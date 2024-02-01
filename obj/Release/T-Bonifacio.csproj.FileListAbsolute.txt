@@ -17,6 +17,5 @@ C:\Prog\T-Bonifacio\T-Bonifacio\obj\Release\TeleBonifacio.CadVendedores.resource
 C:\Prog\T-Bonifacio\T-Bonifacio\obj\Release\TeleBonifacio.Properties.Resources.resources
 C:\Prog\T-Bonifacio\T-Bonifacio\obj\Release\T-Bonifacio.csproj.GenerateResource.cache
 C:\Prog\T-Bonifacio\T-Bonifacio\obj\Release\T-Bonifacio.csproj.CoreCompileInputs.cache
-C:\Prog\T-Bonifacio\T-Bonifacio\obj\Release\T-Bonifacio.csproj.CopyComplete
 C:\Prog\T-Bonifacio\T-Bonifacio\obj\Release\TeleBonifacio.exe
 C:\Prog\T-Bonifacio\T-Bonifacio\obj\Release\TeleBonifacio.pdb

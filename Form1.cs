@@ -50,7 +50,7 @@ namespace TeleBonifacio
 
         private void pictureBox5_Click(object sender, EventArgs e)
         {
-            //AbrirOuFocarFormulario<fCadEntregadores>();
+            AbrirOuFocarFormulario<fCadEntregadores>();
         }
 
         private void pictureBox_MouseDown(object sender, MouseEventArgs e)
@@ -73,7 +73,7 @@ namespace TeleBonifacio
 
         private void pictureBox4_Click(object sender, EventArgs e)
         {
-            //AbrirOuFocarFormulario<fCadClientes>();
+            AbrirOuFocarFormulario<fCadClientes>();
         }
 
         private void pictureBox6_Click(object sender, EventArgs e)
