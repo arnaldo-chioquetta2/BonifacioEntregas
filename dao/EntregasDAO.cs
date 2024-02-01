@@ -16,7 +16,7 @@ namespace TeleBonifacio.dao
         public DataTable getDados(DateTime? DT)
         {
             StringBuilder query = new StringBuilder();
-            int maxLength = 10; // Defina o comprimento máximo esperado
+            int maxLength = 10; 
             query.Append($@"SELECT
                 e.ID as Id, 
                 e.Data, 
@@ -56,92 +56,6 @@ namespace TeleBonifacio.dao
             DataTable dt = ExecutarConsulta(query.ToString());
             return dt;
         }
-
-        //public DataTable getDados(DateTime? DT)
-        //{
-        //    StringBuilder query = new StringBuilder();
-        //    query.Append(@"SELECT
-        //        e.ID as Id, 
-        //        e.Data, 
-        //        m.Nome AS MotoBoy, 
-        //        Format(e.Valor, 'Standard') & ' ' AS Valor, 
-        //        Format(e.Desconto, 'Standard') & ' ' AS Desconto,
-        //        Format(e.VlNota, 'Standard') & ' ' AS Compra, 
-        //        SWITCH(
-        //            e.idForma = 0, 'Anotado',
-        //            e.idForma = 1, 'Cartão',
-        //            e.idForma = 2, 'Dinheiro',
-        //            e.idForma = 3, 'Pix',
-        //            e.idForma = 5, 'Troca',
-        //            TRUE, 'Desconhecido'
-        //        ) AS Pagamento,
-        //        c.Nome AS Cliente,
-        //        v.Nome AS Vendedor,  
-        //        e.Obs,
-        //        m.codi as idBoy,
-        //        c.NrCli,
-        //        e.idForma,
-        //        e.idVend 
-        //    FROM 
-        //        (((Entregas e
-        //        INNER JOIN Clientes c ON c.NrCli = e.idCliente)
-        //        INNER JOIN Mecanicos m ON m.codi = e.idBoy)
-        //        LEFT JOIN Vendedores v ON v.ID = e.idVend)");
-        //    if (DT.HasValue)
-        //    {
-        //        DateTime dataInicio = DT.Value.Date;
-        //        DateTime dataFim = dataInicio.AddDays(1).AddTicks(-1);
-        //        string dataInicioStr = dataInicio.ToString("MM/dd/yyyy HH:mm:ss");
-        //        string dataFimStr = dataFim.ToString("MM/dd/yyyy HH:mm:ss");
-        //        query.AppendFormat(" WHERE e.Data BETWEEN #{0}# AND #{1}#", dataInicioStr, dataFimStr);
-        //    }
-        //    query.Append(" Order By e.ID desc");
-        //    DataTable dt = ExecutarConsulta(query.ToString());
-        //    return dt;
-        //}
-
-        //public DataTable getDados(DateTime? DT)
-        //{
-        //    StringBuilder query = new StringBuilder();
-        //    query.Append(@"SELECT
-        //        e.ID as Id, 
-        //        e.Data, 
-        //        m.Nome AS MotoBoy, 
-        //        e.Valor, 
-        //        e.Desconto,
-        //        SWITCH(
-        //            e.idForma = 0, 'Anotado',
-        //            e.idForma = 1, 'Cartão',
-        //            e.idForma = 2, 'Dinheiro',
-        //            e.idForma = 3, 'Pix',
-        //            e.idForma = 5, 'Troca',
-        //            TRUE, 'Desconhecido'
-        //        ) AS Pagamento,
-        //        e.VlNota as Compra, 
-        //        c.Nome AS Cliente,
-        //        v.Nome AS Vendedor,  
-        //        e.Obs,
-        //        m.codi as idBoy,
-        //        c.NrCli,
-        //        e.idForma,
-        //        e.idVend 
-        //    FROM 
-        //        (((Entregas e
-        //        INNER JOIN Clientes c ON c.NrCli = e.idCliente)
-        //        INNER JOIN Mecanicos m ON m.codi = e.idBoy)
-        //        LEFT JOIN Vendedores v ON v.ID = e.idVend)"); 
-        //    if (DT.HasValue)
-        //    {
-        //        DateTime dataInicio = DT.Value.Date;
-        //        DateTime dataFim = dataInicio.AddDays(1).AddTicks(-1);
-        //        string dataInicioStr = dataInicio.ToString("MM/dd/yyyy HH:mm:ss");
-        //        string dataFimStr = dataFim.ToString("MM/dd/yyyy HH:mm:ss");
-        //        query.AppendFormat(" WHERE e.Data BETWEEN #{0}# AND #{1}#", dataInicioStr, dataFimStr);
-        //    }
-        //    query.Append(" Order By e.ID desc");
-        //    DataTable dt = ExecutarConsulta(query.ToString());
-        //    return dt;
-        //}
 
         private DataTable ExecutarConsulta(string query)
         {

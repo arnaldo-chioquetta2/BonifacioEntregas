@@ -107,6 +107,12 @@
     <Compile Include="operConfig.designer.cs">
       <DependentUpon>operConfig.cs</DependentUpon>
     </Compile>
+    <Compile Include="operConsulta.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="operConsulta.Designer.cs">
+      <DependentUpon>operConsulta.cs</DependentUpon>
+    </Compile>
     <Compile Include="operLancamento.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -145,6 +151,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="operConfig.resx">
       <DependentUpon>operConfig.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="operConsulta.resx">
+      <DependentUpon>operConsulta.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="operLancamento.resx">
       <DependentUpon>operLancamento.cs</DependentUpon>

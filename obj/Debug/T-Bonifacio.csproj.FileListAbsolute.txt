@@ -19,3 +19,4 @@ C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug\SourceGrid.xml
 C:\Prog\T-Bonifacio\T-Bonifacio\obj\Debug\TeleBonifacio.fCadClientes.resources
 C:\Prog\T-Bonifacio\T-Bonifacio\obj\Debug\TeleBonifacio.fCadEntregadores.resources
 C:\Prog\T-Bonifacio\T-Bonifacio\obj\Debug\TeleBonifacio.CadVendedor.resources
+C:\Prog\T-Bonifacio\T-Bonifacio\obj\Debug\TeleBonifacio.operConsulta.resources
