@@ -122,6 +122,7 @@ namespace TeleBonifacio
             this.txDesc.Size = new System.Drawing.Size(56, 20);
             this.txDesc.TabIndex = 31;
             this.txDesc.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.txDesc.Enter += new System.EventHandler(this.txtValor_Enter);
             this.txDesc.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtValor_KeyPress);
             this.txDesc.KeyUp += new System.Windows.Forms.KeyEventHandler(this.txtValor_KeyUp);
             // 
@@ -168,6 +169,7 @@ namespace TeleBonifacio
             this.txCompra.Size = new System.Drawing.Size(56, 20);
             this.txCompra.TabIndex = 15;
             this.txCompra.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.txCompra.Enter += new System.EventHandler(this.txtValor_Enter);
             this.txCompra.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtValor_KeyPress);
             this.txCompra.KeyUp += new System.Windows.Forms.KeyEventHandler(this.txtValor_KeyUp);
             // 
@@ -263,6 +265,7 @@ namespace TeleBonifacio
             this.txtValor.Size = new System.Drawing.Size(56, 20);
             this.txtValor.TabIndex = 14;
             this.txtValor.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.txtValor.Enter += new System.EventHandler(this.txtValor_Enter);
             this.txtValor.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtValor_KeyPress);
             this.txtValor.KeyUp += new System.Windows.Forms.KeyEventHandler(this.txtValor_KeyUp);
             // 

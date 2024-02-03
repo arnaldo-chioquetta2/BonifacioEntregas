@@ -54,6 +54,13 @@ namespace TeleBonifacio.dao
         {
             return 0;
         }
+
+        public virtual DataTable getDadosC()
+        {
+            return null;
+        }
+
         
+
     }
 }

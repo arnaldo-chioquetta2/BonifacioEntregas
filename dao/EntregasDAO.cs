@@ -57,6 +57,47 @@ namespace TeleBonifacio.dao
             return dt;
         }
 
+        public DataTable getDadosC(DateTime? DT1, DateTime? DT2)
+        {
+            StringBuilder query = new StringBuilder();
+            int maxLength = 10;
+            query.Append($@"SELECT
+                e.ID as Id, 
+                e.Data, 
+                m.Nome AS MotoBoy, 
+                Space({maxLength} - Len(Format(e.Valor, 'Standard'))) & Format(e.Valor, 'Standard') AS Valor, 
+                Space({maxLength} - Len(Format(e.Desconto, 'Standard'))) & Format(e.Desconto, 'Standard') AS Desconto,
+                Space({maxLength} - Len(Format(e.VlNota, 'Standard'))) & Format(e.VlNota, 'Standard') AS Compra, 
+                SWITCH(
+                    e.idForma = 0, 'Anotado',
+                    e.idForma = 1, 'Cartão',
+                    e.idForma = 2, 'Dinheiro',
+                    e.idForma = 3, 'Pix',
+                    e.idForma = 5, 'Troca',
+                    TRUE, 'Desconhecido'
+                ) AS Pagamento,
+                c.Nome AS Cliente,
+                v.Nome AS Vendedor,  
+                e.Obs,
+                m.codi as idBoy,
+                c.NrCli,
+                e.idForma,
+                e.idVend 
+            FROM 
+                (((Entregas e
+                INNER JOIN Clientes c ON c.NrCli = e.idCliente)
+                INNER JOIN Mecanicos m ON m.codi = e.idBoy)
+                LEFT JOIN Vendedores v ON v.ID = e.idVend)");
+            DateTime dataInicio = DT1.Value.Date;
+            DateTime dataFim = DT2.Value.Date;
+            string dataInicioStr = dataInicio.ToString("MM/dd/yyyy HH:mm:ss");
+            string dataFimStr = dataFim.ToString("MM/dd/yyyy HH:mm:ss");
+            query.AppendFormat(" WHERE e.Data BETWEEN #{0}# AND #{1}#", dataInicioStr, dataFimStr);
+            query.Append(" Order By e.ID desc");
+            DataTable dt = ExecutarConsulta(query.ToString());
+            return dt;
+        }
+
         private DataTable ExecutarConsulta(string query)
         {
             DataTable dataTable = new DataTable();

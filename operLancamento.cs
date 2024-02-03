@@ -5,6 +5,7 @@ using System.Data;
 using System.Reflection;
 using System.Windows.Forms;
 using TeleBonifacio.tb;
+using System.Globalization;
 
 namespace TeleBonifacio
 {
@@ -182,14 +183,41 @@ namespace TeleBonifacio
         #endregion
 
         #region Eventos
-        
+
         private void txtValor_KeyPress(object sender, KeyPressEventArgs e)
         {
-            if (!char.IsDigit(e.KeyChar) && e.KeyChar != ',' && e.KeyChar != '.')
+            // Permite dígitos e Backspace
+            if (!char.IsDigit(e.KeyChar) && e.KeyChar != (char)Keys.Back)
             {
-                e.Handled = true;
+                // Permite vírgula ou ponto como separador decimal, dependendo da cultura
+                TextBox textBox = sender as TextBox;
+                string S = textBox.Text;
+                if ((e.KeyChar == ',' || e.KeyChar == '.') && !S.Contains(CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator))
+                {
+                    // Substitui ',' por '.' ou vice-versa, conforme necessário, apenas se ainda não estiver presente
+                    if (CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator == "," && e.KeyChar == '.')
+                    {
+                        e.KeyChar = ','; // Substitui ponto por vírgula
+                    }
+                    else if (CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator == "." && e.KeyChar == ',')
+                    {
+                        e.KeyChar = '.'; // Substitui vírgula por ponto
+                    }
+                }
+                else
+                {
+                    e.Handled = true; // Bloqueia a entrada do caractere
+                }
             }
         }
+
+        //private void txtValor_KeyPress(object sender, KeyPressEventArgs e)
+        //{
+        //    if (!char.IsDigit(e.KeyChar) && e.KeyChar != ',' && e.KeyChar != '.')
+        //    {
+        //        e.Handled = true;
+        //    }
+        //}
 
         private void cmbMotoBoy_KeyPress(object sender, KeyPressEventArgs e)
         {
@@ -256,6 +284,11 @@ namespace TeleBonifacio
 
         #endregion
 
+        private void txtValor_Enter(object sender, EventArgs e)
+        {
+            TextBox textBox = sender as TextBox;
+            textBox?.SelectAll();
+        }
     }
 
 }

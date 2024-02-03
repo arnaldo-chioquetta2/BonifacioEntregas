@@ -88,7 +88,7 @@ namespace TeleBonifacio
 
         private void pictureBox2_Click(object sender, EventArgs e)
         {
-            AbrirOuFocarFormulario<operConsulta>();
+            AbrirOuFocarFormulario<Consultas>();
         }
     }
 
