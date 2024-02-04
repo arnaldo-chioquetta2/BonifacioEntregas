@@ -37,7 +37,7 @@ namespace TeleBonifacio
             this.label5 = new System.Windows.Forms.Label();
             this.textBox4 = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
-            this.textBox3 = new System.Windows.Forms.TextBox();
+            this.txtValor = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
             this.textBox2 = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
@@ -55,7 +55,7 @@ namespace TeleBonifacio
             this.panel1.Controls.Add(this.label5);
             this.panel1.Controls.Add(this.textBox4);
             this.panel1.Controls.Add(this.label4);
-            this.panel1.Controls.Add(this.textBox3);
+            this.panel1.Controls.Add(this.txtValor);
             this.panel1.Controls.Add(this.label3);
             this.panel1.Controls.Add(this.textBox2);
             this.panel1.Controls.Add(this.label2);
@@ -119,12 +119,12 @@ namespace TeleBonifacio
             this.label4.TabIndex = 6;
             this.label4.Text = "Percentual";
             // 
-            // textBox3
+            // txtValor
             // 
-            this.textBox3.Location = new System.Drawing.Point(45, 12);
-            this.textBox3.Name = "textBox3";
-            this.textBox3.Size = new System.Drawing.Size(80, 20);
-            this.textBox3.TabIndex = 5;
+            this.txtValor.Location = new System.Drawing.Point(45, 12);
+            this.txtValor.Name = "txtValor";
+            this.txtValor.Size = new System.Drawing.Size(80, 20);
+            this.txtValor.TabIndex = 5;
             // 
             // label3
             // 
@@ -176,7 +176,7 @@ namespace TeleBonifacio
             this.dataGrid1.Location = new System.Drawing.Point(0, 46);
             this.dataGrid1.Name = "dataGrid1";
             this.dataGrid1.SelectionMode = SourceGrid.GridSelectionMode.Row;
-            this.dataGrid1.Size = new System.Drawing.Size(852, 144);
+            this.dataGrid1.Size = new System.Drawing.Size(852, 130);
             this.dataGrid1.TabIndex = 1;
             this.dataGrid1.TabStop = true;
             this.dataGrid1.ToolTipText = "";
@@ -185,7 +185,7 @@ namespace TeleBonifacio
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(852, 190);
+            this.ClientSize = new System.Drawing.Size(852, 176);
             this.Controls.Add(this.dataGrid1);
             this.Controls.Add(this.panel1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -207,7 +207,7 @@ namespace TeleBonifacio
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.TextBox textBox4;
         private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.TextBox textBox3;
+        private System.Windows.Forms.TextBox txtValor;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.TextBox textBox2;
         private System.Windows.Forms.Label label2;

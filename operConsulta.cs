@@ -22,7 +22,11 @@ namespace TeleBonifacio
         private void operConsulta_Load(object sender, EventArgs e)
         {            
             DateTime DT1 = DateTime.Now;
-            DateTime DT2 = DT1.AddDays(-30);
+            DateTime DT2 = DT1.AddMonths(-1);
+
+            DT1 = new DateTime(2024, 1, 1);
+            DT2 = new DateTime(2024,12, 31);
+
             CarregaGrid(DT1, DT2);
             ConfigurarGrid();
         }
@@ -49,36 +53,40 @@ namespace TeleBonifacio
         private DataTable OrganizarDadosEmDataTable(DataTable dados)
         {
             DataTable dadosOrganizados = new DataTable();
-            dadosOrganizados.Columns.Add("Forma de Pagto", typeof(string));
-            var entregadores = dados.AsEnumerable().Select(row => row.Field<string>("MotoBoy")).Distinct().ToList();
-            foreach (var entregador in entregadores)
+            dadosOrganizados.Columns.Add("Forma de Pagamento", typeof(string));
+            var formasPagamento = new Dictionary<int, string>
+                {
+                    { 0, "Anotado" },
+                    { 1, "Cartão" },
+                    { 2, "Dinheiro" },
+                    { 3, "Pix" },
+                    { 4, "Troca" }
+                };
+            foreach (var forma in formasPagamento)
             {
-                dadosOrganizados.Columns.Add(entregador, typeof(string));
+                dadosOrganizados.Rows.Add(forma.Value);
             }
-            var gruposFormaPagamento = dados.AsEnumerable()
-                .GroupBy(row => row.Field<string>("Pagamento"))
-                .Select(group => new
-                {
-                    FormaPagamento = group.Key,
-                    EntregadoresTotais = entregadores.ToDictionary(entregador => entregador, entregador => group.Where(row => row.Field<string>("MotoBoy") == entregador).Sum(row => Convert.ToDecimal(row["Valor"])))
-                }).ToList();
-            foreach (var grupo in gruposFormaPagamento)
+            var motoBoys = dados.AsEnumerable()
+                .Select(row => row.Field<string>("MotoBoy"))
+                .Distinct()
+                .Where(motoBoy => !string.IsNullOrEmpty(motoBoy)) 
+                .ToList();
+            foreach (var motoBoy in motoBoys)
             {
-                DataRow newRow = dadosOrganizados.NewRow();
-                newRow["Forma de Pagto"] = grupo.FormaPagamento;
-                foreach (var entregador in entregadores)
+                dadosOrganizados.Columns.Add(motoBoy, typeof(string)); 
+            }
+            foreach (DataRow row in dados.Rows)
+            {
+                string motoBoy = row.Field<string>("MotoBoy");
+                int idForma = row.Field<int>("idForma");
+                decimal valor = row.Field<decimal>("Valor");
+                DataRow linhaForma = dadosOrganizados.AsEnumerable().FirstOrDefault(r => r.Field<string>("Forma de Pagamento") == formasPagamento[idForma]);
+                if (linhaForma != null && dadosOrganizados.Columns.Contains(motoBoy))
                 {
-                    newRow[entregador] = grupo.EntregadoresTotais.ContainsKey(entregador) ? gen.ConvObjStrFormatado(grupo.EntregadoresTotais[entregador]) : "0";
+                    decimal valorAtual = linhaForma.IsNull(motoBoy) ? 0 : decimal.Parse(linhaForma[motoBoy].ToString());
+                    linhaForma[motoBoy] = (valorAtual + valor).ToString("N2"); // Formatação como número com duas casas decimais
                 }
-                dadosOrganizados.Rows.Add(newRow);
             }
-            DataRow totalRow = dadosOrganizados.NewRow();
-            totalRow["Forma de Pagto"] = "Total";
-            foreach (var entregador in entregadores)
-            {
-                totalRow[entregador] = gen.ConvObjStrFormatado(gruposFormaPagamento.Sum(g => g.EntregadoresTotais.ContainsKey(entregador) ? g.EntregadoresTotais[entregador] : 0M));
-            }
-            dadosOrganizados.Rows.Add(totalRow);
             return dadosOrganizados;
         }
 

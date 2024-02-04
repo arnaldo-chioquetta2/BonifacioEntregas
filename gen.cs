@@ -33,10 +33,6 @@ namespace TeleBonifacio
             }
         }
 
-
-
-        // gen.CaminhoBase = MeuIni.ReadString("Config", "Base", "");
-
         public static string connectionString
         {
             get
