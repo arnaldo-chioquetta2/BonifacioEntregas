@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data.OleDb;
 using System.Globalization;
 using System.Linq;
@@ -123,6 +124,20 @@ namespace TeleBonifacio
             string str = vlr.ToString();
             return str.Replace(",", ".");
         }
+
+        public static bool IsDateTimeValid(int year, int month, int day)
+        {
+            if (year < DateTime.MinValue.Year || year > DateTime.MaxValue.Year)
+                return false;
+            if (month < 1 || month > 12)
+                return false;
+            if (day < 1 || day > DateTime.DaysInMonth(year, month))
+                return false;
+
+            return true; // A data é válida
+        }
+
+
 
         #region DB
 

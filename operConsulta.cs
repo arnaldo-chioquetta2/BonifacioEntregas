@@ -14,30 +14,55 @@ namespace TeleBonifacio
 {
     public partial class Consultas : Form
     {
+
+        private decimal totalGeral = 0;
+
         public Consultas()
         {
             InitializeComponent();
         }
 
         private void operConsulta_Load(object sender, EventArgs e)
-        {            
-            DateTime DT1 = DateTime.Now;
-            DateTime DT2 = DT1.AddMonths(-1);
-
-            DT1 = new DateTime(2024, 1, 1);
-            DT2 = new DateTime(2024,12, 31);
-
+        {
+            DateTime Agora = DateTime.Now;
+            int Ano = Agora.Year;
+            int Mes = Agora.Month;
+            int Dia = Agora.Day+1;
+            DateTime DT1 = new DateTime(Ano, 1, 1);
+            DateTime DT2 = DateTime.Now;
+            if (gen.IsDateTimeValid(Ano, Mes, Dia))
+            {
+                DT2 = new DateTime(Ano, Mes, Dia);
+            }
+            else
+            {
+                Mes++;
+                if (gen.IsDateTimeValid(Ano, Mes, Dia))
+                {
+                    Ano++;
+                    Mes = 1;
+                    DT2 = new DateTime(Ano, Mes, 1);
+                }                     
+            }
+            dtpDataIniicio.Value = DT1;
+            dtpDataFim.Value = DT2;
             CarregaGrid(DT1, DT2);
-            ConfigurarGrid();
+            ConfigurarGrid(); 
         }
 
         private void CarregaGrid(DateTime? DT1 = null, DateTime? DT2 = null)
         {
             EntregasDAO entregasDAO = new EntregasDAO();
             DataTable dados = entregasDAO.getDadosC(DT1, DT2);
-            DataTable dados2 = OrganizarDadosEmDataTable(dados);
-            DevAge.ComponentModel.BoundDataView boundDataView = new DevAge.ComponentModel.BoundDataView(dados2.DefaultView);
-            dataGrid1.DataSource = boundDataView;
+            if (dados.Rows.Count == 0)
+            {
+                dataGrid1.DataSource = null;
+            } else
+            {
+                DataTable dados2 = OrganizarDadosEmDataTable(dados);
+                DevAge.ComponentModel.BoundDataView boundDataView = new DevAge.ComponentModel.BoundDataView(dados2.DefaultView);
+                dataGrid1.DataSource = boundDataView;
+            }
         }
 
         private void ConfigurarGrid()
@@ -50,31 +75,68 @@ namespace TeleBonifacio
             dataGrid1.Invalidate();
         }
 
+#region Grid
+
         private DataTable OrganizarDadosEmDataTable(DataTable dados)
         {
-            DataTable dadosOrganizados = new DataTable();
-            dadosOrganizados.Columns.Add("Forma de Pagamento", typeof(string));
-            var formasPagamento = new Dictionary<int, string>
-                {
-                    { 0, "Anotado" },
-                    { 1, "Cartão" },
-                    { 2, "Dinheiro" },
-                    { 3, "Pix" },
-                    { 4, "Troca" }
-                };
+            var dadosOrganizados = InicializarDataTable();
+            var formasPagamento = ObterFormasDePagamento();
+            AdicionarFormasDePagamento(dadosOrganizados, formasPagamento);
+            var motoBoys = ObterMotoBoys(dados);
+            AdicionarColunasMotoBoys(dadosOrganizados, motoBoys);
+            var totaisEntregadores = CalcularValoresPorEntregador(dados, dadosOrganizados, formasPagamento, motoBoys);
+            AdicionarLinhaTotal(dadosOrganizados, totaisEntregadores);
+            AtualizarValorTotalInterface(totaisEntregadores);
+            return dadosOrganizados;
+        }
+
+        private DataTable InicializarDataTable()
+        {
+            var dataTable = new DataTable();
+            dataTable.Columns.Add("Forma de Pagamento", typeof(string));
+            return dataTable;
+        }
+
+        private Dictionary<int, string> ObterFormasDePagamento()
+        {
+            return new Dictionary<int, string>
+            {
+                { 0, "Anotado" },
+                { 1, "Cartão" },
+                { 2, "Dinheiro" },
+                { 3, "Pix" },
+                { 4, "Troca" }
+            };
+        }
+
+        private void AdicionarFormasDePagamento(DataTable dataTable, Dictionary<int, string> formasPagamento)
+        {
             foreach (var forma in formasPagamento)
             {
-                dadosOrganizados.Rows.Add(forma.Value);
+                dataTable.Rows.Add(forma.Value);
             }
-            var motoBoys = dados.AsEnumerable()
+        }
+
+        private List<string> ObterMotoBoys(DataTable dados)
+        {
+            return dados.AsEnumerable()
                 .Select(row => row.Field<string>("MotoBoy"))
                 .Distinct()
-                .Where(motoBoy => !string.IsNullOrEmpty(motoBoy)) 
+                .Where(motoBoy => !string.IsNullOrEmpty(motoBoy))
                 .ToList();
+        }
+
+        private void AdicionarColunasMotoBoys(DataTable dataTable, List<string> motoBoys)
+        {
             foreach (var motoBoy in motoBoys)
             {
-                dadosOrganizados.Columns.Add(motoBoy, typeof(string)); 
+                dataTable.Columns.Add(motoBoy, typeof(string));
             }
+        }
+
+        private Dictionary<string, decimal> CalcularValoresPorEntregador(DataTable dados, DataTable dadosOrganizados, Dictionary<int, string> formasPagamento, List<string> motoBoys)
+        {
+            var totaisEntregadores = motoBoys.ToDictionary(motoBoy => motoBoy, motoBoy => 0M);
             foreach (DataRow row in dados.Rows)
             {
                 string motoBoy = row.Field<string>("MotoBoy");
@@ -84,10 +146,65 @@ namespace TeleBonifacio
                 if (linhaForma != null && dadosOrganizados.Columns.Contains(motoBoy))
                 {
                     decimal valorAtual = linhaForma.IsNull(motoBoy) ? 0 : decimal.Parse(linhaForma[motoBoy].ToString());
-                    linhaForma[motoBoy] = (valorAtual + valor).ToString("N2"); // Formatação como número com duas casas decimais
+                    decimal valorSomado = valorAtual + valor;
+                    linhaForma[motoBoy] = valorSomado.ToString("N2");
+                    totaisEntregadores[motoBoy] += valor;
                 }
             }
-            return dadosOrganizados;
+            return totaisEntregadores;
+        }
+
+        private void AdicionarLinhaTotal(DataTable dataTable, Dictionary<string, decimal> totaisEntregadores)
+        {
+            DataRow linhaTotal = dataTable.NewRow();
+            linhaTotal["Forma de Pagamento"] = "TOTAL";
+            foreach (var motoBoy in totaisEntregadores.Keys)
+            {
+                linhaTotal[motoBoy] = totaisEntregadores[motoBoy].ToString("N2");
+            }
+            dataTable.Rows.Add(linhaTotal);
+        }
+
+        private void AtualizarValorTotalInterface(Dictionary<string, decimal> totaisEntregadores)
+        {
+            totalGeral = totaisEntregadores.Values.Sum();
+            txtValor.Text = totalGeral.ToString("N2");
+            ConfigDAO config = new ConfigDAO();
+            decimal perc = config.getPercentual();
+            AtualizaValores(perc);
+        }
+
+        #endregion
+
+        private void AtualizaValores(decimal perc)
+        {
+            txPerc.Text = perc.ToString("F2");
+            decimal comiss = totalGeral * perc / 100;
+            txComiss.Text = comiss.ToString("F2");
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            CarregaGrid(dtpDataIniicio.Value, dtpDataFim.Value);
+        }
+
+        private void txPerc_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                float perc = gen.LeValor(txPerc.Text);
+                AtualizaValores((decimal)perc);
+                ConfigDAO config = new ConfigDAO();
+                config.SetPerc(perc);
+            }
+        }
+
+        private void txPerc_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (!char.IsDigit(e.KeyChar) && e.KeyChar != ',' && e.KeyChar != '.' && e.KeyChar != (char)Keys.Enter && e.KeyChar != (char)Keys.Left && e.KeyChar != (char)Keys.Right && e.KeyChar != (char)Keys.Back && e.KeyChar != (char)Keys.Delete)
+            {
+                e.Handled = true;
+            }
         }
 
     }
