@@ -31,6 +31,7 @@ namespace TeleBonifacio
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Consultas));
             this.panel1 = new System.Windows.Forms.Panel();
+            this.dtpDataFim = new System.Windows.Forms.DateTimePicker();
             this.dtpDataIniicio = new System.Windows.Forms.DateTimePicker();
             this.button2 = new System.Windows.Forms.Button();
             this.button1 = new System.Windows.Forms.Button();
@@ -43,7 +44,6 @@ namespace TeleBonifacio
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.dataGrid1 = new SourceGrid.DataGrid();
-            this.dtpDataFim = new System.Windows.Forms.DateTimePicker();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -67,6 +67,16 @@ namespace TeleBonifacio
             this.panel1.Size = new System.Drawing.Size(860, 46);
             this.panel1.TabIndex = 0;
             // 
+            // dtpDataFim
+            // 
+            this.dtpDataFim.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
+            this.dtpDataFim.Format = System.Windows.Forms.DateTimePickerFormat.Short;
+            this.dtpDataFim.Location = new System.Drawing.Point(606, 10);
+            this.dtpDataFim.Name = "dtpDataFim";
+            this.dtpDataFim.Size = new System.Drawing.Size(85, 23);
+            this.dtpDataFim.TabIndex = 13;
+            this.dtpDataFim.Tag = "H";
+            // 
             // dtpDataIniicio
             // 
             this.dtpDataIniicio.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
@@ -80,13 +90,13 @@ namespace TeleBonifacio
             // 
             // button2
             // 
-            this.button2.Enabled = false;
             this.button2.Location = new System.Drawing.Point(773, 9);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(75, 23);
             this.button2.TabIndex = 11;
             this.button2.Text = "Imprimir";
             this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
             // button1
             // 
@@ -181,16 +191,6 @@ namespace TeleBonifacio
             this.dataGrid1.TabIndex = 1;
             this.dataGrid1.TabStop = true;
             this.dataGrid1.ToolTipText = "";
-            // 
-            // dtpDataFim
-            // 
-            this.dtpDataFim.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
-            this.dtpDataFim.Format = System.Windows.Forms.DateTimePickerFormat.Short;
-            this.dtpDataFim.Location = new System.Drawing.Point(606, 10);
-            this.dtpDataFim.Name = "dtpDataFim";
-            this.dtpDataFim.Size = new System.Drawing.Size(85, 23);
-            this.dtpDataFim.TabIndex = 13;
-            this.dtpDataFim.Tag = "H";
             // 
             // Consultas
             // 
