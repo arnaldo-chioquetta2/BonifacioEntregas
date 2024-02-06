@@ -90,6 +90,11 @@ namespace TeleBonifacio
         {
             AbrirOuFocarFormulario<Consultas>();
         }
+
+        private void pictureBox3_Click(object sender, EventArgs e)
+        {
+            AbrirOuFocarFormulario<Dashboard>();
+        }
     }
 
 }
