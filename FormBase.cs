@@ -435,15 +435,29 @@ namespace TeleBonifacio
             AlterarVisibilidadeControles(false);
             if (!GridCarregada)
             {
-                CriaGrid();
+                CriaGrid();                
+                int IndCtrGrid = this.Controls.Count - 1;
+                var grid = this.Controls[IndCtrGrid] as DataGrid;
+                if (grid != null)
+                {
+                    if (grid.TableStyles.Count == 0)
+                    {
+                        grid.TableStyles.Add(new DataGridTableStyle());
+                    }
+                    DataGridTableStyle tableStyle = grid.TableStyles[0];
+                    tableStyle.GridColumnStyles[0].Width = 30;
+                    tableStyle.GridColumnStyles[1].Width = 100;
+                    tableStyle.GridColumnStyles[2].Width = 100;
+                    //  grid.sele
+                }
                 GridCarregada = true;
             }
         }
 
         private void CriaGrid()
         {
-            System.Data.DataTable Dados = getDados();
-            dataGrid = new System.Windows.Forms.DataGrid();
+            DataTable Dados = getDados();
+            dataGrid = new DataGrid();
             this.Controls.Add(dataGrid);
             dataGrid.DataSource = Dados;
             dataGrid.Name = "GRID";
@@ -459,11 +473,11 @@ namespace TeleBonifacio
 
         private void dataGrid_DoubleClick(object sender, EventArgs e)
         {
-            System.Windows.Forms.DataGrid grid = (System.Windows.Forms.DataGrid)sender;
+            DataGrid grid = (DataGrid)sender;
             if (grid.CurrentRowIndex >= 0)
             {
                 int rowIndex = grid.CurrentRowIndex;
-                System.Data.DataRowView selectedRowView = (System.Data.DataRowView)grid.BindingContext[grid.DataSource].Current;
+                DataRowView selectedRowView = (DataRowView)grid.BindingContext[grid.DataSource].Current;
                 object idValue = selectedRowView.Row["id"];
                 CarregaRegistro(idValue.ToString());
             }

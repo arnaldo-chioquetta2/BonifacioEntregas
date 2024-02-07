@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Windows.Forms;
 using SourceGrid;
 using System.Data;
+using System.Linq;
 
 namespace TeleBonifacio
 {
@@ -40,7 +41,6 @@ namespace TeleBonifacio
                         this.Close();
                         break;
                 }
-
             }
         }
 
