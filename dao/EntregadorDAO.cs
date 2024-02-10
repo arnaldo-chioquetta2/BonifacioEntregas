@@ -268,6 +268,24 @@ namespace TeleBonifacio.dao
             return ExecutarConsulta(query);
         }
 
+        public override string VeSeJaTem(object obj)
+        {
+            EntregadorDAO entregador = (EntregadorDAO)obj;
+            string wre = "";
+            if (!entregador.Adicao)
+            {
+                wre = " and codi <> " + entregador.id.ToString();
+            }
+            string queryNome = $"SELECT COUNT(*) FROM Mecanicos WHERE Nome = '{entregador.Nome}' " + wre;
+            int countNome = gen.ExecutarConsultaCount(queryNome);
+            if (countNome > 0)
+            {
+                return "Já existe um cliente cadastrado com esse nome.";
+            }
+            return "";
+        }
+
+
     }
 
 }

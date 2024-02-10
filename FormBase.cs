@@ -282,25 +282,37 @@ namespace TeleBonifacio
         {
             MapearCamposParaModelo(DAO);
             List<string> criticas = FazerCriticas(DAO);
+            bool ok = false;
+            string mensagemCritica = "";
             if (criticas.Count == 0)
             {
                 DAO.Adicao = EmAdicao;
-                if (cntrole1.Vazio)
+                string mensJaTem = DAO.VeSeJaTem(DAO); 
+                if (mensJaTem.Length>0)
                 {
-                    DAO.Adicao = true;
-                }
-                DAO.Grava(DAO);
-                EmAdicao = false;
-                cntrole1.ModoNormal();
-                cntrole1.Vazio = false;
-                if (AdicaoPorfora)
+                    mensagemCritica = mensJaTem;
+                } else
                 {
-                    this.Close();
+                    if (cntrole1.Vazio)
+                    {
+                        DAO.Adicao = true;
+                    }
+                    DAO.Grava(DAO);
+                    EmAdicao = false;
+                    cntrole1.ModoNormal();
+                    cntrole1.Vazio = false;
+                    ok = true;
+                    if (AdicaoPorfora)
+                    {
+                        this.Close();
+                    }
                 }
-            }
-            else
+            } else
             {
-                string mensagemCritica = string.Join("\n", criticas);
+                mensagemCritica = string.Join("\n", criticas);
+            }
+            if (!ok)
+            {                
                 MessageBox.Show(mensagemCritica, "Críticas", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
         }

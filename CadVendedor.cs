@@ -63,18 +63,22 @@ namespace TeleBonifacio
             base.cntrole1_AcaoRealizada(sender, e, base.reg);
         }
 
-        private void CadVendedores_KeyUp(object sender, KeyEventArgs e)
+        private void CadVendedor_KeyUp(object sender, KeyEventArgs e)
         {
-            if (e.KeyCode == Keys.Escape)
+            if (e.KeyCode != Keys.Left && e.KeyCode != Keys.Right && !(e.Control && e.KeyCode == Keys.C) && !(e.Control && e.KeyCode == Keys.A))
             {
-                base.Cancela();
-            }
-            else
-            {
-                if (!base.Pesquisando)
+                if (e.KeyCode == Keys.Escape)
                 {
-                    base.cntrole1.EmEdicao = true;
+                    base.Cancela();
                 }
+                else
+                {
+                    if (!base.Pesquisando)
+                    {
+                        base.cntrole1.EmEdicao = true;
+                    }
+                }
+
             }
         }
     }

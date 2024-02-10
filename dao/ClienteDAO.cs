@@ -275,6 +275,29 @@ namespace TeleBonifacio.dao
             return 0;
         }
 
+        public override string VeSeJaTem(object obj)
+        {
+            ClienteDAO cliente = (ClienteDAO)obj;
+            string wre = "";
+            if (!cliente.Adicao)
+            {
+                wre = " and NrCli <> " + cliente.id.ToString();
+            }
+            string queryNome = $"SELECT COUNT(*) FROM Clientes WHERE Nome = '{cliente.Nome}' " + wre;
+            int countNome = gen.ExecutarConsultaCount(queryNome);
+            if (countNome > 0)
+            {
+                return "Já existe um cliente cadastrado com esse nome.";
+            }
+            string queryNrOutro = $"SELECT COUNT(*) FROM Clientes WHERE NrOutro = {cliente.NrOutro} " + wre;
+            int countNrOutro = gen.ExecutarConsultaCount(queryNrOutro);
+            if (countNrOutro > 0)
+            {
+                return "Já existe um cliente cadastrado com o mesmo NrOutro.";
+            }
+            return "";
+        }
+
     }
 
 }

@@ -30,19 +30,23 @@ namespace TeleBonifacio
 
         private void Teclou(object sender, KeyEventArgs e)
         {
-            if (e.KeyCode == Keys.Escape)
+            if (e.KeyCode != Keys.Left && e.KeyCode != Keys.Right && !(e.Control && e.KeyCode == Keys.C) && !(e.Control && e.KeyCode == Keys.A))
             {
-                base.Cancela();
-            } else
-            {
-                if (!base.Pesquisando)
+                if (e.KeyCode == Keys.Escape)
                 {
-                    if (!this.txtIdDentro)
+                    base.Cancela();
+                }
+                else
+                {
+                    if (!base.Pesquisando)
                     {
-                        base.cntrole1.EmEdicao = true;
+                        if (!this.txtIdDentro)
+                        {
+                            base.cntrole1.EmEdicao = true;
+                        }
                     }
                 }
-            }            
+            }
         }
 
         private void dtpValidadeCNH_ValueChanged(object sender, EventArgs e)

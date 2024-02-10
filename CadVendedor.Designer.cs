@@ -86,6 +86,7 @@ namespace TeleBonifacio
             this.Controls.Add(this.lblNome);
             this.Controls.Add(this.txtNome);
             this.Name = "CadVendedor";
+            this.KeyUp += new System.Windows.Forms.KeyEventHandler(this.CadVendedor_KeyUp);
             this.Controls.SetChildIndex(this.cntrole1, 0);
             this.Controls.SetChildIndex(this.txtNome, 0);
             this.Controls.SetChildIndex(this.lblNome, 0);

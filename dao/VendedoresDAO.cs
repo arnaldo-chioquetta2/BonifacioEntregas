@@ -200,5 +200,23 @@ namespace TeleBonifacio.dao
             return ExecutarConsultaVendedor(query);
         }
 
+        public override string VeSeJaTem(object obj)
+        {
+            VendedoresDAO vendedor = (VendedoresDAO)obj;
+            string wre = "";
+            if (!vendedor.Adicao)
+            {
+                wre = " and ID <> " + vendedor.Id.ToString();
+            }
+            string queryNome = $"SELECT COUNT(*) FROM Vendedores WHERE Nome = '{vendedor.Nome}' " + wre;
+            int countNome = gen.ExecutarConsultaCount(queryNome);
+            if (countNome > 0)
+            {
+                return "Já existe um vendedor cadastrado com esse nome.";
+            }
+            return "";
+        }
+
+
     }
 }

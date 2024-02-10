@@ -160,6 +160,29 @@ namespace TeleBonifacio
             }
         }
 
+        public static int ExecutarConsultaCount(string query)
+        {
+            int count = 0;
+            using (OleDbConnection connection = new OleDbConnection(gen.connectionString))
+            {
+                try
+                {
+                    connection.Open();
+                    using (OleDbCommand command = new OleDbCommand(query, connection))
+                    {
+                        count = (int)command.ExecuteScalar();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    // Tratamento de exceções adequado
+                    throw;
+                }
+            }
+            return count;
+        }
+
+
         #endregion
     }
 }

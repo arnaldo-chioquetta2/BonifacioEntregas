@@ -33,6 +33,8 @@ namespace TeleBonifacio.dao
 
         public abstract tb.IDataEntity GetPeloID(string id);
 
+        public abstract string VeSeJaTem(object obj);
+
         #endregion
 
         public virtual System.Data.DataTable CarregarDados()
@@ -59,8 +61,6 @@ namespace TeleBonifacio.dao
         {
             return null;
         }
-
-        
 
     }
 }
