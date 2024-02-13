@@ -47,6 +47,9 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>dashboard.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="SourceGrid, Version=4.40.4580.29115, Culture=neutral, PublicKeyToken=df6f5e538749e85d, processorArchitecture=MSIL">
       <HintPath>packages\SourceGrid.4.4.0\lib\net35\SourceGrid.dll</HintPath>
@@ -215,6 +218,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\exemplo.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="dashboard.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

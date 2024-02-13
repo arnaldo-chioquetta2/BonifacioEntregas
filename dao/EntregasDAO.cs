@@ -71,10 +71,22 @@ namespace TeleBonifacio.dao
             DateTime dataFim = DT2.Value.Date;
             string dataInicioStr = dataInicio.ToString("MM/dd/yyyy HH:mm:ss");
             string dataFimStr = dataFim.ToString("MM/dd/yyyy HH:mm:ss");
-            query.AppendFormat(" WHERE e.Data BETWEEN #{0}# AND #{1}#", dataInicioStr, dataFimStr);
+            query.AppendFormat(" WHERE m.Oper = 3 and e.Data BETWEEN #{0}# AND #{1}#", dataInicioStr, dataFimStr);
             query.Append(" GROUP BY m.Nome, e.idForma");
             query.Append(" ORDER BY m.Nome, e.idForma");
             DataTable dt = ExecutarConsulta(query.ToString());
+            return dt;
+        }
+
+        public DataTable Dasboard(DateTime? DT1, DateTime? DT2)
+        {
+            string query = ($@"SELECT DateValue(Data) AS DataTruncada,
+                                   SUM(VlNota) - SUM(VlNota / 1.7) AS LucroBruto,
+                                   SUM(Valor) AS ValorTotalEntrega,
+                                   (SUM(VlNota) - SUM(VlNota / 1.7)) - SUM(Valor) AS LucroTeleentrega
+                            FROM Entregas
+                            GROUP BY DateValue(Data)");
+            DataTable dt = ExecutarConsulta(query);
             return dt;
         }
 
