@@ -11,11 +11,14 @@ namespace TeleBonifacio
     public partial class Dashboard : Form
     {
         private Chart chartLucratividade;
+        EntregasDAO entregasDAO;
+        DataTable dados;
 
         public Dashboard()
         {
             InitializeComponent();
             InicializarComponentesDeGrafico();
+            entregasDAO = new EntregasDAO();
         }
 
         private void InicializarComponentesDeGrafico()
@@ -37,27 +40,17 @@ namespace TeleBonifacio
 
         private void CarregarDadosDoGrafico(DateTime DT1, DateTime DT2)
         {
-            // Limpar séries e áreas de gráfico existentes
             chartLucratividade.Series.Clear();
             chartLucratividade.ChartAreas.Clear();
-
-            // Adicionar uma nova área de gráfico
             ChartArea chartArea = new ChartArea();
             chartLucratividade.ChartAreas.Add(chartArea);
-
-            // Adicionar a série "Lucro"
             Series seriesLucro = new Series("Lucro")
             {
                 ChartType = SeriesChartType.Column,
-                Color = Color.Green // Cor padrão para lucro positivo
+                Color = Color.Green 
             };
-            chartLucratividade.Series.Add(seriesLucro);
-
-            // Carregar os dados
-            EntregasDAO entregasDAO = new EntregasDAO();
-            DataTable dados = entregasDAO.Dasboard(DT1, DT2);
-
-            // Verifica se há dados para mostrar
+            chartLucratividade.Series.Add(seriesLucro);            
+            dados = entregasDAO.Dasboard(DT1, DT2);
             if (dados.Rows.Count > 0)
             {
                 foreach (DataRow row in dados.Rows)
@@ -68,14 +61,10 @@ namespace TeleBonifacio
                     int pointIndex = chartLucratividade.Series["Lucro"].Points.Count - 1;
                     chartLucratividade.Series["Lucro"].Points[pointIndex].Color = lucroTeleentrega >= 0 ? Color.Green : Color.Red;
                 }
-
-                // Configurar a área do gráfico
                 chartLucratividade.ChartAreas[0].AxisX.Interval = 1;
                 chartLucratividade.ChartAreas[0].AxisX.IntervalType = DateTimeIntervalType.Days;
                 chartLucratividade.ChartAreas[0].AxisX.LabelStyle.Format = "dd/MM";
                 chartLucratividade.ChartAreas[0].AxisY.LabelStyle.Format = "C2";
-
-                // Atualizar o gráfico
                 chartLucratividade.Invalidate();
             }
             else
@@ -109,6 +98,33 @@ namespace TeleBonifacio
             dtpDataIniicio.Value = DT1;
             dtpDataFim.Value = DT2.AddDays(-1);
             CarregarDadosDoGrafico(DT1, DT2);
+            AtualizarCamposDeTextoComValoresTotais();
         }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            CarregarDadosDoGrafico(dtpDataIniicio.Value, dtpDataFim.Value);
+            AtualizarCamposDeTextoComValoresTotais();
+        }
+
+        private void AtualizarCamposDeTextoComValoresTotais()
+        {
+            decimal totalVendas = 0m;
+            decimal totalEntregadores = 0m;
+            decimal lucroTotal = 0m;
+            if (dados.Rows.Count > 0)
+            {
+                foreach (DataRow row in dados.Rows)
+                {
+                    totalVendas += row.IsNull("LucroBruto") ? 0m : Convert.ToDecimal(row["LucroBruto"]);
+                    totalEntregadores += row.IsNull("ValorTotalEntrega") ? 0m : Convert.ToDecimal(row["ValorTotalEntrega"]);
+                    lucroTotal += row.IsNull("LucroTeleentrega") ? 0m : Convert.ToDecimal(row["LucroTeleentrega"]);
+                }
+            }
+            txtTotalVendas.Text = "Vendas: "+totalVendas.ToString("C");
+            txtTotalEntregadores.Text = "Vlr.Entregas: " + totalEntregadores.ToString("C");
+            txtLucroTotal.Text = "Lucro: " + lucroTotal.ToString("C");
+        }
+
     }
 }

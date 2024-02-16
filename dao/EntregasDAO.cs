@@ -78,13 +78,16 @@ namespace TeleBonifacio.dao
             return dt;
         }
 
-        public DataTable Dasboard(DateTime? DT1, DateTime? DT2)
+        public DataTable Dasboard(DateTime DT1, DateTime DT2)
         {
+            string dataInicioStr = DT1.ToString("MM/dd/yyyy HH:mm:ss");
+            string dataFimStr = DT2.ToString("MM/dd/yyyy HH:mm:ss");
             string query = ($@"SELECT DateValue(Data) AS DataTruncada,
                                    SUM(VlNota) - SUM(VlNota / 1.7) AS LucroBruto,
                                    SUM(Valor) AS ValorTotalEntrega,
-                                   (SUM(VlNota) - SUM(VlNota / 1.7)) - SUM(Valor) AS LucroTeleentrega
+                                   (SUM(VlNota) - SUM(VlNota / 1.7)) - SUM(Valor) AS LucroTeleentrega                            
                             FROM Entregas
+                            WHERE Data BETWEEN #{dataInicioStr}# AND #{dataFimStr}# 
                             GROUP BY DateValue(Data)");
             DataTable dt = ExecutarConsulta(query);
             return dt;

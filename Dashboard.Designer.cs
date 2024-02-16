@@ -31,6 +31,9 @@ namespace TeleBonifacio
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Dashboard));
             this.panel2 = new System.Windows.Forms.Panel();
+            this.txtLucroTotal = new System.Windows.Forms.Label();
+            this.txtTotalEntregadores = new System.Windows.Forms.Label();
+            this.txtTotalVendas = new System.Windows.Forms.Label();
             this.dtpDataFim = new System.Windows.Forms.DateTimePicker();
             this.dtpDataIniicio = new System.Windows.Forms.DateTimePicker();
             this.button1 = new System.Windows.Forms.Button();
@@ -43,6 +46,9 @@ namespace TeleBonifacio
             // 
             // panel2
             // 
+            this.panel2.Controls.Add(this.txtLucroTotal);
+            this.panel2.Controls.Add(this.txtTotalEntregadores);
+            this.panel2.Controls.Add(this.txtTotalVendas);
             this.panel2.Controls.Add(this.dtpDataFim);
             this.panel2.Controls.Add(this.dtpDataIniicio);
             this.panel2.Controls.Add(this.button1);
@@ -54,11 +60,41 @@ namespace TeleBonifacio
             this.panel2.Size = new System.Drawing.Size(800, 46);
             this.panel2.TabIndex = 1;
             // 
+            // txtLucroTotal
+            // 
+            this.txtLucroTotal.AutoSize = true;
+            this.txtLucroTotal.Location = new System.Drawing.Point(680, 17);
+            this.txtLucroTotal.Name = "txtLucroTotal";
+            this.txtLucroTotal.Size = new System.Drawing.Size(79, 13);
+            this.txtLucroTotal.TabIndex = 16;
+            this.txtLucroTotal.Text = "Lucro 8.888,88";
+            this.txtLucroTotal.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // txtTotalEntregadores
+            // 
+            this.txtTotalEntregadores.AutoSize = true;
+            this.txtTotalEntregadores.Location = new System.Drawing.Point(536, 17);
+            this.txtTotalEntregadores.Name = "txtTotalEntregadores";
+            this.txtTotalEntregadores.Size = new System.Drawing.Size(112, 13);
+            this.txtTotalEntregadores.TabIndex = 15;
+            this.txtTotalEntregadores.Text = "Vlr.Entregas: 8.888,88";
+            this.txtTotalEntregadores.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // txtTotalVendas
+            // 
+            this.txtTotalVendas.AutoSize = true;
+            this.txtTotalVendas.Location = new System.Drawing.Point(409, 17);
+            this.txtTotalVendas.Name = "txtTotalVendas";
+            this.txtTotalVendas.Size = new System.Drawing.Size(97, 13);
+            this.txtTotalVendas.TabIndex = 14;
+            this.txtTotalVendas.Text = "Vendas: 88.888,88";
+            this.txtTotalVendas.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
             // dtpDataFim
             // 
             this.dtpDataFim.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
             this.dtpDataFim.Format = System.Windows.Forms.DateTimePickerFormat.Short;
-            this.dtpDataFim.Location = new System.Drawing.Point(627, 12);
+            this.dtpDataFim.Location = new System.Drawing.Point(233, 12);
             this.dtpDataFim.Name = "dtpDataFim";
             this.dtpDataFim.Size = new System.Drawing.Size(85, 23);
             this.dtpDataFim.TabIndex = 13;
@@ -68,7 +104,7 @@ namespace TeleBonifacio
             // 
             this.dtpDataIniicio.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
             this.dtpDataIniicio.Format = System.Windows.Forms.DateTimePickerFormat.Short;
-            this.dtpDataIniicio.Location = new System.Drawing.Point(472, 12);
+            this.dtpDataIniicio.Location = new System.Drawing.Point(78, 12);
             this.dtpDataIniicio.Name = "dtpDataIniicio";
             this.dtpDataIniicio.Size = new System.Drawing.Size(85, 23);
             this.dtpDataIniicio.TabIndex = 12;
@@ -77,17 +113,18 @@ namespace TeleBonifacio
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(713, 12);
+            this.button1.Location = new System.Drawing.Point(328, 12);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(75, 23);
             this.button1.TabIndex = 10;
             this.button1.Text = "Pesquisar";
             this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(566, 17);
+            this.label2.Location = new System.Drawing.Point(172, 17);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(55, 13);
             this.label2.TabIndex = 2;
@@ -96,7 +133,7 @@ namespace TeleBonifacio
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(406, 17);
+            this.label1.Location = new System.Drawing.Point(12, 17);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(60, 13);
             this.label1.TabIndex = 0;
@@ -108,7 +145,7 @@ namespace TeleBonifacio
             this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(800, 75);
+            this.panel1.Size = new System.Drawing.Size(800, 50);
             this.panel1.TabIndex = 0;
             // 
             // Dashboard
@@ -137,5 +174,8 @@ namespace TeleBonifacio
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.Label txtLucroTotal;
+        private System.Windows.Forms.Label txtTotalEntregadores;
+        private System.Windows.Forms.Label txtTotalVendas;
     }
 }
