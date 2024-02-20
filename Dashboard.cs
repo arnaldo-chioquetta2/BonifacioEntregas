@@ -112,6 +112,7 @@ namespace TeleBonifacio
             decimal totalVendas = 0m;
             decimal totalEntregadores = 0m;
             decimal lucroTotal = 0m;
+            decimal comiss = 0m;
             if (dados.Rows.Count > 0)
             {
                 foreach (DataRow row in dados.Rows)
@@ -119,11 +120,13 @@ namespace TeleBonifacio
                     totalVendas += row.IsNull("LucroBruto") ? 0m : Convert.ToDecimal(row["LucroBruto"]);
                     totalEntregadores += row.IsNull("ValorTotalEntrega") ? 0m : Convert.ToDecimal(row["ValorTotalEntrega"]);
                     lucroTotal += row.IsNull("LucroTeleentrega") ? 0m : Convert.ToDecimal(row["LucroTeleentrega"]);
+                    comiss += row.IsNull("Comissao") ? 0m : Convert.ToDecimal(row["Comissao"]);
                 }
             }
-            txtTotalVendas.Text = "Vendas: "+totalVendas.ToString("C");
-            txtTotalEntregadores.Text = "Vlr.Entregas: " + totalEntregadores.ToString("C");
-            txtLucroTotal.Text = "Lucro: " + lucroTotal.ToString("C");
+            txtTotalVendas.Text = totalVendas.ToString("C");
+            txtTotalEntregadores.Text = totalEntregadores.ToString("C");
+            txtLucroTotal.Text = lucroTotal.ToString("C");
+            txtComiss.Text = comiss.ToString("C");
         }
 
     }

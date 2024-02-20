@@ -83,12 +83,13 @@ namespace TeleBonifacio.dao
             string dataInicioStr = DT1.ToString("MM/dd/yyyy HH:mm:ss");
             string dataFimStr = DT2.ToString("MM/dd/yyyy HH:mm:ss");
             string query = ($@"SELECT DateValue(Data) AS DataTruncada,
-                                   SUM(VlNota) - SUM(VlNota / 1.7) AS LucroBruto,
-                                   SUM(Valor) AS ValorTotalEntrega,
-                                   (SUM(VlNota) - SUM(VlNota / 1.7)) - SUM(Valor) AS LucroTeleentrega                            
+                                SUM(VlNota) - SUM(VlNota / 1.7) AS LucroBruto,
+                                SUM(Valor) AS ValorTotalEntrega,
+                                ((SUM(VlNota) - SUM(VlNota / 1.7)) - SUM(Valor)) -(SUM(VlNota) * 0.01) AS LucroTeleentrega,
+                                SUM(VlNota) *0.01 AS Comissao                                 
                             FROM Entregas
                             WHERE Data BETWEEN #{dataInicioStr}# AND #{dataFimStr}# 
-                            GROUP BY DateValue(Data)");
+                            GROUP BY DateValue(Data) ");
             DataTable dt = ExecutarConsulta(query);
             return dt;
         }

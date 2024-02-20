@@ -40,12 +40,22 @@ namespace TeleBonifacio
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.label3 = new System.Windows.Forms.Label();
+            this.label4 = new System.Windows.Forms.Label();
+            this.label5 = new System.Windows.Forms.Label();
+            this.txtComiss = new System.Windows.Forms.Label();
+            this.label6 = new System.Windows.Forms.Label();
             this.panel2.SuspendLayout();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // panel2
             // 
+            this.panel2.Controls.Add(this.label6);
+            this.panel2.Controls.Add(this.txtComiss);
+            this.panel2.Controls.Add(this.label5);
+            this.panel2.Controls.Add(this.label4);
+            this.panel2.Controls.Add(this.label3);
             this.panel2.Controls.Add(this.txtLucroTotal);
             this.panel2.Controls.Add(this.txtTotalEntregadores);
             this.panel2.Controls.Add(this.txtTotalVendas);
@@ -57,37 +67,37 @@ namespace TeleBonifacio
             this.panel2.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel2.Location = new System.Drawing.Point(0, 0);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(800, 46);
+            this.panel2.Size = new System.Drawing.Size(800, 56);
             this.panel2.TabIndex = 1;
             // 
             // txtLucroTotal
             // 
             this.txtLucroTotal.AutoSize = true;
-            this.txtLucroTotal.Location = new System.Drawing.Point(680, 17);
+            this.txtLucroTotal.Location = new System.Drawing.Point(729, 37);
             this.txtLucroTotal.Name = "txtLucroTotal";
-            this.txtLucroTotal.Size = new System.Drawing.Size(79, 13);
+            this.txtLucroTotal.Size = new System.Drawing.Size(49, 13);
             this.txtLucroTotal.TabIndex = 16;
-            this.txtLucroTotal.Text = "Lucro 8.888,88";
+            this.txtLucroTotal.Text = "8.888,88";
             this.txtLucroTotal.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // txtTotalEntregadores
             // 
             this.txtTotalEntregadores.AutoSize = true;
-            this.txtTotalEntregadores.Location = new System.Drawing.Point(536, 17);
+            this.txtTotalEntregadores.Location = new System.Drawing.Point(515, 37);
             this.txtTotalEntregadores.Name = "txtTotalEntregadores";
-            this.txtTotalEntregadores.Size = new System.Drawing.Size(112, 13);
+            this.txtTotalEntregadores.Size = new System.Drawing.Size(52, 13);
             this.txtTotalEntregadores.TabIndex = 15;
-            this.txtTotalEntregadores.Text = "Vlr.Entregas: 8.888,88";
+            this.txtTotalEntregadores.Text = " 8.888,88";
             this.txtTotalEntregadores.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // txtTotalVendas
             // 
             this.txtTotalVendas.AutoSize = true;
-            this.txtTotalVendas.Location = new System.Drawing.Point(409, 17);
+            this.txtTotalVendas.Location = new System.Drawing.Point(417, 37);
             this.txtTotalVendas.Name = "txtTotalVendas";
-            this.txtTotalVendas.Size = new System.Drawing.Size(97, 13);
+            this.txtTotalVendas.Size = new System.Drawing.Size(55, 13);
             this.txtTotalVendas.TabIndex = 14;
-            this.txtTotalVendas.Text = "Vendas: 88.888,88";
+            this.txtTotalVendas.Text = "88.888,88";
             this.txtTotalVendas.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // dtpDataFim
@@ -148,6 +158,56 @@ namespace TeleBonifacio
             this.panel1.Size = new System.Drawing.Size(800, 50);
             this.panel1.TabIndex = 0;
             // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(417, 12);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(49, 13);
+            this.label3.TabIndex = 17;
+            this.label3.Text = "Vendas: ";
+            this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(512, 12);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(55, 13);
+            this.label4.TabIndex = 18;
+            this.label4.Text = "Entregas: ";
+            this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(621, 12);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(63, 13);
+            this.label5.TabIndex = 19;
+            this.label5.Text = "Comissões :";
+            this.label5.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // txtComiss
+            // 
+            this.txtComiss.AutoSize = true;
+            this.txtComiss.Location = new System.Drawing.Point(621, 37);
+            this.txtComiss.Name = "txtComiss";
+            this.txtComiss.Size = new System.Drawing.Size(52, 13);
+            this.txtComiss.TabIndex = 20;
+            this.txtComiss.Text = " 8.888,88";
+            this.txtComiss.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(738, 12);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(40, 13);
+            this.label6.TabIndex = 21;
+            this.label6.Text = "Lucro :";
+            this.label6.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
             // Dashboard
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -177,5 +237,10 @@ namespace TeleBonifacio
         private System.Windows.Forms.Label txtLucroTotal;
         private System.Windows.Forms.Label txtTotalEntregadores;
         private System.Windows.Forms.Label txtTotalVendas;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.Label txtComiss;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Label label3;
     }
 }
