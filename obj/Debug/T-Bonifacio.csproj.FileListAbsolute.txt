@@ -21,3 +21,4 @@ C:\Prog\T-Bonifacio\T-Bonifacio\obj\Debug\TeleBonifacio.fCadEntregadores.resourc
 C:\Prog\T-Bonifacio\T-Bonifacio\obj\Debug\TeleBonifacio.CadVendedor.resources
 C:\Prog\T-Bonifacio\T-Bonifacio\obj\Debug\TeleBonifacio.Consultas.resources
 C:\Prog\T-Bonifacio\T-Bonifacio\obj\Debug\TeleBonifacio.Dashboard.resources
+C:\Prog\T-Bonifacio\T-Bonifacio\obj\Debug\TeleBonifacio.opRecibos.resources
