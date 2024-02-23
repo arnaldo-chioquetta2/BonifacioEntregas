@@ -91,6 +91,7 @@
     <Compile Include="dao\ConfigDAO.cs" />
     <Compile Include="dao\EntregadorDAO.cs" />
     <Compile Include="dao\EntregasDAO.cs" />
+    <Compile Include="dao\ReciboDAO.cs" />
     <Compile Include="dao\VendedoresDAO.cs" />
     <Compile Include="Dashboard.cs">
       <SubType>Form</SubType>
