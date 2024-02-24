@@ -15,8 +15,6 @@ namespace TeleBonifacio
     public partial class opRecibos : Form
     {
 
-        VendedoresDAO Vendedor;
-
         public opRecibos()
         {
             InitializeComponent();            
@@ -24,11 +22,29 @@ namespace TeleBonifacio
 
         private void opRecibos_Load(object sender, EventArgs e)
         {
-            Vendedor = new VendedoresDAO();
             PopulaVendedores();
             CarregaGrid();
+            ConfigurarGrid();
         }
 
+        private void PopulaVendedores()
+        {
+            VendedoresDAO Vendedor = new VendedoresDAO();
+            DataTable dados = Vendedor.GetDadosOrdenados();
+            List<ComboBoxItem> lista = new List<ComboBoxItem>();
+            foreach (DataRow row in dados.Rows)
+            {
+                int id = Convert.ToInt32(row["id"]);
+                string nome = row["Nome"].ToString();
+                ComboBoxItem item = new ComboBoxItem(id, nome);
+                lista.Add(item);
+            }
+            cmbVendedor.DataSource = lista;
+            cmbVendedor.DisplayMember = "Nome";
+            cmbVendedor.ValueMember = "Id";
+        }
+
+        #region Grid
         private void CarregaGrid()
         {
             ReciboDAO Recibo = new ReciboDAO();
@@ -39,9 +55,23 @@ namespace TeleBonifacio
             }
             else
             {
+                dataGrid1.Rows.SetHeight(0, 0);
                 DataTable DadosInvertidos = InverteLinhasColunas(Dados);
+                for (int i = 0; i < DadosInvertidos.Columns.Count; i++)
+                {
+                    string info = (string)DadosInvertidos.Rows[1][i];
+                    double vlr = Convert.ToDouble(info);
+                    DadosInvertidos.Rows[1][i] = vlr.ToString("0.00");
+                }
                 DevAge.ComponentModel.BoundDataView boundDataView = new DevAge.ComponentModel.BoundDataView(DadosInvertidos.DefaultView);
                 dataGrid1.DataSource = boundDataView;
+                for (int i = 0; i < dataGrid1.Columns.Count; i++)
+                {
+                    if (dataGrid1.GetCell(1, i) != null)
+                    {
+                        dataGrid1.GetCell(1, i).View.TextAlignment = DevAge.Drawing.ContentAlignment.MiddleRight;
+                    }
+                }
             }
         }
 
@@ -64,20 +94,26 @@ namespace TeleBonifacio
             return dataTableInvertido;
         }
 
-        private void PopulaVendedores()
+        private void ConfigurarGrid()
         {
-            DataTable dados = Vendedor.GetDadosOrdenados();
-            List<ComboBoxItem> lista = new List<ComboBoxItem>();
-            foreach (DataRow row in dados.Rows)
+            SourceGrid.Cells.Views.Cell fonte = new SourceGrid.Cells.Views.Cell();
+            fonte.Font = new Font("Arial", 12, FontStyle.Regular);
+            for (int i = 0; i < dataGrid1.Columns.Count; i++)
             {
-                int id = Convert.ToInt32(row["id"]);
-                string nome = row["Nome"].ToString();
-                ComboBoxItem item = new ComboBoxItem(id, nome);
-                lista.Add(item);
+                dataGrid1.Columns[i].Width = 160;
             }
-            cmbVendedor.DataSource = lista;
-            cmbVendedor.DisplayMember = "Nome";
-            cmbVendedor.ValueMember = "Id";
+            for (int i = 0; i < dataGrid1.Columns.Count; i++)
+            {
+                for (int j = 0; j < dataGrid1.Rows.Count; j++)
+                {
+                    dataGrid1.GetCell(j, i).View = fonte;
+                    dataGrid1.GetCell(j, i).View.TextAlignment = DevAge.Drawing.ContentAlignment.MiddleRight;
+                }
+            }
+            dataGrid1.Invalidate();
         }
+
+        #endregion
+
     }
 }
