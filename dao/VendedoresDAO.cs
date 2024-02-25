@@ -130,6 +130,11 @@ namespace TeleBonifacio.dao
             };
         }
 
+        internal string VlrPend(object selectedValue)
+        {
+            throw new NotImplementedException();
+        }
+
         public override DataTable getDados()
         {
             string query = $"SELECT * FROM Vendedores";

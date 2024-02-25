@@ -31,18 +31,18 @@ namespace TeleBonifacio
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(opRecibos));
             this.panel1 = new System.Windows.Forms.Panel();
-            this.dataGrid1 = new SourceGrid.DataGrid();
-            this.label1 = new System.Windows.Forms.Label();
-            this.cmbVendedor = new System.Windows.Forms.ComboBox();
-            this.button1 = new System.Windows.Forms.Button();
+            this.ltVlr = new System.Windows.Forms.Label();
             this.button2 = new System.Windows.Forms.Button();
-            this.label2 = new System.Windows.Forms.Label();
+            this.button1 = new System.Windows.Forms.Button();
+            this.cmbVendedor = new System.Windows.Forms.ComboBox();
+            this.label1 = new System.Windows.Forms.Label();
+            this.dataGrid1 = new SourceGrid.DataGrid();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // panel1
             // 
-            this.panel1.Controls.Add(this.label2);
+            this.panel1.Controls.Add(this.ltVlr);
             this.panel1.Controls.Add(this.button2);
             this.panel1.Controls.Add(this.button1);
             this.panel1.Controls.Add(this.cmbVendedor);
@@ -52,6 +52,53 @@ namespace TeleBonifacio
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(800, 67);
             this.panel1.TabIndex = 0;
+            // 
+            // ltVlr
+            // 
+            this.ltVlr.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ltVlr.Location = new System.Drawing.Point(543, 23);
+            this.ltVlr.Name = "ltVlr";
+            this.ltVlr.Size = new System.Drawing.Size(74, 17);
+            this.ltVlr.TabIndex = 16;
+            // 
+            // button2
+            // 
+            this.button2.Location = new System.Drawing.Point(715, 20);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(75, 23);
+            this.button2.TabIndex = 15;
+            this.button2.Text = "Extrato";
+            this.button2.UseVisualStyleBackColor = true;
+            // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(634, 20);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(75, 23);
+            this.button1.TabIndex = 14;
+            this.button1.Text = "Pagar";
+            this.button1.UseVisualStyleBackColor = true;
+            // 
+            // cmbVendedor
+            // 
+            this.cmbVendedor.DisplayMember = "Nome";
+            this.cmbVendedor.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbVendedor.Location = new System.Drawing.Point(294, 17);
+            this.cmbVendedor.Name = "cmbVendedor";
+            this.cmbVendedor.Size = new System.Drawing.Size(232, 21);
+            this.cmbVendedor.TabIndex = 13;
+            this.cmbVendedor.ValueMember = "Id";
+            this.cmbVendedor.SelectedIndexChanged += new System.EventHandler(this.cmbVendedor_SelectedIndexChanged_1);
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.Location = new System.Drawing.Point(214, 23);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(74, 17);
+            this.label1.TabIndex = 0;
+            this.label1.Text = "Vendedor:";
             // 
             // dataGrid1
             // 
@@ -66,53 +113,6 @@ namespace TeleBonifacio
             this.dataGrid1.TabIndex = 2;
             this.dataGrid1.TabStop = true;
             this.dataGrid1.ToolTipText = "";
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(214, 23);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(74, 17);
-            this.label1.TabIndex = 0;
-            this.label1.Text = "Vendedor:";
-            // 
-            // cmbVendedor
-            // 
-            this.cmbVendedor.DisplayMember = "Nome";
-            this.cmbVendedor.Location = new System.Drawing.Point(294, 22);
-            this.cmbVendedor.Name = "cmbVendedor";
-            this.cmbVendedor.Size = new System.Drawing.Size(232, 21);
-            this.cmbVendedor.TabIndex = 13;
-            this.cmbVendedor.ValueMember = "Id";
-            // 
-            // button1
-            // 
-            this.button1.Location = new System.Drawing.Point(634, 20);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
-            this.button1.TabIndex = 14;
-            this.button1.Text = "Pagar";
-            this.button1.UseVisualStyleBackColor = true;
-            // 
-            // button2
-            // 
-            this.button2.Location = new System.Drawing.Point(715, 20);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(75, 23);
-            this.button2.TabIndex = 15;
-            this.button2.Text = "Extrato";
-            this.button2.UseVisualStyleBackColor = true;
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(543, 23);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(74, 17);
-            this.label2.TabIndex = 16;
-            this.label2.Text = "R$ 888.88";
             // 
             // opRecibos
             // 
@@ -138,7 +138,7 @@ namespace TeleBonifacio
         private System.Windows.Forms.Label label1;
         private SourceGrid.DataGrid dataGrid1;
         private System.Windows.Forms.ComboBox cmbVendedor;
-        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label ltVlr;
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.Button button1;
     }

@@ -15,6 +15,8 @@ namespace TeleBonifacio
     public partial class opRecibos : Form
     {
 
+        private ReciboDAO Recibo;
+
         public opRecibos()
         {
             InitializeComponent();            
@@ -23,6 +25,7 @@ namespace TeleBonifacio
         private void opRecibos_Load(object sender, EventArgs e)
         {
             PopulaVendedores();
+            Recibo = new ReciboDAO();
             CarregaGrid();
             ConfigurarGrid();
         }
@@ -32,6 +35,8 @@ namespace TeleBonifacio
             VendedoresDAO Vendedor = new VendedoresDAO();
             DataTable dados = Vendedor.GetDadosOrdenados();
             List<ComboBoxItem> lista = new List<ComboBoxItem>();
+            ComboBoxItem item0 = new ComboBoxItem(0, "SELECIONE");
+            lista.Add(item0);
             foreach (DataRow row in dados.Rows)
             {
                 int id = Convert.ToInt32(row["id"]);
@@ -47,7 +52,7 @@ namespace TeleBonifacio
         #region Grid
         private void CarregaGrid()
         {
-            ReciboDAO Recibo = new ReciboDAO();
+            Recibo = new ReciboDAO();
             DataTable Dados = Recibo.ValoresAPagar();
             if (Dados.Rows.Count == 0)
             {
@@ -115,5 +120,14 @@ namespace TeleBonifacio
 
         #endregion
 
+        private void cmbVendedor_SelectedIndexChanged_1(object sender, EventArgs e)
+        {
+            if (dataGrid1.DataSource != null)
+            {
+                int id = Convert.ToInt32(cmbVendedor.SelectedValue);
+                decimal ret = Recibo.VlrPend(id);
+                ltVlr.Text = ret.ToString("C");
+            }
+        }
     }
 }

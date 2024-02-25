@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.OleDb;
 using System.Globalization;
 using System.Linq;
@@ -32,7 +33,7 @@ namespace TeleBonifacio
                 INI MeuIni = new INI();
                 MeuIni.WriteString("Config", "Base", value);
             }
-        }
+        }        
 
         public static string connectionString
         {
@@ -180,6 +181,31 @@ namespace TeleBonifacio
                 }
             }
             return count;
+        }
+
+        public static DataTable getDados(string query)
+        {
+            using (OleDbConnection connection = new OleDbConnection(gen.connectionString))
+            {
+                try
+                {
+                    connection.Open();
+                    using (OleDbCommand command = new OleDbCommand(query, connection))
+                    {
+                        using (OleDbDataAdapter adapter = new OleDbDataAdapter(command))
+                        {
+                            DataTable dataTable = new DataTable();
+                            adapter.Fill(dataTable);
+                            return dataTable;
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    throw;
+                }
+            }
+            return null;
         }
 
         #endregion

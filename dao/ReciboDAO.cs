@@ -16,28 +16,20 @@ namespace TeleBonifacio.dao
                         and Entregas.idVend > 0
                         Group by Entregas.idVend, Vendedores.Nome
                         Order by Entregas.idVend, Vendedores.Nome ";
+            DataTable dataTable = gen.getDados(query);
+            return dataTable;
+        }
 
-            using (OleDbConnection connection = new OleDbConnection(gen.connectionString))
-            {
-                try
-                {
-                    connection.Open();
-                    using (OleDbCommand command = new OleDbCommand(query, connection))
-                    {
-                        using (OleDbDataAdapter adapter = new OleDbDataAdapter(command))
-                        {
-                            DataTable dataTable = new DataTable();
-                            adapter.Fill(dataTable);
-                            return dataTable;
-                        }
-                    }
-                }
-                catch (Exception ex)
-                {
-                    throw;
-                }
-            }
-            return null;
+        public decimal VlrPend(int id)
+        {
+            string query = @"Select Sum(Entregas.VlNota) / 100 as Valor  
+                From Entregas
+                Where Entregas.Pago is Null
+                and Entregas.idVend = " + id.ToString();
+            DataTable dataTable = gen.getDados(query);
+            double doubleValue = Convert.ToDouble(dataTable.Rows[0]["Valor"]);
+            decimal ret = Convert.ToDecimal(doubleValue);
+            return ret;
         }
 
     }
