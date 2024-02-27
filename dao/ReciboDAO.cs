@@ -23,8 +23,8 @@ namespace TeleBonifacio.dao
         public decimal VlrPend(int id)
         {
             string query = @"Select Sum(Entregas.VlNota) / 100 as Valor  
-                From Entregas
-                Where Entregas.Pago is Null
+                From Entregas 
+                Where Entregas.Pago is Null 
                 and Entregas.idVend = " + id.ToString();
             DataTable dataTable = gen.getDados(query);
             double doubleValue = Convert.ToDouble(dataTable.Rows[0]["Valor"]);
@@ -32,5 +32,10 @@ namespace TeleBonifacio.dao
             return ret;
         }
 
+        internal void Pagar(int id)
+        {
+            string query = "UPDATE Entregas SET Pago = VlNota/ 100 WHERE Pago is Null and idVend = " + id.ToString();
+            gen.ExecutarComandoSQL(query, null);
+        }
     }
 }

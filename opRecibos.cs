@@ -1,14 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using TeleBonifacio.dao;
 using TeleBonifacio.tb;
+using System.Linq;
 
 namespace TeleBonifacio
 {
@@ -16,6 +13,7 @@ namespace TeleBonifacio
     {
 
         private ReciboDAO Recibo;
+        private DataTable dataTableInvertido;
 
         public opRecibos()
         {
@@ -62,6 +60,7 @@ namespace TeleBonifacio
             {
                 dataGrid1.Rows.SetHeight(0, 0);
                 DataTable DadosInvertidos = InverteLinhasColunas(Dados);
+                DadosInvertidos = InverteLinhasColunas(Dados);
                 for (int i = 0; i < DadosInvertidos.Columns.Count; i++)
                 {
                     string info = (string)DadosInvertidos.Rows[1][i];
@@ -82,7 +81,7 @@ namespace TeleBonifacio
 
         private DataTable InverteLinhasColunas(DataTable dataTableOriginal)
         {
-            DataTable dataTableInvertido = new DataTable();
+            dataTableInvertido = new DataTable();
             foreach (DataRow row in dataTableOriginal.Rows)
             {
                 dataTableInvertido.Columns.Add(row[0].ToString());
@@ -118,6 +117,26 @@ namespace TeleBonifacio
             dataGrid1.Invalidate();
         }
 
+        private void dataGrid1_MouseDown(object sender, MouseEventArgs e)
+        {
+            SourceGrid.DataGrid grid = (SourceGrid.DataGrid)sender;
+            SourceGrid.Position position = grid.PositionAtPoint(new System.Drawing.Point(e.X, e.Y));
+            SourceGrid.Cells.ICellVirtual cell = grid.GetCell(position.Row, position.Column);
+            int colunaClicada = position.Column;
+            if (cell != null)
+            {
+                string nome = dataTableInvertido.Rows[0][colunaClicada].ToString();
+                foreach (var item in cmbVendedor.Items)
+                {
+                    if (item.ToString() == nome)
+                    {
+                        cmbVendedor.SelectedItem = item;
+                        break;
+                    }
+                }
+            }
+        }
+
         #endregion
 
         private void cmbVendedor_SelectedIndexChanged_1(object sender, EventArgs e)
@@ -129,5 +148,13 @@ namespace TeleBonifacio
                 ltVlr.Text = ret.ToString("C");
             }
         }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            int id = Convert.ToInt32(cmbVendedor.SelectedValue);
+            Recibo.Pagar(id);
+            this.Close();
+        }
+
     }
 }

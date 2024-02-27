@@ -78,6 +78,7 @@ namespace TeleBonifacio
             this.button1.TabIndex = 14;
             this.button1.Text = "Pagar";
             this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // cmbVendedor
             // 
@@ -108,17 +109,18 @@ namespace TeleBonifacio
             this.dataGrid1.FixedRows = 1;
             this.dataGrid1.Location = new System.Drawing.Point(0, 67);
             this.dataGrid1.Name = "dataGrid1";
-            this.dataGrid1.SelectionMode = SourceGrid.GridSelectionMode.Row;
-            this.dataGrid1.Size = new System.Drawing.Size(800, 158);
+            this.dataGrid1.SelectionMode = SourceGrid.GridSelectionMode.Column;
+            this.dataGrid1.Size = new System.Drawing.Size(800, 74);
             this.dataGrid1.TabIndex = 2;
             this.dataGrid1.TabStop = true;
             this.dataGrid1.ToolTipText = "";
+            this.dataGrid1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.dataGrid1_MouseDown);
             // 
             // opRecibos
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 225);
+            this.ClientSize = new System.Drawing.Size(800, 141);
             this.Controls.Add(this.dataGrid1);
             this.Controls.Add(this.panel1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
