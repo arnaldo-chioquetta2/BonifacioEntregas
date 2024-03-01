@@ -121,19 +121,26 @@ namespace TeleBonifacio
         {
             SourceGrid.DataGrid grid = (SourceGrid.DataGrid)sender;
             SourceGrid.Position position = grid.PositionAtPoint(new System.Drawing.Point(e.X, e.Y));
-            SourceGrid.Cells.ICellVirtual cell = grid.GetCell(position.Row, position.Column);
-            int colunaClicada = position.Column;
-            if (cell != null)
+            try
             {
-                string nome = dataTableInvertido.Rows[0][colunaClicada].ToString();
-                foreach (var item in cmbVendedor.Items)
+                SourceGrid.Cells.ICellVirtual cell = grid.GetCell(position.Row, position.Column);
+                int colunaClicada = position.Column;
+                if (cell != null)
                 {
-                    if (item.ToString() == nome)
+                    string nome = dataTableInvertido.Rows[0][colunaClicada].ToString();
+                    foreach (var item in cmbVendedor.Items)
                     {
-                        cmbVendedor.SelectedItem = item;
-                        break;
+                        if (item.ToString() == nome)
+                        {
+                            cmbVendedor.SelectedItem = item;
+                            break;
+                        }
                     }
                 }
+            }
+            catch (Exception)
+            {
+                // throw;
             }
         }
 
@@ -153,7 +160,35 @@ namespace TeleBonifacio
         {
             int id = Convert.ToInt32(cmbVendedor.SelectedValue);
             Recibo.Pagar(id);
-            this.Close();
+            using (var receipt = new rel.Receipt())
+            {
+                // Definir as informações do recibo
+                var storeName = "Boni Auto peças";
+                var storeAddress = "Estrada Retiro da Ponta Grossa, 1050";
+                var storePhone = "3245-5653/3242-3857";
+                var customerName = "DIOGO MATOS";
+                var customerAddress = "AV PRINCIPAL DA PONTA GROSSA";
+                var date = "26/02/2024 a 02/03/2024";
+                var time = "10:20";
+                var invoiceNumber = "2024-03-01-001";
+
+                receipt.Print(storeName, storeAddress, storePhone, customerName, customerAddress, date, time, invoiceNumber, "items", ltVlr.Text, "paymentMethod");
+
+                //var items = new List<ReceiptItem>()
+                //{
+                //    new ReceiptItem { Name = "Peça A", Quantity = 2, Price = 10.50m },
+                //    new ReceiptItem { Name = "Peça B", Quantity = 1, Price = 25.00m }
+                //};
+                //var total = items.Sum(item => item.Quantity * item.Price);
+                //var paymentMethod = "Cartão de crédito";
+
+                //// Print the receipt
+                //using (var receipt = new Receipt())
+                //{
+                //    receipt.Print(storeName, storeAddress, storePhone, customerName, customerAddress, date, time, invoiceNumber, items, total.ToString("C2"), paymentMethod);
+                //}
+            }
+            // this.Close();
         }
 
     }

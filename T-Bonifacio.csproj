@@ -145,6 +145,7 @@
     <Compile Include="Properties\CadVendedores.designer.cs">
       <DependentUpon>CadVendedores.cs</DependentUpon>
     </Compile>
+    <Compile Include="rel\Receipt.cs" />
     <Compile Include="tb\CampoTagInfo.cs" />
     <Compile Include="tb\Cliente.cs" />
     <Compile Include="tb\ComboBoxItem.cs" />

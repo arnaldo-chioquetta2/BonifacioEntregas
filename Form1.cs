@@ -21,7 +21,9 @@ namespace TeleBonifacio
 
         private void Form1_Load(object sender, EventArgs e)
         {
-
+            INI cINI = new INI();
+            int diaAtual = DateTime.Now.Day;
+            cINI.WriteInt("INI", "UltExec", diaAtual);
         }
 
         private void pictureBox1_Click(object sender, EventArgs e)
