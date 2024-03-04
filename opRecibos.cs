@@ -159,7 +159,7 @@ namespace TeleBonifacio
         private void button1_Click(object sender, EventArgs e)
         {
             int id = Convert.ToInt32(cmbVendedor.SelectedValue);
-            Recibo.Pagar(id);
+            // Recibo.Pagar(id);
             using (var receipt = new rel.Receipt())
             {
                 // Definir as informações do recibo

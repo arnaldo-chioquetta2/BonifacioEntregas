@@ -43,69 +43,42 @@ namespace TeleBonifacio.rel
 
         public void Print(string storeName, string storeAddress, string storePhone, string customerName, string customerAddress, string date, string time, string invoiceNumber, string items, string total, string paymentMethod)
         {
-            // Criar um novo documento de impressão
             var printDocument = new PrintDocument();
-
-            // Definir as propriedades do documento de impressão
             printDocument.DocumentName = "Receipt";
             printDocument.PrintPage += PrintPage;
-
-            // Imprimir o documento
             printDocument.Print();
-
-            // Função que imprime a página do recibo
         }
 
         private void PrintPage(object sender, PrintPageEventArgs e)
         {
-            // Desenhar o cabeçalho do recibo
-            e.Graphics.DrawString(storeName, _font, _brush, new Point(10, 10));
-            e.Graphics.DrawString(storeAddress, _font, _brush, new Point(10, 30));
-            e.Graphics.DrawString(storePhone, _font, _brush, new Point(10, 50));
+            int startX = 10;
+            int startY = 10;
+            int offset = 40;
 
-            // Desenhar o corpo do recibo
-            e.Graphics.DrawString("Cliente:", _font, _brush, new Point(10, 70));
-            e.Graphics.DrawString(customerName, _font, _brush, new Point(10, 90));
-            e.Graphics.DrawString(customerAddress, _font, _brush, new Point(10, 110));
-            e.Graphics.DrawString("Data:", _font, _brush, new Point(10, 130));
-            e.Graphics.DrawString(date, _font, _brush, new Point(10, 150));
-            e.Graphics.DrawString("Hora:", _font, _brush, new Point(10, 170));
-            e.Graphics.DrawString(time, _font, _brush, new Point(10, 190));
-            e.Graphics.DrawString("Número da Fatura:", _font, _brush, new Point(10, 210));
-            e.Graphics.DrawString(invoiceNumber, _font, _brush, new Point(10, 230));
-            e.Graphics.DrawString("Itens:", _font, _brush, new Point(10, 250));
-            e.Graphics.DrawString(items, _font, _brush, new Point(10, 270));
+            string storeName = "Bonifacio Comercio Ltda";
+            string storePhone = "3245-5553/3242-3857";
+            string storeAddress = "Estrada Retiro da Ponta Grossa, 1050";
+            string customerName = "Vendedor";
+            string total = "R$ 123,45";
 
-            // Desenhar o rodapé do recibo
-            e.Graphics.DrawString("Total:", _font, _brush, new Point(10, 290));
-            e.Graphics.DrawString(total, _font, _brush, new Point(10, 310));
-            e.Graphics.DrawString("Forma de Pagamento:", _font, _brush, new Point(10, 330));
-            e.Graphics.DrawString(paymentMethod, _font, _brush, new Point(10, 350));
-
-            // Draw items table header
-            //y += 20;
-            //e.Graphics.DrawString("Itens", _font, _brush, new Point(10, y));
-            //y += 10;
-            //e.Graphics.DrawLine(_pen, new Point(10, y), new Point(e.PageBounds.Width - 10, y)); // Line under header
-            //y += 10;
-            //// Draw table columns (adjust spacing as needed)
-            //e.Graphics.DrawString("Nome", _font, _brush, new Point(10, y));
-            //e.Graphics.DrawString("Qtd.", _font, _brush, new Point(e.PageBounds.Width - 80, y));
-            //e.Graphics.DrawString("Preço", _font, _brush, new Point(e.PageBounds.Width - 40, y));
-            //y += 10;
-            //e.Graphics.DrawLine(_pen, new Point(10, y), new Point(e.PageBounds.Width - 10, y)); // Line under columns
-
-            //// Draw each item
-            //foreach (var item in items)
-            //{
-            //    y += 10;
-            //    e.Graphics.DrawString(item.Name, _font, _brush, new Point(10, y));
-            //    e.Graphics.DrawString(item.Quantity.ToString(),
-
+            e.Graphics.DrawString("Recibo", new Font(_font.FontFamily, 18, FontStyle.Bold), _brush, startX, startY);
+            startX = +100;
+            e.Graphics.DrawString(storeName, _font, _brush, startX, startY + offset);            
+            e.Graphics.DrawString("Telefone: " + storePhone, _font, _brush, startX, startY + offset * 2);
+            e.Graphics.DrawString("Endereço: " + storeAddress, _font, _brush, startX, startY + offset * 3);
+            e.Graphics.DrawLine(_pen, new Point(startX, startY + offset * 4), new Point(e.PageBounds.Width - startX, startY + offset * 4));
+            e.Graphics.DrawString("Nome: "+ customerName, _font, _brush, startX, startY + offset * 5);           
+            e.Graphics.DrawString("Valor: "+ total, _font, _brush, startX, startY + offset * 6);
+            e.Graphics.DrawString("Um real e vinte e tres centavos", _font, _brush, startX, startY + offset * 7);
+            e.Graphics.DrawString("Concordo com o valor acima citado", _font, _brush, startX, startY + offset * 8);
+            e.Graphics.DrawString("Pagamento das vendas de 01/03/2024 a "+ DateTime.Now.ToString("dd/MM/yyyy"), _font, _brush, startX, startY + offset * 9);
+            e.Graphics.DrawString("Ass:", _font, _brush, startX, startY + offset * 11);
+            int MgeY = (startY + offset * 11) + 20;
+            e.Graphics.DrawLine(_pen, new Point((startX+50), MgeY), new Point(e.PageBounds.Width - (startX + 50), MgeY));
+            e.Graphics.DrawString("Porto Alegre, " + DateTime.Now.ToString("dd/MM/yyyy"), _font, _brush, startX, startY + offset * 12);
         }
 
-
-        }
+    }
 
 }
 
