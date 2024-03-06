@@ -81,14 +81,14 @@ namespace TeleBonifacio
             int Dia = Agora.Day + 1;
             DateTime DT1 = new DateTime(Ano, 1, 1);
             DateTime DT2 = DateTime.Now;
-            if (gen.IsDateTimeValid(Ano, Mes, Dia))
+            if (glo.IsDateTimeValid(Ano, Mes, Dia))
             {
                 DT2 = new DateTime(Ano, Mes, Dia);
             }
             else
             {
                 Mes++;
-                if (gen.IsDateTimeValid(Ano, Mes, Dia))
+                if (glo.IsDateTimeValid(Ano, Mes, Dia))
                 {
                     Ano++;
                     Mes = 1;

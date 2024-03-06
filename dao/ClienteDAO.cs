@@ -39,7 +39,7 @@ namespace TeleBonifacio.dao
             }
             try
             {
-                gen.ExecutarComandoSQL(query, parameters);
+                glo.ExecutarComandoSQL(query, parameters);
             }
             catch (Exception ex)
             {
@@ -74,7 +74,7 @@ namespace TeleBonifacio.dao
         private int VeUltReg()
         {
             string query = "SELECT Max(NrCli) as NrCli FROM Clientes";
-            using (OleDbConnection connection = new OleDbConnection(gen.connectionString))
+            using (OleDbConnection connection = new OleDbConnection(glo.connectionString))
             {
                 try
                 {
@@ -119,7 +119,7 @@ namespace TeleBonifacio.dao
 
         public override tb.IDataEntity Apagar(int direcao, tb.IDataEntity entidade)
         {
-            gen.ExecutarComandoSQL("DELETE FROM Clientes WHERE NrCli = " + id.ToString(), null);
+            glo.ExecutarComandoSQL("DELETE FROM Clientes WHERE NrCli = " + id.ToString(), null);
             tb.Cliente proximocliente = direcao > -1 ? ParaFrente() as tb.Cliente : ParaTraz() as tb.Cliente;
             if (proximocliente == null || proximocliente.Id == 0)
             {
@@ -174,7 +174,7 @@ namespace TeleBonifacio.dao
 
         private tb.Cliente ExecutarConsultacliente(string query)
         {
-            using (OleDbConnection connection = new OleDbConnection(gen.connectionString))
+            using (OleDbConnection connection = new OleDbConnection(glo.connectionString))
             {
                 try
                 {
@@ -207,7 +207,7 @@ namespace TeleBonifacio.dao
 
         private DataTable ExecutarConsulta(string query)
         {
-            using (OleDbConnection connection = new OleDbConnection(gen.connectionString))
+            using (OleDbConnection connection = new OleDbConnection(glo.connectionString))
             {
                 try
                 {
@@ -284,13 +284,13 @@ namespace TeleBonifacio.dao
                 wre = " and NrCli <> " + cliente.id.ToString();
             }
             string queryNome = $"SELECT COUNT(*) FROM Clientes WHERE Nome = '{cliente.Nome}' " + wre;
-            int countNome = gen.ExecutarConsultaCount(queryNome);
+            int countNome = glo.ExecutarConsultaCount(queryNome);
             if (countNome > 0)
             {
                 return "Já existe um cliente cadastrado com esse nome.";
             }
             string queryNrOutro = $"SELECT COUNT(*) FROM Clientes WHERE NrOutro = {cliente.NrOutro} " + wre;
-            int countNrOutro = gen.ExecutarConsultaCount(queryNrOutro);
+            int countNrOutro = glo.ExecutarConsultaCount(queryNrOutro);
             if (countNrOutro > 0)
             {
                 return "Já existe um cliente cadastrado com o mesmo NrOutro.";

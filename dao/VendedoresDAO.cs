@@ -24,18 +24,18 @@ namespace TeleBonifacio.dao
         public void AdicionaVendedor(string nome, string loja)
         {
             String sql = @"INSERT INTO Vendedores (Nome, Loja) VALUES ('"
-                + gen.fa(nome) + "', '"
-                + gen.fa(loja) + "')";
-            gen.ExecutarComandoSQL(sql);
+                + glo.fa(nome) + "', '"
+                + glo.fa(loja) + "')";
+            glo.ExecutarComandoSQL(sql);
         }
 
         public void EditaVendedor(int id, string nome, string loja)
         {
             String sql = @"UPDATE Vendedores SET 
-                Nome = '" + gen.fa(nome) +
-                "', Loja = '" + gen.fa(loja) +
+                Nome = '" + glo.fa(nome) +
+                "', Loja = '" + glo.fa(loja) +
                 "' WHERE ID = " + id.ToString();
-            gen.ExecutarComandoSQL(sql);
+            glo.ExecutarComandoSQL(sql);
         }
         public override object GetUltimo()
         {
@@ -61,7 +61,7 @@ namespace TeleBonifacio.dao
 
             try
             {
-                gen.ExecutarComandoSQL(query, parameters);
+                glo.ExecutarComandoSQL(query, parameters);
             }
             catch (Exception ex)
             {
@@ -178,7 +178,7 @@ namespace TeleBonifacio.dao
 
         public override tb.IDataEntity Apagar(int direcao, tb.IDataEntity entidade)
         {
-            gen.ExecutarComandoSQL("DELETE FROM Vendedores WHERE ID = " + Id.ToString(), null);
+            glo.ExecutarComandoSQL("DELETE FROM Vendedores WHERE ID = " + Id.ToString(), null);
             tb.Vendedor proximocliente = direcao > -1 ? ParaFrente() as tb.Vendedor : ParaTraz() as tb.Vendedor;
             if (proximocliente == null || proximocliente.Id == 0)
             {
@@ -214,7 +214,7 @@ namespace TeleBonifacio.dao
                 wre = " and ID <> " + vendedor.Id.ToString();
             }
             string queryNome = $"SELECT COUNT(*) FROM Vendedores WHERE Nome = '{vendedor.Nome}' " + wre;
-            int countNome = gen.ExecutarConsultaCount(queryNome);
+            int countNome = glo.ExecutarConsultaCount(queryNome);
             if (countNome > 0)
             {
                 return "Já existe um vendedor cadastrado com esse nome.";

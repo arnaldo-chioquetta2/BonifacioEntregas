@@ -37,7 +37,7 @@ namespace TeleBonifacio
                     case "OK":
                         Grava();
                         base.reg = DAO.GetUltimo() as tb.Cliente;
-                        gen.IdAdicionado = base.reg.Id;
+                        glo.IdAdicionado = base.reg.Id;
                         this.Close();
                         break;
                 }
@@ -77,9 +77,9 @@ namespace TeleBonifacio
 
         private void fCadClientes_Activated(object sender, EventArgs e)
         {
-            if (gen.IdAdicionado == -1)
+            if (glo.IdAdicionado == -1)
             {
-                gen.IdAdicionado = 0;
+                glo.IdAdicionado = 0;
                 Adicionando = true;
                 base.Adicionar();                
             }

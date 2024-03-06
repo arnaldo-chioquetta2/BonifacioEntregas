@@ -126,9 +126,9 @@ namespace TeleBonifacio
 
         private void MostraTotal()
         {
-            float valor = gen.LeValor(txtValor.Text);
-            float compra = gen.LeValor(txCompra.Text);
-            float desc = gen.LeValor(txDesc.Text);
+            float valor = glo.LeValor(txtValor.Text);
+            float compra = glo.LeValor(txCompra.Text);
+            float desc = glo.LeValor(txDesc.Text);
             float total = valor + compra - desc;
             if (total > 0)
             {
@@ -148,15 +148,15 @@ namespace TeleBonifacio
                 SourceGrid.Position position = grid.Selection.ActivePosition;
                 if (position != SourceGrid.Position.Empty)
                 {
-                    this.iID = gen.ConvOjbInt(((DataRowView)grid.SelectedDataRows[0]).Row["Id"]);
-                    txtValor.Text = gen.ConvOjbStr(((DataRowView)grid.SelectedDataRows[0]).Row["Valor"]);
-                    txDesc.Text = gen.ConvOjbStr(((DataRowView)grid.SelectedDataRows[0]).Row["Desconto"]);
-                    txCompra.Text = gen.ConvOjbStr(((DataRowView)grid.SelectedDataRows[0]).Row["Compra"]);
-                    txObs.Text = gen.ConvOjbStr(((DataRowView)grid.SelectedDataRows[0]).Row["Obs"]);
-                    cmbMotoBoy.SelectedValue = gen.ConvOjbInt(((DataRowView)grid.SelectedDataRows[0]).Row["idBoy"]);
-                    cmbCliente.SelectedValue = gen.ConvOjbInt(((DataRowView)grid.SelectedDataRows[0]).Row["NrCli"]);
-                    cmbVendedor.SelectedValue = gen.ConvOjbInt(((DataRowView)grid.SelectedDataRows[0]).Row["idVend"]);
-                    cmbFormaPagamento.SelectedIndex = gen.ConvOjbInt(((DataRowView)grid.SelectedDataRows[0]).Row["idForma"]);
+                    this.iID = glo.ConvOjbInt(((DataRowView)grid.SelectedDataRows[0]).Row["Id"]);
+                    txtValor.Text = glo.ConvOjbStr(((DataRowView)grid.SelectedDataRows[0]).Row["Valor"]);
+                    txDesc.Text = glo.ConvOjbStr(((DataRowView)grid.SelectedDataRows[0]).Row["Desconto"]);
+                    txCompra.Text = glo.ConvOjbStr(((DataRowView)grid.SelectedDataRows[0]).Row["Compra"]);
+                    txObs.Text = glo.ConvOjbStr(((DataRowView)grid.SelectedDataRows[0]).Row["Obs"]);
+                    cmbMotoBoy.SelectedValue = glo.ConvOjbInt(((DataRowView)grid.SelectedDataRows[0]).Row["idBoy"]);
+                    cmbCliente.SelectedValue = glo.ConvOjbInt(((DataRowView)grid.SelectedDataRows[0]).Row["NrCli"]);
+                    cmbVendedor.SelectedValue = glo.ConvOjbInt(((DataRowView)grid.SelectedDataRows[0]).Row["idVend"]);
+                    cmbFormaPagamento.SelectedIndex = glo.ConvOjbInt(((DataRowView)grid.SelectedDataRows[0]).Row["idForma"]);
                     btnAdicionar.Text = "Salvar";
                     MostraTotal();
                 }
@@ -271,14 +271,14 @@ namespace TeleBonifacio
 
         private void btnNovoCliente_Click(object sender, EventArgs e)
         {
-            gen.IdAdicionado = -1;
+            glo.IdAdicionado = -1;
             fCadClientes Cad = new fCadClientes();            
             Cad.ShowDialog();
-            if (gen.IdAdicionado > 0)
+            if (glo.IdAdicionado > 0)
             {
                 ClienteDAO Cliente = new ClienteDAO();
                 CarregarComboBox<tb.Cliente>(cmbCliente, Cliente);
-                cmbCliente.SelectedValue = gen.IdAdicionado;
+                cmbCliente.SelectedValue = glo.IdAdicionado;
             }
         }
 

@@ -40,7 +40,7 @@ namespace TeleBonifacio.dao
 
             try
             {
-                gen.ExecutarComandoSQL(query, parameters);
+                glo.ExecutarComandoSQL(query, parameters);
             }
             catch (Exception ex)
             {
@@ -277,7 +277,7 @@ namespace TeleBonifacio.dao
                 wre = " and codi <> " + entregador.id.ToString();
             }
             string queryNome = $"SELECT COUNT(*) FROM Mecanicos WHERE Nome = '{entregador.Nome}' " + wre;
-            int countNome = gen.ExecutarConsultaCount(queryNome);
+            int countNome = glo.ExecutarConsultaCount(queryNome);
             if (countNome > 0)
             {
                 return "Já existe um cliente cadastrado com esse nome.";

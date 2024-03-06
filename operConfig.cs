@@ -15,7 +15,7 @@ namespace TeleBonifacio
         public oprConfig()
         {
             InitializeComponent();
-            textBox1.Text = gen.CaminhoBase;
+            textBox1.Text = glo.CaminhoBase;
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -29,7 +29,7 @@ namespace TeleBonifacio
         private void button3_Click(object sender, EventArgs e)
         {
             
-            gen.CaminhoBase = textBox1.Text;
+            glo.CaminhoBase = textBox1.Text;
             this.Close();
         }
 

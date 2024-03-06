@@ -11,7 +11,7 @@ namespace TeleBonifacio.dao
 
         protected BaseDAO()
         {
-            this.connectionString = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + gen.CaminhoBase + ";";
+            this.connectionString = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + glo.CaminhoBase + ";";
         }
 
         #region Metodos Abstratos

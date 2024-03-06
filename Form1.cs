@@ -21,11 +21,26 @@ namespace TeleBonifacio
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            INI cINI = new INI();
-            int diaAtual = DateTime.Now.Day;
-            cINI.WriteInt("INI", "UltExec", diaAtual);
+            
+            VerificaNovaVersao();
         }
 
+        private void VerificaNovaVersao()
+        {
+            INI cINI = new INI();
+            int diaAtual = DateTime.Now.Day;
+            int UltExec = cINI.ReadInt("INI", "UltExec", 0);
+            if (diaAtual != UltExec)
+            {
+                string URL = cINI.ReadString("FTP","URL","");
+                if (URL.Length>0)
+                {
+                    // Ler o arquivo e comparar a versão
+                    int x = 0;
+                }
+            }
+            cINI.WriteInt("INI", "UltExec", diaAtual);
+        }
         private void pictureBox1_Click(object sender, EventArgs e)
         {
             AbrirOuFocarFormulario<operLancamento>();

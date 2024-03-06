@@ -30,7 +30,7 @@ namespace TeleBonifacio
 
         private Vendedor ExecutarConsulta(string query)
         {
-            using (OleDbConnection connection = new OleDbConnection(gen.connectionString))
+            using (OleDbConnection connection = new OleDbConnection(glo.connectionString))
             {
                 try
                 {

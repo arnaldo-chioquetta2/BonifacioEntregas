@@ -97,7 +97,7 @@ namespace TeleBonifacio.dao
         private DataTable ExecutarConsulta(string query)
         {
             DataTable dataTable = new DataTable();
-            using (OleDbConnection connection = new OleDbConnection(gen.connectionString))
+            using (OleDbConnection connection = new OleDbConnection(glo.connectionString))
             {
                 try
                 {
@@ -121,10 +121,10 @@ namespace TeleBonifacio.dao
                 + idcliente.ToString() + ", "
                 + idForma.ToString() + ", "
                 + idBoy.ToString() + ", "                
-                + gen.sv(valor) + ", "
-                + gen.sv(compra) + ", "
-                + gen.fa(Obs) + ", "
-                + gen.sv(desc) + ", "
+                + glo.sv(valor) + ", "
+                + glo.sv(compra) + ", "
+                + glo.fa(Obs) + ", "
+                + glo.sv(desc) + ", "
                 + idVend.ToString()  
                 + ",Now)";
             ExecutarComandoSQL(sql);
@@ -132,7 +132,7 @@ namespace TeleBonifacio.dao
 
         private void ExecutarComandoSQL(string query)
         {
-            using (OleDbConnection connection = new OleDbConnection(@"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + gen.CaminhoBase + ";"))
+            using (OleDbConnection connection = new OleDbConnection(@"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + glo.CaminhoBase + ";"))
             {
                 connection.Open();
                 using (OleDbCommand command = new OleDbCommand(query, connection))
@@ -148,10 +148,10 @@ namespace TeleBonifacio.dao
                 idCliente = " + idCliente.ToString() + 
                             ",idForma = " + idForma.ToString() + 
                             ",idBoy = " + idBoy.ToString() + 
-                            ",Valor = " + gen.sv(valor) + 
-                            ",VlNota = " + gen.sv(compra) + 
-                            ",Obs = " + gen.fa(obs) + 
-                            ",Desconto = " + gen.sv(desc) +
+                            ",Valor = " + glo.sv(valor) + 
+                            ",VlNota = " + glo.sv(compra) + 
+                            ",Obs = " + glo.fa(obs) + 
+                            ",Desconto = " + glo.sv(desc) +
                             ",idVend = " + idVend.ToString() + 
                             " WHERE ID = " + iID.ToString();
             ExecutarComandoSQL(sql);

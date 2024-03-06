@@ -13,6 +13,7 @@ namespace TeleBonifacio
     {
 
         private ReciboDAO Recibo;
+        private VendedoresDAO Vendedor;
         private DataTable dataTableInvertido;
 
         public opRecibos()
@@ -30,7 +31,7 @@ namespace TeleBonifacio
 
         private void PopulaVendedores()
         {
-            VendedoresDAO Vendedor = new VendedoresDAO();
+            Vendedor = new VendedoresDAO();
             DataTable dados = Vendedor.GetDadosOrdenados();
             List<ComboBoxItem> lista = new List<ComboBoxItem>();
             ComboBoxItem item0 = new ComboBoxItem(0, "SELECIONE");
@@ -159,36 +160,16 @@ namespace TeleBonifacio
         private void button1_Click(object sender, EventArgs e)
         {
             int id = Convert.ToInt32(cmbVendedor.SelectedValue);
-            // Recibo.Pagar(id);
+            DateTime DataIni =Recibo.Pagar(id);
             using (var receipt = new rel.Receipt())
             {
-                // Definir as informações do recibo
-                var storeName = "Boni Auto peças";
-                var storeAddress = "Estrada Retiro da Ponta Grossa, 1050";
-                var storePhone = "3245-5653/3242-3857";
-                var customerName = "DIOGO MATOS";
-                var customerAddress = "AV PRINCIPAL DA PONTA GROSSA";
-                var date = "26/02/2024 a 02/03/2024";
-                var time = "10:20";
-                var invoiceNumber = "2024-03-01-001";
-
-                receipt.Print(storeName, storeAddress, storePhone, customerName, customerAddress, date, time, invoiceNumber, "items", ltVlr.Text, "paymentMethod");
-
-                //var items = new List<ReceiptItem>()
-                //{
-                //    new ReceiptItem { Name = "Peça A", Quantity = 2, Price = 10.50m },
-                //    new ReceiptItem { Name = "Peça B", Quantity = 1, Price = 25.00m }
-                //};
-                //var total = items.Sum(item => item.Quantity * item.Price);
-                //var paymentMethod = "Cartão de crédito";
-
-                //// Print the receipt
-                //using (var receipt = new Receipt())
-                //{
-                //    receipt.Print(storeName, storeAddress, storePhone, customerName, customerAddress, date, time, invoiceNumber, items, total.ToString("C2"), paymentMethod);
-                //}
+                string storeName = "Boni Auto peças";
+                string storeAddress = "Estrada Retiro da Ponta Grossa, 1050";
+                string storePhone = "3245-5653/3242-3857";
+                string customerName = cmbVendedor.Text;
+                receipt.Print(storeName, storeAddress, storePhone, customerName, ltVlr.Text, DataIni);
             }
-            // this.Close();
+            this.Close();
         }
 
     }

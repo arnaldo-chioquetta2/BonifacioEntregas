@@ -16,7 +16,7 @@ namespace TeleBonifacio.dao
         private DataTable ExecutarConsulta(string query)
         {
             DataTable dataTable = new DataTable();
-            using (OleDbConnection connection = new OleDbConnection(gen.connectionString))
+            using (OleDbConnection connection = new OleDbConnection(glo.connectionString))
             {
                 try
                 {
@@ -57,7 +57,7 @@ namespace TeleBonifacio.dao
         public void SetPerc(float perc)
         {
             string sql = "UPDATE Config SET UtComissoes = @perc";
-            using (OleDbConnection connection = new OleDbConnection(gen.connectionString))
+            using (OleDbConnection connection = new OleDbConnection(glo.connectionString))
             {
                 connection.Open();
                 using (OleDbCommand command = new OleDbCommand(sql, connection))
