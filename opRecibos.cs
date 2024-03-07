@@ -154,6 +154,7 @@ namespace TeleBonifacio
                 int id = Convert.ToInt32(cmbVendedor.SelectedValue);
                 decimal ret = Recibo.VlrPend(id);
                 ltVlr.Text = ret.ToString("C");
+                btExtrato.Enabled = true;
             }
         }
 
@@ -172,5 +173,11 @@ namespace TeleBonifacio
             this.Close();
         }
 
+        private void btExtrato_Click(object sender, EventArgs e)
+        {
+            rel.Extrato fExtr = new rel.Extrato();
+            fExtr.SetNome(cmbVendedor.Text);
+            fExtr.Show();
+        }
     }
 }

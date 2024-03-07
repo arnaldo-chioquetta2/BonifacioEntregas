@@ -147,6 +147,12 @@
     <Compile Include="Properties\CadVendedores.designer.cs">
       <DependentUpon>CadVendedores.cs</DependentUpon>
     </Compile>
+    <Compile Include="rel\Extrato.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="rel\Extrato.Designer.cs">
+      <DependentUpon>Extrato.cs</DependentUpon>
+    </Compile>
     <Compile Include="rel\Receipt.cs" />
     <Compile Include="tb\CampoTagInfo.cs" />
     <Compile Include="tb\Cliente.cs" />
@@ -200,6 +206,9 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <EmbeddedResource Include="rel\Extrato.resx">
+      <DependentUpon>Extrato.cs</DependentUpon>
+    </EmbeddedResource>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
