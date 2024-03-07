@@ -35,8 +35,10 @@ namespace TeleBonifacio
                 string URL = cINI.ReadString("FTP","URL","");
                 if (URL.Length>0)
                 {
-                    // Ler o arquivo e comparar a versão
-                    int x = 0;
+                    string user = cINI.ReadString("FTP", "user", "");
+                    string senha = cINI.ReadString("FTP", "pass", "");
+                    FTP cFPT = new FTP(URL, user, senha);
+                    bool ret = cFPT.Testa();
                 }
             }
             cINI.WriteInt("INI", "UltExec", diaAtual);
