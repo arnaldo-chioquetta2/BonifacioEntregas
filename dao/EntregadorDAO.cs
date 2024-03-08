@@ -26,7 +26,6 @@ namespace TeleBonifacio.dao
             EntregadorDAO entregador = (EntregadorDAO)obj;
             string query;
             List<OleDbParameter> parameters;
-            int result = 0;
             if (entregador.Adicao)
             {
                 query = "INSERT INTO Mecanicos (codi, Oper, Nome, Telefone, CNH, DataValidadeCNH) VALUES (?, ?, ?, ?, ?, ?)";
@@ -45,7 +44,6 @@ namespace TeleBonifacio.dao
             catch (Exception ex)
             {
                 string x = ex.ToString();
-                // Considerar um melhor tratamento de exceções ou log
             }
         }
 

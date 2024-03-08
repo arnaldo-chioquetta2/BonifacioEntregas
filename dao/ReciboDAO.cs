@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data;
+using System.Data.Linq;
 using System.Data.OleDb;
 
 namespace TeleBonifacio.dao
@@ -40,14 +42,38 @@ namespace TeleBonifacio.dao
             return ret;
         }
 
-        public DateTime Pagar(int id)
+        public DateTime DtInicial(int id)
         {
             string SQLPriComiss = "SELECT Data FROM Entregas WHERE Pago IS NULL AND idVend = " + id.ToString() + " ORDER BY Data ASC";
-            DataTable dataTable = glo.getDados(SQLPriComiss);
-            DateTime Dia = Convert.ToDateTime(dataTable.Rows[0]["Data"]);
-            string query = "UPDATE Entregas SET Pago = VlNota / 100 WHERE Pago IS NULL AND idVend = " + id.ToString();
-            glo.ExecutarComandoSQL(query, null);
+            DataTable dtData = glo.getDados(SQLPriComiss);
+            DateTime Dia = Convert.ToDateTime(dtData.Rows[0]["Data"]);
             return Dia;
+        }
+
+        public void Pagar(int id, string Valor, string dataPagamento)
+        {
+
+            string query = "INSERT INTO Vales (IdOperador, Data, Valor, Pago, Tipo, Periodo) " +
+                            "VALUES ('" +
+                            id.ToString() + "', '" +
+                            DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "', '" +
+                            Valor + "', '" +
+                            DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "', 1, '" +
+                            dataPagamento + "')";
+            glo.ExecutarComandoSQL(query);
+
+            int idRecibo = VeUltReg();
+
+            string queryUpd = "UPDATE Entregas SET Pago = VlNota / 100, idPagto = " + idRecibo + " WHERE Pago IS NULL AND idVend = " + id.ToString();
+            glo.ExecutarComandoSQL(queryUpd, null);
+
+        }
+
+        private int VeUltReg()
+        {
+            string SQL = "SELECT Max(ID) as ID FROM Vales";
+            DataTable dtData = glo.getDados(SQL);
+            return Convert.ToInt16(dtData.Rows[0]["ID"]);
         }
 
     }

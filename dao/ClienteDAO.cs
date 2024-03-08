@@ -8,7 +8,6 @@ namespace TeleBonifacio.dao
 {
     public class ClienteDAO : BaseDAO
     {
-        // private int Linhas;
 
         protected int id { get; set; }
         public string Nome { get; set; }
@@ -97,25 +96,6 @@ namespace TeleBonifacio.dao
                 return 0;
             }
         }
-
-        //public int ExecutarComandoSQL(string query, List<OleDbParameter> parameters)
-        //{
-        //    using (OleDbConnection connection = new OleDbConnection(gen.connectionString))
-        //    {
-        //        using (OleDbCommand command = new OleDbCommand(query, connection))
-        //        {
-        //            if (parameters != null)
-        //            {
-        //                foreach (var param in parameters)
-        //                {
-        //                    command.Parameters.Add(param);
-        //                }
-        //            }
-        //            connection.Open();
-        //            return command.ExecuteNonQuery();
-        //        }
-        //    }
-        //}
 
         public override tb.IDataEntity Apagar(int direcao, tb.IDataEntity entidade)
         {

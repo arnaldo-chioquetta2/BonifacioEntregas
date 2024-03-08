@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Data.Linq;
+using System.Diagnostics;
 using System.Linq;
 using System.Windows.Forms;
 
@@ -7,6 +9,8 @@ namespace TeleBonifacio
     public partial class Form1 : Form
     {
 
+        private bool ativou = false;
+
         public Form1()
         {
             InitializeComponent();
@@ -14,8 +18,7 @@ namespace TeleBonifacio
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            
-            VerificaNovaVersao();
+
         }
 
         private void VerificaNovaVersao()
@@ -24,8 +27,8 @@ namespace TeleBonifacio
             int diaAtual = DateTime.Now.Day;
             int UltExec = cINI.ReadInt("INI", "UltExec", 0);
 
-            // bool atualizar = (diaAtual != UltExec);
-            bool atualizar = false;
+            bool atualizar = (diaAtual != UltExec);
+            // bool atualizar = true;
 
             if (atualizar)
             {
@@ -41,12 +44,15 @@ namespace TeleBonifacio
 
                     if (funfa)
                     {
+                        Stopwatch stopwatch = new Stopwatch();
+                        stopwatch.Start();
                         int versaoFtp = cFPT.LerVersaoDoFtp();
-                    }
-
+                        stopwatch.Stop();
+                        string Tempo = stopwatch.ElapsedMilliseconds.ToString();
+                        cINI.WriteString("FTP", "tempo", Tempo);                    }
                 }
-            }
-            cINI.WriteInt("INI", "UltExec", diaAtual);
+                cINI.WriteInt("INI", "UltExec", diaAtual);
+            }            
         }
         private void pictureBox1_Click(object sender, EventArgs e)
         {
@@ -123,6 +129,15 @@ namespace TeleBonifacio
         private void pictureBox8_Click(object sender, EventArgs e)
         {
             AbrirOuFocarFormulario<opRecibos>();
+        }
+
+        private void Form1_Activated(object sender, EventArgs e)
+        {
+            if (!this.ativou)
+            {
+                this.ativou = true;
+                VerificaNovaVersao();
+            }
         }
     }
 

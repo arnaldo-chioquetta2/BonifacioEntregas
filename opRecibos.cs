@@ -162,14 +162,24 @@ namespace TeleBonifacio
         private void button1_Click(object sender, EventArgs e)
         {
             int id = Convert.ToInt32(cmbVendedor.SelectedValue);
-            DateTime DataIni =Recibo.Pagar(id);
+            DateTime DataIni = Recibo.DtInicial(id);
+            string dataPagamento = "";
+            if (DataIni.Date == DateTime.Now.Date)
+            {
+                dataPagamento = "do dia " + DateTime.Now.ToString("dd/MM/yyyy");
+            }
+            else
+            {
+                dataPagamento = "de " + DataIni.ToString("dd/MM/yyyy") + " a " + DateTime.Now.ToString("dd/MM/yyyy");
+            }
+            Recibo.Pagar(id, ltVlr.Text, dataPagamento);
             using (var receipt = new rel.Receipt())
             {
                 string storeName = "Boni Auto peças";
                 string storeAddress = "Estrada Retiro da Ponta Grossa, 1050";
                 string storePhone = "3245-5653/3242-3857";
                 string customerName = cmbVendedor.Text;
-                receipt.Print(storeName, storeAddress, storePhone, customerName, ltVlr.Text, DataIni);
+                receipt.Print(storeName, storeAddress, storePhone, customerName, ltVlr.Text, DataIni, dataPagamento);
             }
             this.Close();
         }

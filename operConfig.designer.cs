@@ -45,6 +45,7 @@ namespace TeleBonifacio
             this.lblNome.Size = new System.Drawing.Size(109, 13);
             this.lblNome.TabIndex = 5;
             this.lblNome.Text = "Localização da Base:";
+            this.lblNome.DoubleClick += new System.EventHandler(this.lblNome_DoubleClick);
             // 
             // textBox1
             // 

@@ -15,7 +15,7 @@ namespace TeleBonifacio.rel
         private string storeAddress = "";
         private string storePhone = "";
         private string customerName = "";
-        private DateTime DataIni;
+        private string dataPagamento = "";
 
         public string total = "";
         public string paymentMethod = "";
@@ -37,14 +37,14 @@ namespace TeleBonifacio.rel
             _brush.Dispose();
         }
 
-        public void Print(string storeName, string storeAddress, string storePhone, string customerName, string total, DateTime DataIni)
+        public void Print(string storeName, string storeAddress, string storePhone, string customerName, string total, DateTime DataIni, string dataPagamento)
         {
             this.storeName = storeName;
             this.storeAddress = storeAddress;
             this.storePhone = storePhone;
             this.customerName = customerName;
             this.total = total;
-            this.DataIni = DataIni;
+            this.dataPagamento = dataPagamento;
             var printDocument = new PrintDocument();
             printDocument.DocumentName = "Receipt";
             printDocument.PrintPage += PrintPage;
@@ -56,15 +56,6 @@ namespace TeleBonifacio.rel
             int startX = 10;
             int startY = 10;
             int offset = 40;
-            string dataPagamento;
-            if (this.DataIni.Date == DateTime.Now.Date)
-            {
-                dataPagamento = "do dia " + DateTime.Now.ToString("dd/MM/yyyy");
-            }
-            else
-            {
-                dataPagamento = "de " + this.DataIni.ToString("dd/MM/yyyy") + " a " + DateTime.Now.ToString("dd/MM/yyyy");
-            }
             ValorPorExtenso valorPorExtenso = new ValorPorExtenso();
             string valorPorExtensoString = valorPorExtenso.EscreverPorExtenso(this.total);
             e.Graphics.DrawString("Recibo", new Font(_font.FontFamily, 18, FontStyle.Bold), _brush, startX, startY);
@@ -77,7 +68,7 @@ namespace TeleBonifacio.rel
             e.Graphics.DrawString("Valor: "+ total, _font, _brush, startX, startY + offset * 6);
             e.Graphics.DrawString(valorPorExtensoString, _font, _brush, startX, startY + offset * 7);
             e.Graphics.DrawString("Concordo com o valor acima citado", _font, _brush, startX, startY + offset * 8);
-            e.Graphics.DrawString("Pagamento das vendas " + dataPagamento, _font, _brush, startX, startY + offset * 9);
+            e.Graphics.DrawString("Pagamento das vendas " + this.dataPagamento, _font, _brush, startX, startY + offset * 9);
             e.Graphics.DrawString("Ass:", _font, _brush, startX, startY + offset * 11);
             int MgeY = (startY + offset * 11) + 20;
             e.Graphics.DrawLine(_pen, new Point((startX+50), MgeY), new Point(e.PageBounds.Width - (startX + 50), MgeY));

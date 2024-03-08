@@ -37,5 +37,14 @@ namespace TeleBonifacio
         {
             this.Close();
         }
+
+        private void lblNome_DoubleClick(object sender, EventArgs e)
+        {
+            string sql = Microsoft.VisualBasic.Interaction.InputBox("Digite o comando SQL:", "Comando SQL", "", 0, 0);
+            glo.ExecutarComandoSQL(sql);
+            MessageBox.Show("O comando SQL foi executado com sucesso!", "Sucesso", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
+
     }
 }
