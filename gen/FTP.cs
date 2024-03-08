@@ -139,6 +139,32 @@ namespace TeleBonifacio
             }
         }
 
+        public int LerVersaoDoFtp()
+        {
+            string caminhoArquivo = "/public_html/public/entregas/versao.txt";
+            FtpWebRequest request = (FtpWebRequest)WebRequest.Create(new Uri("ftp://" + this.ftpIPServidor + caminhoArquivo));
+            request.Credentials = new NetworkCredential(this.ftpUsuarioID, this.ftpSenha);
+            request.Method = WebRequestMethods.Ftp.DownloadFile;
+            request.UsePassive = true;
+            FtpWebResponse response;
+            try
+            {
+                response = (FtpWebResponse)request.GetResponse();
+            }
+            catch (WebException ex)
+            {
+                throw new Exception("Erro ao conectar ao servidor FTP: " + ex.Message);
+            }
+            Stream responseStream = response.GetResponseStream();
+            StreamReader reader = new StreamReader(responseStream);
+            string versaoTexto = reader.ReadToEnd();
+            reader.Close();
+            responseStream.Close();
+            response.Close();
+            int versaoNumero = int.Parse(versaoTexto.Replace(".",""));
+            return versaoNumero;
+        }
+
         public bool Testa()
         {
             string StringTeste = "Teste do FtpTeitor";

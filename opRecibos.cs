@@ -153,7 +153,8 @@ namespace TeleBonifacio
             {
                 int id = Convert.ToInt32(cmbVendedor.SelectedValue);
                 decimal ret = Recibo.VlrPend(id);
-                ltVlr.Text = ret.ToString("C");
+                ltVlr.Text = ret.ToString("C");                
+                btPagar.Enabled = (ret > 0);
                 btExtrato.Enabled = true;
             }
         }

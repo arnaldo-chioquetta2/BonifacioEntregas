@@ -33,7 +33,7 @@ namespace TeleBonifacio
             this.panel1 = new System.Windows.Forms.Panel();
             this.ltVlr = new System.Windows.Forms.Label();
             this.btExtrato = new System.Windows.Forms.Button();
-            this.button1 = new System.Windows.Forms.Button();
+            this.btPagar = new System.Windows.Forms.Button();
             this.cmbVendedor = new System.Windows.Forms.ComboBox();
             this.label1 = new System.Windows.Forms.Label();
             this.dataGrid1 = new SourceGrid.DataGrid();
@@ -44,7 +44,7 @@ namespace TeleBonifacio
             // 
             this.panel1.Controls.Add(this.ltVlr);
             this.panel1.Controls.Add(this.btExtrato);
-            this.panel1.Controls.Add(this.button1);
+            this.panel1.Controls.Add(this.btPagar);
             this.panel1.Controls.Add(this.cmbVendedor);
             this.panel1.Controls.Add(this.label1);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
@@ -72,15 +72,16 @@ namespace TeleBonifacio
             this.btExtrato.UseVisualStyleBackColor = true;
             this.btExtrato.Click += new System.EventHandler(this.btExtrato_Click);
             // 
-            // button1
+            // btPagar
             // 
-            this.button1.Location = new System.Drawing.Point(634, 20);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
-            this.button1.TabIndex = 14;
-            this.button1.Text = "Pagar";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.btPagar.Enabled = false;
+            this.btPagar.Location = new System.Drawing.Point(634, 20);
+            this.btPagar.Name = "btPagar";
+            this.btPagar.Size = new System.Drawing.Size(75, 23);
+            this.btPagar.TabIndex = 14;
+            this.btPagar.Text = "Pagar";
+            this.btPagar.UseVisualStyleBackColor = true;
+            this.btPagar.Click += new System.EventHandler(this.button1_Click);
             // 
             // cmbVendedor
             // 
@@ -144,6 +145,6 @@ namespace TeleBonifacio
         private System.Windows.Forms.ComboBox cmbVendedor;
         private System.Windows.Forms.Label ltVlr;
         private System.Windows.Forms.Button btExtrato;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button btPagar;
     }
 }

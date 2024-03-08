@@ -1,13 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using TeleBonifacio;
 
 namespace TeleBonifacio
 {
@@ -30,7 +23,11 @@ namespace TeleBonifacio
             INI cINI = new INI();
             int diaAtual = DateTime.Now.Day;
             int UltExec = cINI.ReadInt("INI", "UltExec", 0);
-            if (diaAtual != UltExec)
+
+            // bool atualizar = (diaAtual != UltExec);
+            bool atualizar = false;
+
+            if (atualizar)
             {
                 string URL = cINI.ReadString("FTP","URL","");
                 if (URL.Length>0)
@@ -38,7 +35,15 @@ namespace TeleBonifacio
                     string user = cINI.ReadString("FTP", "user", "");
                     string senha = cINI.ReadString("FTP", "pass", "");
                     FTP cFPT = new FTP(URL, user, senha);
-                    bool ret = cFPT.Testa();
+
+                    // bool funfa = cFPT.Testa();
+                    bool funfa = true;
+
+                    if (funfa)
+                    {
+                        int versaoFtp = cFPT.LerVersaoDoFtp();
+                    }
+
                 }
             }
             cINI.WriteInt("INI", "UltExec", diaAtual);

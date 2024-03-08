@@ -22,3 +22,4 @@ C:\Prog\T-Bonifacio\T-Bonifacio\obj\Release\TeleBonifacio.pdb
 C:\Prog\T-Bonifacio\T-Bonifacio\obj\Release\TeleBonifacio.Consultas.resources
 C:\Prog\T-Bonifacio\T-Bonifacio\obj\Release\TeleBonifacio.Dashboard.resources
 C:\Prog\T-Bonifacio\T-Bonifacio\obj\Release\TeleBonifacio.opRecibos.resources
+C:\Prog\T-Bonifacio\T-Bonifacio\obj\Release\TeleBonifacio.rel.Extrato.resources

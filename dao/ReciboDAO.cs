@@ -27,8 +27,16 @@ namespace TeleBonifacio.dao
                 Where Entregas.Pago is Null 
                 and Entregas.idVend = " + id.ToString();
             DataTable dataTable = glo.getDados(query);
-            double doubleValue = Convert.ToDouble(dataTable.Rows[0]["Valor"]);
-            decimal ret = Convert.ToDecimal(doubleValue);
+            decimal ret = 0;
+            try
+            {
+                double doubleValue = Convert.ToDouble(dataTable.Rows[0]["Valor"]);
+                ret = Convert.ToDecimal(doubleValue);
+            }
+            catch (Exception)
+            {
+                // throw;
+            }
             return ret;
         }
 
