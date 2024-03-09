@@ -188,6 +188,8 @@ namespace TeleBonifacio
         {
             rel.Extrato fExtr = new rel.Extrato();
             fExtr.SetNome(cmbVendedor.Text);
+            int id = Convert.ToInt32(cmbVendedor.SelectedValue);
+            fExtr.SetId(id);
             fExtr.Show();
         }
     }
