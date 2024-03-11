@@ -149,13 +149,20 @@ namespace TeleBonifacio
 
         private void cmbVendedor_SelectedIndexChanged_1(object sender, EventArgs e)
         {
-            if (dataGrid1.DataSource != null)
+            try
             {
                 int id = Convert.ToInt32(cmbVendedor.SelectedValue);
-                decimal ret = Recibo.VlrPend(id);
-                ltVlr.Text = ret.ToString("C");                
-                btPagar.Enabled = (ret > 0);
-                btExtrato.Enabled = true;
+                if (Recibo != null)
+                {
+                    decimal ret = Recibo.VlrPend(id);                                
+                    ltVlr.Text = ret.ToString("C");
+                    btPagar.Enabled = (ret > 0);
+                    btExtrato.Enabled = true;
+                }
+            }
+            catch (Exception)
+            {
+                // throw;
             }
         }
 

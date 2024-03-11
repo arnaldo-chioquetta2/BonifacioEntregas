@@ -139,6 +139,58 @@ namespace TeleBonifacio
             return true; // A data é válida
         }
 
+        public static string ComplStr(string dado, int Tam, int Tipo)
+        {
+            // Tipo é o alinhamento
+                // 0=Esquerda,
+                // 1=Central
+                // 2=Direita
+            int Aux;
+            int Aux2;
+            string Aux3;
+            Aux = dado.Length;
+            string Prench = " ";
+            if (Aux >= Tam)
+            {
+                return dado.Substring(0, Tam);
+            }
+            else
+            {
+                switch (Tipo)
+                {
+                    case 0:
+                        // A esquerda
+                        if (dado.Length < Tam)
+                        {
+                            dado = dado.PadRight(Tam, Convert.ToChar(Prench));
+                        }
+                        break;
+                    case 1:
+                        // Central
+                        Aux2 = (Tam - Aux) / 2;
+                        Aux3 = new string(Convert.ToChar(Prench), Aux2) + dado + new string(Convert.ToChar(Prench), Aux2);
+                        Aux = Aux3.Length;
+                        if (Aux < Tam)
+                        {
+                            Aux3 = Aux3.PadRight(Tam, Convert.ToChar(Prench));
+                        }
+                        if (Aux > Tam)
+                        {
+                            Aux3 = Aux3.Substring(0, Tam);
+                        }
+                        dado = Aux3;
+                        break;
+                    case 2:
+                        // A Direita
+                        if (dado.Length < Tam)
+                        {
+                            dado = dado.PadLeft(Tam, Convert.ToChar(Prench));
+                        }
+                        break;
+                }
+                return dado;
+            }
+        }
 
 
         #region DB

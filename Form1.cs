@@ -2,6 +2,7 @@
 using System.Data.Linq;
 using System.Diagnostics;
 using System.Linq;
+using System.Reflection;
 using System.Windows.Forms;
 
 namespace TeleBonifacio
@@ -49,7 +50,19 @@ namespace TeleBonifacio
                         int versaoFtp = cFPT.LerVersaoDoFtp();
                         stopwatch.Stop();
                         string Tempo = stopwatch.ElapsedMilliseconds.ToString();
-                        cINI.WriteString("FTP", "tempo", Tempo);                    }
+                        cINI.WriteString("FTP", "tempo", Tempo);
+                        Version version = Assembly.GetExecutingAssembly().GetName().Version;
+                        int versionInt = (version.Major * 100) + (version.Minor * 10) + version.Build;
+                        if (versaoFtp> versionInt)
+                        {
+                            // ATUALIZAR
+                            int x = 0;
+                        } else
+                        {
+                            // NÃO ATUALIZAR
+                            int x = 0;
+                        }
+                    }
                 }
                 cINI.WriteInt("INI", "UltExec", diaAtual);
             }            

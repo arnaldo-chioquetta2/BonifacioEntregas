@@ -1,5 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Data.OleDb;
+using System.Data.SqlClient;
 using System.Text;
 using System.Windows.Forms;
 
@@ -10,8 +13,8 @@ namespace TeleBonifacio.rel
 
         private bool ativou = false;
         public string Vendedor { get; set; }
-        public DateTime DataInicio { get; set; }
-        public DateTime DataFim { get; set; }
+        private DateTime DataInicio { get; set; }
+        private DateTime DataFim { get; set; }
         private List<ComissaoPaga> ComissoesPagas { get; set; }
         private List<ComissaoPendente> ComissoesPendentes { get; set; }
 
@@ -39,86 +42,121 @@ namespace TeleBonifacio.rel
             this.lblTitulo.Text = "Extrato: " + text;
         }
 
-        private void Mostra(DateTime dataInicio, DateTime dataFim)
-        {
-            // Vendedor = vendedor;
-            DataInicio = dataInicio;
-            DataFim = dataFim;
-            ComissoesPagas = CarregarComissoesPagas(dataInicio, dataFim);
-            ComissoesPendentes = CarregarComissoesPendentes(dataInicio, dataFim);
-            textBox1.Text=GerarExtrato();
-        }
-
         private List<ComissaoPendente> CarregarComissoesPendentes(DateTime dataInicio, DateTime dataFim)
         {
-            // this.ID
-            return null;
-        }
+            string SQL = @"SELECT Data, Valor,  
+                            SWITCH(
+                                idForma = 0, 'Anotado',
+                                idForma = 1, 'Cartão',
+                                idForma = 2, 'Dinheiro',
+                                idForma = 3, 'Pix',
+                                idForma = 4, 'Troca'
+                            ) AS FormaPagamento 
+                           FROM Entregas 
+                           WHERE Data > #03/07/2024# 
+                                and idVend = " + this.ID.ToString();
 
+            List <ComissaoPendente> comissoes = new List<ComissaoPendente>();
+            using (OleDbConnection connection = new OleDbConnection(glo.connectionString))
+            {
+                connection.Open();
+                using (OleDbCommand command = new OleDbCommand(SQL, connection))
+                {
+                    using (OleDbDataReader reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            ComissaoPendente comissao = new ComissaoPendente();
+                            comissao.DataVenda = (DateTime)reader["Data"];
+                            comissao.Valor = (decimal)reader["Valor"];
+                            comissao.FormaPagamento = (string)reader["FormaPagamento"];
+                            comissoes.Add(comissao);
+                        }
+                    }
+                }
+            }
+            return comissoes;
+        }
         private List<ComissaoPaga> CarregarComissoesPagas(DateTime dataInicio, DateTime dataFim)
         {
-            // this.ID
-            return null;
+            string SQL = @"SELECT
+                        V.ID as ID_Vale,
+                        V.Data, 
+                        V.Valor as Valor_Vale,
+                        (
+                            SELECT COUNT(*)
+                            FROM Entregas E
+                            WHERE E.idPagto = V.ID
+                        ) as qtd
+                    FROM Vales V
+                    WHERE V.Data > #03/07/2024# 
+                        And V.idOperador = " + this.ID.ToString();
+            List<ComissaoPaga> comissoes = new List<ComissaoPaga>();
+            using (OleDbConnection connection = new OleDbConnection(glo.connectionString))
+            {
+                try
+                {
+                    connection.Open();
+                    using (OleDbCommand command = new OleDbCommand(SQL, connection))
+                    {
+                        using (OleDbDataReader reader = command.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                ComissaoPaga comissao = new ComissaoPaga();
+                                comissao.DataPagamento = (DateTime)reader["Data"];
+                                comissao.Quantidade = (int)reader["qtd"];
+                                comissao.Valor = (decimal)reader["Valor_Vale"];
+                                comissoes.Add(comissao);
+                            }
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.ToString());
+                    return null;
+                }
+            }
+            return comissoes;
         }
 
-        public string GerarExtrato()
+        public string GerarExtrato(DateTime dataInicio, DateTime dataFim)
         {
+            ComissoesPagas = CarregarComissoesPagas(dataInicio, dataFim);
+            ComissoesPendentes = CarregarComissoesPendentes(dataInicio, dataFim);
             StringBuilder sb = new StringBuilder();
-
             sb.AppendLine("Extrato de Movimentação de Comissões");
             sb.AppendLine();
             sb.AppendLine($"Vendedor: {Vendedor}");
             sb.AppendLine();
             sb.AppendLine($"Período: {DataInicio:dd/MM/yyyy} a {DataFim:dd/MM/yyyy}");
             sb.AppendLine();
-            sb.AppendLine("Comissões Pagas:");
-            sb.AppendLine();
-            string txt = @"    Data       |qtd|     Valor
---------------------------------
-1 | 01/03/2024 | 2 | R$ 1.000,00
-2 | 15/03/2024 | 3 |   R$ 500,00
-
-Comissões Pendentes:
-
-     Venda |  Hora |     Valor | Forma de Pagamento
----------------------------------------------------
-05/03/2024 | 10:00 | R$ 500,00 | Cartão de Crédito
-07/03/2024 | 14:00 | R$ 700,00 | Dinheiro
-08/03/2024 | 18:00 | R$ 400,00 | Pix
-09/03/2024 | 12:00 | R$ 400,00 | Boleto";
-            sb.AppendLine(txt);
-            // Resumo
-            //sb.AppendLine($"Vendedor: {Vendedor}");
-            //sb.AppendLine($"Período: {DataInicio:dd/MM/yyyy} a {DataFim:dd/MM/yyyy}");
-            //sb.AppendLine();
-
-            //sb.AppendLine("**Comissões Pagas:**");
-            //// sb.AppendLine($"Período: {DT1:dd/MM/yyyy} a {DT2:dd/MM/yyyy}");
-            //// sb.AppendLine($"Quantidade de Pagamentos: {ComissoesPagas.Count}");
-            //sb.AppendLine($"Data do Último Pagamento: {GetLastPagamentoDate(ComissoesPagas):dd/MM/yyyy}");
-            //_ = sb.AppendLine($"Valor Total Pago: R$ {GetTotalPago(ComissoesPagas):F2}");
-            //sb.AppendLine();
-
-            //sb.AppendLine("**Comissões Pendentes:**");
-            //// sb.AppendLine($"Quantidade de Vendas: {ComissoesPendentes.Count}");
-            //sb.AppendLine($"Valor Total: R$ {GetTotalPendente(ComissoesPendentes):F2}");
-            //sb.AppendLine();
-
-            //// Detalhes das comissões pagas
-            //sb.AppendLine("**Detalhes das Comissões Pagas:**");
-            ////foreach (var comissao in ComissoesPagas)
-            ////{
-            ////    sb.AppendLine($"{comissao.DataPagamento:dd/MM/yyyy} | {comissao.Quantidade} | R$ {comissao.Valor:F2}");
-            ////}
-            //sb.AppendLine();
-
-            //// Detalhes das comissões pendentes
-            //sb.AppendLine("**Detalhes das Comissões Pendentes:**");
-            //foreach (var comissao in ComissoesPendentes)
-            //{
-            //    sb.AppendLine($"{comissao.DataVenda:dd/MM/yyyy} | {comissao.HoraVenda:HH:mm} | R$ {comissao.Valor:F2} | {comissao.FormaPagamento}");
-            //}
-
+            if (ComissoesPagas.Count>0)
+            {
+                sb.AppendLine("Comissões Pagas:");
+                sb.AppendLine();
+                sb.AppendLine("    Data   |quantidade|   Valor");
+                foreach (var comissao in ComissoesPagas)
+                {
+                    string vlr = glo.ComplStr(comissao.Valor.ToString("N2"), 6, 2);
+                    string qtd = glo.ComplStr(comissao.Quantidade.ToString(), 10, 1);
+                    sb.AppendLine($"{comissao.DataPagamento:dd/MM/yyyy} |{qtd}| R$ {vlr}");
+                }
+            }
+            if (ComissoesPendentes.Count>0)
+            {
+                sb.AppendLine();
+                sb.AppendLine("Comissões Pendentes:");
+                sb.AppendLine();
+                sb.AppendLine("     Venda        |   Valor   | Forma de Pagamento");
+                foreach (var comissao in ComissoesPendentes)
+                {
+                    string forma = glo.ComplStr(comissao.FormaPagamento, 18, 1);
+                    string vlr = glo.ComplStr((comissao.Valor / 100).ToString("N2"), 6, 2);
+                    sb.AppendLine($" { comissao.DataVenda:dd/MM/yyyy HH:ss} | R$ {vlr} |{forma}");
+                }
+            }
             return sb.ToString();
         }
 
@@ -139,6 +177,21 @@ Comissões Pendentes:
             return null;
         }
 
+        private DateTime PrimData(DateTime DtAlternativa)
+        {
+            string SQL = @"SELECT Data 
+                           FROM Entregas
+                           Where Data > #03/07/2024# 
+                                and idVend = " + this.ID.ToString();
+            DataTable ret = glo.getDados(SQL);
+            DateTime DtRet = (DateTime)ret.Rows[0]["Data"];
+            if (DtRet < DtAlternativa)
+            {
+                DtRet = DtAlternativa;
+            }
+            return DtRet;
+        }
+
         public void SetId(int selectedValue)
         {
             this.ID = selectedValue;
@@ -148,9 +201,9 @@ Comissões Pendentes:
         {
             if (!ativou)
                 ativou = true;
-            DateTime dataFim = DateTime.Now;
-            DateTime dataInicio = dataFim.AddYears(-1);
-            Mostra(dataInicio, dataFim);
+            this.DataFim = DateTime.Now;
+            this.DataInicio = PrimData(this.DataFim.AddYears(-1));
+            textBox1.Text= GerarExtrato(this.DataInicio, this.DataFim);
         }
 
         #region Classes
@@ -165,11 +218,9 @@ Comissões Pendentes:
         private class ComissaoPendente
         {
             public DateTime DataVenda { get; set; }
-            public TimeSpan HoraVenda { get; set; }
             public decimal Valor { get; set; }
             public string FormaPagamento { get; set; }
         }
-
 
         #endregion
 
