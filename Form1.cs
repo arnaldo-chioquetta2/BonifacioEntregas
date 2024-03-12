@@ -19,7 +19,9 @@ namespace TeleBonifacio
 
         private void Form1_Load(object sender, EventArgs e)
         {
-
+            string u = glo.Encrypt("admin_segu");
+            string p = glo.Encrypt("ufrs3753!");
+            int x = 0;
         }
 
         private void VerificaNovaVersao()
@@ -36,8 +38,8 @@ namespace TeleBonifacio
                 string URL = cINI.ReadString("FTP","URL","");
                 if (URL.Length>0)
                 {
-                    string user = cINI.ReadString("FTP", "user", "");
-                    string senha = cINI.ReadString("FTP", "pass", "");
+                    string user = glo.Decrypt(cINI.ReadString("FTP", "user", ""));
+                    string senha = glo.Decrypt(cINI.ReadString("FTP", "pass", ""));
                     FTP cFPT = new FTP(URL, user, senha);
 
                     // bool funfa = cFPT.Testa();

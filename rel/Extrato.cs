@@ -13,14 +13,14 @@ namespace TeleBonifacio.rel
 
         private bool ativou = false;
         public string Vendedor { get; set; }
-        private DateTime DataInicio { get; set; }
+        private DateTime? DataInicio { get; set; }
         private DateTime DataFim { get; set; }
         private List<ComissaoPaga> ComissoesPagas { get; set; }
         private List<ComissaoPendente> ComissoesPendentes { get; set; }
 
         private int ID = 0;
 
-        private string Texto = "";
+        private string DtInicioSis = "#01/28/2024#";
 
         public Extrato()
         {
@@ -42,7 +42,7 @@ namespace TeleBonifacio.rel
             this.lblTitulo.Text = "Extrato: " + text;
         }
 
-        private List<ComissaoPendente> CarregarComissoesPendentes(DateTime dataInicio, DateTime dataFim)
+        private List<ComissaoPendente> CarregarComissoesPendentes(DateTime? dataInicio, DateTime dataFim)
         {
             string SQL = @"SELECT Data, Valor,  
                             SWITCH(
@@ -53,8 +53,8 @@ namespace TeleBonifacio.rel
                                 idForma = 4, 'Troca'
                             ) AS FormaPagamento 
                            FROM Entregas 
-                           WHERE Data > #03/07/2024# 
-                                and idVend = " + this.ID.ToString();
+                           WHERE Data > "+DtInicioSis 
+                                +" and idVend = " + this.ID.ToString();
 
             List <ComissaoPendente> comissoes = new List<ComissaoPendente>();
             using (OleDbConnection connection = new OleDbConnection(glo.connectionString))
@@ -77,7 +77,7 @@ namespace TeleBonifacio.rel
             }
             return comissoes;
         }
-        private List<ComissaoPaga> CarregarComissoesPagas(DateTime dataInicio, DateTime dataFim)
+        private List<ComissaoPaga> CarregarComissoesPagas(DateTime? dataInicio, DateTime dataFim)
         {
             string SQL = @"SELECT
                         V.ID as ID_Vale,
@@ -89,8 +89,8 @@ namespace TeleBonifacio.rel
                             WHERE E.idPagto = V.ID
                         ) as qtd
                     FROM Vales V
-                    WHERE V.Data > #03/07/2024# 
-                        And V.idOperador = " + this.ID.ToString();
+                    WHERE V.Data > "+ DtInicioSis
+                        +" and V.idOperador = " + this.ID.ToString();
             List<ComissaoPaga> comissoes = new List<ComissaoPaga>();
             using (OleDbConnection connection = new OleDbConnection(glo.connectionString))
             {
@@ -121,7 +121,7 @@ namespace TeleBonifacio.rel
             return comissoes;
         }
 
-        public string GerarExtrato(DateTime dataInicio, DateTime dataFim)
+        public string GerarExtrato(DateTime? dataInicio, DateTime dataFim)
         {
             ComissoesPagas = CarregarComissoesPagas(dataInicio, dataFim);
             ComissoesPendentes = CarregarComissoesPendentes(dataInicio, dataFim);
@@ -160,36 +160,30 @@ namespace TeleBonifacio.rel
             return sb.ToString();
         }
 
-        private object GetTotalPago(List<ComissaoPaga> comissoesPagas)
-        {
-            return null;
-        }
-
-        private object GetTotalPendente(List<ComissaoPendente> comissoesPendentes)
-        {
-            // throw new NotImplementedException();
-            return null;
-        }
-
-        private object GetLastPagamentoDate(List<ComissaoPaga> comissoesPagas)
-        {
-            // throw new NotImplementedException();
-            return null;
-        }
-
-        private DateTime PrimData(DateTime DtAlternativa)
+        private DateTime? PrimData(DateTime DtAlternativa)
         {
             string SQL = @"SELECT Data 
                            FROM Entregas
-                           Where Data > #03/07/2024# 
-                                and idVend = " + this.ID.ToString();
+                           Where idVend = " + this.ID.ToString();
+
+            //string SQL = @"SELECT Data 
+            //               FROM Entregas
+            //               Where Data > #03/07/2024# 
+            //                    and idVend = " + this.ID.ToString();
+
             DataTable ret = glo.getDados(SQL);
-            DateTime DtRet = (DateTime)ret.Rows[0]["Data"];
-            if (DtRet < DtAlternativa)
+            if (ret.Rows.Count>0)
             {
-                DtRet = DtAlternativa;
+                DateTime DtRet = (DateTime)ret.Rows[0]["Data"];
+                if (DtRet < DtAlternativa)
+                {
+                    DtRet = DtAlternativa;
+                }
+                return DtRet;
+            } else
+            {
+                return null;
             }
-            return DtRet;
         }
 
         public void SetId(int selectedValue)
