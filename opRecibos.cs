@@ -180,11 +180,12 @@ namespace TeleBonifacio
                 dataPagamento = "de " + DataIni.ToString("dd/MM/yyyy") + " a " + DateTime.Now.ToString("dd/MM/yyyy");
             }
             Recibo.Pagar(id, ltVlr.Text, dataPagamento);
+            INI MeuIni = new INI();
             using (var receipt = new rel.Receipt())
             {
-                string storeName = "Boni Auto peças";
-                string storeAddress = "Estrada Retiro da Ponta Grossa, 1050";
-                string storePhone = "3245-5653/3242-3857";
+                string storeName = MeuIni.ReadString("Identidade", "Nome", "");
+                string storeAddress = MeuIni.ReadString("Identidade", "Endereco", "");
+                string storePhone = MeuIni.ReadString("Identidade", "Fone", "");
                 string customerName = cmbVendedor.Text;
                 receipt.Print(storeName, storeAddress, storePhone, customerName, ltVlr.Text, DataIni, dataPagamento);
             }

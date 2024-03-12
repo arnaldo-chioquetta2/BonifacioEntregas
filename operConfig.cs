@@ -10,12 +10,19 @@ using System.Windows.Forms;
 
 namespace TeleBonifacio
 {
-    public partial class oprConfig : Form
+    public partial class oprConfig : Form        
     {
+
+        private INI MeuIni;
+
         public oprConfig()
         {
             InitializeComponent();
             textBox1.Text = glo.CaminhoBase;
+            MeuIni = new INI();
+            txNome.Text = MeuIni.ReadString("Identidade", "Nome", "");
+            txEndereco.Text = MeuIni.ReadString("Identidade", "Endereco", "");
+            txFone.Text = MeuIni.ReadString("Identidade", "Fone", "");
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -30,6 +37,9 @@ namespace TeleBonifacio
         {
             
             glo.CaminhoBase = textBox1.Text;
+            MeuIni.WriteString("Identidade", "Nome", txNome.Text);
+            MeuIni.WriteString("Identidade", "Endereco", txEndereco.Text);
+            MeuIni.WriteString("Identidade", "Fone", txFone.Text);
             this.Close();
         }
 
