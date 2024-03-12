@@ -3,15 +3,8 @@ namespace TeleBonifacio
 {
     partial class Dashboard
     {
-        /// <summary>
-        /// Required designer variable.
-        /// </summary>
         private System.ComponentModel.IContainer components = null;
 
-        /// <summary>
-        /// Clean up any resources being used.
-        /// </summary>
-        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
         protected override void Dispose(bool disposing)
         {
             if (disposing && (components != null))
@@ -23,14 +16,15 @@ namespace TeleBonifacio
 
         #region Windows Form Designer generated code
 
-        /// <summary>
-        /// Required method for Designer support - do not modify
-        /// the contents of this method with the code editor.
-        /// </summary>
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Dashboard));
             this.panel2 = new System.Windows.Forms.Panel();
+            this.label6 = new System.Windows.Forms.Label();
+            this.txtComiss = new System.Windows.Forms.Label();
+            this.label5 = new System.Windows.Forms.Label();
+            this.label4 = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
             this.txtLucroTotal = new System.Windows.Forms.Label();
             this.txtTotalEntregadores = new System.Windows.Forms.Label();
             this.txtTotalVendas = new System.Windows.Forms.Label();
@@ -40,13 +34,12 @@ namespace TeleBonifacio
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.label3 = new System.Windows.Forms.Label();
-            this.label4 = new System.Windows.Forms.Label();
-            this.label5 = new System.Windows.Forms.Label();
-            this.txtComiss = new System.Windows.Forms.Label();
-            this.label6 = new System.Windows.Forms.Label();
+            this.tabControl1 = new System.Windows.Forms.TabControl();
+            this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.tabPage2 = new System.Windows.Forms.TabPage();
             this.panel2.SuspendLayout();
             this.panel1.SuspendLayout();
+            this.tabControl1.SuspendLayout();
             this.SuspendLayout();
             // 
             // panel2
@@ -69,6 +62,56 @@ namespace TeleBonifacio
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(800, 56);
             this.panel2.TabIndex = 1;
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(738, 12);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(40, 13);
+            this.label6.TabIndex = 21;
+            this.label6.Text = "Lucro :";
+            this.label6.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // txtComiss
+            // 
+            this.txtComiss.AutoSize = true;
+            this.txtComiss.Location = new System.Drawing.Point(621, 37);
+            this.txtComiss.Name = "txtComiss";
+            this.txtComiss.Size = new System.Drawing.Size(52, 13);
+            this.txtComiss.TabIndex = 20;
+            this.txtComiss.Text = " 8.888,88";
+            this.txtComiss.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(621, 12);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(63, 13);
+            this.label5.TabIndex = 19;
+            this.label5.Text = "Comissões :";
+            this.label5.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(512, 12);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(55, 13);
+            this.label4.TabIndex = 18;
+            this.label4.Text = "Entregas: ";
+            this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(417, 12);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(49, 13);
+            this.label3.TabIndex = 17;
+            this.label3.Text = "Vendas: ";
+            this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // txtLucroTotal
             // 
@@ -158,61 +201,43 @@ namespace TeleBonifacio
             this.panel1.Size = new System.Drawing.Size(800, 50);
             this.panel1.TabIndex = 0;
             // 
-            // label3
+            // tabControl1
             // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(417, 12);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(49, 13);
-            this.label3.TabIndex = 17;
-            this.label3.Text = "Vendas: ";
-            this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.tabControl1.Controls.Add(this.tabPage1);
+            this.tabControl1.Controls.Add(this.tabPage2);
+            this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tabControl1.Location = new System.Drawing.Point(0, 50);
+            this.tabControl1.Name = "tabControl1";
+            this.tabControl1.SelectedIndex = 0;
+            this.tabControl1.Size = new System.Drawing.Size(800, 400);
+            this.tabControl1.TabIndex = 1;
             // 
-            // label4
+            // tabPage1
             // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(512, 12);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(55, 13);
-            this.label4.TabIndex = 18;
-            this.label4.Text = "Entregas: ";
-            this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.tabPage1.Location = new System.Drawing.Point(4, 22);
+            this.tabPage1.Name = "tabPage1";
+            this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage1.Size = new System.Drawing.Size(792, 374);
+            this.tabPage1.TabIndex = 0;
+            this.tabPage1.Text = "Entregadores";
+            this.tabPage1.UseVisualStyleBackColor = true;
             // 
-            // label5
+            // tabPage2
             // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(621, 12);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(63, 13);
-            this.label5.TabIndex = 19;
-            this.label5.Text = "Comissões :";
-            this.label5.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
-            // txtComiss
-            // 
-            this.txtComiss.AutoSize = true;
-            this.txtComiss.Location = new System.Drawing.Point(621, 37);
-            this.txtComiss.Name = "txtComiss";
-            this.txtComiss.Size = new System.Drawing.Size(52, 13);
-            this.txtComiss.TabIndex = 20;
-            this.txtComiss.Text = " 8.888,88";
-            this.txtComiss.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
-            // label6
-            // 
-            this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(738, 12);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(40, 13);
-            this.label6.TabIndex = 21;
-            this.label6.Text = "Lucro :";
-            this.label6.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.tabPage2.Location = new System.Drawing.Point(4, 22);
+            this.tabPage2.Name = "tabPage2";
+            this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage2.Size = new System.Drawing.Size(792, 374);
+            this.tabPage2.TabIndex = 1;
+            this.tabPage2.Text = "Vendas";
+            this.tabPage2.UseVisualStyleBackColor = true;
             // 
             // Dashboard
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.tabControl1);
             this.Controls.Add(this.panel1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Dashboard";
@@ -221,6 +246,7 @@ namespace TeleBonifacio
             this.panel2.ResumeLayout(false);
             this.panel2.PerformLayout();
             this.panel1.ResumeLayout(false);
+            this.tabControl1.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -242,5 +268,8 @@ namespace TeleBonifacio
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.TabControl tabControl1;
+        private System.Windows.Forms.TabPage tabPage1;
+        private System.Windows.Forms.TabPage tabPage2;
     }
 }

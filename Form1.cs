@@ -19,9 +19,7 @@ namespace TeleBonifacio
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            string u = glo.Encrypt("admin_segu");
-            string p = glo.Encrypt("ufrs3753!");
-            int x = 0;
+
         }
 
         private void VerificaNovaVersao()

@@ -78,7 +78,7 @@ namespace TeleBonifacio.dao
             return dt;
         }
 
-        public DataTable Dasboard(DateTime DT1, DateTime DT2)
+        public DataTable GraficEntregadores(DateTime DT1, DateTime DT2)
         {
             string dataInicioStr = DT1.ToString("MM/dd/yyyy HH:mm:ss");
             string dataFimStr = DT2.ToString("MM/dd/yyyy HH:mm:ss");
@@ -90,6 +90,19 @@ namespace TeleBonifacio.dao
                             FROM Entregas
                             WHERE Data BETWEEN #{dataInicioStr}# AND #{dataFimStr}# 
                             GROUP BY DateValue(Data) ");
+            DataTable dt = ExecutarConsulta(query);
+            return dt;
+        }
+
+        public DataTable GraficVendas(DateTime DT1, DateTime DT2)
+        {
+            string dataInicioStr = DT1.ToString("MM/dd/yyyy HH:mm:ss");
+            string dataFimStr = DT2.ToString("MM/dd/yyyy HH:mm:ss");
+            string query = ($@"SELECT FORMAT([Data], 'dd/mm/yyyy') AS DataFormatada,
+                                SUM(Val([VlNota])) AS TotalVendas
+                            FROM Entregas
+                            WHERE Data BETWEEN #{dataInicioStr}# AND #{dataFimStr}# 
+                            GROUP BY FORMAT([Data], 'dd/mm/yyyy') ");
             DataTable dt = ExecutarConsulta(query);
             return dt;
         }
