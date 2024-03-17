@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.OleDb;
 using System.Text;
+using System.Windows.Forms;
 
 namespace TeleBonifacio.dao
 {
@@ -60,7 +61,6 @@ namespace TeleBonifacio.dao
         public DataTable getDadosC(DateTime? DT1, DateTime? DT2)
         {
             StringBuilder query = new StringBuilder();
-            int maxLength = 10;
             query.Append($@"SELECT
                             m.Nome AS MotoBoy,
                             e.idForma,

@@ -60,13 +60,13 @@ namespace TeleBonifacio
             this.panel2.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel2.Location = new System.Drawing.Point(0, 0);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(800, 56);
+            this.panel2.Size = new System.Drawing.Size(881, 56);
             this.panel2.TabIndex = 1;
             // 
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(738, 12);
+            this.label6.Location = new System.Drawing.Point(802, 12);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(40, 13);
             this.label6.TabIndex = 21;
@@ -75,10 +75,10 @@ namespace TeleBonifacio
             // 
             // txtComiss
             // 
-            this.txtComiss.AutoSize = true;
-            this.txtComiss.Location = new System.Drawing.Point(621, 37);
+            this.txtComiss.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtComiss.Location = new System.Drawing.Point(652, 25);
             this.txtComiss.Name = "txtComiss";
-            this.txtComiss.Size = new System.Drawing.Size(52, 13);
+            this.txtComiss.Size = new System.Drawing.Size(93, 33);
             this.txtComiss.TabIndex = 20;
             this.txtComiss.Text = " 8.888,88";
             this.txtComiss.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -86,7 +86,7 @@ namespace TeleBonifacio
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(621, 12);
+            this.label5.Location = new System.Drawing.Point(682, 12);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(63, 13);
             this.label5.TabIndex = 19;
@@ -96,7 +96,7 @@ namespace TeleBonifacio
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(512, 12);
+            this.label4.Location = new System.Drawing.Point(568, 13);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(55, 13);
             this.label4.TabIndex = 18;
@@ -106,7 +106,7 @@ namespace TeleBonifacio
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(417, 12);
+            this.label3.Location = new System.Drawing.Point(442, 12);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(49, 13);
             this.label3.TabIndex = 17;
@@ -115,30 +115,30 @@ namespace TeleBonifacio
             // 
             // txtLucroTotal
             // 
-            this.txtLucroTotal.AutoSize = true;
-            this.txtLucroTotal.Location = new System.Drawing.Point(729, 37);
+            this.txtLucroTotal.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtLucroTotal.Location = new System.Drawing.Point(755, 30);
             this.txtLucroTotal.Name = "txtLucroTotal";
-            this.txtLucroTotal.Size = new System.Drawing.Size(49, 13);
+            this.txtLucroTotal.Size = new System.Drawing.Size(114, 24);
             this.txtLucroTotal.TabIndex = 16;
             this.txtLucroTotal.Text = "8.888,88";
             this.txtLucroTotal.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // txtTotalEntregadores
             // 
-            this.txtTotalEntregadores.AutoSize = true;
-            this.txtTotalEntregadores.Location = new System.Drawing.Point(515, 37);
+            this.txtTotalEntregadores.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtTotalEntregadores.Location = new System.Drawing.Point(538, 26);
             this.txtTotalEntregadores.Name = "txtTotalEntregadores";
-            this.txtTotalEntregadores.Size = new System.Drawing.Size(52, 13);
+            this.txtTotalEntregadores.Size = new System.Drawing.Size(108, 31);
             this.txtTotalEntregadores.TabIndex = 15;
             this.txtTotalEntregadores.Text = " 8.888,88";
             this.txtTotalEntregadores.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // txtTotalVendas
             // 
-            this.txtTotalVendas.AutoSize = true;
-            this.txtTotalVendas.Location = new System.Drawing.Point(417, 37);
+            this.txtTotalVendas.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtTotalVendas.Location = new System.Drawing.Point(409, 25);
             this.txtTotalVendas.Name = "txtTotalVendas";
-            this.txtTotalVendas.Size = new System.Drawing.Size(55, 13);
+            this.txtTotalVendas.Size = new System.Drawing.Size(123, 33);
             this.txtTotalVendas.TabIndex = 14;
             this.txtTotalVendas.Text = "88.888,88";
             this.txtTotalVendas.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -198,7 +198,7 @@ namespace TeleBonifacio
             this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(800, 50);
+            this.panel1.Size = new System.Drawing.Size(881, 50);
             this.panel1.TabIndex = 0;
             // 
             // tabControl1
@@ -209,7 +209,7 @@ namespace TeleBonifacio
             this.tabControl1.Location = new System.Drawing.Point(0, 50);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(800, 400);
+            this.tabControl1.Size = new System.Drawing.Size(881, 400);
             this.tabControl1.TabIndex = 1;
             // 
             // tabPage1
@@ -217,7 +217,7 @@ namespace TeleBonifacio
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(792, 374);
+            this.tabPage1.Size = new System.Drawing.Size(873, 374);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Entregadores";
             this.tabPage1.UseVisualStyleBackColor = true;
@@ -236,7 +236,7 @@ namespace TeleBonifacio
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
+            this.ClientSize = new System.Drawing.Size(881, 450);
             this.Controls.Add(this.tabControl1);
             this.Controls.Add(this.panel1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));

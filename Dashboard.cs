@@ -180,3 +180,16 @@ namespace TeleBonifacio
 
     }
 }
+
+/*
+1) Primeiramente, o programa busca informações sobre as entregas feitas dentro de um período de tempo específico. 
+2) Ele procura saber a data de cada entrega e o lucro que foi gerado com ela.
+
+Sendo que o lucro considerado é o valor da venda, menos desconto e menos valor pago pela entrega.
+
+3) Depois de coletar esses dados, o programa organiza as informações por dia. 
+Isso significa que ele junta todas as entregas que foram feitas em um mesmo dia e calcula o lucro total daquele dia.
+4) Com essas informações organizadas, o programa cria um gráfico. 
+Cada barra no gráfico representa um dia, e a altura da barra mostra o lucro gerado naquele dia. 
+As barras verdes representam dias em que houve lucro, enquanto as barras vermelhas representam dias com prejuízo.
+ */ 

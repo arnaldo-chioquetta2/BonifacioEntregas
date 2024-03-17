@@ -1,13 +1,7 @@
-﻿using SourceGrid;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
-using System.Drawing;
-using System.Drawing.Printing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using TeleBonifacio.dao;
 
@@ -181,165 +175,31 @@ namespace TeleBonifacio
 
         private void AtualizaValores(decimal perc)
         {
-            txPerc.Text = perc.ToString("F2");
-            decimal comiss = totalGeral * perc / 100;
-            txComiss.Text = comiss.ToString("F2");
+
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
+            dataGrid1.DataSource = null;
+            dataGrid1.Columns.Clear();            
             CarregaGrid(dtpDataIniicio.Value, dtpDataFim.Value);
+            ConfigurarGrid();
         }
 
         private void txPerc_KeyUp(object sender, KeyEventArgs e)
         {
-            if (e.KeyCode == Keys.Enter)
-            {
-                float perc = glo.LeValor(txPerc.Text);
-                AtualizaValores((decimal)perc);
-                ConfigDAO config = new ConfigDAO();
-                config.SetPerc(perc);
-            }
+
         }
 
         private void txPerc_KeyPress(object sender, KeyPressEventArgs e)
         {
-            if (!char.IsDigit(e.KeyChar) && e.KeyChar != ',' && e.KeyChar != '.' && e.KeyChar != (char)Keys.Enter && e.KeyChar != (char)Keys.Left && e.KeyChar != (char)Keys.Right && e.KeyChar != (char)Keys.Back && e.KeyChar != (char)Keys.Delete)
-            {
-                e.Handled = true;
-            }
+
         }
 
         private void button2_Click(object sender, EventArgs e)
         {
-            ImprimirConteudo();
+            
         }
-
-        #region Impressão
-
-        //private void ImprimirConteudo()
-        //{
-        //    PrintDocument printDocument = new PrintDocument();
-        //    printDocument.DefaultPageSettings.Landscape = true;
-        //    printDocument.PrintPage += new PrintPageEventHandler(OnPrintPage);
-        //    PrintDialog printDialog = new PrintDialog();
-        //    printDialog.Document = printDocument;
-        //    if (printDialog.ShowDialog() == DialogResult.OK)
-        //    {                
-        //        printDocument.Print();
-        //    }
-        //}
-
-        private void ImprimirConteudo()
-        {
-            PrintDocument printDocument = new PrintDocument();
-
-            // Defina a orientação da página para paisagem antes de criar o PrintDialog
-            printDocument.DefaultPageSettings.Landscape = true;
-
-            printDocument.PrintPage += new PrintPageEventHandler(OnPrintPage);
-
-            // Cria o PrintDialog e define suas configurações
-            PrintDialog printDialog = new PrintDialog();
-            printDialog.Document = printDocument;
-
-            // Tente definir a orientação para paisagem nas configurações do PrintDialog também
-            printDialog.Document.DefaultPageSettings.Landscape = true;
-
-            if (printDialog.ShowDialog() == DialogResult.OK)
-            {
-                printDocument.Print();
-            }
-        }
-
-
-        //private void OnPrintPage(object sender, PrintPageEventArgs e)
-        //{
-        //    Graphics graphics = e.Graphics;
-        //    Font font = new Font("Arial", 10);
-        //    Brush brush = Brushes.Black;
-        //    float lineHeight = font.GetHeight();
-        //    float x = e.MarginBounds.Left;
-        //    float y = e.MarginBounds.Top;
-        //    float[] columnWidths = { 200, 225, 225, 225, 225, 225 };
-
-        //    // Supondo que o cabeçalho e a ordem das colunas do DataTable estejam corretos
-        //    string[] columnNames = Dados.Columns.Cast<DataColumn>().Select(col => col.ColumnName).ToArray();
-        //    // Desenha os cabeçalhos das colunas
-        //    for (int i = 0; i < columnNames.Length; i++)
-        //    {
-        //        graphics.DrawString(columnNames[i], font, brush, x, y);
-        //        x += columnWidths[i]; // Move X para a próxima coluna
-        //    }
-        //    y += lineHeight; // Move para a próxima linha após o cabeçalho
-
-        //    // Desenha os valores de cada linha
-        //    foreach (DataRow row in Dados.Rows)
-        //    {
-        //        x = e.MarginBounds.Left; // Reseta X para o início de cada nova linha
-        //        for (int i = 0; i < columnNames.Length; i++)
-        //        {
-        //            string text = row[i].ToString();
-        //            graphics.DrawString(text, font, brush, x, y);
-        //            x += columnWidths[i]; // Move X para a próxima coluna
-        //        }
-        //        y += lineHeight; // Move para a próxima linha após cada linha de dados
-        //    }
-
-        //    // Desenha a linha de separação
-        //    y += lineHeight / 2; // Pequeno espaço antes da linha de separação
-        //    graphics.DrawLine(Pens.Black, e.MarginBounds.Left, y, e.MarginBounds.Right, y);
-        //    y += lineHeight / 2; // Pequeno espaço após a linha de separação
-
-        //    // Desenha o total geral e a data da consulta
-        //    graphics.DrawString($"Valor Total: {totalGeral.ToString("N2")}", font, brush, e.MarginBounds.Left, y);
-        //    y += lineHeight;
-        //    graphics.DrawString($"Data da Consulta: {dtpDataIniicio.Value.ToShortDateString()} até {dtpDataFim.Value.ToShortDateString()}", font, brush, e.MarginBounds.Left, y);
-
-        //    // Verifica se há mais páginas
-        //    e.HasMorePages = false; // Defina como true se precisar continuar em uma nova página
-        //}
-
-        private void OnPrintPage(object sender, PrintPageEventArgs e)
-        {
-            Graphics graphics = e.Graphics;
-            Font font = new Font("Arial", 10);
-            Brush brush = Brushes.Black;
-            float lineHeight = font.GetHeight();
-            float x = e.MarginBounds.Left;
-            float y = e.MarginBounds.Top;
-            float pageWidth = e.MarginBounds.Width;
-            string[] columnNames = Dados.Columns.Cast<DataColumn>().Select(col => col.ColumnName).ToArray();
-            int columnCount = columnNames.Length;
-            float[] columnWidths = Enumerable.Repeat(pageWidth / columnCount, columnCount).ToArray();
-            columnWidths[columnWidths.Length - 1] = pageWidth - columnWidths.Take(columnWidths.Length - 1).Sum();
-            for (int i = 0; i < columnCount; i++)
-            {
-                graphics.DrawString(columnNames[i], font, brush, x, y);
-                x += columnWidths[i]; 
-            }
-            y += lineHeight; 
-            foreach (DataRow row in Dados.Rows)
-            {
-                x = e.MarginBounds.Left; 
-                for (int i = 0; i < columnCount; i++)
-                {
-                    string text = row[i].ToString();
-                    graphics.DrawString(text, font, brush, x, y);
-                    x += columnWidths[i]; 
-                }
-                y += lineHeight; 
-            }
-            y += lineHeight / 2; 
-            graphics.DrawLine(Pens.Black, e.MarginBounds.Left, y, e.MarginBounds.Right, y);
-            y += lineHeight / 2; 
-            graphics.DrawString($"Valor Total: {totalGeral.ToString("N2")}", font, brush, e.MarginBounds.Left, y);
-            y += lineHeight;
-            graphics.DrawString($"Data da Consulta: {dtpDataIniicio.Value.ToShortDateString()} até {dtpDataFim.Value.ToShortDateString()}", font, brush, e.MarginBounds.Left, y);
-            e.HasMorePages = false; 
-        }
-
-
-        #endregion
     }
 }
+
