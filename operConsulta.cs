@@ -64,12 +64,19 @@ namespace TeleBonifacio
 
         private void ConfigurarGrid()
         {
-            dataGrid1.Columns[0].Width = 100;
-            for (int i = 1; i < dataGrid1.Columns.Count; i++)
+            try
             {
-                dataGrid1.Columns[i].Width = 90;
+                dataGrid1.Columns[0].Width = 100;
+                for (int i = 1; i < dataGrid1.Columns.Count; i++)
+                {
+                    dataGrid1.Columns[i].Width = 90;
+                }
+                dataGrid1.Invalidate();
             }
-            dataGrid1.Invalidate();
+            catch (Exception)
+            {
+                // Não faz nada
+            }
         }
 
 #region Grid
