@@ -50,7 +50,7 @@ namespace TeleBonifacio.dao
                 DateTime dataInicio = DT.Value.Date;
                 DateTime dataFim = dataInicio.AddDays(1).AddTicks(-1);
                 string dataInicioStr = dataInicio.ToString("MM/dd/yyyy HH:mm:ss");
-                string dataFimStr = dataFim.ToString("MM/dd/yyyy HH:mm:ss");
+                string dataFimStr = dataFim.ToString("MM/dd/yyyy 23:59:59");
                 query.AppendFormat(" WHERE e.Data BETWEEN #{0}# AND #{1}#", dataInicioStr, dataFimStr);
             }
             query.Append(" Order By e.ID desc");
@@ -70,7 +70,7 @@ namespace TeleBonifacio.dao
             DateTime dataInicio = DT1.Value.Date;
             DateTime dataFim = DT2.Value.Date;
             string dataInicioStr = dataInicio.ToString("MM/dd/yyyy HH:mm:ss");
-            string dataFimStr = dataFim.ToString("MM/dd/yyyy HH:mm:ss");
+            string dataFimStr = dataFim.ToString("MM/dd/yyyy 23:59:59");
             query.AppendFormat(" WHERE m.Oper = 3 and e.Data BETWEEN #{0}# AND #{1}#", dataInicioStr, dataFimStr);
             query.Append(" GROUP BY m.Nome, e.idForma");
             query.Append(" ORDER BY m.Nome, e.idForma");
@@ -81,7 +81,7 @@ namespace TeleBonifacio.dao
         public DataTable GraficEntregadores(DateTime DT1, DateTime DT2)
         {
             string dataInicioStr = DT1.ToString("MM/dd/yyyy HH:mm:ss");
-            string dataFimStr = DT2.ToString("MM/dd/yyyy HH:mm:ss");
+            string dataFimStr = DT2.ToString("MM/dd/yyyy 23:59:59");
             string query = ($@"SELECT DateValue(Data) AS DataTruncada,
                                 SUM(VlNota) - SUM(VlNota / 1.7) AS LucroBruto,
                                 SUM(Valor) AS ValorTotalEntrega,
@@ -97,7 +97,7 @@ namespace TeleBonifacio.dao
         public DataTable GraficVendas(DateTime DT1, DateTime DT2)
         {
             string dataInicioStr = DT1.ToString("MM/dd/yyyy HH:mm:ss");
-            string dataFimStr = DT2.ToString("MM/dd/yyyy HH:mm:ss");
+            string dataFimStr = DT2.ToString("MM/dd/yyyy 23:59:59");
             string query = ($@"SELECT FORMAT([Data], 'dd/mm/yyyy') AS DataFormatada,
                                 SUM(Val([VlNota])) AS TotalVendas
                             FROM Entregas
