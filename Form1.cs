@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Data.Linq;
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
@@ -14,7 +13,7 @@ namespace TeleBonifacio
 
         public Form1()
         {
-            InitializeComponent();
+            InitializeComponent();            
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -24,48 +23,7 @@ namespace TeleBonifacio
 
         private void VerificaNovaVersao()
         {
-            INI cINI = new INI();
-            int diaAtual = DateTime.Now.Day;
-            int UltExec = cINI.ReadInt("INI", "UltExec", 0);
 
-            bool atualizar = (diaAtual != UltExec);
-            // bool atualizar = true;
-
-            if (atualizar)
-            {
-                string URL = cINI.ReadString("FTP","URL","");
-                if (URL.Length>0)
-                {
-                    string user = glo.Decrypt(cINI.ReadString("FTP", "user", ""));
-                    string senha = glo.Decrypt(cINI.ReadString("FTP", "pass", ""));
-                    FTP cFPT = new FTP(URL, user, senha);
-
-                    // bool funfa = cFPT.Testa();
-                    bool funfa = true;
-
-                    if (funfa)
-                    {
-                        Stopwatch stopwatch = new Stopwatch();
-                        stopwatch.Start();
-                        int versaoFtp = cFPT.LerVersaoDoFtp();
-                        stopwatch.Stop();
-                        string Tempo = stopwatch.ElapsedMilliseconds.ToString();
-                        cINI.WriteString("FTP", "tempo", Tempo);
-                        Version version = Assembly.GetExecutingAssembly().GetName().Version;
-                        int versionInt = (version.Major * 100) + (version.Minor * 10) + version.Build;
-                        if (versaoFtp> versionInt)
-                        {
-                            // ATUALIZAR
-                            int x = 0;
-                        } else
-                        {
-                            // NÃO ATUALIZAR
-                            int x = 0;
-                        }
-                    }
-                }
-                cINI.WriteInt("INI", "UltExec", diaAtual);
-            }            
         }
         private void pictureBox1_Click(object sender, EventArgs e)
         {
@@ -144,12 +102,70 @@ namespace TeleBonifacio
             AbrirOuFocarFormulario<opRecibos>();
         }
 
-        private void Form1_Activated(object sender, EventArgs e)
+        private void Form1_Shown(object sender, EventArgs e)
         {
             if (!this.ativou)
             {
                 this.ativou = true;
-                VerificaNovaVersao();
+                Version version = Assembly.GetExecutingAssembly().GetName().Version;
+                string titulo;
+                if (version.Revision > 0)
+                {
+                    titulo = $"Bonifácio TeleEntregas {version.Major}.{version.Minor}.{version.Build}.{version.Revision}";
+                }
+                else
+                {
+                    titulo = $"Bonifácio TeleEntregas {version.Major}.{version.Minor}.{version.Build}";
+                }
+                VerificaNovaVersao(version);
+                this.Text = titulo;
+            }
+        }
+
+        private void VerificaNovaVersao(Version version)
+        {
+            INI cINI = new INI();
+            int diaAtual = DateTime.Now.Day;
+            int UltExec = cINI.ReadInt("INI", "UltExec", 0);
+
+            bool atualizar = (diaAtual != UltExec);
+            // bool atualizar = true;
+
+            if (atualizar)
+            {
+                string URL = cINI.ReadString("FTP", "URL", "");
+                if (URL.Length > 0)
+                {
+                    string user = glo.Decrypt(cINI.ReadString("FTP", "user", ""));
+                    string senha = glo.Decrypt(cINI.ReadString("FTP", "pass", ""));
+                    FTP cFPT = new FTP(URL, user, senha);
+
+                    // bool funfa = cFPT.Testa();
+                    bool funfa = true;
+
+                    if (funfa)
+                    {
+                        this.Text = "PROCURANDO NOVA VERSÃO";
+                        Stopwatch stopwatch = new Stopwatch();
+                        stopwatch.Start();
+                        int versaoFtp = cFPT.LerVersaoDoFtp();
+                        stopwatch.Stop();
+                        string Tempo = stopwatch.ElapsedMilliseconds.ToString();
+                        cINI.WriteString("FTP", "tempo", Tempo);
+                        int versionInt = (version.Major * 100) + (version.Minor * 10) + version.Build;
+                        if (versaoFtp > versionInt)
+                        {
+                            // ATUALIZAR
+                            int x = 0;
+                        }
+                        else
+                        {
+                            // NÃO ATUALIZAR
+                            int x = 0;
+                        }
+                    }
+                }
+                cINI.WriteInt("INI", "UltExec", diaAtual);
             }
         }
     }
