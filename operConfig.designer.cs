@@ -94,7 +94,7 @@ namespace TeleBonifacio
             // 
             // openFileDialog1
             // 
-            this.openFileDialog1.FileName = "openFileDialog1";
+            this.openFileDialog1.FileName = "*.mdb";
             this.openFileDialog1.Filter = "Banco de dados Access (*.mdb)|*.mdb";
             // 
             // txNome

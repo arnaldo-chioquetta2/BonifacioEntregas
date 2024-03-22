@@ -86,10 +86,11 @@ namespace TeleBonifacio.dao
                                 SUM(VlNota) - SUM(VlNota / 1.7) AS LucroBruto,
                                 SUM(Valor) AS ValorTotalEntrega,
                                 ((SUM(VlNota) - SUM(VlNota / 1.7)) - SUM(Valor)) -(SUM(VlNota) * 0.01) AS LucroTeleentrega,
-                                SUM(VlNota) *0.01 AS Comissao                                 
+                                SUM(VlNota) AS VlNota 
                             FROM Entregas
                             WHERE Data BETWEEN #{dataInicioStr}# AND #{dataFimStr}# 
                             GROUP BY DateValue(Data) ");
+            Console.WriteLine(query);
             DataTable dt = ExecutarConsulta(query);
             return dt;
         }

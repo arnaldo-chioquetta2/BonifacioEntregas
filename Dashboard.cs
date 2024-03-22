@@ -166,10 +166,11 @@ namespace TeleBonifacio
             {
                 foreach (DataRow row in dados.Rows)
                 {
-                    totalVendas += row.IsNull("LucroBruto") ? 0m : Convert.ToDecimal(row["LucroBruto"]);
+                    decimal VlNota = Convert.ToDecimal(row["VlNota"]);
+                    totalVendas += VlNota;
                     totalEntregadores += row.IsNull("ValorTotalEntrega") ? 0m : Convert.ToDecimal(row["ValorTotalEntrega"]);
                     lucroTotal += row.IsNull("LucroTeleentrega") ? 0m : Convert.ToDecimal(row["LucroTeleentrega"]);
-                    comiss += row.IsNull("Comissao") ? 0m : Convert.ToDecimal(row["Comissao"]);
+                    comiss += VlNota / 100;
                 }
             }
             txtTotalVendas.Text = totalVendas.ToString("C");
