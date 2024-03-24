@@ -128,8 +128,8 @@ namespace TeleBonifacio
             int diaAtual = DateTime.Now.Day;
             int UltExec = cINI.ReadInt("INI", "UltExec", 0);
 
-            bool atualizar = (diaAtual != UltExec);
-            // bool atualizar = true;
+            // bool atualizar = (diaAtual != UltExec);
+            bool atualizar = true;
 
             if (atualizar)
             {
@@ -139,31 +139,41 @@ namespace TeleBonifacio
                     string user = glo.Decrypt(cINI.ReadString("FTP", "user", ""));
                     string senha = glo.Decrypt(cINI.ReadString("FTP", "pass", ""));
                     FTP cFPT = new FTP(URL, user, senha);
+                    this.Text = "PROCURANDO NOVA VERSÃO";
+                    Stopwatch stopwatch = new Stopwatch();
+                    stopwatch.Start();
+                    int versaoFtp = cFPT.LerVersaoDoFtp();
+                    stopwatch.Stop();
+                    string Tempo = stopwatch.ElapsedMilliseconds.ToString();
+                    cINI.WriteString("FTP", "tempo", Tempo);
+                    int versionInt = (version.Major * 100) + (version.Minor * 10) + version.Build;
 
-                    // bool funfa = cFPT.Testa();
-                    bool funfa = true;
-
-                    if (funfa)
+                    // if (1==1)
+                    if (versaoFtp > versionInt)
                     {
-                        this.Text = "PROCURANDO NOVA VERSÃO";
-                        Stopwatch stopwatch = new Stopwatch();
-                        stopwatch.Start();
-                        int versaoFtp = cFPT.LerVersaoDoFtp();
-                        stopwatch.Stop();
-                        string Tempo = stopwatch.ElapsedMilliseconds.ToString();
-                        cINI.WriteString("FTP", "tempo", Tempo);
-                        int versionInt = (version.Major * 100) + (version.Minor * 10) + version.Build;
-                        if (versaoFtp > versionInt)
+                        string versaoAtualStr = version.ToString().Substring(0, version.ToString().Length - 2);
+                        string versaoNovaStr = $"{versaoFtp / 100}.{(versaoFtp / 10) % 10}.{versaoFtp % 10}";
+                        string mensagem = $"Existe uma nova versão do programa disponível.\n\n" +
+                                                $"Versão atual: {versaoAtualStr}\n" +
+                                                $"Nova versão: {versaoNovaStr}\n\n" +
+                                                "Deseja baixá-la agora?";
+                        DialogResult dialogResult = MessageBox.Show(
+                            mensagem,
+                            "Atualização Disponível",
+                            MessageBoxButtons.YesNo,
+                            MessageBoxIcon.Information,
+                            MessageBoxDefaultButton.Button1);
+                        if (dialogResult == DialogResult.Yes)
                         {
-                            // ATUALIZAR
-                            int x = 0;
-                        }
-                        else
-                        {
-                            // NÃO ATUALIZAR
-                            int x = 0;
+                            int X = 1;
                         }
                     }
+                    else
+                    {
+                        // NÃO ATUALIZAR
+                        int x = 0;
+                    }
+
                 }
                 cINI.WriteInt("INI", "UltExec", diaAtual);
             }
