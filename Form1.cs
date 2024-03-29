@@ -148,8 +148,8 @@ namespace TeleBonifacio
                     cINI.WriteString("FTP", "tempo", Tempo);
                     int versionInt = (version.Major * 100) + (version.Minor * 10) + version.Build;
 
-                    // if (1==1)
-                    if (versaoFtp > versionInt)
+                    if (1==1)
+                    // if (versaoFtp > versionInt)
                     {
                         string versaoAtualStr = version.ToString().Substring(0, version.ToString().Length - 2);
                         string versaoNovaStr = $"{versaoFtp / 100}.{(versaoFtp / 10) % 10}.{versaoFtp % 10}";
@@ -165,7 +165,9 @@ namespace TeleBonifacio
                             MessageBoxDefaultButton.Button1);
                         if (dialogResult == DialogResult.Yes)
                         {
-                            int X = 1;
+                            string PastaAtu = cINI.ReadString("Config", "Atualizador", "");
+                            Process.Start(PastaAtu+ @"\ATCAtualizeitor.exe");
+                            Environment.Exit(0);
                         }
                     }
                     else
