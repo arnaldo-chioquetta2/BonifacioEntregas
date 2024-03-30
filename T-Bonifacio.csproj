@@ -133,6 +133,7 @@
     <Compile Include="FormBase.designer.cs">
       <DependentUpon>FormBase.cs</DependentUpon>
     </Compile>
+    <Compile Include="gen\Cripto.cs" />
     <Compile Include="gen\FTP.cs" />
     <Compile Include="gen\glo.cs" />
     <Compile Include="gen\INI.cs" />

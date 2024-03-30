@@ -136,8 +136,8 @@ namespace TeleBonifacio
                 string URL = cINI.ReadString("FTP", "URL", "");
                 if (URL.Length > 0)
                 {
-                    string user = glo.Decrypt(cINI.ReadString("FTP", "user", ""));
-                    string senha = glo.Decrypt(cINI.ReadString("FTP", "pass", ""));
+                    string user = gen.Cripto.Decrypt(cINI.ReadString("FTP", "user", ""));
+                    string senha = gen.Cripto.Decrypt(cINI.ReadString("FTP", "pass", ""));
                     FTP cFPT = new FTP(URL, user, senha);
                     this.Text = "PROCURANDO NOVA VERSÃO";
                     Stopwatch stopwatch = new Stopwatch();
