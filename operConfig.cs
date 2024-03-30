@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Windows.Forms;
 
 namespace TeleBonifacio
@@ -6,16 +7,26 @@ namespace TeleBonifacio
     public partial class oprConfig : Form        
     {
 
-        private INI MeuIni;
+        private INI cINI;
 
         public oprConfig()
         {
             InitializeComponent();
             textBox1.Text = glo.CaminhoBase;
-            MeuIni = new INI();
-            txNome.Text = MeuIni.ReadString("Identidade", "Nome", "");
-            txEndereco.Text = MeuIni.ReadString("Identidade", "Endereco", "");
-            txFone.Text = MeuIni.ReadString("Identidade", "Fone", "");
+            cINI = new INI();
+            txNome.Text = cINI.ReadString("Identidade", "Nome", "");
+            txEndereco.Text = cINI.ReadString("Identidade", "Endereco", "");
+            txFone.Text = cINI.ReadString("Identidade", "Fone", "");
+            string NovaVersao = cINI.ReadString("Config", "NovaVersao", "");
+            if (NovaVersao.Length>0)
+            {
+                string VersaoAtual = cINI.ReadString("Config", "VersaoAtual", "");
+                if (VersaoAtual!= NovaVersao)
+                {
+                    btAtu.Text = "Atualizar para versão " + NovaVersao;
+                    btAtu.Visible = true;
+                }
+            }            
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -30,9 +41,9 @@ namespace TeleBonifacio
         {
             
             glo.CaminhoBase = textBox1.Text;
-            MeuIni.WriteString("Identidade", "Nome", txNome.Text);
-            MeuIni.WriteString("Identidade", "Endereco", txEndereco.Text);
-            MeuIni.WriteString("Identidade", "Fone", txFone.Text);
+            cINI.WriteString("Identidade", "Nome", txNome.Text);
+            cINI.WriteString("Identidade", "Endereco", txEndereco.Text);
+            cINI.WriteString("Identidade", "Fone", txFone.Text);
             this.Close();
         }
 
@@ -47,5 +58,11 @@ namespace TeleBonifacio
             glo.ExecutarComandoSQL(sql);
         }
 
+        private void btAtu_Click(object sender, EventArgs e)
+        {
+            string PastaAtu = cINI.ReadString("Config", "Atualizador", "");
+            Process.Start(PastaAtu + @"\ATCAtualizeitor.exe");
+            Environment.Exit(0);
+        }
     }
 }

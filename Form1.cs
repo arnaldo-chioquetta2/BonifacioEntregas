@@ -13,7 +13,7 @@ namespace TeleBonifacio
 
         public Form1()
         {
-            InitializeComponent();            
+            InitializeComponent();
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -128,8 +128,8 @@ namespace TeleBonifacio
             int diaAtual = DateTime.Now.Day;
             int UltExec = cINI.ReadInt("INI", "UltExec", 0);
 
-            // bool atualizar = (diaAtual != UltExec);
-            bool atualizar = true;
+            bool atualizar = (diaAtual != UltExec);
+            // bool atualizar = true;
 
             if (atualizar)
             {
@@ -147,35 +147,43 @@ namespace TeleBonifacio
                     string Tempo = stopwatch.ElapsedMilliseconds.ToString();
                     cINI.WriteString("FTP", "tempo", Tempo);
                     int versionInt = (version.Major * 100) + (version.Minor * 10) + version.Build;
-
-                    if (1==1)
-                    // if (versaoFtp > versionInt)
+                    // if (1==1)
+                    if (versaoFtp > versionInt)
                     {
-                        string versaoAtualStr = version.ToString().Substring(0, version.ToString().Length - 2);
                         string versaoNovaStr = $"{versaoFtp / 100}.{(versaoFtp / 10) % 10}.{versaoFtp % 10}";
-                        string mensagem = $"Existe uma nova versão do programa disponível.\n\n" +
-                                                $"Versão atual: {versaoAtualStr}\n" +
-                                                $"Nova versão: {versaoNovaStr}\n\n" +
-                                                "Deseja baixá-la agora?";
-                        DialogResult dialogResult = MessageBox.Show(
-                            mensagem,
-                            "Atualização Disponível",
-                            MessageBoxButtons.YesNo,
-                            MessageBoxIcon.Information,
-                            MessageBoxDefaultButton.Button1);
-                        if (dialogResult == DialogResult.Yes)
+                        string NovaVersaoINI = cINI.ReadString("Config", "NovaVersao", "");
+                        if (versaoNovaStr != NovaVersaoINI)
                         {
-                            string PastaAtu = cINI.ReadString("Config", "Atualizador", "");
-                            Process.Start(PastaAtu+ @"\ATCAtualizeitor.exe");
-                            Environment.Exit(0);
+                            string versaoAtualStr = version.ToString().Substring(0, version.ToString().Length - 2);
+                            string mensagem = $"Existe uma nova versão do programa disponível.\n\n" +
+                                                    $"Versão atual: {versaoAtualStr}\n" +
+                                                    $"Nova versão: {versaoNovaStr}\n\n" +
+                                                    "Deseja baixá-la agora?";
+                            DialogResult dialogResult = MessageBox.Show(
+                                mensagem,
+                                "Atualização Disponível",
+                                MessageBoxButtons.YesNo,
+                                MessageBoxIcon.Information,
+                                MessageBoxDefaultButton.Button1);
+                            if (dialogResult == DialogResult.Yes)
+                            {
+                                string PastaAtu = cINI.ReadString("Config", "Atualizador", "");
+                                Process.Start(PastaAtu + @"\ATCAtualizeitor.exe");
+                                Environment.Exit(0);
+                            }
+                            else
+                            {
+                                cINI.WriteString("Config", "NovaVersao", versaoNovaStr);
+                                cINI.WriteString("Config", "VersaoAtual", versaoAtualStr);
+                                MessageBox.Show(
+                                    "Poderá atualizar quando quiser\n" +
+                                    "indo nas configurações",
+                                    "Atualização Disponível",
+                                    MessageBoxButtons.OK,
+                                    MessageBoxIcon.Information);
+                            }
                         }
                     }
-                    else
-                    {
-                        // NÃO ATUALIZAR
-                        int x = 0;
-                    }
-
                 }
                 cINI.WriteInt("INI", "UltExec", diaAtual);
             }

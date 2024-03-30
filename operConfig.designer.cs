@@ -41,6 +41,7 @@ namespace TeleBonifacio
             this.label2 = new System.Windows.Forms.Label();
             this.txFone = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
+            this.btAtu = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // lblNome
@@ -145,11 +146,24 @@ namespace TeleBonifacio
             this.label3.TabIndex = 14;
             this.label3.Text = "Fone:";
             // 
+            // btAtu
+            // 
+            this.btAtu.DialogResult = System.Windows.Forms.DialogResult.OK;
+            this.btAtu.Location = new System.Drawing.Point(136, 130);
+            this.btAtu.Name = "btAtu";
+            this.btAtu.Size = new System.Drawing.Size(222, 23);
+            this.btAtu.TabIndex = 16;
+            this.btAtu.Text = "OK";
+            this.btAtu.UseVisualStyleBackColor = true;
+            this.btAtu.Visible = false;
+            this.btAtu.Click += new System.EventHandler(this.btAtu_Click);
+            // 
             // oprConfig
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(534, 169);
+            this.Controls.Add(this.btAtu);
             this.Controls.Add(this.txFone);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.txEndereco);
@@ -185,5 +199,6 @@ namespace TeleBonifacio
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.TextBox txFone;
         private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Button btAtu;
     }
 }
