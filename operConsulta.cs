@@ -182,7 +182,9 @@ namespace TeleBonifacio
 
         private void AtualizaValores(decimal perc)
         {
-
+            txPerc.Text = perc.ToString("F2");
+            decimal comiss = totalGeral * perc / 100;
+            txComiss.Text = comiss.ToString("F2");
         }
 
         private void button1_Click(object sender, EventArgs e)
