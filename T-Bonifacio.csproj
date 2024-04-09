@@ -138,6 +138,12 @@
     <Compile Include="gen\glo.cs" />
     <Compile Include="gen\INI.cs" />
     <Compile Include="gen\ValorPorExtenso.cs" />
+    <Compile Include="operAvanco.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="operAvanco.designer.cs">
+      <DependentUpon>operAvanco.cs</DependentUpon>
+    </Compile>
     <Compile Include="operConfig.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -204,6 +210,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="FormBase.resx">
       <DependentUpon>FormBase.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="operAvanco.resx">
+      <DependentUpon>operAvanco.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="operConfig.resx">
       <DependentUpon>operConfig.cs</DependentUpon>

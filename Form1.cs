@@ -94,7 +94,7 @@ namespace TeleBonifacio
 
         private void pictureBox3_Click(object sender, EventArgs e)
         {
-            AbrirOuFocarFormulario<Dashboard>();
+            AbrirOuFocarFormulario<operAvanco>();
         }
 
         private void pictureBox8_Click(object sender, EventArgs e)
@@ -187,6 +187,11 @@ namespace TeleBonifacio
                 }
                 cINI.WriteInt("INI", "UltExec", diaAtual);
             }
+        }
+
+        private void pictureBox9_Click(object sender, EventArgs e)
+        {
+            AbrirOuFocarFormulario<operAvanco>();
         }
     }
 

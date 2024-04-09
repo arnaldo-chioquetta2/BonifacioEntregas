@@ -17,7 +17,6 @@ namespace TeleBonifacio
         }
         public INI()
         {
-            // FileName = Path.ChangeExtension(Application.ExecutablePath, ".ini");
             FileName = @"C:\Entregas\TeleBonifacio.ini";
         }
 
