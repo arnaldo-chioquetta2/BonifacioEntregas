@@ -94,7 +94,7 @@ namespace TeleBonifacio
 
         private void pictureBox3_Click(object sender, EventArgs e)
         {
-            AbrirOuFocarFormulario<operAvanco>();
+            AbrirOuFocarFormulario<Dashboard>();
         }
 
         private void pictureBox8_Click(object sender, EventArgs e)
