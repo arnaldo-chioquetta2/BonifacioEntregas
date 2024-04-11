@@ -33,7 +33,11 @@ namespace TeleBonifacio
             this.button1 = new System.Windows.Forms.Button();
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
+            this.tabControl1 = new System.Windows.Forms.TabControl();
+            this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.tabPage1 = new System.Windows.Forms.TabPage();
             this.panel2.SuspendLayout();
+            this.tabControl1.SuspendLayout();
             this.SuspendLayout();
             // 
             // panel2
@@ -74,7 +78,6 @@ namespace TeleBonifacio
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(36, 31);
             this.label6.TabIndex = 21;
-            this.label6.Text = "12";
             this.label6.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // label4
@@ -170,6 +173,7 @@ namespace TeleBonifacio
             this.button1.TabIndex = 10;
             this.button1.Text = "Pesquisar";
             this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // label2
             // 
@@ -189,9 +193,41 @@ namespace TeleBonifacio
             this.label1.TabIndex = 0;
             this.label1.Text = "Data Inicial";
             // 
+            // tabControl1
+            // 
+            this.tabControl1.Controls.Add(this.tabPage2);
+            this.tabControl1.Controls.Add(this.tabPage1);
+            this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tabControl1.Location = new System.Drawing.Point(0, 53);
+            this.tabControl1.Name = "tabControl1";
+            this.tabControl1.SelectedIndex = 0;
+            this.tabControl1.Size = new System.Drawing.Size(881, 397);
+            this.tabControl1.TabIndex = 3;
+            // 
+            // tabPage2
+            // 
+            this.tabPage2.Location = new System.Drawing.Point(4, 22);
+            this.tabPage2.Name = "tabPage2";
+            this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage2.Size = new System.Drawing.Size(873, 371);
+            this.tabPage2.TabIndex = 1;
+            this.tabPage2.Text = "Entregas";
+            this.tabPage2.UseVisualStyleBackColor = true;
+            // 
+            // tabPage1
+            // 
+            this.tabPage1.Location = new System.Drawing.Point(4, 22);
+            this.tabPage1.Name = "tabPage1";
+            this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage1.Size = new System.Drawing.Size(873, 371);
+            this.tabPage1.TabIndex = 0;
+            this.tabPage1.Text = "Clientes";
+            this.tabPage1.UseVisualStyleBackColor = true;
+            // 
             // operAvanco
             // 
             this.ClientSize = new System.Drawing.Size(881, 450);
+            this.Controls.Add(this.tabControl1);
             this.Controls.Add(this.panel2);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "operAvanco";
@@ -199,6 +235,7 @@ namespace TeleBonifacio
             this.Load += new System.EventHandler(this.operAvanco_Load);
             this.panel2.ResumeLayout(false);
             this.panel2.PerformLayout();
+            this.tabControl1.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -220,5 +257,8 @@ namespace TeleBonifacio
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label txtTotalEntregadores;
+        private System.Windows.Forms.TabControl tabControl1;
+        private System.Windows.Forms.TabPage tabPage1;
+        private System.Windows.Forms.TabPage tabPage2;
     }
 }

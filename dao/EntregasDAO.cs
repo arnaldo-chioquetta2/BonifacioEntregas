@@ -78,6 +78,73 @@ namespace TeleBonifacio.dao
             return dt;
         }
 
+        public DataTable getEntregas(DateTime DT1, DateTime DT2, int indiceSelecionado)
+        {
+            string grp = "";
+            string sq = "";
+            string or = "";
+            string wh = ""; // Adicionando uma string para a cláusula WHERE
+
+            if (indiceSelecionado < 2)
+            {
+                sq = "SELECT DateSerial(Year(Data), Month(Data), Day(Data)) AS Dado, COUNT(*) AS QTD ";
+                grp = "GROUP BY DateSerial(Year(Data), Month(Data), Day(Data)) ";
+                or = "ORDER BY DateSerial(Year(Data), Month(Data), Day(Data)) ASC";
+            }
+            else
+            {
+                sq = "SELECT Format(DateSerial(Year(Data), Month(Data), 1), 'dd/mm/yyyy') AS Dado, COUNT(*) AS QTD ";
+                grp = "GROUP BY Format(DateSerial(Year(Data), Month(Data), 1), 'dd/mm/yyyy') ";
+                or = "ORDER BY Format(DateSerial(Year(Data), Month(Data), 1), 'dd/mm/yyyy')";
+            }
+
+            // Formatando as datas para o padrão mm/dd/yyyy para compatibilidade com o Access
+            string dataInicioStr = DT1.ToString("MM/dd/yyyy");
+            string dataFimStr = DT2.ToString("MM/dd/yyyy");
+
+            // Construindo a cláusula WHERE
+            wh = "WHERE Data >= #" + dataInicioStr + "# AND Data <= #" + dataFimStr + "# ";
+
+            StringBuilder query = new StringBuilder();
+            query.AppendLine(sq);
+            query.AppendLine("FROM Entregas");
+            query.AppendLine(wh); // Adicionando a cláusula WHERE à consulta
+            query.AppendLine(grp);
+            query.AppendLine(or);
+
+            DataTable dt = ExecutarConsulta(query.ToString());
+            return dt;
+        }
+
+
+        //public DataTable getEntregas(DateTime DT1, DateTime DT2, int indiceSelecionado)
+        //{
+        //    string grp = "";
+        //    string sq = "";
+        //    string or = "";
+        //    if (indiceSelecionado<2)
+        //    {
+        //        sq = "SELECT DateSerial(Year(Data), Month(Data), Day(Data)) AS Dado, COUNT(*) AS QTD ";
+        //        grp = "GROUP BY DateSerial(Year(Data), Month(Data), Day(Data)) ";
+        //        or = "ORDER BY DateSerial(Year(Data), Month(Data), Day(Data)) ASC";
+        //    }
+        //    else
+        //    {
+        //        sq = "SELECT Format(DateSerial(Year(Data), Month(Data), 1), 'dd/mm/yyyy') AS Dado, COUNT(*) AS QTD ";
+        //        grp = "GROUP BY Format(DateSerial(Year(Data), Month(Data), 1), 'dd/mm/yyyy') ";
+        //        or = "ORDER BY Format(DateSerial(Year(Data), Month(Data), 1), 'dd/mm/yyyy')";
+        //    }
+        //    StringBuilder query = new StringBuilder();
+        //    query.AppendLine(sq);
+        //    query.AppendLine("FROM Entregas");
+        //    string dataInicioStr = DT1.AddDays(-1).ToString("MM/dd/yyyy");
+        //    string dataFimStr = DT2.AddDays(1).ToString("MM/dd/yyyy");
+        //    query.AppendLine(grp);
+        //    query.AppendLine(or);
+        //    DataTable dt = ExecutarConsulta(query.ToString());
+        //    return dt;
+        //}
+
         public DataTable GraficEntregadores(DateTime DT1, DateTime DT2)
         {
             string dataInicioStr = DT1.ToString("MM/dd/yyyy HH:mm:ss");
@@ -108,7 +175,7 @@ namespace TeleBonifacio.dao
             return dt;
         }
 
-        private DataTable ExecutarConsulta(string query)
+        public DataTable ExecutarConsulta(string query)
         {
             DataTable dataTable = new DataTable();
             using (OleDbConnection connection = new OleDbConnection(glo.connectionString))
