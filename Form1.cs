@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Windows.Forms;
@@ -16,15 +17,8 @@ namespace TeleBonifacio
             InitializeComponent();
         }
 
-        private void Form1_Load(object sender, EventArgs e)
-        {
+        #region Botões
 
-        }
-
-        private void VerificaNovaVersao()
-        {
-
-        }
         private void pictureBox1_Click(object sender, EventArgs e)
         {
             AbrirOuFocarFormulario<operLancamento>();
@@ -102,6 +96,9 @@ namespace TeleBonifacio
             AbrirOuFocarFormulario<opRecibos>();
         }
 
+
+        #endregion
+
         private void Form1_Shown(object sender, EventArgs e)
         {
             if (!this.ativou)
@@ -167,8 +164,10 @@ namespace TeleBonifacio
                                 MessageBoxDefaultButton.Button1);
                             if (dialogResult == DialogResult.Yes)
                             {
-                                string PastaAtu = cINI.ReadString("Config", "Atualizador", "");
-                                Process.Start(PastaAtu + @"\ATCAtualizeitor.exe");
+                                string pastaAtual = Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName);
+                                string pastaAtualizador = Path.Combine(pastaAtual, "Atualizador");
+                                string progAtualizador = Path.Combine(pastaAtualizador, "ATCAtualizeitor.exe");
+                                Process.Start(progAtualizador);
                                 Environment.Exit(0);
                             }
                             else
@@ -187,6 +186,13 @@ namespace TeleBonifacio
                 }
                 cINI.WriteInt("INI", "UltExec", diaAtual);
             }
+        }
+
+        private bool PathIsLocal(string path)
+        {
+            if (path.Length < 3)
+                return false;
+            return path[1] == ':' && path[2] == '\\';
         }
 
         private void pictureBox9_Click(object sender, EventArgs e)
