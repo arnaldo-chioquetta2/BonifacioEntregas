@@ -12,7 +12,6 @@ C:\Prog\T-Bonifacio\T-Bonifacio\obj\Debug\TeleBonifacio.CadVendedor.resources
 C:\Prog\T-Bonifacio\T-Bonifacio\obj\Debug\TeleBonifacio.Dashboard.resources
 C:\Prog\T-Bonifacio\T-Bonifacio\obj\Debug\TeleBonifacio.Form1.resources
 C:\Prog\T-Bonifacio\T-Bonifacio\obj\Debug\TeleBonifacio.FormBase.resources
-C:\Prog\T-Bonifacio\T-Bonifacio\obj\Debug\TeleBonifacio.operAvanco.resources
 C:\Prog\T-Bonifacio\T-Bonifacio\obj\Debug\TeleBonifacio.oprConfig.resources
 C:\Prog\T-Bonifacio\T-Bonifacio\obj\Debug\TeleBonifacio.Consultas.resources
 C:\Prog\T-Bonifacio\T-Bonifacio\obj\Debug\TeleBonifacio.operLancamento.resources
@@ -24,3 +23,4 @@ C:\Prog\T-Bonifacio\T-Bonifacio\obj\Debug\T-Bonifacio.csproj.GenerateResource.ca
 C:\Prog\T-Bonifacio\T-Bonifacio\obj\Debug\T-Bonifacio.csproj.CoreCompileInputs.cache
 C:\Prog\T-Bonifacio\T-Bonifacio\obj\Debug\TeleBonifacio.exe
 C:\Prog\T-Bonifacio\T-Bonifacio\obj\Debug\TeleBonifacio.pdb
+C:\Prog\T-Bonifacio\T-Bonifacio\obj\Debug\TeleBonifacio.operAvanc.resources
