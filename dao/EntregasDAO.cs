@@ -42,8 +42,8 @@ namespace TeleBonifacio.dao
                 e.idVend 
             FROM 
                 (((Entregas e
-                INNER JOIN Clientes c ON c.NrCli = e.idCliente)
-                INNER JOIN Mecanicos m ON m.codi = e.idBoy)
+                LEFT JOIN Clientes c ON c.NrCli = e.idCliente)
+                LEFT JOIN Mecanicos m ON m.codi = e.idBoy)
                 LEFT JOIN Vendedores v ON v.ID = e.idVend)");
             if (DT.HasValue)
             {

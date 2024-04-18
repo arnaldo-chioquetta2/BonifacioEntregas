@@ -2,10 +2,12 @@
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Reflection;
 using System.Windows.Forms;
 using TeleBonifacio.tb;
 using System.Globalization;
+
+//1) não ta aparecendo quando é adicionado
+//2) Ao adicionar deve retornar os combos para o default
 
 namespace TeleBonifacio
 {
@@ -24,9 +26,9 @@ namespace TeleBonifacio
             EntregadorDAO Entregador = new EntregadorDAO();
             ClienteDAO Cliente = new ClienteDAO();
             VendedoresDAO Vendedor = new VendedoresDAO();
-            CarregarComboBox<tb.Entregador>(cmbMotoBoy, Entregador);
-            CarregarComboBox<tb.Cliente>(cmbCliente, Cliente);
-            CarregarComboBox<tb.Vendedor>(cmbVendedor, Vendedor);
+            CarregarComboBox<Entregador>(cmbMotoBoy, Entregador, "SEM ENTREGA");
+            CarregarComboBox<Cliente>(cmbCliente, Cliente,"NÃO IDENTIFICADO");
+            CarregarComboBox<Vendedor>(cmbVendedor, Vendedor);
             CarregaGrid(null);
             ConfigurarGrid();
         }
@@ -54,25 +56,29 @@ namespace TeleBonifacio
 
         private void Limpar()
         {
-            cmbMotoBoy.SelectedIndex = -1;
-            cmbCliente.SelectedIndex = -1;
+            cmbMotoBoy.SelectedIndex = 0;
+            cmbCliente.SelectedIndex = 0;
             cmbFormaPagamento.SelectedIndex = -1;
-            cmbVendedor.SelectedIndex = -1;
+            cmbVendedor.SelectedIndex = 0;
             txtValor.Text = "";
             txCompra.Text = "";
             txDesc.Text = "";
             lbTotal.Text = "";
         }
 
-        private void CarregarComboBox<T>(ComboBox comboBox, BaseDAO classe) where T : tb.IDataEntity, new()
+        private void CarregarComboBox<T>(ComboBox comboBox, BaseDAO classe, string ItemZero="") where T : IDataEntity, new()
         {
             DataTable dados = classe.GetDadosOrdenados();
             List<ComboBoxItem> lista = new List<ComboBoxItem>();
+            if (ItemZero.Length>0)
+            {
+                ComboBoxItem item = new ComboBoxItem(0, ItemZero);
+                lista.Add(item);
+            }
             foreach (DataRow row in dados.Rows)
             {
                 int id = Convert.ToInt32(row["id"]);
                 string nome = row["Nome"].ToString();
-
                 ComboBoxItem item = new ComboBoxItem(id, nome);
                 lista.Add(item);
             }
@@ -172,10 +178,22 @@ namespace TeleBonifacio
             if (cmbFormaPagamento.SelectedIndex == -1)
             {
                 OK = false;
-            }
-            if (txtValor.Text == "")
+            } else
             {
-                OK = false;
+                if (cmbMotoBoy.SelectedIndex == 0)
+                {
+                    if (txCompra.Text == "")
+                    {
+                        OK = false;
+                    }
+                }
+                else
+                {
+                    if (txtValor.Text == "")
+                    {
+                        OK = false;
+                    }
+                }
             }
             btnAdicionar.Enabled = OK;
         }

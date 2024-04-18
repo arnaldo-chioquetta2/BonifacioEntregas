@@ -96,6 +96,15 @@ namespace TeleBonifacio
             AbrirOuFocarFormulario<opRecibos>();
         }
 
+        private void pictureBox9_Click(object sender, EventArgs e)
+        {
+            AbrirOuFocarFormulario<operAvanc>();
+        }
+
+        private void pictureBox10_Click(object sender, EventArgs e)
+        {
+            AbrirOuFocarFormulario<operCaixa>();
+        }
 
         #endregion
 
@@ -119,6 +128,7 @@ namespace TeleBonifacio
             }
         }
 
+        #region Atualizacao 
         private void VerificaNovaVersao(Version version)
         {
             INI cINI = new INI();
@@ -126,8 +136,10 @@ namespace TeleBonifacio
             int UltExec = cINI.ReadInt("INI", "UltExec", 0);
 
             bool atualizar = (diaAtual != UltExec);
+            cINI.WriteInt("INI", "UltExec", diaAtual);
             // bool atualizar = true;
 
+            Loga("atualizar = "+atualizar.ToString());
             if (atualizar)
             {
                 string URL = cINI.ReadString("FTP", "URL", "");
@@ -136,6 +148,7 @@ namespace TeleBonifacio
                     string user = gen.Cripto.Decrypt(cINI.ReadString("FTP", "user", ""));
                     string senha = gen.Cripto.Decrypt(cINI.ReadString("FTP", "pass", ""));
                     FTP cFPT = new FTP(URL, user, senha);
+                    string BakTitulo = this.Text;
                     this.Text = "PROCURANDO NOVA VERSÃO";
                     Stopwatch stopwatch = new Stopwatch();
                     stopwatch.Start();
@@ -144,11 +157,14 @@ namespace TeleBonifacio
                     string Tempo = stopwatch.ElapsedMilliseconds.ToString();
                     cINI.WriteString("FTP", "tempo", Tempo);
                     int versionInt = (version.Major * 100) + (version.Minor * 10) + version.Build;
+                    Loga("Versão Atual " + versionInt.ToString());
+                    Loga("Versão no FTP " + versaoFtp.ToString());
                     // if (1==1)
                     if (versaoFtp > versionInt)
                     {
                         string versaoNovaStr = $"{versaoFtp / 100}.{(versaoFtp / 10) % 10}.{versaoFtp % 10}";
                         string NovaVersaoINI = cINI.ReadString("Config", "NovaVersao", "");
+                        Loga("Versão no INI " + NovaVersaoINI);
                         if (versaoNovaStr != NovaVersaoINI)
                         {
                             string versaoAtualStr = version.ToString().Substring(0, version.ToString().Length - 2);
@@ -164,14 +180,22 @@ namespace TeleBonifacio
                                 MessageBoxDefaultButton.Button1);
                             if (dialogResult == DialogResult.Yes)
                             {
+                                Loga("Optado por atualizar");
                                 string pastaAtual = Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName);
+                                string EstouEm = Path.Combine(pastaAtual, "TeleBonifacio.exe");
+                                cINI.WriteString("Atualizador", "EstouEm", EstouEm);
                                 string pastaAtualizador = Path.Combine(pastaAtual, "Atualizador");
                                 string progAtualizador = Path.Combine(pastaAtualizador, "ATCAtualizeitor.exe");
+                                Loga("pasta Atual: "+ pastaAtual);
+                                Loga("pasta Atualizador: " + pastaAtualizador);
+                                Loga("Programa Atualizador : " + progAtualizador);
                                 Process.Start(progAtualizador);
                                 Environment.Exit(0);
                             }
                             else
                             {
+                                Loga("Optado por NÃO atualizar");
+                                this.Text = BakTitulo;
                                 cINI.WriteString("Config", "NovaVersao", versaoNovaStr);
                                 cINI.WriteString("Config", "VersaoAtual", versaoAtualStr);
                                 MessageBox.Show(
@@ -183,8 +207,7 @@ namespace TeleBonifacio
                             }
                         }
                     }
-                }
-                cINI.WriteInt("INI", "UltExec", diaAtual);
+                }                
             }
         }
 
@@ -195,10 +218,17 @@ namespace TeleBonifacio
             return path[1] == ':' && path[2] == '\\';
         }
 
-        private void pictureBox9_Click(object sender, EventArgs e)
+        private void Loga(string message)
         {
-            AbrirOuFocarFormulario<operAvanc>();
+            string logFilePath = @"C:\Entregas\Entregas.txt";
+            using (StreamWriter writer = new StreamWriter(logFilePath, true))
+            {
+                writer.WriteLine($"{DateTime.Now}: {message}");
+            }
         }
+
+        #endregion
+
     }
 
 }

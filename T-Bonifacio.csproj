@@ -145,6 +145,12 @@
     <Compile Include="operAvanc.designer.cs">
       <DependentUpon>operAvanc.cs</DependentUpon>
     </Compile>
+    <Compile Include="operCaixa.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="operCaixa.designer.cs">
+      <DependentUpon>operCaixa.cs</DependentUpon>
+    </Compile>
     <Compile Include="operConfig.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -213,6 +219,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="operAvanc.resx">
       <DependentUpon>operAvanc.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="operCaixa.resx">
+      <DependentUpon>operCaixa.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="operConfig.resx">
       <DependentUpon>operConfig.cs</DependentUpon>
