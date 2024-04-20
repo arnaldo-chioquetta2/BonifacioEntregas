@@ -54,7 +54,7 @@ namespace TeleBonifacio.dao
                 query.AppendFormat(" WHERE e.Data BETWEEN #{0}# AND #{1}#", dataInicioStr, dataFimStr);
             }
             query.Append(" Order By e.ID desc");
-            DataTable dt = ExecutarConsulta(query.ToString());
+            DataTable dt = glo.ExecutarConsulta(query.ToString());
             return dt;
         }
 
@@ -74,7 +74,7 @@ namespace TeleBonifacio.dao
             query.AppendFormat(" WHERE m.Oper = 3 and e.Data BETWEEN #{0}# AND #{1}#", dataInicioStr, dataFimStr);
             query.Append(" GROUP BY m.Nome, e.idForma");
             query.Append(" ORDER BY m.Nome, e.idForma");
-            DataTable dt = ExecutarConsulta(query.ToString());
+            DataTable dt = glo.ExecutarConsulta(query.ToString());
             return dt;
         }
 
@@ -105,7 +105,7 @@ namespace TeleBonifacio.dao
             query.AppendLine(wh); 
             query.AppendLine(grp);
             query.AppendLine(or);
-            DataTable dt = ExecutarConsulta(query.ToString());
+            DataTable dt = glo.ExecutarConsulta(query.ToString());
             return dt;
         }
 
@@ -122,7 +122,7 @@ namespace TeleBonifacio.dao
                             WHERE Data BETWEEN #{dataInicioStr}# AND #{dataFimStr}# 
                             GROUP BY DateValue(Data) ");
             Console.WriteLine(query);
-            DataTable dt = ExecutarConsulta(query);
+            DataTable dt = glo.ExecutarConsulta(query);
             return dt;
         }
 
@@ -135,29 +135,8 @@ namespace TeleBonifacio.dao
                             FROM Entregas
                             WHERE Data BETWEEN #{dataInicioStr}# AND #{dataFimStr}# 
                             GROUP BY FORMAT([Data], 'dd/mm/yyyy') ");
-            DataTable dt = ExecutarConsulta(query);
+            DataTable dt = glo.ExecutarConsulta(query);
             return dt;
-        }
-
-        public DataTable ExecutarConsulta(string query)
-        {
-            DataTable dataTable = new DataTable();
-            using (OleDbConnection connection = new OleDbConnection(glo.connectionString))
-            {
-                try
-                {
-                    connection.Open();
-                    using (OleDbDataAdapter adapter = new OleDbDataAdapter(query, connection))
-                    {
-                        adapter.Fill(dataTable);
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine(ex.Message);
-                }
-            }
-            return dataTable;
         }
 
         public void Adiciona(int idBoy, int idForma, float valor, int idcliente, float compra, string Obs, float desc, int idVend)
@@ -172,19 +151,7 @@ namespace TeleBonifacio.dao
                 + glo.sv(desc) + ", "
                 + idVend.ToString()  
                 + ",Now)";
-            ExecutarComandoSQL(sql);
-        }
-
-        private void ExecutarComandoSQL(string query)
-        {
-            using (OleDbConnection connection = new OleDbConnection(@"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + glo.CaminhoBase + ";"))
-            {
-                connection.Open();
-                using (OleDbCommand command = new OleDbCommand(query, connection))
-                {
-                    command.ExecuteNonQuery();
-                }
-            }
+            glo.ExecutarComandoSQL(sql);
         }
 
         public void Edita(int iID, int idBoy, int idForma, float valor, int idCliente, float compra, string obs, float desc, int idVend)
@@ -199,7 +166,7 @@ namespace TeleBonifacio.dao
                             ",Desconto = " + glo.sv(desc) +
                             ",idVend = " + idVend.ToString() + 
                             " WHERE ID = " + iID.ToString();
-            ExecutarComandoSQL(sql);
+            glo.ExecutarComandoSQL(sql);
         }
 
     }

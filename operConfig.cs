@@ -54,8 +54,9 @@ namespace TeleBonifacio
 
         private void lblNome_DoubleClick(object sender, EventArgs e)
         {
-            string sql = Microsoft.VisualBasic.Interaction.InputBox("Digite o comando SQL:", "Comando SQL", "", 0, 0);
-            glo.ExecutarComandoSQL(sql);
+
+            operSQL foperSQL = new operSQL();
+            foperSQL.Show();
         }
 
         private void btAtu_Click(object sender, EventArgs e)

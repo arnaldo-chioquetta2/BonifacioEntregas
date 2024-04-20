@@ -260,6 +260,27 @@ namespace TeleBonifacio
             return null;
         }
 
+        public static DataTable ExecutarConsulta(string query)
+        {
+            DataTable dataTable = new DataTable();
+            using (OleDbConnection connection = new OleDbConnection(glo.connectionString))
+            {
+                try
+                {
+                    connection.Open();
+                    using (OleDbDataAdapter adapter = new OleDbDataAdapter(query, connection))
+                    {
+                        adapter.Fill(dataTable);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+            }
+            return dataTable;
+        }
+
         #endregion
     }
 }

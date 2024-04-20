@@ -6,9 +6,6 @@ using System.Windows.Forms;
 using TeleBonifacio.tb;
 using System.Globalization;
 
-//1) não ta aparecendo quando é adicionado
-//2) Ao adicionar deve retornar os combos para o default
-
 namespace TeleBonifacio
 {
     public partial class operLancamento : Form
@@ -26,9 +23,11 @@ namespace TeleBonifacio
             EntregadorDAO Entregador = new EntregadorDAO();
             ClienteDAO Cliente = new ClienteDAO();
             VendedoresDAO Vendedor = new VendedoresDAO();
-            CarregarComboBox<Entregador>(cmbMotoBoy, Entregador, "SEM ENTREGA");
-            CarregarComboBox<Cliente>(cmbCliente, Cliente,"NÃO IDENTIFICADO");
+            CarregarComboBox<Entregador>(cmbMotoBoy, Entregador);
+            CarregarComboBox<Cliente>(cmbCliente, Cliente);
             CarregarComboBox<Vendedor>(cmbVendedor, Vendedor);
+            cmbMotoBoy.SelectedIndex = -1;
+            cmbCliente.SelectedIndex = -1;
             CarregaGrid(null);
             ConfigurarGrid();
         }
@@ -204,38 +203,27 @@ namespace TeleBonifacio
 
         private void txtValor_KeyPress(object sender, KeyPressEventArgs e)
         {
-            // Permite dígitos e Backspace
             if (!char.IsDigit(e.KeyChar) && e.KeyChar != (char)Keys.Back)
             {
-                // Permite vírgula ou ponto como separador decimal, dependendo da cultura
                 TextBox textBox = sender as TextBox;
                 string S = textBox.Text;
                 if ((e.KeyChar == ',' || e.KeyChar == '.') && !S.Contains(CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator))
                 {
-                    // Substitui ',' por '.' ou vice-versa, conforme necessário, apenas se ainda não estiver presente
                     if (CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator == "," && e.KeyChar == '.')
                     {
-                        e.KeyChar = ','; // Substitui ponto por vírgula
+                        e.KeyChar = ','; 
                     }
                     else if (CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator == "." && e.KeyChar == ',')
                     {
-                        e.KeyChar = '.'; // Substitui vírgula por ponto
+                        e.KeyChar = '.'; 
                     }
                 }
                 else
                 {
-                    e.Handled = true; // Bloqueia a entrada do caractere
+                    e.Handled = true; 
                 }
             }
         }
-
-        //private void txtValor_KeyPress(object sender, KeyPressEventArgs e)
-        //{
-        //    if (!char.IsDigit(e.KeyChar) && e.KeyChar != ',' && e.KeyChar != '.')
-        //    {
-        //        e.Handled = true;
-        //    }
-        //}
 
         private void cmbMotoBoy_KeyPress(object sender, KeyPressEventArgs e)
         {

@@ -25,3 +25,4 @@ C:\Prog\T-Bonifacio\T-Bonifacio\obj\Debug\TeleBonifacio.exe
 C:\Prog\T-Bonifacio\T-Bonifacio\obj\Debug\TeleBonifacio.pdb
 C:\Prog\T-Bonifacio\T-Bonifacio\obj\Debug\TeleBonifacio.operAvanc.resources
 C:\Prog\T-Bonifacio\T-Bonifacio\obj\Debug\TeleBonifacio.operCaixa.resources
+C:\Prog\T-Bonifacio\T-Bonifacio\obj\Debug\TeleBonifacio.operSQL.resources
