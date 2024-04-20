@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Reflection;
 using System.Windows.Forms;
 
 namespace TeleBonifacio
@@ -17,14 +18,18 @@ namespace TeleBonifacio
             txNome.Text = cINI.ReadString("Identidade", "Nome", "");
             txEndereco.Text = cINI.ReadString("Identidade", "Endereco", "");
             txFone.Text = cINI.ReadString("Identidade", "Fone", "");
+
+            Version version = Assembly.GetExecutingAssembly().GetName().Version;
+            int versionInt = (version.Major * 100) + (version.Minor * 10) + version.Build;
+
             string NovaVersao = cINI.ReadString("Config", "NovaVersao", "");
+            int NovaVersaoInt = int.Parse(NovaVersao.Replace(".",""));
             if (NovaVersao.Length>0)
             {
-                string VersaoAtual = cINI.ReadString("Config", "VersaoAtual", "");
-                if (VersaoAtual!= NovaVersao)
+                // string VersaoAtual = cINI.ReadString("Config", "VersaoAtual", "");
+                if (versionInt < NovaVersaoInt)
                 {
                     btAtu.Text = "Atualizar para versão " + NovaVersao;
-                    btAtu.Visible = true;
                 }
             }            
         }

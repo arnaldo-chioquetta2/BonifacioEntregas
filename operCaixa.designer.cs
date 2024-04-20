@@ -44,15 +44,15 @@ namespace TeleBonifacio
             this.cmbCliente = new System.Windows.Forms.ComboBox();
             this.label3 = new System.Windows.Forms.Label();
             this.btnLimpar = new System.Windows.Forms.Button();
-            this.btAnotado = new System.Windows.Forms.Button();
             this.btnFiltrar = new System.Windows.Forms.Button();
             this.btnNovoCliente = new System.Windows.Forms.Button();
             this.panel1 = new System.Windows.Forms.Panel();
             this.button5 = new System.Windows.Forms.Button();
-            this.btTroco = new System.Windows.Forms.Button();
+            this.btDespeza = new System.Windows.Forms.Button();
             this.btPix = new System.Windows.Forms.Button();
             this.btDinheiro = new System.Windows.Forms.Button();
             this.btCartao = new System.Windows.Forms.Button();
+            this.btExcluir = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -194,17 +194,6 @@ namespace TeleBonifacio
             this.btnLimpar.Text = "Limpar";
             this.btnLimpar.Click += new System.EventHandler(this.btnLimpar_Click);
             // 
-            // btAnotado
-            // 
-            this.btAnotado.Anchor = System.Windows.Forms.AnchorStyles.Right;
-            this.btAnotado.Enabled = false;
-            this.btAnotado.Location = new System.Drawing.Point(440, 78);
-            this.btAnotado.Name = "btAnotado";
-            this.btAnotado.Size = new System.Drawing.Size(75, 23);
-            this.btAnotado.TabIndex = 17;
-            this.btAnotado.Text = "Anotado";
-            this.btAnotado.Click += new System.EventHandler(this.btAnotado_Click);
-            // 
             // btnFiltrar
             // 
             this.btnFiltrar.Anchor = System.Windows.Forms.AnchorStyles.Right;
@@ -226,8 +215,9 @@ namespace TeleBonifacio
             // 
             // panel1
             // 
+            this.panel1.Controls.Add(this.btExcluir);
             this.panel1.Controls.Add(this.button5);
-            this.panel1.Controls.Add(this.btTroco);
+            this.panel1.Controls.Add(this.btDespeza);
             this.panel1.Controls.Add(this.btPix);
             this.panel1.Controls.Add(this.btDinheiro);
             this.panel1.Controls.Add(this.btCartao);
@@ -244,7 +234,6 @@ namespace TeleBonifacio
             this.panel1.Controls.Add(this.cmbCliente);
             this.panel1.Controls.Add(this.label3);
             this.panel1.Controls.Add(this.btnLimpar);
-            this.panel1.Controls.Add(this.btAnotado);
             this.panel1.Controls.Add(this.btnFiltrar);
             this.panel1.Controls.Add(this.btnNovoCliente);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
@@ -263,22 +252,22 @@ namespace TeleBonifacio
             this.button5.TabIndex = 39;
             this.button5.Text = "Relatório";
             // 
-            // btTroco
+            // btDespeza
             // 
-            this.btTroco.Anchor = System.Windows.Forms.AnchorStyles.Right;
-            this.btTroco.Enabled = false;
-            this.btTroco.Location = new System.Drawing.Point(602, 78);
-            this.btTroco.Name = "btTroco";
-            this.btTroco.Size = new System.Drawing.Size(75, 23);
-            this.btTroco.TabIndex = 38;
-            this.btTroco.Text = "Troca";
-            this.btTroco.Click += new System.EventHandler(this.btTroco_Click);
+            this.btDespeza.Anchor = System.Windows.Forms.AnchorStyles.Right;
+            this.btDespeza.Enabled = false;
+            this.btDespeza.Location = new System.Drawing.Point(521, 78);
+            this.btDespeza.Name = "btDespeza";
+            this.btDespeza.Size = new System.Drawing.Size(75, 23);
+            this.btDespeza.TabIndex = 38;
+            this.btDespeza.Text = "Despeza";
+            this.btDespeza.Click += new System.EventHandler(this.btTroco_Click);
             // 
             // btPix
             // 
             this.btPix.Anchor = System.Windows.Forms.AnchorStyles.Right;
             this.btPix.Enabled = false;
-            this.btPix.Location = new System.Drawing.Point(521, 79);
+            this.btPix.Location = new System.Drawing.Point(440, 79);
             this.btPix.Name = "btPix";
             this.btPix.Size = new System.Drawing.Size(75, 23);
             this.btPix.TabIndex = 37;
@@ -306,6 +295,19 @@ namespace TeleBonifacio
             this.btCartao.TabIndex = 35;
             this.btCartao.Text = "Cartão";
             this.btCartao.Click += new System.EventHandler(this.btCartao_Click);
+            // 
+            // btExcluir
+            // 
+            this.btExcluir.Anchor = System.Windows.Forms.AnchorStyles.Right;
+            this.btExcluir.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(128)))));
+            this.btExcluir.Location = new System.Drawing.Point(602, 79);
+            this.btExcluir.Name = "btExcluir";
+            this.btExcluir.Size = new System.Drawing.Size(75, 23);
+            this.btExcluir.TabIndex = 40;
+            this.btExcluir.Text = "Excluir";
+            this.btExcluir.UseVisualStyleBackColor = false;
+            this.btExcluir.Visible = false;
+            this.btExcluir.Click += new System.EventHandler(this.button1_Click);
             // 
             // operCaixa
             // 
@@ -341,15 +343,15 @@ namespace TeleBonifacio
         private System.Windows.Forms.ComboBox cmbCliente;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Button btnLimpar;
-        private System.Windows.Forms.Button btAnotado;
         private System.Windows.Forms.Button btnFiltrar;
         private System.Windows.Forms.Button btnNovoCliente;
         private System.Windows.Forms.Panel panel1;
-        private System.Windows.Forms.Button btTroco;
+        private System.Windows.Forms.Button btDespeza;
         private System.Windows.Forms.Button btPix;
         private System.Windows.Forms.Button btDinheiro;
         private System.Windows.Forms.Button btCartao;
         private System.Windows.Forms.Button button5;
+        private System.Windows.Forms.Button btExcluir;
     }
 }
 

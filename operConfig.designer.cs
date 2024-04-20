@@ -153,9 +153,8 @@ namespace TeleBonifacio
             this.btAtu.Name = "btAtu";
             this.btAtu.Size = new System.Drawing.Size(222, 23);
             this.btAtu.TabIndex = 16;
-            this.btAtu.Text = "OK";
+            this.btAtu.Text = "Procurar Atualização";
             this.btAtu.UseVisualStyleBackColor = true;
-            this.btAtu.Visible = false;
             this.btAtu.Click += new System.EventHandler(this.btAtu_Click);
             // 
             // oprConfig

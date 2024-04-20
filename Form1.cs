@@ -131,6 +131,8 @@ namespace TeleBonifacio
         #region Atualizacao 
         private void VerificaNovaVersao(Version version)
         {
+            string pastaAtual = Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName);
+            Loga("Executado a partir de "+ pastaAtual);
             INI cINI = new INI();
             int diaAtual = DateTime.Now.Day;
             int UltExec = cINI.ReadInt("INI", "UltExec", 0);
@@ -180,8 +182,7 @@ namespace TeleBonifacio
                                 MessageBoxDefaultButton.Button1);
                             if (dialogResult == DialogResult.Yes)
                             {
-                                Loga("Optado por atualizar");
-                                string pastaAtual = Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName);
+                                Loga("Optado por atualizar");                                
                                 string EstouEm = Path.Combine(pastaAtual, "TeleBonifacio.exe");
                                 cINI.WriteString("Atualizador", "EstouEm", EstouEm);
                                 string pastaAtualizador = Path.Combine(pastaAtual, "Atualizador");

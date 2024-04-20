@@ -41,13 +41,15 @@ namespace TeleBonifacio.dao
                         ca.idForma = 1, 'Cartão',
                         ca.idForma = 2, 'Anotado',
                         ca.idForma = 3, 'Pix',
-                        ca.idForma = 4, 'Troca'
+                        ca.idForma = 4, 'Troca',
+                        ca.idForma = 5, 'Despesa'
                     ) AS Pagamento, ca.Obs,
                     c.NrCli, ca.idVend, ca.idForma 
                     FROM (Caixa ca
                     LEFT JOIN Clientes c ON c.NrCli = ca.idCliente)
                     INNER JOIN Vendedores v ON v.ID = ca.idVend"); 
                 query.AppendFormat(" WHERE ca.Data BETWEEN #{0}# AND #{1}#", dataInicioStr, dataFimStr);
+                query.Append(" Order By ca.ID ");
                 dt = glo.ExecutarConsulta(query.ToString());
                 if (dt.Rows.Count == 0)
                 {
@@ -80,6 +82,12 @@ namespace TeleBonifacio.dao
                             ",Desconto = " + glo.sv(desc) +
                             ",idVend = " + idVend.ToString() +
                             " WHERE ID = " + iID.ToString();
+            glo.ExecutarComandoSQL(sql);
+        }
+
+        public void Exclui(int iID)
+        {
+            String sql = @"Delete From Caixa WHERE ID = " + iID.ToString();
             glo.ExecutarComandoSQL(sql);
         }
     }

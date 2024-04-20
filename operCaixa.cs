@@ -36,9 +36,9 @@ namespace TeleBonifacio
             {
                 OK = false;
             }
-            btAnotado.Enabled = OK;
+            // btAnotado.Enabled = OK;
             btnLimpar.Enabled = OK;
-            btTroco.Enabled = OK;
+            btDespeza.Enabled = OK;
             btPix.Enabled = OK;
             btDinheiro.Enabled = OK;
             btCartao.Enabled = OK;
@@ -139,15 +139,16 @@ namespace TeleBonifacio
         private void BotoesNormais()
         {
             this.btDinheiro.Enabled = true;
-            this.btAnotado.Enabled = true;
-            this.btTroco.Enabled = true;
+            //this.btAnotado.Enabled = true;
+            this.btDespeza.Enabled = true;
             this.btPix.Enabled = true;
             this.btCartao.Enabled = true;
             this.btDinheiro.BackColor = SystemColors.Control;
-            this.btAnotado.BackColor = SystemColors.Control;
-            this.btTroco.BackColor = SystemColors.Control;
+            // this.btAnotado.BackColor = SystemColors.Control;
+            this.btDespeza.BackColor = SystemColors.Control;
             this.btPix.BackColor = SystemColors.Control;
             this.btCartao.BackColor = SystemColors.Control;
+            btExcluir.Visible = false;
         }
 
         private void CarregaGrid()
@@ -188,7 +189,7 @@ namespace TeleBonifacio
 
         private void btTroco_Click(object sender, EventArgs e)
         {
-            Registra(4);
+            Registra(5);
         }
 
         private void btAnotado_Click(object sender, EventArgs e)
@@ -252,17 +253,32 @@ namespace TeleBonifacio
                         case 1:
                             this.btCartao.BackColor = cor;                            
                             break;
-                        case 2:
-                            this.btAnotado.BackColor = cor;
-                            break;
+                        //case 2:
+                        //    this.btAnotado.BackColor = cor;
+                        //    break;
                         case 3:
                             this.btPix.BackColor = cor;
                             break;
-                        case 4:
-                            this.btTroco.BackColor = cor;
+                        case 5:
+                            this.btDespeza.BackColor = cor;
                             break;
                     }
+                    btExcluir.Visible = true;
                 }
+            }
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            DialogResult result = MessageBox.Show("Tem certeza que deseja excluir este registro?",
+                                                  "Confirmar Deleção",
+                                                  MessageBoxButtons.YesNo,
+                                                  MessageBoxIcon.Question);
+            if (result == DialogResult.Yes)
+            {
+                Caixa.Exclui(this.iID);
+                CarregaGrid();
+                Limpar();
             }
         }
     }
