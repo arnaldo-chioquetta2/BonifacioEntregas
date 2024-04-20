@@ -47,12 +47,12 @@ namespace TeleBonifacio
             this.btnFiltrar = new System.Windows.Forms.Button();
             this.btnNovoCliente = new System.Windows.Forms.Button();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.btExcluir = new System.Windows.Forms.Button();
             this.button5 = new System.Windows.Forms.Button();
             this.btDespeza = new System.Windows.Forms.Button();
             this.btPix = new System.Windows.Forms.Button();
             this.btDinheiro = new System.Windows.Forms.Button();
             this.btCartao = new System.Windows.Forms.Button();
-            this.btExcluir = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -65,7 +65,7 @@ namespace TeleBonifacio
             this.dataGrid1.Location = new System.Drawing.Point(0, 156);
             this.dataGrid1.Name = "dataGrid1";
             this.dataGrid1.SelectionMode = SourceGrid.GridSelectionMode.Row;
-            this.dataGrid1.Size = new System.Drawing.Size(830, 216);
+            this.dataGrid1.Size = new System.Drawing.Size(928, 216);
             this.dataGrid1.TabIndex = 14;
             this.dataGrid1.TabStop = true;
             this.dataGrid1.ToolTipText = "";
@@ -187,7 +187,7 @@ namespace TeleBonifacio
             // 
             this.btnLimpar.Anchor = System.Windows.Forms.AnchorStyles.Right;
             this.btnLimpar.Enabled = false;
-            this.btnLimpar.Location = new System.Drawing.Point(746, 119);
+            this.btnLimpar.Location = new System.Drawing.Point(844, 119);
             this.btnLimpar.Name = "btnLimpar";
             this.btnLimpar.Size = new System.Drawing.Size(75, 23);
             this.btnLimpar.TabIndex = 16;
@@ -197,7 +197,7 @@ namespace TeleBonifacio
             // btnFiltrar
             // 
             this.btnFiltrar.Anchor = System.Windows.Forms.AnchorStyles.Right;
-            this.btnFiltrar.Location = new System.Drawing.Point(515, 119);
+            this.btnFiltrar.Location = new System.Drawing.Point(613, 119);
             this.btnFiltrar.Name = "btnFiltrar";
             this.btnFiltrar.Size = new System.Drawing.Size(75, 23);
             this.btnFiltrar.TabIndex = 18;
@@ -239,14 +239,27 @@ namespace TeleBonifacio
             this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(830, 156);
+            this.panel1.Size = new System.Drawing.Size(928, 156);
             this.panel1.TabIndex = 13;
+            // 
+            // btExcluir
+            // 
+            this.btExcluir.Anchor = System.Windows.Forms.AnchorStyles.Right;
+            this.btExcluir.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(128)))));
+            this.btExcluir.Location = new System.Drawing.Point(700, 79);
+            this.btExcluir.Name = "btExcluir";
+            this.btExcluir.Size = new System.Drawing.Size(75, 23);
+            this.btExcluir.TabIndex = 40;
+            this.btExcluir.Text = "Excluir";
+            this.btExcluir.UseVisualStyleBackColor = false;
+            this.btExcluir.Visible = false;
+            this.btExcluir.Click += new System.EventHandler(this.button1_Click);
             // 
             // button5
             // 
             this.button5.Anchor = System.Windows.Forms.AnchorStyles.Right;
             this.button5.Enabled = false;
-            this.button5.Location = new System.Drawing.Point(746, 90);
+            this.button5.Location = new System.Drawing.Point(844, 90);
             this.button5.Name = "button5";
             this.button5.Size = new System.Drawing.Size(75, 23);
             this.button5.TabIndex = 39;
@@ -256,7 +269,7 @@ namespace TeleBonifacio
             // 
             this.btDespeza.Anchor = System.Windows.Forms.AnchorStyles.Right;
             this.btDespeza.Enabled = false;
-            this.btDespeza.Location = new System.Drawing.Point(521, 78);
+            this.btDespeza.Location = new System.Drawing.Point(619, 78);
             this.btDespeza.Name = "btDespeza";
             this.btDespeza.Size = new System.Drawing.Size(75, 23);
             this.btDespeza.TabIndex = 38;
@@ -267,7 +280,7 @@ namespace TeleBonifacio
             // 
             this.btPix.Anchor = System.Windows.Forms.AnchorStyles.Right;
             this.btPix.Enabled = false;
-            this.btPix.Location = new System.Drawing.Point(440, 79);
+            this.btPix.Location = new System.Drawing.Point(538, 79);
             this.btPix.Name = "btPix";
             this.btPix.Size = new System.Drawing.Size(75, 23);
             this.btPix.TabIndex = 37;
@@ -278,7 +291,7 @@ namespace TeleBonifacio
             // 
             this.btDinheiro.Anchor = System.Windows.Forms.AnchorStyles.Right;
             this.btDinheiro.Enabled = false;
-            this.btDinheiro.Location = new System.Drawing.Point(278, 79);
+            this.btDinheiro.Location = new System.Drawing.Point(376, 79);
             this.btDinheiro.Name = "btDinheiro";
             this.btDinheiro.Size = new System.Drawing.Size(75, 23);
             this.btDinheiro.TabIndex = 36;
@@ -289,31 +302,18 @@ namespace TeleBonifacio
             // 
             this.btCartao.Anchor = System.Windows.Forms.AnchorStyles.Right;
             this.btCartao.Enabled = false;
-            this.btCartao.Location = new System.Drawing.Point(359, 79);
+            this.btCartao.Location = new System.Drawing.Point(457, 79);
             this.btCartao.Name = "btCartao";
             this.btCartao.Size = new System.Drawing.Size(75, 23);
             this.btCartao.TabIndex = 35;
             this.btCartao.Text = "Cartão";
             this.btCartao.Click += new System.EventHandler(this.btCartao_Click);
             // 
-            // btExcluir
-            // 
-            this.btExcluir.Anchor = System.Windows.Forms.AnchorStyles.Right;
-            this.btExcluir.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(128)))));
-            this.btExcluir.Location = new System.Drawing.Point(602, 79);
-            this.btExcluir.Name = "btExcluir";
-            this.btExcluir.Size = new System.Drawing.Size(75, 23);
-            this.btExcluir.TabIndex = 40;
-            this.btExcluir.Text = "Excluir";
-            this.btExcluir.UseVisualStyleBackColor = false;
-            this.btExcluir.Visible = false;
-            this.btExcluir.Click += new System.EventHandler(this.button1_Click);
-            // 
             // operCaixa
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(830, 372);
+            this.ClientSize = new System.Drawing.Size(928, 372);
             this.Controls.Add(this.dataGrid1);
             this.Controls.Add(this.panel1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));

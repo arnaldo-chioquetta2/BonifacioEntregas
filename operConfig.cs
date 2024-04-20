@@ -22,11 +22,10 @@ namespace TeleBonifacio
             Version version = Assembly.GetExecutingAssembly().GetName().Version;
             int versionInt = (version.Major * 100) + (version.Minor * 10) + version.Build;
 
-            string NovaVersao = cINI.ReadString("Config", "NovaVersao", "");
-            int NovaVersaoInt = int.Parse(NovaVersao.Replace(".",""));
+            string NovaVersao = cINI.ReadString("Config", "NovaVersao", "");            
             if (NovaVersao.Length>0)
             {
-                // string VersaoAtual = cINI.ReadString("Config", "VersaoAtual", "");
+                int NovaVersaoInt = int.Parse(NovaVersao.Replace(".", ""));
                 if (versionInt < NovaVersaoInt)
                 {
                     btAtu.Text = "Atualizar para versão " + NovaVersao;

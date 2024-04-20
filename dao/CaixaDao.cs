@@ -49,7 +49,7 @@ namespace TeleBonifacio.dao
                     LEFT JOIN Clientes c ON c.NrCli = ca.idCliente)
                     INNER JOIN Vendedores v ON v.ID = ca.idVend"); 
                 query.AppendFormat(" WHERE ca.Data BETWEEN #{0}# AND #{1}#", dataInicioStr, dataFimStr);
-                query.Append(" Order By ca.ID ");
+                query.Append(" Order By ca.ID desc ");
                 dt = glo.ExecutarConsulta(query.ToString());
                 if (dt.Rows.Count == 0)
                 {

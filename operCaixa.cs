@@ -168,7 +168,7 @@ namespace TeleBonifacio
             dataGrid1.Columns[5].Width = 170;   // Vendedor
             dataGrid1.Columns[6].Width = 100;   // Data
             dataGrid1.Columns[7].Width = 70;    // Forma de pagamento
-            dataGrid1.Columns[8].Width = 90;    // Obs
+            dataGrid1.Columns[8].Width = 200;    // Obs
             dataGrid1.Columns[9].Width = 0;
             dataGrid1.Columns[10].Width = 0;
             dataGrid1.Columns[11].Width = 0;
