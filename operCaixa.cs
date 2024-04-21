@@ -62,7 +62,9 @@ namespace TeleBonifacio
             CarregarComboBox<Cliente>(cmbCliente, Cliente, "NÃO IDENTIFICADO");
             CarregarComboBox<Vendedor>(cmbVendedor, Vendedor);
             cmbCliente.SelectedIndex = 0;
-            cmbVendedor.SelectedIndex = 0;            
+            cmbVendedor.SelectedIndex = 0;
+            DateTime ontem = DateTime.Today.AddDays(-1);
+            dtpDataIN.Value = ontem;
             CarregaGrid();
             ConfigurarGrid();
         }
@@ -146,7 +148,7 @@ namespace TeleBonifacio
 
         private void CarregaGrid()
         {
-            DataTable dados = Caixa.getDados(dtpData.Value);
+            DataTable dados = Caixa.getDados(dtpDataIN.Value, dtnDtFim.Value);
             DevAge.ComponentModel.BoundDataView boundDataView = new DevAge.ComponentModel.BoundDataView(dados.DefaultView);
             dataGrid1.DataSource = boundDataView;
         }
@@ -197,6 +199,8 @@ namespace TeleBonifacio
 
         #endregion
 
+        #region Botões
+
         private void btnNovoCliente_Click(object sender, EventArgs e)
         {
             glo.IdAdicionado = -1;
@@ -219,6 +223,28 @@ namespace TeleBonifacio
         {
             CarregaGrid();
         }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            DialogResult result = MessageBox.Show("Tem certeza que deseja excluir este registro?",
+                                                  "Confirmar Deleção",
+                                                  MessageBoxButtons.YesNo,
+                                                  MessageBoxIcon.Question);
+            if (result == DialogResult.Yes)
+            {
+                Caixa.Exclui(this.iID);
+                CarregaGrid();
+                Limpar();
+            }
+        }
+
+        private void button5_Click(object sender, EventArgs e)
+        {
+            rel.Caixa fRel = new rel.Caixa();
+            fRel.Show();
+        }
+
+        #endregion
 
         private void dataGrid1_Click(object sender, EventArgs e)
         {
@@ -261,24 +287,5 @@ namespace TeleBonifacio
             }
         }
 
-        private void button1_Click(object sender, EventArgs e)
-        {
-            DialogResult result = MessageBox.Show("Tem certeza que deseja excluir este registro?",
-                                                  "Confirmar Deleção",
-                                                  MessageBoxButtons.YesNo,
-                                                  MessageBoxIcon.Question);
-            if (result == DialogResult.Yes)
-            {
-                Caixa.Exclui(this.iID);
-                CarregaGrid();
-                Limpar();
-            }
-        }
-
-        private void button5_Click(object sender, EventArgs e)
-        {
-            rel.Caixa fRel = new rel.Caixa();
-            fRel.Show();
-        }
     }
 }

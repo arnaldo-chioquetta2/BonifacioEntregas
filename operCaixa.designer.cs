@@ -36,7 +36,7 @@ namespace TeleBonifacio
             this.label6 = new System.Windows.Forms.Label();
             this.txDesc = new System.Windows.Forms.TextBox();
             this.lbTotal = new System.Windows.Forms.Label();
-            this.dtpData = new System.Windows.Forms.DateTimePicker();
+            this.dtpDataIN = new System.Windows.Forms.DateTimePicker();
             this.txObs = new System.Windows.Forms.TextBox();
             this.label5 = new System.Windows.Forms.Label();
             this.txCompra = new System.Windows.Forms.TextBox();
@@ -53,6 +53,7 @@ namespace TeleBonifacio
             this.btPix = new System.Windows.Forms.Button();
             this.btDinheiro = new System.Windows.Forms.Button();
             this.btCartao = new System.Windows.Forms.Button();
+            this.dtnDtFim = new System.Windows.Forms.DateTimePicker();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -118,15 +119,15 @@ namespace TeleBonifacio
             this.lbTotal.TabIndex = 30;
             this.lbTotal.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
-            // dtpData
+            // dtpDataIN
             // 
-            this.dtpData.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
-            this.dtpData.Format = System.Windows.Forms.DateTimePickerFormat.Short;
-            this.dtpData.Location = new System.Drawing.Point(419, 120);
-            this.dtpData.Name = "dtpData";
-            this.dtpData.Size = new System.Drawing.Size(90, 23);
-            this.dtpData.TabIndex = 29;
-            this.dtpData.Tag = "H";
+            this.dtpDataIN.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
+            this.dtpDataIN.Format = System.Windows.Forms.DateTimePickerFormat.Short;
+            this.dtpDataIN.Location = new System.Drawing.Point(419, 120);
+            this.dtpDataIN.Name = "dtpDataIN";
+            this.dtpDataIN.Size = new System.Drawing.Size(90, 23);
+            this.dtpDataIN.TabIndex = 29;
+            this.dtpDataIN.Tag = "H";
             // 
             // txObs
             // 
@@ -187,7 +188,7 @@ namespace TeleBonifacio
             // 
             this.btnLimpar.Anchor = System.Windows.Forms.AnchorStyles.Right;
             this.btnLimpar.Enabled = false;
-            this.btnLimpar.Location = new System.Drawing.Point(844, 119);
+            this.btnLimpar.Location = new System.Drawing.Point(841, 120);
             this.btnLimpar.Name = "btnLimpar";
             this.btnLimpar.Size = new System.Drawing.Size(75, 23);
             this.btnLimpar.TabIndex = 16;
@@ -197,7 +198,7 @@ namespace TeleBonifacio
             // btnFiltrar
             // 
             this.btnFiltrar.Anchor = System.Windows.Forms.AnchorStyles.Right;
-            this.btnFiltrar.Location = new System.Drawing.Point(613, 119);
+            this.btnFiltrar.Location = new System.Drawing.Point(619, 120);
             this.btnFiltrar.Name = "btnFiltrar";
             this.btnFiltrar.Size = new System.Drawing.Size(75, 23);
             this.btnFiltrar.TabIndex = 18;
@@ -215,6 +216,7 @@ namespace TeleBonifacio
             // 
             // panel1
             // 
+            this.panel1.Controls.Add(this.dtnDtFim);
             this.panel1.Controls.Add(this.btExcluir);
             this.panel1.Controls.Add(this.button5);
             this.panel1.Controls.Add(this.btDespeza);
@@ -226,7 +228,7 @@ namespace TeleBonifacio
             this.panel1.Controls.Add(this.label6);
             this.panel1.Controls.Add(this.txDesc);
             this.panel1.Controls.Add(this.lbTotal);
-            this.panel1.Controls.Add(this.dtpData);
+            this.panel1.Controls.Add(this.dtpDataIN);
             this.panel1.Controls.Add(this.txObs);
             this.panel1.Controls.Add(this.label5);
             this.panel1.Controls.Add(this.txCompra);
@@ -258,7 +260,7 @@ namespace TeleBonifacio
             // button5
             // 
             this.button5.Anchor = System.Windows.Forms.AnchorStyles.Right;
-            this.button5.Location = new System.Drawing.Point(844, 90);
+            this.button5.Location = new System.Drawing.Point(841, 91);
             this.button5.Name = "button5";
             this.button5.Size = new System.Drawing.Size(75, 23);
             this.button5.TabIndex = 39;
@@ -309,6 +311,16 @@ namespace TeleBonifacio
             this.btCartao.Text = "Cartão";
             this.btCartao.Click += new System.EventHandler(this.btCartao_Click);
             // 
+            // dtnDtFim
+            // 
+            this.dtnDtFim.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
+            this.dtnDtFim.Format = System.Windows.Forms.DateTimePickerFormat.Short;
+            this.dtnDtFim.Location = new System.Drawing.Point(515, 120);
+            this.dtnDtFim.Name = "dtnDtFim";
+            this.dtnDtFim.Size = new System.Drawing.Size(90, 23);
+            this.dtnDtFim.TabIndex = 41;
+            this.dtnDtFim.Tag = "H";
+            // 
             // operCaixa
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -335,7 +347,7 @@ namespace TeleBonifacio
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.TextBox txDesc;
         private System.Windows.Forms.Label lbTotal;
-        private System.Windows.Forms.DateTimePicker dtpData;
+        private System.Windows.Forms.DateTimePicker dtpDataIN;
         private System.Windows.Forms.TextBox txObs;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.TextBox txCompra;
@@ -352,6 +364,7 @@ namespace TeleBonifacio
         private System.Windows.Forms.Button btCartao;
         private System.Windows.Forms.Button button5;
         private System.Windows.Forms.Button btExcluir;
+        private System.Windows.Forms.DateTimePicker dtnDtFim;
     }
 }
 

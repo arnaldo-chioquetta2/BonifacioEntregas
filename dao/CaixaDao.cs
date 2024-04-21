@@ -23,14 +23,14 @@ namespace TeleBonifacio.dao
             glo.ExecutarComandoSQL(sql);
         }
 
-        public DataTable getDados(DateTime DT)
+        public DataTable getDados(DateTime DT1, DateTime DT2)
         {
             bool Sair = false;
             DataTable dt = null;
             while (Sair==false)
             {
-                DateTime dataInicio = DT.Date;
-                DateTime dataFim = dataInicio.AddDays(1).AddTicks(-1);
+                DateTime dataInicio = DT1.Date;
+                DateTime dataFim = DT2.Date;
                 string dataInicioStr = dataInicio.ToString("MM/dd/yyyy HH:mm:ss");
                 string dataFimStr = dataFim.ToString("MM/dd/yyyy 23:59:59");
                 StringBuilder query = new StringBuilder();
@@ -60,7 +60,8 @@ namespace TeleBonifacio.dao
                         Sair = true;
                     } else
                     {
-                        DT = (DateTime)dt2.Rows[0]["Data"];
+                        DT1 = (DateTime)dt2.Rows[0]["Data"];
+                        DT2 = DT2.AddDays(1);
                     }                        
                 } else
                 {
