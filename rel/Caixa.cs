@@ -1,0 +1,144 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Data.OleDb;
+using System.Text;
+using System.Windows.Forms;
+
+namespace TeleBonifacio.rel
+{
+    public partial class Caixa : Form
+    {
+
+        private bool ativou = false;
+        private DateTime? DataInicio { get; set; }
+        private DateTime DataFim { get; set; }
+        private List<Lanctos> relcaixa { get; set; }
+
+        public Caixa()
+        {
+            InitializeComponent();
+            SetStartPosition();
+        }
+
+        private void SetStartPosition()
+        {
+            this.StartPosition = FormStartPosition.Manual;
+            this.Left = (Screen.PrimaryScreen.WorkingArea.Width - this.Width) / 2;
+            this.Top = 0;
+            this.Height = Screen.PrimaryScreen.WorkingArea.Height;
+        }
+
+        private List<Lanctos> CarregaCaixa(DateTime? dataInicio, DateTime dataFim)
+        {
+            string SQL = @"SELECT C.ID, C.Data, C.Valor, C.Desconto, 
+                            C.idForma AS FormaPagto
+                            FROM Caixa C";
+            List<Lanctos> lancamentos = new List<Lanctos>();
+            using (OleDbConnection connection = new OleDbConnection(glo.connectionString))
+            {
+                try
+                {
+                    connection.Open();
+                    using (OleDbCommand command = new OleDbCommand(SQL, connection))
+                    {
+                        using (OleDbDataReader reader = command.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                Lanctos lancamento = new Lanctos();
+                                lancamento.ID = (int)reader["ID"];
+                                lancamento.DataPagamento = (DateTime)reader["Data"];                                
+                                lancamento.Desconto = (decimal)reader["Desconto"];
+                                lancamento.FormaPagto = (int)reader["FormaPagto"];
+                                if (lancamento.FormaPagto == 5)
+                                {
+                                    lancamento.Entrada = 0;
+                                    lancamento.Saida = (decimal)reader["Valor"];
+                                }
+                                else
+                                {
+                                    lancamento.Entrada = (decimal)reader["Valor"];
+                                    lancamento.Saida = 0;
+                                }
+                                lancamento.Saldo = lancamento.Entrada - lancamento.Desconto - lancamento.Saida;
+                                lancamentos.Add(lancamento);
+                            }
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.ToString());
+                    return null;
+                }
+            }
+            return lancamentos;
+        }
+
+        public string GerarRelCaixa(DateTime? dataInicio, DateTime dataFim)
+        {
+            relcaixa = CarregaCaixa(dataInicio, dataFim);
+            StringBuilder sb = new StringBuilder();
+            sb.AppendLine("Extrato de Movimentação do Caixa");
+            sb.AppendLine();
+            sb.AppendLine($"Período: {dataInicio?.ToString("dd/MM/yyyy")} a {dataFim.ToString("dd/MM/yyyy")}");
+            sb.AppendLine();
+            sb.AppendLine("ID    Data      | Entrada | Desconto | Saídas | FormaPagto | Saldo ");
+            decimal saldo = 0;
+            foreach (var lancos in relcaixa)
+            {
+                sb.AppendLine($"{lancos.ID} {lancos.DataPagamento:dd/MM/yyyy} | {lancos.Entrada} | {lancos.Desconto} | {lancos.Saida} | {lancos.FormaPagto} | {lancos.Saldo}");
+                saldo += lancos.Saldo;
+            }
+            return sb.ToString();
+        }
+
+        private DateTime? PrimData(DateTime DtAlternativa)
+        {
+            string SQL = @"SELECT Data FROM Caixa" ;
+            DataTable ret = glo.getDados(SQL);
+            if (ret.Rows.Count > 0)
+            {
+                DateTime DtRet = (DateTime)ret.Rows[0]["Data"];
+                if (DtRet < DtAlternativa)
+                {
+                    DtRet = DtAlternativa;
+                }
+                return DtRet;
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        private void Extrato_Activated(object sender, EventArgs e)
+        {
+            if (!ativou)
+                ativou = true;
+            this.DataFim = DateTime.Now;
+            this.DataInicio = PrimData(this.DataFim.AddYears(-1));
+            textBox1.Text = GerarRelCaixa(this.DataInicio, this.DataFim);
+        }
+
+        #region Classes
+
+        private class Lanctos
+        {
+            public int ID { get; set; }
+            public DateTime DataPagamento { get; set; }
+            public decimal Entrada { get; set; }
+            public decimal Desconto { get; set; }
+            public decimal Saida { get; set; }
+            public decimal FormaPagto { get; set; }            
+            public decimal Saldo { get; set; }
+            public int Quantidade { get; set; }
+            
+        }
+                       
+        #endregion
+
+    }
+
+}

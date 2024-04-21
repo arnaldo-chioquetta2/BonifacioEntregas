@@ -26,3 +26,5 @@ C:\Prog\T-Bonifacio\T-Bonifacio\obj\Release\TeleBonifacio.pdb
 C:\Prog\T-Bonifacio\T-Bonifacio\obj\Release\TeleBonifacio.operAvanc.resources
 C:\Prog\T-Bonifacio\T-Bonifacio\obj\Release\TeleBonifacio.operCaixa.resources
 C:\Prog\T-Bonifacio\T-Bonifacio\obj\Release\TeleBonifacio.operSQL.resources
+C:\Prog\T-Bonifacio\T-Bonifacio\obj\Release\TeleBonifacio.rel.Caixa.resources
+C:\Prog\T-Bonifacio\T-Bonifacio\obj\Release\T-Bonifacio.csproj.CopyComplete

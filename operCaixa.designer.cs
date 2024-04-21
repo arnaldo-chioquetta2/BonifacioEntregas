@@ -258,12 +258,12 @@ namespace TeleBonifacio
             // button5
             // 
             this.button5.Anchor = System.Windows.Forms.AnchorStyles.Right;
-            this.button5.Enabled = false;
             this.button5.Location = new System.Drawing.Point(844, 90);
             this.button5.Name = "button5";
             this.button5.Size = new System.Drawing.Size(75, 23);
             this.button5.TabIndex = 39;
             this.button5.Text = "Relatório";
+            this.button5.Click += new System.EventHandler(this.button5_Click);
             // 
             // btDespeza
             // 

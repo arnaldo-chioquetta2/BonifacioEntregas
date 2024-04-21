@@ -1,11 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using TeleBonifacio.dao;
 using TeleBonifacio.tb;
@@ -36,7 +32,6 @@ namespace TeleBonifacio
             {
                 OK = false;
             }
-            // btAnotado.Enabled = OK;
             btnLimpar.Enabled = OK;
             btDespeza.Enabled = OK;
             btPix.Enabled = OK;
@@ -139,12 +134,10 @@ namespace TeleBonifacio
         private void BotoesNormais()
         {
             this.btDinheiro.Enabled = true;
-            //this.btAnotado.Enabled = true;
             this.btDespeza.Enabled = true;
             this.btPix.Enabled = true;
             this.btCartao.Enabled = true;
             this.btDinheiro.BackColor = SystemColors.Control;
-            // this.btAnotado.BackColor = SystemColors.Control;
             this.btDespeza.BackColor = SystemColors.Control;
             this.btPix.BackColor = SystemColors.Control;
             this.btCartao.BackColor = SystemColors.Control;
@@ -280,6 +273,12 @@ namespace TeleBonifacio
                 CarregaGrid();
                 Limpar();
             }
+        }
+
+        private void button5_Click(object sender, EventArgs e)
+        {
+            rel.Caixa fRel = new rel.Caixa();
+            fRel.Show();
         }
     }
 }
