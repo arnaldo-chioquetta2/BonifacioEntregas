@@ -56,7 +56,7 @@ namespace TeleBonifacio
                 pb.BorderStyle = BorderStyle.Fixed3D; // Efeito de pressionado
             }
         }
-
+        
         private void pictureBox_MouseUp(object sender, MouseEventArgs e)
         {
             PictureBox pb = sender as PictureBox;
@@ -136,11 +136,11 @@ namespace TeleBonifacio
             INI cINI = new INI();
             int diaAtual = DateTime.Now.Day;
             int UltExec = cINI.ReadInt("INI", "UltExec", 0);
+            cINI.WriteInt("INI", "UltExec", diaAtual);
 
             bool atualizar = (diaAtual != UltExec);
-            cINI.WriteInt("INI", "UltExec", diaAtual);
-            // bool atualizar = true;
-
+            // atualizar = true;
+            
             Loga("atualizar = "+atualizar.ToString());
             if (atualizar)
             {
@@ -170,9 +170,15 @@ namespace TeleBonifacio
                         if (versaoNovaStr != NovaVersaoINI)
                         {
                             string versaoAtualStr = version.ToString().Substring(0, version.ToString().Length - 2);
+                            string Mensagem = cFPT.retMensagem();
+                            if (Mensagem.Length>0)
+                            {
+                                Mensagem = $"" +Mensagem + "\n\n";
+                            }
                             string mensagem = $"Existe uma nova versão do programa disponível.\n\n" +
                                                     $"Versão atual: {versaoAtualStr}\n" +
                                                     $"Nova versão: {versaoNovaStr}\n\n" +
+                                                    Mensagem +
                                                     "Deseja baixá-la agora?";
                             DialogResult dialogResult = MessageBox.Show(
                                 mensagem,

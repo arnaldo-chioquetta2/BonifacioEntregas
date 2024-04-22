@@ -18,6 +18,7 @@ namespace TeleBonifacio
         string ftpSenha = "";
         private string Erro = "";
         private ProgressBar ProgressBar1= null;
+        private string Mensagem = "";
 
         public int tamanhoConteudo
         {
@@ -157,12 +158,25 @@ namespace TeleBonifacio
             }
             Stream responseStream = response.GetResponseStream();
             StreamReader reader = new StreamReader(responseStream);
-            string versaoTexto = reader.ReadToEnd();
+            string info = reader.ReadToEnd();
+
+            // aqui preciso que seja os 5 primeiros caracteres
+            // string versaoTexto = info.PadLeft(5);
+            string versaoTexto = info.Substring(0, Math.Min(info.Length, 5));
+            if (info.Length>5)
+            {
+                this.Mensagem = info.Substring(6);
+            }
             reader.Close();
             responseStream.Close();
             response.Close();
-            int versaoNumero = int.Parse(versaoTexto.Replace(".",""));
+            int versaoNumero = int.Parse(versaoTexto.Replace(".", ""));
             return versaoNumero;
+        }
+
+        public string retMensagem()
+        {
+            return this.Mensagem;
         }
 
         public bool Testa()

@@ -53,7 +53,7 @@ namespace TeleBonifacio.rel
             this.textBox1.Multiline = true;
             this.textBox1.Name = "textBox1";
             this.textBox1.ReadOnly = true;
-            this.textBox1.Size = new System.Drawing.Size(800, 401);
+            this.textBox1.Size = new System.Drawing.Size(737, 401);
             this.textBox1.TabIndex = 11;
             // 
             // panel1
@@ -62,14 +62,14 @@ namespace TeleBonifacio.rel
             this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(800, 49);
+            this.panel1.Size = new System.Drawing.Size(737, 49);
             this.panel1.TabIndex = 10;
             // 
             // Caixa
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
+            this.ClientSize = new System.Drawing.Size(737, 450);
             this.Controls.Add(this.textBox1);
             this.Controls.Add(this.panel1);
             this.Name = "Caixa";

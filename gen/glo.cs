@@ -145,6 +145,7 @@ namespace TeleBonifacio
                 // 0=Esquerda,
                 // 1=Central
                 // 2=Direita
+                // 3=Direita e se não tiver nada, retorna nada
             int Aux;
             int Aux2;
             string Aux3;
@@ -184,6 +185,18 @@ namespace TeleBonifacio
                         // A Direita
                         if (dado.Length < Tam)
                         {
+                            dado = dado.PadLeft(Tam, Convert.ToChar(Prench));
+                        }
+                        break;
+                    case 3:
+                        // Direita e se não tiver nada, retorna nada
+                        if (dado == "0,00")
+                        {
+                            dado = new string(' ', Tam);
+                        }
+                        else
+                        {
+                            // CASO NORMAL
                             dado = dado.PadLeft(Tam, Convert.ToChar(Prench));
                         }
                         break;
