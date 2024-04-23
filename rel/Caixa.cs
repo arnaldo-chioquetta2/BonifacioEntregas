@@ -123,7 +123,7 @@ namespace TeleBonifacio.rel
                 string Desconto = glo.ComplStr(lancos.Desconto.ToString("N2"), 8, 3); // Desconto | 
                 string Saidas = glo.ComplStr(lancos.Saida.ToString("N2"), 7, 3); // Saídas | 
                 string Forma = glo.ComplStr(lancos.Forma, 11, 2); // FormaPagto | 
-                string Saldo = glo.ComplStr(lancos.Saldo.ToString("N2"), 6, 2); // Saldo
+                string Saldo = glo.ComplStr(lancos.Saldo.ToString("N2"), 7, 2); // Saldo
                 sb.AppendLine($"{ID}   {Data}   {Entrada}   {Desconto}   {Saidas}   {Forma}   {Saldo}");
                 //total += lancos.Saldo;
                 switch (lancos.idFormaPagto)
@@ -152,7 +152,7 @@ namespace TeleBonifacio.rel
             string EspacosAjustes = "";
             if (total > 0)
             {
-                EspacosAjustes = "                        ";
+                EspacosAjustes = new string(' ', 25); 
             }
             string final = $"Saldo:                                 {EspacosAjustes}{totalString}";
             sb.AppendLine();

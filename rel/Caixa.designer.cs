@@ -73,6 +73,7 @@ namespace TeleBonifacio.rel
             this.ClientSize = new System.Drawing.Size(769, 450);
             this.Controls.Add(this.textBox1);
             this.Controls.Add(this.panel1);
+            this.MaximizeBox = false;
             this.Name = "Caixa";
             this.Text = "Relatório de Caixa";
             this.Activated += new System.EventHandler(this.Extrato_Activated);
