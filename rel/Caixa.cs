@@ -110,7 +110,11 @@ namespace TeleBonifacio.rel
             sb.AppendLine($"Período: {dataInicio?.ToString("dd/MM/yyyy")} a {dataFim.ToString("dd/MM/yyyy")}");
             sb.AppendLine();
             sb.AppendLine("ID       Data     |  Entrada | Desconto |  Saídas |  FormaPagto |  Saldo ");
-            decimal total = 0;
+            //decimal total = 0;
+            decimal TDinheiro = 0;
+            decimal TCartao = 0;
+            decimal TPix = 0;
+            decimal TDespesa = 0;
             foreach (var lancos in relcaixa)
             {
                 string ID = glo.ComplStr(lancos.ID.ToString(), 4, 2); // ID    
@@ -121,17 +125,36 @@ namespace TeleBonifacio.rel
                 string Forma = glo.ComplStr(lancos.Forma, 11, 2); // FormaPagto | 
                 string Saldo = glo.ComplStr(lancos.Saldo.ToString("N2"), 6, 2); // Saldo
                 sb.AppendLine($"{ID}   {Data}   {Entrada}   {Desconto}   {Saidas}   {Forma}   {Saldo}");
-                // sb.AppendLine($"{ID} | {Data} | {Entrada} | {Desconto} | {Saidas} | {Forma} | {Saldo}");
-                total += lancos.Saldo;
+                //total += lancos.Saldo;
+                switch (lancos.idFormaPagto)
+                {
+                    case 0:
+                        TDinheiro += lancos.Entrada - lancos.Desconto;
+                    break;
+                    case 1:
+                        TCartao += lancos.Entrada - lancos.Desconto;
+                    break;
+                    case 3:
+                        TPix += lancos.Entrada - lancos.Desconto;
+                    break;
+                    case 5:
+                        TDespesa += lancos.Saida;
+                    break;
+                }
             }
-
-            string totalString = glo.ComplStr(total.ToString("N2"), 8, 2); 
+            sb.AppendLine();
+            sb.AppendLine($"Dinheiro: " + glo.ComplStr(TDinheiro.ToString("N2"), 9, 2));
+            sb.AppendLine($"Cartão:   " + glo.ComplStr(TCartao.ToString("N2"), 9, 2));
+            sb.AppendLine($"Pix:      " + glo.ComplStr(TPix.ToString("N2"), 9, 2));
+            sb.AppendLine($"Despesas: " + glo.ComplStr(TDespesa.ToString("N2"), 9, 2));
+            decimal total = TDinheiro + TCartao + TPix - TDespesa;
+            string totalString = glo.ComplStr(total.ToString("N2"), 9, 2); 
             string EspacosAjustes = "";
             if (total > 0)
             {
                 EspacosAjustes = "                        ";
             }
-            string final = $"Saldo:                         {EspacosAjustes}{totalString}";
+            string final = $"Saldo:                                 {EspacosAjustes}{totalString}";
             sb.AppendLine();
             sb.AppendLine(final);
             return sb.ToString();
@@ -163,6 +186,8 @@ namespace TeleBonifacio.rel
             this.DataFim = DateTime.Now;
             this.DataInicio = PrimData(this.DataFim.AddYears(-1));
             textBox1.Text = GerarRelCaixa(this.DataInicio, this.DataFim);
+            textBox1.SelectionStart = textBox1.Text.Length;
+            textBox1.ScrollToCaret();
         }
 
         #region Classes

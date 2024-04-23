@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.IO;
 using System.Reflection;
 using System.Windows.Forms;
 
@@ -66,8 +67,22 @@ namespace TeleBonifacio
         private void btAtu_Click(object sender, EventArgs e)
         {
             string PastaAtu = cINI.ReadString("Config", "Atualizador", "");
-            Process.Start(PastaAtu + @"\ATCAtualizeitor.exe");
+            Loga("Config : PastaAtu = " + PastaAtu);
+            string Executar = PastaAtu + @"\ATCAtualizeitor.exe";
+            Loga("Config : Executar o atualizador em " + Executar);
+            Process.Start(Executar);
             Environment.Exit(0);
         }
+
+        private void Loga(string message)
+        {
+            string logFilePath = @"C:\Entregas\Entregas.txt";
+            using (StreamWriter writer = new StreamWriter(logFilePath, true))
+            {
+                writer.WriteLine($"{DateTime.Now}: {message}");
+            }
+        }
+
+
     }
 }

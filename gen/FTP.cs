@@ -159,14 +159,12 @@ namespace TeleBonifacio
             Stream responseStream = response.GetResponseStream();
             StreamReader reader = new StreamReader(responseStream);
             string info = reader.ReadToEnd();
-
-            // aqui preciso que seja os 5 primeiros caracteres
-            // string versaoTexto = info.PadLeft(5);
-            string versaoTexto = info.Substring(0, Math.Min(info.Length, 5));
-            if (info.Length>5)
+            string[] lines = info.Split(new[] { "\r\n", "\r", "\n" }, StringSplitOptions.None);          
+            string versaoTexto = lines[0];
+            if (lines.Length>1)
             {
-                this.Mensagem = info.Substring(6);
-            }
+                this.Mensagem = lines[1];
+            }            
             reader.Close();
             responseStream.Close();
             response.Close();
