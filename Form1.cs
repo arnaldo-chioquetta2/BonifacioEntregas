@@ -191,7 +191,10 @@ namespace TeleBonifacio
                                 Loga("Optado por atualizar");                                
                                 string EstouEm = Path.Combine(pastaAtual, "TeleBonifacio.exe");
                                 cINI.WriteString("Atualizador", "EstouEm", EstouEm);
-                                string pastaAtualizador = Path.Combine(pastaAtual, "Atualizador");
+
+                                // pastaAtual
+
+                                string pastaAtualizador = Path.Combine(pastaAtual, "Atualizacao");
                                 string progAtualizador = Path.Combine(pastaAtualizador, "ATCAtualizeitor.exe");
                                 Loga("pasta Atual: "+ pastaAtual);
                                 Loga("pasta Atualizador: " + pastaAtualizador);
