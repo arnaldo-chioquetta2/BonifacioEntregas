@@ -14,6 +14,8 @@ namespace TeleBonifacio.rel
         private DateTime? DataInicio { get; set; }
         private DateTime DataFim { get; set; }
         private List<Lanctos> relcaixa { get; set; }
+        public DateTime DT1 { get; set; }
+        public DateTime DT2 { get; set; }
 
         public Caixa()
         {
@@ -31,9 +33,10 @@ namespace TeleBonifacio.rel
 
         private List<Lanctos> CarregaCaixa(DateTime? dataInicio, DateTime dataFim)
         {
-            string SQL = @"SELECT C.ID, C.Data, C.Valor, C.Desconto, 
+            string SQL = $@"SELECT C.ID, C.Data, C.Valor, C.Desconto, 
                             C.idForma AS FormaPagto
-                            FROM Caixa C";
+                            FROM Caixa C
+                            Where Data Between #{ dataInicio:dd/MM/yyyy HH:ss}# and #{ dataFim:dd/MM/yyyy HH:ss}# ";
             List<Lanctos> lancamentos = new List<Lanctos>();
             using (OleDbConnection connection = new OleDbConnection(glo.connectionString))
             {
@@ -110,7 +113,6 @@ namespace TeleBonifacio.rel
             sb.AppendLine($"Período: {dataInicio?.ToString("dd/MM/yyyy")} a {dataFim.ToString("dd/MM/yyyy")}");
             sb.AppendLine();
             sb.AppendLine("ID       Data     |  Entrada | Desconto |  Saídas |  FormaPagto |  Saldo ");
-            //decimal total = 0;
             decimal TDinheiro = 0;
             decimal TCartao = 0;
             decimal TPix = 0;
@@ -125,7 +127,6 @@ namespace TeleBonifacio.rel
                 string Forma = glo.ComplStr(lancos.Forma, 11, 2); // FormaPagto | 
                 string Saldo = glo.ComplStr(lancos.Saldo.ToString("N2"), 7, 2); // Saldo
                 sb.AppendLine($"{ID}   {Data}   {Entrada}   {Desconto}   {Saidas}   {Forma}   {Saldo}");
-                //total += lancos.Saldo;
                 switch (lancos.idFormaPagto)
                 {
                     case 0:
@@ -183,8 +184,8 @@ namespace TeleBonifacio.rel
         {
             if (!ativou)
                 ativou = true;
-            this.DataFim = DateTime.Now;
-            this.DataInicio = PrimData(this.DataFim.AddYears(-1));
+            this.DataInicio = this.DT1;
+            this.DataFim = this.DT2.Date.AddDays(1).AddMinutes(-1);
             textBox1.Text = GerarRelCaixa(this.DataInicio, this.DataFim);
             textBox1.SelectionStart = textBox1.Text.Length;
             textBox1.ScrollToCaret();

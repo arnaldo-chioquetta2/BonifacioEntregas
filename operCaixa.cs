@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Windows.Forms;
 using TeleBonifacio.dao;
 using TeleBonifacio.tb;
@@ -112,9 +113,11 @@ namespace TeleBonifacio
             }
             if (this.iID==0)
             {
+                Loga($@"A,{idForma},{compra},{idCliente}, {obs}, {desc}, {idVend}");
                 Caixa.Adiciona(idForma, compra, idCliente, obs, desc, idVend);
             } else
             {
+                Loga($@"E,{this.iID},{idForma},{compra},{idCliente}, {obs}, {desc}, {idVend}");
                 Caixa.Edita(this.iID, idForma, compra, idCliente, obs, desc, idVend);
             }            
             CarregaGrid();
@@ -232,6 +235,7 @@ namespace TeleBonifacio
                                                   MessageBoxIcon.Question);
             if (result == DialogResult.Yes)
             {
+                Loga($@"D,{this.iID}");
                 Caixa.Exclui(this.iID);
                 CarregaGrid();
                 Limpar();
@@ -241,6 +245,8 @@ namespace TeleBonifacio
         private void button5_Click(object sender, EventArgs e)
         {
             rel.Caixa fRel = new rel.Caixa();
+            fRel.DT1 = dtpDataIN.Value;
+            fRel.DT2 = dtnDtFim.Value;
             fRel.Show();
         }
 
@@ -284,6 +290,15 @@ namespace TeleBonifacio
                     }
                     btExcluir.Visible = true;
                 }
+            }
+        }
+
+        private void Loga(string message)
+        {
+            string logFilePath = @"C:\Entregas\Entregas.txt";
+            using (StreamWriter writer = new StreamWriter(logFilePath, true))
+            {
+                writer.WriteLine($"{DateTime.Now}: {message}");
             }
         }
 

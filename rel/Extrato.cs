@@ -164,12 +164,6 @@ namespace TeleBonifacio.rel
             string SQL = @"SELECT Data 
                            FROM Entregas
                            Where idVend = " + this.ID.ToString();
-
-            //string SQL = @"SELECT Data 
-            //               FROM Entregas
-            //               Where Data > #03/07/2024# 
-            //                    and idVend = " + this.ID.ToString();
-
             DataTable ret = glo.getDados(SQL);
             if (ret.Rows.Count>0)
             {
