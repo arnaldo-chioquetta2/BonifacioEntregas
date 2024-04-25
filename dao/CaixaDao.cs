@@ -91,5 +91,12 @@ namespace TeleBonifacio.dao
             String sql = @"Delete From Caixa WHERE ID = " + iID.ToString();
             glo.ExecutarComandoSQL(sql);
         }
+
+        public void MudaData(DateTime data, string lista)
+        {           
+            string sData = data.ToString("MM/dd/yyyy");
+            String sql = $@"Update Caixa Set Data = #{sData}# WHERE ID in ({lista}) ";
+            glo.ExecutarComandoSQL(sql);
+        }
     }
 }

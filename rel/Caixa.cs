@@ -195,7 +195,7 @@ namespace TeleBonifacio.rel
 
         private class Lanctos
         {
-            internal string Forma;
+            public string Forma;
 
             public int ID { get; set; }
             public DateTime DataPagamento { get; set; }

@@ -30,7 +30,6 @@ namespace TeleBonifacio
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(operCaixa));
-            this.dataGrid1 = new SourceGrid.DataGrid();
             this.cmbVendedor = new System.Windows.Forms.ComboBox();
             this.label7 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
@@ -47,30 +46,18 @@ namespace TeleBonifacio
             this.btnFiltrar = new System.Windows.Forms.Button();
             this.btnNovoCliente = new System.Windows.Forms.Button();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.btEditar = new System.Windows.Forms.Button();
+            this.dtnDtFim = new System.Windows.Forms.DateTimePicker();
             this.btExcluir = new System.Windows.Forms.Button();
             this.button5 = new System.Windows.Forms.Button();
             this.btDespeza = new System.Windows.Forms.Button();
             this.btPix = new System.Windows.Forms.Button();
             this.btDinheiro = new System.Windows.Forms.Button();
             this.btCartao = new System.Windows.Forms.Button();
-            this.dtnDtFim = new System.Windows.Forms.DateTimePicker();
+            this.dataGrid1 = new System.Windows.Forms.DataGridView();
             this.panel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGrid1)).BeginInit();
             this.SuspendLayout();
-            // 
-            // dataGrid1
-            // 
-            this.dataGrid1.DeleteQuestionMessage = "Are you sure to delete all the selected rows?";
-            this.dataGrid1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dataGrid1.EnableSort = false;
-            this.dataGrid1.FixedRows = 1;
-            this.dataGrid1.Location = new System.Drawing.Point(0, 156);
-            this.dataGrid1.Name = "dataGrid1";
-            this.dataGrid1.SelectionMode = SourceGrid.GridSelectionMode.Row;
-            this.dataGrid1.Size = new System.Drawing.Size(928, 216);
-            this.dataGrid1.TabIndex = 14;
-            this.dataGrid1.TabStop = true;
-            this.dataGrid1.ToolTipText = "";
-            this.dataGrid1.Click += new System.EventHandler(this.dataGrid1_Click);
             // 
             // cmbVendedor
             // 
@@ -216,6 +203,7 @@ namespace TeleBonifacio
             // 
             // panel1
             // 
+            this.panel1.Controls.Add(this.btEditar);
             this.panel1.Controls.Add(this.dtnDtFim);
             this.panel1.Controls.Add(this.btExcluir);
             this.panel1.Controls.Add(this.button5);
@@ -244,11 +232,34 @@ namespace TeleBonifacio
             this.panel1.Size = new System.Drawing.Size(928, 156);
             this.panel1.TabIndex = 13;
             // 
+            // btEditar
+            // 
+            this.btEditar.Anchor = System.Windows.Forms.AnchorStyles.Right;
+            this.btEditar.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
+            this.btEditar.Location = new System.Drawing.Point(647, 79);
+            this.btEditar.Name = "btEditar";
+            this.btEditar.Size = new System.Drawing.Size(75, 23);
+            this.btEditar.TabIndex = 42;
+            this.btEditar.Text = "Editar";
+            this.btEditar.UseVisualStyleBackColor = false;
+            this.btEditar.Visible = false;
+            this.btEditar.Click += new System.EventHandler(this.btEditar_Click);
+            // 
+            // dtnDtFim
+            // 
+            this.dtnDtFim.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
+            this.dtnDtFim.Format = System.Windows.Forms.DateTimePickerFormat.Short;
+            this.dtnDtFim.Location = new System.Drawing.Point(515, 120);
+            this.dtnDtFim.Name = "dtnDtFim";
+            this.dtnDtFim.Size = new System.Drawing.Size(90, 23);
+            this.dtnDtFim.TabIndex = 41;
+            this.dtnDtFim.Tag = "H";
+            // 
             // btExcluir
             // 
             this.btExcluir.Anchor = System.Windows.Forms.AnchorStyles.Right;
             this.btExcluir.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(128)))));
-            this.btExcluir.Location = new System.Drawing.Point(700, 79);
+            this.btExcluir.Location = new System.Drawing.Point(728, 79);
             this.btExcluir.Name = "btExcluir";
             this.btExcluir.Size = new System.Drawing.Size(75, 23);
             this.btExcluir.TabIndex = 40;
@@ -271,7 +282,7 @@ namespace TeleBonifacio
             // 
             this.btDespeza.Anchor = System.Windows.Forms.AnchorStyles.Right;
             this.btDespeza.Enabled = false;
-            this.btDespeza.Location = new System.Drawing.Point(619, 78);
+            this.btDespeza.Location = new System.Drawing.Point(566, 79);
             this.btDespeza.Name = "btDespeza";
             this.btDespeza.Size = new System.Drawing.Size(75, 23);
             this.btDespeza.TabIndex = 38;
@@ -282,7 +293,7 @@ namespace TeleBonifacio
             // 
             this.btPix.Anchor = System.Windows.Forms.AnchorStyles.Right;
             this.btPix.Enabled = false;
-            this.btPix.Location = new System.Drawing.Point(538, 79);
+            this.btPix.Location = new System.Drawing.Point(485, 80);
             this.btPix.Name = "btPix";
             this.btPix.Size = new System.Drawing.Size(75, 23);
             this.btPix.TabIndex = 37;
@@ -293,7 +304,7 @@ namespace TeleBonifacio
             // 
             this.btDinheiro.Anchor = System.Windows.Forms.AnchorStyles.Right;
             this.btDinheiro.Enabled = false;
-            this.btDinheiro.Location = new System.Drawing.Point(376, 79);
+            this.btDinheiro.Location = new System.Drawing.Point(323, 80);
             this.btDinheiro.Name = "btDinheiro";
             this.btDinheiro.Size = new System.Drawing.Size(75, 23);
             this.btDinheiro.TabIndex = 36;
@@ -304,22 +315,24 @@ namespace TeleBonifacio
             // 
             this.btCartao.Anchor = System.Windows.Forms.AnchorStyles.Right;
             this.btCartao.Enabled = false;
-            this.btCartao.Location = new System.Drawing.Point(457, 79);
+            this.btCartao.Location = new System.Drawing.Point(404, 80);
             this.btCartao.Name = "btCartao";
             this.btCartao.Size = new System.Drawing.Size(75, 23);
             this.btCartao.TabIndex = 35;
             this.btCartao.Text = "Cartão";
             this.btCartao.Click += new System.EventHandler(this.btCartao_Click);
             // 
-            // dtnDtFim
+            // dataGrid1
             // 
-            this.dtnDtFim.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
-            this.dtnDtFim.Format = System.Windows.Forms.DateTimePickerFormat.Short;
-            this.dtnDtFim.Location = new System.Drawing.Point(515, 120);
-            this.dtnDtFim.Name = "dtnDtFim";
-            this.dtnDtFim.Size = new System.Drawing.Size(90, 23);
-            this.dtnDtFim.TabIndex = 41;
-            this.dtnDtFim.Tag = "H";
+            this.dataGrid1.AllowUserToAddRows = false;
+            this.dataGrid1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dataGrid1.Location = new System.Drawing.Point(0, 156);
+            this.dataGrid1.Name = "dataGrid1";
+            this.dataGrid1.ReadOnly = true;
+            this.dataGrid1.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.dataGrid1.Size = new System.Drawing.Size(928, 216);
+            this.dataGrid1.TabIndex = 0;
+            this.dataGrid1.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGrid1_CellClick);
             // 
             // operCaixa
             // 
@@ -335,13 +348,12 @@ namespace TeleBonifacio
             this.Load += new System.EventHandler(this.operCaixa_Load);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGrid1)).EndInit();
             this.ResumeLayout(false);
 
         }
 
         #endregion
-
-        private SourceGrid.DataGrid dataGrid1;
         private System.Windows.Forms.ComboBox cmbVendedor;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.Label label6;
@@ -365,6 +377,8 @@ namespace TeleBonifacio
         private System.Windows.Forms.Button button5;
         private System.Windows.Forms.Button btExcluir;
         private System.Windows.Forms.DateTimePicker dtnDtFim;
+        private System.Windows.Forms.Button btEditar;
+        private System.Windows.Forms.DataGridView dataGrid1;
     }
 }
 
