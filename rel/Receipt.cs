@@ -46,7 +46,7 @@ namespace TeleBonifacio.rel
             this.total = total;
             this.dataPagamento = dataPagamento;
             var printDocument = new PrintDocument();
-            printDocument.DocumentName = "Receipt";
+            printDocument.DocumentName = "Recibo";
             printDocument.PrintPage += PrintPage;
             printDocument.Print();
         }
