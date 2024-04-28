@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Windows.Forms;
+using TeleBonifacio.dao;
 using TeleBonifacio.tb;
 using System.Globalization;
 
@@ -294,6 +295,13 @@ namespace TeleBonifacio
         {
             TextBox textBox = sender as TextBox;
             textBox?.SelectAll();
+        }
+
+        private void btRelat_Click(object sender, EventArgs e)
+        {
+            rel.RelEntegas fRel = new rel.RelEntegas();
+            fRel.Data = dtpData.Value;
+            fRel.Show();
         }
     }
 

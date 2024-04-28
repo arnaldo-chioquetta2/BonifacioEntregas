@@ -53,11 +53,13 @@ namespace TeleBonifacio
             this.btnFiltrar = new System.Windows.Forms.Button();
             this.btnNovoCliente = new System.Windows.Forms.Button();
             this.dataGrid1 = new SourceGrid.DataGrid();
+            this.btRelat = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // panel1
             // 
+            this.panel1.Controls.Add(this.btRelat);
             this.panel1.Controls.Add(this.cmbVendedor);
             this.panel1.Controls.Add(this.label7);
             this.panel1.Controls.Add(this.label6);
@@ -272,7 +274,7 @@ namespace TeleBonifacio
             // btnLimpar
             // 
             this.btnLimpar.Anchor = System.Windows.Forms.AnchorStyles.Right;
-            this.btnLimpar.Location = new System.Drawing.Point(800, 24);
+            this.btnLimpar.Location = new System.Drawing.Point(796, 38);
             this.btnLimpar.Name = "btnLimpar";
             this.btnLimpar.Size = new System.Drawing.Size(75, 23);
             this.btnLimpar.TabIndex = 16;
@@ -283,7 +285,7 @@ namespace TeleBonifacio
             // 
             this.btnAdicionar.Anchor = System.Windows.Forms.AnchorStyles.Right;
             this.btnAdicionar.Enabled = false;
-            this.btnAdicionar.Location = new System.Drawing.Point(800, 54);
+            this.btnAdicionar.Location = new System.Drawing.Point(796, 68);
             this.btnAdicionar.Name = "btnAdicionar";
             this.btnAdicionar.Size = new System.Drawing.Size(75, 23);
             this.btnAdicionar.TabIndex = 17;
@@ -293,7 +295,7 @@ namespace TeleBonifacio
             // btnFiltrar
             // 
             this.btnFiltrar.Anchor = System.Windows.Forms.AnchorStyles.Right;
-            this.btnFiltrar.Location = new System.Drawing.Point(800, 83);
+            this.btnFiltrar.Location = new System.Drawing.Point(796, 97);
             this.btnFiltrar.Name = "btnFiltrar";
             this.btnFiltrar.Size = new System.Drawing.Size(75, 23);
             this.btnFiltrar.TabIndex = 18;
@@ -323,6 +325,16 @@ namespace TeleBonifacio
             this.dataGrid1.TabStop = true;
             this.dataGrid1.ToolTipText = "";
             this.dataGrid1.Click += new System.EventHandler(this.dataGrid1_Click);
+            // 
+            // btRelat
+            // 
+            this.btRelat.Anchor = System.Windows.Forms.AnchorStyles.Right;
+            this.btRelat.Location = new System.Drawing.Point(796, 11);
+            this.btRelat.Name = "btRelat";
+            this.btRelat.Size = new System.Drawing.Size(75, 23);
+            this.btRelat.TabIndex = 35;
+            this.btRelat.Text = "Relatório";
+            this.btRelat.Click += new System.EventHandler(this.btRelat_Click);
             // 
             // operLancamento
             // 
@@ -368,5 +380,6 @@ namespace TeleBonifacio
         private System.Windows.Forms.TextBox txDesc;
         private System.Windows.Forms.ComboBox cmbVendedor;
         private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.Button btRelat;
     }
 }
