@@ -33,9 +33,9 @@ namespace TeleBonifacio.rel
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.panel1 = new System.Windows.Forms.Panel();
             this.btImprimir = new System.Windows.Forms.Button();
+            this.btnFiltrar = new System.Windows.Forms.Button();
             this.dtnDtFim = new System.Windows.Forms.DateTimePicker();
             this.dtpDataIN = new System.Windows.Forms.DateTimePicker();
-            this.btnFiltrar = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -58,7 +58,7 @@ namespace TeleBonifacio.rel
             this.textBox1.Name = "textBox1";
             this.textBox1.ReadOnly = true;
             this.textBox1.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.textBox1.Size = new System.Drawing.Size(975, 401);
+            this.textBox1.Size = new System.Drawing.Size(519, 401);
             this.textBox1.TabIndex = 11;
             // 
             // panel1
@@ -71,18 +71,28 @@ namespace TeleBonifacio.rel
             this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(975, 49);
+            this.panel1.Size = new System.Drawing.Size(519, 49);
             this.panel1.TabIndex = 10;
             // 
             // btImprimir
             // 
-            this.btImprimir.Anchor = System.Windows.Forms.AnchorStyles.Right;
-            this.btImprimir.Location = new System.Drawing.Point(414, 12);
+            this.btImprimir.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.btImprimir.Location = new System.Drawing.Point(405, 12);
             this.btImprimir.Name = "btImprimir";
             this.btImprimir.Size = new System.Drawing.Size(75, 23);
             this.btImprimir.TabIndex = 47;
             this.btImprimir.Text = "Imprimir";
             this.btImprimir.Click += new System.EventHandler(this.btImprimir_Click);
+            // 
+            // btnFiltrar
+            // 
+            this.btnFiltrar.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.btnFiltrar.Location = new System.Drawing.Point(315, 12);
+            this.btnFiltrar.Name = "btnFiltrar";
+            this.btnFiltrar.Size = new System.Drawing.Size(75, 23);
+            this.btnFiltrar.TabIndex = 46;
+            this.btnFiltrar.Text = "Filtrar";
+            this.btnFiltrar.Click += new System.EventHandler(this.btnFiltrar_Click);
             // 
             // dtnDtFim
             // 
@@ -104,21 +114,11 @@ namespace TeleBonifacio.rel
             this.dtpDataIN.TabIndex = 42;
             this.dtpDataIN.Tag = "H";
             // 
-            // btnFiltrar
-            // 
-            this.btnFiltrar.Anchor = System.Windows.Forms.AnchorStyles.Right;
-            this.btnFiltrar.Location = new System.Drawing.Point(324, 12);
-            this.btnFiltrar.Name = "btnFiltrar";
-            this.btnFiltrar.Size = new System.Drawing.Size(75, 23);
-            this.btnFiltrar.TabIndex = 46;
-            this.btnFiltrar.Text = "Filtrar";
-            this.btnFiltrar.Click += new System.EventHandler(this.btnFiltrar_Click);
-            // 
             // RelEntegas
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(975, 450);
+            this.ClientSize = new System.Drawing.Size(519, 450);
             this.Controls.Add(this.textBox1);
             this.Controls.Add(this.panel1);
             this.MaximizeBox = false;
