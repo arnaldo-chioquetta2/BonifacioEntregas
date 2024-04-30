@@ -4,6 +4,7 @@ using System.Data;
 using System.Data.Linq;
 using System.Data.OleDb;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 
 namespace TeleBonifacio
@@ -116,6 +117,22 @@ namespace TeleBonifacio
             return string.Format("{0,10} ", obj);
         }
 
+        private static string RandomString(int length)
+        {
+            const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+            var random = new Random();
+            return new string(Enumerable.Repeat(chars, length)
+                .Select(s => s[random.Next(s.Length)]).ToArray());
+        }
+
+        public static string GenerateUID()
+        {
+            string dateTimePart = DateTime.Now.ToString("ddMMyyyyHHmmss");
+            int QtdCarac = 20 - dateTimePart.Length;
+            string randomChars = RandomString(QtdCarac);
+            return dateTimePart + randomChars;
+        }
+
         public static string fa(string str)
         {
             return "'" + str + "'";
@@ -225,6 +242,16 @@ namespace TeleBonifacio
                 }
             }
         }
+
+        public static void Loga(string message)
+        {
+            string logFilePath = @"C:\Entregas\Entregas.txt";
+            using (StreamWriter writer = new StreamWriter(logFilePath, true))
+            {
+                writer.WriteLine($"{DateTime.Now}: {message}");
+            }
+        }
+
 
         public static int ExecutarConsultaCount(string query)
         {

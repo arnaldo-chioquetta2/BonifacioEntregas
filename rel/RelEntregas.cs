@@ -55,9 +55,9 @@ namespace TeleBonifacio.rel
                             {
                                 Lanctos lancamento = new Lanctos();
                                 lancamento.Data = (DateTime)reader["Data"];
-                                lancamento.Vendas = (decimal)reader["Vendas"];
-                                lancamento.Entregas = (decimal) reader["Entregas"];
-                                lancamento.Qtd = (int)reader["Qtd"];
+                                lancamento.Vendas = reader["Vendas"] != DBNull.Value ? (decimal)reader["Vendas"] : 0;
+                                lancamento.Entregas = reader["Entregas"] != DBNull.Value ? (decimal)reader["Entregas"] : 0;
+                                lancamento.Qtd = reader["Qtd"] != DBNull.Value ? (int)reader["Qtd"] : 0;
                                 lancamentos.Add(lancamento);
                             }
                         }

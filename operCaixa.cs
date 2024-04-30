@@ -15,6 +15,7 @@ namespace TeleBonifacio
 
         private CaixaDao Caixa;
         private int iID = 0;
+        private string UID = "";
 
         public operCaixa()
         {
@@ -114,12 +115,13 @@ namespace TeleBonifacio
             }
             if (this.iID == 0)
             {
-                Loga($@"A,{idForma},{compra},{idCliente}, {obs}, {desc}, {idVend}");
-                Caixa.Adiciona(idForma, compra, idCliente, obs, desc, idVend);
+                string UID = glo.GenerateUID();
+                glo.Loga($@"CA,{idForma},{compra},{idCliente}, {obs}, {desc}, {idVend}, {UID}");
+                Caixa.Adiciona(idForma, compra, idCliente, obs, desc, idVend, UID);
             }
             else
             {
-                Loga($@"E,{this.iID},{idForma},{compra},{idCliente}, {obs}, {desc}, {idVend}");
+                glo.Loga($@"CE,{this.iID},{idForma},{compra},{idCliente}, {obs}, {desc}, {idVend}, {this.UID}");
                 Caixa.Edita(this.iID, idForma, compra, idCliente, obs, desc, idVend);
             }
             CarregaGrid();
@@ -214,7 +216,7 @@ namespace TeleBonifacio
                                                   MessageBoxIcon.Question);
             if (result == DialogResult.Yes)
             {
-                Loga($@"D,{this.iID}");
+                glo.Loga($@"CD,{this.iID}, {this.UID}");
                 Caixa.Exclui(this.iID);
                 CarregaGrid();
                 Limpar();
@@ -262,15 +264,6 @@ namespace TeleBonifacio
 
         #region Grid
 
-        private void Loga(string message)
-        {
-            string logFilePath = @"C:\Entregas\Entregas.txt";
-            using (StreamWriter writer = new StreamWriter(logFilePath, true))
-            {
-                writer.WriteLine($"{DateTime.Now}: {message}");
-            }
-        }
-
         private void dataGrid1_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             DataGridView grid = (DataGridView)sender;
@@ -289,6 +282,7 @@ namespace TeleBonifacio
                 int idVend = Convert.ToInt32(selectedRow.Cells["idVend"].Value);
                 int idForma = Convert.ToInt32(selectedRow.Cells["idForma"].Value);
                 this.iID = id;
+                this.UID = Convert.ToString(selectedRow.Cells["UID"].Value);
                 cmbCliente.SelectedValue = nrCli;
                 txCompra.Text = valor.ToString();
                 txDesc.Text = desconto.ToString();
@@ -334,9 +328,10 @@ namespace TeleBonifacio
             dataGrid1.Columns[6].Width = 100;   // Data
             dataGrid1.Columns[7].Width = 70;    // Forma de pagamento
             dataGrid1.Columns[8].Width = 200;    // Obs
-            dataGrid1.Columns[9].Visible = false; // Tornar a décima coluna invisível (largura = 0)
-            dataGrid1.Columns[10].Visible = false; // Tornar a décima primeira coluna invisível (largura = 0)
-            dataGrid1.Columns[11].Visible = false; // Tornar a décima segunda coluna invisível (largura = 0)
+            dataGrid1.Columns[9].Visible = false;
+            dataGrid1.Columns[10].Visible = false;
+            dataGrid1.Columns[11].Visible = false;
+            dataGrid1.Columns[12].Visible = false;
         }       
 
         #endregion

@@ -13,6 +13,7 @@ namespace TeleBonifacio
     {
         private EntregasDAO entregasDAO;
         private int iID = 0;
+        private string UID = "";
 
         public operLancamento()
         {
@@ -51,6 +52,7 @@ namespace TeleBonifacio
             dataGrid1.Columns[11].Width = 0;
             dataGrid1.Columns[12].Width = 0;
             dataGrid1.Columns[13].Width = 0;
+            dataGrid1.Columns[14].Width = 0;
             dataGrid1.Invalidate();
         }
 
@@ -119,12 +121,15 @@ namespace TeleBonifacio
             }
             if (btnAdicionar.Text == "Salvar")
             {
+                glo.Loga($@"EE,{this.iID}, {idBoy}, {idForma}, {valor}, {idCliente}, {compra}, {obs}, {desc}, {idVend}, {this.UID}");
                 entregasDAO.Edita(this.iID, idBoy, idForma, valor, idCliente, compra, obs, desc, idVend);
                 btnAdicionar.Text = "Adicionar";
             }
             else
             {
-                entregasDAO.Adiciona(idBoy, idForma, valor, idCliente, compra, obs, desc, idVend);
+                string UID = glo.GenerateUID();
+                glo.Loga($@"EA,{idForma},{compra},{idCliente}, {obs}, {desc}, {idVend}, {UID}");
+                entregasDAO.Adiciona(idBoy, idForma, valor, idCliente, compra, obs, desc, idVend, UID);
             }
             CarregaGrid(null);
             Limpar();
@@ -163,6 +168,7 @@ namespace TeleBonifacio
                     cmbCliente.SelectedValue = glo.ConvOjbInt(((DataRowView)grid.SelectedDataRows[0]).Row["NrCli"]);
                     cmbVendedor.SelectedValue = glo.ConvOjbInt(((DataRowView)grid.SelectedDataRows[0]).Row["idVend"]);
                     cmbFormaPagamento.SelectedIndex = glo.ConvOjbInt(((DataRowView)grid.SelectedDataRows[0]).Row["idForma"]);
+                    this.UID = glo.ConvOjbStr(((DataRowView)grid.SelectedDataRows[0]).Row["UID"]);
                     btnAdicionar.Text = "Salvar";
                     MostraTotal();
                 }

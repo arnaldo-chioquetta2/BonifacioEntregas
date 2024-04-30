@@ -35,11 +35,10 @@ namespace TeleBonifacio.dao
                 ) AS Pagamento,
                 c.Nome AS Cliente,
                 v.Nome AS Vendedor,  
-                e.Obs,
+                e.Obs, 
                 m.codi as idBoy,
                 c.NrCli,
-                e.idForma,
-                e.idVend 
+                e.idForma, e.idVend, e.UID 
             FROM 
                 (((Entregas e
                 LEFT JOIN Clientes c ON c.NrCli = e.idCliente)
@@ -139,9 +138,9 @@ namespace TeleBonifacio.dao
             return dt;
         }
 
-        public void Adiciona(int idBoy, int idForma, float valor, int idcliente, float compra, string Obs, float desc, int idVend)
+        public void Adiciona(int idBoy, int idForma, float valor, int idcliente, float compra, string Obs, float desc, int idVend, string UID)
         {
-            String sql = @"INSERT INTO Entregas (idCliente, idForma, idBoy, Valor, VlNota, Obs, Desconto, idVend, Data) VALUES ("
+            String sql = @"INSERT INTO Entregas (idCliente, idForma, idBoy, Valor, VlNota, Obs, Desconto, idVend, UID, Data) VALUES ("
                 + idcliente.ToString() + ", "
                 + idForma.ToString() + ", "
                 + idBoy.ToString() + ", "                
@@ -149,7 +148,8 @@ namespace TeleBonifacio.dao
                 + glo.sv(compra) + ", "
                 + glo.fa(Obs) + ", "
                 + glo.sv(desc) + ", "
-                + idVend.ToString()  
+                + idVend.ToString() + ", "
+                + glo.fa(UID)
                 + ",Now)";
             glo.ExecutarComandoSQL(sql);
         }
@@ -164,7 +164,7 @@ namespace TeleBonifacio.dao
                             ",VlNota = " + glo.sv(compra) + 
                             ",Obs = " + glo.fa(obs) + 
                             ",Desconto = " + glo.sv(desc) +
-                            ",idVend = " + idVend.ToString() + 
+                            ",idVend = " + idVend.ToString() +
                             " WHERE ID = " + iID.ToString();
             glo.ExecutarComandoSQL(sql);
         }

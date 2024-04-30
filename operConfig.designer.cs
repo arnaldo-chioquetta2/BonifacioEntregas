@@ -113,6 +113,7 @@ namespace TeleBonifacio
             this.label1.Size = new System.Drawing.Size(38, 13);
             this.label1.TabIndex = 10;
             this.label1.Text = "Nome:";
+            this.label1.DoubleClick += new System.EventHandler(this.label1_DoubleClick);
             // 
             // txEndereco
             // 

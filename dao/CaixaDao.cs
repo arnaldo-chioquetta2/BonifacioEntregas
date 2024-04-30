@@ -9,16 +9,17 @@ namespace TeleBonifacio.dao
 {
     public class CaixaDao
     {
-        public void Adiciona(int idForma, float compra, int idCliente, string obs, float desc, int idVend)
+        public void Adiciona(int idForma, float compra, int idCliente, string obs, float desc, int idVend, string UID)
         {
-            String sql = @"INSERT INTO Caixa (idCliente, idForma, Valor, VlNota, Obs, Desconto, idVend, Data) VALUES ("
+            String sql = @"INSERT INTO Caixa (idCliente, idForma, Valor, VlNota, Obs, Desconto, idVend, UID, Data) VALUES ("
                 + idCliente.ToString() + ", "
                 + idForma.ToString() + ", "
                 + glo.sv(compra) + ", "
                 + glo.sv(compra - desc) + ", "
                 + glo.fa(obs) + ", "
                 + glo.sv(desc) + ", "
-                + idVend.ToString()
+                + idVend.ToString() + ", "
+                + glo.fa(UID)
                 + ",Now)";
             glo.ExecutarComandoSQL(sql);
         }
@@ -44,7 +45,7 @@ namespace TeleBonifacio.dao
                         ca.idForma = 4, 'Troca',
                         ca.idForma = 5, 'Despesa'
                     ) AS Pagamento, ca.Obs,
-                    c.NrCli, ca.idVend, ca.idForma 
+                    c.NrCli, ca.idVend, ca.idForma, ca.UID 
                     FROM (Caixa ca
                     LEFT JOIN Clientes c ON c.NrCli = ca.idCliente)
                     INNER JOIN Vendedores v ON v.ID = ca.idVend"); 
