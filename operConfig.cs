@@ -12,6 +12,7 @@ namespace TeleBonifacio
     {
 
         private INI cINI;
+        private bool Carregando = true;
 
         public oprConfig()
         {
@@ -21,10 +22,8 @@ namespace TeleBonifacio
             txNome.Text = cINI.ReadString("Identidade", "Nome", "");
             txEndereco.Text = cINI.ReadString("Identidade", "Endereco", "");
             txFone.Text = cINI.ReadString("Identidade", "Fone", "");
-
             Version version = Assembly.GetExecutingAssembly().GetName().Version;
             int versionInt = (version.Major * 100) + (version.Minor * 10) + version.Build;
-
             string NovaVersao = cINI.ReadString("Config", "NovaVersao", "");            
             if (NovaVersao.Length>0)
             {
@@ -33,7 +32,17 @@ namespace TeleBonifacio
                 {
                     btAtu.Text = "Atualizar para versão " + NovaVersao;
                 }
-            }            
+            }
+            if (Environment.CurrentDirectory.Contains("\\\\"))
+            {
+                ckBackup.Visible = false; 
+            }
+            else
+            {
+                ckBackup.Visible = true;
+                ckBackup.Checked = (cINI.ReadString("Backup", "Ativo", "")=="1");
+            }
+            Carregando = false;
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -45,12 +54,13 @@ namespace TeleBonifacio
         }
 
         private void button3_Click(object sender, EventArgs e)
-        {
-            
+        {            
             glo.CaminhoBase = textBox1.Text;
             cINI.WriteString("Identidade", "Nome", txNome.Text);
             cINI.WriteString("Identidade", "Endereco", txEndereco.Text);
             cINI.WriteString("Identidade", "Fone", txFone.Text);
+            string Backup = ckBackup.Checked ? "1" : "0";
+            cINI.WriteString("Backup", "Ativo", Backup);
             this.Close();
         }
 
@@ -69,20 +79,11 @@ namespace TeleBonifacio
         private void btAtu_Click(object sender, EventArgs e)
         {
             string PastaAtu = cINI.ReadString("Config", "Atualizador", "");
-            Loga("Config : PastaAtu = " + PastaAtu);
+            glo.Loga("Config : PastaAtu = " + PastaAtu);
             string Executar = PastaAtu + @"\ATCAtualizeitor.exe";
-            Loga("Config : Executar o atualizador em " + Executar);
+            glo.Loga("Config : Executar o atualizador em " + Executar);
             Process.Start(Executar);
             Environment.Exit(0);
-        }
-
-        private void Loga(string message)
-        {
-            string logFilePath = @"C:\Entregas\Entregas.txt";
-            using (StreamWriter writer = new StreamWriter(logFilePath, true))
-            {
-                writer.WriteLine($"{DateTime.Now}: {message}");
-            }
         }
 
         private void label1_DoubleClick(object sender, EventArgs e)
@@ -94,60 +95,58 @@ namespace TeleBonifacio
                 List<string> logs = new List<string>(File.ReadAllLines(ArqLogs));
                 foreach (var log in logs)
                 {
-                    // Encontra a posição do primeiro ':' na linha para separar a data
                     int colonIndex = log.IndexOf(':');
                     if (colonIndex == -1)
                     {
-                        Console.WriteLine($"Formato de log inválido: {log}");
-                        continue; // Pula para a próxima linha do arquivo de log
-                    }
-
-                    // Extrai a data do log
-                    string dataString = log.Substring(0, 19);
-                    DateTime dataLog;
-                    if (!DateTime.TryParseExact(dataString, "dd/MM/yyyy HH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.None, out dataLog))
+                        MessageBox.Show($"Formato de log inválido: {log}", "Atualizado", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    } else
                     {
-                        Console.WriteLine($"Formato de data inválido: {dataString}");
-                        continue; // Pula para a próxima linha do arquivo de log
+                        string dataString = log.Substring(0, 19);
+                        DateTime dataLog;
+                        if (!DateTime.TryParseExact(dataString, "dd/MM/yyyy HH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.None, out dataLog))
+                        {
+                            MessageBox.Show($"Formato de data inválido: {dataString}", "Atualizado", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        }
+                        else
+                        {
+                            string logWithoutDate = log.Substring(colonIndex + 1);
+                            string[] fields = logWithoutDate.Split(',');
+                            string idForma = fields[1];
+                            string valor = fields[2];
+                            string idCliente = fields[3];
+                            string obs = "";
+                            string desc = "";
+                            string idVend = "";
+                            if (fields.Length >= 8)
+                            {
+                                // Registro diferente
+                                obs = fields[4].Trim();
+                                desc = fields[6];
+                                idVend = fields[7];
+                            }
+                            else
+                            {
+                                obs = fields[4].Trim();
+                                desc = fields[5];
+                                idVend = fields[6];
+                            }
+                            if (obs == "")
+                            {
+                                obs = " ";
+                            }
+                            decimal dDesc = Convert.ToDecimal(desc);
+                            decimal dvalor = Convert.ToDecimal(valor);
+                            decimal dvlNota = dvalor - dDesc;
+                            string vlNota = dvlNota.ToString();
+                            string sql = $@"INSERT INTO Caixa (idCliente, idForma, Valor, VlNota, Obs, Desconto, idVend, Data) VALUES (
+                                {idCliente}, {idForma}, {valor}, {vlNota}, '{obs}', {desc}, {idVend}, '{dataLog.ToString("yyyy-MM-dd HH:mm:ss")}');";
+                            glo.ExecutarComandoSQL(sql);
+                        }
                     }
-
-                    string logWithoutDate = log.Substring(colonIndex + 1);
-                    string[] fields = logWithoutDate.Split(',');
-                    string idForma = fields[1];
-                    string valor = fields[2];                    
-                    string idCliente = fields[3];
-                    string obs = "";
-                    string desc = "";
-                    string idVend = "";
-                    if (fields.Length >= 8)
-                    {
-                        // Registro diferente
-                        obs = fields[4].Trim();
-                        desc = fields[6];
-                        idVend = fields[7];
-                    }
-                    else
-                    {
-                        // Registro normal
-                        obs = fields[4].Trim();
-                        desc = fields[5];
-                        idVend = fields[6];
-                    }                    
-                    if (obs == "")
-                    {
-                        obs = " ";
-                    }
-                    decimal dDesc = Convert.ToDecimal(desc);
-                    decimal dvalor = Convert.ToDecimal(valor);
-                    decimal dvlNota = dvalor - dDesc;
-                    string vlNota = dvlNota.ToString();
-                    string sql = $@"INSERT INTO Caixa (idCliente, idForma, Valor, VlNota, Obs, Desconto, idVend, Data) VALUES (
-                {idCliente}, {idForma}, {valor}, {vlNota}, '{obs}', {desc}, {idVend}, '{dataLog.ToString("yyyy-MM-dd HH:mm:ss")}');";
-
-                    glo.ExecutarComandoSQL(sql);
-                }
-                MessageBox.Show("Atualizado", "Atualizado", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show("Atualizado", "Atualizado", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }                
             }
         }
+
     }    
 }

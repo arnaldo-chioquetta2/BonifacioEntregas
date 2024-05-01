@@ -29,6 +29,7 @@ namespace TeleBonifacio
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
@@ -51,6 +52,8 @@ namespace TeleBonifacio
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.pictureBox10 = new System.Windows.Forms.PictureBox();
             this.label10 = new System.Windows.Forms.Label();
+            this.timer1 = new System.Windows.Forms.Timer(this.components);
+            this.progressBar1 = new System.Windows.Forms.ProgressBar();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox9)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox8)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox7)).BeginInit();
@@ -148,7 +151,7 @@ namespace TeleBonifacio
             this.lbMens.Font = new System.Drawing.Font("Microsoft Sans Serif", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lbMens.Location = new System.Drawing.Point(8, 131);
             this.lbMens.Name = "lbMens";
-            this.lbMens.Size = new System.Drawing.Size(835, 43);
+            this.lbMens.Size = new System.Drawing.Size(1042, 43);
             this.lbMens.TabIndex = 16;
             this.lbMens.Text = "Procurando Atualização";
             this.lbMens.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -297,11 +300,24 @@ namespace TeleBonifacio
             this.label10.Text = "Caixa";
             this.label10.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
+            // timer1
+            // 
+            this.timer1.Interval = 4000;
+            this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
+            // 
+            // progressBar1
+            // 
+            this.progressBar1.Location = new System.Drawing.Point(4, 134);
+            this.progressBar1.Name = "progressBar1";
+            this.progressBar1.Size = new System.Drawing.Size(1020, 40);
+            this.progressBar1.TabIndex = 21;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1062, 135);
+            this.ClientSize = new System.Drawing.Size(1062, 133);
+            this.Controls.Add(this.progressBar1);
             this.Controls.Add(this.label10);
             this.Controls.Add(this.pictureBox10);
             this.Controls.Add(this.label9);
@@ -366,6 +382,8 @@ namespace TeleBonifacio
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.PictureBox pictureBox10;
         private System.Windows.Forms.Label label10;
+        private System.Windows.Forms.Timer timer1;
+        private System.Windows.Forms.ProgressBar progressBar1;
     }
 }
 

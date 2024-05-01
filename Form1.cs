@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.Globalization;
 using System.IO;
+using System.IO.Compression;
 using System.Linq;
 using System.Reflection;
 using System.Windows.Forms;
@@ -11,6 +14,8 @@ namespace TeleBonifacio
     {
 
         private bool ativou = false;
+        private INI cINI;
+        private bool DentroDoTimer = false;
 
         public Form1()
         {
@@ -123,17 +128,30 @@ namespace TeleBonifacio
                 {
                     titulo = $"Bonifácio TeleEntregas {version.Major}.{version.Minor}.{version.Build}";
                 }
-                VerificaNovaVersao(version);
+                cINI = new INI();
+                if (!VerificaNovaVersao(version))
+                {
+                    if (!Environment.CurrentDirectory.Contains("\\\\"))
+                    {
+                        if (cINI.ReadString("Backup", "Ativo", "") == "1")
+                        {
+                            string HoraBckup = cINI.ReadString("Backup", "Hora", "");
+                            timer1.Tag = HoraBckup;
+                            timer1.Enabled = true;
+                        }
+                    }
+                }
                 this.Text = titulo;
+
             }
         }
 
         #region Atualizacao 
-        private void VerificaNovaVersao(Version version)
+        private bool VerificaNovaVersao(Version version)
         {
+            bool ret = false;
             string pastaAtual = Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName);
-            Loga("Executado a partir de "+ pastaAtual);
-            INI cINI = new INI();
+            glo.Loga("Executado a partir de "+ pastaAtual);            
             int diaAtual = DateTime.Now.Day;
             int UltExec = cINI.ReadInt("INI", "UltExec", 0);
             cINI.WriteInt("INI", "UltExec", diaAtual);
@@ -141,7 +159,7 @@ namespace TeleBonifacio
             bool atualizar = (diaAtual != UltExec);
             // atualizar = true;
             
-            Loga("atualizar = "+atualizar.ToString());
+            glo.Loga("atualizar = "+atualizar.ToString());
             if (atualizar)
             {
                 string URL = cINI.ReadString("FTP", "URL", "");
@@ -159,16 +177,18 @@ namespace TeleBonifacio
                     string Tempo = stopwatch.ElapsedMilliseconds.ToString();
                     cINI.WriteString("FTP", "tempo", Tempo);
                     int versionInt = (version.Major * 100) + (version.Minor * 10) + version.Build;
-                    Loga("Versão Atual " + versionInt.ToString());
-                    Loga("Versão no FTP " + versaoFtp.ToString());
+                    glo.Loga("Versão Atual " + versionInt.ToString());
+                    glo.Loga("Versão no FTP " + versaoFtp.ToString());
+
                     // if (1==1)
                     if (versaoFtp > versionInt)
                     {
                         string versaoNovaStr = $"{versaoFtp / 100}.{(versaoFtp / 10) % 10}.{versaoFtp % 10}";
                         string NovaVersaoINI = cINI.ReadString("Config", "NovaVersao", "");
-                        Loga("Versão no INI " + NovaVersaoINI);
+                        glo.Loga("Versão no INI " + NovaVersaoINI);
                         if (versaoNovaStr != NovaVersaoINI)
                         {
+                            ret = true;
                             string versaoAtualStr = version.ToString().Substring(0, version.ToString().Length - 2);
                             string Mensagem = cFPT.retMensagem();
                             if (Mensagem.Length>0)
@@ -188,23 +208,20 @@ namespace TeleBonifacio
                                 MessageBoxDefaultButton.Button1);
                             if (dialogResult == DialogResult.Yes)
                             {
-                                Loga("Optado por atualizar");                                
+                                glo.Loga("Optado por atualizar");                                
                                 string EstouEm = Path.Combine(pastaAtual, "TeleBonifacio.exe");
                                 cINI.WriteString("Atualizador", "EstouEm", EstouEm);
-
-                                // pastaAtual
-
                                 string pastaAtualizador = Path.Combine(pastaAtual, "Atualizacao");
                                 string progAtualizador = Path.Combine(pastaAtualizador, "ATCAtualizeitor.exe");
-                                Loga("pasta Atual: "+ pastaAtual);
-                                Loga("pasta Atualizador: " + pastaAtualizador);
-                                Loga("Programa Atualizador : " + progAtualizador);
+                                glo.Loga("pasta Atual: "+ pastaAtual);
+                                glo.Loga("pasta Atualizador: " + pastaAtualizador);
+                                glo.Loga("Programa Atualizador : " + progAtualizador);
                                 Process.Start(progAtualizador);
                                 Environment.Exit(0);
                             }
                             else
                             {
-                                Loga("Optado por NÃO atualizar");
+                                glo.Loga("Optado por NÃO atualizar");
                                 this.Text = BakTitulo;
                                 cINI.WriteString("Config", "NovaVersao", versaoNovaStr);
                                 cINI.WriteString("Config", "VersaoAtual", versaoAtualStr);
@@ -219,26 +236,97 @@ namespace TeleBonifacio
                     }
                 }                
             }
-        }
-
-        private bool PathIsLocal(string path)
-        {
-            if (path.Length < 3)
-                return false;
-            return path[1] == ':' && path[2] == '\\';
-        }
-
-        private void Loga(string message)
-        {
-            string logFilePath = @"C:\Entregas\Entregas.txt";
-            using (StreamWriter writer = new StreamWriter(logFilePath, true))
-            {
-                writer.WriteLine($"{DateTime.Now}: {message}");
-            }
+            return ret;
         }
 
         #endregion
 
+        private void timer1_Tick(object sender, EventArgs e)
+        {            
+            if (!this.DentroDoTimer) {
+                lbMens.Text = "Fazendo Backup OnLine";
+                this.DentroDoTimer = true;
+                timer1.Interval = 60000;
+                string HoraBckup = timer1.Tag.ToString() + ":00";
+                DateTime horaBackup = DateTime.ParseExact(HoraBckup, "HH:mm", CultureInfo.InvariantCulture);
+                DateTime horaAtual = DateTime.Now;
+
+                bool Fazer = horaAtual.Hour > horaBackup.Hour || (horaAtual.Hour == horaBackup.Hour && horaAtual.Minute <= horaBackup.Minute + 1);
+                // bool Fazer = true;
+
+                if (Fazer)
+                {
+                    string caminhoArquivoZip = "";
+                    string pastaOper = cINI.ReadString("Backup", "pastaOper", "");
+                    if (Directory.Exists(pastaOper))
+                    {
+                        DirectoryInfo di = new DirectoryInfo(pastaOper);
+                        foreach (FileInfo file in di.GetFiles())
+                        {
+                            file.Delete();
+                        }
+                    }
+                    else
+                    {
+                        Directory.CreateDirectory(pastaOper);
+                    }
+                    List<string> arquivosParaZipar = new List<string>();
+                    int contador = 1;
+                    while (true)
+                    {
+                        string nomeArquivo = cINI.ReadString("Backup", "Arq" + contador.ToString(), "");
+                        if (string.IsNullOrEmpty(nomeArquivo))
+                        {
+                            break;
+                        }
+                        string caminhoArquivoOrigem = Path.Combine(Application.StartupPath, nomeArquivo);
+                        string caminhoArquivoDestino = Path.Combine(pastaOper, Path.GetFileName(nomeArquivo));
+                        File.Copy(caminhoArquivoOrigem, caminhoArquivoDestino, true);
+                        contador++;
+                        arquivosParaZipar.Add(caminhoArquivoDestino);
+                    }
+                    string PriParteNome = "Backup" + ((int)DateTime.Now.DayOfWeek).ToString();
+                    string NomeArq = $"{PriParteNome}.zip";
+                    caminhoArquivoZip = Path.Combine(pastaOper, NomeArq);
+                    contador = 0;
+                    while (true)
+                    {
+                        try
+                        {
+                            using (ZipArchive zip = ZipFile.Open(caminhoArquivoZip, ZipArchiveMode.Create))
+                            {
+                                foreach (string caminhoArquivoOrigem in arquivosParaZipar)
+                                {
+                                    zip.CreateEntryFromFile(caminhoArquivoOrigem, Path.GetFileName(caminhoArquivoOrigem));
+                                }
+                            }
+                            break;
+                        }
+                        catch (IOException ex)
+                        {
+                            contador++;
+                            NomeArq = $"{PriParteNome}{contador}";
+                            caminhoArquivoZip = Path.Combine(pastaOper, $"{NomeArq}.zip");
+                        }
+                    }
+                    string URL = cINI.ReadString("FTP", "URL", "");
+                    string user = gen.Cripto.Decrypt(cINI.ReadString("FTP", "user", ""));
+                    string senha = gen.Cripto.Decrypt(cINI.ReadString("FTP", "pass", ""));
+                    FTP cFPT = new FTP(URL, user, senha);                    
+                    string PastaBaseFTP = cINI.ReadString("Backup", "PastaBaseFTP", "");
+                    int pos = caminhoArquivoZip.IndexOf(pastaOper.Replace("/", "\\"));
+                    string CamfTP = caminhoArquivoZip.Substring(pos);                    
+                    if (CamfTP.EndsWith(NomeArq))
+                    {
+                        CamfTP = CamfTP.Remove(CamfTP.Length - NomeArq.Length);
+                    }
+                    cFPT.setBarra(ref progressBar1);
+                    cFPT.Upload(caminhoArquivoZip, PastaBaseFTP);
+                    MessageBox.Show("Backup Realizado", "Backup Realizado", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    this.DentroDoTimer = false;
+                }
+            }
+        }
     }
 
 }

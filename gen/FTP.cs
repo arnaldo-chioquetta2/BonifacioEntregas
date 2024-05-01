@@ -51,7 +51,7 @@ namespace TeleBonifacio
             this.Tot = 0;
             string Cam = Caminho.Replace(@"\", @"/");
             FileInfo _arquivoInfo = new FileInfo(_nomeArquivo);
-            string Suri = "ftp://" + this.ftpIPServidor + @"/" + Cam + _arquivoInfo.Name;
+            string Suri = "ftp://" + this.ftpIPServidor + @"/" + Cam + @"/" + _arquivoInfo.Name;
             FtpWebRequest requisicaoFTP;
             requisicaoFTP = (FtpWebRequest)FtpWebRequest.Create(new Uri(Suri));
             requisicaoFTP.Credentials = new NetworkCredential(this.ftpUsuarioID, this.ftpSenha);

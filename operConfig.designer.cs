@@ -42,6 +42,7 @@ namespace TeleBonifacio
             this.txFone = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
             this.btAtu = new System.Windows.Forms.Button();
+            this.ckBackup = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // lblNome
@@ -158,11 +159,22 @@ namespace TeleBonifacio
             this.btAtu.UseVisualStyleBackColor = true;
             this.btAtu.Click += new System.EventHandler(this.btAtu_Click);
             // 
+            // ckBackup
+            // 
+            this.ckBackup.AutoSize = true;
+            this.ckBackup.Location = new System.Drawing.Point(12, 136);
+            this.ckBackup.Name = "ckBackup";
+            this.ckBackup.Size = new System.Drawing.Size(119, 17);
+            this.ckBackup.TabIndex = 17;
+            this.ckBackup.Text = "Backup Automático";
+            this.ckBackup.UseVisualStyleBackColor = true;
+            // 
             // oprConfig
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(534, 169);
+            this.Controls.Add(this.ckBackup);
             this.Controls.Add(this.btAtu);
             this.Controls.Add(this.txFone);
             this.Controls.Add(this.label3);
@@ -200,5 +212,6 @@ namespace TeleBonifacio
         private System.Windows.Forms.TextBox txFone;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Button btAtu;
+        private System.Windows.Forms.CheckBox ckBackup;
     }
 }
