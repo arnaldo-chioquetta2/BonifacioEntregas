@@ -302,7 +302,7 @@ namespace TeleBonifacio
             // 
             // timer1
             // 
-            this.timer1.Interval = 4000;
+            this.timer1.Interval = 60000;
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
             // 
             // progressBar1
@@ -316,7 +316,7 @@ namespace TeleBonifacio
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1062, 133);
+            this.ClientSize = new System.Drawing.Size(1062, 132);
             this.Controls.Add(this.progressBar1);
             this.Controls.Add(this.label10);
             this.Controls.Add(this.pictureBox10);

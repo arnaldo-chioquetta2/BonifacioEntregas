@@ -39,9 +39,10 @@ namespace TeleBonifacio.rel
                             SUM(Valor) AS Entregas,
                             COUNT(*) AS Qtd
                         FROM Entregas
-                        Where Data Between #{ dataInicio:dd/MM/yyyy 00:00}# and #{ dataFim:dd/MM/yyyy 23:59}#
+                        Where Data Between #{ dataInicio:MM/dd/yyyy 00:00}# and #{ dataFim:MM/dd/yyyy 23:59}#
                         GROUP BY DateValue(Data)";
             List<Lanctos> lancamentos = new List<Lanctos>();
+            // Where Data Between #{ dataInicio:dd/MM/yyyy 00:00}# and #{ dataFim:dd/MM/yyyy 23:59}#
             using (OleDbConnection connection = new OleDbConnection(glo.connectionString))
             {
                 try

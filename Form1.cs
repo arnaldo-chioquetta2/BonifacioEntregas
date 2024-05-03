@@ -242,11 +242,15 @@ namespace TeleBonifacio
         #endregion
 
         private void timer1_Tick(object sender, EventArgs e)
-        {            
-            if (!this.DentroDoTimer) {
-                lbMens.Text = "Fazendo Backup OnLine";
+        {
+            if (!this.DentroDoTimer)
+            {
                 this.DentroDoTimer = true;
-                timer1.Interval = 60000;
+                lbMens.Text = "Fazendo Backup OnLine";
+                string Caption = this.Text;
+                this.Text = "Fazendo Backup OnLine";
+                this.Height = 171;
+                // timer1.Interval = 60000;
                 string HoraBckup = timer1.Tag.ToString() + ":00";
                 DateTime horaBackup = DateTime.ParseExact(HoraBckup, "HH:mm", CultureInfo.InvariantCulture);
                 DateTime horaAtual = DateTime.Now;
@@ -272,6 +276,7 @@ namespace TeleBonifacio
                     }
                     List<string> arquivosParaZipar = new List<string>();
                     int contador = 1;
+                    this.Text = "Copiando arquivos";
                     while (true)
                     {
                         string nomeArquivo = cINI.ReadString("Backup", "Arq" + contador.ToString(), "");
@@ -289,6 +294,7 @@ namespace TeleBonifacio
                     string NomeArq = $"{PriParteNome}.zip";
                     caminhoArquivoZip = Path.Combine(pastaOper, NomeArq);
                     contador = 0;
+                    this.Text = "Compactando";
                     while (true)
                     {
                         try
@@ -312,21 +318,24 @@ namespace TeleBonifacio
                     string URL = cINI.ReadString("FTP", "URL", "");
                     string user = gen.Cripto.Decrypt(cINI.ReadString("FTP", "user", ""));
                     string senha = gen.Cripto.Decrypt(cINI.ReadString("FTP", "pass", ""));
-                    FTP cFPT = new FTP(URL, user, senha);                    
+                    this.Text = "Enviando ao servidor";
+                    FTP cFPT = new FTP(URL, user, senha);
                     string PastaBaseFTP = cINI.ReadString("Backup", "PastaBaseFTP", "");
                     int pos = caminhoArquivoZip.IndexOf(pastaOper.Replace("/", "\\"));
-                    string CamfTP = caminhoArquivoZip.Substring(pos);                    
+                    string CamfTP = caminhoArquivoZip.Substring(pos);
                     if (CamfTP.EndsWith(NomeArq))
                     {
                         CamfTP = CamfTP.Remove(CamfTP.Length - NomeArq.Length);
                     }
                     cFPT.setBarra(ref progressBar1);
                     cFPT.Upload(caminhoArquivoZip, PastaBaseFTP);
-                    MessageBox.Show("Backup Realizado", "Backup Realizado", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    this.Text = Caption;
+                    this.Height = 171;
                     this.DentroDoTimer = false;
                 }
             }
         }
+
     }
 
 }
