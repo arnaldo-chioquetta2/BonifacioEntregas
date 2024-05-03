@@ -68,7 +68,7 @@ namespace TeleBonifacio
             lbTotal.Text = "";
         }
 
-        private void CarregarComboBox<T>(ComboBox comboBox, BaseDAO classe, string ItemZero="") where T : IDataEntity, new()
+        private void CarregarComboBox<T>(ComboBox comboBox, BaseDAO classe, string ItemZero="Escolha") where T : IDataEntity, new()
         {
             DataTable dados = classe.GetDadosOrdenados();
             List<ComboBoxItem> lista = new List<ComboBoxItem>();

@@ -111,6 +111,11 @@ namespace TeleBonifacio
             AbrirOuFocarFormulario<operCaixa>();
         }
 
+        private void pictureBox11_Click(object sender, EventArgs e)
+        {
+            AbrirOuFocarFormulario<OperRH>();
+        }
+
         #endregion
 
         private void Form1_Shown(object sender, EventArgs e)

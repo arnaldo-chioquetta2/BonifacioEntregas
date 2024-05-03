@@ -222,6 +222,8 @@ namespace TeleBonifacio
             }
         }
 
+
+
         #region DB
 
         public static void ExecutarComandoSQL(string query, List<OleDbParameter> parameters=null)
