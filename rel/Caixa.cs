@@ -46,7 +46,7 @@ namespace TeleBonifacio.rel
             string SQL = $@"SELECT C.ID, C.Data, C.Valor, C.Desconto, 
                             C.idForma AS FormaPagto, Obs 
                             FROM Caixa C
-                            Where Data Between #{ dataInicio:dd/MM/yyyy HH:ss}# and #{ dataFim:dd/MM/yyyy HH:ss}# {sFiltro} ";
+                            Where Data Between #{ dataInicio:MM/dd/yyyy HH:ss}# and #{ dataFim:MM/dd/yyyy HH:ss}# {sFiltro} ";
             List<Lanctos> lancamentos = new List<Lanctos>();
             using (OleDbConnection connection = new OleDbConnection(glo.connectionString))
             {
@@ -148,7 +148,6 @@ namespace TeleBonifacio.rel
             sb.AppendLine($"Período: {dtpDataIN.Value.ToString("dd/MM/yyyy")} a {dtpDataIN.Value.ToString("dd/MM/yyyy")}");
             sb.AppendLine();
             sb.AppendLine("ID       Data     |  Entrada | Desconto |  Saídas |  FormaPagto |  Saldo  | Observação");
-            // sb.AppendLine("ID       Data     |  Entrada | Desconto |  Saídas |  FormaPagto |  Saldo ");
             decimal TDinheiro = 0;
             decimal TCartao = 0;
             decimal TPix = 0;

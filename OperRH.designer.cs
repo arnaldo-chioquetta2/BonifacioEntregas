@@ -31,6 +31,7 @@ namespace TeleBonifacio
         {
             this.lblTitulo = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.dtpHorario = new System.Windows.Forms.DateTimePicker();
             this.btGravar = new System.Windows.Forms.Button();
             this.txFnTrd = new System.Windows.Forms.TextBox();
             this.txInTrd = new System.Windows.Forms.TextBox();
@@ -60,6 +61,7 @@ namespace TeleBonifacio
             // 
             // panel1
             // 
+            this.panel1.Controls.Add(this.dtpHorario);
             this.panel1.Controls.Add(this.btGravar);
             this.panel1.Controls.Add(this.txFnTrd);
             this.panel1.Controls.Add(this.txInTrd);
@@ -77,8 +79,18 @@ namespace TeleBonifacio
             this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(851, 72);
+            this.panel1.Size = new System.Drawing.Size(851, 77);
             this.panel1.TabIndex = 10;
+            // 
+            // dtpHorario
+            // 
+            this.dtpHorario.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
+            this.dtpHorario.Format = System.Windows.Forms.DateTimePickerFormat.Short;
+            this.dtpHorario.Location = new System.Drawing.Point(442, 41);
+            this.dtpHorario.Name = "dtpHorario";
+            this.dtpHorario.Size = new System.Drawing.Size(90, 23);
+            this.dtpHorario.TabIndex = 55;
+            this.dtpHorario.Tag = "H";
             // 
             // btGravar
             // 
@@ -128,7 +140,7 @@ namespace TeleBonifacio
             this.lbColaborador.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.lbColaborador.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F);
             this.lbColaborador.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.lbColaborador.Location = new System.Drawing.Point(338, 46);
+            this.lbColaborador.Location = new System.Drawing.Point(240, 47);
             this.lbColaborador.Name = "lbColaborador";
             this.lbColaborador.Size = new System.Drawing.Size(196, 19);
             this.lbColaborador.TabIndex = 49;
@@ -223,10 +235,10 @@ namespace TeleBonifacio
             this.dataGrid1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataGrid1.EnableSort = false;
             this.dataGrid1.FixedRows = 1;
-            this.dataGrid1.Location = new System.Drawing.Point(0, 72);
+            this.dataGrid1.Location = new System.Drawing.Point(0, 77);
             this.dataGrid1.Name = "dataGrid1";
             this.dataGrid1.SelectionMode = SourceGrid.GridSelectionMode.Row;
-            this.dataGrid1.Size = new System.Drawing.Size(851, 378);
+            this.dataGrid1.Size = new System.Drawing.Size(851, 373);
             this.dataGrid1.TabIndex = 13;
             this.dataGrid1.TabStop = true;
             this.dataGrid1.ToolTipText = "";
@@ -259,13 +271,14 @@ namespace TeleBonifacio
         private System.Windows.Forms.Button btImprimir;
         private System.Windows.Forms.Button btnFiltrar;
         private System.Windows.Forms.Button btLancar;
-        private SourceGrid.DataGrid dataGrid1;
         private System.Windows.Forms.Label lbColaborador;
         private System.Windows.Forms.Button btGravar;
         private System.Windows.Forms.TextBox txFnTrd;
         private System.Windows.Forms.TextBox txInTrd;
         private System.Windows.Forms.TextBox txFmMan;
         private System.Windows.Forms.TextBox txInMan;
+        private System.Windows.Forms.DateTimePicker dtpHorario;
+        private SourceGrid.DataGrid dataGrid1;
     }
 }
 
