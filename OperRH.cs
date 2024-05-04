@@ -18,6 +18,10 @@ namespace TeleBonifacio
         private bool ativou = false;
 
         private RHDAO cRHDAO;
+        private int iID = 0;
+        private string UID = "";
+        private bool carregando = true;
+        private int idFunc = 0;
 
         public OperRH()
         {
@@ -34,113 +38,7 @@ namespace TeleBonifacio
             this.Height = Screen.PrimaryScreen.WorkingArea.Height;
         }
 
-        private List<Lanctos> CarregaCaixa()
-        {
-            DateTime? dataInicio = dtpDataIN.Value;
-            DateTime dataFim = dtnDtFim.Value;
-            int SelTipo = cmbVendedor.SelectedIndex;
-            string sFiltro = "";
-            if (SelTipo > 0)
-            {
-                sFiltro = " and C.idForma = " + retIdForma(cmbVendedor.Text);
-            }
-            string SQL = $@"SELECT C.ID, C.Data, C.Valor, C.Desconto, 
-                            C.idForma AS FormaPagto, Obs 
-                            FROM Caixa C
-                            Where Data Between #{ dataInicio:dd/MM/yyyy HH:ss}# and #{ dataFim:dd/MM/yyyy HH:ss}# {sFiltro} ";
-            List<Lanctos> lancamentos = new List<Lanctos>();
-            using (OleDbConnection connection = new OleDbConnection(glo.connectionString))
-            {
-                try
-                {
-                    connection.Open();
-                    using (OleDbCommand command = new OleDbCommand(SQL, connection))
-                    {
-                        using (OleDbDataReader reader = command.ExecuteReader())
-                        {
-                            while (reader.Read())
-                            {
-                                Lanctos lancamento = new Lanctos();
-                                lancamento.ID = (int)reader["ID"];
-                                lancamento.DataPagamento = (DateTime)reader["Data"];
-                                lancamento.Desconto = (decimal)reader["Desconto"];
-                                lancamento.idFormaPagto = (int)reader["FormaPagto"];
-                                if (lancamento.idFormaPagto == 5)
-                                {
-                                    lancamento.Entrada = 0;
-                                    lancamento.Saida = (decimal)reader["Valor"];
-                                }
-                                else
-                                {
-                                    lancamento.Entrada = (decimal)reader["Valor"];
-                                    lancamento.Saida = 0;
-                                }
-                                lancamento.Forma = retFormaId(lancamento.idFormaPagto);
-                                lancamento.Saldo = lancamento.Entrada - lancamento.Desconto - lancamento.Saida;
-                                lancamento.Obs = (string)reader["Obs"];
-                                lancamentos.Add(lancamento);
-                            }
-                        }
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine(ex.ToString());
-                    return null;
-                }
-            }
-            return lancamentos;
-        }
-
-        private int retIdForma(string Forma)
-        {
-            int ret = 5;
-            switch (Forma)
-            {
-                case "Dinheiro":
-                    ret = 0;
-                    break;
-                case "Cartão":
-                    ret = 1;
-                    break;
-                case "Anotado":
-                    ret = 2;
-                    break;
-                case "Pix":
-                    ret = 3;
-                    break;
-                case "Despesa":
-                    ret = 5;
-                    break;
-            }
-            return ret;
-        }
-
-        private string retFormaId(int idForma)
-        {
-            string ret = "";
-            switch (idForma)
-            {
-                case 0:
-                    ret = "Dinheiro";
-                    break;
-                case 1:
-                    ret = "Cartão";
-                    break;
-                case 2:
-                    ret = "Anotado";
-                    break;
-                case 3:
-                    ret = "Pix";
-                    break;
-                case 5:
-                    ret = "Despesa";
-                    break;
-            }
-            return ret;
-        }
-
-        private void Extrato_Activated(object sender, EventArgs e)
+       private void Extrato_Activated(object sender, EventArgs e)
         {
             if (!ativou)
             {
@@ -150,31 +48,75 @@ namespace TeleBonifacio
                 dtnDtFim.Value = DateTime.Today;
                 dtpDataIN.Value = new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1);
                 cRHDAO = new RHDAO();
-                Mostra();
-                
+                Mostra();                
                 PreparaGrid();
             }
         }
 
         private void PreparaGrid()
         {
-            dataGrid1.Columns[0].Width = 0;
-            dataGrid1.Columns[1].Width = 75;
-            dataGrid1.Columns[2].Width = 110;
-            dataGrid1.Columns[3].Width = 70; 
+            dataGrid1.Columns[0].Visible = false;
+            dataGrid1.Columns[1].Visible = false;
+            dataGrid1.Columns[2].Width = 75;
+            dataGrid1.Columns[3].Width = 110;
             dataGrid1.Columns[4].Width = 70; 
-            dataGrid1.Columns[5].Width = 70;
+            dataGrid1.Columns[5].Width = 70; 
             dataGrid1.Columns[6].Width = 70;
+            dataGrid1.Columns[7].Width = 70;
+            dataGrid1.Columns[8].Width = 70;
+            dataGrid1.Columns[9].Visible = false;
             dataGrid1.Invalidate();
         }
 
         private void Mostra()
         {
+            this.carregando = true;
             DateTime DT1 = dtpDataIN.Value.Date;
             DateTime DT2 = dtnDtFim.Value.Date;
-            DataTable dados = cRHDAO.getDados(DT1, DT2);
-            DevAge.ComponentModel.BoundDataView boundDataView = new DevAge.ComponentModel.BoundDataView(dados.DefaultView);
-            dataGrid1.DataSource = boundDataView;
+            int idFunc = Convert.ToInt32(cmbVendedor.SelectedValue.ToString());
+            DataTable dados = cRHDAO.getDados(DT1, DT2, idFunc);
+            dataGrid1.Rows.Clear();
+            if (dataGrid1.Columns.Count == 0 && dados.Columns.Count > 0)
+            {
+                foreach (DataColumn column in dados.Columns)
+                {
+                    dataGrid1.Columns.Add(column.ColumnName, column.ColumnName);
+                }
+            }
+            dataGrid1.Columns.Add("Total", "Total");
+            foreach (DataRow row in dados.Rows)
+            {
+                string[] rowData = new string[dados.Columns.Count+1];
+                for (int i = 0; i < dados.Columns.Count; i++)
+                {
+                    rowData[i] = row[i].ToString();
+                }
+                DateTime? inMan = ParseTime(row["InMan"].ToString());
+                DateTime? fmMan = ParseTime(row["FmMan"].ToString());
+                DateTime? inTrd = ParseTime(row["InTrd"].ToString());
+                DateTime? fnTrd = ParseTime(row["FnTrd"].ToString());
+                TimeSpan total = TimeSpan.Zero;
+                if (inMan != null && fmMan != null)
+                {
+                    total += fmMan.Value - inMan.Value;
+                }
+                if (inTrd != null && fnTrd != null)
+                {
+                    total += fnTrd.Value - inTrd.Value;
+                }
+                rowData[9] = total.ToString(@"hh\:mm");
+                dataGrid1.Rows.Add(rowData);
+            }
+            this.carregando = false;
+        }
+
+        private DateTime? ParseTime(string timeString)
+        {
+            if (DateTime.TryParseExact(timeString, "HH:mm", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime time))
+            {
+                return time;
+            }
+            return null;
         }
 
         private void btnFiltrar_Click(object sender, EventArgs e)
@@ -244,10 +186,19 @@ namespace TeleBonifacio
         #endregion
 
         private void btLancar_Click(object sender, EventArgs e)
-        {            
+        {
+            LancaRegistro();
+        }
+
+        private void LancaRegistro()
+        {
             panel1.Height = 91;
             lbColaborador.Text = cmbVendedor.Text;
             btGravar.Enabled = false;
+            txInMan.Text = "";
+            txFmMan.Text = "";
+            txInTrd.Text = "";
+            txFnTrd.Text = "";
             txInMan.Focus();
         }
 
@@ -257,8 +208,7 @@ namespace TeleBonifacio
         }
 
         private void button1_Click(object sender, EventArgs e)
-        {
-            int idFunc = Convert.ToInt32(cmbVendedor.SelectedValue.ToString());
+        {            
             DateTime dInMan, dFmMan, dInTrd, dFnTrd;
             string sInMan = txInMan.Text.Replace(";", ":");
             string sFmMan = txFmMan.Text.Replace(";", ":");
@@ -274,17 +224,31 @@ namespace TeleBonifacio
             DateTime.TryParseExact(sInTrd, "HH:mm", CultureInfo.InvariantCulture, DateTimeStyles.None, out dInTrd);
             DateTime.TryParseExact(sFnTrd, "HH:mm", CultureInfo.InvariantCulture, DateTimeStyles.None, out dFnTrd);
             DateTime dtHorario = dtpHorario.Value.Date;
-            cRHDAO.AddHorario(idFunc, dInMan, dFmMan, dInTrd, dFnTrd, UID, dtHorario);
-            txInMan.Text = "";
-            txFmMan.Text = "";
-            txInTrd.Text = "";
-            txFnTrd.Text = "";
-            if (dtpHorario.Value>DateTime.Now.AddDays(-1))
+            if (this.iID==0)
             {
-                dtpHorario.Value = dtHorario.AddDays(1);
+                int idFuncio = Convert.ToInt32(cmbVendedor.SelectedValue.ToString());
+                glo.Loga($@"HA,{idFuncio}, {dInMan}, {dFmMan}, {dInTrd}, {dFnTrd}, {UID}, {dtHorario}");
+                cRHDAO.AddHorario(idFuncio, dInMan, dFmMan, dInTrd, dFnTrd, UID, dtHorario);
+                txInMan.Text = "";
+                txFmMan.Text = "";
+                txInTrd.Text = "";
+                txFnTrd.Text = "";
+                if (dtpHorario.Value < DateTime.Now.AddDays(-1))
+                {
+                    dtpHorario.Value = dtHorario.AddDays(1);
+                }
+                if (dtpDataIN.Value> dtpHorario.Value)
+                {
+                    dtpDataIN.Value = dtpHorario.Value;
+                }
+                txInMan.Focus();
+            } else
+            {
+                glo.Loga($@"HE,{this.iID}, {this.idFunc}, {dInMan}, {dFmMan}, {dInTrd}, {dFnTrd}, {UID}, {dtHorario}");
+                cRHDAO.EdHorario(this.iID, this.idFunc, dInMan, dFmMan, dInTrd, dFnTrd, dtHorario);
+                DesfazEdicao();
             }
-            Mostra();
-            txInMan.Focus();
+            Mostra();            
         }
 
         private void txInMan_KeyUp(object sender, KeyEventArgs e)
@@ -346,6 +310,50 @@ namespace TeleBonifacio
                 }
             }
             btGravar.Enabled = isValid;
+        }
+
+        private void btExcluir_Click(object sender, EventArgs e)
+        {
+            DialogResult result = MessageBox.Show("Tem certeza que deseja excluir este registro?",
+                                                  "Confirmar Deleção",
+                                                  MessageBoxButtons.YesNo,
+                                                  MessageBoxIcon.Question);
+            if (result == DialogResult.Yes)
+            {
+                glo.Loga($@"HD,{this.iID}, {this.UID}");
+                cRHDAO.Exclui(this.iID);
+                Mostra();
+                DesfazEdicao();
+            }
+        }
+
+        private void DesfazEdicao()
+        {
+            btExcluir.Visible = false;
+            panel1.Height = 43;
+            this.iID = 0;
+        }
+
+        private void dataGrid1_SelectionChanged(object sender, EventArgs e)
+        {
+            if (this.carregando==false)
+            {
+                if (dataGrid1.SelectedRows.Count > 0)
+                {
+                    LancaRegistro();
+                    btExcluir.Visible = true;
+                    DataGridViewRow selectedRow = dataGrid1.SelectedRows[0];
+                    this.iID = Convert.ToInt16(selectedRow.Cells["ID"].Value.ToString());
+                    this.UID = selectedRow.Cells["UID"].Value.ToString();
+                    this.idFunc = Convert.ToInt16(selectedRow.Cells["FuncID"].Value.ToString());
+                    dtpHorario.Value = Convert.ToDateTime(selectedRow.Cells["Data"].Value);
+                    txInMan.Text = selectedRow.Cells["InMan"].Value.ToString();
+                    txFmMan.Text = selectedRow.Cells["FmMan"].Value.ToString();
+                    txInTrd.Text = selectedRow.Cells["InTrd"].Value.ToString();
+                    txFnTrd.Text = selectedRow.Cells["FnTrd"].Value.ToString();
+                }
+
+            }
         }
     }
 

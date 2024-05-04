@@ -31,6 +31,7 @@ namespace TeleBonifacio
         {
             this.lblTitulo = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.btExcluir = new System.Windows.Forms.Button();
             this.dtpHorario = new System.Windows.Forms.DateTimePicker();
             this.btGravar = new System.Windows.Forms.Button();
             this.txFnTrd = new System.Windows.Forms.TextBox();
@@ -45,8 +46,9 @@ namespace TeleBonifacio
             this.label5 = new System.Windows.Forms.Label();
             this.dtnDtFim = new System.Windows.Forms.DateTimePicker();
             this.dtpDataIN = new System.Windows.Forms.DateTimePicker();
-            this.dataGrid1 = new SourceGrid.DataGrid();
+            this.dataGrid1 = new System.Windows.Forms.DataGridView();
             this.panel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGrid1)).BeginInit();
             this.SuspendLayout();
             // 
             // lblTitulo
@@ -61,6 +63,7 @@ namespace TeleBonifacio
             // 
             // panel1
             // 
+            this.panel1.Controls.Add(this.btExcluir);
             this.panel1.Controls.Add(this.dtpHorario);
             this.panel1.Controls.Add(this.btGravar);
             this.panel1.Controls.Add(this.txFnTrd);
@@ -82,11 +85,24 @@ namespace TeleBonifacio
             this.panel1.Size = new System.Drawing.Size(851, 77);
             this.panel1.TabIndex = 10;
             // 
+            // btExcluir
+            // 
+            this.btExcluir.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.btExcluir.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(128)))));
+            this.btExcluir.Location = new System.Drawing.Point(274, 42);
+            this.btExcluir.Name = "btExcluir";
+            this.btExcluir.Size = new System.Drawing.Size(75, 23);
+            this.btExcluir.TabIndex = 56;
+            this.btExcluir.Text = "Excluir";
+            this.btExcluir.UseVisualStyleBackColor = false;
+            this.btExcluir.Visible = false;
+            this.btExcluir.Click += new System.EventHandler(this.btExcluir_Click);
+            // 
             // dtpHorario
             // 
             this.dtpHorario.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
             this.dtpHorario.Format = System.Windows.Forms.DateTimePickerFormat.Short;
-            this.dtpHorario.Location = new System.Drawing.Point(442, 41);
+            this.dtpHorario.Location = new System.Drawing.Point(442, 45);
             this.dtpHorario.Name = "dtpHorario";
             this.dtpHorario.Size = new System.Drawing.Size(90, 23);
             this.dtpHorario.TabIndex = 55;
@@ -231,17 +247,16 @@ namespace TeleBonifacio
             // 
             // dataGrid1
             // 
-            this.dataGrid1.DeleteQuestionMessage = "Are you sure to delete all the selected rows?";
+            this.dataGrid1.AllowUserToAddRows = false;
             this.dataGrid1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dataGrid1.EnableSort = false;
-            this.dataGrid1.FixedRows = 1;
             this.dataGrid1.Location = new System.Drawing.Point(0, 77);
+            this.dataGrid1.MultiSelect = false;
             this.dataGrid1.Name = "dataGrid1";
-            this.dataGrid1.SelectionMode = SourceGrid.GridSelectionMode.Row;
+            this.dataGrid1.ReadOnly = true;
+            this.dataGrid1.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dataGrid1.Size = new System.Drawing.Size(851, 373);
-            this.dataGrid1.TabIndex = 13;
-            this.dataGrid1.TabStop = true;
-            this.dataGrid1.ToolTipText = "";
+            this.dataGrid1.TabIndex = 11;
+            this.dataGrid1.SelectionChanged += new System.EventHandler(this.dataGrid1_SelectionChanged);
             // 
             // OperRH
             // 
@@ -256,6 +271,7 @@ namespace TeleBonifacio
             this.Activated += new System.EventHandler(this.Extrato_Activated);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGrid1)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -278,7 +294,8 @@ namespace TeleBonifacio
         private System.Windows.Forms.TextBox txFmMan;
         private System.Windows.Forms.TextBox txInMan;
         private System.Windows.Forms.DateTimePicker dtpHorario;
-        private SourceGrid.DataGrid dataGrid1;
+        private System.Windows.Forms.DataGridView dataGrid1;
+        private System.Windows.Forms.Button btExcluir;
     }
 }
 
