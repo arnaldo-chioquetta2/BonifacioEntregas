@@ -23,6 +23,8 @@ namespace TeleBonifacio
         private bool carregando = true;
         private int idFunc = 0;
 
+        #region Inicialização
+
         public OperRH()
         {
             InitializeComponent();
@@ -38,7 +40,7 @@ namespace TeleBonifacio
             this.Height = Screen.PrimaryScreen.WorkingArea.Height;
         }
 
-       private void Extrato_Activated(object sender, EventArgs e)
+        private void Extrato_Activated(object sender, EventArgs e)
         {
             if (!ativou)
             {
@@ -48,7 +50,7 @@ namespace TeleBonifacio
                 dtnDtFim.Value = DateTime.Today;
                 dtpDataIN.Value = new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1);
                 cRHDAO = new RHDAO();
-                Mostra();                
+                Mostra();
                 PreparaGrid();
             }
         }
@@ -59,90 +61,13 @@ namespace TeleBonifacio
             dataGrid1.Columns[1].Visible = false;
             dataGrid1.Columns[2].Width = 75;
             dataGrid1.Columns[3].Width = 110;
-            dataGrid1.Columns[4].Width = 70; 
-            dataGrid1.Columns[5].Width = 70; 
+            dataGrid1.Columns[4].Width = 70;
+            dataGrid1.Columns[5].Width = 70;
             dataGrid1.Columns[6].Width = 70;
             dataGrid1.Columns[7].Width = 70;
-            dataGrid1.Columns[8].Width = 70;
-            dataGrid1.Columns[9].Visible = false;
+            dataGrid1.Columns[8].Visible = false; 
+            dataGrid1.Columns[9].Width = 70;
             dataGrid1.Invalidate();
-        }
-
-        private void Mostra()
-        {
-            this.carregando = true;
-            DateTime DT1 = dtpDataIN.Value.Date;
-            DateTime DT2 = dtnDtFim.Value.Date;
-            int idFunc = Convert.ToInt32(cmbVendedor.SelectedValue.ToString());
-            DataTable dados = cRHDAO.getDados(DT1, DT2, idFunc);
-            dataGrid1.Rows.Clear();
-            if (dataGrid1.Columns.Count == 0 && dados.Columns.Count > 0)
-            {
-                foreach (DataColumn column in dados.Columns)
-                {
-                    dataGrid1.Columns.Add(column.ColumnName, column.ColumnName);
-                }
-            }
-            dataGrid1.Columns.Add("Total", "Total");
-            foreach (DataRow row in dados.Rows)
-            {
-                string[] rowData = new string[dados.Columns.Count+1];
-                for (int i = 0; i < dados.Columns.Count; i++)
-                {
-                    rowData[i] = row[i].ToString();
-                }
-                DateTime? inMan = ParseTime(row["InMan"].ToString());
-                DateTime? fmMan = ParseTime(row["FmMan"].ToString());
-                DateTime? inTrd = ParseTime(row["InTrd"].ToString());
-                DateTime? fnTrd = ParseTime(row["FnTrd"].ToString());
-                TimeSpan total = TimeSpan.Zero;
-                if (inMan != null && fmMan != null)
-                {
-                    total += fmMan.Value - inMan.Value;
-                }
-                if (inTrd != null && fnTrd != null)
-                {
-                    total += fnTrd.Value - inTrd.Value;
-                }
-                rowData[9] = total.ToString(@"hh\:mm");
-                dataGrid1.Rows.Add(rowData);
-            }
-            this.carregando = false;
-        }
-
-        private DateTime? ParseTime(string timeString)
-        {
-            if (DateTime.TryParseExact(timeString, "HH:mm", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime time))
-            {
-                return time;
-            }
-            return null;
-        }
-
-        private void btnFiltrar_Click(object sender, EventArgs e)
-        {
-            Mostra();
-        }
-
-        private void btImprimir_Click(object sender, EventArgs e)
-        {
-            PrintDocument printDocument = new PrintDocument();
-            printDocument.PrintPage += new PrintPageEventHandler(PrintPageHandler);
-            printDocument.Print();
-        }
-
-        private void PrintPageHandler(object sender, PrintPageEventArgs e)
-        {
-            //Font font = new Font("Courier New", 10);
-            //float yPos = 0;
-            //int count = 0;
-            //string[] lines = textBox1.Text.Split(new[] { Environment.NewLine }, StringSplitOptions.None);
-            //foreach (string line in lines)
-            //{
-            //    yPos = count * font.GetHeight(e.Graphics);
-            //    e.Graphics.DrawString(line, font, Brushes.Black, new PointF(10, yPos));
-            //    count++;
-            //}
         }
 
         private void CarregarComboBox<T>(ComboBox comboBox, BaseDAO classe, string ItemZero = "") where T : IDataEntity, new()
@@ -166,24 +91,9 @@ namespace TeleBonifacio
             comboBox.ValueMember = "Id";
         }
 
-        #region Classes
-
-        private class Lanctos
-        {
-            public string Forma;
-            public int ID;
-            public DateTime DataPagamento;
-            public decimal Entrada;
-            public decimal Desconto;
-            public decimal Saida;
-            public int idFormaPagto;
-            public decimal Saldo;
-            public int Quantidade;
-            public string Obs;
-
-        }
-
         #endregion
+
+        #region Lançamentos
 
         private void btLancar_Click(object sender, EventArgs e)
         {
@@ -207,24 +117,25 @@ namespace TeleBonifacio
             btLancar.Enabled = (cmbVendedor.SelectedIndex > 0);
         }
 
+        private TimeSpan ProcHora(string sHora)
+        {
+            string horafmt = ProcessarHora(sHora);
+            string[] arrHora = horafmt.Split(':');
+            int iHora = Convert.ToInt16(arrHora[0]);
+            int iMin = Convert.ToInt16(arrHora[1]);
+            TimeSpan hora = new TimeSpan(iHora, iMin, 0);
+            return hora;
+        }
+
         private void button1_Click(object sender, EventArgs e)
-        {            
-            DateTime dInMan, dFmMan, dInTrd, dFnTrd;
-            string sInMan = txInMan.Text.Replace(";", ":");
-            string sFmMan = txFmMan.Text.Replace(";", ":");
-            string sInTrd = txInTrd.Text.Replace(";", ":");
-            string sFnTrd = txFnTrd.Text.Replace(";", ":");
-            sInMan = string.IsNullOrWhiteSpace(sInMan) ? "00:00" : sInMan;
-            sFmMan = string.IsNullOrWhiteSpace(sFmMan) ? "00:00" : sFmMan;
-            sInTrd = string.IsNullOrWhiteSpace(sInTrd) ? "00:00" : sInTrd;
-            sFnTrd = string.IsNullOrWhiteSpace(sFnTrd) ? "00:00" : sFnTrd;            
+        {
+            TimeSpan dInMan = ProcHora(txInMan.Text);
+            TimeSpan dFmMan = ProcHora(txFmMan.Text);
+            TimeSpan dInTrd = ProcHora(txInTrd.Text);
+            TimeSpan dFnTrd = ProcHora(txFnTrd.Text);
             string UID = glo.GenerateUID();
-            DateTime.TryParseExact(sInMan, "HH:mm", CultureInfo.InvariantCulture, DateTimeStyles.None, out dInMan);
-            DateTime.TryParseExact(sFmMan, "HH:mm", CultureInfo.InvariantCulture, DateTimeStyles.None, out dFmMan);
-            DateTime.TryParseExact(sInTrd, "HH:mm", CultureInfo.InvariantCulture, DateTimeStyles.None, out dInTrd);
-            DateTime.TryParseExact(sFnTrd, "HH:mm", CultureInfo.InvariantCulture, DateTimeStyles.None, out dFnTrd);
             DateTime dtHorario = dtpHorario.Value.Date;
-            if (this.iID==0)
+            if (this.iID == 0)
             {
                 int idFuncio = Convert.ToInt32(cmbVendedor.SelectedValue.ToString());
                 glo.Loga($@"HA,{idFuncio}, {dInMan}, {dFmMan}, {dInTrd}, {dFnTrd}, {UID}, {dtHorario}");
@@ -237,29 +148,33 @@ namespace TeleBonifacio
                 {
                     dtpHorario.Value = dtHorario.AddDays(1);
                 }
-                if (dtpDataIN.Value> dtpHorario.Value)
+                if (dtpDataIN.Value > dtpHorario.Value)
                 {
                     dtpDataIN.Value = dtpHorario.Value;
                 }
                 txInMan.Focus();
-            } else
+            }
+            else
             {
                 glo.Loga($@"HE,{this.iID}, {this.idFunc}, {dInMan}, {dFmMan}, {dInTrd}, {dFnTrd}, {UID}, {dtHorario}");
                 cRHDAO.EdHorario(this.iID, this.idFunc, dInMan, dFmMan, dInTrd, dFnTrd, dtHorario);
                 DesfazEdicao();
             }
-            Mostra();            
+            Mostra();
         }
+
+        #endregion
+
+        #region CriticaHoras
 
         private void txInMan_KeyUp(object sender, KeyEventArgs e)
         {
-            string sInMan = txInMan.Text.Replace(";", ":");
-            string sFmMan = txFmMan.Text.Replace(";", ":");
-            string sInTrd = txInTrd.Text.Replace(";", ":");
-            string sFnTrd = txFnTrd.Text.Replace(";", ":");
-            string timeFormat = "HH:mm";
-            int temManha=0;
-            int temTarde=0;
+            string sInMan = ProcessarHora(txInMan.Text);
+            string sFmMan = ProcessarHora(txFmMan.Text);
+            string sInTrd = ProcessarHora(txInTrd.Text);
+            string sFnTrd = ProcessarHora(txFnTrd.Text);
+            int temManha = 0;
+            int temTarde = 0;
             bool isValid = false;
             if (sInMan.Length > 0)
             {
@@ -270,46 +185,167 @@ namespace TeleBonifacio
                     temManha++;
                 }
             }
-            if (sInTrd.Length > 0) 
+            if (sInTrd == "00:00")
             {
-                temTarde++;
-                if (sFnTrd.Length > 0)
+                isValid = false;
+            }
+            else
+            {
+                if (sInTrd.Length > 0)
                 {
-                    isValid = true;
                     temTarde++;
+                    if (sFnTrd.Length > 0)
+                    {
+                        isValid = true;
+                        temTarde++;
+                    }
                 }
             }
-            if (temManha>0 && isValid)
+            if (temManha > 0)
             {
-                DateTime inMan, fmMan;
-                if (DateTime.TryParseExact(sInMan, timeFormat, CultureInfo.InvariantCulture, DateTimeStyles.None, out inMan) &&
-                    DateTime.TryParseExact(sFmMan, timeFormat, CultureInfo.InvariantCulture, DateTimeStyles.None, out fmMan))
-                {
-                    if (inMan >= fmMan)
-                    {
-                        isValid = false;
-                    }
-                } else
-                {
-                    isValid = false;
-                }
+                isValid = CritDatas(sInMan, sFmMan);
             }
-            if (temTarde>0 && isValid)
+            if (temTarde > 0)
             {
-                DateTime inTar, fmTar;
-                if (DateTime.TryParseExact(sInTrd, timeFormat, CultureInfo.InvariantCulture, DateTimeStyles.None, out inTar) &&
-                    DateTime.TryParseExact(sFnTrd, timeFormat, CultureInfo.InvariantCulture, DateTimeStyles.None, out fmTar))
-                {
-                    if (inTar >= fmTar)
-                    {
-                        isValid = false;
-                    }
-                } else
-                {
-                    isValid = false;
-                }
+                isValid = CritDatas(sInTrd, sFnTrd);
             }
             btGravar.Enabled = isValid;
+        }
+
+        private bool CritDatas(string sInTrd, string sFnTrd)
+        {
+            DateTime inTar, fmTar;
+            bool bIN = TryParseHora(sInTrd, out inTar);
+            bool bFN = TryParseHora(sFnTrd, out fmTar);
+            if (bIN && bFN)
+            {
+                if (inTar >= fmTar)
+                {
+                    return false;
+                }
+                else
+                {
+                    return true;
+                }
+            }
+            else
+            {
+                return false;
+            }
+
+        }
+
+        private bool TryParseHora(string horaString, out DateTime hora)
+        {
+            string[] formatosHora = { "HH:mm", "H:mm" }; 
+            hora = DateTime.MinValue;
+
+            if (DateTime.TryParseExact(horaString, formatosHora, CultureInfo.InvariantCulture, DateTimeStyles.None, out hora))
+            {
+                if (hora.TimeOfDay == TimeSpan.Zero)
+                {
+                    return false;
+                }
+                else
+                {
+                    return true;
+                }
+            }
+            else
+            {
+                return false; 
+            }
+        }
+
+        private string ProcessarHora(string hora)
+        {
+            if (hora.Length == 0)
+            {
+                return "00:00";
+            }
+            else
+            {
+                hora = hora.Replace(";", ":").Replace(".", ":").Replace(",", ":").Replace("/", ":").Replace("-", "");
+                string[] partesHora = hora.Split(':');
+                int pz = Convert.ToInt16(partesHora[0]);
+                partesHora[0] = AdicionarZero(pz);
+                if ((partesHora.Length > 1) && (partesHora[1]!=""))
+                {
+                    string s1 = partesHora[1];
+                    int i1 = Convert.ToInt16(s1);
+                    partesHora[1] = AdicionarZero(i1);
+                    return string.Join(":", partesHora);
+                }
+                else
+                {
+                    return partesHora[0] + ":00";
+                }
+            }
+        }
+
+        private string AdicionarZero(int numero)
+        {
+            if (numero < 10)
+            {
+                return "0" + numero.ToString();
+            }
+            else
+            {
+                return numero.ToString();
+            }
+        }
+
+        #endregion        
+
+        #region Grid
+
+        private DateTime? ParseTime(string timeString)
+        {
+            if (DateTime.TryParseExact(timeString, "HH:mm", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime time))
+            {
+                return time;
+            }
+            return null;
+        }
+
+        private void Mostra()
+        {
+            this.carregando = true;
+            DateTime DT1 = dtpDataIN.Value.Date;
+            DateTime DT2 = dtnDtFim.Value.Date;
+            int idFunc = Convert.ToInt32(cmbVendedor.SelectedValue.ToString());
+            DataTable dados = cRHDAO.getDados(DT1, DT2, idFunc);
+            dataGrid1.Rows.Clear();
+            if (dataGrid1.Columns.Count == 0 && dados.Columns.Count > 0)
+            {
+                foreach (DataColumn column in dados.Columns)
+                {
+                    dataGrid1.Columns.Add(column.ColumnName, column.ColumnName);
+                }
+            }
+            dataGrid1.Columns.Add("Total", "Total");
+            foreach (DataRow row in dados.Rows)
+            {
+                string[] rowData = new string[dados.Columns.Count + 1];
+                for (int i = 0; i < dados.Columns.Count; i++)
+                {
+                    rowData[i] = row[i].ToString();
+                }
+                TimeSpan inMan = ProcHora(rowData[4]);
+                TimeSpan fmMan = ProcHora(rowData[5]);
+                TimeSpan inTrd = ProcHora(rowData[6]);
+                TimeSpan fnTrd = ProcHora(rowData[7]);
+                TimeSpan total = fmMan - inMan; 
+                total += fnTrd - inTrd;
+                rowData[9] = total.ToString(@"hh\:mm");
+                dataGrid1.Rows.Add(rowData);
+            }
+            this.carregando = false;
+        }
+
+        private void btnFiltrar_Click(object sender, EventArgs e)
+        {
+            Mostra();
         }
 
         private void btExcluir_Click(object sender, EventArgs e)
@@ -336,7 +372,7 @@ namespace TeleBonifacio
 
         private void dataGrid1_SelectionChanged(object sender, EventArgs e)
         {
-            if (this.carregando==false)
+            if (this.carregando == false)
             {
                 if (dataGrid1.SelectedRows.Count > 0)
                 {
@@ -355,6 +391,9 @@ namespace TeleBonifacio
 
             }
         }
+
+        #endregion
+
     }
 
 }

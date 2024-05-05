@@ -135,6 +135,9 @@ namespace TeleBonifacio.rel
                 case 5:
                     ret = "Despesa";
                     break;
+                case 6:
+                    ret = "Itau";
+                    break;
             }
             return ret;
         }
@@ -152,6 +155,7 @@ namespace TeleBonifacio.rel
             decimal TCartao = 0;
             decimal TPix = 0;
             decimal TDespesa = 0;
+            decimal TItau = 0;
             foreach (var lancos in relcaixa)
             {
                 string ID = glo.ComplStr(lancos.ID.ToString(), 4, 2);
@@ -177,6 +181,9 @@ namespace TeleBonifacio.rel
                     case 5:
                         TDespesa += lancos.Saida;
                     break;
+                    case 6:
+                        TItau += lancos.Entrada - lancos.Desconto;
+                        break;
                 }
             }
             sb.AppendLine();
@@ -184,6 +191,7 @@ namespace TeleBonifacio.rel
             sb.AppendLine($"Cartão:   " + glo.ComplStr(TCartao.ToString("N2"), 9, 2));
             sb.AppendLine($"Pix:      " + glo.ComplStr(TPix.ToString("N2"), 9, 2));
             sb.AppendLine($"Despesas: " + glo.ComplStr(TDespesa.ToString("N2"), 9, 2));
+            sb.AppendLine($"Itau:     " + glo.ComplStr(TItau.ToString("N2"), 9, 2));
             decimal total = TDinheiro + TCartao + TPix - TDespesa;
             string totalString = glo.ComplStr(total.ToString("N2"), 9, 2); 
             string EspacosAjustes = "";

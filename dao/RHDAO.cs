@@ -10,16 +10,20 @@ namespace TeleBonifacio.dao
     public class RHDAO
     {
 
-        public void AddHorario(int idFunc, DateTime txInMan, DateTime txFmMan, DateTime txInTrd, DateTime txFnTrd, string UID, DateTime dtHorario)
+        public void AddHorario(int idFunc, TimeSpan txInMan, TimeSpan txFmMan, TimeSpan txInTrd, TimeSpan txFnTrd, string UID, DateTime dtHorario)
         {
             string sData = dtHorario.ToString("MM/dd/yyyy");
             String fdsql = $@"#{sData}#";
+            string sInMan = "#2000-01-01 " + txInMan.ToString(@"hh\:mm\:ss") + "#, ";
+            string sFmMan = "#2000-01-01 " + txFmMan.ToString(@"hh\:mm\:ss") + "#, "; 
+            string sInTrd = "#2000-01-01 " + txInTrd.ToString(@"hh\:mm\:ss") + "#, "; 
+            string sFnTrd = "#2000-01-01 " + txFnTrd.ToString(@"hh\:mm\:ss") + "#, "; 
             string sql = @"INSERT INTO Horarios (idFunc, txInMan, txFmMan, txInTrd, txFnTrd, UID, Data) VALUES ("
-                + idFunc + ", #"
-                + txInMan.ToString("yyyy-MM-dd HH:mm:ss") + "#, #"
-                + txFmMan.ToString("yyyy-MM-dd HH:mm:ss") + "#, #"
-                + txInTrd.ToString("yyyy-MM-dd HH:mm:ss") + "#, #"
-                + txFnTrd.ToString("yyyy-MM-dd HH:mm:ss") + "#, " 
+                + idFunc + ", "
+                + sInMan
+                + sFmMan
+                + sInTrd
+                + sFnTrd
                 + glo.fa(UID) + ", "
                 + fdsql + " )";
             glo.ExecutarComandoSQL(sql);
@@ -28,7 +32,7 @@ namespace TeleBonifacio.dao
         public DataTable getDados(DateTime? DT1, DateTime? DT2, int idFunc)
         {
             StringBuilder query = new StringBuilder();
-            query.Append($@"Select Horarios.ID, Horarios.uid, 
+        query.Append($@"Select Horarios.ID, Horarios.uid, 
                 Horarios.Data, Vendedores.Nome, 
                 IIF(FORMAT(Horarios.txInMan, 'hh:mm') = '00:00', '', FORMAT(Horarios.txInMan, 'hh:mm')) AS InMan,
                 IIF(FORMAT(Horarios.txFmMan, 'hh:mm') = '00:00', '', FORMAT(Horarios.txFmMan, 'hh:mm')) AS FmMan,
@@ -57,14 +61,18 @@ namespace TeleBonifacio.dao
             glo.ExecutarComandoSQL(sql);
         }
 
-        public void EdHorario(int iID, int idFunc, DateTime dInMan, DateTime dFmMan, DateTime dInTrd, DateTime dFnTrd, DateTime dtHorario)
+        public void EdHorario(int iID, int idFunc, TimeSpan dInMan, TimeSpan dFmMan, TimeSpan dInTrd, TimeSpan dFnTrd, DateTime dtHorario)
         {
+            string sHI = ", txInMan = '" + dInMan.ToString(@"hh\:mm") + "'";
+            string sHF = ", txFmMan = '" + dFmMan.ToString(@"hh\:mm") + "'";
+            string sTI = ", txInTrd = '" + dInTrd.ToString(@"hh\:mm") + "'";            
+            string sTF = ", txFnTrd = '" + dFnTrd.ToString(@"hh\:mm") + "'";
             string sql = @"UPDATE Horarios SET 
                       idFunc = " + idFunc +
-                          ", txInMan = '" + dInMan.ToString("HH:mm") + "'" +
-                          ", txFmMan = '" + dFmMan.ToString("HH:mm") + "'" +
-                          ", txInTrd = '" + dInTrd.ToString("HH:mm") + "'" +
-                          ", txFnTrd = '" + dFnTrd.ToString("HH:mm") + "'" +
+                          sHI +
+                          sHF +
+                          sTI +
+                          sTF +
                           ", Data = '" + dtHorario.ToString("yyyy-MM-dd") + "'" +
                           " WHERE ID = " + iID;
             glo.ExecutarComandoSQL(sql);

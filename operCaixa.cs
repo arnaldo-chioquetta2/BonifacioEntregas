@@ -31,7 +31,7 @@ namespace TeleBonifacio
         private void VeSeHab()
         {
             bool OK = true;
-            if (txCompra.Text == "")
+            if ((txCompra.Text == "") && (txDesc.Text == ""))
             {
                 OK = false;
             }
@@ -40,6 +40,7 @@ namespace TeleBonifacio
             btPix.Enabled = OK;
             btDinheiro.Enabled = OK;
             btCartao.Enabled = OK;
+            btItau.Enabled = OK;
         }
 
         private void MostraTotal()
@@ -95,6 +96,7 @@ namespace TeleBonifacio
 
         private void txDesc_KeyUp(object sender, KeyEventArgs e)
         {
+            VeSeHab();
             MostraTotal();
         }
 
@@ -127,7 +129,6 @@ namespace TeleBonifacio
             CarregaGrid();
             Limpar();
         }
-
         private void Limpar()
         {
             txDesc.Text = "";
@@ -167,6 +168,11 @@ namespace TeleBonifacio
             Registra(0);
         }
 
+        private void btItau_Click(object sender, EventArgs e)
+        {
+            Registra(6);
+        }
+
         #endregion
 
         #region Botões
@@ -177,10 +183,12 @@ namespace TeleBonifacio
             this.btDespeza.Enabled = true;
             this.btPix.Enabled = true;
             this.btCartao.Enabled = true;
+            this.btItau.Enabled = true;
             this.btDinheiro.BackColor = SystemColors.Control;
             this.btDespeza.BackColor = SystemColors.Control;
             this.btPix.BackColor = SystemColors.Control;
             this.btCartao.BackColor = SystemColors.Control;
+            this.btItau.BackColor = SystemColors.Control;
             btExcluir.Visible = false;
             btEditar.Visible = false;
         }
@@ -305,6 +313,10 @@ namespace TeleBonifacio
                     case 5:
                         this.btDespeza.BackColor = cor;
                         break;
+                    case 6:
+                        this.btItau.BackColor = cor;
+                        break;
+
                 }
                 btExcluir.Visible = true;
                 btEditar.Visible = true;
@@ -332,7 +344,7 @@ namespace TeleBonifacio
             dataGrid1.Columns[10].Visible = false;
             dataGrid1.Columns[11].Visible = false;
             dataGrid1.Columns[12].Visible = false;
-        }       
+        }
 
         #endregion
 

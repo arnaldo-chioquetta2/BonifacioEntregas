@@ -46,6 +46,7 @@ namespace TeleBonifacio
             this.btnFiltrar = new System.Windows.Forms.Button();
             this.btnNovoCliente = new System.Windows.Forms.Button();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.btItau = new System.Windows.Forms.Button();
             this.btEditar = new System.Windows.Forms.Button();
             this.dtnDtFim = new System.Windows.Forms.DateTimePicker();
             this.btExcluir = new System.Windows.Forms.Button();
@@ -203,6 +204,7 @@ namespace TeleBonifacio
             // 
             // panel1
             // 
+            this.panel1.Controls.Add(this.btItau);
             this.panel1.Controls.Add(this.btEditar);
             this.panel1.Controls.Add(this.dtnDtFim);
             this.panel1.Controls.Add(this.btExcluir);
@@ -231,6 +233,18 @@ namespace TeleBonifacio
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(928, 156);
             this.panel1.TabIndex = 13;
+            // 
+            // btItau
+            // 
+            this.btItau.Anchor = System.Windows.Forms.AnchorStyles.Right;
+            this.btItau.Enabled = false;
+            this.btItau.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btItau.Location = new System.Drawing.Point(566, 80);
+            this.btItau.Name = "btItau";
+            this.btItau.Size = new System.Drawing.Size(75, 23);
+            this.btItau.TabIndex = 43;
+            this.btItau.Text = "Itaú";
+            this.btItau.Click += new System.EventHandler(this.btItau_Click);
             // 
             // btEditar
             // 
@@ -282,7 +296,7 @@ namespace TeleBonifacio
             // 
             this.btDespeza.Anchor = System.Windows.Forms.AnchorStyles.Right;
             this.btDespeza.Enabled = false;
-            this.btDespeza.Location = new System.Drawing.Point(566, 79);
+            this.btDespeza.Location = new System.Drawing.Point(485, 79);
             this.btDespeza.Name = "btDespeza";
             this.btDespeza.Size = new System.Drawing.Size(75, 23);
             this.btDespeza.TabIndex = 38;
@@ -293,7 +307,7 @@ namespace TeleBonifacio
             // 
             this.btPix.Anchor = System.Windows.Forms.AnchorStyles.Right;
             this.btPix.Enabled = false;
-            this.btPix.Location = new System.Drawing.Point(485, 80);
+            this.btPix.Location = new System.Drawing.Point(404, 80);
             this.btPix.Name = "btPix";
             this.btPix.Size = new System.Drawing.Size(75, 23);
             this.btPix.TabIndex = 37;
@@ -304,7 +318,7 @@ namespace TeleBonifacio
             // 
             this.btDinheiro.Anchor = System.Windows.Forms.AnchorStyles.Right;
             this.btDinheiro.Enabled = false;
-            this.btDinheiro.Location = new System.Drawing.Point(323, 80);
+            this.btDinheiro.Location = new System.Drawing.Point(242, 80);
             this.btDinheiro.Name = "btDinheiro";
             this.btDinheiro.Size = new System.Drawing.Size(75, 23);
             this.btDinheiro.TabIndex = 36;
@@ -315,7 +329,7 @@ namespace TeleBonifacio
             // 
             this.btCartao.Anchor = System.Windows.Forms.AnchorStyles.Right;
             this.btCartao.Enabled = false;
-            this.btCartao.Location = new System.Drawing.Point(404, 80);
+            this.btCartao.Location = new System.Drawing.Point(323, 80);
             this.btCartao.Name = "btCartao";
             this.btCartao.Size = new System.Drawing.Size(75, 23);
             this.btCartao.TabIndex = 35;
@@ -379,6 +393,7 @@ namespace TeleBonifacio
         private System.Windows.Forms.DateTimePicker dtnDtFim;
         private System.Windows.Forms.Button btEditar;
         private System.Windows.Forms.DataGridView dataGrid1;
+        private System.Windows.Forms.Button btItau;
     }
 }
 
