@@ -83,7 +83,7 @@ namespace TeleBonifacio
 
         private void pictureBox7_Click(object sender, EventArgs e)
         {
-            AbrirOuFocarFormulario<CadVendedores>();
+            AbrirOuFocarFormulario<CadVendedores2>();
         }
 
         private void pictureBox2_Click(object sender, EventArgs e)

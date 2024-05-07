@@ -11,7 +11,8 @@ namespace TeleBonifacio.tb
         public string Loja { get; set; }
 
         public bool Adicao { get; set; }
-        // bool IDataEntity.Adicao { get => throw new System.NotImplementedException(); set => throw new System.NotImplementedException(); }
+        
+        public bool Atende { get; set; }
 
     }
 }

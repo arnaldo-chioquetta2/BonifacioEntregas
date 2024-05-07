@@ -248,7 +248,7 @@ namespace TeleBonifacio.dao
             }
         }
 
-        public override DataTable GetDadosOrdenados()
+        public override DataTable GetDadosOrdenados(string filtro = "", string ordem="")
         {
             string query = "SELECT * FROM Mecanicos Where Oper = 3 and Nome > '' Order By Nome ";
             return ExecutarConsulta(query);

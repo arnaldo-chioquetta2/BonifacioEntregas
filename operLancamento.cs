@@ -26,8 +26,8 @@ namespace TeleBonifacio
             VendedoresDAO Vendedor = new VendedoresDAO();
             CarregarComboBox<Entregador>(cmbMotoBoy, Entregador);
             CarregarComboBox<Cliente>(cmbCliente, Cliente);
-            CarregarComboBox<Vendedor>(cmbVendedor, Vendedor);
-            cmbMotoBoy.SelectedIndex = -1;
+            CarregarComboBox<Vendedor>(cmbVendedor, Vendedor,"", " Where Vendedores.Atende = -1 or Vendedores.Atende = 1 ", " desc ");
+            cmbMotoBoy.SelectedIndex = 0;
             cmbCliente.SelectedIndex = -1;
             CarregaGrid(null);
             ConfigurarGrid();
@@ -67,9 +67,9 @@ namespace TeleBonifacio
             lbTotal.Text = "";
         }
 
-        private void CarregarComboBox<T>(ComboBox comboBox, BaseDAO classe, string ItemZero="Escolha") where T : IDataEntity, new()
+        private void CarregarComboBox<T>(ComboBox comboBox, BaseDAO classe, string ItemZero="", string filtro="", string ordem="") where T : IDataEntity, new()
         {
-            DataTable dados = classe.GetDadosOrdenados();
+            DataTable dados = classe.GetDadosOrdenados(filtro, ordem);
             List<ComboBoxItem> lista = new List<ComboBoxItem>();
             if (ItemZero.Length>0)
             {
@@ -185,7 +185,7 @@ namespace TeleBonifacio
                 OK = false;
             } else
             {
-                if (cmbMotoBoy.SelectedIndex == 0)
+                if (cmbMotoBoy.SelectedIndex == -1)
                 {
                     if (txCompra.Text == "")
                     {

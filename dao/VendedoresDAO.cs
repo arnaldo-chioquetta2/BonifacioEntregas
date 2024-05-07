@@ -14,27 +14,35 @@ namespace TeleBonifacio.dao
 
         public string Nome { get; set; }
 
-        public string Loja { get; set; }        
+        public string Loja { get; set; }
+
+        public bool Atende { get; set; }
 
         public VendedoresDAO()
         {
             
         }
 
-        public void AdicionaVendedor(string nome, string loja)
+        public void AdicionaVendedor(string nome, string loja, bool Atende)
         {
-            String sql = @"INSERT INTO Vendedores (Nome, Loja) VALUES ('"
-                + glo.fa(nome) + "', '"
-                + glo.fa(loja) + "')";
+            int iat = (Atende == true) ? 1: 0;
+            string sat = iat.ToString();
+            String sql = @"INSERT INTO Vendedores (Nome, Loja, Atende) VALUES ("
+                + glo.fa(nome) + ", "
+                + glo.fa(loja)  
+                + sat + ")";
             glo.ExecutarComandoSQL(sql);
         }
 
-        public void EditaVendedor(int id, string nome, string loja)
+        public void EditaVendedor(int id, string nome, string loja, bool Atende)
         {
+            int iat = (Atende == true) ? 1 : 0;
+            string sat = iat.ToString();
             String sql = @"UPDATE Vendedores SET 
-                Nome = '" + glo.fa(nome) +
-                "', Loja = '" + glo.fa(loja) +
-                "' WHERE ID = " + id.ToString();
+                Nome = " + glo.fa(nome) +
+                ", Loja = '" + glo.fa(loja) +
+                ", Atende = " + sat + 
+                " WHERE ID = " + id.ToString();
             glo.ExecutarComandoSQL(sql);
         }
         public override object GetUltimo()
@@ -50,12 +58,12 @@ namespace TeleBonifacio.dao
             List<OleDbParameter> parameters;
             if (vendedor.Adicao)
             {
-                query = "INSERT INTO Vendedores (Nome, Loja) VALUES (?, ?)";
+                query = "INSERT INTO Vendedores (Nome, Lojam Atende) VALUES (?, ?, ?)";
                 parameters = ConstruirParametro(vendedor, true);
             }
             else
             {
-                query = "UPDATE Vendedores SET Nome = ?, Loja = ? WHERE ID = ?";
+                query = "UPDATE Vendedores SET Nome = ?, Loja = ?, Atende = ? WHERE ID = ?";
                 parameters = ConstruirParametro(vendedor, false);
             }
 
@@ -72,11 +80,12 @@ namespace TeleBonifacio.dao
 
         private List<OleDbParameter> ConstruirParametro(VendedoresDAO vendedor, bool inserindo)
         {
-
+            int iAt = (vendedor.Atende) ? 1 : 0;
             var parametros = new List<OleDbParameter>
             {
                 new OleDbParameter("@Nome", vendedor.Nome),
-                new OleDbParameter("@Loja", vendedor.Loja)
+                new OleDbParameter("@Loja", vendedor.Loja),
+                new OleDbParameter("@Atende", iAt) 
             };
             if (!inserindo)
             {
@@ -100,12 +109,14 @@ namespace TeleBonifacio.dao
                             dataTable.Columns.Add("ID", typeof(int));
                             dataTable.Columns.Add("Nome", typeof(string));
                             dataTable.Columns.Add("Loja", typeof(string));
+                            dataTable.Columns.Add("Atende", typeof(string));
                             while (reader.Read())
                             {
                                 DataRow row = dataTable.NewRow();
                                 row["ID"] = reader["ID"];
                                 row["Nome"] = reader["Nome"];
                                 row["Loja"] = reader["Loja"];
+                                row["Atende"] = reader["Atende"];                                
                                 dataTable.Rows.Add(row);
                             }
                             return dataTable;
@@ -126,7 +137,8 @@ namespace TeleBonifacio.dao
             {
                 Id = Id,
                 Nome = Nome,
-                Loja = Loja
+                Loja = Loja,
+                Atende = Atende
             };
         }
 
@@ -163,6 +175,15 @@ namespace TeleBonifacio.dao
                                 Nome = reader["Nome"].ToString();
                                 Id = Convert.ToInt32(reader["ID"]);
                                 Loja = reader["Loja"].ToString();
+                                object oAt = reader["Atende"];
+                                if (oAt == DBNull.Value)
+                                {
+                                    Atende = false;
+                                } else
+                                {
+                                    int iAt = Convert.ToInt32(oAt);
+                                    Atende = !(iAt == 0);
+                                }                                
                                 return (tb.Vendedor)GetEsse();
                             }
                         }
@@ -199,9 +220,9 @@ namespace TeleBonifacio.dao
             return ExecutarConsultaVendedor2(query);
         }
 
-        public override DataTable GetDadosOrdenados()   
+        public override DataTable GetDadosOrdenados(string filtro="", string ordem ="")   
         {
-            string query = "SELECT * FROM Vendedores Order By Nome ";
+            string query = $"SELECT * FROM Vendedores {filtro} Order By Nome {ordem}";
             return ExecutarConsultaVendedor(query);
         }
 

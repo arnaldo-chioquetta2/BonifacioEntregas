@@ -43,7 +43,8 @@ namespace TeleBonifacio.dao
                         ca.idForma = 2, 'Anotado',
                         ca.idForma = 3, 'Pix',
                         ca.idForma = 4, 'Troca',
-                        ca.idForma = 5, 'Despesa'
+                        ca.idForma = 5, 'Despesa',
+                        ca.idForma = 6, 'Itau'
                     ) AS Pagamento, ca.Obs,
                     c.NrCli, ca.idVend, ca.idForma, ca.UID 
                     FROM (Caixa ca

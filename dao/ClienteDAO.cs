@@ -244,7 +244,7 @@ namespace TeleBonifacio.dao
             return ExecutarConsultacliente(query);
         }
 
-        public override DataTable GetDadosOrdenados()
+        public override DataTable GetDadosOrdenados(string filtro = "", string ordem = "")
         {
             string query = "SELECT * FROM Clientes Order By Nome ";
             return ExecutarConsulta(query);

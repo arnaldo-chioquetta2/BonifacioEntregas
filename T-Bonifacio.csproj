@@ -105,11 +105,11 @@
     <Compile Include="CadEntregadores.designer.cs">
       <DependentUpon>CadEntregadores.cs</DependentUpon>
     </Compile>
-    <Compile Include="CadVendedor.cs">
+    <Compile Include="CadVendedores2.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="CadVendedor.Designer.cs">
-      <DependentUpon>CadVendedor.cs</DependentUpon>
+    <Compile Include="CadVendedores2.designer.cs">
+      <DependentUpon>CadVendedores2.cs</DependentUpon>
     </Compile>
     <Compile Include="dao\BaseDAO.cs" />
     <Compile Include="dao\CaixaDao.cs" />
@@ -233,8 +233,8 @@
       <DependentUpon>CadEntregadores.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="CadVendedor.resx">
-      <DependentUpon>CadVendedor.cs</DependentUpon>
+    <EmbeddedResource Include="CadVendedores2.resx">
+      <DependentUpon>CadVendedores2.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Dashboard.resx">
       <DependentUpon>Dashboard.cs</DependentUpon>

@@ -8,7 +8,6 @@ C:\Prog\T-Bonifacio\T-Bonifacio\bin\Release\SourceGrid.xml
 C:\Prog\T-Bonifacio\T-Bonifacio\obj\Release\T-Bonifacio.csproj.AssemblyReference.cache
 C:\Prog\T-Bonifacio\T-Bonifacio\obj\Release\TeleBonifacio.fCadClientes.resources
 C:\Prog\T-Bonifacio\T-Bonifacio\obj\Release\TeleBonifacio.fCadEntregadores.resources
-C:\Prog\T-Bonifacio\T-Bonifacio\obj\Release\TeleBonifacio.CadVendedor.resources
 C:\Prog\T-Bonifacio\T-Bonifacio\obj\Release\TeleBonifacio.Dashboard.resources
 C:\Prog\T-Bonifacio\T-Bonifacio\obj\Release\TeleBonifacio.Form1.resources
 C:\Prog\T-Bonifacio\T-Bonifacio\obj\Release\TeleBonifacio.FormBase.resources
@@ -29,3 +28,5 @@ C:\Prog\T-Bonifacio\T-Bonifacio\obj\Release\TeleBonifacio.exe
 C:\Prog\T-Bonifacio\T-Bonifacio\obj\Release\TeleBonifacio.pdb
 C:\Prog\T-Bonifacio\T-Bonifacio\obj\Release\TeleBonifacio.rel.RelEntegas.resources
 C:\Prog\T-Bonifacio\T-Bonifacio\obj\Release\TeleBonifacio.OperRH.resources
+C:\Prog\T-Bonifacio\T-Bonifacio\obj\Release\TeleBonifacio.CadVendedores2.resources
+C:\Prog\T-Bonifacio\T-Bonifacio\obj\Release\T-Bonifacio.csproj.CopyComplete

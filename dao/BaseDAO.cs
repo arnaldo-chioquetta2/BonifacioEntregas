@@ -16,7 +16,7 @@ namespace TeleBonifacio.dao
 
         #region Metodos Abstratos
 
-        public abstract DataTable GetDadosOrdenados();
+        public abstract DataTable GetDadosOrdenados(string filtro = "", string ordem = "");
 
         public abstract void Grava(object obj);
         public abstract tb.IDataEntity Apagar(int direcao, tb.IDataEntity entidade);

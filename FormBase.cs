@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Linq;
 using System.Reflection;
 using System.Windows.Forms;
+using TeleBonifacio.dao;
 
 namespace TeleBonifacio
 {
@@ -65,11 +66,25 @@ namespace TeleBonifacio
                         else if (control is DateTimePicker dateTimePicker)
                         {
                             ProcessarDateTimePicker(dateTimePicker);
+                        } else if (control is CheckBox Check)
+                        {
+                            ProcessaCheck(Check);
                         }
                     }
                     Mostrando = false;
                     return true;
                 }
+            }
+        }
+
+        private void ProcessaCheck(CheckBox check)
+        {
+            string propertyName = check.Name.Substring(3); 
+            PropertyInfo propertyInfo = reg.GetType().GetProperty(propertyName);
+            if (propertyInfo != null)
+            {
+                string valor = propertyInfo.GetValue(reg, null)?.ToString() ?? string.Empty;
+                check.Checked = (valor == "True");
             }
         }
 
@@ -125,6 +140,9 @@ namespace TeleBonifacio
                     else if (control is DateTimePicker dateTimePicker)
                     {
                         MapearDateTimePickerParaModelo(dateTimePicker, reg);
+                    } else if (control is CheckBox Check)
+                    {
+                        MapearCheckParaModelo(Check, reg);
                     }
                 }
                 catch (Exception ex)
@@ -134,6 +152,35 @@ namespace TeleBonifacio
                 }
             }
         }
+
+        private void MapearCheckParaModelo(CheckBox check, BaseDAO reg)
+        {
+            string propertyName = check.Name.Substring(3); // Remove o prefixo "chk" do nome do CheckBox
+            PropertyInfo propertyInfo = reg.GetType().GetProperty(propertyName);
+            if (propertyInfo == null)
+            {
+                propertyInfo.SetValue(reg, null, null);
+            }
+            else
+            {
+                // Verifica se o CheckBox está marcado e define o valor da propriedade correspondente
+                propertyInfo.SetValue(reg, check.Checked, null);
+            }
+        }
+
+        //private void MapearCheckParaModelo(CheckBox check, BaseDAO reg)
+        //{
+        //    string propertyName = check.Name.Substring(3); 
+        //    PropertyInfo propertyInfo = reg.GetType().GetProperty(propertyName);
+        //    if (propertyInfo == null)
+        //    {
+        //        propertyInfo.SetValue(reg, null, null);
+        //    }
+        //    else
+        //    {
+        //        propertyInfo.SetValue(reg, textBox.Text, null);
+        //    }
+        //}
 
         private void MapearTextBoxParaModelo(TextBox textBox, dao.BaseDAO reg)
         {
@@ -224,6 +271,7 @@ namespace TeleBonifacio
                 case "ParaFrente":
                     Direcao = 1; ;
                     reg = DAO.ParaFrente();
+                    
                     if (!Mostra())
                     {
                         cntrole1.Primeiro = true;
@@ -287,7 +335,11 @@ namespace TeleBonifacio
             if (criticas.Count == 0)
             {
                 DAO.Adicao = EmAdicao;
-                string mensJaTem = DAO.VeSeJaTem(DAO); 
+                string mensJaTem = "";
+                if (EmAdicao)
+                {
+                    mensJaTem = DAO.VeSeJaTem(DAO);
+                }                
                 if (mensJaTem.Length>0)
                 {
                     mensagemCritica = mensJaTem;

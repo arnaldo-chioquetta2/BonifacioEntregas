@@ -10,15 +10,18 @@ using System.Windows.Forms;
 
 namespace TeleBonifacio
 {
-    public partial class CadVendedor : TeleBonifacio.FormBase
+    public partial class CadVendedores2 : TeleBonifacio.FormBase
     {
-        public CadVendedor()
+        private bool Carregando = true;
+
+        public CadVendedores2()
         {
             InitializeComponent();
             base.DAO = new dao.VendedoresDAO();
             base.reg = getUlt();
             base.Mostra();
             base.LerTagsDosCamposDeTexto();
+            Carregando = false;
         }
 
         private tb.Vendedor getUlt()
@@ -44,6 +47,15 @@ namespace TeleBonifacio
                                 ret.Id = (int)reader["ID"];
                                 ret.Nome = (string)reader["Nome"];
                                 ret.Loja = (string)reader["Loja"];
+                                object oAt = reader["Atende"];
+                                if (oAt== System.DBNull.Value)
+                                {
+                                    ret.Atende = false;
+                                } else
+                                {
+                                    int iAt = (int)oAt;
+                                    ret.Atende = (iAt == -1);
+                                }
                             }
                             return ret;
                         }
@@ -60,7 +72,9 @@ namespace TeleBonifacio
 
         private void cntrole1_AcaoRealizada(object sender, AcaoEventArgs e)
         {
+            Carregando = true;
             base.cntrole1_AcaoRealizada(sender, e, base.reg);
+            Carregando = false;
         }
 
         private void CadVendedor_KeyUp(object sender, KeyEventArgs e)
@@ -80,6 +94,14 @@ namespace TeleBonifacio
                 }
 
             }
+        }
+
+        private void chkAtende_CheckStateChanged(object sender, EventArgs e)
+        {
+            if (Carregando==false)
+            {
+                base.cntrole1.EmEdicao = true;
+            }            
         }
     }
 }
