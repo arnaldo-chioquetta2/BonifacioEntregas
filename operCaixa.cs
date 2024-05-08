@@ -64,7 +64,7 @@ namespace TeleBonifacio
             ClienteDAO Cliente = new ClienteDAO();
             VendedoresDAO Vendedor = new VendedoresDAO();
             CarregarComboBox<Cliente>(cmbCliente, Cliente, "NÃO IDENTIFICADO");
-            CarregarComboBox<Vendedor>(cmbVendedor, Vendedor);
+            CarregarComboBox<Vendedor>(cmbVendedor, Vendedor, "", " Where Vendedores.Atende = -1 or Vendedores.Atende = 1 ", " desc ");
             cmbCliente.SelectedIndex = 0;
             cmbVendedor.SelectedIndex = 0;
             DateTime ontem = DateTime.Today.AddDays(-1);
@@ -73,9 +73,9 @@ namespace TeleBonifacio
             ConfigurarGrid();
         }
 
-        private void CarregarComboBox<T>(ComboBox comboBox, BaseDAO classe, string ItemZero = "") where T : IDataEntity, new()
+        private void CarregarComboBox<T>(ComboBox comboBox, BaseDAO classe, string ItemZero = "", string filtro = "", string ordem = "") where T : IDataEntity, new()
         {
-            DataTable dados = classe.GetDadosOrdenados();
+            DataTable dados = classe.GetDadosOrdenados(filtro, ordem);
             List<ComboBoxItem> lista = new List<ComboBoxItem>();
             if (ItemZero.Length > 0)
             {

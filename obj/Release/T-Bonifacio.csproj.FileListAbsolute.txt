@@ -29,4 +29,3 @@ C:\Prog\T-Bonifacio\T-Bonifacio\obj\Release\TeleBonifacio.pdb
 C:\Prog\T-Bonifacio\T-Bonifacio\obj\Release\TeleBonifacio.rel.RelEntegas.resources
 C:\Prog\T-Bonifacio\T-Bonifacio\obj\Release\TeleBonifacio.OperRH.resources
 C:\Prog\T-Bonifacio\T-Bonifacio\obj\Release\TeleBonifacio.CadVendedores2.resources
-C:\Prog\T-Bonifacio\T-Bonifacio\obj\Release\T-Bonifacio.csproj.CopyComplete
