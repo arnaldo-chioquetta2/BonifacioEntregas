@@ -37,11 +37,15 @@ namespace TeleBonifacio
             this.cmbVendedor = new System.Windows.Forms.ComboBox();
             this.label1 = new System.Windows.Forms.Label();
             this.dataGrid1 = new SourceGrid.DataGrid();
+            this.dtnDtFim = new System.Windows.Forms.DateTimePicker();
+            this.dtpDataIN = new System.Windows.Forms.DateTimePicker();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // panel1
             // 
+            this.panel1.Controls.Add(this.dtnDtFim);
+            this.panel1.Controls.Add(this.dtpDataIN);
             this.panel1.Controls.Add(this.ltVlr);
             this.panel1.Controls.Add(this.btExtrato);
             this.panel1.Controls.Add(this.btPagar);
@@ -87,7 +91,7 @@ namespace TeleBonifacio
             // 
             this.cmbVendedor.DisplayMember = "Nome";
             this.cmbVendedor.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbVendedor.Location = new System.Drawing.Point(294, 17);
+            this.cmbVendedor.Location = new System.Drawing.Point(98, 19);
             this.cmbVendedor.Name = "cmbVendedor";
             this.cmbVendedor.Size = new System.Drawing.Size(232, 21);
             this.cmbVendedor.TabIndex = 13;
@@ -98,7 +102,7 @@ namespace TeleBonifacio
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(214, 23);
+            this.label1.Location = new System.Drawing.Point(18, 25);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(74, 17);
             this.label1.TabIndex = 0;
@@ -118,6 +122,26 @@ namespace TeleBonifacio
             this.dataGrid1.TabStop = true;
             this.dataGrid1.ToolTipText = "";
             this.dataGrid1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.dataGrid1_MouseDown);
+            // 
+            // dtnDtFim
+            // 
+            this.dtnDtFim.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
+            this.dtnDtFim.Format = System.Windows.Forms.DateTimePickerFormat.Short;
+            this.dtnDtFim.Location = new System.Drawing.Point(434, 17);
+            this.dtnDtFim.Name = "dtnDtFim";
+            this.dtnDtFim.Size = new System.Drawing.Size(90, 23);
+            this.dtnDtFim.TabIndex = 45;
+            this.dtnDtFim.Tag = "H";
+            // 
+            // dtpDataIN
+            // 
+            this.dtpDataIN.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
+            this.dtpDataIN.Format = System.Windows.Forms.DateTimePickerFormat.Short;
+            this.dtpDataIN.Location = new System.Drawing.Point(338, 18);
+            this.dtpDataIN.Name = "dtpDataIN";
+            this.dtpDataIN.Size = new System.Drawing.Size(90, 23);
+            this.dtpDataIN.TabIndex = 44;
+            this.dtpDataIN.Tag = "H";
             // 
             // opRecibos
             // 
@@ -146,5 +170,7 @@ namespace TeleBonifacio
         private System.Windows.Forms.Label ltVlr;
         private System.Windows.Forms.Button btExtrato;
         private System.Windows.Forms.Button btPagar;
+        private System.Windows.Forms.DateTimePicker dtnDtFim;
+        private System.Windows.Forms.DateTimePicker dtpDataIN;
     }
 }

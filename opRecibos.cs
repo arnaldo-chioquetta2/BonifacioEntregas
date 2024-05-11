@@ -25,6 +25,8 @@ namespace TeleBonifacio
         {
             PopulaVendedores();
             Recibo = new ReciboDAO();
+            dtnDtFim.Value = DateTime.Today;
+            dtpDataIN.Value = dtnDtFim.Value.AddDays(-7);
             CarregaGrid();
             ConfigurarGrid();
         }
@@ -51,8 +53,10 @@ namespace TeleBonifacio
         #region Grid
         private void CarregaGrid()
         {
+            DateTime DT1 = dtpDataIN.Value.Date;
+            DateTime DT2 = dtnDtFim.Value.Date;
             Recibo = new ReciboDAO();
-            DataTable Dados = Recibo.ValoresAPagar();
+            DataTable Dados = Recibo.ValoresAPagar(DT1, DT2);
             if (Dados.Rows.Count == 0)
             {
                 dataGrid1.DataSource = null;
@@ -154,7 +158,9 @@ namespace TeleBonifacio
                 int id = Convert.ToInt32(cmbVendedor.SelectedValue);
                 if (Recibo != null)
                 {
-                    decimal ret = Recibo.VlrPend(id);                                
+                    DateTime DT1 = dtpDataIN.Value.Date;
+                    DateTime DT2 = dtnDtFim.Value.Date;
+                    decimal ret = Recibo.VlrPend(id, DT1, DT2);                                
                     ltVlr.Text = ret.ToString("C");
                     btPagar.Enabled = (ret > 0);
                     btExtrato.Enabled = true;
@@ -169,7 +175,8 @@ namespace TeleBonifacio
         private void button1_Click(object sender, EventArgs e)
         {
             int id = Convert.ToInt32(cmbVendedor.SelectedValue);
-            DateTime DataIni = Recibo.DtInicial(id);
+            // DateTime DataIni = Recibo.DtInicial(id);
+            DateTime DataIni = dtpDataIN.Value;
             string dataPagamento = "";
             if (DataIni.Date == DateTime.Now.Date)
             {

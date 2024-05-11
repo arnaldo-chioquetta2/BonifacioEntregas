@@ -3,32 +3,46 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.Linq;
 using System.Data.OleDb;
+using System.Text;
 
 namespace TeleBonifacio.dao
 {
     public class ReciboDAO
     {
 
-        public DataTable ValoresAPagar()
+        public DataTable ValoresAPagar(DateTime? DT1, DateTime? DT2)
         {
-            string query = @"Select Entregas.idVend, Vendedores.Nome, Sum(Entregas.VlNota) / 100 as Valor  
+            StringBuilder query = new StringBuilder();
+            query.Append($@"Select Entregas.idVend, Vendedores.Nome, Sum(Entregas.VlNota) / 100 as Valor  
                         From Entregas
                         Inner Join Vendedores on Vendedores.ID = Entregas.idVend
                         Where Entregas.Pago is Null
-                        and Entregas.idVend > 0
-                        Group by Entregas.idVend, Vendedores.Nome
-                        Order by Entregas.idVend, Vendedores.Nome ";
-            DataTable dataTable = glo.getDados(query);
+                        and Entregas.idVend > 0 ");
+            DateTime dataInicio = DT1.Value.Date;
+            DateTime dataFim = DT2.Value.Date;
+            string dataInicioStr = dataInicio.ToString("MM/dd/yyyy HH:mm:ss");
+            string dataFimStr = dataFim.ToString("MM/dd/yyyy 23:59:59");
+            query.AppendFormat(" and Entregas.Data BETWEEN #{0}# AND #{1}#", dataInicioStr, dataFimStr);
+            query.Append(" Group by Entregas.idVend, Vendedores.Nome ");
+            query.Append("Order by Entregas.idVend, Vendedores.Nome");
+            DataTable dataTable = glo.getDados(query.ToString());
             return dataTable;
         }
 
-        public decimal VlrPend(int id)
+        public decimal VlrPend(int id, DateTime DT1, DateTime DT2)
         {
-            string query = @"Select Sum(Entregas.VlNota) / 100 as Valor  
+            DateTime dataInicio = DT1.Date;
+            DateTime dataFim = DT2.Date;
+            string dataInicioStr = dataInicio.ToString("MM/dd/yyyy HH:mm:ss");
+            string dataFimStr = dataFim.ToString("MM/dd/yyyy 23:59:59");
+            StringBuilder query = new StringBuilder();
+
+            query.Append($@"Select Sum(Entregas.VlNota) / 100 as Valor  
                 From Entregas 
                 Where Entregas.Pago is Null 
-                and Entregas.idVend = " + id.ToString();
-            DataTable dataTable = glo.getDados(query);
+                    and Entregas.idVend = " + id.ToString());
+            query.AppendFormat(" and Entregas.Data BETWEEN #{0}# AND #{1}#", dataInicioStr, dataFimStr);
+            DataTable dataTable = glo.getDados(query.ToString());
             decimal ret = 0;
             try
             {
