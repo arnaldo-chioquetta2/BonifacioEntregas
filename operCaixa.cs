@@ -294,6 +294,7 @@ namespace TeleBonifacio
                 cmbCliente.SelectedValue = nrCli;
                 txCompra.Text = valor.ToString();
                 txDesc.Text = desconto.ToString();
+                txObs.Text = selectedRow.Cells["Obs"].Value.ToString();
                 cmbVendedor.SelectedValue = idVend;
                 MostraTotal();
                 btnLimpar.Enabled = true;

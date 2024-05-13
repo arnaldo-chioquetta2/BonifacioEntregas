@@ -160,7 +160,7 @@ namespace TeleBonifacio
                 {
                     DateTime DT1 = dtpDataIN.Value.Date;
                     DateTime DT2 = dtnDtFim.Value.Date;
-                    decimal ret = Recibo.VlrPend(id, DT1, DT2);                                
+                    decimal ret = Recibo.VlrPend(id, DT1, DT2); 
                     ltVlr.Text = ret.ToString("C");
                     btPagar.Enabled = (ret > 0);
                     btExtrato.Enabled = true;
@@ -186,7 +186,7 @@ namespace TeleBonifacio
             {
                 dataPagamento = "de " + DataIni.ToString("dd/MM/yyyy") + " a " + DateTime.Now.ToString("dd/MM/yyyy");
             }
-            Recibo.Pagar(id, ltVlr.Text, dataPagamento);
+            Recibo.Pagar(id, ltVlr.Text, dataPagamento, dtpDataIN.Value, dtnDtFim.Value);
             INI MeuIni = new INI();
             using (var receipt = new rel.Receipt())
             {
@@ -206,6 +206,11 @@ namespace TeleBonifacio
             int id = Convert.ToInt32(cmbVendedor.SelectedValue);
             fExtr.SetId(id);
             fExtr.Show();
+        }
+
+        private void btAtu_Click(object sender, EventArgs e)
+        {
+            CarregaGrid();
         }
     }
 }

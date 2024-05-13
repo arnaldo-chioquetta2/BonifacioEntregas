@@ -56,15 +56,15 @@ namespace TeleBonifacio.dao
             return ret;
         }
 
-        public DateTime DtInicial(int id)
-        {
-            string SQLPriComiss = "SELECT Data FROM Entregas WHERE Pago IS NULL AND idVend = " + id.ToString() + " ORDER BY Data ASC";
-            DataTable dtData = glo.getDados(SQLPriComiss);
-            DateTime Dia = Convert.ToDateTime(dtData.Rows[0]["Data"]);
-            return Dia;
-        }
+        //public DateTime DtInicial(int id)
+        //{
+        //    string SQLPriComiss = "SELECT Data FROM Entregas WHERE Pago IS NULL AND idVend = " + id.ToString() + " ORDER BY Data ASC";
+        //    DataTable dtData = glo.getDados(SQLPriComiss);
+        //    DateTime Dia = Convert.ToDateTime(dtData.Rows[0]["Data"]);
+        //    return Dia;
+        //}
 
-        public void Pagar(int id, string Valor, string dataPagamento)
+        public void Pagar(int id, string Valor, string dataPagamento, DateTime DT1, DateTime DT2)
         {
 
             string query = "INSERT INTO Vales (IdOperador, Data, Valor, Pago, Tipo, Periodo) " +
@@ -78,8 +78,16 @@ namespace TeleBonifacio.dao
 
             int idRecibo = VeUltReg();
 
-            string queryUpd = "UPDATE Entregas SET Pago = VlNota / 100, idPagto = " + idRecibo + " WHERE Pago IS NULL AND idVend = " + id.ToString();
-            glo.ExecutarComandoSQL(queryUpd, null);
+            DateTime dataInicio = DT1.Date;
+            DateTime dataFim = DT2.Date;
+            string dataInicioStr = dataInicio.ToString("MM/dd/yyyy HH:mm:ss");
+            string dataFimStr = dataFim.ToString("MM/dd/yyyy 23:59:59");
+
+            StringBuilder queryUpd = new StringBuilder();
+            queryUpd.Append($@"UPDATE Entregas SET Pago = VlNota / 100, idPagto = " + idRecibo);
+            queryUpd.Append(" WHERE Pago IS NULL AND idVend = " + id.ToString());
+            queryUpd.AppendFormat(" and Entregas.Data BETWEEN #{0}# AND #{1}#", dataInicioStr, dataFimStr);
+            glo.ExecutarComandoSQL(queryUpd.ToString(), null);
 
         }
 
