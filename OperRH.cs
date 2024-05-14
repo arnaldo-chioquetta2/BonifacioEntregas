@@ -1,11 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Data.OleDb;
-using System.Drawing;
-using System.Drawing.Printing;
 using System.Globalization;
-using System.Text;
 using System.Windows.Forms;
 using TeleBonifacio.dao;
 using TeleBonifacio.tb;
@@ -299,14 +295,14 @@ namespace TeleBonifacio
 
         #region Grid
 
-        private DateTime? ParseTime(string timeString)
-        {
-            if (DateTime.TryParseExact(timeString, "HH:mm", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime time))
-            {
-                return time;
-            }
-            return null;
-        }
+        //private DateTime? ParseTime(string timeString)
+        //{
+        //    if (DateTime.TryParseExact(timeString, "HH:mm", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime time))
+        //    {
+        //        return time;
+        //    }
+        //    return null;
+        //}
 
         private void Mostra()
         {
@@ -324,6 +320,7 @@ namespace TeleBonifacio
                 }
             }
             dataGrid1.Columns.Add("Total", "Total");
+            TimeSpan totalzao = TimeSpan.Zero;
             foreach (DataRow row in dados.Rows)
             {
                 string[] rowData = new string[dados.Columns.Count + 1];
@@ -337,8 +334,19 @@ namespace TeleBonifacio
                 TimeSpan fnTrd = ProcHora(rowData[7]);
                 TimeSpan total = fmMan - inMan; 
                 total += fnTrd - inTrd;
+                totalzao += total;
                 rowData[9] = total.ToString(@"hh\:mm");
                 dataGrid1.Rows.Add(rowData);
+            }
+            if (idFunc>0)
+            {
+                string[] totalRowData = new string[dados.Columns.Count + 1];
+                for (int i = 0; i < dados.Columns.Count; i++)
+                {
+                    totalRowData[i] = "";
+                }
+                totalRowData[9] = totalzao.TotalHours.ToString("N2");
+                dataGrid1.Rows.Add(totalRowData);
             }
             this.carregando = false;
         }
