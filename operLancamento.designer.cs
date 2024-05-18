@@ -346,6 +346,7 @@ namespace TeleBonifacio
             this.MaximizeBox = false;
             this.Name = "operLancamento";
             this.Text = "Lançamento de Entregas";
+            this.Activated += new System.EventHandler(this.operLancamento_Activated);
             this.Load += new System.EventHandler(this.operLancamento_Load);
             this.Resize += new System.EventHandler(this.operLancamento_Resize);
             this.panel1.ResumeLayout(false);

@@ -131,7 +131,8 @@ namespace TeleBonifacio.rel
             sb.AppendLine();
             sb.AppendLine($"Período: {DataInicio:dd/MM/yyyy} a {DataFim:dd/MM/yyyy}");
             sb.AppendLine();
-            if (ComissoesPagas.Count>0)
+
+            if (ComissoesPagas != null && ComissoesPagas.Count > 0)
             {
                 sb.AppendLine("Comissões Pagas:");
                 sb.AppendLine();
@@ -143,7 +144,12 @@ namespace TeleBonifacio.rel
                     sb.AppendLine($"{comissao.DataPagamento:dd/MM/yyyy} |{qtd}| R$ {vlr}");
                 }
             }
-            if (ComissoesPendentes.Count>0)
+            else
+            {
+                sb.AppendLine("Não houveram comissões pagas,");
+                sb.AppendLine();
+            }
+            if (ComissoesPendentes != null && ComissoesPendentes.Count > 0)
             {
                 sb.AppendLine();
                 sb.AppendLine("Comissões Pendentes:");
@@ -155,6 +161,17 @@ namespace TeleBonifacio.rel
                     string vlr = glo.ComplStr((comissao.Valor / 100).ToString("N2"), 6, 2);
                     sb.AppendLine($" { comissao.DataVenda:dd/MM/yyyy HH:ss} | R$ {vlr} |{forma}");
                 }
+            }
+            else
+            {
+                sb.AppendLine("Não houveram comissões pendentes.");
+                sb.AppendLine();
+
+            }
+
+            if (ComissoesPendentes.Count>0)
+            {
+
             }
             return sb.ToString();
         }

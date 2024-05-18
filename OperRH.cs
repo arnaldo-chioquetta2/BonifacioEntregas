@@ -18,6 +18,7 @@ namespace TeleBonifacio
         private string UID = "";
         private bool carregando = true;
         private int idFunc = 0;
+        private bool AdicCol;
 
         #region Inicialização
 
@@ -61,8 +62,12 @@ namespace TeleBonifacio
             dataGrid1.Columns[5].Width = 70;
             dataGrid1.Columns[6].Width = 70;
             dataGrid1.Columns[7].Width = 70;
-            dataGrid1.Columns[8].Visible = false; 
+            dataGrid1.Columns[8].Visible = false;
+
+            //dataGrid1.Columns[9].Visible = false;
+            //dataGrid1.Columns[9].Width = 0;
             dataGrid1.Columns[9].Width = 70;
+
             dataGrid1.Invalidate();
         }
 
@@ -295,15 +300,6 @@ namespace TeleBonifacio
 
         #region Grid
 
-        //private DateTime? ParseTime(string timeString)
-        //{
-        //    if (DateTime.TryParseExact(timeString, "HH:mm", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime time))
-        //    {
-        //        return time;
-        //    }
-        //    return null;
-        //}
-
         private void Mostra()
         {
             this.carregando = true;
@@ -319,8 +315,12 @@ namespace TeleBonifacio
                     dataGrid1.Columns.Add(column.ColumnName, column.ColumnName);
                 }
             }
-            dataGrid1.Columns.Add("Total", "Total");
-            TimeSpan totalzao = TimeSpan.Zero;
+            if (!this.AdicCol)
+            {
+                dataGrid1.Columns.Add("Total", "Total");
+            }            
+            this.AdicCol = true;
+            TimeSpan totalzao = TimeSpan.Zero;            
             foreach (DataRow row in dados.Rows)
             {
                 string[] rowData = new string[dados.Columns.Count + 1];
@@ -348,6 +348,7 @@ namespace TeleBonifacio
                 totalRowData[9] = totalzao.TotalHours.ToString("N2");
                 dataGrid1.Rows.Add(totalRowData);
             }
+            //dataGrid1.Columns[10].Width = 0;
             this.carregando = false;
         }
 

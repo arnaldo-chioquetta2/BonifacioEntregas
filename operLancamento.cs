@@ -13,6 +13,7 @@ namespace TeleBonifacio
         private EntregasDAO entregasDAO;
         private int iID = 0;
         private string UID = "";
+        private bool carregou = false;
 
         public operLancamento()
         {
@@ -29,8 +30,8 @@ namespace TeleBonifacio
             CarregarComboBox<Vendedor>(cmbVendedor, Vendedor,"", " Where Vendedores.Atende = -1 or Vendedores.Atende = 1 ", " desc ");
             cmbMotoBoy.SelectedIndex = 0;
             cmbCliente.SelectedIndex = -1;
-            CarregaGrid(null);
-            ConfigurarGrid();
+            // CarregaGrid(null);
+            // ConfigurarGrid();
         }
 
         #region MetodosPrincipais
@@ -88,10 +89,11 @@ namespace TeleBonifacio
             comboBox.ValueMember = "Id";
         }
 
-        private void CarregaGrid(DateTime? DT)
+        private void CarregaGrid()
         {
             entregasDAO = new EntregasDAO();
-            DataTable dados = entregasDAO.getDados(DT);
+            DateTime DT2 = dtpData.Value.AddDays(-1);
+            DataTable dados = entregasDAO.getDados(DT2, dtpData.Value);
             DevAge.ComponentModel.BoundDataView boundDataView = new DevAge.ComponentModel.BoundDataView(dados.DefaultView);
             dataGrid1.DataSource = boundDataView;
         }
@@ -130,7 +132,7 @@ namespace TeleBonifacio
                 glo.Loga($@"EA,{idForma},{compra},{idCliente}, {obs}, {desc}, {idVend}, {UID}");
                 entregasDAO.Adiciona(idBoy, idForma, valor, idCliente, compra, obs, desc, idVend, UID);
             }
-            CarregaGrid(null);
+            CarregaGrid();
             Limpar();
         }
 
@@ -272,8 +274,8 @@ namespace TeleBonifacio
 
         private void btnFiltrar_Click(object sender, EventArgs e)
         {
-            DateTime DT = dtpData.Value;
-            CarregaGrid(DT);
+            //DateTime DT = dtpData.Value;
+            CarregaGrid();
         }
 
         private void operLancamento_Resize(object sender, EventArgs e)
@@ -308,7 +310,17 @@ namespace TeleBonifacio
             fRel.Data = dtpData.Value;
             fRel.Show();
         }
-    }
 
+        private void operLancamento_Activated(object sender, EventArgs e)
+        {
+            if (!carregou)
+            {
+                carregou = true;
+                dtpData.Value = DateTime.Now;
+                CarregaGrid();
+                ConfigurarGrid();
+            }            
+        }
+    }
 }
 

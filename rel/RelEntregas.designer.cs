@@ -52,7 +52,7 @@ namespace TeleBonifacio.rel
             // textBox1
             // 
             this.textBox1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.textBox1.Font = new System.Drawing.Font("Courier New", 12F);
+            this.textBox1.Font = new System.Drawing.Font("Courier New", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textBox1.Location = new System.Drawing.Point(0, 49);
             this.textBox1.Multiline = true;
             this.textBox1.Name = "textBox1";
@@ -60,6 +60,7 @@ namespace TeleBonifacio.rel
             this.textBox1.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.textBox1.Size = new System.Drawing.Size(519, 401);
             this.textBox1.TabIndex = 11;
+            this.textBox1.WordWrap = false;
             // 
             // panel1
             // 
@@ -121,9 +122,9 @@ namespace TeleBonifacio.rel
             this.ClientSize = new System.Drawing.Size(519, 450);
             this.Controls.Add(this.textBox1);
             this.Controls.Add(this.panel1);
-            this.MaximizeBox = false;
             this.Name = "RelEntegas";
             this.Text = "Relatório de Entregas";
+            this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.Activated += new System.EventHandler(this.Extrato_Activated);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();

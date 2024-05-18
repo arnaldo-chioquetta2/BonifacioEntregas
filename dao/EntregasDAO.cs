@@ -14,7 +14,7 @@ namespace TeleBonifacio.dao
             
         }
 
-        public DataTable getDados(DateTime? DT)
+        public DataTable getDados(DateTime? DT1, DateTime? DT2)
         {
             StringBuilder query = new StringBuilder();
             int maxLength = 10; 
@@ -44,14 +44,11 @@ namespace TeleBonifacio.dao
                 LEFT JOIN Clientes c ON c.NrCli = e.idCliente)
                 LEFT JOIN Mecanicos m ON m.codi = e.idBoy)
                 LEFT JOIN Vendedores v ON v.ID = e.idVend)");
-            if (DT.HasValue)
-            {
-                DateTime dataInicio = DT.Value.Date;
-                DateTime dataFim = dataInicio.AddDays(1).AddTicks(-1);
-                string dataInicioStr = dataInicio.ToString("MM/dd/yyyy HH:mm:ss");
-                string dataFimStr = dataFim.ToString("MM/dd/yyyy 23:59:59");
-                query.AppendFormat(" WHERE e.Data BETWEEN #{0}# AND #{1}#", dataInicioStr, dataFimStr);
-            }
+            DateTime dataInicio = DT1.Value.Date;
+            DateTime dataFim = DT2.Value.Date;                
+            string dataInicioStr = dataInicio.ToString("MM/dd/yyyy HH:mm:ss");
+            string dataFimStr = dataFim.ToString("MM/dd/yyyy 23:59:59");
+            query.AppendFormat(" WHERE e.Data BETWEEN #{0}# AND #{1}#", dataInicioStr, dataFimStr);
             query.Append(" Order By e.ID desc");
             DataTable dt = glo.ExecutarConsulta(query.ToString());
             return dt;
