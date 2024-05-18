@@ -13,8 +13,8 @@ namespace TeleBonifacio.rel
     {
 
         private bool ativou = false;
-        private DateTime? DataInicio { get; set; }
-        private DateTime DataFim { get; set; }
+        //private DateTime? DataInicio { get; set; }
+        //private DateTime DataFim { get; set; }
         private List<Lanctos> relcaixa { get; set; }
         public DateTime DT1 { get; set; }
         public DateTime DT2 { get; set; }
@@ -192,17 +192,12 @@ namespace TeleBonifacio.rel
             sb.AppendLine($"Pix:      " + glo.ComplStr(TPix.ToString("N2"), 9, 2));
             sb.AppendLine($"Despesas: " + glo.ComplStr(TDespesa.ToString("N2"), 9, 2));
             sb.AppendLine($"Itau:     " + glo.ComplStr(TItau.ToString("N2"), 9, 2));
-            decimal total = TDinheiro + TCartao + TPix - TDespesa;
-            string totalString = glo.ComplStr(total.ToString("N2"), 9, 2); 
-            string EspacosAjustes = "";
-            if (total > 0)
-            {
-                EspacosAjustes = new string(' ', 25); 
-            }
-            string EspacosIniciais = new string(' ', 34);
-            string final = $"Saldo:{EspacosIniciais}{EspacosAjustes}{totalString}";
-            sb.AppendLine();
-            sb.AppendLine(final);
+            decimal Entradas = TDinheiro + TCartao + TPix + TItau;
+            decimal saldo = Entradas - TDespesa;
+            sb.AppendLine("");
+            sb.AppendLine("Total de entradas:"+ glo.ComplStr(Entradas.ToString("N2"), 9, 2));
+            sb.AppendLine("Total de saídas  :" + glo.ComplStr(TDespesa.ToString("N2"), 9, 2));
+            sb.AppendLine("Saldo            :" + glo.ComplStr(saldo.ToString("N2"), 9, 2));
             textBox1.Text = sb.ToString(); ;
             textBox1.SelectionStart = textBox1.Text.Length;
             textBox1.ScrollToCaret();
