@@ -6,6 +6,8 @@ using System.Data.OleDb;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Windows.Forms;
+using TeleBonifacio.dao;
 
 namespace TeleBonifacio
 {
@@ -35,7 +37,7 @@ namespace TeleBonifacio
                 INI MeuIni = new INI();
                 MeuIni.WriteString("Config", "Base", value);
             }
-        }        
+        }
 
         public static string connectionString
         {
@@ -222,7 +224,31 @@ namespace TeleBonifacio
             }
         }
 
-
+        public static void CarregarComboBox<T>(ComboBox comboBox, dao.BaseDAO classe, string ItemZero = "", string filtro = "", string ordem = "", string ItemFinal="") where T : tb.IDataEntity, new()
+        {
+            DataTable dados = classe.GetDadosOrdenados(filtro, ordem);
+            List<tb.ComboBoxItem> lista = new List<tb.ComboBoxItem>();
+            if (ItemZero.Length > 0)
+            {
+                tb.ComboBoxItem item = new tb.ComboBoxItem(0, ItemZero);
+                lista.Add(item);
+            }
+            foreach (DataRow row in dados.Rows)
+            {
+                int id = Convert.ToInt32(row["id"]);
+                string nome = row["Nome"].ToString();
+                tb.ComboBoxItem item = new tb.ComboBoxItem(id, nome);
+                lista.Add(item);
+            }
+            if (ItemFinal.Length > 0)
+            {
+                tb.ComboBoxItem item = new tb.ComboBoxItem(0, ItemFinal);
+                lista.Add(item);
+            }
+            comboBox.DataSource = lista;
+            comboBox.DisplayMember = "Nome";
+            comboBox.ValueMember = "Id";
+        }
 
         #region DB
 

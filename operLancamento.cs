@@ -25,13 +25,11 @@ namespace TeleBonifacio
             EntregadorDAO Entregador = new EntregadorDAO();
             ClienteDAO Cliente = new ClienteDAO();
             VendedoresDAO Vendedor = new VendedoresDAO();
-            CarregarComboBox<Entregador>(cmbMotoBoy, Entregador);
-            CarregarComboBox<Cliente>(cmbCliente, Cliente);
-            CarregarComboBox<Vendedor>(cmbVendedor, Vendedor,"", " Where Vendedores.Atende = -1 or Vendedores.Atende = 1 ", " desc ");
+            glo.CarregarComboBox<Entregador>(cmbMotoBoy, Entregador);
+            glo.CarregarComboBox<Cliente>(cmbCliente, Cliente);
+            glo.CarregarComboBox<Vendedor>(cmbVendedor, Vendedor,"", " Where Vendedores.Atende = -1 or Vendedores.Atende = 1 ", " desc ");
             cmbMotoBoy.SelectedIndex = 0;
             cmbCliente.SelectedIndex = -1;
-            // CarregaGrid(null);
-            // ConfigurarGrid();
         }
 
         #region MetodosPrincipais
@@ -68,26 +66,26 @@ namespace TeleBonifacio
             lbTotal.Text = "";
         }
 
-        private void CarregarComboBox<T>(ComboBox comboBox, BaseDAO classe, string ItemZero="", string filtro="", string ordem="") where T : IDataEntity, new()
-        {
-            DataTable dados = classe.GetDadosOrdenados(filtro, ordem);
-            List<ComboBoxItem> lista = new List<ComboBoxItem>();
-            if (ItemZero.Length>0)
-            {
-                ComboBoxItem item = new ComboBoxItem(0, ItemZero);
-                lista.Add(item);
-            }
-            foreach (DataRow row in dados.Rows)
-            {
-                int id = Convert.ToInt32(row["id"]);
-                string nome = row["Nome"].ToString();
-                ComboBoxItem item = new ComboBoxItem(id, nome);
-                lista.Add(item);
-            }
-            comboBox.DataSource = lista;
-            comboBox.DisplayMember = "Nome";
-            comboBox.ValueMember = "Id";
-        }
+        //private void CarregarComboBox<T>(ComboBox comboBox, BaseDAO classe, string ItemZero="", string filtro="", string ordem="") where T : IDataEntity, new()
+        //{
+        //    DataTable dados = classe.GetDadosOrdenados(filtro, ordem);
+        //    List<ComboBoxItem> lista = new List<ComboBoxItem>();
+        //    if (ItemZero.Length>0)
+        //    {
+        //        ComboBoxItem item = new ComboBoxItem(0, ItemZero);
+        //        lista.Add(item);
+        //    }
+        //    foreach (DataRow row in dados.Rows)
+        //    {
+        //        int id = Convert.ToInt32(row["id"]);
+        //        string nome = row["Nome"].ToString();
+        //        ComboBoxItem item = new ComboBoxItem(id, nome);
+        //        lista.Add(item);
+        //    }
+        //    comboBox.DataSource = lista;
+        //    comboBox.DisplayMember = "Nome";
+        //    comboBox.ValueMember = "Id";
+        //}
 
         private void CarregaGrid()
         {
@@ -291,7 +289,7 @@ namespace TeleBonifacio
             if (glo.IdAdicionado > 0)
             {
                 ClienteDAO Cliente = new ClienteDAO();
-                CarregarComboBox<tb.Cliente>(cmbCliente, Cliente);
+                glo.CarregarComboBox<tb.Cliente>(cmbCliente, Cliente);
                 cmbCliente.SelectedValue = glo.IdAdicionado;
             }
         }
