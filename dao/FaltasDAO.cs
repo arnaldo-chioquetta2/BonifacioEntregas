@@ -6,14 +6,15 @@ namespace TeleBonifacio.dao
 {
     public class FaltasDAO
     {
-        public void Adiciona(int idBalconista, float quantidade, string codigo, string Marca, string UID)
+        public void Adiciona(int idBalconista, float quantidade, string codigo, string Marca, string Descr, string UID)
         {
-            string sql = $@"INSERT INTO Faltas (IDBalconista, Quant, Codigo, Marca, Data, UID) VALUES (
+            string sql = $@"INSERT INTO Faltas (IDBalconista, Quant, Codigo, Marca, Data, Descricao, UID) VALUES (
                 {idBalconista}, 
                 {quantidade}, 
                 '{codigo}', 
                 '{Marca}', 
                 Now, 
+                '{Descr}', 
                 '{UID}')";
             glo.ExecutarComandoSQL(sql);
         }
@@ -21,7 +22,7 @@ namespace TeleBonifacio.dao
         public DataTable getDados(int tipo)
         {
             StringBuilder query = new StringBuilder();
-            query.Append(@"SELECT F.ID, F.IDBalconista, F.Data, F.Codigo, F.Quant, F.Marca, 
+            query.Append(@"SELECT F.Compra, F.Forn, F.ID, F.IDBalconista, F.Data, F.Codigo, F.Quant, F.Marca, F.Descricao, 
                     V.Nome AS Balconista, F.UID, F.Tipo 
                 FROM Faltas F
                 INNER JOIN Vendedores V ON V.ID = F.IDBalconista ");
@@ -50,9 +51,15 @@ namespace TeleBonifacio.dao
             glo.ExecutarComandoSQL(sql);
         }
 
-        public void SetaTipo(int iID, int iTpo)
+        public void Atualiza(int iID, int iTpo, string Forn)
         {
-            string sql = $@"UPDATE Faltas SET Tipo = {iTpo} WHERE ID = {iID}";
+            string sql = $@"UPDATE Faltas SET Tipo = {iTpo}, Forn = '{Forn}' WHERE ID = {iID}";
+            glo.ExecutarComandoSQL(sql);
+        }
+
+        internal void Comprou(int iID)
+        {
+            string sql = $@"UPDATE Faltas SET Compra = Now WHERE ID = {iID}";
             glo.ExecutarComandoSQL(sql);
         }
     }
