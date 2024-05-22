@@ -17,7 +17,16 @@ namespace TeleBonifacio
         protected bool EmAdicao = false;
         protected bool Mostrando = false;
         protected bool Pesquisando = false;
-        protected dao.BaseDAO DAO;
+        protected dao.BaseDAO _dao;
+        public dao.BaseDAO DAO
+        {
+            get { return _dao; }
+            set
+            {
+                _dao = value;
+            }
+        }
+        // protected dao.BaseDAO DAO;
         protected tb.IDataEntity reg;
         private List<CampoTagInfo> tagsDosCampos;
         private int lastColumnClick = -1;
@@ -72,6 +81,7 @@ namespace TeleBonifacio
                         }
                     }
                     Mostrando = false;
+                    cntrole1.IDAtual = reg.Id;
                     return true;
                 }
             }
@@ -339,6 +349,9 @@ namespace TeleBonifacio
                 if (EmAdicao)
                 {
                     mensJaTem = DAO.VeSeJaTem(DAO);
+                } else
+                {
+                    DAO.SetId(cntrole1.IDAtual);
                 }                
                 if (mensJaTem.Length>0)
                 {
@@ -511,8 +524,14 @@ namespace TeleBonifacio
                     DataGridTableStyle tableStyle = grid.TableStyles[0];
                     tableStyle.GridColumnStyles[0].Width = 30;
                     tableStyle.GridColumnStyles[1].Width = 100;
-                    tableStyle.GridColumnStyles[2].Width = 100;
-                    //  grid.sele
+                    try
+                    {
+                        tableStyle.GridColumnStyles[2].Width = 100;
+                    }
+                    catch (Exception)
+                    {
+
+                    }                    
                 }
                 GridCarregada = true;
             }

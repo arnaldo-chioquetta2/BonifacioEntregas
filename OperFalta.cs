@@ -24,13 +24,30 @@ namespace TeleBonifacio
         private void OperFalta_Load(object sender, EventArgs e)
         {
             VendedoresDAO Vendedor = new VendedoresDAO();
-            glo.CarregarComboBox<tb.Vendedor>(cmbVendedor, Vendedor, "", " Where Vendedores.Atende = -1 or Vendedores.Atende = 1 ", " desc ");
+            CarregarComboBox<tb.Vendedor>(cmbVendedor, Vendedor);
             cmbVendedor.SelectedIndex = -1;
             faltasDAO = new FaltasDAO();
             TpoFalta = new TpoFaltaDAO();
             CarregaGrid(0);
             ConfigurarGrid();            
             MostraTipos();
+        }
+
+        private void CarregarComboBox<T>(ComboBox comboBox, VendedoresDAO vendedor)
+        {
+            DataTable dados = vendedor.getBalconistas();
+            List<tb.ComboBoxItem> lista = new List<tb.ComboBoxItem>();
+            foreach (DataRow row in dados.Rows)
+            {
+                int id = Convert.ToInt32(row["id"]);
+                string Nro = row["Nro"].ToString();
+                string nome = Nro + " - " + row["Nome"].ToString();
+                tb.ComboBoxItem item = new tb.ComboBoxItem(id, nome);
+                lista.Add(item);
+            }
+            comboBox.DataSource = lista;
+            comboBox.DisplayMember = "Nome";
+            comboBox.ValueMember = "Id";
         }
 
         private void OperFalta_Activated(object sender, EventArgs e)
@@ -70,9 +87,10 @@ namespace TeleBonifacio
         private void Limpar()
         {
             cmbVendedor.SelectedIndex = -1;
-            txQuantidade.Text = "";
+            txQuantidade.Text = "0";
             txMarca.Text = "";
             txtCodigo.Text = "";
+            txDescr.Text = "";
             ReadlyOnly(false);
             btnAdicionar.Text = "Adicionar";
             btnExcluir.Enabled = false;
@@ -168,8 +186,9 @@ namespace TeleBonifacio
             dataGrid1.Columns[6].Width = 50; // Quantidade
             dataGrid1.Columns[7].Width = 100; // Marca
             dataGrid1.Columns[8].Width = 200; // Vendedor
-            dataGrid1.Columns[9].Visible = false; // UID
-            dataGrid1.Columns[10].Width = 100; // Tipo
+            dataGrid1.Columns[9].Width = 200; 
+            dataGrid1.Columns[10].Visible = false;  // UID
+            dataGrid1.Columns[11].Width = 200; // Tipo
             dataGrid1.Invalidate();
         }
 
@@ -228,7 +247,7 @@ namespace TeleBonifacio
 
         private void MostraTipos()
         {
-            glo.CarregarComboBox<tb.TpoFalta>(cmbTipos, TpoFalta, "ESCOLHA",ItemFinal:"ADICIONE");
+            glo.CarregarComboBox<tb.TpoFalta>(cmbTipos, TpoFalta, "ESCOLHA",ItemFinal:"ADICIONE", ItemFinal2: "EDIÇÃO");
             glo.CarregarComboBox<tb.TpoFalta>(cmbTiposFiltro, TpoFalta, "TODOS");
         }
 
@@ -236,14 +255,17 @@ namespace TeleBonifacio
         {
             if (btAdicTpo.Text == "Adicionar")
             {
-                TpoFalta.Adiciona(txNvTipo.Text);
-                txNvTipo.Text = "";
-                txNvTipo.Visible = false;
-                cmbTipos.Visible = true;
-                cmbTipos.DataSource = null;
-                MostraTipos();
-                btAdicTpo.Text = "Atualizar";
-                btAdicTpo.Enabled = false;
+                if (txNvTipo.Text.Length==0)
+                {
+                    MessageBox.Show("Só é possível adicionar um tipo se dizer qual ele é",
+                                                  "Não tem o tipo",
+                                                  MessageBoxButtons.OK);
+                    txNvTipo.Focus();
+                } else
+                {
+                    TpoFalta.Adiciona(txNvTipo.Text);
+                    RetCmboTpo();
+                }
             } else
             {
                 int iTpo = cmbTipos.SelectedIndex;
@@ -252,6 +274,19 @@ namespace TeleBonifacio
                 faltasDAO.Atualiza(iID, idTipo, Forn);
                 AtualizouEmBaixo();
             }
+        }
+
+        private void RetCmboTpo()
+        {
+            txNvTipo.Text = "";
+            txNvTipo.Visible = false;
+            cmbTipos.Visible = true;
+            cmbTipos.DataSource = null;
+            MostraTipos();
+            btAdicTpo.Text = "Atualizar";
+            btAdicTpo.Enabled = false;
+            btComprei.Text = "Comprei";
+            btComprei.Enabled = false;
         }
 
         private void AtualizouEmBaixo()
@@ -277,11 +312,21 @@ namespace TeleBonifacio
                             btAdicTpo.Enabled = true;
                             txNvTipo.Visible = true;
                             cmbTipos.Visible = false;
+                            btComprei.Text = "Cancelar";
+                            btComprei.Enabled = true;
                             txNvTipo.Focus();
                         }
                         else
                         {
-                            btAdicTpo.Enabled = true;
+                            if (ItemCombo == "EDIÇÃO")
+                            {
+                                fCadTiposFaltas novoForm = new fCadTiposFaltas();
+                                novoForm.ShowDialog();
+                                MostraTipos();
+                            } else
+                            {
+                                btAdicTpo.Enabled = true;
+                            }                                
                         }
                     }
                 }
@@ -295,8 +340,14 @@ namespace TeleBonifacio
 
         private void btComprei_Click(object sender, EventArgs e)
         {
-            faltasDAO.Comprou(iID);
-            AtualizouEmBaixo();
+            if (btComprei.Text == "Comprei")
+            {
+                faltasDAO.Comprou(iID);
+                AtualizouEmBaixo();
+            } else
+            {
+                RetCmboTpo();
+            }
         }
 
         #endregion

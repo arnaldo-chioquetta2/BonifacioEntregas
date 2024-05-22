@@ -34,6 +34,8 @@ namespace TeleBonifacio
             this.lblNome = new System.Windows.Forms.Label();
             this.txtNome = new System.Windows.Forms.TextBox();
             this.chkAtende = new System.Windows.Forms.CheckBox();
+            this.txtNro = new System.Windows.Forms.TextBox();
+            this.label2 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // cntrole1
@@ -91,10 +93,31 @@ namespace TeleBonifacio
             this.chkAtende.UseVisualStyleBackColor = true;
             this.chkAtende.CheckStateChanged += new System.EventHandler(this.chkAtende_CheckStateChanged);
             // 
+            // txtNro
+            // 
+            this.txtNro.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtNro.Location = new System.Drawing.Point(258, 172);
+            this.txtNro.MaxLength = 100;
+            this.txtNro.Name = "txtNro";
+            this.txtNro.Size = new System.Drawing.Size(55, 23);
+            this.txtNro.TabIndex = 14;
+            this.txtNro.Tag = "";
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(228, 177);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(24, 13);
+            this.label2.TabIndex = 15;
+            this.label2.Text = "Nro";
+            // 
             // CadVendedores2
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.ClientSize = new System.Drawing.Size(334, 211);
+            this.Controls.Add(this.label2);
+            this.Controls.Add(this.txtNro);
             this.Controls.Add(this.chkAtende);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.txtLoja);
@@ -102,6 +125,7 @@ namespace TeleBonifacio
             this.Controls.Add(this.txtNome);
             this.Name = "CadVendedores2";
             this.Text = "Vendedores";
+            this.Activated += new System.EventHandler(this.CadVendedores2_Activated);
             this.KeyUp += new System.Windows.Forms.KeyEventHandler(this.CadVendedor_KeyUp);
             this.Controls.SetChildIndex(this.cntrole1, 0);
             this.Controls.SetChildIndex(this.txtNome, 0);
@@ -109,6 +133,8 @@ namespace TeleBonifacio
             this.Controls.SetChildIndex(this.txtLoja, 0);
             this.Controls.SetChildIndex(this.label1, 0);
             this.Controls.SetChildIndex(this.chkAtende, 0);
+            this.Controls.SetChildIndex(this.txtNro, 0);
+            this.Controls.SetChildIndex(this.label2, 0);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -121,5 +147,7 @@ namespace TeleBonifacio
         private System.Windows.Forms.Label lblNome;
         private System.Windows.Forms.TextBox txtNome;
         private System.Windows.Forms.CheckBox chkAtende;
+        private System.Windows.Forms.TextBox txtNro;
+        private System.Windows.Forms.Label label2;
     }
 }

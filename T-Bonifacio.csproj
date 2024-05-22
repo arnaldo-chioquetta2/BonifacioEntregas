@@ -105,6 +105,12 @@
     <Compile Include="CadEntregadores.designer.cs">
       <DependentUpon>CadEntregadores.cs</DependentUpon>
     </Compile>
+    <Compile Include="CadTipos.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="CadTipos.Designer.cs">
+      <DependentUpon>CadTipos.cs</DependentUpon>
+    </Compile>
     <Compile Include="CadVendedores2.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -242,6 +248,9 @@
     <EmbeddedResource Include="CadEntregadores.resx">
       <DependentUpon>CadEntregadores.cs</DependentUpon>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="CadTipos.resx">
+      <DependentUpon>CadTipos.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="CadVendedores2.resx">
       <DependentUpon>CadVendedores2.cs</DependentUpon>

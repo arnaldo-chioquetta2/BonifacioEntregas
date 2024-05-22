@@ -14,5 +14,6 @@ namespace TeleBonifacio.tb
 
         public string Codigo { get; set; } 
         public bool Adicao { get; set; }
+        public string Nome { get; set; }
     }
 }

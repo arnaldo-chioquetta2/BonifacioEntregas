@@ -12,39 +12,59 @@ namespace TeleBonifacio.dao
 
         public int Id { get; set; }
 
-        public string Nome { get; set; }
+        // public string Nome { get; set; }
+        protected string _Nome;
+        public string Nome
+        {
+            get { return _Nome; }
+            set
+            {
+                _Nome = value;
+            }
+        }
 
         public string Loja { get; set; }
 
         public bool Atende { get; set; }
+
+        public string Nro { get; set; }
 
         public VendedoresDAO()
         {
             
         }
 
-        public void AdicionaVendedor(string nome, string loja, bool Atende)
+        public void AdicionaVendedor(string nome, string loja, bool Atende, string Nro)
         {
             int iat = (Atende == true) ? 1: 0;
             string sat = iat.ToString();
-            String sql = @"INSERT INTO Vendedores (Nome, Loja, Atende) VALUES ("
+            String sql = @"INSERT INTO Vendedores (Nome, Loja, Atende, Nro) VALUES ("
                 + glo.fa(nome) + ", "
-                + glo.fa(loja)  
-                + sat + ")";
+                + glo.fa(loja) + ", "
+                + sat + ", "
+                + glo.fa(Nro) + ")";
             glo.ExecutarComandoSQL(sql);
         }
 
-        public void EditaVendedor(int id, string nome, string loja, bool Atende)
+        public void EditaVendedor(int id, string nome, string loja, bool Atende, string Nro)
         {
             int iat = (Atende == true) ? 1 : 0;
             string sat = iat.ToString();
             String sql = @"UPDATE Vendedores SET 
                 Nome = " + glo.fa(nome) +
                 ", Loja = '" + glo.fa(loja) +
-                ", Atende = " + sat + 
+                ", Atende = " + sat +
+                ", Nro = " + glo.fa(Nro) + 
                 " WHERE ID = " + id.ToString();
             glo.ExecutarComandoSQL(sql);
         }
+
+        internal DataTable getBalconistas()
+        {
+            string query = $"SELECT * FROM Vendedores Where Nro > '0' Order By Nome ";
+            return ExecutarConsultaVendedor(query);
+        }
+
         public override object GetUltimo()
         {
             string query = "SELECT TOP 1 * FROM Vendedores ORDER BY ID Desc";
@@ -58,12 +78,13 @@ namespace TeleBonifacio.dao
             List<OleDbParameter> parameters;
             if (vendedor.Adicao)
             {
-                query = "INSERT INTO Vendedores (Nome, Lojam Atende) VALUES (?, ?, ?)";
+                query = "INSERT INTO Vendedores (Nome, Lojam Atende, Nro) VALUES (?, ?, ?, ?)";
                 parameters = ConstruirParametro(vendedor, true);
             }
             else
             {
-                query = "UPDATE Vendedores SET Nome = ?, Loja = ?, Atende = ? WHERE ID = ?";
+                // query = $"UPDATE Vendedores SET Nome = '{vendedor.Nome}', Loja = '{vendedor.Loja}', Atende = {vendedor.Atende}, Nro = '{vendedor.Nro}' WHERE ID = {vendedor.Id} ";
+                query = "UPDATE Vendedores SET Nome = ?, Loja = ?, Atende = ?, Nro = ? WHERE ID = ?";
                 parameters = ConstruirParametro(vendedor, false);
             }
 
@@ -85,7 +106,8 @@ namespace TeleBonifacio.dao
             {
                 new OleDbParameter("@Nome", vendedor.Nome),
                 new OleDbParameter("@Loja", vendedor.Loja),
-                new OleDbParameter("@Atende", iAt) 
+                new OleDbParameter("@Atende", iAt),
+                new OleDbParameter("@Nro", Nro)                
             };
             if (!inserindo)
             {
@@ -110,13 +132,15 @@ namespace TeleBonifacio.dao
                             dataTable.Columns.Add("Nome", typeof(string));
                             dataTable.Columns.Add("Loja", typeof(string));
                             dataTable.Columns.Add("Atende", typeof(string));
+                            dataTable.Columns.Add("Nro", typeof(string));                            
                             while (reader.Read())
                             {
                                 DataRow row = dataTable.NewRow();
                                 row["ID"] = reader["ID"];
                                 row["Nome"] = reader["Nome"];
                                 row["Loja"] = reader["Loja"];
-                                row["Atende"] = reader["Atende"];                                
+                                row["Atende"] = reader["Atende"];
+                                row["Nro"] = reader["Nro"];                                
                                 dataTable.Rows.Add(row);
                             }
                             return dataTable;
@@ -138,7 +162,8 @@ namespace TeleBonifacio.dao
                 Id = Id,
                 Nome = Nome,
                 Loja = Loja,
-                Atende = Atende
+                Atende = Atende,
+                Nro = Nro
             };
         }
 
@@ -183,7 +208,8 @@ namespace TeleBonifacio.dao
                                 {
                                     int iAt = Convert.ToInt32(oAt);
                                     Atende = !(iAt == 0);
-                                }                                
+                                }     
+                                Nro = reader["Nro"].ToString();
                                 return (tb.Vendedor)GetEsse();
                             }
                         }
@@ -243,6 +269,10 @@ namespace TeleBonifacio.dao
             return "";
         }
 
+        public override void SetId(int iD)
+        {
+            this.Id = iD;
+        }
 
     }
 }

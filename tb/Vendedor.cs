@@ -14,5 +14,7 @@ namespace TeleBonifacio.tb
         
         public bool Atende { get; set; }
 
+        public string Nro { get; set; }
+
     }
 }

@@ -224,7 +224,7 @@ namespace TeleBonifacio
             }
         }
 
-        public static void CarregarComboBox<T>(ComboBox comboBox, dao.BaseDAO classe, string ItemZero = "", string filtro = "", string ordem = "", string ItemFinal="") where T : tb.IDataEntity, new()
+        public static void CarregarComboBox<T>(ComboBox comboBox, dao.BaseDAO classe, string ItemZero = "", string filtro = "", string ordem = "", string ItemFinal="", string ItemFinal2 = "") where T : tb.IDataEntity, new()
         {
             DataTable dados = classe.GetDadosOrdenados(filtro, ordem);
             List<tb.ComboBoxItem> lista = new List<tb.ComboBoxItem>();
@@ -244,6 +244,11 @@ namespace TeleBonifacio
             {
                 tb.ComboBoxItem item = new tb.ComboBoxItem(0, ItemFinal);
                 lista.Add(item);
+                if (ItemFinal2.Length > 0)
+                {
+                    tb.ComboBoxItem item2 = new tb.ComboBoxItem(0, ItemFinal2);
+                    lista.Add(item2);
+                }
             }
             comboBox.DataSource = lista;
             comboBox.DisplayMember = "Nome";

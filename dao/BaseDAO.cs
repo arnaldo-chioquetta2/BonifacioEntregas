@@ -62,5 +62,9 @@ namespace TeleBonifacio.dao
             return null;
         }
 
+        public virtual void SetId(int iD)
+        {
+            // 
+        }
     }
 }

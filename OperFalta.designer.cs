@@ -72,7 +72,7 @@ namespace TeleBonifacio
             this.dataGrid1.Location = new System.Drawing.Point(0, 119);
             this.dataGrid1.Name = "dataGrid1";
             this.dataGrid1.SelectionMode = SourceGrid.GridSelectionMode.Row;
-            this.dataGrid1.Size = new System.Drawing.Size(1204, 313);
+            this.dataGrid1.Size = new System.Drawing.Size(1114, 313);
             this.dataGrid1.TabIndex = 14;
             this.dataGrid1.TabStop = true;
             this.dataGrid1.ToolTipText = "";
@@ -86,7 +86,7 @@ namespace TeleBonifacio
             this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(1204, 119);
+            this.panel1.Size = new System.Drawing.Size(1114, 119);
             this.panel1.TabIndex = 13;
             // 
             // groupBox3
@@ -138,11 +138,11 @@ namespace TeleBonifacio
             this.groupBox2.Controls.Add(this.btComprei);
             this.groupBox2.Controls.Add(this.txForn);
             this.groupBox2.Controls.Add(this.label5);
-            this.groupBox2.Controls.Add(this.txNvTipo);
             this.groupBox2.Controls.Add(this.cmbTipos);
             this.groupBox2.Controls.Add(this.label3);
             this.groupBox2.Controls.Add(this.btAdicTpo);
             this.groupBox2.Controls.Add(this.btnExcluir);
+            this.groupBox2.Controls.Add(this.txNvTipo);
             this.groupBox2.Location = new System.Drawing.Point(12, 61);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Size = new System.Drawing.Size(658, 51);
@@ -247,7 +247,7 @@ namespace TeleBonifacio
             this.groupBox1.Dock = System.Windows.Forms.DockStyle.Top;
             this.groupBox1.Location = new System.Drawing.Point(0, 0);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(1204, 55);
+            this.groupBox1.Size = new System.Drawing.Size(1114, 55);
             this.groupBox1.TabIndex = 39;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Adição";
@@ -352,7 +352,7 @@ namespace TeleBonifacio
             // 
             this.btnAdicionar.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.btnAdicionar.Enabled = false;
-            this.btnAdicionar.Location = new System.Drawing.Point(1032, 22);
+            this.btnAdicionar.Location = new System.Drawing.Point(1033, 22);
             this.btnAdicionar.Name = "btnAdicionar";
             this.btnAdicionar.Size = new System.Drawing.Size(75, 23);
             this.btnAdicionar.TabIndex = 40;
@@ -361,7 +361,7 @@ namespace TeleBonifacio
             // 
             // OperFalta
             // 
-            this.ClientSize = new System.Drawing.Size(1204, 432);
+            this.ClientSize = new System.Drawing.Size(1114, 432);
             this.Controls.Add(this.dataGrid1);
             this.Controls.Add(this.panel1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));

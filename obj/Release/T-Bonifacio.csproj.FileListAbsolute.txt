@@ -30,3 +30,5 @@ C:\Prog\T-Bonifacio\T-Bonifacio\obj\Release\TeleBonifacio.rel.RelEntegas.resourc
 C:\Prog\T-Bonifacio\T-Bonifacio\obj\Release\TeleBonifacio.OperRH.resources
 C:\Prog\T-Bonifacio\T-Bonifacio\obj\Release\TeleBonifacio.CadVendedores2.resources
 C:\Prog\T-Bonifacio\T-Bonifacio\obj\Release\TeleBonifacio.OperFalta.resources
+C:\Prog\T-Bonifacio\T-Bonifacio\obj\Release\TeleBonifacio.fCadTiposFaltas.resources
+C:\Prog\T-Bonifacio\T-Bonifacio\obj\Release\T-Bonifacio.csproj.CopyComplete

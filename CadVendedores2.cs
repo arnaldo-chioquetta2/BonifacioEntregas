@@ -1,11 +1,6 @@
 ﻿using TeleBonifacio.tb;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Data.OleDb;
-using System.Drawing;
-using System.Text;
 using System.Windows.Forms;
 
 namespace TeleBonifacio
@@ -13,12 +8,15 @@ namespace TeleBonifacio
     public partial class CadVendedores2 : TeleBonifacio.FormBase
     {
         private bool Carregando = true;
+        private int ID = 0;
+        private bool Adicionando = false;
 
         public CadVendedores2()
         {
             InitializeComponent();
             base.DAO = new dao.VendedoresDAO();
             base.reg = getUlt();
+            ID = base.reg.Id;
             base.Mostra();
             base.LerTagsDosCamposDeTexto();
             Carregando = false;
@@ -56,6 +54,7 @@ namespace TeleBonifacio
                                     int iAt = (int)oAt;
                                     ret.Atende = (iAt == -1);
                                 }
+                                ret.Nro = (string)reader["Nro"];
                             }
                             return ret;
                         }
@@ -73,6 +72,10 @@ namespace TeleBonifacio
         private void cntrole1_AcaoRealizada(object sender, AcaoEventArgs e)
         {
             Carregando = true;
+            if (!Adicionando)
+            {
+                base.DAO.SetId(ID);
+            }
             base.cntrole1_AcaoRealizada(sender, e, base.reg);
             Carregando = false;
         }
@@ -103,5 +106,16 @@ namespace TeleBonifacio
                 base.cntrole1.EmEdicao = true;
             }            
         }
+
+        private void CadVendedores2_Activated(object sender, EventArgs e)
+        {
+            if (glo.IdAdicionado == -1)
+            {
+                // glo.IdAdicionado = 0;
+                Adicionando = true;
+                // base.Adicionar();
+            }
+        }
+
     }
 }

@@ -10,6 +10,8 @@ namespace TeleBonifacio.tb
     {
         int Id { get; set; }
         bool Adicao { get; set; }
+
+        string Nome { get; set; }
     }
 }
 
