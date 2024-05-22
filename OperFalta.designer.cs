@@ -30,7 +30,6 @@ namespace TeleBonifacio
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(OperFalta));
-            this.dataGrid1 = new SourceGrid.DataGrid();
             this.panel1 = new System.Windows.Forms.Panel();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.button2 = new System.Windows.Forms.Button();
@@ -40,11 +39,11 @@ namespace TeleBonifacio
             this.btComprei = new System.Windows.Forms.Button();
             this.txForn = new System.Windows.Forms.TextBox();
             this.label5 = new System.Windows.Forms.Label();
-            this.txNvTipo = new System.Windows.Forms.TextBox();
             this.cmbTipos = new System.Windows.Forms.ComboBox();
             this.label3 = new System.Windows.Forms.Label();
             this.btAdicTpo = new System.Windows.Forms.Button();
             this.btnExcluir = new System.Windows.Forms.Button();
+            this.txNvTipo = new System.Windows.Forms.TextBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.label8 = new System.Windows.Forms.Label();
             this.txDescr = new System.Windows.Forms.TextBox();
@@ -57,26 +56,13 @@ namespace TeleBonifacio
             this.label2 = new System.Windows.Forms.Label();
             this.txtCodigo = new System.Windows.Forms.TextBox();
             this.btnAdicionar = new System.Windows.Forms.Button();
+            this.dataGrid1 = new System.Windows.Forms.DataGridView();
             this.panel1.SuspendLayout();
             this.groupBox3.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGrid1)).BeginInit();
             this.SuspendLayout();
-            // 
-            // dataGrid1
-            // 
-            this.dataGrid1.DeleteQuestionMessage = "Are you sure to delete all the selected rows?";
-            this.dataGrid1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dataGrid1.EnableSort = false;
-            this.dataGrid1.FixedRows = 1;
-            this.dataGrid1.Location = new System.Drawing.Point(0, 119);
-            this.dataGrid1.Name = "dataGrid1";
-            this.dataGrid1.SelectionMode = SourceGrid.GridSelectionMode.Row;
-            this.dataGrid1.Size = new System.Drawing.Size(1114, 313);
-            this.dataGrid1.TabIndex = 14;
-            this.dataGrid1.TabStop = true;
-            this.dataGrid1.ToolTipText = "";
-            this.dataGrid1.DoubleClick += new System.EventHandler(this.dataGrid1_DoubleClick);
             // 
             // panel1
             // 
@@ -180,14 +166,6 @@ namespace TeleBonifacio
             this.label5.TabIndex = 47;
             this.label5.Text = "Forn";
             // 
-            // txNvTipo
-            // 
-            this.txNvTipo.Location = new System.Drawing.Point(57, 19);
-            this.txNvTipo.Name = "txNvTipo";
-            this.txNvTipo.Size = new System.Drawing.Size(266, 20);
-            this.txNvTipo.TabIndex = 45;
-            this.txNvTipo.Visible = false;
-            // 
             // cmbTipos
             // 
             this.cmbTipos.DisplayMember = "Nome";
@@ -230,6 +208,14 @@ namespace TeleBonifacio
             this.btnExcluir.TabIndex = 39;
             this.btnExcluir.Text = "Excluir";
             this.btnExcluir.Click += new System.EventHandler(this.btnExcluir_Click);
+            // 
+            // txNvTipo
+            // 
+            this.txNvTipo.Location = new System.Drawing.Point(57, 19);
+            this.txNvTipo.Name = "txNvTipo";
+            this.txNvTipo.Size = new System.Drawing.Size(266, 20);
+            this.txNvTipo.TabIndex = 45;
+            this.txNvTipo.Visible = false;
             // 
             // groupBox1
             // 
@@ -359,6 +345,18 @@ namespace TeleBonifacio
             this.btnAdicionar.Text = "Adicionar";
             this.btnAdicionar.Click += new System.EventHandler(this.btnAdicionar_Click);
             // 
+            // dataGrid1
+            // 
+            this.dataGrid1.AllowUserToAddRows = false;
+            this.dataGrid1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dataGrid1.Location = new System.Drawing.Point(0, 119);
+            this.dataGrid1.Name = "dataGrid1";
+            this.dataGrid1.ReadOnly = true;
+            this.dataGrid1.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.dataGrid1.Size = new System.Drawing.Size(1114, 313);
+            this.dataGrid1.TabIndex = 14;
+            this.dataGrid1.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGrid1_CellClick);
+            // 
             // OperFalta
             // 
             this.ClientSize = new System.Drawing.Size(1114, 432);
@@ -377,12 +375,12 @@ namespace TeleBonifacio
             this.groupBox2.PerformLayout();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGrid1)).EndInit();
             this.ResumeLayout(false);
 
         }
 
         #endregion
-        private SourceGrid.DataGrid dataGrid1;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.GroupBox groupBox3;
         private System.Windows.Forms.Button button2;
@@ -409,6 +407,7 @@ namespace TeleBonifacio
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.TextBox txDescr;
+        private System.Windows.Forms.DataGridView dataGrid1;
     }
 }
 

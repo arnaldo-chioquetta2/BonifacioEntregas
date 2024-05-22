@@ -23,7 +23,7 @@ namespace TeleBonifacio.dao
         {
             StringBuilder query = new StringBuilder();
             query.Append(@"SELECT F.Compra, F.Forn, F.ID, F.IDBalconista, F.Data, F.Codigo, F.Quant, F.Marca, F.Descricao, 
-                    V.Nome AS Balconista, F.UID, F.Tipo 
+                    V.Nome AS Balconista, F.UID, F.Tipo, F.Tipo as TipoOrig
                 FROM Faltas F
                 INNER JOIN Vendedores V ON V.ID = F.IDBalconista ");
             if (tipo>0)
