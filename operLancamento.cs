@@ -27,7 +27,10 @@ namespace TeleBonifacio
             VendedoresDAO Vendedor = new VendedoresDAO();
             glo.CarregarComboBox<Entregador>(cmbMotoBoy, Entregador);
             glo.CarregarComboBox<Cliente>(cmbCliente, Cliente);
-            glo.CarregarComboBox<Vendedor>(cmbVendedor, Vendedor,"", " Where Vendedores.Atende = -1 or Vendedores.Atende = 1 ", " desc ");
+
+            glo.CarregarComboBox<Vendedor>(cmbVendedor, Vendedor,"", " Where Vendedores.Atende = 1 ", " desc ");
+            // glo.CarregarComboBox<Vendedor>(cmbVendedor, Vendedor, "", " Where Vendedores.Atende = -1 or Vendedores.Atende = 1 ", " desc ");
+
             cmbMotoBoy.SelectedIndex = 0;
             cmbCliente.SelectedIndex = -1;
         }

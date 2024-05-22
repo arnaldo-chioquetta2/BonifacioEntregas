@@ -25,7 +25,7 @@ namespace TeleBonifacio
         private tb.Vendedor getUlt()
         {
             string query = "SELECT TOP 1 * FROM Vendedores ORDER BY ID Desc";
-            return ExecutarConsulta(query); ;
+            return ExecutarConsulta(query); 
         }
 
         private Vendedor ExecutarConsulta(string query)
@@ -54,7 +54,15 @@ namespace TeleBonifacio
                                     int iAt = (int)oAt;
                                     ret.Atende = (iAt == -1);
                                 }
-                                ret.Nro = (string)reader["Nro"];
+                                object oNro = reader["Nro"];
+                                if (oNro == System.DBNull.Value)
+                                {
+                                    ret.Nro = "0";
+                                }
+                                else
+                                {
+                                    ret.Nro = (string)oNro;
+                                }
                             }
                             return ret;
                         }
@@ -62,7 +70,7 @@ namespace TeleBonifacio
                 }
                 catch (Exception ex)
                 {
-                    // Aqui você pode decidir como lidar com a exceção
+                    Console.WriteLine(ex.ToString());
                     throw;
                 }
 
