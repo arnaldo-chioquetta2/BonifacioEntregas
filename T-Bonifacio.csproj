@@ -105,6 +105,12 @@
     <Compile Include="CadEntregadores.designer.cs">
       <DependentUpon>CadEntregadores.cs</DependentUpon>
     </Compile>
+    <Compile Include="CadFornec.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="CadFornec.Designer.cs">
+      <DependentUpon>CadFornec.cs</DependentUpon>
+    </Compile>
     <Compile Include="CadTipos.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -124,6 +130,7 @@
     <Compile Include="dao\EntregadorDAO.cs" />
     <Compile Include="dao\EntregasDAO.cs" />
     <Compile Include="dao\FaltasDAO.cs" />
+    <Compile Include="dao\FornecedorDao.cs" />
     <Compile Include="dao\ReciboDAO.cs" />
     <Compile Include="dao\RHDAO.cs" />
     <Compile Include="dao\TpoFaltaDAO.cs" />
@@ -237,6 +244,7 @@
     <Compile Include="tb\Entregador.cs" />
     <Compile Include="tb\Entregas.cs" />
     <Compile Include="tb\Falta .cs" />
+    <Compile Include="tb\Fornecedor.cs" />
     <Compile Include="tb\IDataEntity.cs" />
     <Compile Include="tb\Recibo.cs" />
     <Compile Include="tb\TpoFalta .cs" />
@@ -248,6 +256,9 @@
     <EmbeddedResource Include="CadEntregadores.resx">
       <DependentUpon>CadEntregadores.cs</DependentUpon>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="CadFornec.resx">
+      <DependentUpon>CadFornec.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="CadTipos.resx">
       <DependentUpon>CadTipos.cs</DependentUpon>

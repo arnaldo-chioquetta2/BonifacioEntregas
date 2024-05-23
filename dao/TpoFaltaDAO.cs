@@ -123,7 +123,6 @@ namespace TeleBonifacio.dao
             return parametros;
         }
 
-
         public override void Grava(object obj)
         {
             TpoFaltaDAO tpoFalta = (TpoFaltaDAO)obj;
@@ -154,7 +153,13 @@ namespace TeleBonifacio.dao
 
         public override tb.IDataEntity ParaFrente()
         {
-            string query = $"SELECT TOP 1 * FROM TpoFalta Where Where Nome > '{Nome}' ORDER BY Nome Desc ";
+            string query = $"SELECT TOP 1 * FROM TpoFalta Where Nome > '{Nome}' ORDER BY Nome Desc ";
+            return ExecutarConsulta2(query);
+        }
+
+        public override IDataEntity ParaTraz()
+        {
+            string query = $"SELECT TOP 1 * FROM TpoFalta Where Nome < '{Nome}' ORDER BY Nome Desc";
             return ExecutarConsulta2(query);
         }
 
@@ -184,12 +189,6 @@ namespace TeleBonifacio.dao
                 }
             }
             return null;
-        }
-
-        public override IDataEntity ParaTraz()
-        {
-            string query = $"SELECT TOP 1 * FROM TpoFalta Where Nome < '{Nome}' ORDER BY Nome Desc";
-            return ExecutarConsulta2(query);
         }
 
         public override string VeSeJaTem(object obj)

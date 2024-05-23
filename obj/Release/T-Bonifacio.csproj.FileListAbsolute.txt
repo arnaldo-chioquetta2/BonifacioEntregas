@@ -31,3 +31,5 @@ C:\Prog\T-Bonifacio\T-Bonifacio\obj\Release\T-Bonifacio.csproj.GenerateResource.
 C:\Prog\T-Bonifacio\T-Bonifacio\obj\Release\T-Bonifacio.csproj.CoreCompileInputs.cache
 C:\Prog\T-Bonifacio\T-Bonifacio\obj\Release\TeleBonifacio.exe
 C:\Prog\T-Bonifacio\T-Bonifacio\obj\Release\TeleBonifacio.pdb
+C:\Prog\T-Bonifacio\T-Bonifacio\obj\Release\TeleBonifacio.CadFornec.resources
+C:\Prog\T-Bonifacio\T-Bonifacio\obj\Release\T-Bonifacio.csproj.CopyComplete

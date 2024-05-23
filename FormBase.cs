@@ -26,11 +26,10 @@ namespace TeleBonifacio
                 _dao = value;
             }
         }
-        // protected dao.BaseDAO DAO;
         protected tb.IDataEntity reg;
         private List<CampoTagInfo> tagsDosCampos;
-        private int lastColumnClick = -1;
-        private DateTime lastClickTime = DateTime.MinValue;
+        //private int lastColumnClick = -1;
+        //private DateTime lastClickTime = DateTime.MinValue;
         private System.Windows.Forms.DataGrid dataGrid;
         private bool GridCarregada = false;
         private bool AdicaoPorfora = false;
@@ -348,7 +347,8 @@ namespace TeleBonifacio
                 string mensJaTem = "";
                 if (EmAdicao)
                 {
-                    mensJaTem = DAO.VeSeJaTem(DAO);
+                    //DAO.SetId(0);
+                    mensJaTem = DAO.VeSeJaTem(DAO);                    
                 } else
                 {
                     DAO.SetId(cntrole1.IDAtual);

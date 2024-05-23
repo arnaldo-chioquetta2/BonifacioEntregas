@@ -1,5 +1,4 @@
-﻿using TeleBonifacio.tb;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.OleDb;
@@ -12,7 +11,6 @@ namespace TeleBonifacio.dao
 
         public int Id { get; set; }
 
-        // public string Nome { get; set; }
         protected string _Nome;
         public string Nome
         {
@@ -75,15 +73,14 @@ namespace TeleBonifacio.dao
         {
             VendedoresDAO vendedor = (VendedoresDAO)obj;
             string query;
-            List<OleDbParameter> parameters;
+            List<OleDbParameter> parameters=null;
             if (vendedor.Adicao)
             {
-                query = "INSERT INTO Vendedores (Nome, Lojam Atende, Nro) VALUES (?, ?, ?, ?)";
-                parameters = ConstruirParametro(vendedor, true);
+                int iAtende = vendedor.Atende ? 1 : 0;
+                query = $"INSERT INTO Vendedores (Nome, Loja, Atende, Nro) VALUES ('{vendedor.Nome}', '{vendedor.Loja}', {iAtende}, '{vendedor.Nro}')";
             }
             else
             {
-                // query = $"UPDATE Vendedores SET Nome = '{vendedor.Nome}', Loja = '{vendedor.Loja}', Atende = {vendedor.Atende}, Nro = '{vendedor.Nro}' WHERE ID = {vendedor.Id} ";
                 query = "UPDATE Vendedores SET Nome = ?, Loja = ?, Atende = ?, Nro = ? WHERE ID = ?";
                 parameters = ConstruirParametro(vendedor, false);
             }

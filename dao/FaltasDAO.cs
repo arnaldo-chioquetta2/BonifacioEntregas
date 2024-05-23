@@ -19,17 +19,33 @@ namespace TeleBonifacio.dao
             glo.ExecutarComandoSQL(sql);
         }
 
-        public DataTable getDados(int tipo)
+        public DataTable getDados(int tipo, int idForn)
         {
             StringBuilder query = new StringBuilder();
-            query.Append(@"SELECT F.Compra, F.Forn, F.ID, F.IDBalconista, F.Data, F.Codigo, F.Quant, F.Marca, F.Descricao, 
-                    V.Nome AS Balconista, F.UID, F.Tipo, F.Tipo as TipoOrig
+
+            query.Append(@"SELECT F.Compra, '' as Forn, F.ID, F.IDBalconista, F.Data, F.Codigo, F.Quant, F.Marca, F.Descricao, 
+                    V.Nome AS Balconista, F.UID, F.Tipo, F.Tipo as TipoOrig, F.idForn
                 FROM Faltas F
                 INNER JOIN Vendedores V ON V.ID = F.IDBalconista ");
-            if (tipo>0)
-            {
-                query.Append($@" Where F.Tipo = '{tipo}' ");
-            }            
+            if ((tipo > 0) || (idForn > 0))
+            {                
+                string sTipo = "";
+                string sForn = "";
+                string sAnd = "";
+                if (tipo > 0)
+                {
+                    sTipo = $@" F.Tipo = '{tipo}' ";
+                }
+                if (idForn > 0)
+                {
+                    sForn = $@" F.idForn = {idForn} ";
+                }
+                if ((tipo > 0) && (tipo > 0))
+                {
+                    sAnd = " and ";
+                }                
+                query.Append($@" Where {sTipo} {sAnd} {sForn} ");
+            }
             query.Append(" ORDER BY F.Data, V.Nome");
             DataTable dt = glo.ExecutarConsulta(query.ToString());
             return dt;
@@ -51,9 +67,20 @@ namespace TeleBonifacio.dao
             glo.ExecutarComandoSQL(sql);
         }
 
-        public void Atualiza(int iID, int iTpo, string Forn)
+        public void Atualiza(int iID, int iTpo, int idForn)
         {
-            string sql = $@"UPDATE Faltas SET Tipo = {iTpo}, Forn = '{Forn}' WHERE ID = {iID}";
+            string sTipo = "";
+            if (iTpo>0)
+            {
+                sTipo = $@" Tipo = {iTpo}";
+            }
+            string sForn = "";
+            if (idForn > 0)
+            {
+                sForn = $@" idForn = {idForn}";
+            }
+            string Virgula = ((sTipo.Length > 0) && (sForn.Length>0)) ? " , " : "";
+            string sql = $@"UPDATE Faltas SET {sTipo} {Virgula} {sForn} WHERE ID = {iID}";
             glo.ExecutarComandoSQL(sql);
         }
 

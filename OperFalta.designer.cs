@@ -32,18 +32,21 @@ namespace TeleBonifacio
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(OperFalta));
             this.panel1 = new System.Windows.Forms.Panel();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.cmbFornFiltro = new System.Windows.Forms.ComboBox();
+            this.label9 = new System.Windows.Forms.Label();
             this.button2 = new System.Windows.Forms.Button();
             this.cmbTiposFiltro = new System.Windows.Forms.ComboBox();
             this.label1 = new System.Windows.Forms.Label();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.cmbForn = new System.Windows.Forms.ComboBox();
             this.btComprei = new System.Windows.Forms.Button();
-            this.txForn = new System.Windows.Forms.TextBox();
             this.label5 = new System.Windows.Forms.Label();
             this.cmbTipos = new System.Windows.Forms.ComboBox();
             this.label3 = new System.Windows.Forms.Label();
             this.btAdicTpo = new System.Windows.Forms.Button();
             this.btnExcluir = new System.Windows.Forms.Button();
             this.txNvTipo = new System.Windows.Forms.TextBox();
+            this.txNvForn = new System.Windows.Forms.TextBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.label8 = new System.Windows.Forms.Label();
             this.txDescr = new System.Windows.Forms.TextBox();
@@ -72,26 +75,50 @@ namespace TeleBonifacio
             this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(1114, 119);
+            this.panel1.Size = new System.Drawing.Size(1114, 153);
             this.panel1.TabIndex = 13;
             // 
             // groupBox3
             // 
+            this.groupBox3.Controls.Add(this.cmbFornFiltro);
+            this.groupBox3.Controls.Add(this.label9);
             this.groupBox3.Controls.Add(this.button2);
             this.groupBox3.Controls.Add(this.cmbTiposFiltro);
             this.groupBox3.Controls.Add(this.label1);
-            this.groupBox3.Location = new System.Drawing.Point(676, 65);
+            this.groupBox3.Dock = System.Windows.Forms.DockStyle.Top;
+            this.groupBox3.Location = new System.Drawing.Point(0, 100);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(431, 51);
+            this.groupBox3.Size = new System.Drawing.Size(1114, 50);
             this.groupBox3.TabIndex = 41;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Filtro";
+            // 
+            // cmbFornFiltro
+            // 
+            this.cmbFornFiltro.DisplayMember = "Nome";
+            this.cmbFornFiltro.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbFornFiltro.Location = new System.Drawing.Point(372, 21);
+            this.cmbFornFiltro.Name = "cmbFornFiltro";
+            this.cmbFornFiltro.Size = new System.Drawing.Size(266, 21);
+            this.cmbFornFiltro.TabIndex = 51;
+            this.cmbFornFiltro.ValueMember = "Id";
+            this.cmbFornFiltro.SelectedIndexChanged += new System.EventHandler(this.cmbTiposFiltro_SelectedIndexChanged);
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label9.Location = new System.Drawing.Point(331, 24);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(35, 16);
+            this.label9.TabIndex = 50;
+            this.label9.Text = "Forn";
             // 
             // button2
             // 
             this.button2.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.button2.Enabled = false;
-            this.button2.Location = new System.Drawing.Point(337, 17);
+            this.button2.Location = new System.Drawing.Point(656, 19);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(75, 23);
             this.button2.TabIndex = 44;
@@ -102,7 +129,7 @@ namespace TeleBonifacio
             // 
             this.cmbTiposFiltro.DisplayMember = "Nome";
             this.cmbTiposFiltro.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbTiposFiltro.Location = new System.Drawing.Point(48, 19);
+            this.cmbTiposFiltro.Location = new System.Drawing.Point(57, 21);
             this.cmbTiposFiltro.Name = "cmbTiposFiltro";
             this.cmbTiposFiltro.Size = new System.Drawing.Size(266, 21);
             this.cmbTiposFiltro.TabIndex = 42;
@@ -121,40 +148,44 @@ namespace TeleBonifacio
             // 
             // groupBox2
             // 
+            this.groupBox2.Controls.Add(this.cmbForn);
             this.groupBox2.Controls.Add(this.btComprei);
-            this.groupBox2.Controls.Add(this.txForn);
             this.groupBox2.Controls.Add(this.label5);
             this.groupBox2.Controls.Add(this.cmbTipos);
             this.groupBox2.Controls.Add(this.label3);
             this.groupBox2.Controls.Add(this.btAdicTpo);
             this.groupBox2.Controls.Add(this.btnExcluir);
             this.groupBox2.Controls.Add(this.txNvTipo);
-            this.groupBox2.Location = new System.Drawing.Point(12, 61);
+            this.groupBox2.Controls.Add(this.txNvForn);
+            this.groupBox2.Dock = System.Windows.Forms.DockStyle.Top;
+            this.groupBox2.Location = new System.Drawing.Point(0, 50);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(658, 51);
+            this.groupBox2.Size = new System.Drawing.Size(1114, 50);
             this.groupBox2.TabIndex = 40;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Edição";
+            // 
+            // cmbForn
+            // 
+            this.cmbForn.DisplayMember = "Nome";
+            this.cmbForn.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbForn.Location = new System.Drawing.Point(372, 16);
+            this.cmbForn.Name = "cmbForn";
+            this.cmbForn.Size = new System.Drawing.Size(266, 21);
+            this.cmbForn.TabIndex = 49;
+            this.cmbForn.ValueMember = "Id";
+            this.cmbForn.SelectedIndexChanged += new System.EventHandler(this.cmbForn_SelectedIndexChanged);
             // 
             // btComprei
             // 
             this.btComprei.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.btComprei.Enabled = false;
-            this.btComprei.Location = new System.Drawing.Point(493, 16);
+            this.btComprei.Location = new System.Drawing.Point(737, 13);
             this.btComprei.Name = "btComprei";
             this.btComprei.Size = new System.Drawing.Size(75, 23);
             this.btComprei.TabIndex = 48;
             this.btComprei.Text = "Comprei";
             this.btComprei.Click += new System.EventHandler(this.btComprei_Click);
-            // 
-            // txForn
-            // 
-            this.txForn.Location = new System.Drawing.Point(372, 17);
-            this.txForn.Name = "txForn";
-            this.txForn.Size = new System.Drawing.Size(29, 20);
-            this.txForn.TabIndex = 46;
-            this.txForn.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-            this.txForn.KeyUp += new System.Windows.Forms.KeyEventHandler(this.txForn_KeyUp);
             // 
             // label5
             // 
@@ -170,7 +201,7 @@ namespace TeleBonifacio
             // 
             this.cmbTipos.DisplayMember = "Nome";
             this.cmbTipos.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbTipos.Location = new System.Drawing.Point(57, 17);
+            this.cmbTipos.Location = new System.Drawing.Point(59, 19);
             this.cmbTipos.Name = "cmbTipos";
             this.cmbTipos.Size = new System.Drawing.Size(266, 21);
             this.cmbTipos.TabIndex = 44;
@@ -191,7 +222,7 @@ namespace TeleBonifacio
             // 
             this.btAdicTpo.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.btAdicTpo.Enabled = false;
-            this.btAdicTpo.Location = new System.Drawing.Point(412, 16);
+            this.btAdicTpo.Location = new System.Drawing.Point(656, 13);
             this.btAdicTpo.Name = "btAdicTpo";
             this.btAdicTpo.Size = new System.Drawing.Size(75, 23);
             this.btAdicTpo.TabIndex = 42;
@@ -202,7 +233,7 @@ namespace TeleBonifacio
             // 
             this.btnExcluir.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.btnExcluir.Enabled = false;
-            this.btnExcluir.Location = new System.Drawing.Point(578, 16);
+            this.btnExcluir.Location = new System.Drawing.Point(822, 13);
             this.btnExcluir.Name = "btnExcluir";
             this.btnExcluir.Size = new System.Drawing.Size(75, 23);
             this.btnExcluir.TabIndex = 39;
@@ -216,6 +247,14 @@ namespace TeleBonifacio
             this.txNvTipo.Size = new System.Drawing.Size(266, 20);
             this.txNvTipo.TabIndex = 45;
             this.txNvTipo.Visible = false;
+            // 
+            // txNvForn
+            // 
+            this.txNvForn.Location = new System.Drawing.Point(372, 16);
+            this.txNvForn.Name = "txNvForn";
+            this.txNvForn.Size = new System.Drawing.Size(266, 20);
+            this.txNvForn.TabIndex = 50;
+            this.txNvForn.Visible = false;
             // 
             // groupBox1
             // 
@@ -233,7 +272,7 @@ namespace TeleBonifacio
             this.groupBox1.Dock = System.Windows.Forms.DockStyle.Top;
             this.groupBox1.Location = new System.Drawing.Point(0, 0);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(1114, 55);
+            this.groupBox1.Size = new System.Drawing.Size(1114, 50);
             this.groupBox1.TabIndex = 39;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Adição";
@@ -253,7 +292,7 @@ namespace TeleBonifacio
             this.txDescr.Location = new System.Drawing.Point(515, 19);
             this.txDescr.Name = "txDescr";
             this.txDescr.Size = new System.Drawing.Size(169, 20);
-            this.txDescr.TabIndex = 45;
+            this.txDescr.TabIndex = 3;
             this.txDescr.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.txDescr.KeyUp += new System.Windows.Forms.KeyEventHandler(this.txDescr_KeyUp);
             // 
@@ -264,7 +303,7 @@ namespace TeleBonifacio
             this.cmbVendedor.Location = new System.Drawing.Point(760, 21);
             this.cmbVendedor.Name = "cmbVendedor";
             this.cmbVendedor.Size = new System.Drawing.Size(266, 21);
-            this.cmbVendedor.TabIndex = 39;
+            this.cmbVendedor.TabIndex = 4;
             this.cmbVendedor.ValueMember = "Id";
             this.cmbVendedor.SelectedIndexChanged += new System.EventHandler(this.cmbVendedor_SelectedIndexChanged);
             // 
@@ -293,7 +332,7 @@ namespace TeleBonifacio
             this.txMarca.Location = new System.Drawing.Point(355, 19);
             this.txMarca.Name = "txMarca";
             this.txMarca.Size = new System.Drawing.Size(101, 20);
-            this.txMarca.TabIndex = 38;
+            this.txMarca.TabIndex = 2;
             this.txMarca.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.txMarca.KeyUp += new System.Windows.Forms.KeyEventHandler(this.txMarca_KeyUp);
             // 
@@ -302,7 +341,7 @@ namespace TeleBonifacio
             this.txQuantidade.Location = new System.Drawing.Point(257, 19);
             this.txQuantidade.Name = "txQuantidade";
             this.txQuantidade.Size = new System.Drawing.Size(40, 20);
-            this.txQuantidade.TabIndex = 37;
+            this.txQuantidade.TabIndex = 1;
             this.txQuantidade.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.txQuantidade.KeyUp += new System.Windows.Forms.KeyEventHandler(this.txQuantidade_KeyUp);
             // 
@@ -331,14 +370,14 @@ namespace TeleBonifacio
             this.txtCodigo.Location = new System.Drawing.Point(69, 19);
             this.txtCodigo.Name = "txtCodigo";
             this.txtCodigo.Size = new System.Drawing.Size(101, 20);
-            this.txtCodigo.TabIndex = 36;
+            this.txtCodigo.TabIndex = 0;
             this.txtCodigo.KeyUp += new System.Windows.Forms.KeyEventHandler(this.txtCodigo_KeyUp);
             // 
             // btnAdicionar
             // 
             this.btnAdicionar.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.btnAdicionar.Enabled = false;
-            this.btnAdicionar.Location = new System.Drawing.Point(1033, 22);
+            this.btnAdicionar.Location = new System.Drawing.Point(1033, 19);
             this.btnAdicionar.Name = "btnAdicionar";
             this.btnAdicionar.Size = new System.Drawing.Size(75, 23);
             this.btnAdicionar.TabIndex = 40;
@@ -349,11 +388,11 @@ namespace TeleBonifacio
             // 
             this.dataGrid1.AllowUserToAddRows = false;
             this.dataGrid1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dataGrid1.Location = new System.Drawing.Point(0, 119);
+            this.dataGrid1.Location = new System.Drawing.Point(0, 153);
             this.dataGrid1.Name = "dataGrid1";
             this.dataGrid1.ReadOnly = true;
             this.dataGrid1.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dataGrid1.Size = new System.Drawing.Size(1114, 313);
+            this.dataGrid1.Size = new System.Drawing.Size(1114, 279);
             this.dataGrid1.TabIndex = 14;
             this.dataGrid1.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGrid1_CellClick);
             // 
@@ -403,11 +442,14 @@ namespace TeleBonifacio
         private System.Windows.Forms.Button btnAdicionar;
         private System.Windows.Forms.TextBox txNvTipo;
         private System.Windows.Forms.Button btComprei;
-        private System.Windows.Forms.TextBox txForn;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.TextBox txDescr;
         private System.Windows.Forms.DataGridView dataGrid1;
+        private System.Windows.Forms.ComboBox cmbForn;
+        private System.Windows.Forms.TextBox txNvForn;
+        private System.Windows.Forms.ComboBox cmbFornFiltro;
+        private System.Windows.Forms.Label label9;
     }
 }
 

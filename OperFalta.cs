@@ -12,6 +12,7 @@ namespace TeleBonifacio
     {
         private FaltasDAO faltasDAO;
         private TpoFaltaDAO TpoFalta;
+        private FornecedorDao Forn;
         private bool carregando = true;
         private string UID = "";
         private int iID = 0;
@@ -19,21 +20,31 @@ namespace TeleBonifacio
         public OperFalta()
         {
             InitializeComponent();
+            SetStartPosition();
         }
 
         private void OperFalta_Load(object sender, EventArgs e)
         {
             VendedoresDAO Vendedor = new VendedoresDAO();
-            CarregarComboBox<tb.Vendedor>(cmbVendedor, Vendedor);
+            CarregarComboBoxV<tb.Vendedor>(cmbVendedor, Vendedor);
             cmbVendedor.SelectedIndex = -1;
             faltasDAO = new FaltasDAO();
             TpoFalta = new TpoFaltaDAO();
-            CarregaGrid(0);
-            ConfigurarGrid();
-            MostraTipos();
+            Forn = new FornecedorDao();
+            CarregaGrid(0,0);
+            //ConfigurarGrid();
+            MostraTipos();                        
         }
 
-        private void CarregarComboBox<T>(ComboBox comboBox, VendedoresDAO vendedor)
+        private void SetStartPosition()
+        {
+            this.StartPosition = FormStartPosition.Manual;
+            this.Left = (Screen.PrimaryScreen.WorkingArea.Width - this.Width) / 2;
+            this.Top = 0;
+            this.Height = Screen.PrimaryScreen.WorkingArea.Height;
+        }
+
+        private void CarregarComboBoxV<T>(ComboBox comboBox, VendedoresDAO vendedor)
         {
             DataTable dados = vendedor.getBalconistas();
             List<tb.ComboBoxItem> lista = new List<tb.ComboBoxItem>();
@@ -80,7 +91,7 @@ namespace TeleBonifacio
                 glo.Loga($@"FA,{idBalconista}, {quantidade}, {codigo}, {Marca},{Descr} ,{UID}");
                 faltasDAO.Adiciona(idBalconista, quantidade, codigo, Marca, Descr, UID);
             }
-            CarregaGrid(0);
+            CarregaGrid(0,0);
             Limpar();
         }
 
@@ -150,7 +161,6 @@ namespace TeleBonifacio
             txtCodigo.ReadOnly = v;
         }
 
-
         private void btnExcluir_Click(object sender, EventArgs e)
         {
             DialogResult result = MessageBox.Show("Tem certeza que deseja excluir este registro?",
@@ -166,7 +176,7 @@ namespace TeleBonifacio
                     glo.Loga($@"FD,{gID}, {UID}");
                     faltasDAO.Exclui(gID);
                 }
-                CarregaGrid(0);
+                CarregaGrid(0,0);
                 Limpar();
             }
         }
@@ -179,11 +189,10 @@ namespace TeleBonifacio
         #endregion
 
         #region Grid
-
         private void ConfigurarGrid()
         {
             dataGrid1.Columns[0].Width = 100; // Compra
-            dataGrid1.Columns[1].Width = 30; // Forn
+            dataGrid1.Columns[1].Width = 150; // Forn
             dataGrid1.Columns[2].Visible = false;
             dataGrid1.Columns[3].Visible = false;
             dataGrid1.Columns[4].Width = 100; // Data
@@ -195,14 +204,16 @@ namespace TeleBonifacio
             dataGrid1.Columns[10].Visible = false;  // UID
             dataGrid1.Columns[11].Width = 150; // Tipo - colocado o texto
             dataGrid1.Columns[12].Visible = false;  // Tipo valor original
+            dataGrid1.Columns[13].Visible = false;  // idForn
             dataGrid1.Invalidate();
         }
 
-        private void CarregaGrid(int tipo)
+        private void CarregaGrid(int tipo, int idForn)
         {
             FaltasDAO faltasDAO = new FaltasDAO();
-            DataTable dados = faltasDAO.getDados(tipo);
-            List<tb.TpoFalta> tipos = TpoFalta.getTipos();
+            DataTable dados = faltasDAO.getDados(tipo, idForn);
+            List<tb.TpoFalta> tipos = TpoFalta.getTipos();            
+            List<tb.Fornecedor> Fornecs = Forn.getForns();
             foreach (DataRow row in dados.Rows)
             {
                 if (!row.IsNull("Tipo") && !string.IsNullOrEmpty(row["Tipo"].ToString()) && int.TryParse(row["Tipo"].ToString(), out int tipoId))
@@ -217,32 +228,59 @@ namespace TeleBonifacio
                         row["Tipo"] = DBNull.Value;
                     }
                 }
+
+                if (!row.IsNull("idForn") && !string.IsNullOrEmpty(row["idForn"].ToString()) && int.TryParse(row["idForn"].ToString(), out int FornId))
+                {
+                    var tipoEncontrado = Fornecs.Find(t => t.Id == FornId);
+                    if (tipoEncontrado != null)
+                    {
+                        row["Forn"] = tipoEncontrado.Nome;
+                    }
+                    else
+                    {
+                        row["Forn"] = DBNull.Value;
+                    }
+                }
+
             }
             dataGrid1.DataSource = dados;
+            ConfigurarGrid();
         }
 
-        //private void dataGrid1_DoubleClick(object sender, EventArgs e)
-        //{
-        //    SourceGrid.DataGrid grid = (SourceGrid.DataGrid)sender;
-        //    if (grid != null && grid.Rows.Count > 0)
-        //    {
-        //        SourceGrid.Position position = grid.Selection.ActivePosition;
-        //        if (position != SourceGrid.Position.Empty)
-        //        {
-        //            this.iID = glo.ConvOjbInt(((DataRowView)grid.SelectedDataRows[0]).Row["ID"]);
-        //            txQuantidade.Text = glo.ConvOjbStr(((DataRowView)grid.SelectedDataRows[0]).Row["Quant"]);
-        //            txtCodigo.Text = glo.ConvOjbStr(((DataRowView)grid.SelectedDataRows[0]).Row["Codigo"]);
-        //            txMarca.Text = glo.ConvOjbStr(((DataRowView)grid.SelectedDataRows[0]).Row["Marca"]);
-        //            cmbVendedor.SelectedValue = glo.ConvOjbInt(((DataRowView)grid.SelectedDataRows[0]).Row["IDBalconista"]);
-        //            this.UID = glo.ConvOjbStr(((DataRowView)grid.SelectedDataRows[0]).Row["UID"]);
-        //            txForn.Text = glo.ConvOjbStr(((DataRowView)grid.SelectedDataRows[0]).Row["Forn"]);
-        //            ReadlyOnly(true);
-        //            btnAdicionar.Text = "Limpar";
-        //            btnExcluir.Enabled = true;
-        //            btComprei.Enabled = true;
-        //        }
-        //    }
-        //}
+        private void dataGrid1_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            DataGridView grid = (DataGridView)sender;
+            if (grid != null && e.RowIndex >= 0 && e.RowIndex < grid.Rows.Count)
+            {
+                DataGridViewRow selectedRow = grid.Rows[e.RowIndex];
+                this.iID = Convert.ToInt32(selectedRow.Cells["ID"].Value);
+                txQuantidade.Text = Convert.ToString(selectedRow.Cells["Quant"].Value);
+                txtCodigo.Text = Convert.ToString(selectedRow.Cells["Codigo"].Value);
+                txMarca.Text = Convert.ToString(selectedRow.Cells["Marca"].Value);
+                cmbVendedor.SelectedValue = Convert.ToInt32(selectedRow.Cells["IDBalconista"].Value);
+                this.UID = Convert.ToString(selectedRow.Cells["UID"].Value);
+                try
+                {
+                    cmbForn.SelectedValue = Convert.ToInt32(selectedRow.Cells["idForn"].Value);
+                }
+                catch (Exception)
+                {
+                    cmbForn.SelectedValue = -1;
+                }
+                try
+                {
+                    cmbTipos.SelectedValue = Convert.ToInt32(selectedRow.Cells["TipoOrig"].Value);
+                }
+                catch (Exception)
+                {
+                    cmbTipos.SelectedValue = -1;
+                }
+                ReadlyOnly(true);
+                btnAdicionar.Text = "Limpar";
+                btnExcluir.Enabled = true;
+                btComprei.Enabled = true;
+            }
+        }
 
         #endregion
 
@@ -252,34 +290,53 @@ namespace TeleBonifacio
         {
             glo.CarregarComboBox<tb.TpoFalta>(cmbTipos, TpoFalta, "ESCOLHA", ItemFinal: "ADICIONE", ItemFinal2: "EDIÇÃO");
             glo.CarregarComboBox<tb.TpoFalta>(cmbTiposFiltro, TpoFalta, "TODOS");
+            glo.CarregarComboBox<tb.Fornecedor>(cmbForn, Forn, "ESCOLHA", ItemFinal: "ADICIONE", ItemFinal2: "EDIÇÃO");
+            glo.CarregarComboBox<tb.Fornecedor>(cmbFornFiltro, Forn, "TODOS");
         }
 
         private void btAdicTpo_Click(object sender, EventArgs e)
         {
             if (btAdicTpo.Text == "Adicionar")
             {
-                if (txNvTipo.Text.Length == 0)
+                if ((txNvTipo.Text.Length == 0) && (txNvForn.Text.Length==0))
                 {
-                    MessageBox.Show("Só é possível adicionar um tipo se dizer qual ele é",
-                                                  "Não tem o tipo",
+                    MessageBox.Show("Só é possível adicionar se dizer qual ele é",
+                                                  "Faltou dizer",
                                                   MessageBoxButtons.OK);
                     txNvTipo.Focus();
                 }
                 else
                 {
-                    TpoFalta.Adiciona(txNvTipo.Text);
+                    if (txNvTipo.Visible)
+                    {
+                        TpoFalta.Adiciona(txNvTipo.Text);
+                    } else
+                    {
+                        Forn.Adiciona(txNvForn.Text);
+                    }                    
                     RetCmboTpo();
                 }
             }
             else
-            {
-                string Forn = txForn.Text;
+            {                
+                int iForn = cmbForn.SelectedIndex;
+                int idForn = 0;
+                if (iForn > -1)
+                {
+                    idForn = ((tb.ComboBoxItem)cmbForn.Items[iForn]).Id;
+                }
                 int iTpo = cmbTipos.SelectedIndex;
-                int idTipo = ((tb.ComboBoxItem)cmbTipos.Items[iTpo]).Id;
+                int idTipo = 0;
+                if (iTpo > -1)
+                {
+                    idTipo = ((tb.ComboBoxItem)cmbTipos.Items[iTpo]).Id;
+                }
                 foreach (DataGridViewRow row in dataGrid1.SelectedRows)
                 {
                     int gID = Convert.ToInt32(row.Cells["ID"].Value);
-                    faltasDAO.Atualiza(gID, idTipo, Forn);
+                    string UID = Convert.ToString(row.Cells["UID"].Value);
+                    glo.Loga($@"FA,{gID}, {idTipo}, {idForn} ,{UID}");
+                    faltasDAO.Atualiza(gID, idTipo, idForn);
                 }
                 AtualizouEmBaixo();
             }
@@ -288,9 +345,13 @@ namespace TeleBonifacio
         private void RetCmboTpo()
         {
             txNvTipo.Text = "";
+            txNvForn.Text = "";
             txNvTipo.Visible = false;
+            txNvForn.Visible = false;
             cmbTipos.Visible = true;
+            cmbForn.Visible = true;
             cmbTipos.DataSource = null;
+            cmbForn.DataSource = null;
             MostraTipos();
             btAdicTpo.Text = "Atualizar";
             btAdicTpo.Enabled = false;
@@ -300,7 +361,7 @@ namespace TeleBonifacio
 
         private void AtualizouEmBaixo()
         {
-            CarregaGrid(0);
+            CarregaGrid(0,0);
             cmbTipos.SelectedIndex = 0;
             btAdicTpo.Enabled = false;
             btComprei.Enabled = false;
@@ -330,6 +391,43 @@ namespace TeleBonifacio
                             if (ItemCombo == "EDIÇÃO")
                             {
                                 fCadTiposFaltas novoForm = new fCadTiposFaltas();
+                                novoForm.ShowDialog();
+                                MostraTipos();
+                            }
+                            else
+                            {
+                                btAdicTpo.Enabled = true;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        private void cmbForn_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (!carregando)
+            {
+                if (cmbForn.SelectedItem != null)
+                {
+                    string ItemCombo = cmbForn.SelectedItem.ToString();
+                    if (ItemCombo != "ESCOLHA")
+                    {
+                        if (ItemCombo == "ADICIONE")
+                        {
+                            btAdicTpo.Text = "Adicionar";
+                            btAdicTpo.Enabled = true;
+                            txNvForn.Visible = true;
+                            cmbForn.Visible = false;
+                            btComprei.Text = "Cancelar";
+                            btComprei.Enabled = true;
+                            txNvForn.Focus();
+                        }
+                        else
+                        {
+                            if (ItemCombo == "EDIÇÃO")
+                            {
+                                CadFornec novoForm = new CadFornec();
                                 novoForm.ShowDialog();
                                 MostraTipos();
                             }
@@ -379,39 +477,22 @@ namespace TeleBonifacio
         private void button2_Click(object sender, EventArgs e)
         {
             int iTpo = cmbTiposFiltro.SelectedIndex;
-            int idTipo = ((tb.ComboBoxItem)cmbTiposFiltro.Items[iTpo]).Id;
-            CarregaGrid(idTipo);
+            int idTipo = 0;
+            if (iTpo>-1)
+            {
+                idTipo = ((tb.ComboBoxItem)cmbTiposFiltro.Items[iTpo]).Id;
+            }
+            int iForn = cmbFornFiltro.SelectedIndex;
+            int idForn = 0;
+            if (iForn > -1)
+            {
+                idForn = ((tb.ComboBoxItem)cmbFornFiltro.Items[iForn]).Id;
+            }
+            CarregaGrid(idTipo, idForn);
         }
 
 
         #endregion
 
-        private void dataGrid1_CellClick(object sender, DataGridViewCellEventArgs e)
-        {
-            DataGridView grid = (DataGridView)sender;
-            if (grid != null && e.RowIndex >= 0 && e.RowIndex < grid.Rows.Count)
-            {
-                DataGridViewRow selectedRow = grid.Rows[e.RowIndex];
-                this.iID = Convert.ToInt32(selectedRow.Cells["ID"].Value);
-                txQuantidade.Text = Convert.ToString(selectedRow.Cells["Quant"].Value);
-                txtCodigo.Text = Convert.ToString(selectedRow.Cells["Codigo"].Value);
-                txMarca.Text = Convert.ToString(selectedRow.Cells["Marca"].Value);
-                cmbVendedor.SelectedValue = Convert.ToInt32(selectedRow.Cells["IDBalconista"].Value);
-                this.UID = Convert.ToString(selectedRow.Cells["UID"].Value);
-                txForn.Text = Convert.ToString(selectedRow.Cells["Forn"].Value);
-                try
-                {
-                    cmbTipos.SelectedValue = Convert.ToInt32(selectedRow.Cells["TipoOrig"].Value);
-                }
-                catch (Exception)
-                {
-                    cmbTipos.SelectedValue = -1;
-                }                
-                ReadlyOnly(true);
-                btnAdicionar.Text = "Limpar";
-                btnExcluir.Enabled = true;
-                btComprei.Enabled = true;
-            }
-        }
     }
 }
