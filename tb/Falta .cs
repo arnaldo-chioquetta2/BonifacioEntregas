@@ -16,6 +16,7 @@ namespace TeleBonifacio.tb
         public bool Adicao { get; set; }
         public string Nome { get; set; }
         public int idForn { get; set; }
-        
+        public string Obs { get; set; }
+
     }
 }

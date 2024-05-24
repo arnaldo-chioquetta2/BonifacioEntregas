@@ -6,45 +6,61 @@ namespace TeleBonifacio.dao
 {
     public class FaltasDAO
     {
-        public void Adiciona(int idBalconista, float quantidade, string codigo, string Marca, string Descr, string UID)
+        public void Adiciona(int idBalconista, float quantidade, string codigo, string Marca, string Descr, string Obs, string UID)
         {
-            string sql = $@"INSERT INTO Faltas (IDBalconista, Quant, Codigo, Marca, Data, Descricao, UID) VALUES (
+            string sql = $@"INSERT INTO Faltas (IDBalconista, Quant, Codigo, Marca, Data, Descricao, Obs, UID) VALUES (
                 {idBalconista}, 
                 {quantidade}, 
                 '{codigo}', 
                 '{Marca}', 
                 Now, 
                 '{Descr}', 
+                '{Obs}', 
                 '{UID}')";
-            glo.ExecutarComandoSQL(sql);
+            glo.ExecutarComandoSQL(sql); 
         }
 
-        public DataTable getDados(int tipo, int idForn)
+        public DataTable getDados(int tipo, int idForn, int Comprado)
         {
             StringBuilder query = new StringBuilder();
 
             query.Append(@"SELECT F.Compra, '' as Forn, F.ID, F.IDBalconista, F.Data, F.Codigo, F.Quant, F.Marca, F.Descricao, 
-                    V.Nome AS Balconista, F.UID, F.Tipo, F.Tipo as TipoOrig, F.idForn
+                    V.Nome AS Balconista, F.UID, F.Tipo, F.Tipo as TipoOrig, F.idForn, F.Obs 
                 FROM Faltas F
                 INNER JOIN Vendedores V ON V.ID = F.IDBalconista ");
-            if ((tipo > 0) || (idForn > 0))
+            int SmIfs = tipo + idForn + Comprado;
+            if (SmIfs > 0)
             {                
                 string sTipo = "";
                 string sForn = "";
-                string sAnd = "";
+                string sAnd1 = "";
+                string sAnd2 = "";
+                string sCompra = "";
+                int Ifs = 0;
                 if (tipo > 0)
                 {
                     sTipo = $@" F.Tipo = '{tipo}' ";
+                    Ifs++;
                 }
                 if (idForn > 0)
                 {
                     sForn = $@" F.idForn = {idForn} ";
+                    Ifs++;
                 }
-                if ((tipo > 0) && (tipo > 0))
+                if (Comprado > 0)
                 {
-                    sAnd = " and ";
+                    sCompra = $@" F.Compra is not null ";
+                    Ifs++;
+                }
+                if (Ifs>1)
+                {
+                    sAnd1 = " and ";
+                    if (Ifs > 2)
+                    {
+                        sAnd2 = " and ";
+                    }
                 }                
-                query.Append($@" Where {sTipo} {sAnd} {sForn} ");
+                query.Append($@" Where {sTipo} {sAnd1} {sForn} {sAnd2} {sCompra} ");
             }
             query.Append(" ORDER BY F.Data, V.Nome");
             DataTable dt = glo.ExecutarConsulta(query.ToString());
@@ -84,10 +100,23 @@ namespace TeleBonifacio.dao
             glo.ExecutarComandoSQL(sql);
         }
 
-        internal void Comprou(int iID)
+        public void Comprou(int iID)
         {
             string sql = $@"UPDATE Faltas SET Compra = Now WHERE ID = {iID}";
             glo.ExecutarComandoSQL(sql);
         }
+        
+        public string VeSeJaTemAFalta(string codigo)
+        {
+            string query = $@"SELECT Count(*) FROM Faltas Where Codigo = '{codigo}' ";
+            int count = glo.ExecutarConsultaCount(query);
+            string ret = "";
+            if (count > 0)
+            {
+                ret= "Já existe um falta com este código.";
+            }
+            return ret;
+        }
+
     }
 }

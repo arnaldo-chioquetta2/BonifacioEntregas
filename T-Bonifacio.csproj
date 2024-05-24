@@ -157,6 +157,7 @@
     <Compile Include="gen\FTP.cs" />
     <Compile Include="gen\glo.cs" />
     <Compile Include="gen\INI.cs" />
+    <Compile Include="gen\INI2.cs" />
     <Compile Include="gen\ValorPorExtenso.cs" />
     <Compile Include="operAvanc.cs">
       <SubType>Form</SubType>

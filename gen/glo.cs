@@ -285,7 +285,6 @@ namespace TeleBonifacio
             }
         }
 
-
         public static int ExecutarConsultaCount(string query)
         {
             int count = 0;
