@@ -20,7 +20,7 @@ namespace TeleBonifacio.dao
             glo.ExecutarComandoSQL(sql); 
         }
 
-        public DataTable getDados(int tipo, int idForn, int Comprado)
+        public DataTable getDados(int tipo, int idForn, int Comprado, string codigo, int quantidade, string marca, string Obs)
         {
             StringBuilder query = new StringBuilder();
 
@@ -28,39 +28,39 @@ namespace TeleBonifacio.dao
                     V.Nome AS Balconista, F.UID, F.Tipo, F.Tipo as TipoOrig, F.idForn, F.Obs 
                 FROM Faltas F
                 INNER JOIN Vendedores V ON V.ID = F.IDBalconista ");
-            int SmIfs = tipo + idForn + Comprado;
-            if (SmIfs > 0)
-            {                
-                string sTipo = "";
-                string sForn = "";
-                string sAnd1 = "";
-                string sAnd2 = "";
-                string sCompra = "";
-                int Ifs = 0;
-                if (tipo > 0)
-                {
-                    sTipo = $@" F.Tipo = '{tipo}' ";
-                    Ifs++;
-                }
-                if (idForn > 0)
-                {
-                    sForn = $@" F.idForn = {idForn} ";
-                    Ifs++;
-                }
-                if (Comprado > 0)
-                {
-                    sCompra = $@" F.Compra is not null ";
-                    Ifs++;
-                }
-                if (Ifs>1)
-                {
-                    sAnd1 = " and ";
-                    if (Ifs > 2)
-                    {
-                        sAnd2 = " and ";
-                    }
-                }                
-                query.Append($@" Where {sTipo} {sAnd1} {sForn} {sAnd2} {sCompra} ");
+            StringBuilder alteracoes = new StringBuilder();
+            if (tipo > 0)
+            {
+                alteracoes.Append($@" F.Tipo = {tipo} and ");
+            }
+            if (idForn > 0)
+            {
+                alteracoes.Append($@" F.idForn = {idForn} and ");
+            }
+            if (Comprado > 0)
+            {
+                alteracoes.Append(" F.Compra is not null and ");
+            }
+            if (codigo.Length>0)
+            {
+                alteracoes.Append($@" F.Codigo = '{codigo}' and ");
+            }
+            if (quantidade > -1)
+            {
+                alteracoes.Append($@" F.Quant = {quantidade} and ");
+            }
+            if (marca.Length > 0)
+            {
+                alteracoes.Append($@" F.Marca = '{marca}' and ");
+            }
+            if (Obs.Length > 0)
+            {
+                alteracoes.Append($@" F.Obs = '{Obs}' and ");
+            }
+            if (alteracoes.Length>0)
+            {
+                alteracoes.Length -= 4;
+                query.Append($@" Where {alteracoes} ");
             }
             query.Append(" ORDER BY F.Data, V.Nome");
             DataTable dt = glo.ExecutarConsulta(query.ToString());
@@ -83,22 +83,72 @@ namespace TeleBonifacio.dao
             glo.ExecutarComandoSQL(sql);
         }
 
-        public void Atualiza(int iID, int iTpo, int idForn)
+        public void Atualiza(int iID, int iTpo, int idForn, string codigo, int quantidade, string marca, string Obs)
         {
-            string sTipo = "";
-            if (iTpo>0)
+            StringBuilder alteracoes = new StringBuilder();
+            if (iTpo > 0)
             {
-                sTipo = $@" Tipo = {iTpo}";
+                alteracoes.Append($"Tipo = {iTpo}, ");
             }
-            string sForn = "";
             if (idForn > 0)
             {
-                sForn = $@" idForn = {idForn}";
+                alteracoes.Append($"idForn = {idForn}, ");
             }
-            string Virgula = ((sTipo.Length > 0) && (sForn.Length>0)) ? " , " : "";
-            string sql = $@"UPDATE Faltas SET {sTipo} {Virgula} {sForn} WHERE ID = {iID}";
+            if (!string.IsNullOrEmpty(codigo))
+            {
+                alteracoes.Append($"Codigo = '{codigo}', ");
+            }
+            if (quantidade > -1)
+            {
+                alteracoes.Append($"Quant = {quantidade}, ");
+            }
+            if (!string.IsNullOrEmpty(marca))
+            {
+                alteracoes.Append($"Marca = '{marca}', ");
+            }
+            if (!string.IsNullOrEmpty(Obs))
+            {
+                alteracoes.Append($"Obs = '{Obs}', ");
+            }
+            alteracoes.Length -= 2;
+            string sql = $@"UPDATE Faltas SET {alteracoes} WHERE ID = {iID}";
             glo.ExecutarComandoSQL(sql);
         }
+
+        //public void Atualiza(int iID, int iTpo, int idForn, string codigo, int quantidade, string marca, string Obs)
+        //{
+        //    string sTipo = "";
+        //    if (iTpo>0)
+        //    {
+        //        sTipo = $@" Tipo = {iTpo}, ";
+        //    }
+        //    string sForn = "";
+        //    if (idForn > 0)
+        //    {
+        //        sForn = $@" idForn = {idForn}, ";
+        //    }
+        //    if (codigo.Length>0)
+        //    {
+        //        codigo = $@" Codigo = '{codigo}', ";
+        //    }
+        //    string sQuant = "";
+        //    if (quantidade>-1)
+        //    {
+        //        sQuant = $@" Quant = {quantidade}, ";
+        //    }
+        //    if (marca.Length > 0)
+        //    {
+        //        marca = $@" Marca = '{marca}', ";
+        //    }
+        //    if (Obs.Length>0)
+        //    {                
+        //        marca = $@" Obs = '{Obs}', ";
+        //    }
+        //    string Alterar = $@" { sTipo } { sForn} {codigo} {sQuant} {marca} {marca} ";
+        //    // RETIRAR A ÚLTIMA VIRGULA DA STRING
+        //    string sql = $@"UPDATE Faltas SET {Alterar} WHERE ID = {iID}";
+        //    glo.ExecutarComandoSQL(sql);
+        //}
 
         public void Comprou(int iID)
         {

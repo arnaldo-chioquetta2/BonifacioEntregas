@@ -32,6 +32,7 @@ namespace TeleBonifacio
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(OperFalta));
             this.panel1 = new System.Windows.Forms.Panel();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.ckComprado = new System.Windows.Forms.CheckBox();
             this.cmbFornFiltro = new System.Windows.Forms.ComboBox();
             this.label9 = new System.Windows.Forms.Label();
             this.button2 = new System.Windows.Forms.Button();
@@ -48,6 +49,8 @@ namespace TeleBonifacio
             this.txNvTipo = new System.Windows.Forms.TextBox();
             this.txNvForn = new System.Windows.Forms.TextBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.label10 = new System.Windows.Forms.Label();
+            this.txObs = new System.Windows.Forms.TextBox();
             this.label8 = new System.Windows.Forms.Label();
             this.txDescr = new System.Windows.Forms.TextBox();
             this.cmbVendedor = new System.Windows.Forms.ComboBox();
@@ -60,9 +63,6 @@ namespace TeleBonifacio
             this.txtCodigo = new System.Windows.Forms.TextBox();
             this.btnAdicionar = new System.Windows.Forms.Button();
             this.dataGrid1 = new System.Windows.Forms.DataGridView();
-            this.ckComprado = new System.Windows.Forms.CheckBox();
-            this.label10 = new System.Windows.Forms.Label();
-            this.txObs = new System.Windows.Forms.TextBox();
             this.panel1.SuspendLayout();
             this.groupBox3.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -96,6 +96,18 @@ namespace TeleBonifacio
             this.groupBox3.TabIndex = 41;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Filtro";
+            // 
+            // ckComprado
+            // 
+            this.ckComprado.AutoSize = true;
+            this.ckComprado.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ckComprado.Location = new System.Drawing.Point(644, 21);
+            this.ckComprado.Name = "ckComprado";
+            this.ckComprado.Size = new System.Drawing.Size(84, 19);
+            this.ckComprado.TabIndex = 52;
+            this.ckComprado.Text = "Comprado";
+            this.ckComprado.UseVisualStyleBackColor = true;
+            this.ckComprado.Click += new System.EventHandler(this.ckComprado_Click);
             // 
             // cmbFornFiltro
             // 
@@ -292,6 +304,26 @@ namespace TeleBonifacio
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Adição";
             // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label10.Location = new System.Drawing.Point(690, 20);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(36, 16);
+            this.label10.TabIndex = 48;
+            this.label10.Text = "Obs.";
+            // 
+            // txObs
+            // 
+            this.txObs.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txObs.Location = new System.Drawing.Point(742, 19);
+            this.txObs.Name = "txObs";
+            this.txObs.Size = new System.Drawing.Size(113, 21);
+            this.txObs.TabIndex = 4;
+            this.txObs.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.txObs.KeyUp += new System.Windows.Forms.KeyEventHandler(this.txObs_KeyUp);
+            // 
             // label8
             // 
             this.label8.AutoSize = true;
@@ -416,37 +448,6 @@ namespace TeleBonifacio
             this.dataGrid1.TabIndex = 14;
             this.dataGrid1.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGrid1_CellClick);
             // 
-            // ckComprado
-            // 
-            this.ckComprado.AutoSize = true;
-            this.ckComprado.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.ckComprado.Location = new System.Drawing.Point(644, 21);
-            this.ckComprado.Name = "ckComprado";
-            this.ckComprado.Size = new System.Drawing.Size(84, 19);
-            this.ckComprado.TabIndex = 52;
-            this.ckComprado.Text = "Comprado";
-            this.ckComprado.UseVisualStyleBackColor = true;
-            this.ckComprado.Click += new System.EventHandler(this.ckComprado_Click);
-            // 
-            // label10
-            // 
-            this.label10.AutoSize = true;
-            this.label10.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label10.Location = new System.Drawing.Point(690, 20);
-            this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(36, 16);
-            this.label10.TabIndex = 48;
-            this.label10.Text = "Obs.";
-            // 
-            // txObs
-            // 
-            this.txObs.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txObs.Location = new System.Drawing.Point(742, 19);
-            this.txObs.Name = "txObs";
-            this.txObs.Size = new System.Drawing.Size(113, 21);
-            this.txObs.TabIndex = 4;
-            this.txObs.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-            // 
             // OperFalta
             // 
             this.ClientSize = new System.Drawing.Size(1114, 432);
@@ -496,7 +497,6 @@ namespace TeleBonifacio
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.TextBox txDescr;
-        private System.Windows.Forms.DataGridView dataGrid1;
         private System.Windows.Forms.ComboBox cmbForn;
         private System.Windows.Forms.TextBox txNvForn;
         private System.Windows.Forms.ComboBox cmbFornFiltro;
@@ -504,6 +504,7 @@ namespace TeleBonifacio
         private System.Windows.Forms.CheckBox ckComprado;
         private System.Windows.Forms.Label label10;
         private System.Windows.Forms.TextBox txObs;
+        private System.Windows.Forms.DataGridView dataGrid1;
     }
 }
 

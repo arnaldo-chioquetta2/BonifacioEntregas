@@ -73,27 +73,6 @@ namespace TeleBonifacio
             ConfigurarGrid();
         }
 
-        //private void CarregarComboBox<T>(ComboBox comboBox, BaseDAO classe, string ItemZero = "", string filtro = "", string ordem = "") where T : IDataEntity, new()
-        //{
-        //    DataTable dados = classe.GetDadosOrdenados(filtro, ordem);
-        //    List<ComboBoxItem> lista = new List<ComboBoxItem>();
-        //    if (ItemZero.Length > 0)
-        //    {
-        //        ComboBoxItem item = new ComboBoxItem(0, ItemZero);
-        //        lista.Add(item);
-        //    }
-        //    foreach (DataRow row in dados.Rows)
-        //    {
-        //        int id = Convert.ToInt32(row["id"]);
-        //        string nome = row["Nome"].ToString();
-        //        ComboBoxItem item = new ComboBoxItem(id, nome);
-        //        lista.Add(item);
-        //    }
-        //    comboBox.DataSource = lista;
-        //    comboBox.DisplayMember = "Nome";
-        //    comboBox.ValueMember = "Id";
-        //}
-
         private void txDesc_KeyUp(object sender, KeyEventArgs e)
         {
             VeSeHab();

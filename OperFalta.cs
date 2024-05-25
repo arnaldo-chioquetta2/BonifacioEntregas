@@ -17,11 +17,21 @@ namespace TeleBonifacio
         private bool carregando = true;
         private string UID = "";
         private int iID = 0;
+        private bool Restrito = false;
+        private Color originalBackgroundColor;
+
+        private int BakidTipo = 0;
+        private int BakidForn = 0;
+        private int bakComprado =  0;
+        private string Bakcodigo = "";
+        private int Bakquantidade = -1;
+        private string Bakmarca = "";
+        private string BakObs = "";
 
         public OperFalta()
         {
             InitializeComponent();
-            SetStartPosition();
+            SetStartPosition();            
         }
 
         private void OperFalta_Load(object sender, EventArgs e)
@@ -33,12 +43,14 @@ namespace TeleBonifacio
             faltasDAO = new FaltasDAO();
             TpoFalta = new TpoFaltaDAO();
             Forn = new FornecedorDao();
-            CarregaGrid(0,0,0);
-            MostraTipos();            
-            //if (iUser.Length==0)
-            //{
-            //    groupBox2.Visible = false;
-            //}
+            CarregaGrid();
+            MostraTipos();
+            if (iUser.Length == 0)
+            {
+                groupBox2.Visible = false;
+                Restrito = true;
+            }
+            originalBackgroundColor = txtCodigo.BackColor;
         }
 
         private void SetStartPosition()
@@ -118,31 +130,55 @@ namespace TeleBonifacio
                     faltasDAO.Adiciona(idBalconista, quantidade, codigo, Marca, Descr, Obs, UID);
                 }
             }
-            CarregaGrid(0,0,0);
+            CarregaGrid();
             Limpar();
         }
 
         private void Limpar()
         {
             cmbVendedor.SelectedIndex = -1;
-            txQuantidade.Text = "0";
-            txMarca.Text = "";
-            txtCodigo.Text = "";
-            txDescr.Text = "";
-            txObs.Text = "";
-            ReadlyOnly(false);
+            cmbTipos.SelectedIndex = 0;
+            cmbTipos.FlatStyle = FlatStyle.System;
+            cmbForn.FlatStyle = FlatStyle.System;
+            cmbForn.SelectedIndex = 0;
+            Normaliza(txtCodigo,1);
+            Normaliza(txMarca,1);
+            Normaliza(txDescr,1);
+            Normaliza(txObs,1);
+            Normaliza(txQuantidade,1);
             btnAdicionar.Text = "Adicionar";
             btnExcluir.Enabled = false;
             txtCodigo.Focus();
         }
 
-        private void txtCodigo_KeyUp(object sender, KeyEventArgs e)
+        private void Normaliza(TextBox obj, int tipo)
         {
-            VeSeHab();
+            if (tipo==1) {
+                obj.Text = "";
+            }            
+            obj.BackColor = originalBackgroundColor;
+            obj.ReadOnly = false;
         }
 
-        private void VeSeHab()
+        private void txtCodigo_KeyUp(object sender, KeyEventArgs e)
         {
+            VeSeHab(txtCodigo);
+        }
+
+        private void VeSeHab(TextBox obj=null)
+        {
+            if (obj!=null)
+            {
+                if (!Restrito)
+                {
+                    if (!obj.ReadOnly)
+                    {
+                        obj.BackColor = Color.Yellow;
+                        btAdicTpo.Enabled = true;
+                        button2.Enabled = true;
+                    }                    
+                }
+            }
             bool ok = true;
             if (cmbVendedor.SelectedIndex == -1)
             {
@@ -165,12 +201,17 @@ namespace TeleBonifacio
 
         private void txQuantidade_KeyUp(object sender, KeyEventArgs e)
         {
-            VeSeHab();
+            VeSeHab(txQuantidade);
         }
 
         private void txMarca_KeyUp(object sender, KeyEventArgs e)
         {
-            VeSeHab();
+            VeSeHab(txMarca);
+        }
+
+        private void txObs_KeyUp(object sender, KeyEventArgs e)
+        {
+            VeSeHab(txObs);
         }
 
         private void cmbVendedor_SelectedIndexChanged(object sender, EventArgs e)
@@ -204,14 +245,14 @@ namespace TeleBonifacio
                     glo.Loga($@"FD,{gID}, {UID}");
                     faltasDAO.Exclui(gID);
                 }
-                CarregaGrid(0,0,0);
+                CarregaGrid();
                 Limpar();
             }
         }
 
         private void txDescr_KeyUp(object sender, KeyEventArgs e)
         {
-            VeSeHab();
+            VeSeHab(txDescr);
         }
 
         #endregion
@@ -237,10 +278,11 @@ namespace TeleBonifacio
             dataGrid1.Invalidate();
         }
 
-        private void CarregaGrid(int tipo, int idForn, int Comprado)
+        // int tipo = 0, int idForn = 0, int Comprado = 0, string codigo = "", int quantidade = -1, string marca = "", string Obs = ""
+        private void CarregaGrid()
         {
             FaltasDAO faltasDAO = new FaltasDAO();
-            DataTable dados = faltasDAO.getDados(tipo, idForn, Comprado);
+            DataTable dados = faltasDAO.getDados(BakidTipo, BakidForn, BakidForn, Bakcodigo, Bakquantidade, Bakmarca, BakObs);
             List<tb.TpoFalta> tipos = TpoFalta.getTipos();
             List<tb.Fornecedor> Fornecs = Forn.getForns();
             dataGrid1.DataSource = dados;
@@ -281,6 +323,7 @@ namespace TeleBonifacio
             DataGridView grid = (DataGridView)sender;
             if (grid != null && e.RowIndex >= 0 && e.RowIndex < grid.Rows.Count)
             {
+                carregando = true;
                 DataGridViewRow selectedRow = grid.Rows[e.RowIndex];
                 this.iID = Convert.ToInt32(selectedRow.Cells["ID"].Value);
                 txQuantidade.Text = Convert.ToString(selectedRow.Cells["Quant"].Value);
@@ -311,6 +354,21 @@ namespace TeleBonifacio
                 btnAdicionar.Enabled = true;
                 btnExcluir.Enabled = true;
                 btComprei.Enabled = true;
+                txQuantidade.ReadOnly = false;                
+                txMarca.ReadOnly = false;
+                if (dataGrid1.SelectedRows.Count == 1)
+                {
+                    txtCodigo.ReadOnly = false;
+                } else
+                {
+                    txtCodigo.ReadOnly = true;                    
+                }
+                txQuantidade.BackColor = originalBackgroundColor;
+                txMarca.BackColor = originalBackgroundColor;
+                txtCodigo.BackColor = originalBackgroundColor;
+                txDescr.BackColor = originalBackgroundColor;
+                txObs.BackColor = originalBackgroundColor;
+                carregando = false;
             }
         }
 
@@ -350,25 +408,72 @@ namespace TeleBonifacio
                 }
             }
             else
-            {                
-                int iForn = cmbForn.SelectedIndex;
+            {
+                // ATUALIZAÇÃO
                 int idForn = 0;
-                if (iForn > -1)
+                if (cmbForn.FlatStyle == FlatStyle.Flat)
                 {
-                    idForn = ((tb.ComboBoxItem)cmbForn.Items[iForn]).Id;
+                    int iForn = cmbForn.SelectedIndex;
+                    if (iForn > -1)
+                    {
+                        idForn = ((tb.ComboBoxItem)cmbForn.Items[iForn]).Id;
+                    }                
                 }
-                int iTpo = cmbTipos.SelectedIndex;
                 int idTipo = 0;
-                if (iTpo > -1)
+                if (cmbTipos.FlatStyle == FlatStyle.Flat)
                 {
-                    idTipo = ((tb.ComboBoxItem)cmbTipos.Items[iTpo]).Id;
+                    int iTpo = cmbTipos.SelectedIndex;
+                    if (iTpo > -1)
+                    {
+                        idTipo = ((tb.ComboBoxItem)cmbTipos.Items[iTpo]).Id;
+                    }
                 }
+                string codigo = "";
+                if (txtCodigo.BackColor == Color.Yellow)
+                {
+                    codigo = txtCodigo.Text;
+                }
+                int quantidade = -1;
+                if (txQuantidade.BackColor == Color.Yellow)
+                {
+                    if (!int.TryParse(txQuantidade.Text, out quantidade))
+                    {
+                        quantidade = -1;
+                    }
+                }
+                string marca = "";
+                if (txMarca.BackColor == Color.Yellow)
+                {
+                    marca = txMarca.Text;
+                }
+                string Obs = "";
+                if (txObs.BackColor == Color.Yellow)
+                {
+                    Obs = txObs.Text;
+                }
+                HashSet<string> selectedCodes = new HashSet<string>();
+                int scrollPosition = dataGrid1.FirstDisplayedScrollingRowIndex;
                 foreach (DataGridViewRow row in dataGrid1.SelectedRows)
                 {
+                    selectedCodes.Add((string)row.Cells["Codigo"].Value);
                     int gID = Convert.ToInt32(row.Cells["ID"].Value);
                     string UID = Convert.ToString(row.Cells["UID"].Value);
-                    glo.Loga($@"FA,{gID}, {idTipo}, {idForn} ,{UID}");
-                    faltasDAO.Atualiza(gID, idTipo, idForn);
+                    glo.Loga($@"FA,{gID}, {idTipo}, {idForn} ,{codigo}, {quantidade},{marca}, {Obs}, {UID}");
+                    faltasDAO.Atualiza(gID, idTipo, idForn, codigo, quantidade, marca, Obs);
+                }
+                CarregaGrid();
+                dataGrid1.FirstDisplayedScrollingRowIndex = scrollPosition;
+                foreach (string code in selectedCodes)
+                {
+                    foreach (DataGridViewRow row in dataGrid1.Rows)
+                    {
+                        string cod = row.Cells["Codigo"].Value.ToString();
+                        if (cod == code)
+                        {
+                            row.Selected = true;
+                            break;
+                        }
+                    }
                 }
                 AtualizouEmBaixo();
             }
@@ -393,10 +498,14 @@ namespace TeleBonifacio
 
         private void AtualizouEmBaixo()
         {
-            CarregaGrid(0,0,0);
             cmbTipos.SelectedIndex = 0;
             btAdicTpo.Enabled = false;
             btComprei.Enabled = false;
+            Normaliza(txtCodigo, 0);
+            Normaliza(txMarca, 0);
+            Normaliza(txDescr, 0);
+            Normaliza(txObs, 0);
+            Normaliza(txQuantidade, 0);
         }
 
         private void cmbTipos_SelectedIndexChanged(object sender, EventArgs e)
@@ -428,10 +537,14 @@ namespace TeleBonifacio
                             }
                             else
                             {
-                                btAdicTpo.Enabled = true;
+                                if (txtCodigo.Text.Length > 0)
+                                {
+                                    btAdicTpo.Enabled = true;
+                                    cmbTipos.FlatStyle = FlatStyle.Flat;
+                                }
                             }
                         }
-                    }
+                    } 
                 }
             }
         }
@@ -465,7 +578,11 @@ namespace TeleBonifacio
                             }
                             else
                             {
-                                btAdicTpo.Enabled = true;
+                                if (txtCodigo.Text.Length>0)
+                                {
+                                    btAdicTpo.Enabled = true;
+                                    cmbForn.FlatStyle = FlatStyle.Flat;
+                                }
                             }
                         }
                     }
@@ -492,6 +609,7 @@ namespace TeleBonifacio
             else
             {
                 RetCmboTpo();
+                Limpar();
             }
         }
 
@@ -508,20 +626,44 @@ namespace TeleBonifacio
 
         private void button2_Click(object sender, EventArgs e)
         {
-            int iTpo = cmbTiposFiltro.SelectedIndex;
-            int idTipo = 0;
-            if (iTpo>-1)
+            int idTipo = cmbTiposFiltro.SelectedIndex;
+            BakidTipo = 0;
+            if (idTipo > 0)
             {
-                idTipo = ((tb.ComboBoxItem)cmbTiposFiltro.Items[iTpo]).Id;
+                BakidTipo = ((tb.ComboBoxItem)cmbTiposFiltro.Items[idTipo]).Id;
             }
             int iForn = cmbFornFiltro.SelectedIndex;
-            int idForn = 0;
-            if (iForn > -1)
+            BakidForn = 0;
+            if (iForn > 0)
             {
-                idForn = ((tb.ComboBoxItem)cmbFornFiltro.Items[iForn]).Id;
+                BakidForn = ((tb.ComboBoxItem)cmbFornFiltro.Items[iForn]).Id;
             }
-            int Comprado = (ckComprado.Checked) ? 1 : 0;
-            CarregaGrid(idTipo, idForn, Comprado);
+            bakComprado = (ckComprado.Checked) ? 1 : 0;
+            Bakcodigo = "";
+            if (txtCodigo.BackColor == Color.Yellow)
+            {
+                Bakcodigo = txtCodigo.Text;
+            }
+            Bakquantidade = -1;
+            if (txQuantidade.BackColor == Color.Yellow)
+            {
+                if (!int.TryParse(txQuantidade.Text, out Bakquantidade))
+                {
+                    Bakquantidade = -1;
+                }
+            }
+            Bakmarca = "";
+            if (txMarca.BackColor == Color.Yellow)
+            {
+                Bakmarca = txMarca.Text;
+            }
+            BakObs = "";
+            if (txObs.BackColor == Color.Yellow)
+            {
+                BakObs = txObs.Text;
+            }
+            CarregaGrid();
+            btnAdicionar.Text = "Limpar";
         }
 
         private void ckComprado_Click(object sender, EventArgs e)

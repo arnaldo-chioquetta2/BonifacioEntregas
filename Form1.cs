@@ -7,6 +7,7 @@ using System.IO.Compression;
 using System.Linq;
 using System.Reflection;
 using System.Windows.Forms;
+using TeleBonifacio.gen;
 
 namespace TeleBonifacio
 {
@@ -351,6 +352,45 @@ namespace TeleBonifacio
             }
         }
 
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            INI2 cINI2 = new INI2();
+            string iUser = cINI2.ReadString("Usuario", "User", "");
+            if (iUser.Length==0)
+            {
+                label1.Visible = false;
+                label2.Visible = false;
+                label3.Visible = false;
+                label4.Visible = false;
+                label5.Visible = false;
+                label6.Visible = false;
+                label7.Visible = false;
+                label8.Visible = false;
+                lbMens.Visible = false;
+                label9.Visible = false;
+                label10.Visible = false;
+                label11.Visible = false;
+                label13.Visible = false;
+                pictureBox1.Visible = false;
+                pictureBox2.Visible = false;
+                pictureBox3.Visible = false;
+                pictureBox4.Visible = false;
+                pictureBox5.Visible = false;
+                pictureBox6.Visible = false;
+                pictureBox7.Visible = false;
+                pictureBox8.Visible = false;
+                pictureBox9.Visible = false;
+                pictureBox10.Visible = false;
+                pictureBox11.Visible = false;
+                pictureBox13.Visible = false;
+                label12.Left = 63;
+                pictureBox12.Left = 63;
+                this.Width = 350;
+                this.Height = 200;
+            }
+            // w = 762
+            // h = 295
+        }
     }
 
 }
