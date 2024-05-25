@@ -184,10 +184,6 @@ namespace TeleBonifacio
             {
                 ok = false;
             }
-            if (txQuantidade.Text.Length == 0)
-            {
-                ok = false;
-            }
             if (txMarca.Text.Length == 0)
             {
                 ok = false;

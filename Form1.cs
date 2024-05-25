@@ -383,10 +383,9 @@ namespace TeleBonifacio
                 pictureBox10.Visible = false;
                 pictureBox11.Visible = false;
                 pictureBox13.Visible = false;
-                label12.Left = 63;
-                pictureBox12.Left = 63;
                 this.Width = 350;
                 this.Height = 200;
+                pictureBox12.Left = label12.Left = (this.Width - pictureBox12.Width) / 2;
             }
             // w = 762
             // h = 295

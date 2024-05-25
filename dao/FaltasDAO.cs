@@ -62,7 +62,7 @@ namespace TeleBonifacio.dao
                 alteracoes.Length -= 4;
                 query.Append($@" Where {alteracoes} ");
             }
-            query.Append(" ORDER BY F.Data, V.Nome");
+            query.Append(" ORDER BY F.Data desc, V.Nome");
             DataTable dt = glo.ExecutarConsulta(query.ToString());
             return dt;
         }
