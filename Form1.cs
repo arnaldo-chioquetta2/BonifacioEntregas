@@ -127,6 +127,11 @@ namespace TeleBonifacio
             AbrirOuFocarFormulario<CadFornec>();
         }
 
+        private void pictureBox14_Click(object sender, EventArgs e)
+        {
+            AbrirOuFocarFormulario<OperProdutos>();
+        }
+
         #endregion
 
         private void Form1_Shown(object sender, EventArgs e)
@@ -356,7 +361,8 @@ namespace TeleBonifacio
         {
             INI2 cINI2 = new INI2();
             string iUser = cINI2.ReadString("Usuario", "User", "");
-            if (iUser.Length==0)
+            string Caixa = cINI2.ReadString("Usuario", "Caixa", "");
+            if ((iUser.Length==0) && (Caixa.Length==0))
             {
                 label1.Visible = false;
                 label2.Visible = false;
@@ -367,8 +373,7 @@ namespace TeleBonifacio
                 label7.Visible = false;
                 label8.Visible = false;
                 lbMens.Visible = false;
-                label9.Visible = false;
-                label10.Visible = false;
+                label9.Visible = false; 
                 label11.Visible = false;
                 label13.Visible = false;
                 pictureBox1.Visible = false;
@@ -380,16 +385,19 @@ namespace TeleBonifacio
                 pictureBox7.Visible = false;
                 pictureBox8.Visible = false;
                 pictureBox9.Visible = false;
-                pictureBox10.Visible = false;
                 pictureBox11.Visible = false;
                 pictureBox13.Visible = false;
                 this.Width = 350;
                 this.Height = 200;
-                pictureBox12.Left = label12.Left = (this.Width - pictureBox12.Width) / 2;
+                label10.Left = pictureBox10.Left = 63;
+                int posL = (this.Width - pictureBox12.Width) / 2;
+                posL = posL + 50;
+                pictureBox12.Left = label12.Left = posL;
             }
             // w = 762
             // h = 295
         }
+
     }
 
 }

@@ -47,7 +47,9 @@ namespace TeleBonifacio
             MostraTipos();
             if (iUser.Length == 0)
             {
-                groupBox2.Visible = false;
+                btAdicTpo.Visible = false;
+                btComprei.Visible = false;
+                btnExcluir.Visible = false;
                 Restrito = true;
             }
             originalBackgroundColor = txtCodigo.BackColor;
@@ -126,8 +128,32 @@ namespace TeleBonifacio
                     string Descr = txDescr.Text;
                     string Obs = txObs.Text;
                     string UID = glo.GenerateUID();
-                    glo.Loga($@"FA,{idBalconista}, {quantidade}, {codigo}, {Marca},{Descr} ,{Obs} , {UID}");
-                    faltasDAO.Adiciona(idBalconista, quantidade, codigo, Marca, Descr, Obs, UID);
+                    int idForn = 0;
+                    if (!Restrito)
+                    {
+                        if (cmbForn.FlatStyle == FlatStyle.Flat)
+                        {
+                            int iForn = cmbForn.SelectedIndex;
+                            if (iForn > -1)
+                            {
+                                idForn = ((tb.ComboBoxItem)cmbForn.Items[iForn]).Id;
+                            }
+                        }
+                    }
+                    int idTipo = 0;
+                    if (!Restrito)
+                    {
+                        if (cmbTipos.FlatStyle == FlatStyle.Flat)
+                        {
+                            int iTpo = cmbTipos.SelectedIndex;
+                            if (iTpo > -1)
+                            {
+                                idTipo = ((tb.ComboBoxItem)cmbTipos.Items[iTpo]).Id;
+                            }
+                        }
+                    }
+                    glo.Loga($@"FA,{idBalconista}, {quantidade}, {codigo}, {Marca}, {Descr}, {Obs} , {idForn}, {idTipo}, {UID}");
+                    faltasDAO.Adiciona(idBalconista, quantidade, codigo, Marca, Descr, Obs, idForn, idTipo, UID);
                 }
             }
             CarregaGrid();
@@ -141,6 +167,7 @@ namespace TeleBonifacio
             cmbTipos.FlatStyle = FlatStyle.System;
             cmbForn.FlatStyle = FlatStyle.System;
             cmbForn.SelectedIndex = 0;
+            ckComprado.Checked = false;
             Normaliza(txtCodigo,1);
             Normaliza(txMarca,1);
             Normaliza(txDescr,1);
@@ -163,6 +190,7 @@ namespace TeleBonifacio
         private void txtCodigo_KeyUp(object sender, KeyEventArgs e)
         {
             VeSeHab(txtCodigo);
+            btnAdicionar.Enabled = true;
         }
 
         private void VeSeHab(TextBox obj=null)
@@ -173,9 +201,12 @@ namespace TeleBonifacio
                 {
                     if (!obj.ReadOnly)
                     {
-                        obj.BackColor = Color.Yellow;
-                        btAdicTpo.Enabled = true;
-                        button2.Enabled = true;
+                        if (obj.Text.Length>0)
+                        {
+                            obj.BackColor = Color.Yellow;
+                            btAdicTpo.Enabled = true;
+                            button2.Enabled = btLmpFiltro.Enabled = true;
+                        }
                     }                    
                 }
             }
@@ -274,11 +305,12 @@ namespace TeleBonifacio
             dataGrid1.Invalidate();
         }
 
-        // int tipo = 0, int idForn = 0, int Comprado = 0, string codigo = "", int quantidade = -1, string marca = "", string Obs = ""
         private void CarregaGrid()
         {
             FaltasDAO faltasDAO = new FaltasDAO();
-            DataTable dados = faltasDAO.getDados(BakidTipo, BakidForn, BakidForn, Bakcodigo, Bakquantidade, Bakmarca, BakObs);
+            // int tipo, int idForn, int Comprado, string codigo, int quantidade, string marca, string Obs
+            DataTable dados = faltasDAO.getDados(BakidTipo, BakidForn, bakComprado, Bakcodigo, Bakquantidade, Bakmarca, BakObs);
+            // DataTable dados = faltasDAO.getDados(BakidTipo, BakidForn, BakidForn, Bakcodigo, Bakquantidade, Bakmarca, BakObs);
             List<tb.TpoFalta> tipos = TpoFalta.getTipos();
             List<tb.Fornecedor> Fornecs = Forn.getForns();
             dataGrid1.DataSource = dados;
@@ -311,7 +343,10 @@ namespace TeleBonifacio
                     }
                 }
             }
-            ConfigurarGrid();
+            if (dados != null)
+            {
+                ConfigurarGrid();
+            }
         }
 
         private void dataGrid1_CellClick(object sender, DataGridViewCellEventArgs e)
@@ -375,9 +410,7 @@ namespace TeleBonifacio
         private void MostraTipos()
         {
             glo.CarregarComboBox<tb.TpoFalta>(cmbTipos, TpoFalta, "ESCOLHA", ItemFinal: "ADICIONE", ItemFinal2: "EDIÇÃO");
-            glo.CarregarComboBox<tb.TpoFalta>(cmbTiposFiltro, TpoFalta, "TODOS");
             glo.CarregarComboBox<tb.Fornecedor>(cmbForn, Forn, "ESCOLHA", ItemFinal: "ADICIONE", ItemFinal2: "EDIÇÃO");
-            glo.CarregarComboBox<tb.Fornecedor>(cmbFornFiltro, Forn, "TODOS");
         }
 
         private void btAdicTpo_Click(object sender, EventArgs e)
@@ -458,20 +491,23 @@ namespace TeleBonifacio
                     faltasDAO.Atualiza(gID, idTipo, idForn, codigo, quantidade, marca, Obs);
                 }
                 CarregaGrid();
-                dataGrid1.FirstDisplayedScrollingRowIndex = scrollPosition;
-                foreach (string code in selectedCodes)
+                if (dataGrid1.Rows.Count>0)
                 {
-                    foreach (DataGridViewRow row in dataGrid1.Rows)
+                    dataGrid1.FirstDisplayedScrollingRowIndex = scrollPosition;
+                    foreach (string code in selectedCodes)
                     {
-                        string cod = row.Cells["Codigo"].Value.ToString();
-                        if (cod == code)
+                        foreach (DataGridViewRow row in dataGrid1.Rows)
                         {
-                            row.Selected = true;
-                            break;
+                            string cod = row.Cells["Codigo"].Value.ToString();
+                            if (cod == code)
+                            {
+                                row.Selected = true;
+                                break;
+                            }
                         }
                     }
+                    AtualizouEmBaixo();
                 }
-                AtualizouEmBaixo();
             }
         }
 
@@ -495,6 +531,9 @@ namespace TeleBonifacio
         private void AtualizouEmBaixo()
         {
             cmbTipos.SelectedIndex = 0;
+            cmbTipos.FlatStyle = FlatStyle.System;
+            cmbForn.SelectedIndex = 0;
+            cmbForn.FlatStyle = FlatStyle.System;
             btAdicTpo.Enabled = false;
             btComprei.Enabled = false;
             Normaliza(txtCodigo, 0);
@@ -537,6 +576,10 @@ namespace TeleBonifacio
                                 {
                                     btAdicTpo.Enabled = true;
                                     cmbTipos.FlatStyle = FlatStyle.Flat;
+                                } else
+                                {
+                                    button2.Enabled = true;
+                                    btLmpFiltro.Enabled = true;
                                 }
                             }
                         }
@@ -579,6 +622,11 @@ namespace TeleBonifacio
                                     btAdicTpo.Enabled = true;
                                     cmbForn.FlatStyle = FlatStyle.Flat;
                                 }
+                                else
+                                {
+                                    button2.Enabled = true;
+                                    btLmpFiltro.Enabled = true;
+                                }
                             }
                         }
                     }
@@ -600,6 +648,7 @@ namespace TeleBonifacio
                     int gID = Convert.ToInt32(row.Cells["ID"].Value);
                     faltasDAO.Comprou(gID);
                 }
+                CarregaGrid();
                 AtualizouEmBaixo();
             }
             else
@@ -616,23 +665,23 @@ namespace TeleBonifacio
         {
             if (!carregando)
             {
-                button2.Enabled = true;
+                button2.Enabled = btLmpFiltro.Enabled = true;                
             }
         }
 
         private void button2_Click(object sender, EventArgs e)
         {
-            int idTipo = cmbTiposFiltro.SelectedIndex;
+            int idTipo = cmbTipos.SelectedIndex;
             BakidTipo = 0;
             if (idTipo > 0)
             {
-                BakidTipo = ((tb.ComboBoxItem)cmbTiposFiltro.Items[idTipo]).Id;
+                BakidTipo = ((tb.ComboBoxItem)cmbTipos.Items[idTipo]).Id;
             }
-            int iForn = cmbFornFiltro.SelectedIndex;
+            int iForn = cmbForn.SelectedIndex;
             BakidForn = 0;
             if (iForn > 0)
             {
-                BakidForn = ((tb.ComboBoxItem)cmbFornFiltro.Items[iForn]).Id;
+                BakidForn = ((tb.ComboBoxItem)cmbForn.Items[iForn]).Id;
             }
             bakComprado = (ckComprado.Checked) ? 1 : 0;
             Bakcodigo = "";
@@ -660,11 +709,28 @@ namespace TeleBonifacio
             }
             CarregaGrid();
             btnAdicionar.Text = "Limpar";
+            btAdicTpo.Enabled = false;
+            // AtualizouEmBaixo();
         }
 
         private void ckComprado_Click(object sender, EventArgs e)
         {
-            button2.Enabled = true;
+            button2.Enabled = btLmpFiltro.Enabled = true;
+        }
+
+        private void btLmpFiltro_Click(object sender, EventArgs e)
+        {
+            Limpar();
+            BakidTipo = 0;
+            BakidForn = 0;
+            bakComprado = 0;
+            Bakcodigo = "";
+            Bakquantidade = -1;
+            Bakmarca = "";
+            BakObs = "";
+            //cmbTiposFiltro.SelectedIndex = 0;
+            //cmbFornFiltro.SelectedIndex = 0;
+            CarregaGrid();
         }
 
         #endregion

@@ -1,14 +1,15 @@
 ﻿using System;
 using System.Data;
+using System.Data.OleDb;
 using System.Text;
 
 namespace TeleBonifacio.dao
 {
     public class FaltasDAO
     {
-        public void Adiciona(int idBalconista, float quantidade, string codigo, string Marca, string Descr, string Obs, string UID)
+        public void Adiciona(int idBalconista, float quantidade, string codigo, string Marca, string Descr, string Obs, int idForn, int idTipo, string UID)
         {
-            string sql = $@"INSERT INTO Faltas (IDBalconista, Quant, Codigo, Marca, Data, Descricao, Obs, UID) VALUES (
+            string sql = $@"INSERT INTO Faltas (IDBalconista, Quant, Codigo, Marca, Data, Descricao, Obs, Tipo, idForn, UID) VALUES (
                 {idBalconista}, 
                 {quantidade}, 
                 '{codigo}', 
@@ -16,6 +17,8 @@ namespace TeleBonifacio.dao
                 Now, 
                 '{Descr}', 
                 '{Obs}', 
+                '{idTipo}', 
+                {idForn}, 
                 '{UID}')";
             glo.ExecutarComandoSQL(sql); 
         }
@@ -31,7 +34,7 @@ namespace TeleBonifacio.dao
             StringBuilder alteracoes = new StringBuilder();
             if (tipo > 0)
             {
-                alteracoes.Append($@" F.Tipo = {tipo} and ");
+                alteracoes.Append($@" F.Tipo = '{tipo}' and ");
             }
             if (idForn > 0)
             {
@@ -115,47 +118,19 @@ namespace TeleBonifacio.dao
             glo.ExecutarComandoSQL(sql);
         }
 
-        //public void Atualiza(int iID, int iTpo, int idForn, string codigo, int quantidade, string marca, string Obs)
-        //{
-        //    string sTipo = "";
-        //    if (iTpo>0)
-        //    {
-        //        sTipo = $@" Tipo = {iTpo}, ";
-        //    }
-        //    string sForn = "";
-        //    if (idForn > 0)
-        //    {
-        //        sForn = $@" idForn = {idForn}, ";
-        //    }
-        //    if (codigo.Length>0)
-        //    {
-        //        codigo = $@" Codigo = '{codigo}', ";
-        //    }
-        //    string sQuant = "";
-        //    if (quantidade>-1)
-        //    {
-        //        sQuant = $@" Quant = {quantidade}, ";
-        //    }
-        //    if (marca.Length > 0)
-        //    {
-        //        marca = $@" Marca = '{marca}', ";
-        //    }
-        //    if (Obs.Length>0)
-        //    {                
-        //        marca = $@" Obs = '{Obs}', ";
-        //    }
-        //    string Alterar = $@" { sTipo } { sForn} {codigo} {sQuant} {marca} {marca} ";
-        //    // RETIRAR A ÚLTIMA VIRGULA DA STRING
-        //    string sql = $@"UPDATE Faltas SET {Alterar} WHERE ID = {iID}";
-        //    glo.ExecutarComandoSQL(sql);
-        //}
-
         public void Comprou(int iID)
         {
-            string sql = $@"UPDATE Faltas SET Compra = Now WHERE ID = {iID}";
-            glo.ExecutarComandoSQL(sql);
+            DataTable faltaData = glo.ExecutarConsulta($"SELECT * FROM Faltas WHERE ID = {iID}");
+            DataRow faltaRow = faltaData.Rows[0];
+            string UID = glo.GenerateUID();
+            int idForn = (faltaRow["idForn"].ToString().Length==0) ? 0 : Convert.ToInt16(faltaRow["idForn"]);
+            string insertQuery = $@"INSERT INTO Produtos (Data, Quant, Codigo, Marca, UID, Tipo, Compra, Descricao, idForn, Obs) 
+                            VALUES (Now, {faltaRow["Quant"]}, '{faltaRow["Codigo"]}', '{faltaRow["Marca"]}', '{UID}', '{faltaRow["Tipo"]}', Now(), '{faltaRow["Descricao"]}', {idForn}, '{faltaRow["Obs"]}')";
+            glo.ExecutarComandoSQL(insertQuery);
+            string updateFaltaQuery = $@"UPDATE Faltas SET Compra = Now() WHERE ID = {iID}";
+            glo.ExecutarComandoSQL(updateFaltaQuery);
         }
-        
+
         public string VeSeJaTemAFalta(string codigo)
         {
             string query = $@"SELECT Count(*) FROM Faltas Where Codigo = '{codigo}' ";
