@@ -114,7 +114,11 @@ namespace TeleBonifacio
             else
             {
                 string codigo = txtCodigo.Text;
-                string ret = faltasDAO.VeSeJaTemAFalta(codigo);
+                string ret = "";
+                if (codigo.Length>0)
+                {
+                    ret = faltasDAO.VeSeJaTemAFalta(codigo);
+                }                
                 if (ret.Length>0)
                 {
                     MessageBox.Show(ret, "Já foi lançada a falta", MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -164,12 +168,10 @@ namespace TeleBonifacio
 
         private void Limpar()
         {
-            cmbVendedor.SelectedIndex = -1;
             cmbTipos.SelectedIndex = 0;
             cmbTipos.FlatStyle = FlatStyle.System;
             cmbForn.FlatStyle = FlatStyle.System;
             cmbForn.SelectedIndex = 0;
-            // ckComprado.Checked = false;
             Normaliza(txtCodigo,1);
             Normaliza(txMarca,1);
             Normaliza(txDescr,1);
@@ -482,6 +484,11 @@ namespace TeleBonifacio
                 {
                     Obs = txObs.Text;
                 }
+                string Descr = "";
+                if (txDescr.BackColor == Color.Yellow)
+                {
+                    Descr = txDescr.Text;
+                }
                 HashSet<string> selectedCodes = new HashSet<string>();
                 int scrollPosition = dataGrid1.FirstDisplayedScrollingRowIndex;
                 foreach (DataGridViewRow row in dataGrid1.SelectedRows)
@@ -489,8 +496,8 @@ namespace TeleBonifacio
                     selectedCodes.Add((string)row.Cells["Codigo"].Value);
                     int gID = Convert.ToInt32(row.Cells["ID"].Value);
                     string UID = Convert.ToString(row.Cells["UID"].Value);
-                    glo.Loga($@"FA,{gID}, {idTipo}, {idForn} ,{codigo}, {quantidade},{marca}, {Obs}, {UID}");
-                    faltasDAO.Atualiza(gID, idTipo, idForn, codigo, quantidade, marca, Obs);
+                    glo.Loga($@"FA,{gID}, {idTipo}, {idForn} ,{codigo}, {quantidade},{marca}, {Obs}, {Descr}, {UID}");
+                    faltasDAO.Atualiza(gID, idTipo, idForn, codigo, quantidade, marca, Obs, Descr);
                 }
                 CarregaGrid();
                 if (dataGrid1.Rows.Count>0)
@@ -736,8 +743,6 @@ namespace TeleBonifacio
             Bakquantidade = -1;
             Bakmarca = "";
             BakObs = "";
-            //cmbTiposFiltro.SelectedIndex = 0;
-            //cmbFornFiltro.SelectedIndex = 0;
             if (tbFaltas.SelectedIndex == 1)
             {
                 CarregaGridP();

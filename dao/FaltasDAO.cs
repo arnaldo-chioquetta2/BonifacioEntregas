@@ -86,7 +86,7 @@ namespace TeleBonifacio.dao
             glo.ExecutarComandoSQL(sql);
         }
 
-        public void Atualiza(int iID, int iTpo, int idForn, string codigo, int quantidade, string marca, string Obs)
+        public void Atualiza(int iID, int iTpo, int idForn, string codigo, int quantidade, string marca, string Obs, string Descr)
         {
             StringBuilder alteracoes = new StringBuilder();
             if (iTpo > 0)
@@ -113,6 +113,10 @@ namespace TeleBonifacio.dao
             {
                 alteracoes.Append($"Obs = '{Obs}', ");
             }
+            if (!string.IsNullOrEmpty(Descr))
+            {
+                alteracoes.Append($"Descricao = '{Descr}', ");
+            }            
             alteracoes.Length -= 2;
             string sql = $@"UPDATE Faltas SET {alteracoes} WHERE ID = {iID}";
             glo.ExecutarComandoSQL(sql);
