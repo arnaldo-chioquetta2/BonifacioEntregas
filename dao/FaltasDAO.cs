@@ -127,7 +127,7 @@ namespace TeleBonifacio.dao
             string insertQuery = $@"INSERT INTO Produtos (Data, Quant, Codigo, Marca, UID, Tipo, Compra, Descricao, idForn, Obs) 
                             VALUES (Now, {faltaRow["Quant"]}, '{faltaRow["Codigo"]}', '{faltaRow["Marca"]}', '{UID}', '{faltaRow["Tipo"]}', Now(), '{faltaRow["Descricao"]}', {idForn}, '{faltaRow["Obs"]}')";
             glo.ExecutarComandoSQL(insertQuery);
-            string updateFaltaQuery = $@"UPDATE Faltas SET Compra = Now() WHERE ID = {iID}";
+            string updateFaltaQuery = $@"Delete From Faltas WHERE ID = {iID}";
             glo.ExecutarComandoSQL(updateFaltaQuery);
         }
 

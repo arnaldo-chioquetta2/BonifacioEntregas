@@ -32,18 +32,17 @@ namespace TeleBonifacio
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(OperFalta));
             this.panel1 = new System.Windows.Forms.Panel();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
-            this.btLmpFiltro = new System.Windows.Forms.Button();
-            this.ckComprado = new System.Windows.Forms.CheckBox();
-            this.button2 = new System.Windows.Forms.Button();
-            this.cmbForn = new System.Windows.Forms.ComboBox();
             this.btComprei = new System.Windows.Forms.Button();
-            this.label5 = new System.Windows.Forms.Label();
-            this.cmbTipos = new System.Windows.Forms.ComboBox();
-            this.label3 = new System.Windows.Forms.Label();
+            this.cmbForn = new System.Windows.Forms.ComboBox();
             this.btAdicTpo = new System.Windows.Forms.Button();
             this.btnExcluir = new System.Windows.Forms.Button();
-            this.txNvTipo = new System.Windows.Forms.TextBox();
+            this.btLmpFiltro = new System.Windows.Forms.Button();
+            this.label5 = new System.Windows.Forms.Label();
             this.txNvForn = new System.Windows.Forms.TextBox();
+            this.cmbTipos = new System.Windows.Forms.ComboBox();
+            this.button2 = new System.Windows.Forms.Button();
+            this.label3 = new System.Windows.Forms.Label();
+            this.txNvTipo = new System.Windows.Forms.TextBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.label10 = new System.Windows.Forms.Label();
             this.txObs = new System.Windows.Forms.TextBox();
@@ -58,11 +57,19 @@ namespace TeleBonifacio
             this.label2 = new System.Windows.Forms.Label();
             this.txtCodigo = new System.Windows.Forms.TextBox();
             this.btnAdicionar = new System.Windows.Forms.Button();
+            this.tbFaltas = new System.Windows.Forms.TabControl();
+            this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.tabPage2 = new System.Windows.Forms.TabPage();
             this.dataGrid1 = new System.Windows.Forms.DataGridView();
+            this.dataGrid2 = new System.Windows.Forms.DataGridView();
             this.panel1.SuspendLayout();
             this.groupBox3.SuspendLayout();
             this.groupBox1.SuspendLayout();
+            this.tbFaltas.SuspendLayout();
+            this.tabPage1.SuspendLayout();
+            this.tabPage2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGrid1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGrid2)).BeginInit();
             this.SuspendLayout();
             // 
             // panel1
@@ -83,7 +90,6 @@ namespace TeleBonifacio
             this.groupBox3.Controls.Add(this.btnExcluir);
             this.groupBox3.Controls.Add(this.btLmpFiltro);
             this.groupBox3.Controls.Add(this.label5);
-            this.groupBox3.Controls.Add(this.ckComprado);
             this.groupBox3.Controls.Add(this.txNvForn);
             this.groupBox3.Controls.Add(this.cmbTipos);
             this.groupBox3.Controls.Add(this.button2);
@@ -97,39 +103,17 @@ namespace TeleBonifacio
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Filtro";
             // 
-            // btLmpFiltro
+            // btComprei
             // 
-            this.btLmpFiltro.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.btLmpFiltro.Enabled = false;
-            this.btLmpFiltro.Location = new System.Drawing.Point(748, 16);
-            this.btLmpFiltro.Name = "btLmpFiltro";
-            this.btLmpFiltro.Size = new System.Drawing.Size(75, 23);
-            this.btLmpFiltro.TabIndex = 53;
-            this.btLmpFiltro.Text = "Limpar";
-            this.btLmpFiltro.Click += new System.EventHandler(this.btLmpFiltro_Click);
-            // 
-            // ckComprado
-            // 
-            this.ckComprado.AutoSize = true;
-            this.ckComprado.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.ckComprado.Location = new System.Drawing.Point(564, 20);
-            this.ckComprado.Name = "ckComprado";
-            this.ckComprado.Size = new System.Drawing.Size(84, 19);
-            this.ckComprado.TabIndex = 52;
-            this.ckComprado.Text = "Comprado";
-            this.ckComprado.UseVisualStyleBackColor = true;
-            this.ckComprado.Click += new System.EventHandler(this.ckComprado_Click);
-            // 
-            // button2
-            // 
-            this.button2.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.button2.Enabled = false;
-            this.button2.Location = new System.Drawing.Point(654, 17);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(75, 23);
-            this.button2.TabIndex = 44;
-            this.button2.Text = "Filtrar";
-            this.button2.Click += new System.EventHandler(this.button2_Click);
+            this.btComprei.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.btComprei.Enabled = false;
+            this.btComprei.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btComprei.Location = new System.Drawing.Point(926, 16);
+            this.btComprei.Name = "btComprei";
+            this.btComprei.Size = new System.Drawing.Size(75, 23);
+            this.btComprei.TabIndex = 48;
+            this.btComprei.Text = "Comprei";
+            this.btComprei.Click += new System.EventHandler(this.btComprei_Click);
             // 
             // cmbForn
             // 
@@ -143,17 +127,40 @@ namespace TeleBonifacio
             this.cmbForn.ValueMember = "Id";
             this.cmbForn.SelectedIndexChanged += new System.EventHandler(this.cmbForn_SelectedIndexChanged);
             // 
-            // btComprei
+            // btAdicTpo
             // 
-            this.btComprei.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.btComprei.Enabled = false;
-            this.btComprei.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btComprei.Location = new System.Drawing.Point(936, 16);
-            this.btComprei.Name = "btComprei";
-            this.btComprei.Size = new System.Drawing.Size(75, 23);
-            this.btComprei.TabIndex = 48;
-            this.btComprei.Text = "Comprei";
-            this.btComprei.Click += new System.EventHandler(this.btComprei_Click);
+            this.btAdicTpo.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.btAdicTpo.Enabled = false;
+            this.btAdicTpo.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btAdicTpo.Location = new System.Drawing.Point(742, 17);
+            this.btAdicTpo.Name = "btAdicTpo";
+            this.btAdicTpo.Size = new System.Drawing.Size(75, 23);
+            this.btAdicTpo.TabIndex = 42;
+            this.btAdicTpo.Text = "Atualizar";
+            this.btAdicTpo.Click += new System.EventHandler(this.btAdicTpo_Click);
+            // 
+            // btnExcluir
+            // 
+            this.btnExcluir.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.btnExcluir.Enabled = false;
+            this.btnExcluir.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnExcluir.Location = new System.Drawing.Point(834, 17);
+            this.btnExcluir.Name = "btnExcluir";
+            this.btnExcluir.Size = new System.Drawing.Size(75, 23);
+            this.btnExcluir.TabIndex = 39;
+            this.btnExcluir.Text = "Excluir";
+            this.btnExcluir.Click += new System.EventHandler(this.btnExcluir_Click);
+            // 
+            // btLmpFiltro
+            // 
+            this.btLmpFiltro.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.btLmpFiltro.Enabled = false;
+            this.btLmpFiltro.Location = new System.Drawing.Point(650, 17);
+            this.btLmpFiltro.Name = "btLmpFiltro";
+            this.btLmpFiltro.Size = new System.Drawing.Size(75, 23);
+            this.btLmpFiltro.TabIndex = 53;
+            this.btLmpFiltro.Text = "Limpar";
+            this.btLmpFiltro.Click += new System.EventHandler(this.btLmpFiltro_Click);
             // 
             // label5
             // 
@@ -164,6 +171,15 @@ namespace TeleBonifacio
             this.label5.Size = new System.Drawing.Size(35, 16);
             this.label5.TabIndex = 47;
             this.label5.Text = "Forn";
+            // 
+            // txNvForn
+            // 
+            this.txNvForn.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txNvForn.Location = new System.Drawing.Point(327, 21);
+            this.txNvForn.Name = "txNvForn";
+            this.txNvForn.Size = new System.Drawing.Size(221, 21);
+            this.txNvForn.TabIndex = 50;
+            this.txNvForn.Visible = false;
             // 
             // cmbTipos
             // 
@@ -177,6 +193,17 @@ namespace TeleBonifacio
             this.cmbTipos.ValueMember = "Id";
             this.cmbTipos.SelectedIndexChanged += new System.EventHandler(this.cmbTipos_SelectedIndexChanged);
             // 
+            // button2
+            // 
+            this.button2.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.button2.Enabled = false;
+            this.button2.Location = new System.Drawing.Point(558, 18);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(75, 23);
+            this.button2.TabIndex = 44;
+            this.button2.Text = "Filtrar";
+            this.button2.Click += new System.EventHandler(this.button2_Click);
+            // 
             // label3
             // 
             this.label3.AutoSize = true;
@@ -187,30 +214,6 @@ namespace TeleBonifacio
             this.label3.TabIndex = 45;
             this.label3.Text = "Tipo";
             // 
-            // btAdicTpo
-            // 
-            this.btAdicTpo.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.btAdicTpo.Enabled = false;
-            this.btAdicTpo.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btAdicTpo.Location = new System.Drawing.Point(842, 16);
-            this.btAdicTpo.Name = "btAdicTpo";
-            this.btAdicTpo.Size = new System.Drawing.Size(75, 23);
-            this.btAdicTpo.TabIndex = 42;
-            this.btAdicTpo.Text = "Atualizar";
-            this.btAdicTpo.Click += new System.EventHandler(this.btAdicTpo_Click);
-            // 
-            // btnExcluir
-            // 
-            this.btnExcluir.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.btnExcluir.Enabled = false;
-            this.btnExcluir.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnExcluir.Location = new System.Drawing.Point(1030, 16);
-            this.btnExcluir.Name = "btnExcluir";
-            this.btnExcluir.Size = new System.Drawing.Size(75, 23);
-            this.btnExcluir.TabIndex = 39;
-            this.btnExcluir.Text = "Excluir";
-            this.btnExcluir.Click += new System.EventHandler(this.btnExcluir_Click);
-            // 
             // txNvTipo
             // 
             this.txNvTipo.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -219,15 +222,6 @@ namespace TeleBonifacio
             this.txNvTipo.Size = new System.Drawing.Size(223, 21);
             this.txNvTipo.TabIndex = 45;
             this.txNvTipo.Visible = false;
-            // 
-            // txNvForn
-            // 
-            this.txNvForn.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txNvForn.Location = new System.Drawing.Point(327, 21);
-            this.txNvForn.Name = "txNvForn";
-            this.txNvForn.Size = new System.Drawing.Size(221, 21);
-            this.txNvForn.TabIndex = 50;
-            this.txNvForn.Visible = false;
             // 
             // groupBox1
             // 
@@ -384,22 +378,68 @@ namespace TeleBonifacio
             this.btnAdicionar.Text = "Adicionar";
             this.btnAdicionar.Click += new System.EventHandler(this.btnAdicionar_Click);
             // 
+            // tbFaltas
+            // 
+            this.tbFaltas.Controls.Add(this.tabPage1);
+            this.tbFaltas.Controls.Add(this.tabPage2);
+            this.tbFaltas.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tbFaltas.Location = new System.Drawing.Point(0, 108);
+            this.tbFaltas.Name = "tbFaltas";
+            this.tbFaltas.SelectedIndex = 0;
+            this.tbFaltas.Size = new System.Drawing.Size(1114, 324);
+            this.tbFaltas.TabIndex = 14;
+            this.tbFaltas.SelectedIndexChanged += new System.EventHandler(this.tbFaltas_SelectedIndexChanged);
+            // 
+            // tabPage1
+            // 
+            this.tabPage1.Controls.Add(this.dataGrid1);
+            this.tabPage1.Location = new System.Drawing.Point(4, 22);
+            this.tabPage1.Name = "tabPage1";
+            this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage1.Size = new System.Drawing.Size(1106, 298);
+            this.tabPage1.TabIndex = 0;
+            this.tabPage1.Text = "Faltas";
+            this.tabPage1.UseVisualStyleBackColor = true;
+            // 
+            // tabPage2
+            // 
+            this.tabPage2.Controls.Add(this.dataGrid2);
+            this.tabPage2.Location = new System.Drawing.Point(4, 22);
+            this.tabPage2.Name = "tabPage2";
+            this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage2.Size = new System.Drawing.Size(1106, 298);
+            this.tabPage2.TabIndex = 1;
+            this.tabPage2.Text = "Produtos";
+            this.tabPage2.UseVisualStyleBackColor = true;
+            // 
             // dataGrid1
             // 
             this.dataGrid1.AllowUserToAddRows = false;
             this.dataGrid1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dataGrid1.Location = new System.Drawing.Point(0, 108);
+            this.dataGrid1.Location = new System.Drawing.Point(3, 3);
             this.dataGrid1.Name = "dataGrid1";
             this.dataGrid1.ReadOnly = true;
             this.dataGrid1.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dataGrid1.Size = new System.Drawing.Size(1114, 324);
-            this.dataGrid1.TabIndex = 14;
-            this.dataGrid1.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGrid1_CellClick);
+            this.dataGrid1.Size = new System.Drawing.Size(1100, 292);
+            this.dataGrid1.TabIndex = 1;
+            this.dataGrid1.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGrid1_CellClick);
+            // 
+            // dataGrid2
+            // 
+            this.dataGrid2.AllowUserToAddRows = false;
+            this.dataGrid2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dataGrid2.Location = new System.Drawing.Point(3, 3);
+            this.dataGrid2.Name = "dataGrid2";
+            this.dataGrid2.ReadOnly = true;
+            this.dataGrid2.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.dataGrid2.Size = new System.Drawing.Size(1100, 292);
+            this.dataGrid2.TabIndex = 16;
+            this.dataGrid2.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGrid2_CellContentClick);
             // 
             // OperFalta
             // 
             this.ClientSize = new System.Drawing.Size(1114, 432);
-            this.Controls.Add(this.dataGrid1);
+            this.Controls.Add(this.tbFaltas);
             this.Controls.Add(this.panel1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
@@ -412,7 +452,11 @@ namespace TeleBonifacio
             this.groupBox3.PerformLayout();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
+            this.tbFaltas.ResumeLayout(false);
+            this.tabPage1.ResumeLayout(false);
+            this.tabPage2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dataGrid1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGrid2)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -442,11 +486,14 @@ namespace TeleBonifacio
         private System.Windows.Forms.TextBox txDescr;
         private System.Windows.Forms.ComboBox cmbForn;
         private System.Windows.Forms.TextBox txNvForn;
-        private System.Windows.Forms.CheckBox ckComprado;
         private System.Windows.Forms.Label label10;
         private System.Windows.Forms.TextBox txObs;
-        private System.Windows.Forms.DataGridView dataGrid1;
         private System.Windows.Forms.Button btLmpFiltro;
+        private System.Windows.Forms.TabControl tbFaltas;
+        private System.Windows.Forms.TabPage tabPage1;
+        private System.Windows.Forms.TabPage tabPage2;
+        private System.Windows.Forms.DataGridView dataGrid1;
+        private System.Windows.Forms.DataGridView dataGrid2;
     }
 }
 

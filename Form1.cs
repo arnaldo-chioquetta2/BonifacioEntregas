@@ -127,11 +127,6 @@ namespace TeleBonifacio
             AbrirOuFocarFormulario<CadFornec>();
         }
 
-        private void pictureBox14_Click(object sender, EventArgs e)
-        {
-            AbrirOuFocarFormulario<OperProdutos>();
-        }
-
         #endregion
 
         private void Form1_Shown(object sender, EventArgs e)

@@ -148,5 +148,15 @@ namespace TeleBonifacio
             }
         }
 
+        private void btRetVersao_Click(object sender, EventArgs e)
+        {
+            string PastaAtu = cINI.ReadString("Config", "Atualizador", "");
+            cINI.WriteString("Atualizador", "Retornar", "1");
+            glo.Loga("Config : PastaAtu = " + PastaAtu);
+            string Executar = PastaAtu + @"\ATCAtualizeitor.exe";
+            glo.Loga("Config : Executar o atualizador em " + Executar);
+            Process.Start(Executar);
+            Environment.Exit(0);
+        }
     }    
 }

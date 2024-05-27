@@ -196,12 +196,6 @@
     <Compile Include="operLancamento.designer.cs">
       <DependentUpon>operLancamento.cs</DependentUpon>
     </Compile>
-    <Compile Include="OperProdutos.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="OperProdutos.designer.cs">
-      <DependentUpon>OperProdutos.cs</DependentUpon>
-    </Compile>
     <Compile Include="OperRH.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -301,9 +295,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="operLancamento.resx">
       <DependentUpon>operLancamento.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="OperProdutos.resx">
-      <DependentUpon>OperProdutos.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="OperRH.resx">
       <DependentUpon>OperRH.cs</DependentUpon>

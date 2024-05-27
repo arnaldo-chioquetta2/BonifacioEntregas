@@ -27,6 +27,8 @@ namespace TeleBonifacio
         private int Bakquantidade = -1;
         private string Bakmarca = "";
         private string BakObs = "";
+        private string iUser = "";
+        private bool AtualizarGridP = true;
 
         public OperFalta()
         {
@@ -38,7 +40,7 @@ namespace TeleBonifacio
         {
             VendedoresDAO Vendedor = new VendedoresDAO();
             INI2 cINI2 = new INI2();
-            string iUser = cINI2.ReadString("Usuario", "User", "");
+            iUser = cINI2.ReadString("Usuario", "User", "");
             CarregarComboBoxV<tb.Vendedor>(cmbVendedor, Vendedor, iUser);
             faltasDAO = new FaltasDAO();
             TpoFalta = new TpoFaltaDAO();
@@ -167,7 +169,7 @@ namespace TeleBonifacio
             cmbTipos.FlatStyle = FlatStyle.System;
             cmbForn.FlatStyle = FlatStyle.System;
             cmbForn.SelectedIndex = 0;
-            ckComprado.Checked = false;
+            // ckComprado.Checked = false;
             Normaliza(txtCodigo,1);
             Normaliza(txMarca,1);
             Normaliza(txDescr,1);
@@ -185,12 +187,16 @@ namespace TeleBonifacio
             }            
             obj.BackColor = originalBackgroundColor;
             obj.ReadOnly = false;
+            obj.Tag = "";
         }
 
         private void txtCodigo_KeyUp(object sender, KeyEventArgs e)
         {
             VeSeHab(txtCodigo);
-            btnAdicionar.Enabled = true;
+            if (tbFaltas.SelectedIndex == 0)
+            {
+                btnAdicionar.Enabled = true;
+            }                
         }
 
         private void VeSeHab(TextBox obj=null)
@@ -203,9 +209,13 @@ namespace TeleBonifacio
                     {
                         if (obj.Text.Length>0)
                         {
-                            obj.BackColor = Color.Yellow;
-                            btAdicTpo.Enabled = true;
+                            if (tbFaltas.SelectedIndex == 0)
+                            {
+                                obj.BackColor = Color.Yellow;
+                                btAdicTpo.Enabled = true;
+                            }                                                             
                             button2.Enabled = btLmpFiltro.Enabled = true;
+                            obj.Tag = "M";
                         }
                     }                    
                 }
@@ -316,14 +326,6 @@ namespace TeleBonifacio
             dataGrid1.DataSource = dados;
             foreach (DataGridViewRow row in dataGrid1.Rows)
             {
-                if (row.Cells["Compra"].Value.ToString()!="")
-                {
-                    row.DefaultCellStyle.BackColor = Color.LightGreen;
-                }
-                else
-                {
-                    row.DefaultCellStyle.BackColor = Color.White; 
-                }
                 if (!row.Cells["Tipo"].Value.Equals(DBNull.Value))
                 {
                     int tipoId = Convert.ToInt32(row.Cells["Tipo"].Value);
@@ -648,6 +650,7 @@ namespace TeleBonifacio
                     int gID = Convert.ToInt32(row.Cells["ID"].Value);
                     faltasDAO.Comprou(gID);
                 }
+                AtualizarGridP = true;
                 CarregaGrid();
                 AtualizouEmBaixo();
             }
@@ -683,14 +686,13 @@ namespace TeleBonifacio
             {
                 BakidForn = ((tb.ComboBoxItem)cmbForn.Items[iForn]).Id;
             }
-            bakComprado = (ckComprado.Checked) ? 1 : 0;
             Bakcodigo = "";
-            if (txtCodigo.BackColor == Color.Yellow)
+            if (txtCodigo.Tag == "M")
             {
                 Bakcodigo = txtCodigo.Text;
             }
             Bakquantidade = -1;
-            if (txQuantidade.BackColor == Color.Yellow)
+            if (txQuantidade.Tag == "M")
             {
                 if (!int.TryParse(txQuantidade.Text, out Bakquantidade))
                 {
@@ -698,19 +700,25 @@ namespace TeleBonifacio
                 }
             }
             Bakmarca = "";
-            if (txMarca.BackColor == Color.Yellow)
+            if (txMarca.Tag == "M")
             {
                 Bakmarca = txMarca.Text;
             }
             BakObs = "";
-            if (txObs.BackColor == Color.Yellow)
+            if (txObs.Tag == "M")
             {
                 BakObs = txObs.Text;
             }
-            CarregaGrid();
+            if (tbFaltas.SelectedIndex == 1)
+            {
+                CarregaGridP();
+            }
+            else
+            {
+                CarregaGrid();
+            }
             btnAdicionar.Text = "Limpar";
             btAdicTpo.Enabled = false;
-            // AtualizouEmBaixo();
         }
 
         private void ckComprado_Click(object sender, EventArgs e)
@@ -730,7 +738,148 @@ namespace TeleBonifacio
             BakObs = "";
             //cmbTiposFiltro.SelectedIndex = 0;
             //cmbFornFiltro.SelectedIndex = 0;
-            CarregaGrid();
+            if (tbFaltas.SelectedIndex == 1)
+            {
+                CarregaGridP();
+            }
+            else
+            {
+                CarregaGrid();
+            }
+        }
+
+        #endregion
+
+        #region Produtos
+
+        private void ConfigurarGridP()
+        {
+            dataGrid2.Columns[0].Width = 100;       // Compra
+            dataGrid2.Columns[1].Width = 130;       // Forn
+            dataGrid2.Columns[2].Visible = false;   // ID
+            dataGrid2.Columns[3].Width = 100;       // Data
+            dataGrid2.Columns[4].Width = 80;        // Código
+            dataGrid2.Columns[5].Width = 50;        // Quantidade
+            dataGrid2.Columns[6].Width = 80;        // Marca
+            dataGrid2.Columns[7].Width = 150;       // Descrição
+            dataGrid2.Columns[8].Visible = false;  // UID
+            dataGrid2.Columns[9].Width = 130;      // Tipo - colocado o texto
+            dataGrid2.Columns[10].Visible = false;  // Tipo valor original
+            dataGrid2.Columns[11].Visible = false;  // idForn
+            dataGrid2.Columns[12].Width = 100;      // Obs
+            dataGrid2.Invalidate();
+        }
+
+        private void CarregaGridP()
+        {
+            ProdutosDao cDao = new ProdutosDao();
+            DataTable dados = cDao.getDados(BakidTipo, BakidForn, Bakcodigo, Bakquantidade, Bakmarca, BakObs);
+            List<tb.TpoFalta> tipos = TpoFalta.getTipos();
+            List<tb.Fornecedor> Fornecs = Forn.getForns();
+            dataGrid2.DataSource = dados;
+            foreach (DataGridViewRow row in dataGrid2.Rows)
+            {
+                if ((!row.Cells["Tipo"].Value.Equals(DBNull.Value)) && (row.Cells["Tipo"].Value.ToString().Length > 0))
+                {
+                    int tipoId = Convert.ToInt32(row.Cells["Tipo"].Value);
+                    var tipoEncontrado = tipos.Find(t => t.Id == tipoId);
+                    if (tipoEncontrado != null)
+                    {
+                        row.Cells["Tipo"].Value = tipoEncontrado.Nome;
+                    }
+                }
+                if (!row.Cells["idForn"].Value.Equals(DBNull.Value))
+                {
+                    int FornId = Convert.ToInt32(row.Cells["idForn"].Value);
+                    var fornEncontrado = Fornecs.Find(f => f.Id == FornId);
+                    if (fornEncontrado != null)
+                    {
+                        row.Cells["Forn"].Value = fornEncontrado.Nome;
+                    }
+                }
+            }
+            if (dados != null)
+            {
+                ConfigurarGridP();
+            }
+        }
+
+        private void tbFaltas_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (tbFaltas.SelectedIndex == 1) 
+            {
+                btComprei.Visible = false;
+                if (AtualizarGridP)
+                {
+                    cmbVendedor.SelectedIndex = -1;
+                    cmbVendedor.Enabled = false; ;
+                    CarregaGridP();
+                    AtualizarGridP = false;
+                }                
+            }
+            else
+            {
+                btComprei.Visible = false;
+                if (iUser.Length>0)
+                {
+                    cmbVendedor.SelectedItem = Convert.ToInt16(iUser);
+                } else
+                {
+                    cmbVendedor.Enabled = true;
+                }                
+            }
+            Limpar();
+        }
+
+        private void dataGrid2_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+            DataGridView grid = (DataGridView)sender;
+            if (grid != null && e.RowIndex >= 0 && e.RowIndex < grid.Rows.Count)
+            {
+                carregando = true;
+                DataGridViewRow selectedRow = grid.Rows[e.RowIndex];
+                this.iID = Convert.ToInt32(selectedRow.Cells["ID"].Value);
+                txQuantidade.Text = Convert.ToString(selectedRow.Cells["Quant"].Value);
+                txtCodigo.Text = Convert.ToString(selectedRow.Cells["Codigo"].Value);
+                txMarca.Text = Convert.ToString(selectedRow.Cells["Marca"].Value);
+                txObs.Text = Convert.ToString(selectedRow.Cells["Obs"].Value);
+                txDescr.Text = Convert.ToString(selectedRow.Cells["Descricao"].Value);
+                this.UID = Convert.ToString(selectedRow.Cells["UID"].Value);
+                try
+                {
+                    cmbForn.SelectedValue = Convert.ToInt32(selectedRow.Cells["idForn"].Value);
+                }
+                catch (Exception)
+                {
+                    cmbForn.SelectedValue = -1;
+                }
+                try
+                {
+                    cmbTipos.SelectedValue = Convert.ToInt32(selectedRow.Cells["TipoOrig"].Value);
+                }
+                catch (Exception)
+                {
+                    cmbTipos.SelectedValue = -1;
+                }
+                ReadlyOnly(true);
+                btnExcluir.Enabled = true;
+                txQuantidade.ReadOnly = false;
+                txMarca.ReadOnly = false;
+                if (dataGrid2.SelectedRows.Count == 1)
+                {
+                    txtCodigo.ReadOnly = false;
+                }
+                else
+                {
+                    txtCodigo.ReadOnly = true;
+                }
+                txQuantidade.BackColor = originalBackgroundColor;
+                txMarca.BackColor = originalBackgroundColor;
+                txtCodigo.BackColor = originalBackgroundColor;
+                txDescr.BackColor = originalBackgroundColor;
+                txObs.BackColor = originalBackgroundColor;
+                carregando = false;
+            }
         }
 
         #endregion
