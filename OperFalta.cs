@@ -29,6 +29,7 @@ namespace TeleBonifacio
         private string BakObs = "";
         private string iUser = "";
         private bool AtualizarGridP = true;
+        private string BakCodigoLost = "";
 
         public OperFalta()
         {
@@ -117,11 +118,11 @@ namespace TeleBonifacio
                 string ret = "";
                 if (codigo.Length>0)
                 {
-                    ret = faltasDAO.VeSeJaTemAFalta(codigo);
+                    ret = faltasDAO.VeSeJaTem(codigo);
                 }                
                 if (ret.Length>0)
                 {
-                    MessageBox.Show(ret, "Já foi lançada a falta", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    MessageBox.Show(ret, "Erro", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 } else
                 {
                     int idBalconista = Convert.ToInt32(cmbVendedor.SelectedValue); // Assumindo que cmbVendedor agora representa o balconista
@@ -179,6 +180,7 @@ namespace TeleBonifacio
             Normaliza(txQuantidade,1);
             btnAdicionar.Text = "Adicionar";
             btnExcluir.Enabled = false;
+            BakCodigoLost = "";
             txtCodigo.Focus();
         }
 
@@ -889,5 +891,23 @@ namespace TeleBonifacio
 
         #endregion
 
+        private void txtCodigo_Leave(object sender, EventArgs e)
+        {
+            string codigo = txtCodigo.Text;
+            if (BakCodigoLost != codigo)
+            {
+                BakCodigoLost = codigo;
+                string ret = "";
+                if (codigo.Length > 0)
+                {
+                    ret = faltasDAO.VeSeJaTem(codigo);
+                }
+                if (ret.Length > 0)
+                {
+                    MessageBox.Show(ret, "Erro", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                }
+                txtCodigo.Focus();
+            }
+        }
     }
 }

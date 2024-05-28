@@ -59,16 +59,16 @@ namespace TeleBonifacio
             this.btnAdicionar = new System.Windows.Forms.Button();
             this.tbFaltas = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
-            this.tabPage2 = new System.Windows.Forms.TabPage();
             this.dataGrid1 = new System.Windows.Forms.DataGridView();
+            this.tabPage2 = new System.Windows.Forms.TabPage();
             this.dataGrid2 = new System.Windows.Forms.DataGridView();
             this.panel1.SuspendLayout();
             this.groupBox3.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.tbFaltas.SuspendLayout();
             this.tabPage1.SuspendLayout();
-            this.tabPage2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGrid1)).BeginInit();
+            this.tabPage2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGrid2)).BeginInit();
             this.SuspendLayout();
             // 
@@ -366,6 +366,7 @@ namespace TeleBonifacio
             this.txtCodigo.Size = new System.Drawing.Size(101, 21);
             this.txtCodigo.TabIndex = 0;
             this.txtCodigo.KeyUp += new System.Windows.Forms.KeyEventHandler(this.txtCodigo_KeyUp);
+            this.txtCodigo.Leave += new System.EventHandler(this.txtCodigo_Leave);
             // 
             // btnAdicionar
             // 
@@ -401,17 +402,6 @@ namespace TeleBonifacio
             this.tabPage1.Text = "Faltas";
             this.tabPage1.UseVisualStyleBackColor = true;
             // 
-            // tabPage2
-            // 
-            this.tabPage2.Controls.Add(this.dataGrid2);
-            this.tabPage2.Location = new System.Drawing.Point(4, 22);
-            this.tabPage2.Name = "tabPage2";
-            this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(1106, 298);
-            this.tabPage2.TabIndex = 1;
-            this.tabPage2.Text = "Produtos";
-            this.tabPage2.UseVisualStyleBackColor = true;
-            // 
             // dataGrid1
             // 
             this.dataGrid1.AllowUserToAddRows = false;
@@ -423,6 +413,17 @@ namespace TeleBonifacio
             this.dataGrid1.Size = new System.Drawing.Size(1100, 292);
             this.dataGrid1.TabIndex = 1;
             this.dataGrid1.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGrid1_CellClick);
+            // 
+            // tabPage2
+            // 
+            this.tabPage2.Controls.Add(this.dataGrid2);
+            this.tabPage2.Location = new System.Drawing.Point(4, 22);
+            this.tabPage2.Name = "tabPage2";
+            this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage2.Size = new System.Drawing.Size(1106, 298);
+            this.tabPage2.TabIndex = 1;
+            this.tabPage2.Text = "Produtos";
+            this.tabPage2.UseVisualStyleBackColor = true;
             // 
             // dataGrid2
             // 
@@ -454,8 +455,8 @@ namespace TeleBonifacio
             this.groupBox1.PerformLayout();
             this.tbFaltas.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
-            this.tabPage2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dataGrid1)).EndInit();
+            this.tabPage2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dataGrid2)).EndInit();
             this.ResumeLayout(false);
 

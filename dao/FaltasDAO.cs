@@ -135,7 +135,7 @@ namespace TeleBonifacio.dao
             glo.ExecutarComandoSQL(updateFaltaQuery);
         }
 
-        public string VeSeJaTemAFalta(string codigo)
+        public string VeSeJaTem(string codigo)
         {
             string query = $@"SELECT Count(*) FROM Faltas Where Codigo = '{codigo}' ";
             int count = glo.ExecutarConsultaCount(query);
@@ -143,6 +143,16 @@ namespace TeleBonifacio.dao
             if (count > 0)
             {
                 ret= "Já existe um falta com este código.";
+            } else
+            {
+
+                string queryP = $@"SELECT FORMAT([Compra], 'dd/MM/yyyy') AS CompraFormatada FROM Produtos WHERE Codigo = '{codigo}' ";
+                DataTable dados = glo.ExecutarConsulta(queryP);
+                if (dados.Rows.Count > 0)
+                {
+                    DateTime? dataCompra = Convert.ToDateTime(dados.Rows[0]["CompraFormatada"]);
+                    ret = $"Este produto foi comprado em {dataCompra.Value.ToShortDateString()}";
+                }
             }
             return ret;
         }

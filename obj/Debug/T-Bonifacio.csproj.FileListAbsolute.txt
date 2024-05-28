@@ -8,6 +8,7 @@ C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug\SourceGrid.xml
 C:\Prog\T-Bonifacio\T-Bonifacio\obj\Debug\T-Bonifacio.csproj.AssemblyReference.cache
 C:\Prog\T-Bonifacio\T-Bonifacio\obj\Debug\TeleBonifacio.fCadClientes.resources
 C:\Prog\T-Bonifacio\T-Bonifacio\obj\Debug\TeleBonifacio.fCadEntregadores.resources
+C:\Prog\T-Bonifacio\T-Bonifacio\obj\Debug\TeleBonifacio.CadFornec.resources
 C:\Prog\T-Bonifacio\T-Bonifacio\obj\Debug\TeleBonifacio.fCadTiposFaltas.resources
 C:\Prog\T-Bonifacio\T-Bonifacio\obj\Debug\TeleBonifacio.CadVendedores2.resources
 C:\Prog\T-Bonifacio\T-Bonifacio\obj\Debug\TeleBonifacio.Dashboard.resources
@@ -31,4 +32,3 @@ C:\Prog\T-Bonifacio\T-Bonifacio\obj\Debug\T-Bonifacio.csproj.GenerateResource.ca
 C:\Prog\T-Bonifacio\T-Bonifacio\obj\Debug\T-Bonifacio.csproj.CoreCompileInputs.cache
 C:\Prog\T-Bonifacio\T-Bonifacio\obj\Debug\TeleBonifacio.exe
 C:\Prog\T-Bonifacio\T-Bonifacio\obj\Debug\TeleBonifacio.pdb
-C:\Prog\T-Bonifacio\T-Bonifacio\obj\Debug\TeleBonifacio.CadFornec.resources
