@@ -280,14 +280,29 @@ namespace TeleBonifacio
                                                   MessageBoxIcon.Question);
             if (result == DialogResult.Yes)
             {
-                foreach (DataGridViewRow row in dataGrid1.SelectedRows)
+                if (tbFaltas.SelectedIndex == 0)
                 {
-                    int gID = Convert.ToInt32(row.Cells["ID"].Value);
-                    string UID = Convert.ToString(row.Cells["UID"].Value);                    
-                    glo.Loga($@"FD,{gID}, {UID}");
-                    faltasDAO.Exclui(gID);
+                    foreach (DataGridViewRow row in dataGrid1.SelectedRows)
+                    {
+                        int gID = Convert.ToInt32(row.Cells["ID"].Value);
+                        string UID = Convert.ToString(row.Cells["UID"].Value);
+                        glo.Loga($@"FD,{gID}, {UID}");
+                        faltasDAO.Exclui(gID);
+                    }
+                    CarregaGrid();
                 }
-                CarregaGrid();
+                else
+                {
+                    ProdutosDao cDao = new ProdutosDao();
+                    foreach (DataGridViewRow row in dataGrid2.SelectedRows)
+                    {
+                        int gID = Convert.ToInt32(row.Cells["ID"].Value);
+                        string UID = Convert.ToString(row.Cells["UID"].Value);
+                        glo.Loga($@"FD,{gID}, {UID}");
+                        cDao.Exclui(gID);
+                    }
+                    CarregaGridP();
+                }
                 Limpar();
             }
         }
@@ -661,6 +676,25 @@ namespace TeleBonifacio
             }
         }
 
+        private void txtCodigo_Leave(object sender, EventArgs e)
+        {
+            string codigo = txtCodigo.Text;
+            if (BakCodigoLost != codigo)
+            {
+                BakCodigoLost = codigo;
+                string ret = "";
+                if (codigo.Length > 0)
+                {
+                    ret = faltasDAO.VeSeJaTem(codigo);
+                }
+                if (ret.Length > 0)
+                {
+                    MessageBox.Show(ret, "Erro", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                }
+                txtCodigo.Focus();
+            }
+        }
+
         #endregion
 
         #region Filtro
@@ -882,23 +916,5 @@ namespace TeleBonifacio
 
         #endregion
 
-        private void txtCodigo_Leave(object sender, EventArgs e)
-        {
-            string codigo = txtCodigo.Text;
-            if (BakCodigoLost != codigo)
-            {
-                BakCodigoLost = codigo;
-                string ret = "";
-                if (codigo.Length > 0)
-                {
-                    ret = faltasDAO.VeSeJaTem(codigo);
-                }
-                if (ret.Length > 0)
-                {
-                    MessageBox.Show(ret, "Erro", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                }
-                txtCodigo.Focus();
-            }
-        }
     }
 }

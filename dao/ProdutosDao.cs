@@ -72,7 +72,7 @@ namespace TeleBonifacio.dao
 
         public void Exclui(int id)
         {
-            string sql = $@"DELETE FROM Produtos WHERE ID = {id}";
+            string sql = $@"DELETE FROM Produtos WHERE ID = {id} ";
             glo.ExecutarComandoSQL(sql);
         }
 
