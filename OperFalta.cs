@@ -180,6 +180,7 @@ namespace TeleBonifacio
             Normaliza(txQuantidade,1);
             btnAdicionar.Text = "Adicionar";
             btnExcluir.Enabled = false;
+            btAdicTpo.Enabled = false;
             BakCodigoLost = "";
             txtCodigo.Focus();
         }
@@ -586,6 +587,7 @@ namespace TeleBonifacio
                                 {
                                     btAdicTpo.Enabled = true;
                                     cmbTipos.FlatStyle = FlatStyle.Flat;
+                                    btAdicTpo.Enabled = true;
                                 } else
                                 {
                                     button2.Enabled = true;
