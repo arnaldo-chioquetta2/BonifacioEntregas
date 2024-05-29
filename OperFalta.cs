@@ -322,9 +322,7 @@ namespace TeleBonifacio
         private void CarregaGrid()
         {
             FaltasDAO faltasDAO = new FaltasDAO();
-            // int tipo, int idForn, int Comprado, string codigo, int quantidade, string marca, string Obs
             DataTable dados = faltasDAO.getDados(BakidTipo, BakidForn, bakComprado, Bakcodigo, Bakquantidade, Bakmarca, BakObs);
-            // DataTable dados = faltasDAO.getDados(BakidTipo, BakidForn, BakidForn, Bakcodigo, Bakquantidade, Bakmarca, BakObs);
             List<tb.TpoFalta> tipos = TpoFalta.getTipos();
             List<tb.Fornecedor> Fornecs = Forn.getForns();
             dataGrid1.DataSource = dados;
@@ -346,6 +344,7 @@ namespace TeleBonifacio
                     if (fornEncontrado != null)
                     {
                         row.Cells["Forn"].Value = fornEncontrado.Nome;
+                        row.DefaultCellStyle.BackColor = Color.LightGreen;
                     }
                 }
             }

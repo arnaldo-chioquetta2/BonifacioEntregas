@@ -66,28 +66,12 @@ namespace TeleBonifacio
         private void cntrole1_AcaoRealizada(object sender, AcaoEventArgs e)
         {
             Carregando = true;
-            if (!Adicionando)
-            {
-                base.DAO.SetId(ID);
-            }
+            //if (!Adicionando)
+            //{
+            //    base.DAO.SetId(ID);
+            //}
             base.cntrole1_AcaoRealizada(sender, e, base.reg);
             Carregando = false;
-            //base.cntrole1_AcaoRealizada(sender, e, clienteEspecifico);
-            //if (Adicionando)
-            //{
-            //    switch (e.Acao)
-            //    {
-            //        case "CANC":
-            //            Cancela();
-            //            break;
-            //        case "OK":
-            //            Grava();
-            //            base.reg = DAO.GetUltimo() as tb.TpoFalta;
-            //            glo.IdAdicionado = base.reg.Id;
-            //            this.Close();
-            //            break;
-            //    }
-            //}
         }
 
         private void fCadClientes_KeyUp(object sender, KeyEventArgs e)
