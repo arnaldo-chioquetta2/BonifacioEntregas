@@ -186,12 +186,12 @@ namespace TeleBonifacio
                     FTP cFPT = new FTP(URL, user, senha);
                     string BakTitulo = this.Text;
                     this.Text = "PROCURANDO NOVA VERSÃO";
-                    Stopwatch stopwatch = new Stopwatch();
-                    stopwatch.Start();
+                    //Stopwatch stopwatch = new Stopwatch();
+                    //stopwatch.Start();
                     int versaoFtp = cFPT.LerVersaoDoFtp();
-                    stopwatch.Stop();
-                    string Tempo = stopwatch.ElapsedMilliseconds.ToString();
-                    cINI.WriteString("FTP", "tempo", Tempo);
+                    // stopwatch.Stop();
+                    // string Tempo = stopwatch.ElapsedMilliseconds.ToString();
+                    // cINI.WriteString("FTP", "tempo", Tempo);
                     int versionInt = (version.Major * 100) + (version.Minor * 10) + version.Build;
                     glo.Loga("Versão Atual " + versionInt.ToString());
                     glo.Loga("Versão no FTP " + versaoFtp.ToString());

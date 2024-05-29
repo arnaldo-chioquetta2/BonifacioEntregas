@@ -271,7 +271,16 @@ namespace TeleBonifacio
                         }
                     }
                     connection.Open();
-                    command.ExecuteNonQuery();
+                    try
+                    {
+                        command.ExecuteNonQuery();
+                    }
+                    catch (Exception ex)
+                    {
+                        Loga(ex.ToString());
+                        throw;
+                    }
+                    
                 }
             }
         }

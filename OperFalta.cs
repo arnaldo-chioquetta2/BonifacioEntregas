@@ -583,16 +583,11 @@ namespace TeleBonifacio
                             }
                             else
                             {
-                                if (txtCodigo.Text.Length > 0)
-                                {
-                                    btAdicTpo.Enabled = true;
-                                    cmbTipos.FlatStyle = FlatStyle.Flat;
-                                    btAdicTpo.Enabled = true;
-                                } else
-                                {
-                                    button2.Enabled = true;
-                                    btLmpFiltro.Enabled = true;
-                                }
+                                btAdicTpo.Enabled = true;
+                                cmbTipos.FlatStyle = FlatStyle.Flat;
+                                button2.Enabled = true;
+                                btLmpFiltro.Enabled = true;
+                                btAdicTpo.Enabled = true;
                             }
                         }
                     } 
@@ -629,16 +624,11 @@ namespace TeleBonifacio
                             }
                             else
                             {
-                                if (txtCodigo.Text.Length>0)
-                                {
-                                    btAdicTpo.Enabled = true;
-                                    cmbForn.FlatStyle = FlatStyle.Flat;
-                                }
-                                else
-                                {
-                                    button2.Enabled = true;
-                                    btLmpFiltro.Enabled = true;
-                                }
+                                btAdicTpo.Enabled = true;
+                                cmbForn.FlatStyle = FlatStyle.Flat;
+                                button2.Enabled = true;
+                                btLmpFiltro.Enabled = true;
+                                btAdicTpo.Enabled = true;                                
                             }
                         }
                     }
