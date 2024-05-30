@@ -23,7 +23,7 @@ namespace TeleBonifacio.dao
             glo.ExecutarComandoSQL(sql); 
         }
 
-        public DataTable getDados(int tipo, int idForn, int Comprado, string codigo, int quantidade, string marca, string Obs)
+        public DataTable getDados(int tipo, int idForn, int Comprado, string codigo, int quantidade, string marca, string Obs, int idVendedor, int EmFalta)
         {
             StringBuilder query = new StringBuilder();
 
@@ -59,6 +59,14 @@ namespace TeleBonifacio.dao
             if (Obs.Length > 0)
             {
                 alteracoes.Append($@" F.Obs = '{Obs}' and ");
+            }
+            if (idVendedor>0)
+            {
+                alteracoes.Append($@" F.IDBalconista = {idVendedor} and ");
+            }
+            if (EmFalta > 0)
+            {
+                alteracoes.Append($@" F.Tipo = '8' and ");
             }
             if (alteracoes.Length>0)
             {

@@ -30,6 +30,8 @@ namespace TeleBonifacio
         private string iUser = "";
         private bool AtualizarGridP = true;
         private string BakCodigoLost = "";
+        private int BakidVendedor = 0;
+        private int bakEmFalta = 0;
 
         public OperFalta()
         {
@@ -261,6 +263,8 @@ namespace TeleBonifacio
             if (!carregando)
             {
                 VeSeHab();
+                cmbVendedor.FlatStyle = FlatStyle.Flat;
+                button2.Enabled = true;
             }
         }
 
@@ -338,7 +342,7 @@ namespace TeleBonifacio
         private void CarregaGrid()
         {
             FaltasDAO faltasDAO = new FaltasDAO();
-            DataTable dados = faltasDAO.getDados(BakidTipo, BakidForn, bakComprado, Bakcodigo, Bakquantidade, Bakmarca, BakObs);
+            DataTable dados = faltasDAO.getDados(BakidTipo, BakidForn, bakComprado, Bakcodigo, Bakquantidade, Bakmarca, BakObs, BakidVendedor, bakEmFalta);
             List<tb.TpoFalta> tipos = TpoFalta.getTipos();
             List<tb.Fornecedor> Fornecs = Forn.getForns();
             dataGrid1.DataSource = dados;
@@ -351,6 +355,10 @@ namespace TeleBonifacio
                     if (tipoEncontrado != null)
                     {
                         row.Cells["Tipo"].Value = tipoEncontrado.Nome;
+                        if (tipoId == 8)
+                        {
+                            row.DefaultCellStyle.BackColor = Color.LightGreen;
+                        }
                     }
                 }
                 if (!row.Cells["idForn"].Value.Equals(DBNull.Value))
@@ -359,8 +367,7 @@ namespace TeleBonifacio
                     var fornEncontrado = Fornecs.Find(f => f.Id == FornId);
                     if (fornEncontrado != null)
                     {
-                        row.Cells["Forn"].Value = fornEncontrado.Nome;
-                        row.DefaultCellStyle.BackColor = Color.LightGreen;
+                        row.Cells["Forn"].Value = fornEncontrado.Nome;                        
                     }
                 }
             }
@@ -678,20 +685,23 @@ namespace TeleBonifacio
 
         private void txtCodigo_Leave(object sender, EventArgs e)
         {
-            string codigo = txtCodigo.Text;
-            if (BakCodigoLost != codigo)
+            if (tbFaltas.SelectedIndex == 0)
             {
-                BakCodigoLost = codigo;
-                string ret = "";
-                if (codigo.Length > 0)
+                string codigo = txtCodigo.Text;
+                if (BakCodigoLost != codigo)
                 {
-                    ret = faltasDAO.VeSeJaTem(codigo);
+                    BakCodigoLost = codigo;
+                    string ret = "";
+                    if (codigo.Length > 0)
+                    {
+                        ret = faltasDAO.VeSeJaTem(codigo);
+                    }
+                    if (ret.Length > 0)
+                    {
+                        MessageBox.Show(ret, "Erro", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    }
+                    txtCodigo.Focus();
                 }
-                if (ret.Length > 0)
-                {
-                    MessageBox.Show(ret, "Erro", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                }
-                txtCodigo.Focus();
             }
         }
 
@@ -720,6 +730,13 @@ namespace TeleBonifacio
             {
                 BakidForn = ((tb.ComboBoxItem)cmbForn.Items[iForn]).Id;
             }
+
+            if (cmbVendedor.FlatStyle == FlatStyle.Flat)
+            {
+                int idVendedor = cmbVendedor.SelectedIndex;
+                BakidVendedor = ((tb.ComboBoxItem)cmbVendedor.Items[idVendedor]).Id;
+            }
+
             Bakcodigo = "";
             if (txtCodigo.Tag == "M")
             {
@@ -749,6 +766,7 @@ namespace TeleBonifacio
             }
             else
             {
+                bakEmFalta = (ckEmFalta.Checked == true) ? 1 : 0;
                 CarregaGrid();
             }
             btnAdicionar.Text = "Limpar";
@@ -838,29 +856,37 @@ namespace TeleBonifacio
 
         private void tbFaltas_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (tbFaltas.SelectedIndex == 1) 
+            if (!carregando)
             {
-                btComprei.Visible = false;
-                if (AtualizarGridP)
+                if (tbFaltas.SelectedIndex == 1)
                 {
-                    cmbVendedor.SelectedIndex = -1;
-                    cmbVendedor.Enabled = false; ;
-                    CarregaGridP();
-                    AtualizarGridP = false;
-                }                
+                    btComprei.Visible = false;
+                    ckEmFalta.Visible = false;
+                    if (AtualizarGridP)
+                    {
+                        carregando = true;
+                        cmbVendedor.SelectedIndex = -1;
+                        cmbVendedor.Enabled = false;
+                        CarregaGridP();
+                        AtualizarGridP = false;
+                        carregando = false;
+                    }
+                }
+                else
+                {
+                    btComprei.Visible = false;
+                    ckEmFalta.Visible = false;
+                    if (iUser.Length > 0)
+                    {
+                        cmbVendedor.SelectedItem = Convert.ToInt16(iUser);
+                    }
+                    else
+                    {
+                        cmbVendedor.Enabled = true;
+                    }
+                }
+                Limpar();
             }
-            else
-            {
-                btComprei.Visible = false;
-                if (iUser.Length>0)
-                {
-                    cmbVendedor.SelectedItem = Convert.ToInt16(iUser);
-                } else
-                {
-                    cmbVendedor.Enabled = true;
-                }                
-            }
-            Limpar();
         }
 
         private void dataGrid2_CellContentClick(object sender, DataGridViewCellEventArgs e)
@@ -916,5 +942,9 @@ namespace TeleBonifacio
 
         #endregion
 
+        private void ckEmFalta_Click(object sender, EventArgs e)
+        {
+            button2.Enabled = true;
+        }
     }
 }

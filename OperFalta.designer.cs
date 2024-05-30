@@ -62,6 +62,7 @@ namespace TeleBonifacio
             this.dataGrid1 = new System.Windows.Forms.DataGridView();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.dataGrid2 = new System.Windows.Forms.DataGridView();
+            this.ckEmFalta = new System.Windows.Forms.CheckBox();
             this.panel1.SuspendLayout();
             this.groupBox3.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -84,6 +85,7 @@ namespace TeleBonifacio
             // 
             // groupBox3
             // 
+            this.groupBox3.Controls.Add(this.ckEmFalta);
             this.groupBox3.Controls.Add(this.btComprei);
             this.groupBox3.Controls.Add(this.cmbForn);
             this.groupBox3.Controls.Add(this.btAdicTpo);
@@ -437,6 +439,17 @@ namespace TeleBonifacio
             this.dataGrid2.TabIndex = 16;
             this.dataGrid2.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGrid2_CellContentClick);
             // 
+            // ckEmFalta
+            // 
+            this.ckEmFalta.AutoSize = true;
+            this.ckEmFalta.Location = new System.Drawing.Point(1022, 21);
+            this.ckEmFalta.Name = "ckEmFalta";
+            this.ckEmFalta.Size = new System.Drawing.Size(67, 17);
+            this.ckEmFalta.TabIndex = 49;
+            this.ckEmFalta.Text = "Em Falta";
+            this.ckEmFalta.UseVisualStyleBackColor = true;
+            this.ckEmFalta.Click += new System.EventHandler(this.ckEmFalta_Click);
+            // 
             // OperFalta
             // 
             this.ClientSize = new System.Drawing.Size(1114, 432);
@@ -495,6 +508,7 @@ namespace TeleBonifacio
         private System.Windows.Forms.TabPage tabPage2;
         private System.Windows.Forms.DataGridView dataGrid1;
         private System.Windows.Forms.DataGridView dataGrid2;
+        private System.Windows.Forms.CheckBox ckEmFalta;
     }
 }
 
