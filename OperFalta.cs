@@ -377,7 +377,7 @@ namespace TeleBonifacio
             }
         }
 
-        private void dataGrid1_CellClick(object sender, DataGridViewCellEventArgs e)
+        private void dataGrid1_CellClick_1(object sender, DataGridViewCellEventArgs e)
         {
             DataGridView grid = (DataGridView)sender;
             if (grid != null && e.RowIndex >= 0 && e.RowIndex < grid.Rows.Count)
@@ -413,14 +413,15 @@ namespace TeleBonifacio
                 btnAdicionar.Enabled = true;
                 btnExcluir.Enabled = true;
                 btComprei.Enabled = true;
-                txQuantidade.ReadOnly = false;                
+                txQuantidade.ReadOnly = false;
                 txMarca.ReadOnly = false;
                 if (dataGrid1.SelectedRows.Count == 1)
                 {
                     txtCodigo.ReadOnly = false;
-                } else
+                }
+                else
                 {
-                    txtCodigo.ReadOnly = true;                    
+                    txtCodigo.ReadOnly = true;
                 }
                 txQuantidade.BackColor = originalBackgroundColor;
                 txMarca.BackColor = originalBackgroundColor;
@@ -946,5 +947,7 @@ namespace TeleBonifacio
         {
             button2.Enabled = true;
         }
+
+
     }
 }

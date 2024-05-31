@@ -32,6 +32,7 @@ namespace TeleBonifacio
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(OperFalta));
             this.panel1 = new System.Windows.Forms.Panel();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.ckEmFalta = new System.Windows.Forms.CheckBox();
             this.btComprei = new System.Windows.Forms.Button();
             this.cmbForn = new System.Windows.Forms.ComboBox();
             this.btAdicTpo = new System.Windows.Forms.Button();
@@ -62,7 +63,6 @@ namespace TeleBonifacio
             this.dataGrid1 = new System.Windows.Forms.DataGridView();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.dataGrid2 = new System.Windows.Forms.DataGridView();
-            this.ckEmFalta = new System.Windows.Forms.CheckBox();
             this.panel1.SuspendLayout();
             this.groupBox3.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -104,6 +104,17 @@ namespace TeleBonifacio
             this.groupBox3.TabIndex = 41;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Filtro";
+            // 
+            // ckEmFalta
+            // 
+            this.ckEmFalta.AutoSize = true;
+            this.ckEmFalta.Location = new System.Drawing.Point(1022, 21);
+            this.ckEmFalta.Name = "ckEmFalta";
+            this.ckEmFalta.Size = new System.Drawing.Size(67, 17);
+            this.ckEmFalta.TabIndex = 49;
+            this.ckEmFalta.Text = "Em Falta";
+            this.ckEmFalta.UseVisualStyleBackColor = true;
+            this.ckEmFalta.Click += new System.EventHandler(this.ckEmFalta_Click);
             // 
             // btComprei
             // 
@@ -414,7 +425,7 @@ namespace TeleBonifacio
             this.dataGrid1.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dataGrid1.Size = new System.Drawing.Size(1100, 292);
             this.dataGrid1.TabIndex = 1;
-            this.dataGrid1.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGrid1_CellClick);
+            this.dataGrid1.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGrid1_CellClick_1);
             // 
             // tabPage2
             // 
@@ -438,17 +449,6 @@ namespace TeleBonifacio
             this.dataGrid2.Size = new System.Drawing.Size(1100, 292);
             this.dataGrid2.TabIndex = 16;
             this.dataGrid2.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGrid2_CellContentClick);
-            // 
-            // ckEmFalta
-            // 
-            this.ckEmFalta.AutoSize = true;
-            this.ckEmFalta.Location = new System.Drawing.Point(1022, 21);
-            this.ckEmFalta.Name = "ckEmFalta";
-            this.ckEmFalta.Size = new System.Drawing.Size(67, 17);
-            this.ckEmFalta.TabIndex = 49;
-            this.ckEmFalta.Text = "Em Falta";
-            this.ckEmFalta.UseVisualStyleBackColor = true;
-            this.ckEmFalta.Click += new System.EventHandler(this.ckEmFalta_Click);
             // 
             // OperFalta
             // 
