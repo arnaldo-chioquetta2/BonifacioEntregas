@@ -110,11 +110,7 @@ namespace TeleBonifacio
         #region Adição
         private void btnAdicionar_Click(object sender, EventArgs e)
         {
-            if (btnAdicionar.Text == "Limpar")
-            {
-                Limpar();
-            }
-            else
+            if (btnAdicionar.Text != "Limpar")
             {
                 string codigo = txtCodigo.Text;
                 string ret = "";
@@ -163,10 +159,12 @@ namespace TeleBonifacio
                     }
                     glo.Loga($@"FA,{idBalconista}, {quantidade}, {codigo}, {Marca}, {Descr}, {Obs} , {idForn}, {idTipo}, {UID}");
                     faltasDAO.Adiciona(idBalconista, quantidade, codigo, Marca, Descr, Obs, idForn, idTipo, UID);
+                    cmbVendedor.FlatStyle = FlatStyle.System;
                 }
             }
             CarregaGrid();
             Limpar();
+            cmbVendedor.Enabled = true;
         }
 
         private void Limpar()

@@ -16,5 +16,10 @@ namespace TeleBonifacio.tb
 
         public string Nro { get; set; }
 
+        public string Usuario { get; set; }
+        public string Senha { get; internal set; }
+        public int Nivel { get; set; }
+
+
     }
 }

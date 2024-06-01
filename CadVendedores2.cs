@@ -2,6 +2,7 @@
 using System;
 using System.Data.OleDb;
 using System.Windows.Forms;
+using System.Collections.Generic;
 
 namespace TeleBonifacio
 {
@@ -10,6 +11,7 @@ namespace TeleBonifacio
         private bool Carregando = true;
         private int ID = 0;
         private bool Adicionando = false;
+        private string Nome = "";
 
         public CadVendedores2()
         {
@@ -17,8 +19,14 @@ namespace TeleBonifacio
             base.DAO = new dao.VendedoresDAO();
             base.reg = getUlt();
             ID = base.reg.Id;
+            Nome = base.reg.Nome;
             base.Mostra();
             base.LerTagsDosCamposDeTexto();
+            List<string> lista = new List<string>();
+            lista.Add("Balconísta");
+            lista.Add("Caixa");
+            lista.Add("Escritório");
+            base.setListCombo(lista);
             Carregando = false;
         }
 
@@ -63,7 +71,39 @@ namespace TeleBonifacio
                                 {
                                     ret.Nro = (string)oNro;
                                 }
+
+                                object oUsuario = reader["Usuario"];
+                                if (oUsuario == System.DBNull.Value)
+                                {
+                                    ret.Usuario = "";
+                                }
+                                else
+                                {
+                                    ret.Usuario = (string)oUsuario;
+                                }
+
+                                object oSenha = reader["Senha"];
+                                if (oSenha == System.DBNull.Value)
+                                {
+                                    ret.Senha = "";
+                                }
+                                else
+                                {
+                                    ret.Senha = (string)oSenha;
+                                }
+
+                                object oNivel = reader["Nivel"];
+                                if (oNivel == System.DBNull.Value)
+                                {
+                                    ret.Nivel = 0;
+                                }
+                                else
+                                {
+                                    ret.Nivel = (int)oNivel;
+                                }
+
                             }
+
                             return ret;
                         }
                     }
@@ -83,8 +123,23 @@ namespace TeleBonifacio
             if (!Adicionando)
             {
                 base.DAO.SetId(ID);
+                base.DAO.SetNome(Nome);
             }
+            //if (e.Acao == "OK")
+            //{
+            //    base.DAO.SetSenha(txtSenha.Text);
+            //}
+
             base.cntrole1_AcaoRealizada(sender, e, base.reg);
+            try
+            {
+                ID = base.reg.Id;
+                Nome = base.reg.Nome;
+            }
+            catch (Exception)
+            {
+                // Não faz nada
+            }
             Carregando = false;
         }
 
@@ -125,5 +180,9 @@ namespace TeleBonifacio
             }
         }
 
+        private void cnbNivel_Click(object sender, EventArgs e)
+        {
+            base.cntrole1.EmEdicao = true;
+        }
     }
 }

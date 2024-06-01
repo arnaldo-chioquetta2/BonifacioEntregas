@@ -7,6 +7,7 @@ using System.Linq;
 using System.Reflection;
 using System.Windows.Forms;
 using TeleBonifacio.dao;
+using TeleBonifacio.gen;
 
 namespace TeleBonifacio
 {
@@ -28,16 +29,20 @@ namespace TeleBonifacio
         }
         protected tb.IDataEntity reg;
         private List<CampoTagInfo> tagsDosCampos;
-        //private int lastColumnClick = -1;
-        //private DateTime lastClickTime = DateTime.MinValue;
         private System.Windows.Forms.DataGrid dataGrid;
         private bool GridCarregada = false;
         private bool AdicaoPorfora = false;
+        private List<string> listCombo;
 
         public FormBase()
         {
             InitializeComponent();
             tagsDosCampos = new List<tb.CampoTagInfo>();
+        }
+
+        public void setListCombo(List<string> lista)
+        {
+            listCombo = lista;
         }
 
         private void InitializeDataGrid()
@@ -77,12 +82,30 @@ namespace TeleBonifacio
                         } else if (control is CheckBox Check)
                         {
                             ProcessaCheck(Check);
+                        } else if (control is ComboBox cmb)
+                        {
+                            ProcessaCombo(cmb);
                         }
                     }
                     Mostrando = false;
                     cntrole1.IDAtual = reg.Id;
                     return true;
                 }
+            }
+        }
+
+        private void ProcessaCombo(ComboBox cmb)
+        {
+            string propertyName = cmb.Name.Substring(3);
+            PropertyInfo propertyInfo = reg.GetType().GetProperty(propertyName);
+            if (propertyInfo == null)
+            {
+                cmb.SelectedIndex = 0;
+            } else
+            {
+                string valor = propertyInfo.GetValue(reg, null)?.ToString() ?? string.Empty;
+                int iVlr = Convert.ToInt16(valor);
+                cmb.SelectedIndex = iVlr;
             }
         }
 
@@ -99,11 +122,15 @@ namespace TeleBonifacio
 
         protected void ProcessarTextBox(TextBox textBox)
         {
-            string propertyName = textBox.Name.Substring(3); // Remove o prefixo 'txt'
+            string propertyName = textBox.Name.Substring(3); 
             PropertyInfo propertyInfo = reg.GetType().GetProperty(propertyName);
             if (propertyInfo != null)
             {
                 string valor = propertyInfo.GetValue(reg, null)?.ToString() ?? string.Empty;
+                if (textBox.Name== "txtSenha")
+                {
+                    valor = Cripto.Decrypt(valor);
+                }
                 textBox.Text = valor;
             }
         }
@@ -153,6 +180,11 @@ namespace TeleBonifacio
                     {
                         MapearCheckParaModelo(Check, reg);
                     }
+                    else if (control is ComboBox cmb)
+                    {
+                        MapearComboParaModelo(cmb, reg);
+                    }
+
                 }
                 catch (Exception ex)
                 {
@@ -162,9 +194,34 @@ namespace TeleBonifacio
             }
         }
 
+        private void MapearComboParaModelo(ComboBox cmb, BaseDAO reg)
+        {
+            string propertyName = cmb.Name.Substring(3);
+            PropertyInfo propertyInfo = reg.GetType().GetProperty(propertyName);
+            if (propertyInfo == null)
+            {
+                propertyInfo.SetValue(reg, null, null);
+            }
+            else
+            {
+                int c = 0;
+                foreach (string item in listCombo)
+                {
+                    if (item == cmb.Text)
+                    {                        
+                        break;
+                    } else
+                    {
+                        c++;
+                    }
+                }
+                propertyInfo.SetValue(reg, c, null);
+            }
+        }
+
         private void MapearCheckParaModelo(CheckBox check, BaseDAO reg)
         {
-            string propertyName = check.Name.Substring(3); // Remove o prefixo "chk" do nome do CheckBox
+            string propertyName = check.Name.Substring(3); 
             PropertyInfo propertyInfo = reg.GetType().GetProperty(propertyName);
             if (propertyInfo == null)
             {
@@ -176,20 +233,6 @@ namespace TeleBonifacio
                 propertyInfo.SetValue(reg, check.Checked, null);
             }
         }
-
-        //private void MapearCheckParaModelo(CheckBox check, BaseDAO reg)
-        //{
-        //    string propertyName = check.Name.Substring(3); 
-        //    PropertyInfo propertyInfo = reg.GetType().GetProperty(propertyName);
-        //    if (propertyInfo == null)
-        //    {
-        //        propertyInfo.SetValue(reg, null, null);
-        //    }
-        //    else
-        //    {
-        //        propertyInfo.SetValue(reg, textBox.Text, null);
-        //    }
-        //}
 
         private void MapearTextBoxParaModelo(TextBox textBox, dao.BaseDAO reg)
         {

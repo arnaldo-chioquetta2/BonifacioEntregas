@@ -20,6 +20,8 @@ namespace TeleBonifacio
         // < 0 ID adicionado
         public static int IdAdicionado=0;
 
+        public static int Nivel = 0;
+
         public static string CaminhoBase
         {
             get
@@ -279,8 +281,7 @@ namespace TeleBonifacio
                     {
                         Loga(ex.ToString());
                         throw;
-                    }
-                    
+                    }                    
                 }
             }
         }

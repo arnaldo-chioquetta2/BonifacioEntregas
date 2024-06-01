@@ -66,5 +66,15 @@ namespace TeleBonifacio.dao
         {
             // 
         }
+
+        public virtual void SetNome(string nome)
+        {
+            // 
+        }
+
+        //public virtual void SetSenha(string nome)
+        //{
+        //    // 
+        //}
     }
 }

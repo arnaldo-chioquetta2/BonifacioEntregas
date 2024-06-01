@@ -79,7 +79,7 @@ namespace TeleBonifacio
 
         private void pictureBox6_Click(object sender, EventArgs e)
         {
-            AbrirOuFocarFormulario<oprConfig>();
+            AbrirOuFocarFormulario<operLogin>();
         }
 
         private void pictureBox7_Click(object sender, EventArgs e)
@@ -186,12 +186,7 @@ namespace TeleBonifacio
                     FTP cFPT = new FTP(URL, user, senha);
                     string BakTitulo = this.Text;
                     this.Text = "PROCURANDO NOVA VERSÃO";
-                    //Stopwatch stopwatch = new Stopwatch();
-                    //stopwatch.Start();
                     int versaoFtp = cFPT.LerVersaoDoFtp();
-                    // stopwatch.Stop();
-                    // string Tempo = stopwatch.ElapsedMilliseconds.ToString();
-                    // cINI.WriteString("FTP", "tempo", Tempo);
                     int versionInt = (version.Major * 100) + (version.Minor * 10) + version.Build;
                     glo.Loga("Versão Atual " + versionInt.ToString());
                     glo.Loga("Versão no FTP " + versaoFtp.ToString());
@@ -266,7 +261,6 @@ namespace TeleBonifacio
                 string Caption = this.Text;
                 this.Text = "Fazendo Backup OnLine";
                 this.Height = 171;
-                // timer1.Interval = 60000;
                 string HoraBckup = timer1.Tag.ToString() + ":00";
                 DateTime horaBackup = DateTime.ParseExact(HoraBckup, "HH:mm", CultureInfo.InvariantCulture);
                 DateTime horaAtual = DateTime.Now;
@@ -354,45 +348,52 @@ namespace TeleBonifacio
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            INI2 cINI2 = new INI2();
-            string iUser = cINI2.ReadString("Usuario", "User", "");
-            string Caixa = cINI2.ReadString("Usuario", "Caixa", "");
-            if ((iUser.Length==0) && (Caixa.Length==0))
+            switch (glo.Nivel)
             {
-                label1.Visible = false;
-                label2.Visible = false;
-                label3.Visible = false;
-                label4.Visible = false;
-                label5.Visible = false;
-                label6.Visible = false;
-                label7.Visible = false;
-                label8.Visible = false;
-                lbMens.Visible = false;
-                label9.Visible = false; 
-                label11.Visible = false;
-                label13.Visible = false;
-                pictureBox1.Visible = false;
-                pictureBox2.Visible = false;
-                pictureBox3.Visible = false;
-                pictureBox4.Visible = false;
-                pictureBox5.Visible = false;
-                pictureBox6.Visible = false;
-                pictureBox7.Visible = false;
-                pictureBox8.Visible = false;
-                pictureBox9.Visible = false;
-                pictureBox11.Visible = false;
-                pictureBox13.Visible = false;
-                this.Width = 350;
-                this.Height = 200;
-                label10.Left = pictureBox10.Left = 63;
-                int posL = (this.Width - pictureBox12.Width) / 2;
-                posL = posL + 50;
-                pictureBox12.Left = label12.Left = posL;
+                case 0: // Balconista, ve só as faltas    
+                    label1.Visible = false;
+                    label2.Visible = false;
+                    label3.Visible = false;
+                    label4.Visible = false;
+                    label5.Visible = false;
+                    label6.Visible = false;
+                    label7.Visible = false;
+                    label8.Visible = false;
+                    lbMens.Visible = false;
+                    label9.Visible = false;
+                    label10.Visible = false;
+                    label11.Visible = false;
+                    label13.Visible = false;
+                    pictureBox1.Visible = false;
+                    pictureBox2.Visible = false;
+                    pictureBox3.Visible = false;
+                    pictureBox4.Visible = false;
+                    pictureBox5.Visible = false;
+                    pictureBox6.Visible = false;
+                    pictureBox7.Visible = false;
+                    pictureBox8.Visible = false;
+                    pictureBox9.Visible = false;
+                    pictureBox10.Visible = false;
+                    pictureBox11.Visible = false;
+                    pictureBox13.Visible = false;
+                    this.Width = 350;
+                    this.Height = 200;
+                    int posL = (this.Width - pictureBox12.Width) / 2;
+                    pictureBox12.Left = label12.Left = posL;
+                    break;
+                case 1:
+                    // Caixa vê tudo agora
+                    break;
+                case 2:
+                    // Escritório Vê tudo
+                    break;
             }
-            // w = 762
-            // h = 295
         }
 
+        private void Form1_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            Application.Exit();
+        }
     }
 
 }
