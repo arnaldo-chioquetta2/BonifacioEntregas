@@ -29,7 +29,9 @@ namespace TeleBonifacio
         {
             string user = txYser.Text;
             string senha = Cripto.Encrypt(txSenha.Text);
-            DataTable dados = glo.ExecutarConsulta($"Select Nivel From Vendedores Where Usuario = '{user}' and Senha = '{senha}' ");
+            // DataTable dados = glo.ExecutarConsulta($"Select Nivel From Vendedores  ");
+            string SQL = $"Select Nivel, Nro From Vendedores Where Usuario = '{user}' and Senha = '{senha}' ";
+            DataTable dados = glo.ExecutarConsulta(SQL); 
             if (dados.Rows.Count == 0)
             {
                 MessageBox.Show("Usuário não reconhecido", "Login Inválido", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -38,6 +40,7 @@ namespace TeleBonifacio
             {
                 DataRow Row = dados.Rows[0];
                 glo.Nivel = Convert.ToInt16(Row["Nivel"]);
+                glo.iUsuario = Convert.ToInt16(Row["Nro"]);
                 Form1 Form = new Form1();
                 Form.Show();
                 this.Visible = false;

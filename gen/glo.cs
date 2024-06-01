@@ -21,6 +21,7 @@ namespace TeleBonifacio
         public static int IdAdicionado=0;
 
         public static int Nivel = 0;
+        public static int iUsuario = 0;
 
         public static string CaminhoBase
         {

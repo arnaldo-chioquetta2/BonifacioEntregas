@@ -20,6 +20,7 @@ C:\Prog\T-Bonifacio\T-Bonifacio\obj\Debug\TeleBonifacio.oprConfig.resources
 C:\Prog\T-Bonifacio\T-Bonifacio\obj\Debug\TeleBonifacio.Consultas.resources
 C:\Prog\T-Bonifacio\T-Bonifacio\obj\Debug\TeleBonifacio.OperFalta.resources
 C:\Prog\T-Bonifacio\T-Bonifacio\obj\Debug\TeleBonifacio.operLancamento.resources
+C:\Prog\T-Bonifacio\T-Bonifacio\obj\Debug\TeleBonifacio.operLogin.resources
 C:\Prog\T-Bonifacio\T-Bonifacio\obj\Debug\TeleBonifacio.OperRH.resources
 C:\Prog\T-Bonifacio\T-Bonifacio\obj\Debug\TeleBonifacio.operSQL.resources
 C:\Prog\T-Bonifacio\T-Bonifacio\obj\Debug\TeleBonifacio.opRecibos.resources
@@ -32,4 +33,3 @@ C:\Prog\T-Bonifacio\T-Bonifacio\obj\Debug\T-Bonifacio.csproj.GenerateResource.ca
 C:\Prog\T-Bonifacio\T-Bonifacio\obj\Debug\T-Bonifacio.csproj.CoreCompileInputs.cache
 C:\Prog\T-Bonifacio\T-Bonifacio\obj\Debug\TeleBonifacio.exe
 C:\Prog\T-Bonifacio\T-Bonifacio\obj\Debug\TeleBonifacio.pdb
-C:\Prog\T-Bonifacio\T-Bonifacio\obj\Debug\TeleBonifacio.operLogin.resources

@@ -42,8 +42,7 @@ namespace TeleBonifacio
         private void OperFalta_Load(object sender, EventArgs e)
         {
             VendedoresDAO Vendedor = new VendedoresDAO();
-            INI2 cINI2 = new INI2();
-            iUser = cINI2.ReadString("Usuario", "User", "");
+            iUser = glo.iUsuario.ToString();
             CarregarComboBoxV<tb.Vendedor>(cmbVendedor, Vendedor, iUser);
             faltasDAO = new FaltasDAO();
             TpoFalta = new TpoFaltaDAO();
