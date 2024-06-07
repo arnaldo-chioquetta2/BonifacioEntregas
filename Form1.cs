@@ -79,7 +79,7 @@ namespace TeleBonifacio
 
         private void pictureBox6_Click(object sender, EventArgs e)
         {
-            AbrirOuFocarFormulario<operLogin>();
+            AbrirOuFocarFormulario<oprConfig>();
         }
 
         private void pictureBox7_Click(object sender, EventArgs e)

@@ -76,7 +76,7 @@ namespace TeleBonifacio.dao
         private int VeUltReg()
         {
             string query = $"SELECT Max(codi) as codi FROM Mecanicos";
-            using (OleDbConnection connection = new OleDbConnection(this.connectionString))
+            using (OleDbConnection connection = new OleDbConnection(glo.connectionString))
             {
                 try
                 {
@@ -163,7 +163,7 @@ namespace TeleBonifacio.dao
 
         private tb.Entregador ExecutarConsultaEntregador(string query)
         {
-            using (OleDbConnection connection = new OleDbConnection(this.connectionString))
+            using (OleDbConnection connection = new OleDbConnection(glo.connectionString))
             {
                 try
                 {
@@ -213,7 +213,7 @@ namespace TeleBonifacio.dao
 
         private DataTable ExecutarConsulta(string query)
         {
-            using (OleDbConnection connection = new OleDbConnection(this.connectionString))
+            using (OleDbConnection connection = new OleDbConnection(glo.connectionString))
             {
                 try
                 {

@@ -29,9 +29,11 @@ namespace TeleBonifacio
         private string BakObs = "";
         private string iUser = "";
         private bool AtualizarGridP = true;
+        private bool AtualizarGridE = true;
         private string BakCodigoLost = "";
         private int BakidVendedor = 0;
         private int bakEmFalta = 0;
+        private pesCliente FpesCliente;
 
         public OperFalta()
         {
@@ -180,6 +182,7 @@ namespace TeleBonifacio
             btnAdicionar.Text = "Adicionar";
             btnExcluir.Enabled = false;
             btAdicTpo.Enabled = false;
+            btEncomenda.Enabled = false;
             BakCodigoLost = "";
             txtCodigo.Focus();
         }
@@ -410,8 +413,9 @@ namespace TeleBonifacio
                 btnAdicionar.Enabled = true;
                 btnExcluir.Enabled = true;
                 btComprei.Enabled = true;
+                btEncomenda.Enabled = true;
                 txQuantidade.ReadOnly = false;
-                txMarca.ReadOnly = false;
+                txMarca.ReadOnly = false;                
                 if (dataGrid1.SelectedRows.Count == 1)
                 {
                     txtCodigo.ReadOnly = false;
@@ -856,36 +860,53 @@ namespace TeleBonifacio
         {
             if (!carregando)
             {
-                if (tbFaltas.SelectedIndex == 1)
+                switch (tbFaltas.SelectedIndex)
                 {
-                    btComprei.Visible = false;
-                    ckEmFalta.Visible = false;
-                    if (AtualizarGridP)
-                    {
-                        carregando = true;
-                        cmbVendedor.SelectedIndex = -1;
-                        cmbVendedor.Enabled = false;
-                        CarregaGridP();
-                        AtualizarGridP = false;
-                        carregando = false;
-                    }
-                }
-                else
-                {
-                    btComprei.Visible = false;
-                    ckEmFalta.Visible = false;
-                    if (iUser.Length > 0)
-                    {
-                        cmbVendedor.SelectedItem = Convert.ToInt16(iUser);
-                    }
-                    else
-                    {
-                        cmbVendedor.Enabled = true;
-                    }
+                    case 0:
+                        btComprei.Visible = true;
+                        ckEmFalta.Visible = true;
+                        btEncomenda.Visible = true;
+                        if (iUser.Length > 0)
+                        {
+                            cmbVendedor.SelectedItem = Convert.ToInt16(iUser);
+                        }
+                        else
+                        {
+                            cmbVendedor.Enabled = true;
+                        }
+                        break;
+                    case 1:
+                        btComprei.Visible = false;
+                        ckEmFalta.Visible = false;
+                        btEncomenda.Visible = false;
+                        if (AtualizarGridP)
+                        {
+                            carregando = true;
+                            cmbVendedor.SelectedIndex = -1;
+                            cmbVendedor.Enabled = false;
+                            CarregaGridP();
+                            AtualizarGridP = false;
+                            carregando = false;
+                        }
+                        break;
+                    case 2:
+                        btComprei.Visible = false;
+                        ckEmFalta.Visible = false;
+                        btEncomenda.Visible = false;
+                        if (AtualizarGridE)
+                        {
+                            carregando = true;
+                            cmbVendedor.SelectedIndex = -1;
+                            cmbVendedor.Enabled = false;
+                            CarregaGridE();
+                            AtualizarGridE = false;
+                            carregando = false;
+                        }
+                        break;
                 }
                 Limpar();
             }
-        }
+        }              
 
         private void dataGrid2_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
@@ -945,6 +966,85 @@ namespace TeleBonifacio
             button2.Enabled = true;
         }
 
+        #region Encomendas
 
+        private void btEncomenda_Click(object sender, EventArgs e)
+        {
+            glo.IdAdicionado = 0;
+            if (FpesCliente == null)
+            {
+                FpesCliente = new pesCliente();
+                FpesCliente.ShowDialog();
+            }
+            else
+            {
+                FpesCliente.Visible = true;
+            }
+            if (glo.IdAdicionado > 0)
+            {
+                foreach (DataGridViewRow row in dataGrid1.SelectedRows)
+                {
+                    int gID = Convert.ToInt32(row.Cells["ID"].Value);
+                    faltasDAO.ConfirmaEncomenda(gID);
+                }
+                AtualizarGridE = true;
+                CarregaGrid();
+                AtualizouEmBaixo();
+            }
+        }
+
+        private void ConfigurarGridE()
+        {
+            dataGrid3.Columns[0].Visible = false;   // ID
+            dataGrid3.Columns[1].Width = 130;       // idCliente
+            dataGrid3.Columns[2].Width = 100;       // Data
+            dataGrid3.Columns[3].Width = 100;       // Código
+            dataGrid3.Columns[4].Width = 80;        // Quant
+            dataGrid3.Columns[5].Width = 50;        // Marca
+            dataGrid3.Columns[6].Width = 190;       // Descrição
+            dataGrid3.Columns[7].Visible = false;   // UID
+            dataGrid3.Columns[8].Width = 100;       // Tipo
+            dataGrid3.Columns[9].Width = 130;       // Compra
+            dataGrid3.Columns[10].Visible = false;  // IdForn
+            dataGrid3.Columns[11].Width = 190;      // Obs
+            dataGrid3.Invalidate();
+
+        }
+
+        private void CarregaGridE()
+        {
+            EncomendasDao cDao = new EncomendasDao();
+            DataTable dados = cDao.getDados(BakidTipo, BakidForn, Bakcodigo, Bakquantidade, Bakmarca, BakObs);
+            List<tb.TpoFalta> tipos = TpoFalta.getTipos();
+            List<tb.Fornecedor> Fornecs = Forn.getForns();
+            dataGrid3.DataSource = dados;
+            foreach (DataGridViewRow row in dataGrid3.Rows)
+            {
+                if ((!row.Cells["Tipo"].Value.Equals(DBNull.Value)) && (row.Cells["Tipo"].Value.ToString().Length > 0))
+                {
+                    int tipoId = Convert.ToInt32(row.Cells["Tipo"].Value);
+                    var tipoEncontrado = tipos.Find(t => t.Id == tipoId);
+                    if (tipoEncontrado != null)
+                    {
+                        row.Cells["Tipo"].Value = tipoEncontrado.Nome;
+                    }
+                }
+                //if (!row.Cells["idForn"].Value.Equals(DBNull.Value))
+                //{
+                //    int FornId = Convert.ToInt32(row.Cells["idForn"].Value);
+                //    var fornEncontrado = Fornecs.Find(f => f.Id == FornId);
+                //    if (fornEncontrado != null)
+                //    {
+                //        row.Cells["Forn"].Value = fornEncontrado.Nome;
+                //    }
+                //}
+            }
+            if (dados != null)
+            {
+                ConfigurarGridE();
+            }
+        }
+
+        #endregion
     }
 }

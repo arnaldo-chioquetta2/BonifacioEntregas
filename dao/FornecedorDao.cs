@@ -83,7 +83,7 @@ namespace TeleBonifacio.dao
 
         private DataTable ExecutarConsulta(string query)
         {
-            using (OleDbConnection connection = new OleDbConnection(this.connectionString))
+            using (OleDbConnection connection = new OleDbConnection(glo.connectionString))
             {
                 try
                 {
@@ -169,7 +169,7 @@ namespace TeleBonifacio.dao
 
         private tb.Fornecedor ExecutarConsulta2(string query)
         {
-            using (OleDbConnection connection = new OleDbConnection(this.connectionString))
+            using (OleDbConnection connection = new OleDbConnection(glo.connectionString))
             {
                 try
                 {

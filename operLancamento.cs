@@ -27,10 +27,7 @@ namespace TeleBonifacio
             VendedoresDAO Vendedor = new VendedoresDAO();
             glo.CarregarComboBox<Entregador>(cmbMotoBoy, Entregador);
             glo.CarregarComboBox<Cliente>(cmbCliente, Cliente);
-
             glo.CarregarComboBox<Vendedor>(cmbVendedor, Vendedor,"", " Where Vendedores.Atende = 1 ", " desc ");
-            // glo.CarregarComboBox<Vendedor>(cmbVendedor, Vendedor, "", " Where Vendedores.Atende = -1 or Vendedores.Atende = 1 ", " desc ");
-
             cmbMotoBoy.SelectedIndex = 0;
             cmbCliente.SelectedIndex = -1;
         }
@@ -68,27 +65,6 @@ namespace TeleBonifacio
             txDesc.Text = "";
             lbTotal.Text = "";
         }
-
-        //private void CarregarComboBox<T>(ComboBox comboBox, BaseDAO classe, string ItemZero="", string filtro="", string ordem="") where T : IDataEntity, new()
-        //{
-        //    DataTable dados = classe.GetDadosOrdenados(filtro, ordem);
-        //    List<ComboBoxItem> lista = new List<ComboBoxItem>();
-        //    if (ItemZero.Length>0)
-        //    {
-        //        ComboBoxItem item = new ComboBoxItem(0, ItemZero);
-        //        lista.Add(item);
-        //    }
-        //    foreach (DataRow row in dados.Rows)
-        //    {
-        //        int id = Convert.ToInt32(row["id"]);
-        //        string nome = row["Nome"].ToString();
-        //        ComboBoxItem item = new ComboBoxItem(id, nome);
-        //        lista.Add(item);
-        //    }
-        //    comboBox.DataSource = lista;
-        //    comboBox.DisplayMember = "Nome";
-        //    comboBox.ValueMember = "Id";
-        //}
 
         private void CarregaGrid()
         {

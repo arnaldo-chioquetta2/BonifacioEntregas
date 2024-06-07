@@ -127,6 +127,7 @@
     <Compile Include="dao\CaixaDao.cs" />
     <Compile Include="dao\ClienteDAO.cs" />
     <Compile Include="dao\ConfigDAO.cs" />
+    <Compile Include="dao\EncomendasDao.cs" />
     <Compile Include="dao\EntregadorDAO.cs" />
     <Compile Include="dao\EntregasDAO.cs" />
     <Compile Include="dao\FaltasDAO.cs" />
@@ -220,6 +221,12 @@
     <Compile Include="opRecibos.Designer.cs">
       <DependentUpon>opRecibos.cs</DependentUpon>
     </Compile>
+    <Compile Include="pesCliente.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="pesCliente.designer.cs">
+      <DependentUpon>pesCliente.cs</DependentUpon>
+    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\CadVendedores.cs">
       <SubType>Form</SubType>
@@ -249,6 +256,7 @@
     <Compile Include="tb\CampoTagInfo.cs" />
     <Compile Include="tb\Cliente.cs" />
     <Compile Include="tb\ComboBoxItem.cs" />
+    <Compile Include="tb\Encomendas.cs" />
     <Compile Include="tb\Entregador.cs" />
     <Compile Include="tb\Entregas.cs" />
     <Compile Include="tb\Falta .cs" />
@@ -313,6 +321,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="opRecibos.resx">
       <DependentUpon>opRecibos.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="pesCliente.resx">
+      <DependentUpon>pesCliente.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\CadVendedores.resx">
       <DependentUpon>CadVendedores.cs</DependentUpon>

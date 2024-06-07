@@ -79,6 +79,7 @@ namespace TeleBonifacio
             this.label1.Size = new System.Drawing.Size(56, 21);
             this.label1.TabIndex = 10;
             this.label1.Text = "Senha:";
+            this.label1.MouseClick += new System.Windows.Forms.MouseEventHandler(this.label1_MouseClick);
             // 
             // button1
             // 

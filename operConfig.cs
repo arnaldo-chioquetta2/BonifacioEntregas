@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.OleDb;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
@@ -119,7 +120,6 @@ namespace TeleBonifacio
                             string idVend = "";
                             if (fields.Length >= 8)
                             {
-                                // Registro diferente
                                 obs = fields[4].Trim();
                                 desc = fields[6];
                                 idVend = fields[7];
@@ -158,5 +158,13 @@ namespace TeleBonifacio
             Process.Start(Executar);
             Environment.Exit(0);
         }
+
+        private void label2_DoubleClick(object sender, EventArgs e)
+        {
+            //string novaSenha = "81446407";
+            //string sql = $"UPDATE MSysObjects SET Pwd = {novaSenha} WHERE Type = 1 AND Name = 'DB' ";
+            //glo.ExecutarComandoSQL(sql);
+        }
+
     }    
 }

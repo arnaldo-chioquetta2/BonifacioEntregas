@@ -1,13 +1,17 @@
-﻿using System;
+﻿// #define ODBC
+
+using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Data.Linq;
 using System.Data.OleDb;
 using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
-using TeleBonifacio.dao;
+
+#if ODBC
+using System.Data.Odbc;
+#endif
 
 namespace TeleBonifacio
 {
@@ -46,7 +50,12 @@ namespace TeleBonifacio
         {
             get
             {
+
+#if ODBC
+            return "Driver={Microsoft Access Driver (*.mdb)};DBQ=" + CaminhoBase + ";";
+#else
                 return @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + CaminhoBase + ";";
+#endif
             }
         }
 
@@ -358,7 +367,8 @@ namespace TeleBonifacio
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine(ex.Message);
+                    glo.Loga(ex.Message);
+                    // Console.WriteLine(ex.Message);
                 }
             }
             return dataTable;

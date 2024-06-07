@@ -136,7 +136,7 @@ namespace TeleBonifacio.dao
 
         public DataTable ExecutarConsultaVendedor(string query)
         {
-            using (OleDbConnection connection = new OleDbConnection(this.connectionString))
+            using (OleDbConnection connection = new OleDbConnection(glo.connectionString))
             {
                 try
                 {
@@ -216,7 +216,7 @@ namespace TeleBonifacio.dao
 
         private tb.Vendedor ExecutarConsultaVendedor2(string query)
         {            
-            using (OleDbConnection connection = new OleDbConnection(this.connectionString))
+            using (OleDbConnection connection = new OleDbConnection(glo.connectionString))
             {
                 try
                 {

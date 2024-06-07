@@ -165,7 +165,7 @@ namespace TeleBonifacio.dao
 
         private tb.TpoFalta ExecutarConsulta2(string query)
         {
-            using (OleDbConnection connection = new OleDbConnection(this.connectionString))
+            using (OleDbConnection connection = new OleDbConnection(glo.connectionString))
             {
                 try
                 {

@@ -132,6 +132,7 @@ namespace TeleBonifacio
             this.label2.Size = new System.Drawing.Size(56, 13);
             this.label2.TabIndex = 12;
             this.label2.Text = "Endereço:";
+            this.label2.DoubleClick += new System.EventHandler(this.label2_DoubleClick);
             // 
             // txFone
             // 

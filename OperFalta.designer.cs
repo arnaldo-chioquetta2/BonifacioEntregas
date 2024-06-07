@@ -63,6 +63,9 @@ namespace TeleBonifacio
             this.dataGrid1 = new System.Windows.Forms.DataGridView();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.dataGrid2 = new System.Windows.Forms.DataGridView();
+            this.tabPage3 = new System.Windows.Forms.TabPage();
+            this.dataGrid3 = new System.Windows.Forms.DataGridView();
+            this.btEncomenda = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             this.groupBox3.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -71,6 +74,8 @@ namespace TeleBonifacio
             ((System.ComponentModel.ISupportInitialize)(this.dataGrid1)).BeginInit();
             this.tabPage2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGrid2)).BeginInit();
+            this.tabPage3.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGrid3)).BeginInit();
             this.SuspendLayout();
             // 
             // panel1
@@ -85,6 +90,7 @@ namespace TeleBonifacio
             // 
             // groupBox3
             // 
+            this.groupBox3.Controls.Add(this.btEncomenda);
             this.groupBox3.Controls.Add(this.ckEmFalta);
             this.groupBox3.Controls.Add(this.btComprei);
             this.groupBox3.Controls.Add(this.cmbForn);
@@ -108,7 +114,7 @@ namespace TeleBonifacio
             // ckEmFalta
             // 
             this.ckEmFalta.AutoSize = true;
-            this.ckEmFalta.Location = new System.Drawing.Point(1022, 21);
+            this.ckEmFalta.Location = new System.Drawing.Point(1041, 21);
             this.ckEmFalta.Name = "ckEmFalta";
             this.ckEmFalta.Size = new System.Drawing.Size(67, 17);
             this.ckEmFalta.TabIndex = 49;
@@ -121,7 +127,7 @@ namespace TeleBonifacio
             this.btComprei.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.btComprei.Enabled = false;
             this.btComprei.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btComprei.Location = new System.Drawing.Point(926, 16);
+            this.btComprei.Location = new System.Drawing.Point(872, 16);
             this.btComprei.Name = "btComprei";
             this.btComprei.Size = new System.Drawing.Size(75, 23);
             this.btComprei.TabIndex = 48;
@@ -133,9 +139,9 @@ namespace TeleBonifacio
             this.cmbForn.DisplayMember = "Nome";
             this.cmbForn.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbForn.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cmbForn.Location = new System.Drawing.Point(327, 17);
+            this.cmbForn.Location = new System.Drawing.Point(306, 17);
             this.cmbForn.Name = "cmbForn";
-            this.cmbForn.Size = new System.Drawing.Size(221, 23);
+            this.cmbForn.Size = new System.Drawing.Size(212, 23);
             this.cmbForn.TabIndex = 49;
             this.cmbForn.ValueMember = "Id";
             this.cmbForn.SelectedIndexChanged += new System.EventHandler(this.cmbForn_SelectedIndexChanged);
@@ -145,7 +151,7 @@ namespace TeleBonifacio
             this.btAdicTpo.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.btAdicTpo.Enabled = false;
             this.btAdicTpo.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btAdicTpo.Location = new System.Drawing.Point(742, 17);
+            this.btAdicTpo.Location = new System.Drawing.Point(698, 16);
             this.btAdicTpo.Name = "btAdicTpo";
             this.btAdicTpo.Size = new System.Drawing.Size(75, 23);
             this.btAdicTpo.TabIndex = 42;
@@ -157,7 +163,7 @@ namespace TeleBonifacio
             this.btnExcluir.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.btnExcluir.Enabled = false;
             this.btnExcluir.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnExcluir.Location = new System.Drawing.Point(834, 17);
+            this.btnExcluir.Location = new System.Drawing.Point(785, 16);
             this.btnExcluir.Name = "btnExcluir";
             this.btnExcluir.Size = new System.Drawing.Size(75, 23);
             this.btnExcluir.TabIndex = 39;
@@ -168,7 +174,7 @@ namespace TeleBonifacio
             // 
             this.btLmpFiltro.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.btLmpFiltro.Enabled = false;
-            this.btLmpFiltro.Location = new System.Drawing.Point(650, 17);
+            this.btLmpFiltro.Location = new System.Drawing.Point(611, 16);
             this.btLmpFiltro.Name = "btLmpFiltro";
             this.btLmpFiltro.Size = new System.Drawing.Size(75, 23);
             this.btLmpFiltro.TabIndex = 53;
@@ -179,7 +185,7 @@ namespace TeleBonifacio
             // 
             this.label5.AutoSize = true;
             this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label5.Location = new System.Drawing.Point(286, 21);
+            this.label5.Location = new System.Drawing.Point(265, 21);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(35, 16);
             this.label5.TabIndex = 47;
@@ -188,9 +194,9 @@ namespace TeleBonifacio
             // txNvForn
             // 
             this.txNvForn.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txNvForn.Location = new System.Drawing.Point(327, 21);
+            this.txNvForn.Location = new System.Drawing.Point(306, 21);
             this.txNvForn.Name = "txNvForn";
-            this.txNvForn.Size = new System.Drawing.Size(221, 21);
+            this.txNvForn.Size = new System.Drawing.Size(212, 21);
             this.txNvForn.TabIndex = 50;
             this.txNvForn.Visible = false;
             // 
@@ -201,7 +207,7 @@ namespace TeleBonifacio
             this.cmbTipos.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cmbTipos.Location = new System.Drawing.Point(59, 20);
             this.cmbTipos.Name = "cmbTipos";
-            this.cmbTipos.Size = new System.Drawing.Size(221, 23);
+            this.cmbTipos.Size = new System.Drawing.Size(208, 23);
             this.cmbTipos.TabIndex = 44;
             this.cmbTipos.ValueMember = "Id";
             this.cmbTipos.SelectedIndexChanged += new System.EventHandler(this.cmbTipos_SelectedIndexChanged);
@@ -210,7 +216,7 @@ namespace TeleBonifacio
             // 
             this.button2.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.button2.Enabled = false;
-            this.button2.Location = new System.Drawing.Point(558, 18);
+            this.button2.Location = new System.Drawing.Point(524, 16);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(75, 23);
             this.button2.TabIndex = 44;
@@ -232,7 +238,7 @@ namespace TeleBonifacio
             this.txNvTipo.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txNvTipo.Location = new System.Drawing.Point(57, 21);
             this.txNvTipo.Name = "txNvTipo";
-            this.txNvTipo.Size = new System.Drawing.Size(223, 21);
+            this.txNvTipo.Size = new System.Drawing.Size(210, 21);
             this.txNvTipo.TabIndex = 45;
             this.txNvTipo.Visible = false;
             // 
@@ -272,7 +278,7 @@ namespace TeleBonifacio
             // txObs
             // 
             this.txObs.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txObs.Location = new System.Drawing.Point(742, 19);
+            this.txObs.Location = new System.Drawing.Point(732, 19);
             this.txObs.Name = "txObs";
             this.txObs.Size = new System.Drawing.Size(113, 21);
             this.txObs.TabIndex = 4;
@@ -315,7 +321,7 @@ namespace TeleBonifacio
             // 
             this.label7.AutoSize = true;
             this.label7.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label7.Location = new System.Drawing.Point(861, 22);
+            this.label7.Location = new System.Drawing.Point(851, 22);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(68, 16);
             this.label7.TabIndex = 44;
@@ -396,6 +402,7 @@ namespace TeleBonifacio
             // 
             this.tbFaltas.Controls.Add(this.tabPage1);
             this.tbFaltas.Controls.Add(this.tabPage2);
+            this.tbFaltas.Controls.Add(this.tabPage3);
             this.tbFaltas.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tbFaltas.Location = new System.Drawing.Point(0, 108);
             this.tbFaltas.Name = "tbFaltas";
@@ -450,6 +457,39 @@ namespace TeleBonifacio
             this.dataGrid2.TabIndex = 16;
             this.dataGrid2.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGrid2_CellContentClick);
             // 
+            // tabPage3
+            // 
+            this.tabPage3.Controls.Add(this.dataGrid3);
+            this.tabPage3.Location = new System.Drawing.Point(4, 22);
+            this.tabPage3.Name = "tabPage3";
+            this.tabPage3.Size = new System.Drawing.Size(1106, 298);
+            this.tabPage3.TabIndex = 2;
+            this.tabPage3.Text = "Encomenda";
+            this.tabPage3.UseVisualStyleBackColor = true;
+            // 
+            // dataGrid3
+            // 
+            this.dataGrid3.AllowUserToAddRows = false;
+            this.dataGrid3.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dataGrid3.Location = new System.Drawing.Point(0, 0);
+            this.dataGrid3.Name = "dataGrid3";
+            this.dataGrid3.ReadOnly = true;
+            this.dataGrid3.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.dataGrid3.Size = new System.Drawing.Size(1106, 298);
+            this.dataGrid3.TabIndex = 17;
+            // 
+            // btEncomenda
+            // 
+            this.btEncomenda.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.btEncomenda.Enabled = false;
+            this.btEncomenda.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btEncomenda.Location = new System.Drawing.Point(953, 16);
+            this.btEncomenda.Name = "btEncomenda";
+            this.btEncomenda.Size = new System.Drawing.Size(82, 23);
+            this.btEncomenda.TabIndex = 54;
+            this.btEncomenda.Text = "Encomenda";
+            this.btEncomenda.Click += new System.EventHandler(this.btEncomenda_Click);
+            // 
             // OperFalta
             // 
             this.ClientSize = new System.Drawing.Size(1114, 432);
@@ -471,6 +511,8 @@ namespace TeleBonifacio
             ((System.ComponentModel.ISupportInitialize)(this.dataGrid1)).EndInit();
             this.tabPage2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dataGrid2)).EndInit();
+            this.tabPage3.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.dataGrid3)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -509,6 +551,9 @@ namespace TeleBonifacio
         private System.Windows.Forms.DataGridView dataGrid1;
         private System.Windows.Forms.DataGridView dataGrid2;
         private System.Windows.Forms.CheckBox ckEmFalta;
+        private System.Windows.Forms.Button btEncomenda;
+        private System.Windows.Forms.TabPage tabPage3;
+        private System.Windows.Forms.DataGridView dataGrid3;
     }
 }
 
