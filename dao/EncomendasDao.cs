@@ -24,10 +24,10 @@ namespace TeleBonifacio.dao
         public DataTable getDados(int tipo, int idForn, string codigo, int quantidade, string marca, string Obs)
         {
             StringBuilder query = new StringBuilder();
-            query.Append(@"SELECT E.ID, E.idCliente, E.Data, E.Codigo, E.Quant, E.Marca, E.Descricao, 
-                           E.UID, E.Tipo, E.Compra, E.idForn, E.Obs 
-                           FROM Encomendas E ");
-
+            query.Append(@"SELECT E.ID, IIf(E.Nome IS NULL OR E.Nome = '', Clientes.Nome, E.Nome) AS Nome, E.Data, E.Codigo, E.Quant, 
+                           E.Marca, E.Descricao, E.UID, E.Tipo, E.Compra, '' as Forn, E.idForn, E.Obs 
+                           FROM Encomendas E 
+                           Left Join Clientes on Clientes.NrCli = E.idCliente ");
             StringBuilder alteracoes = new StringBuilder();
             if (tipo > 0)
             {

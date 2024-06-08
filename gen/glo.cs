@@ -23,7 +23,6 @@ namespace TeleBonifacio
         // 0 Modo neutro
         // < 0 ID adicionado
         public static int IdAdicionado=0;
-
         public static int Nivel = 0;
         public static int iUsuario = 0;
 
@@ -52,12 +51,14 @@ namespace TeleBonifacio
             {
 
 #if ODBC
-            return "Driver={Microsoft Access Driver (*.mdb)};DBQ=" + CaminhoBase + ";";
+            return "Driver={Microsoft Access Driver (*.mdb)};DBQ=C:\\Entregas\\MbCarros.mdb;";
 #else
                 return @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + CaminhoBase + ";";
 #endif
             }
         }
+
+        #region FormatacaoTela
 
         public static float LeValor(string valorTexto)
         {
@@ -99,7 +100,7 @@ namespace TeleBonifacio
                 {
                     return "";
                 }
-                return value.ToString("0.00"); 
+                return value.ToString("0.00");
             }
             else
             {
@@ -173,10 +174,10 @@ namespace TeleBonifacio
         public static string ComplStr(string dado, int Tam, int Tipo)
         {
             // Tipo é o alinhamento
-                // 0=Esquerda,
-                // 1=Central
-                // 2=Direita
-                // 3=Direita e se não tiver nada, retorna nada
+            // 0=Esquerda,
+            // 1=Central
+            // 2=Direita
+            // 3=Direita e se não tiver nada, retorna nada
             int Aux;
             int Aux2;
             string Aux3;
@@ -236,6 +237,9 @@ namespace TeleBonifacio
             }
         }
 
+
+        #endregion
+
         public static void CarregarComboBox<T>(ComboBox comboBox, dao.BaseDAO classe, string ItemZero = "", string filtro = "", string ordem = "", string ItemFinal="", string ItemFinal2 = "") where T : tb.IDataEntity, new()
         {
             DataTable dados = classe.GetDadosOrdenados(filtro, ordem);
@@ -267,6 +271,15 @@ namespace TeleBonifacio
             comboBox.ValueMember = "Id";
         }
 
+        public static void Loga(string message)
+        {
+            string logFilePath = @"C:\Entregas\Entregas.txt";
+            using (StreamWriter writer = new StreamWriter(logFilePath, true))
+            {
+                writer.WriteLine($"{DateTime.Now}: {message}");
+            }
+        }
+
         #region DB
 
         public static void ExecutarComandoSQL(string query, List<OleDbParameter> parameters=null)
@@ -293,15 +306,6 @@ namespace TeleBonifacio
                         throw;
                     }                    
                 }
-            }
-        }
-
-        public static void Loga(string message)
-        {
-            string logFilePath = @"C:\Entregas\Entregas.txt";
-            using (StreamWriter writer = new StreamWriter(logFilePath, true))
-            {
-                writer.WriteLine($"{DateTime.Now}: {message}");
             }
         }
 

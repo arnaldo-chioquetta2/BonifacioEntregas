@@ -143,20 +143,30 @@ namespace TeleBonifacio.dao
             glo.ExecutarComandoSQL(updateFaltaQuery);
         }
 
-        public void ConfirmaEncomenda(int iID)
+        public void ConfirmaEncomenda(int iID, string Nome, string Fone, string NovaDesc, DateTime DtAgora, DateTime DtEnc)
         {
-            DataTable encomendaData = glo.ExecutarConsulta($"SELECT * FROM Faltas WHERE ID = {iID}");
-            DataRow encomendaRow = encomendaData.Rows[0];
-            string UID = glo.GenerateUID();
             int idCliente = glo.IdAdicionado;
-            int idForn = (encomendaRow["idForn"].ToString().Length == 0) ? 0 : Convert.ToInt32(encomendaRow["idForn"]);
-            string insertQuery = $@"INSERT INTO Encomendas (idCliente, Data, Quant, Codigo, Marca, UID, Tipo, Compra, Descricao, idForn, Obs) 
-                        VALUES ({idCliente}, Now, {encomendaRow["Quant"]}, '{encomendaRow["Codigo"]}', '{encomendaRow["Marca"]}', '{encomendaRow["UID"]}', '{encomendaRow["Tipo"]}', Now(), '{encomendaRow["Descricao"]}', {idForn}, '{encomendaRow["Obs"]}')";
-            glo.ExecutarComandoSQL(insertQuery);
-            string updateFaltaQuery = $@"DELETE FROM Faltas WHERE ID = {iID}";
-            glo.ExecutarComandoSQL(updateFaltaQuery);
+            string sCompra = DtEnc.ToString("yyyy-MM-dd"); 
+            string sDtAgora = DtAgora.ToString("yyyy-MM-dd"); 
+            if (NovaDesc.Length>0)
+            {
+                string UID = glo.GenerateUID();
+                string insertQuery = $@"INSERT INTO Encomendas (idCliente, Data, UID, Descricao, Nome, Telefone, Compra) 
+                            VALUES ({idCliente}, '{sDtAgora}', '{UID}', '{NovaDesc}', '{Nome}', '{Fone}', '{sCompra}')";
+                glo.ExecutarComandoSQL(insertQuery);
+            }
+            else
+            {
+                DataTable encomendaData = glo.ExecutarConsulta($"SELECT * FROM Faltas WHERE ID = {iID}");
+                DataRow encomendaRow = encomendaData.Rows[0];
+                int idForn = (encomendaRow["idForn"].ToString().Length == 0) ? 0 : Convert.ToInt16(encomendaRow["idForn"]);
+                string insertQuery = $@"INSERT INTO Encomendas (idCliente, Data, Quant, Codigo, Marca, UID, Tipo, Compra, Descricao, idForn, Obs, Nome, Telefone) 
+                        VALUES ({idCliente}, '{sDtAgora}', {encomendaRow["Quant"]}, '{encomendaRow["Codigo"]}', '{encomendaRow["Marca"]}', '{encomendaRow["UID"]}', '{encomendaRow["Tipo"]}', '{sCompra}', '{encomendaRow["Descricao"]}', {idForn}, '{encomendaRow["Obs"]}','{Nome}' ,'{Fone}' )";
+                glo.ExecutarComandoSQL(insertQuery);
+                string updateFaltaQuery = $@"DELETE FROM Faltas WHERE ID = {iID}";
+                glo.ExecutarComandoSQL(updateFaltaQuery);
+            }
         }
-
 
         public string VeSeJaTem(string codigo)
         {

@@ -32,6 +32,7 @@ namespace TeleBonifacio
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(OperFalta));
             this.panel1 = new System.Windows.Forms.Panel();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.btEncomenda = new System.Windows.Forms.Button();
             this.ckEmFalta = new System.Windows.Forms.CheckBox();
             this.btComprei = new System.Windows.Forms.Button();
             this.cmbForn = new System.Windows.Forms.ComboBox();
@@ -65,7 +66,6 @@ namespace TeleBonifacio
             this.dataGrid2 = new System.Windows.Forms.DataGridView();
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.dataGrid3 = new System.Windows.Forms.DataGridView();
-            this.btEncomenda = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             this.groupBox3.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -111,6 +111,17 @@ namespace TeleBonifacio
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Filtro";
             // 
+            // btEncomenda
+            // 
+            this.btEncomenda.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.btEncomenda.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btEncomenda.Location = new System.Drawing.Point(779, 16);
+            this.btEncomenda.Name = "btEncomenda";
+            this.btEncomenda.Size = new System.Drawing.Size(82, 23);
+            this.btEncomenda.TabIndex = 54;
+            this.btEncomenda.Text = "Encomenda";
+            this.btEncomenda.Click += new System.EventHandler(this.btEncomenda_Click);
+            // 
             // ckEmFalta
             // 
             this.ckEmFalta.AutoSize = true;
@@ -127,7 +138,7 @@ namespace TeleBonifacio
             this.btComprei.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.btComprei.Enabled = false;
             this.btComprei.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btComprei.Location = new System.Drawing.Point(872, 16);
+            this.btComprei.Location = new System.Drawing.Point(960, 16);
             this.btComprei.Name = "btComprei";
             this.btComprei.Size = new System.Drawing.Size(75, 23);
             this.btComprei.TabIndex = 48;
@@ -163,7 +174,7 @@ namespace TeleBonifacio
             this.btnExcluir.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.btnExcluir.Enabled = false;
             this.btnExcluir.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnExcluir.Location = new System.Drawing.Point(785, 16);
+            this.btnExcluir.Location = new System.Drawing.Point(873, 16);
             this.btnExcluir.Name = "btnExcluir";
             this.btnExcluir.Size = new System.Drawing.Size(75, 23);
             this.btnExcluir.TabIndex = 39;
@@ -477,18 +488,7 @@ namespace TeleBonifacio
             this.dataGrid3.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dataGrid3.Size = new System.Drawing.Size(1106, 298);
             this.dataGrid3.TabIndex = 17;
-            // 
-            // btEncomenda
-            // 
-            this.btEncomenda.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.btEncomenda.Enabled = false;
-            this.btEncomenda.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btEncomenda.Location = new System.Drawing.Point(953, 16);
-            this.btEncomenda.Name = "btEncomenda";
-            this.btEncomenda.Size = new System.Drawing.Size(82, 23);
-            this.btEncomenda.TabIndex = 54;
-            this.btEncomenda.Text = "Encomenda";
-            this.btEncomenda.Click += new System.EventHandler(this.btEncomenda_Click);
+            this.dataGrid3.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGrid3_CellClick);
             // 
             // OperFalta
             // 

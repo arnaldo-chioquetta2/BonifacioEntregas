@@ -47,6 +47,12 @@ namespace TeleBonifacio.dao
             }
         }
 
+        public void SetFone(string text)
+        {
+            string query = $"UPDATE Clientes SET Telefone = '{text}' WHERE NrCli = {glo.IdAdicionado} ";
+            glo.ExecutarComandoSQL(query);
+        }
+
         private List<OleDbParameter> ConstruirParametroscliente(ClienteDAO cliente, bool inserindo)
         {
             int iNrOutro = 0;
@@ -68,6 +74,20 @@ namespace TeleBonifacio.dao
                 parametros.Add(new OleDbParameter("@NrCli", cliente.id));
             }
             return parametros;
+        }
+
+        public string BuscarTelefonePorNomeParcial(string nomeParcial)
+        {
+            string query = "SELECT NrCli, Telefone FROM Clientes WHERE Nome LIKE '" + nomeParcial + "%'";
+            DataTable dataTable = glo.getDados(query);
+            if (dataTable.Rows.Count > 0 && dataTable.Columns.Contains("Telefone"))
+            {
+                var resultado = dataTable.Rows[0]["Telefone"];
+                var VarId = dataTable.Rows[0]["NrCli"];
+                this.id = Convert.ToInt16(VarId); 
+                return resultado != DBNull.Value ? resultado.ToString() : "";
+            }
+            return "";
         }
 
         private int VeUltReg()
@@ -252,7 +272,7 @@ namespace TeleBonifacio.dao
 
         public override int getIdAtual()
         {
-            return 0;
+            return this.id;
         }
 
         public override string VeSeJaTem(object obj)
