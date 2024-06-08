@@ -105,7 +105,8 @@ namespace TeleBonifacio.rel
             "Dinheiro",
             "Cartão",
             "Pix",
-            "Despesa"});
+            "Despesa",
+            "Itaú"});
             this.cmbTipo.Location = new System.Drawing.Point(374, 14);
             this.cmbTipo.Name = "cmbTipo";
             this.cmbTipo.Size = new System.Drawing.Size(225, 21);

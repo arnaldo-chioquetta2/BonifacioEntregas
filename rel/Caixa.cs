@@ -111,6 +111,9 @@ namespace TeleBonifacio.rel
                 case "Despesa":
                     ret = 5;
                     break;
+                case "Itaú":
+                    ret = 6;
+                    break;
             }
             return ret;
         }
@@ -187,11 +190,18 @@ namespace TeleBonifacio.rel
                 }
             }
             sb.AppendLine();
-            sb.AppendLine($"Dinheiro: " + glo.ComplStr(TDinheiro.ToString("N2"), 9, 2));
-            sb.AppendLine($"Cartão:   " + glo.ComplStr(TCartao.ToString("N2"), 9, 2));
-            sb.AppendLine($"Pix:      " + glo.ComplStr(TPix.ToString("N2"), 9, 2));
-            sb.AppendLine($"Despesas: " + glo.ComplStr(TDespesa.ToString("N2"), 9, 2));
-            sb.AppendLine($"Itau:     " + glo.ComplStr(TItau.ToString("N2"), 9, 2));
+
+            TotForma(ref sb, $"Dinheiro: ", TDinheiro);
+            TotForma(ref sb, $"Cartão:   ", TCartao);
+            TotForma(ref sb, $"Pix:      ", TPix);
+            TotForma(ref sb, $"Despesas: ", TDespesa);
+            TotForma(ref sb, $"Itau:     ", TItau);
+            //sb.AppendLine($"Dinheiro: " + glo.ComplStr(TDinheiro.ToString("N2"), 9, 2));
+            //sb.AppendLine($"Cartão:   " + glo.ComplStr(TCartao.ToString("N2"), 9, 2));
+            //sb.AppendLine($"Pix:      " + glo.ComplStr(TPix.ToString("N2"), 9, 2));
+            //sb.AppendLine($"Despesas: " + glo.ComplStr(TDespesa.ToString("N2"), 9, 2));
+            //sb.AppendLine($"Itau:     " + glo.ComplStr(TItau.ToString("N2"), 9, 2));
+
             decimal Entradas = TDinheiro + TCartao + TPix + TItau;
             decimal saldo = Entradas - TDespesa;
             sb.AppendLine("");
@@ -201,6 +211,18 @@ namespace TeleBonifacio.rel
             textBox1.Text = sb.ToString(); ;
             textBox1.SelectionStart = textBox1.Text.Length;
             textBox1.ScrollToCaret();
+        }
+
+        private void TotForma(ref StringBuilder sb,  string Forma, decimal valor)
+        {
+            if (valor==0)
+            {
+                if (cmbTipo.SelectedIndex != 0)
+                {
+                    return;
+                }
+            }
+            sb.AppendLine(Forma + glo.ComplStr(valor.ToString("N2"), 9, 2));
         }
 
         private void Extrato_Activated(object sender, EventArgs e)
