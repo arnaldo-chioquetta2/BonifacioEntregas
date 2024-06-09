@@ -25,7 +25,7 @@ namespace TeleBonifacio.dao
         {
             StringBuilder query = new StringBuilder();
             query.Append(@"SELECT E.ID, IIf(E.Nome IS NULL OR E.Nome = '', Clientes.Nome, E.Nome) AS Nome, E.Data, E.Codigo, E.Quant, 
-                           E.Marca, E.Descricao, E.UID, E.Tipo, E.Compra, '' as Forn, E.idForn, E.Obs 
+                           E.Marca, E.Descricao, E.UID, E.Tipo, E.Compra, '' as Forn, E.idForn, E.Obs, E.idCliente 
                            FROM Encomendas E 
                            Left Join Clientes on Clientes.NrCli = E.idCliente ");
             StringBuilder alteracoes = new StringBuilder();
@@ -83,7 +83,7 @@ namespace TeleBonifacio.dao
             glo.ExecutarComandoSQL(sql);
         }
 
-        public void Atualiza(int iID, int idCliente, int idForn, string codigo, int quantidade, string marca, string obs)
+        public void Atualiza(int iID, int idCliente, int idForn, string codigo, int quantidade, string marca, string obs, string descr)
         {
             StringBuilder alteracoes = new StringBuilder();
             if (idCliente > 0)
@@ -110,9 +110,13 @@ namespace TeleBonifacio.dao
             {
                 alteracoes.Append($"Obs = '{obs}', ");
             }
+            if (!string.IsNullOrEmpty(descr))
+            {
+                alteracoes.Append($"Descricao = '{descr}', ");
+            }
             if (alteracoes.Length > 0)
             {
-                alteracoes.Length -= 2; // Remove the last comma and space
+                alteracoes.Length -= 2; 
             }
             string sql = $@"UPDATE Encomendas SET {alteracoes} WHERE ID = {iID}";
             glo.ExecutarComandoSQL(sql);

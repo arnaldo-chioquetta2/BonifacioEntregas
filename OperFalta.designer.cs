@@ -466,7 +466,7 @@ namespace TeleBonifacio
             this.dataGrid2.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dataGrid2.Size = new System.Drawing.Size(1100, 292);
             this.dataGrid2.TabIndex = 16;
-            this.dataGrid2.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGrid2_CellContentClick);
+            this.dataGrid2.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGrid2_CellClick);
             // 
             // tabPage3
             // 

@@ -14,6 +14,8 @@ namespace TeleBonifacio
         private FaltasDAO faltasDAO;
         private TpoFaltaDAO TpoFalta;
         private FornecedorDao Forn;
+        private EncomendasDao EncoDao;
+        private ProdutosDao cDaoP;
         private bool carregando = true;
         private string UID = "";
         private int iID = 0;
@@ -34,11 +36,14 @@ namespace TeleBonifacio
         private int BakidVendedor = 0;
         private int bakEmFalta = 0;
         private pesCliente FpesCliente;
+        private int idCliente = 0;
+
+        #region Inicializacao
 
         public OperFalta()
         {
             InitializeComponent();
-            SetStartPosition();            
+            SetStartPosition();
         }
 
         private void OperFalta_Load(object sender, EventArgs e)
@@ -91,10 +96,11 @@ namespace TeleBonifacio
             comboBox.DataSource = lista;
             comboBox.DisplayMember = "Nome";
             comboBox.ValueMember = "Id";
-            if (NrLista>0)
+            if (NrLista > 0)
             {
                 comboBox.SelectedValue = NrLista;
-            } else
+            }
+            else
             {
                 comboBox.SelectedIndex = -1;
             }
@@ -107,6 +113,8 @@ namespace TeleBonifacio
                 carregando = false;
             }
         }
+
+        #endregion
 
         #region Adição
         private void btnAdicionar_Click(object sender, EventArgs e)
@@ -172,8 +180,10 @@ namespace TeleBonifacio
         {
             cmbTipos.SelectedIndex = 0;
             cmbTipos.FlatStyle = FlatStyle.System;
+            cmbTipos.Tag = "";
             cmbForn.FlatStyle = FlatStyle.System;
             cmbForn.SelectedIndex = 0;
+            cmbForn.Tag = "";
             Normaliza(txtCodigo,1);
             Normaliza(txMarca,1);
             Normaliza(txDescr,1);
@@ -218,9 +228,10 @@ namespace TeleBonifacio
                             if (tbFaltas.SelectedIndex == 0)
                             {
                                 obj.BackColor = Color.Yellow;
-                                btAdicTpo.Enabled = true;
-                            }                                                             
+
+                            } 
                             button2.Enabled = btLmpFiltro.Enabled = true;
+                            btAdicTpo.Enabled = true;
                             obj.Tag = "M";
                         }
                     }                    
@@ -275,6 +286,31 @@ namespace TeleBonifacio
             txtCodigo.ReadOnly = v;
         }
 
+        private void ExcluirRegistrosDaGrid(DataGridView grid)
+        {
+            foreach (DataGridViewRow row in grid.SelectedRows)
+            {
+                int gID = Convert.ToInt32(row.Cells["ID"].Value);
+                string UID = Convert.ToString(row.Cells["UID"].Value);
+                glo.Loga($@"FD,{gID}, {UID}");
+
+                switch (tbFaltas.SelectedIndex)
+                {
+                    case 0:
+                        faltasDAO.Exclui(gID);
+                        break;
+                    case 1:
+                        cDaoP.Exclui(gID);
+                        break;
+                    case 2:
+                        EncoDao.Exclui(gID);
+                        break;
+                    default:
+                        return;
+                }                    
+            }
+        }
+
         private void btnExcluir_Click(object sender, EventArgs e)
         {
             DialogResult result = MessageBox.Show("Tem certeza que deseja excluir este registro?",
@@ -283,28 +319,22 @@ namespace TeleBonifacio
                                                   MessageBoxIcon.Question);
             if (result == DialogResult.Yes)
             {
-                if (tbFaltas.SelectedIndex == 0)
+                switch (tbFaltas.SelectedIndex)
                 {
-                    foreach (DataGridViewRow row in dataGrid1.SelectedRows)
-                    {
-                        int gID = Convert.ToInt32(row.Cells["ID"].Value);
-                        string UID = Convert.ToString(row.Cells["UID"].Value);
-                        glo.Loga($@"FD,{gID}, {UID}");
-                        faltasDAO.Exclui(gID);
-                    }
-                    CarregaGrid();
-                }
-                else
-                {
-                    ProdutosDao cDao = new ProdutosDao();
-                    foreach (DataGridViewRow row in dataGrid2.SelectedRows)
-                    {
-                        int gID = Convert.ToInt32(row.Cells["ID"].Value);
-                        string UID = Convert.ToString(row.Cells["UID"].Value);
-                        glo.Loga($@"FD,{gID}, {UID}");
-                        cDao.Exclui(gID);
-                    }
-                    CarregaGridP();
+                    case 0:
+                        ExcluirRegistrosDaGrid(dataGrid1);
+                        CarregaGrid();
+                        break;
+                    case 1:
+                        ExcluirRegistrosDaGrid(dataGrid2);
+                        CarregaGridP();
+                        break;
+                    case 2:
+                        ExcluirRegistrosDaGrid(dataGrid3);
+                        CarregaGridE();
+                        break;
+                    default:
+                        return;
                 }
                 Limpar();
             }
@@ -349,15 +379,6 @@ namespace TeleBonifacio
             {
                 AtualizarLinha(row, tipos, "Tipo", "Tipo");
                 AtualizarLinha(row, Fornecs, "idForn", "Forn");
-                //if (!row.Cells["idForn"].Value.Equals(DBNull.Value))
-                //{
-                //    int FornId = Convert.ToInt32(row.Cells["idForn"].Value);
-                //    var fornEncontrado = Fornecs.Find(f => f.Id == FornId);
-                //    if (fornEncontrado != null)
-                //    {
-                //        row.Cells["Forn"].Value = fornEncontrado.Nome;                        
-                //    }
-                //}
             }
             if (dados != null)
             {
@@ -373,12 +394,20 @@ namespace TeleBonifacio
                 carregando = true;
                 DataGridViewRow selectedRow = grid.Rows[e.RowIndex];
                 this.iID = Convert.ToInt32(selectedRow.Cells["ID"].Value);
-                txQuantidade.Text = Convert.ToString(selectedRow.Cells["Quant"].Value);
-                txtCodigo.Text = Convert.ToString(selectedRow.Cells["Codigo"].Value);
-                txMarca.Text = Convert.ToString(selectedRow.Cells["Marca"].Value);
-                cmbVendedor.SelectedValue = Convert.ToInt32(selectedRow.Cells["IDBalconista"].Value);
-                txObs.Text = Convert.ToString(selectedRow.Cells["Obs"].Value);
+
+                txQuantidade.Text = FiltraOZero(selectedRow.Cells["Quant"].Value);
+                txtCodigo.Text = FiltraOZero(selectedRow.Cells["Codigo"].Value);
+                txMarca.Text = FiltraOZero(selectedRow.Cells["Marca"].Value);
+                txObs.Text = FiltraOZero(selectedRow.Cells["Obs"].Value);
                 txDescr.Text = Convert.ToString(selectedRow.Cells["Descricao"].Value);
+                cmbVendedor.SelectedValue = Convert.ToInt32(selectedRow.Cells["IDBalconista"].Value);
+                //txQuantidade.Text = Convert.ToString(selectedRow.Cells["Quant"].Value);
+                //txtCodigo.Text = Convert.ToString(selectedRow.Cells["Codigo"].Value);
+                //txMarca.Text = Convert.ToString(selectedRow.Cells["Marca"].Value);
+                //cmbVendedor.SelectedValue = Convert.ToInt32(selectedRow.Cells["IDBalconista"].Value);
+                //txObs.Text = Convert.ToString(selectedRow.Cells["Obs"].Value);
+                //txDescr.Text = Convert.ToString(selectedRow.Cells["Descricao"].Value);
+
                 this.UID = Convert.ToString(selectedRow.Cells["UID"].Value);
                 try
                 {
@@ -482,8 +511,13 @@ namespace TeleBonifacio
             else
             {
                 // ATUALIZAÇÃO
+                string codigo = "";
+                if (txtCodigo.Tag=="M")
+                {
+                    codigo = txtCodigo.Text;
+                }
                 int idForn = 0;
-                if (cmbForn.FlatStyle == FlatStyle.Flat)
+                if (cmbForn.Tag == "M")
                 {
                     int iForn = cmbForn.SelectedIndex;
                     if (iForn > -1)
@@ -492,7 +526,7 @@ namespace TeleBonifacio
                     }                
                 }
                 int idTipo = 0;
-                if (cmbTipos.FlatStyle == FlatStyle.Flat)
+                if (cmbTipos.Tag == "M")
                 {
                     int iTpo = cmbTipos.SelectedIndex;
                     if (iTpo > -1)
@@ -500,13 +534,8 @@ namespace TeleBonifacio
                         idTipo = ((tb.ComboBoxItem)cmbTipos.Items[iTpo]).Id;
                     }
                 }
-                string codigo = "";
-                if (txtCodigo.BackColor == Color.Yellow)
-                {
-                    codigo = txtCodigo.Text;
-                }
                 int quantidade = -1;
-                if (txQuantidade.BackColor == Color.Yellow)
+                if (txQuantidade.Tag == "M")
                 {
                     if (!int.TryParse(txQuantidade.Text, out quantidade))
                     {
@@ -514,47 +543,87 @@ namespace TeleBonifacio
                     }
                 }
                 string marca = "";
-                if (txMarca.BackColor == Color.Yellow)
+                if (txMarca.Tag == "M")
                 {
                     marca = txMarca.Text;
                 }
                 string Obs = "";
-                if (txObs.BackColor == Color.Yellow)
+                if (txObs.Tag == "M")
                 {
                     Obs = txObs.Text;
                 }
                 string Descr = "";
-                if (txDescr.BackColor == Color.Yellow)
+                if (txDescr.Tag == "M")
                 {
                     Descr = txDescr.Text;
                 }
-                HashSet<string> selectedCodes = new HashSet<string>();
-                int scrollPosition = dataGrid1.FirstDisplayedScrollingRowIndex;
-                foreach (DataGridViewRow row in dataGrid1.SelectedRows)
+                switch (tbFaltas.SelectedIndex)
                 {
-                    selectedCodes.Add((string)row.Cells["Codigo"].Value);
-                    int gID = Convert.ToInt32(row.Cells["ID"].Value);
-                    string UID = Convert.ToString(row.Cells["UID"].Value);
-                    glo.Loga($@"FA,{gID}, {idTipo}, {idForn} ,{codigo}, {quantidade},{marca}, {Obs}, {Descr}, {UID}");
-                    faltasDAO.Atualiza(gID, idTipo, idForn, codigo, quantidade, marca, Obs, Descr);
+                    case 0:
+                        AtualizaItensSelecionados(0, dataGrid1, idTipo, idForn, codigo, quantidade, marca, Obs, Descr);
+                        break;
+                    case 1:
+                        AtualizaItensSelecionados(1, dataGrid2, idTipo, idForn, codigo, quantidade, marca, Obs, Descr);
+                        break;
+                    case 2:
+                        AtualizaItensSelecionados(2, dataGrid3, idTipo, idForn, codigo, quantidade, marca, Obs, Descr);
+                        break;
                 }
-                CarregaGrid();
-                if (dataGrid1.Rows.Count>0)
+            }
+        }
+
+        private void AtualizaItensSelecionados(int nrGrid, DataGridView grid, int idTipo, int idForn, string codigo, int quantidade, string marca, string obs, string descr)
+        {
+            HashSet<string> selectedCodes = new HashSet<string>();
+            int scrollPosition = grid.FirstDisplayedScrollingRowIndex;
+
+            foreach (DataGridViewRow row in grid.SelectedRows)
+            {
+                string sID = Convert.ToString(row.Cells["ID"].Value);
+                selectedCodes.Add(sID);
+                int gID = Convert.ToInt32(row.Cells["ID"].Value);
+                string UID = Convert.ToString(row.Cells["UID"].Value);
+                glo.Loga($@"FA,{gID}, {idTipo}, {idForn}, {codigo}, {quantidade}, {marca}, {obs}, {descr}, {UID}");
+                switch (tbFaltas.SelectedIndex)
                 {
-                    dataGrid1.FirstDisplayedScrollingRowIndex = scrollPosition;
-                    foreach (string code in selectedCodes)
+                    case 0:
+                        faltasDAO.Atualiza(gID, idTipo, idForn, codigo, quantidade, marca, obs, descr);
+                        break;
+                    case 1:
+                        cDaoP.Atualiza(gID, idTipo, idForn, codigo, quantidade, marca, obs, descr);
+                        break;
+                    case 2:
+                        EncoDao.Atualiza(gID, this.idCliente, idForn, codigo, quantidade, marca, obs, descr);
+                        break;
+                }
+            }            
+            switch (tbFaltas.SelectedIndex)
+            {
+                case 0:
+                    CarregaGrid();
+                    break;
+                case 1:
+                    CarregaGridP();
+                    break;
+                case 2:
+                    CarregaGridE();
+                    break;
+            }
+
+            if (grid.Rows.Count > 0)
+            {
+                grid.FirstDisplayedScrollingRowIndex = scrollPosition;
+                foreach (string code in selectedCodes)
+                {
+                    foreach (DataGridViewRow row in grid.Rows)
                     {
-                        foreach (DataGridViewRow row in dataGrid1.Rows)
+                        string cod = row.Cells["ID"].Value.ToString();
+                        if (cod == code)
                         {
-                            string cod = row.Cells["Codigo"].Value.ToString();
-                            if (cod == code)
-                            {
-                                row.Selected = true;
-                                break;
-                            }
+                            row.Selected = true;
+                            break;
                         }
                     }
-                    AtualizouEmBaixo();
                 }
             }
         }
@@ -622,6 +691,7 @@ namespace TeleBonifacio
                             {
                                 btAdicTpo.Enabled = true;
                                 cmbTipos.FlatStyle = FlatStyle.Flat;
+                                cmbTipos.Tag = "M";
                                 button2.Enabled = true;
                                 btLmpFiltro.Enabled = true;
                                 btAdicTpo.Enabled = true;
@@ -663,6 +733,7 @@ namespace TeleBonifacio
                             {
                                 btAdicTpo.Enabled = true;
                                 cmbForn.FlatStyle = FlatStyle.Flat;
+                                cmbForn.Tag = "M";
                                 button2.Enabled = true;
                                 btLmpFiltro.Enabled = true;
                                 btAdicTpo.Enabled = true;                                
@@ -713,9 +784,8 @@ namespace TeleBonifacio
                     }
                     if (ret.Length > 0)
                     {
-                        MessageBox.Show(ret, "Erro", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        txtCodigo.BackColor = Color.Orange;
                     }
-                    txtCodigo.Focus();
                 }
             }
         }
@@ -775,15 +845,29 @@ namespace TeleBonifacio
             {
                 BakObs = txObs.Text;
             }
-            if (tbFaltas.SelectedIndex == 1)
+
+            switch (tbFaltas.SelectedIndex)
             {
-                CarregaGridP();
+                case 0:
+                    bakEmFalta = (ckEmFalta.Checked == true) ? 1 : 0;
+                    CarregaGrid(); break;
+                case 1:
+                    CarregaGridP();
+                    break;
+                case 2:
+                    CarregaGridE();
+                    break;
             }
-            else
-            {
-                bakEmFalta = (ckEmFalta.Checked == true) ? 1 : 0;
-                CarregaGrid();
-            }
+            //if (tbFaltas.SelectedIndex == 1)
+            //{
+            //    CarregaGridP();
+            //}
+            //else
+            //{
+            //    bakEmFalta = (ckEmFalta.Checked == true) ? 1 : 0;
+            //    CarregaGrid();
+            //}
+
             btnAdicionar.Text = "Limpar";
             btAdicTpo.Enabled = false;
         }
@@ -837,8 +921,8 @@ namespace TeleBonifacio
 
         private void CarregaGridP()
         {
-            ProdutosDao cDao = new ProdutosDao();
-            DataTable dados = cDao.getDados(BakidTipo, BakidForn, Bakcodigo, Bakquantidade, Bakmarca, BakObs);
+            cDaoP = new ProdutosDao();
+            DataTable dados = cDaoP.getDados(BakidTipo, BakidForn, Bakcodigo, Bakquantidade, Bakmarca, BakObs);
             List<tb.TpoFalta> tipos = TpoFalta.getTipos();
             List<tb.Fornecedor> Fornecs = Forn.getForns();
             dataGrid2.DataSource = dados;
@@ -902,7 +986,7 @@ namespace TeleBonifacio
             }
         }              
 
-        private void dataGrid2_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        private void dataGrid2_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             DataGridView grid = (DataGridView)sender;
             if (grid != null && e.RowIndex >= 0 && e.RowIndex < grid.Rows.Count)
@@ -910,10 +994,10 @@ namespace TeleBonifacio
                 carregando = true;
                 DataGridViewRow selectedRow = grid.Rows[e.RowIndex];
                 this.iID = Convert.ToInt32(selectedRow.Cells["ID"].Value);
-                txQuantidade.Text = Convert.ToString(selectedRow.Cells["Quant"].Value);
-                txtCodigo.Text = Convert.ToString(selectedRow.Cells["Codigo"].Value);
-                txMarca.Text = Convert.ToString(selectedRow.Cells["Marca"].Value);
-                txObs.Text = Convert.ToString(selectedRow.Cells["Obs"].Value);
+                txQuantidade.Text = FiltraOZero(selectedRow.Cells["Quant"].Value);
+                txtCodigo.Text = FiltraOZero(selectedRow.Cells["Codigo"].Value);
+                txMarca.Text = FiltraOZero(selectedRow.Cells["Marca"].Value);
+                txObs.Text = FiltraOZero(selectedRow.Cells["Obs"].Value);
                 txDescr.Text = Convert.ToString(selectedRow.Cells["Descricao"].Value);
                 this.UID = Convert.ToString(selectedRow.Cells["UID"].Value);
                 try
@@ -971,13 +1055,15 @@ namespace TeleBonifacio
             {
                 if (dataGrid1.SelectedRows.Count == 1)
                 {
-                    if (dataGrid1.SelectedRows[0].Index != 0)
+
+                    if (dataGrid1.Rows.Count == 1 || dataGrid1.SelectedRows[0].Index != 0)
                     {
                         Descricao = dataGrid1.SelectedRows[0].Cells["Descricao"].Value.ToString();
-                    } else
+                    }
+                    else
                     {
                         ProdNovo = true;
-                    }                        
+                    }
                 }
             }
             btEncomenda.Enabled = false; ;
@@ -1051,13 +1137,14 @@ namespace TeleBonifacio
             dataGrid3.Columns[10].Width = 100;      // Forn
             dataGrid3.Columns[11].Visible = false;  // IdForn
             dataGrid3.Columns[12].Width = 100;      // Obs
+            dataGrid3.Columns[13].Visible = false;  // idCliente 
             dataGrid3.Invalidate();
         }
 
         private void CarregaGridE()
         {
-            EncomendasDao cDao = new EncomendasDao();
-            DataTable dados = cDao.getDados(BakidTipo, BakidForn, Bakcodigo, Bakquantidade, Bakmarca, BakObs);
+            EncoDao = new EncomendasDao();
+            DataTable dados = EncoDao.getDados(BakidTipo, BakidForn, Bakcodigo, Bakquantidade, Bakmarca, BakObs);
             List<tb.TpoFalta> tipos = TpoFalta.getTipos();
             List<tb.Fornecedor> Fornecs = Forn.getForns();
             dataGrid3.DataSource = dados;
@@ -1072,8 +1159,6 @@ namespace TeleBonifacio
             }
         }
 
-        #endregion
-
         private void dataGrid3_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             DataGridView grid = (DataGridView)sender;
@@ -1082,16 +1167,16 @@ namespace TeleBonifacio
                 carregando = true;
                 DataGridViewRow selectedRow = grid.Rows[e.RowIndex];
                 this.iID = Convert.ToInt32(selectedRow.Cells["ID"].Value);
-                txQuantidade.Text = Convert.ToString(selectedRow.Cells["Quant"].Value);
-                txtCodigo.Text = Convert.ToString(selectedRow.Cells["Codigo"].Value);
-                txMarca.Text = Convert.ToString(selectedRow.Cells["Marca"].Value);
-                // cmbCliente.SelectedValue = Convert.ToInt32(selectedRow.Cells["idCliente"].Value); // Mudança aqui para lidar com idCliente em vez de IDBalconista
-                txObs.Text = Convert.ToString(selectedRow.Cells["Obs"].Value);
+                txQuantidade.Text = FiltraOZero(selectedRow.Cells["Quant"].Value);
+                txtCodigo.Text = FiltraOZero(selectedRow.Cells["Codigo"].Value);
+                txMarca.Text = FiltraOZero(selectedRow.Cells["Marca"].Value);
+                txObs.Text = FiltraOZero(selectedRow.Cells["Obs"].Value);
                 txDescr.Text = Convert.ToString(selectedRow.Cells["Descricao"].Value);
                 this.UID = Convert.ToString(selectedRow.Cells["UID"].Value);
+                this.idCliente = Convert.ToInt16(selectedRow.Cells["idCliente"].Value);
                 try
                 {
-                    cmbForn.SelectedValue = Convert.ToInt32(selectedRow.Cells["idForn"].Value);
+                    cmbForn.SelectedValue = Convert.ToInt16(selectedRow.Cells["idForn"].Value);
                 }
                 catch (Exception)
                 {
@@ -1102,7 +1187,6 @@ namespace TeleBonifacio
                 btnAdicionar.Enabled = true;
                 btnExcluir.Enabled = true;
                 btComprei.Enabled = true;
-                // btEncomenda.Enabled = true;
                 txQuantidade.ReadOnly = false;
                 txMarca.ReadOnly = false;
                 if (dataGrid3.SelectedRows.Count == 1)
@@ -1121,5 +1205,19 @@ namespace TeleBonifacio
                 carregando = false;
             }
         }
+
+        #endregion        
+        private string FiltraOZero(object Value)
+        {
+            string texto = Convert.ToString(Value);
+            if (texto=="0")
+            {
+                return "";
+            } else
+            {
+                return texto;
+            }
+        }
+
     }
 }
