@@ -83,7 +83,7 @@ namespace TeleBonifacio
         {
             if (e.Button == MouseButtons.Middle)
             {
-                glo.Nivel = 2;
+                glo.Nivel = 1;
                 glo.iUsuario = 1;
                 Form1 Form = new Form1();
                 Form.Show();

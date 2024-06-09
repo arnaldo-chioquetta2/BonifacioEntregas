@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data;
 using System.Drawing;
 using System.Globalization;
-using System.IO;
 using System.Windows.Forms;
 using TeleBonifacio.dao;
 using TeleBonifacio.tb;
@@ -27,7 +25,6 @@ namespace TeleBonifacio
             MostraTotal();
             VeSeHab();
         }
-
         private void VeSeHab()
         {
             bool OK = true;
@@ -60,6 +57,11 @@ namespace TeleBonifacio
 
         private void operCaixa_Load(object sender, EventArgs e)
         {
+            if (glo.Nivel == 1)
+            {
+                btnFiltrar.Visible = false;
+                button5.Visible = false;
+            }
             Caixa = new CaixaDao();
             ClienteDAO Cliente = new ClienteDAO();
             VendedoresDAO Vendedor = new VendedoresDAO();
