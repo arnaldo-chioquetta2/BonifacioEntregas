@@ -349,80 +349,119 @@ namespace TeleBonifacio
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            switch (glo.Nivel)
+            if (glo.ODBC)
             {
-                case 0: // Balconista, ve só as faltas    
-                    label1.Visible = false;
-                    label2.Visible = false;
-                    label3.Visible = false;
-                    label4.Visible = false;
-                    label5.Visible = false;
-                    label6.Visible = false;
-                    label7.Visible = false;
-                    label8.Visible = false;
-                    lbMens.Visible = false;
-                    label9.Visible = false;
-                    label10.Visible = false;
-                    label11.Visible = false;
-                    label13.Visible = false;
-                    pictureBox1.Visible = false;
-                    pictureBox2.Visible = false;
-                    pictureBox3.Visible = false;
-                    pictureBox4.Visible = false;
-                    pictureBox5.Visible = false;
-                    pictureBox6.Visible = false;
-                    pictureBox7.Visible = false;
-                    pictureBox8.Visible = false;
-                    pictureBox9.Visible = false;
-                    pictureBox10.Visible = false;
-                    pictureBox11.Visible = false;
-                    pictureBox13.Visible = false;
-                    this.Width = 350;
-                    this.Height = 200;
-                    int posL = (this.Width - pictureBox12.Width) / 2;
-                    pictureBox12.Left = label12.Left = posL;
-                    break;
-                case 1: // Caixa
-                    label1.Visible = false;
-                    label2.Visible = false;
-                    label3.Visible = false;
-                    label4.Visible = false;
-                    label5.Visible = false;
-                    label6.Visible = false;
-                    label7.Visible = false;
-                    label8.Visible = false;
-                    lbMens.Visible = false;
-                    label9.Visible = false;
-                    label12.Visible = false;
-                    label13.Visible = false;
-                    pictureBox1.Visible = false;
-                    pictureBox2.Visible = false;
-                    pictureBox3.Visible = false;
-                    pictureBox4.Visible = false;
-                    pictureBox5.Visible = false;
-                    pictureBox6.Visible = false;
-                    pictureBox7.Visible = false;
-                    pictureBox8.Visible = false;
-                    pictureBox9.Visible = false;
-                    pictureBox12.Visible = false;
-                    pictureBox13.Visible = false;
-                    label10.Visible = true;
-                    pictureBox10.Visible = true;
-                    label11.Visible = true;
-                    pictureBox11.Visible = true;
-                    this.Width = 300;
-                    this.Height = 200;
-                    int posL2 = (this.Width - pictureBox10.Width - pictureBox11.Width) / 2;
-                    pictureBox10.Left = label10.Left = posL2;
-                    pictureBox11.Left = label11.Left = posL2 + pictureBox10.Width;
-                    label10.Top = 30;
-                    pictureBox10.Top = 50;                    
-                    label11.Top = 30;
-                    pictureBox11.Top = 50;
-                    break;
-                case 2:
-                    // Escritório Vê tudo
-                    break;
+                label1.Visible = false;
+                label2.Visible = false;
+                label3.Visible = false;
+                label4.Visible = false;
+                label5.Visible = false;
+                label6.Visible = false;
+                label7.Visible = false;
+                label8.Visible = false;
+                lbMens.Visible = false;
+                label9.Visible = false;
+                label10.Visible = false;
+                label11.Visible = false;
+                label13.Visible = false;
+                pictureBox1.Visible = false;
+                pictureBox2.Visible = false;
+                pictureBox3.Visible = false;
+                pictureBox4.Visible = false;
+                pictureBox5.Visible = false;
+                pictureBox6.Visible = false;
+                pictureBox7.Visible = false;
+                pictureBox8.Visible = false;
+                pictureBox9.Visible = false;
+                pictureBox10.Visible = false;
+                pictureBox11.Visible = false;
+                pictureBox13.Visible = false;                                                                
+                this.Width = 300;
+                this.Height = 200;
+                int posL2 = (this.Width - pictureBox10.Width - pictureBox11.Width) / 2;
+                posL2 = +92;
+                label12.Visible = true;
+                pictureBox12.Visible = true;
+                label12.Top = 20;
+                pictureBox12.Left = label12.Left = posL2;               
+            }
+            else
+            {
+                switch (glo.Nivel)
+                {
+                    case 0: // Balconista, ve só as faltas    
+                        label1.Visible = false;
+                        label2.Visible = false;
+                        label3.Visible = false;
+                        label4.Visible = false;
+                        label5.Visible = false;
+                        label6.Visible = false;
+                        label7.Visible = false;
+                        label8.Visible = false;
+                        lbMens.Visible = false;
+                        label9.Visible = false;
+                        label10.Visible = false;
+                        label11.Visible = false;
+                        label13.Visible = false;
+                        pictureBox1.Visible = false;
+                        pictureBox2.Visible = false;
+                        pictureBox3.Visible = false;
+                        pictureBox4.Visible = false;
+                        pictureBox5.Visible = false;
+                        pictureBox6.Visible = false;
+                        pictureBox7.Visible = false;
+                        pictureBox8.Visible = false;
+                        pictureBox9.Visible = false;
+                        pictureBox10.Visible = false;
+                        pictureBox11.Visible = false;
+                        pictureBox13.Visible = false;
+                        this.Width = 350;
+                        this.Height = 200;
+                        int posL = (this.Width - pictureBox12.Width) / 2;
+                        pictureBox12.Left = label12.Left = posL;
+                        break;
+                    case 1: // Caixa
+                        label1.Visible = false;
+                        label2.Visible = false;
+                        label3.Visible = false;
+                        label4.Visible = false;
+                        label5.Visible = false;
+                        label6.Visible = false;
+                        label7.Visible = false;
+                        label8.Visible = false;
+                        lbMens.Visible = false;
+                        label9.Visible = false;
+                        label12.Visible = false;
+                        label13.Visible = false;
+                        pictureBox1.Visible = false;
+                        pictureBox2.Visible = false;
+                        pictureBox3.Visible = false;
+                        pictureBox4.Visible = false;
+                        pictureBox5.Visible = false;
+                        pictureBox6.Visible = false;
+                        pictureBox7.Visible = false;
+                        pictureBox8.Visible = false;
+                        pictureBox9.Visible = false;
+                        pictureBox12.Visible = false;
+                        pictureBox13.Visible = false;
+                        label10.Visible = true;
+                        pictureBox10.Visible = true;
+                        label11.Visible = true;
+                        pictureBox11.Visible = true;
+                        this.Width = 300;
+                        this.Height = 200;
+                        int posL2 = (this.Width - pictureBox10.Width - pictureBox11.Width) / 2;
+                        pictureBox10.Left = label10.Left = posL2;
+                        pictureBox11.Left = label11.Left = posL2 + pictureBox10.Width;
+                        label10.Top = 30;
+                        pictureBox10.Top = 50;
+                        label11.Top = 30;
+                        pictureBox11.Top = 50;
+                        break;
+                    case 2:
+                        // Escritório Vê tudo
+                        break;
+                }
             }
         }
 

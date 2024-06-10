@@ -17,7 +17,7 @@ namespace TeleBonifacio.dao
                 '{idTipo}', 
                 {idForn}, 
                 '{UID}')";
-            glo.ExecutarComandoSQL(sql);
+            DB.ExecutarComandoSQL(sql);
         }
 
         public DataTable getDados(int tipo, int idForn, string codigo, int quantidade, string marca, string Obs)
@@ -62,14 +62,14 @@ namespace TeleBonifacio.dao
                 query.Append($@" Where {alteracoes} ");
             }
             query.Append(" ORDER BY F.Descricao ");
-            DataTable dt = glo.ExecutarConsulta(query.ToString());
+            DataTable dt = DB.ExecutarConsulta(query.ToString());
             return dt;
         }
 
         public void Exclui(int id)
         {
             string sql = $@"DELETE FROM Produtos WHERE ID = {id} ";
-            glo.ExecutarComandoSQL(sql);
+            DB.ExecutarComandoSQL(sql);
         }
 
         public void Edita(int id, int idBalconista, float quantidade, string codigo)
@@ -79,7 +79,7 @@ namespace TeleBonifacio.dao
                 Quant = {quantidade}, 
                 Codigo = '{codigo}'
                 WHERE ID = {id}";
-            glo.ExecutarComandoSQL(sql);
+            DB.ExecutarComandoSQL(sql);
         }
 
         public void Atualiza(int iID, int iTpo, int idForn, string codigo, int quantidade, string marca, string Obs, string descr)
@@ -115,19 +115,19 @@ namespace TeleBonifacio.dao
             }
             alteracoes.Length -= 2;
             string sql = $@"UPDATE Produtos SET {alteracoes} WHERE ID = {iID}";
-            glo.ExecutarComandoSQL(sql);
+            DB.ExecutarComandoSQL(sql);
         }
 
         public void Comprou(int iID)
         {
             string sql = $@"UPDATE Produtos SET Compra = Now WHERE ID = {iID}";
-            glo.ExecutarComandoSQL(sql);
+            DB.ExecutarComandoSQL(sql);
         }
 
         public string VeSeJaTemAFalta(string codigo)
         {
             string query = $@"SELECT Count(*) FROM Produtos Where Codigo = '{codigo}' ";
-            int count = glo.ExecutarConsultaCount(query);
+            int count = DB.ExecutarConsultaCount(query);
             string ret = "";
             if (count > 0)
             {

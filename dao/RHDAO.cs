@@ -26,7 +26,7 @@ namespace TeleBonifacio.dao
                 + sFnTrd
                 + glo.fa(UID) + ", "
                 + fdsql + " )";
-            glo.ExecutarComandoSQL(sql);
+            DB.ExecutarComandoSQL(sql);
         }
 
         public DataTable getDados(DateTime? DT1, DateTime? DT2, int idFunc)
@@ -51,14 +51,14 @@ namespace TeleBonifacio.dao
                 query.AppendFormat(" And Horarios.idFunc = " + idFunc.ToString());
             }            
             query.Append(" Order By Vendedores.Nome, Horarios.Data");
-            DataTable dt = glo.ExecutarConsulta(query.ToString());
+            DataTable dt = DB.ExecutarConsulta(query.ToString());
             return dt;
         }
 
         public void Exclui(int iID)
         {
             String sql = @"Delete From Horarios WHERE ID = " + iID.ToString();
-            glo.ExecutarComandoSQL(sql);
+            DB.ExecutarComandoSQL(sql);
         }
 
         public void EdHorario(int iID, int idFunc, TimeSpan dInMan, TimeSpan dFmMan, TimeSpan dInTrd, TimeSpan dFnTrd, DateTime dtHorario)
@@ -75,7 +75,7 @@ namespace TeleBonifacio.dao
                           sTF +
                           ", Data = '" + dtHorario.ToString("yyyy-MM-dd") + "'" +
                           " WHERE ID = " + iID;
-            glo.ExecutarComandoSQL(sql);
+            DB.ExecutarComandoSQL(sql);
         }
     }
 }

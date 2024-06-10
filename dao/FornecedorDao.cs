@@ -20,12 +20,12 @@ namespace TeleBonifacio.dao
         public void Adiciona(string descricao)
         {
             string sql = $"INSERT INTO Fornecedores (Nome) VALUES ('{descricao}')";
-            glo.ExecutarComandoSQL(sql);
+            DB.ExecutarComandoSQL(sql);
         }
 
         public override IDataEntity Apagar(int direcao, IDataEntity entidade)
         {
-            glo.ExecutarComandoSQL("DELETE FROM Fornecedores WHERE IdForn = " + Id.ToString(), null);
+            DB.ExecutarComandoSQL("DELETE FROM Fornecedores WHERE IdForn = " + Id.ToString(), null);
             tb.Fornecedor proximocliente = direcao > -1 ? ParaFrente() as tb.Fornecedor : ParaTraz() as tb.Fornecedor;
             if (proximocliente == null || proximocliente.Id == 0)
             {
@@ -46,7 +46,7 @@ namespace TeleBonifacio.dao
                 FROM Fornecedores 
                 Where Nome > '' 
                 Order By Nome ";
-            DataTable dt = glo.ExecutarConsulta(query);
+            DataTable dt = DB.ExecutarConsulta(query);
             return dt;
         }
 
@@ -145,7 +145,7 @@ namespace TeleBonifacio.dao
 
             try
             {
-                glo.ExecutarComandoSQL(query, parameters);
+                DB.ExecutarComandoSQL(query, parameters);
             }
             catch (Exception ex)
             {
@@ -204,7 +204,7 @@ namespace TeleBonifacio.dao
                 wre = " and ID <> " + Fornecedor.Id.ToString();
             }
             string queryNome = $"SELECT COUNT(*) FROM Fornecedores WHERE Nome = '{Fornecedor.Nome}' " + wre;
-            int countNome = glo.ExecutarConsultaCount(queryNome);
+            int countNome = DB.ExecutarConsultaCount(queryNome);
             if (countNome > 0)
             {
                 return "Já existe um tipo cadastrado com esse nome.";
@@ -216,7 +216,7 @@ namespace TeleBonifacio.dao
         {
             StringBuilder query = new StringBuilder();
             query.Append("SELECT IdForn, Nome FROM Fornecedores");
-            DataTable dt = glo.ExecutarConsulta(query.ToString());
+            DataTable dt = DB.ExecutarConsulta(query.ToString());
             List<tb.Fornecedor> tipos = new List<tb.Fornecedor>();
             foreach (DataRow row in dt.Rows)
             {

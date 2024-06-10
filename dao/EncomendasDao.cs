@@ -18,7 +18,7 @@ namespace TeleBonifacio.dao
                 {idForn}, 
                 '{UID}', 
                 Now())";
-            glo.ExecutarComandoSQL(sql);
+            DB.ExecutarComandoSQL(sql);
         }
 
         public DataTable getDados(int tipo, int idForn, string codigo, int quantidade, string marca, string Obs)
@@ -59,14 +59,14 @@ namespace TeleBonifacio.dao
                 query.Append($@" WHERE {alteracoes}");
             }
             query.Append(" ORDER BY E.Data DESC");
-            DataTable dt = glo.ExecutarConsulta(query.ToString());
+            DataTable dt = DB.ExecutarConsulta(query.ToString());
             return dt;
         }
 
         public void Exclui(int id)
         {
             string sql = $@"DELETE FROM Encomendas WHERE ID = {id}";
-            glo.ExecutarComandoSQL(sql);
+            DB.ExecutarComandoSQL(sql);
         }
 
         public void Edita(int id, int idCliente, float quantidade, string codigo, string marca, string descricao, int idForn, int tipo)
@@ -80,7 +80,7 @@ namespace TeleBonifacio.dao
                 idForn = {idForn},
                 Tipo = '{tipo}'
                 WHERE ID = {id}";
-            glo.ExecutarComandoSQL(sql);
+            DB.ExecutarComandoSQL(sql);
         }
 
         public void Atualiza(int iID, int idCliente, int idForn, string codigo, int quantidade, string marca, string obs, string descr)
@@ -119,7 +119,7 @@ namespace TeleBonifacio.dao
                 alteracoes.Length -= 2; 
             }
             string sql = $@"UPDATE Encomendas SET {alteracoes} WHERE ID = {iID}";
-            glo.ExecutarComandoSQL(sql);
+            DB.ExecutarComandoSQL(sql);
         }
     }
 }

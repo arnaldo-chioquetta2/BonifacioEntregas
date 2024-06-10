@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace TeleBonifacio.gen
 {
-    internal class INI2
+    public class INI2
     {
         private string FileName;
 

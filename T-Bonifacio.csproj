@@ -155,11 +155,14 @@
     <Compile Include="FormBase.designer.cs">
       <DependentUpon>FormBase.cs</DependentUpon>
     </Compile>
+    <Compile Include="gen\ADO.cs" />
     <Compile Include="gen\Cripto.cs" />
+    <Compile Include="gen\DB.cs" />
     <Compile Include="gen\FTP.cs" />
     <Compile Include="gen\glo.cs" />
     <Compile Include="gen\INI.cs" />
     <Compile Include="gen\INI2.cs" />
+    <Compile Include="gen\odbc.cs" />
     <Compile Include="gen\ValorPorExtenso.cs" />
     <Compile Include="operAvanc.cs">
       <SubType>Form</SubType>

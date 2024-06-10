@@ -20,7 +20,7 @@ namespace TeleBonifacio.dao
                 '{idTipo}', 
                 {idForn}, 
                 '{UID}')";
-            glo.ExecutarComandoSQL(sql); 
+            DB.ExecutarComandoSQL(sql); 
         }
 
         public DataTable getDados(int tipo, int idForn, int Comprado, string codigo, int quantidade, string marca, string Obs, int idVendedor, int EmFalta)
@@ -74,14 +74,14 @@ namespace TeleBonifacio.dao
                 query.Append($@" Where {alteracoes} ");
             }
             query.Append(" ORDER BY F.Data desc, V.Nome");
-            DataTable dt = glo.ExecutarConsulta(query.ToString());
+            DataTable dt = DB.ExecutarConsulta(query.ToString());
             return dt;
         }
 
         public void Exclui(int id)
         {
             string sql = $@"DELETE FROM Faltas WHERE ID = {id}";
-            glo.ExecutarComandoSQL(sql);
+            DB.ExecutarComandoSQL(sql);
         }
 
         public void Edita(int id, int idBalconista, float quantidade, string codigo)
@@ -91,7 +91,7 @@ namespace TeleBonifacio.dao
                 Quant = {quantidade}, 
                 Codigo = '{codigo}'
                 WHERE ID = {id}";
-            glo.ExecutarComandoSQL(sql);
+            DB.ExecutarComandoSQL(sql);
         }
 
         public void Atualiza(int iID, int iTpo, int idForn, string codigo, int quantidade, string marca, string Obs, string Descr)
@@ -127,20 +127,20 @@ namespace TeleBonifacio.dao
             }            
             alteracoes.Length -= 2;
             string sql = $@"UPDATE Faltas SET {alteracoes} WHERE ID = {iID}";
-            glo.ExecutarComandoSQL(sql);
+            DB.ExecutarComandoSQL(sql);
         }
 
         public void Comprou(int iID)
         {
-            DataTable faltaData = glo.ExecutarConsulta($"SELECT * FROM Faltas WHERE ID = {iID}");
+            DataTable faltaData = DB.ExecutarConsulta($"SELECT * FROM Faltas WHERE ID = {iID}");
             DataRow faltaRow = faltaData.Rows[0];
             string UID = glo.GenerateUID();
             int idForn = (faltaRow["idForn"].ToString().Length==0) ? 0 : Convert.ToInt16(faltaRow["idForn"]);
             string insertQuery = $@"INSERT INTO Produtos (Data, Quant, Codigo, Marca, UID, Tipo, Compra, Descricao, idForn, Obs) 
                             VALUES (Now, {faltaRow["Quant"]}, '{faltaRow["Codigo"]}', '{faltaRow["Marca"]}', '{UID}', '{faltaRow["Tipo"]}', Now(), '{faltaRow["Descricao"]}', {idForn}, '{faltaRow["Obs"]}')";
-            glo.ExecutarComandoSQL(insertQuery);
+            DB.ExecutarComandoSQL(insertQuery);
             string updateFaltaQuery = $@"Delete From Faltas WHERE ID = {iID}";
-            glo.ExecutarComandoSQL(updateFaltaQuery);
+            DB.ExecutarComandoSQL(updateFaltaQuery);
         }
 
         public void ConfirmaEncomenda(int iID, string Nome, string Fone, string NovaDesc, DateTime DtAgora, DateTime DtEnc)
@@ -153,25 +153,25 @@ namespace TeleBonifacio.dao
                 string UID = glo.GenerateUID();
                 string insertQuery = $@"INSERT INTO Encomendas (idCliente, Data, UID, Descricao, Nome, Telefone, Compra) 
                             VALUES ({idCliente}, '{sDtAgora}', '{UID}', '{NovaDesc}', '{Nome}', '{Fone}', '{sCompra}')";
-                glo.ExecutarComandoSQL(insertQuery);
+                DB.ExecutarComandoSQL(insertQuery);
             }
             else
             {
-                DataTable encomendaData = glo.ExecutarConsulta($"SELECT * FROM Faltas WHERE ID = {iID}");
+                DataTable encomendaData = DB.ExecutarConsulta($"SELECT * FROM Faltas WHERE ID = {iID}");
                 DataRow encomendaRow = encomendaData.Rows[0];
                 int idForn = (encomendaRow["idForn"].ToString().Length == 0) ? 0 : Convert.ToInt16(encomendaRow["idForn"]);
                 string insertQuery = $@"INSERT INTO Encomendas (idCliente, Data, Quant, Codigo, Marca, UID, Tipo, Compra, Descricao, idForn, Obs, Nome, Telefone) 
                         VALUES ({idCliente}, '{sDtAgora}', {encomendaRow["Quant"]}, '{encomendaRow["Codigo"]}', '{encomendaRow["Marca"]}', '{encomendaRow["UID"]}', '{encomendaRow["Tipo"]}', '{sCompra}', '{encomendaRow["Descricao"]}', {idForn}, '{encomendaRow["Obs"]}','{Nome}' ,'{Fone}' )";
-                glo.ExecutarComandoSQL(insertQuery);
+                DB.ExecutarComandoSQL(insertQuery);
                 string updateFaltaQuery = $@"DELETE FROM Faltas WHERE ID = {iID}";
-                glo.ExecutarComandoSQL(updateFaltaQuery);
+                DB.ExecutarComandoSQL(updateFaltaQuery);
             }
         }
 
         public string VeSeJaTem(string codigo)
         {
             string query = $@"SELECT Count(*) FROM Faltas Where Codigo = '{codigo}' ";
-            int count = glo.ExecutarConsultaCount(query);
+            int count = DB.ExecutarConsultaCount(query);
             string ret = "";
             if (count > 0)
             {
@@ -180,7 +180,7 @@ namespace TeleBonifacio.dao
             {
 
                 string queryP = $@"SELECT FORMAT([Compra], 'dd/MM/yyyy') AS CompraFormatada FROM Produtos WHERE Codigo = '{codigo}' ";
-                DataTable dados = glo.ExecutarConsulta(queryP);
+                DataTable dados = DB.ExecutarConsulta(queryP);
                 if (dados.Rows.Count > 0)
                 {
                     DateTime? dataCompra = Convert.ToDateTime(dados.Rows[0]["CompraFormatada"]);

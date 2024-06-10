@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.Odbc;
 using System.Data.OleDb;
 using System.Windows.Forms;
 
@@ -38,7 +39,7 @@ namespace TeleBonifacio.dao
             }
             try
             {
-                glo.ExecutarComandoSQL(query, parameters);
+                DB.ExecutarComandoSQL(query, parameters);
             }
             catch (Exception ex)
             {
@@ -50,7 +51,7 @@ namespace TeleBonifacio.dao
         public void SetFone(string text)
         {
             string query = $"UPDATE Clientes SET Telefone = '{text}' WHERE NrCli = {glo.IdAdicionado} ";
-            glo.ExecutarComandoSQL(query);
+            DB.ExecutarComandoSQL(query);
         }
 
         private List<OleDbParameter> ConstruirParametroscliente(ClienteDAO cliente, bool inserindo)
@@ -119,7 +120,7 @@ namespace TeleBonifacio.dao
 
         public override tb.IDataEntity Apagar(int direcao, tb.IDataEntity entidade)
         {
-            glo.ExecutarComandoSQL("DELETE FROM Clientes WHERE NrCli = " + id.ToString(), null);
+            DB.ExecutarComandoSQL("DELETE FROM Clientes WHERE NrCli = " + id.ToString(), null);
             tb.Cliente proximocliente = direcao > -1 ? ParaFrente() as tb.Cliente : ParaTraz() as tb.Cliente;
             if (proximocliente == null || proximocliente.Id == 0)
             {
@@ -207,6 +208,18 @@ namespace TeleBonifacio.dao
 
         private DataTable ExecutarConsulta(string query)
         {
+            if (glo.ODBC)
+            {
+                return ExecutarConsultaODBC(query);
+            }
+            else
+            {
+                return ExecutarConsultaADO(query);
+            }
+        }
+
+        private DataTable ExecutarConsultaADO(string query)
+        {
             using (OleDbConnection connection = new OleDbConnection(glo.connectionString))
             {
                 try
@@ -222,7 +235,7 @@ namespace TeleBonifacio.dao
                             dataTable.Columns.Add("Telefone", typeof(string));
                             dataTable.Columns.Add("email", typeof(string));
                             dataTable.Columns.Add("Ender", typeof(string));
-                            dataTable.Columns.Add("NrOutro", typeof(string)); 
+                            dataTable.Columns.Add("NrOutro", typeof(string));
                             while (reader.Read())
                             {
                                 DataRow row = dataTable.NewRow();
@@ -244,13 +257,65 @@ namespace TeleBonifacio.dao
                     throw;
                 }
             }
-        }        
+        }
+
+        private DataTable ExecutarConsultaODBC(string query)
+        {
+            using (OdbcConnection connection = new OdbcConnection(glo.connectionString))
+            {
+                try
+                {
+                    connection.Open();
+                    using (OdbcCommand command = new OdbcCommand(query, connection))
+                    {
+                        using (OdbcDataReader reader = command.ExecuteReader())
+                        {
+                            DataTable dataTable = new DataTable();
+                            dataTable.Columns.Add("id", typeof(int));
+                            dataTable.Columns.Add("Nome", typeof(string));
+                            dataTable.Columns.Add("Telefone", typeof(string));
+                            dataTable.Columns.Add("email", typeof(string));
+                            dataTable.Columns.Add("Ender", typeof(string));
+                            dataTable.Columns.Add("NrOutro", typeof(string));
+
+                            while (reader.Read())
+                            {
+                                DataRow row = dataTable.NewRow();
+                                row["id"] = reader["NrCli"];
+                                row["Nome"] = reader["Nome"];
+                                row["Telefone"] = reader["Telefone"];
+                                row["email"] = reader["email"];
+                                row["Ender"] = reader["Ender"];
+                                row["NrOutro"] = reader["NrOutro"];
+
+                                //row["id"] = reader.GetInt32(reader.GetOrdinal("NrCli")); // Assumindo que "NrCli" é o campo ID
+                                //row["Nome"] = reader.GetString(reader.GetOrdinal("Nome"));
+                                //row["Telefone"] = reader.GetString(reader.GetOrdinal("Telefone"));
+
+                                //row["email"] = reader["email"];
+                                //// row["email"] = reader.GetString(reader.GetOrdinal("email"));
+
+                                //row["Ender"] = reader.GetString(reader.GetOrdinal("Ender"));
+                                //row["NrOutro"] = reader.GetString(reader.GetOrdinal("NrOutro"));
+                                dataTable.Rows.Add(row);
+                            }
+                            return dataTable;
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    // Aqui você pode decidir como lidar com a exceção
+                    throw;
+                }
+            }
+        }
 
         public override DataTable getDados()
-        {
-            string query = $"SELECT * FROM Clientes";
-            return ExecutarConsulta(query);
-        }
+            {
+                string query = $"SELECT * FROM Clientes";
+                return ExecutarConsulta(query);
+            }
 
         public override DataTable Fitrar(string pesquisar)
         {
@@ -284,13 +349,13 @@ namespace TeleBonifacio.dao
                 wre = " and NrCli <> " + cliente.id.ToString();
             }
             string queryNome = $"SELECT COUNT(*) FROM Clientes WHERE Nome = '{cliente.Nome}' " + wre;
-            int countNome = glo.ExecutarConsultaCount(queryNome);
+            int countNome = DB.ExecutarConsultaCount(queryNome);
             if (countNome > 0)
             {
                 return "Já existe um cliente cadastrado com esse nome.";
             }
             string queryNrOutro = $"SELECT COUNT(*) FROM Clientes WHERE NrOutro = {cliente.NrOutro} " + wre;
-            int countNrOutro = glo.ExecutarConsultaCount(queryNrOutro);
+            int countNrOutro = DB.ExecutarConsultaCount(queryNrOutro);
             if (countNrOutro > 0)
             {
                 return "Já existe um cliente cadastrado com o mesmo NrOutro.";

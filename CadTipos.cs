@@ -62,14 +62,9 @@ namespace TeleBonifacio
             }
         }
 
-
         private void cntrole1_AcaoRealizada(object sender, AcaoEventArgs e)
         {
             Carregando = true;
-            //if (!Adicionando)
-            //{
-            //    base.DAO.SetId(ID);
-            //}
             base.cntrole1_AcaoRealizada(sender, e, base.reg);
             Carregando = false;
         }

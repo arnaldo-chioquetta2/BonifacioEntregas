@@ -74,7 +74,7 @@ namespace TeleBonifacio.dao
                             Valor + "', '" +
                             DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "', 1, '" +
                             dataPagamento + "')";
-            glo.ExecutarComandoSQL(query);
+            DB.ExecutarComandoSQL(query);
 
             int idRecibo = VeUltReg();
 
@@ -87,7 +87,7 @@ namespace TeleBonifacio.dao
             queryUpd.Append($@"UPDATE Entregas SET Pago = VlNota / 100, idPagto = " + idRecibo);
             queryUpd.Append(" WHERE Pago IS NULL AND idVend = " + id.ToString());
             queryUpd.AppendFormat(" and Entregas.Data BETWEEN #{0}# AND #{1}#", dataInicioStr, dataFimStr);
-            glo.ExecutarComandoSQL(queryUpd.ToString(), null);
+            DB.ExecutarComandoSQL(queryUpd.ToString(), null);
 
         }
 

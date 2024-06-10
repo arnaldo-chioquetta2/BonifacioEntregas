@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.Odbc;
 using System.Data.OleDb;
 using System.Windows.Forms;
 using TeleBonifacio.gen;
@@ -51,7 +52,7 @@ namespace TeleBonifacio.dao
                 + glo.fa(Senha) + ", "
                 + Nivel.ToString() 
                 + ")";
-            glo.ExecutarComandoSQL(sql);            
+            DB.ExecutarComandoSQL(sql);            
         }
 
         public void EditaVendedor(int id, string nome, string loja, bool Atende, string Nro, string Usuario, string Senha, int Nivel)
@@ -67,7 +68,7 @@ namespace TeleBonifacio.dao
                 ", Senha = " + glo.fa(Senha) +
                 ", Nivel = " + Nivel.ToString() +
                 " WHERE ID = " + id.ToString();
-            glo.ExecutarComandoSQL(sql);
+            DB.ExecutarComandoSQL(sql);
         }
 
         internal DataTable getBalconistas()
@@ -104,7 +105,7 @@ namespace TeleBonifacio.dao
             }
             try
             {
-                glo.ExecutarComandoSQL(query, parameters);
+                DB.ExecutarComandoSQL(query, parameters);
             }
             catch (Exception ex)
             {
@@ -113,28 +114,64 @@ namespace TeleBonifacio.dao
             }
         }
 
-        //private List<OleDbParameter> ConstruirParametro(VendedoresDAO vendedor, bool inserindo)
-        //{
-        //    int iAt = (vendedor.Atende) ? 1 : 0;
-        //    var parametros = new List<OleDbParameter>
-        //    {
-        //        new OleDbParameter("@Nome", vendedor.Nome),
-        //        new OleDbParameter("@Loja", vendedor.Loja),
-        //        new OleDbParameter("@Atende", iAt),
-        //        new OleDbParameter("@Nro", Nro),
-
-        //        new OleDbParameter("@Usuario", Usuario),
-        //        new OleDbParameter("@Senha", Senha),
-        //        new OleDbParameter("@Nro", Nro) 
-        //    };
-        //    if (!inserindo)
-        //    {
-        //        parametros.Add(new OleDbParameter("@ID", vendedor.Id));
-        //    }
-        //    return parametros;
-        //}
-
         public DataTable ExecutarConsultaVendedor(string query)
+        {
+            if (glo.ODBC)
+            {
+                return ExecutarConsultaVendedorODBC(query);
+            } else
+            {
+                return ExecutarConsultaVendedorADO(query);
+            }
+        }
+
+        private DataTable ExecutarConsultaVendedorODBC(string query)
+        {
+            using (OdbcConnection connection = new OdbcConnection(glo.connectionString))
+            {
+                try
+                {
+                    connection.Open();
+                    using (OdbcCommand command = new OdbcCommand(query, connection))
+                    {
+                        using (OdbcDataReader reader = command.ExecuteReader())
+                        {
+                            DataTable dataTable = new DataTable();
+                            dataTable.Columns.Add("ID", typeof(int));
+                            dataTable.Columns.Add("Nome", typeof(string));
+                            dataTable.Columns.Add("Loja", typeof(string));
+                            dataTable.Columns.Add("Atende", typeof(string));
+                            dataTable.Columns.Add("Nro", typeof(string));
+                            dataTable.Columns.Add("Usuario", typeof(string));
+                            dataTable.Columns.Add("Senha", typeof(string));
+                            dataTable.Columns.Add("Nivel", typeof(int));
+
+                            while (reader.Read())
+                            {
+                                DataRow row = dataTable.NewRow();
+                                row["ID"] = reader.GetInt32(reader.GetOrdinal("ID"));
+                                row["Nome"] = reader.GetString(reader.GetOrdinal("Nome"));
+                                row["Loja"] = reader.GetString(reader.GetOrdinal("Loja"));
+                                row["Atende"] = reader.GetString(reader.GetOrdinal("Atende"));
+                                row["Nro"] = reader.GetString(reader.GetOrdinal("Nro"));
+                                row["Usuario"] = reader.GetString(reader.GetOrdinal("Usuario"));
+                                row["Senha"] = reader.GetString(reader.GetOrdinal("Senha"));
+                                row["Nivel"] = reader.GetInt32(reader.GetOrdinal("Nivel"));
+                                dataTable.Rows.Add(row);
+                            }
+                            return dataTable;
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.ToString());
+                    return null;
+                }
+            }
+        }
+
+        private DataTable ExecutarConsultaVendedorADO(string query)
         {
             using (OleDbConnection connection = new OleDbConnection(glo.connectionString))
             {
@@ -151,7 +188,6 @@ namespace TeleBonifacio.dao
                             dataTable.Columns.Add("Loja", typeof(string));
                             dataTable.Columns.Add("Atende", typeof(string));
                             dataTable.Columns.Add("Nro", typeof(string));
-
                             dataTable.Columns.Add("Usuario", typeof(string));
                             dataTable.Columns.Add("Senha", typeof(string));
                             dataTable.Columns.Add("Nivel", typeof(int));
@@ -268,7 +304,7 @@ namespace TeleBonifacio.dao
 
         public override tb.IDataEntity Apagar(int direcao, tb.IDataEntity entidade)
         {
-            glo.ExecutarComandoSQL("DELETE FROM Vendedores WHERE ID = " + Id.ToString(), null);
+            DB.ExecutarComandoSQL("DELETE FROM Vendedores WHERE ID = " + Id.ToString(), null);
             tb.Vendedor proximocliente = direcao > -1 ? ParaFrente() as tb.Vendedor : ParaTraz() as tb.Vendedor;
             if (proximocliente == null || proximocliente.Id == 0)
             {
@@ -304,7 +340,7 @@ namespace TeleBonifacio.dao
                 wre = " and ID <> " + vendedor.Id.ToString();
             }
             string queryNome = $"SELECT COUNT(*) FROM Vendedores WHERE Nome = '{vendedor.Nome}' " + wre;
-            int countNome = glo.ExecutarConsultaCount(queryNome);
+            int countNome = DB.ExecutarConsultaCount(queryNome);
             if (countNome > 0)
             {
                 return "Já existe um vendedor cadastrado com esse nome.";
@@ -320,11 +356,6 @@ namespace TeleBonifacio.dao
         {
             this.Nome = nome;
         }
-
-        //public override void SetSenha(string senha)
-        //{
-        //    this.Senha = Cripto.Encrypt(senha);
-        //}
 
     }
 }

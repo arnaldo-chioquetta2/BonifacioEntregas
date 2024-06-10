@@ -19,12 +19,12 @@ namespace TeleBonifacio.dao
         public void Adiciona(string descricao)
         {
             string sql = $"INSERT INTO TpoFalta (Nome) VALUES ('{descricao}')";
-            glo.ExecutarComandoSQL(sql);
+            DB.ExecutarComandoSQL(sql);
         }
 
         public override IDataEntity Apagar(int direcao, IDataEntity entidade)
         {
-            glo.ExecutarComandoSQL("DELETE FROM TpoFalta WHERE IdFalta = " + Id.ToString(), null);
+            DB.ExecutarComandoSQL("DELETE FROM TpoFalta WHERE IdFalta = " + Id.ToString(), null);
             tb.TpoFalta proximocliente = direcao > -1 ? ParaFrente() as tb.TpoFalta : ParaTraz() as tb.TpoFalta;
             if (proximocliente == null || proximocliente.Id == 0)
             {
@@ -45,7 +45,7 @@ namespace TeleBonifacio.dao
                 FROM TpoFalta 
                 Where Nome > '' 
                 Order By Nome ";
-            DataTable dt = glo.ExecutarConsulta(query);
+            DataTable dt = DB.ExecutarConsulta(query);
             return dt;
         }
 
@@ -141,7 +141,7 @@ namespace TeleBonifacio.dao
 
             try
             {
-                glo.ExecutarComandoSQL(query, parameters);
+                DB.ExecutarComandoSQL(query, parameters);
             }
             catch (Exception ex)
             {
@@ -200,7 +200,7 @@ namespace TeleBonifacio.dao
                 wre = " and ID <> " + tpoFalta.Id.ToString();
             }
             string queryNome = $"SELECT COUNT(*) FROM TpoFalta WHERE Nome = '{tpoFalta.Nome}' " + wre;
-            int countNome = glo.ExecutarConsultaCount(queryNome);
+            int countNome = DB.ExecutarConsultaCount(queryNome);
             if (countNome > 0)
             {
                 return "Já existe um tipo cadastrado com esse nome.";
@@ -212,7 +212,7 @@ namespace TeleBonifacio.dao
         {
             StringBuilder query = new StringBuilder();
             query.Append("SELECT IdFalta, Nome FROM TpoFalta");
-            DataTable dt = glo.ExecutarConsulta(query.ToString());
+            DataTable dt = DB.ExecutarConsulta(query.ToString());
             List<tb.TpoFalta> tipos = new List<tb.TpoFalta>();
             foreach (DataRow row in dt.Rows)
             {

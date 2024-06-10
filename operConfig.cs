@@ -140,7 +140,7 @@ namespace TeleBonifacio
                             string vlNota = dvlNota.ToString();
                             string sql = $@"INSERT INTO Caixa (idCliente, idForma, Valor, VlNota, Obs, Desconto, idVend, Data) VALUES (
                                 {idCliente}, {idForma}, {valor}, {vlNota}, '{obs}', {desc}, {idVend}, '{dataLog.ToString("yyyy-MM-dd HH:mm:ss")}');";
-                            glo.ExecutarComandoSQL(sql);
+                            DB.ExecutarComandoSQL(sql);
                         }
                     }
                     MessageBox.Show("Atualizado", "Atualizado", MessageBoxButtons.OK, MessageBoxIcon.Information);

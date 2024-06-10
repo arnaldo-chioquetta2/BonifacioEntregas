@@ -20,7 +20,7 @@ namespace TeleBonifacio
         private void button1_Click(object sender, EventArgs e)
         {
             string sql = textBox1.Text;
-            glo.ExecutarComandoSQL(sql);
+            DB.ExecutarComandoSQL(sql);
             this.Close();
         }
     }

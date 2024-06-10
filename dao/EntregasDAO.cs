@@ -50,7 +50,7 @@ namespace TeleBonifacio.dao
             string dataFimStr = dataFim.ToString("MM/dd/yyyy 23:59:59");
             query.AppendFormat(" WHERE e.Data BETWEEN #{0}# AND #{1}#", dataInicioStr, dataFimStr);
             query.Append(" Order By e.ID desc");
-            DataTable dt = glo.ExecutarConsulta(query.ToString());
+            DataTable dt = DB.ExecutarConsulta(query.ToString());
             return dt;
         }
 
@@ -70,7 +70,7 @@ namespace TeleBonifacio.dao
             query.AppendFormat(" WHERE m.Oper = 3 and e.Data BETWEEN #{0}# AND #{1}#", dataInicioStr, dataFimStr);
             query.Append(" GROUP BY m.Nome, e.idForma");
             query.Append(" ORDER BY m.Nome, e.idForma");
-            DataTable dt = glo.ExecutarConsulta(query.ToString());
+            DataTable dt = DB.ExecutarConsulta(query.ToString());
             return dt;
         }
 
@@ -101,7 +101,7 @@ namespace TeleBonifacio.dao
             query.AppendLine(wh); 
             query.AppendLine(grp);
             query.AppendLine(or);
-            DataTable dt = glo.ExecutarConsulta(query.ToString());
+            DataTable dt = DB.ExecutarConsulta(query.ToString());
             return dt;
         }
 
@@ -118,7 +118,7 @@ namespace TeleBonifacio.dao
                             WHERE Data BETWEEN #{dataInicioStr}# AND #{dataFimStr}# 
                             GROUP BY DateValue(Data) ");
             Console.WriteLine(query);
-            DataTable dt = glo.ExecutarConsulta(query);
+            DataTable dt = DB.ExecutarConsulta(query);
             return dt;
         }
 
@@ -131,7 +131,7 @@ namespace TeleBonifacio.dao
                             FROM Entregas
                             WHERE Data BETWEEN #{dataInicioStr}# AND #{dataFimStr}# 
                             GROUP BY FORMAT([Data], 'dd/mm/yyyy') ");
-            DataTable dt = glo.ExecutarConsulta(query);
+            DataTable dt = DB.ExecutarConsulta(query);
             return dt;
         }
 
@@ -148,7 +148,7 @@ namespace TeleBonifacio.dao
                 + idVend.ToString() + ", "
                 + glo.fa(UID)
                 + ",Now)";
-            glo.ExecutarComandoSQL(sql);
+            DB.ExecutarComandoSQL(sql);
         }
 
         public void Edita(int iID, int idBoy, int idForma, float valor, int idCliente, float compra, string obs, float desc, int idVend)
@@ -163,7 +163,7 @@ namespace TeleBonifacio.dao
                             ",Desconto = " + glo.sv(desc) +
                             ",idVend = " + idVend.ToString() +
                             " WHERE ID = " + iID.ToString();
-            glo.ExecutarComandoSQL(sql);
+            DB.ExecutarComandoSQL(sql);
         }
 
     }

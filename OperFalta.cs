@@ -64,6 +64,10 @@ namespace TeleBonifacio
                 Restrito = true;
             }
             originalBackgroundColor = txtCodigo.BackColor;
+            if (glo.ODBC)
+            {
+                btEncomenda.Enabled = false;
+            }
         }
 
         private void SetStartPosition()
@@ -193,6 +197,13 @@ namespace TeleBonifacio
             btnExcluir.Enabled = false;
             btAdicTpo.Enabled = false;
             BakCodigoLost = "";
+            BakidTipo = 0;
+            BakidForn = 0;
+            bakComprado = 0;
+            Bakcodigo = "";
+            Bakquantidade = -1;
+            Bakmarca = "";
+            BakObs = "";
             txtCodigo.Focus();
         }
 
@@ -354,11 +365,11 @@ namespace TeleBonifacio
             dataGrid1.Columns[1].Width = 130;       // Forn
             dataGrid1.Columns[2].Visible = false;
             dataGrid1.Columns[3].Visible = false;
-            dataGrid1.Columns[4].Width = 100;       // Data
+            dataGrid1.Columns[4].Width = 75;       // Data
             dataGrid1.Columns[5].Width = 80;        // Código
             dataGrid1.Columns[6].Width = 50;        // Quantidade
             dataGrid1.Columns[7].Width = 80;        // Marca
-            dataGrid1.Columns[8].Width = 150;       // Descrição
+            dataGrid1.Columns[8].Width = 160;       // Descrição
             dataGrid1.Columns[9].Width = 130;       // Balconista
             dataGrid1.Columns[10].Visible = false;  // UID
             dataGrid1.Columns[11].Width = 130;      // Tipo - colocado o texto
@@ -394,20 +405,12 @@ namespace TeleBonifacio
                 carregando = true;
                 DataGridViewRow selectedRow = grid.Rows[e.RowIndex];
                 this.iID = Convert.ToInt32(selectedRow.Cells["ID"].Value);
-
                 txQuantidade.Text = FiltraOZero(selectedRow.Cells["Quant"].Value);
                 txtCodigo.Text = FiltraOZero(selectedRow.Cells["Codigo"].Value);
                 txMarca.Text = FiltraOZero(selectedRow.Cells["Marca"].Value);
                 txObs.Text = FiltraOZero(selectedRow.Cells["Obs"].Value);
                 txDescr.Text = Convert.ToString(selectedRow.Cells["Descricao"].Value);
                 cmbVendedor.SelectedValue = Convert.ToInt32(selectedRow.Cells["IDBalconista"].Value);
-                //txQuantidade.Text = Convert.ToString(selectedRow.Cells["Quant"].Value);
-                //txtCodigo.Text = Convert.ToString(selectedRow.Cells["Codigo"].Value);
-                //txMarca.Text = Convert.ToString(selectedRow.Cells["Marca"].Value);
-                //cmbVendedor.SelectedValue = Convert.ToInt32(selectedRow.Cells["IDBalconista"].Value);
-                //txObs.Text = Convert.ToString(selectedRow.Cells["Obs"].Value);
-                //txDescr.Text = Convert.ToString(selectedRow.Cells["Descricao"].Value);
-
                 this.UID = Convert.ToString(selectedRow.Cells["UID"].Value);
                 try
                 {
@@ -430,7 +433,6 @@ namespace TeleBonifacio
                 btnAdicionar.Enabled = true;
                 btnExcluir.Enabled = true;
                 btComprei.Enabled = true;
-                // btEncomenda.Enabled = true;
                 txQuantidade.ReadOnly = false;
                 txMarca.ReadOnly = false;                
                 if (dataGrid1.SelectedRows.Count == 1)
@@ -481,8 +483,15 @@ namespace TeleBonifacio
 
         private void MostraTipos()
         {
-            glo.CarregarComboBox<tb.TpoFalta>(cmbTipos, TpoFalta, "ESCOLHA", ItemFinal: "ADICIONE", ItemFinal2: "EDIÇÃO");
-            glo.CarregarComboBox<tb.Fornecedor>(cmbForn, Forn, "ESCOLHA", ItemFinal: "ADICIONE", ItemFinal2: "EDIÇÃO");
+            if (glo.ODBC)
+            {
+                glo.CarregarComboBox<tb.TpoFalta>(cmbTipos, TpoFalta, "ESCOLHA");
+                glo.CarregarComboBox<tb.Fornecedor>(cmbForn, Forn, "ESCOLHA");
+            } else
+            {
+                glo.CarregarComboBox<tb.TpoFalta>(cmbTipos, TpoFalta, "ESCOLHA", ItemFinal: "ADICIONE", ItemFinal2: "EDIÇÃO");
+                glo.CarregarComboBox<tb.Fornecedor>(cmbForn, Forn, "ESCOLHA", ItemFinal: "ADICIONE", ItemFinal2: "EDIÇÃO");
+            }
         }
 
         private void btAdicTpo_Click(object sender, EventArgs e)
@@ -887,13 +896,18 @@ namespace TeleBonifacio
             Bakquantidade = -1;
             Bakmarca = "";
             BakObs = "";
-            if (tbFaltas.SelectedIndex == 1)
+
+            switch (tbFaltas.SelectedIndex)
             {
-                CarregaGridP();
-            }
-            else
-            {
-                CarregaGrid();
+                case 0:
+                    CarregaGrid();
+                    break;
+                case 1:
+                    CarregaGridP();
+                    break;
+                case 2:
+                    CarregaGridE();
+                    break;
             }
         }
 
@@ -1066,7 +1080,7 @@ namespace TeleBonifacio
                     }
                 }
             }
-            btEncomenda.Enabled = false; ;
+            btEncomenda.Enabled = false; 
             if (FpesCliente == null)
             {
                 FpesCliente = new pesCliente();
@@ -1087,7 +1101,10 @@ namespace TeleBonifacio
                     FpesCliente.ShowDialog();
                 }                
             }
-            btEncomenda.Enabled = true; 
+            if (!glo.ODBC)
+            {
+                btEncomenda.Enabled = true;
+            }            
             if (FpesCliente.OK)
             {
                 string Nome = "";

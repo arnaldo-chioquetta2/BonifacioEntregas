@@ -21,7 +21,7 @@ namespace TeleBonifacio.dao
                 + idVend.ToString() + ", "
                 + glo.fa(UID)
                 + ",Now)";
-            glo.ExecutarComandoSQL(sql);
+            DB.ExecutarComandoSQL(sql);
         }
 
         public DataTable getDados(DateTime DT1, DateTime DT2)
@@ -52,11 +52,11 @@ namespace TeleBonifacio.dao
                     INNER JOIN Vendedores v ON v.ID = ca.idVend"); 
                 query.AppendFormat(" WHERE ca.Data BETWEEN #{0}# AND #{1}#", dataInicioStr, dataFimStr);
                 query.Append(" Order By ca.ID desc ");
-                dt = glo.ExecutarConsulta(query.ToString());
+                dt = DB.ExecutarConsulta(query.ToString());
                 if (dt.Rows.Count == 0)
                 {
                     string q2 = "Select Data From Caixa Order by Data desc";
-                    DataTable dt2 = glo.ExecutarConsulta(q2);
+                    DataTable dt2 = DB.ExecutarConsulta(q2);
                     if (dt2.Rows.Count == 0)
                     {
                         Sair = true;
@@ -85,20 +85,20 @@ namespace TeleBonifacio.dao
                             ",Desconto = " + glo.sv(desc) +
                             ",idVend = " + idVend.ToString() +
                             " WHERE ID = " + iID.ToString();
-            glo.ExecutarComandoSQL(sql);
+            DB.ExecutarComandoSQL(sql);
         }
 
         public void Exclui(int iID)
         {
             String sql = @"Delete From Caixa WHERE ID = " + iID.ToString();
-            glo.ExecutarComandoSQL(sql);
+            DB.ExecutarComandoSQL(sql);
         }
 
         public void MudaData(DateTime data, string lista)
         {           
             string sData = data.ToString("MM/dd/yyyy");
             String sql = $@"Update Caixa Set Data = #{sData}# WHERE ID in ({lista}) ";
-            glo.ExecutarComandoSQL(sql);
+            DB.ExecutarComandoSQL(sql);
         }
     }
 }

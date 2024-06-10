@@ -5,10 +5,6 @@ using System.Data;
 using System.Windows.Forms;
 using TeleBonifacio.gen;
 
-#if ODBC
-using System.Data.Odbc;
-#endif
-
 namespace TeleBonifacio
 {
     public partial class operLogin : Form        
@@ -17,7 +13,12 @@ namespace TeleBonifacio
         public operLogin()
         {
             InitializeComponent();
-
+            INI2 cINI2 = new INI2();
+            string sOdbc = cINI2.ReadString("Usuario", "ODBC", "0");
+            if (sOdbc=="1")
+            {
+                glo.ODBC = true;
+            }
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -30,13 +31,7 @@ namespace TeleBonifacio
             string user = txYser.Text;
             string senha = Cripto.Encrypt(txSenha.Text);
             string SQL = $"Select Nivel, Nro From Vendedores Where Usuario = '{user}' and Senha = '{senha}' ";
-            
-#if ODBC
-            DataTable dados = ExecutarConsulta(SQL);
-#else
-            DataTable dados = glo.ExecutarConsulta(SQL);
-#endif
-
+            DataTable dados = DB.ExecutarConsulta(SQL);
             if (dados.Rows.Count == 0)
             {
                 MessageBox.Show("Usuário não reconhecido", "Login Inválido", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -51,26 +46,6 @@ namespace TeleBonifacio
                 this.Visible = false;
             }
         }
-
-#if ODBC
-        private DataTable ExecutarConsulta(string query)
-        {
-            using (OdbcConnection connection = new OdbcConnection(glo.connectionString))
-            {
-                connection.Open();
-                using (OdbcCommand command = new OdbcCommand(query, connection))
-                {
-                    using (OdbcDataAdapter adapter = new OdbcDataAdapter(command))
-                    {
-                        DataTable dataTable = new DataTable();
-                        adapter.Fill(dataTable);
-                        return dataTable;
-                    }
-                }
-            }
-        }
-#endif
-
         private void txSenha_KeyPress(object sender, KeyPressEventArgs e)
         {
             if (e.KeyChar == 13)
@@ -83,7 +58,7 @@ namespace TeleBonifacio
         {
             if (e.Button == MouseButtons.Middle)
             {
-                glo.Nivel = 1;
+                glo.Nivel = 2;
                 glo.iUsuario = 1;
                 Form1 Form = new Form1();
                 Form.Show();
