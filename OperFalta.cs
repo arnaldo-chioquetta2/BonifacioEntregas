@@ -358,7 +358,7 @@ namespace TeleBonifacio
 
         #endregion
 
-        #region Grid
+        #region Faltas
         private void ConfigurarGrid()
         {
             dataGrid1.Columns[0].Width = 100;       // Compra
@@ -388,6 +388,14 @@ namespace TeleBonifacio
             dataGrid1.DataSource = dados;
             foreach (DataGridViewRow row in dataGrid1.Rows)
             {
+                if (!row.Cells["Tipo"].Value.Equals(DBNull.Value))
+                {
+                    int tipoId = Convert.ToInt32(row.Cells["Tipo"].Value);
+                    if (tipoId == 8)
+                    {
+                        row.DefaultCellStyle.BackColor = Color.LightGreen;
+                    }
+                }
                 AtualizarLinha(row, tipos, "Tipo", "Tipo");
                 AtualizarLinha(row, Fornecs, "idForn", "Forn");
             }
