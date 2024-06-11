@@ -479,10 +479,24 @@ namespace TeleBonifacio
                 {
                     object oItem = row.Cells[idColumnName].Value;
                     int itemId = 0;
-                    if (oItem is string itemAsString && !string.IsNullOrEmpty(itemAsString))
+                    if (oItem != null)
                     {
-                        itemId = Convert.ToInt32(itemAsString);
+                        if (oItem is int directInt) // Trata diretamente como inteiro
+                        {
+                            itemId = Convert.ToInt32(oItem.ToString());
+                        }
+                        else                         
+                        {
+                            // int convertedInt = 0;
+                            if (oItem is string itemAsString && int.TryParse(itemAsString, out int convertedInt))
+                                itemId = convertedInt;
+                        }
                     }
+                    //if (oItem is string itemAsString && !string.IsNullOrEmpty(itemAsString))
+                    //{
+                    //    itemId = Convert.ToInt32(itemAsString);
+                    //}
+
                     var itemEncontrado = items.Find(i => i.Id == itemId);
                     if (itemEncontrado != null)
                     {
