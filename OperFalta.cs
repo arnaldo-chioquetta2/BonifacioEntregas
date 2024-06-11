@@ -394,6 +394,12 @@ namespace TeleBonifacio
                     if (tipoId == 8)
                     {
                         row.DefaultCellStyle.BackColor = Color.LightGreen;
+                    } else
+                    {
+                        if (tipoId == 26)
+                        {
+                            row.DefaultCellStyle.BackColor = Color.Red;
+                        }
                     }
                 }
                 AtualizarLinha(row, tipos, "Tipo", "Tipo");
@@ -471,7 +477,12 @@ namespace TeleBonifacio
                 }
                 else
                 {
-                    int itemId = Convert.ToInt32(row.Cells[idColumnName].Value);
+                    object oItem = row.Cells[idColumnName].Value;
+                    int itemId = 0;
+                    if (oItem is string itemAsString && !string.IsNullOrEmpty(itemAsString))
+                    {
+                        itemId = Convert.ToInt32(itemAsString);
+                    }
                     var itemEncontrado = items.Find(i => i.Id == itemId);
                     if (itemEncontrado != null)
                     {
@@ -798,10 +809,16 @@ namespace TeleBonifacio
                     if (codigo.Length > 0)
                     {
                         ret = faltasDAO.VeSeJaTem(codigo);
-                    }
-                    if (ret.Length > 0)
-                    {
-                        txtCodigo.BackColor = Color.Orange;
+                        if (ret.Length > 0)
+                        {
+                            if (ret.Contains("comprado"))
+                            {
+                                txtCodigo.BackColor = Color.Red;
+                            } else
+                            {
+                                txtCodigo.BackColor = Color.Orange;
+                            }                            
+                        }
                     }
                 }
             }

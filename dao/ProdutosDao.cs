@@ -1,4 +1,5 @@
-﻿using System.Data;
+﻿using System;
+using System.Data;
 using System.Text;
 
 namespace TeleBonifacio.dao
@@ -135,6 +136,5 @@ namespace TeleBonifacio.dao
             }
             return ret;
         }
-
     }
 }

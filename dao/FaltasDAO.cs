@@ -178,7 +178,6 @@ namespace TeleBonifacio.dao
                 ret= "Já existe um falta com este código.";
             } else
             {
-
                 string queryP = $@"SELECT FORMAT([Compra], 'dd/MM/yyyy') AS CompraFormatada FROM Produtos WHERE Codigo = '{codigo}' ";
                 DataTable dados = DB.ExecutarConsulta(queryP);
                 if (dados.Rows.Count > 0)
