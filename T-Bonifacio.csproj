@@ -132,6 +132,7 @@
     <Compile Include="dao\EntregasDAO.cs" />
     <Compile Include="dao\FaltasDAO.cs" />
     <Compile Include="dao\FornecedorDao.cs" />
+    <Compile Include="dao\GarantiasDao.cs" />
     <Compile Include="dao\ProdutosDao.cs" />
     <Compile Include="dao\ReciboDAO.cs" />
     <Compile Include="dao\RHDAO.cs" />
@@ -193,6 +194,12 @@
     </Compile>
     <Compile Include="OperFalta.designer.cs">
       <DependentUpon>OperFalta.cs</DependentUpon>
+    </Compile>
+    <Compile Include="operGarantia.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="operGarantia.designer.cs">
+      <DependentUpon>operGarantia.cs</DependentUpon>
     </Compile>
     <Compile Include="operLancamento.cs">
       <SubType>Form</SubType>
@@ -264,6 +271,7 @@
     <Compile Include="tb\Entregas.cs" />
     <Compile Include="tb\Falta .cs" />
     <Compile Include="tb\Fornecedor.cs" />
+    <Compile Include="tb\Garantias.cs" />
     <Compile Include="tb\IDataEntity.cs" />
     <Compile Include="tb\Produtos.cs" />
     <Compile Include="tb\Recibo.cs" />
@@ -309,6 +317,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="OperFalta.resx">
       <DependentUpon>OperFalta.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="operGarantia.resx">
+      <DependentUpon>operGarantia.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="operLancamento.resx">
       <DependentUpon>operLancamento.cs</DependentUpon>

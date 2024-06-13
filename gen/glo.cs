@@ -275,7 +275,9 @@ namespace TeleBonifacio
             string logFilePath = @"C:\Entregas\Entregas.txt";
             using (StreamWriter writer = new StreamWriter(logFilePath, true))
             {
-                writer.WriteLine($"{DateTime.Now}: {message}");
+                string Texto = $"{DateTime.Now}: {message}";
+                writer.WriteLine(Texto);
+                Console.WriteLine(Texto);
             }
         }
 

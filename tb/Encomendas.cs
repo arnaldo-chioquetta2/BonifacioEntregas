@@ -4,8 +4,7 @@ namespace TeleBonifacio.tb
 {
     public class Encomendas : IDataEntity
     {
-        public int ID { get; set; } // Assumindo que ID é um campo inteiro autoincrementado, similar ao ID na tabela Produtos.
-        public int Id { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public int Id { get; set; }
         public int idCliente { get; set; }
         public DateTime Data { get; set; }
         public float Quant { get; set; }

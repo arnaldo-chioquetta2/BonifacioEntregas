@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Windows.Forms;
 using TeleBonifacio.dao;
@@ -7,32 +8,39 @@ namespace TeleBonifacio
 {
     public partial class pesCliente : Form        
     {
-        public int ClienteLocalizado = 0;
+        private ClienteDAO Cliente;
+        private DataTable dadosCli;
         public string Nome = "";
         public string Fone = "";
-        public bool OK = false;
-        private bool JaCarregouClientes = false;
         private string ultimoTexto = "";
-        private bool achou = false;
         private string telefone = "";
-        private ClienteDAO Cliente;        
+        public int ClienteLocalizado = 0;
+        public bool OK = false;        
+        private bool achou = false;        
+        private bool carregando = false;        
 
         public pesCliente()
         {
             InitializeComponent();
         }
 
-        private void pesCliente_Load(object sender, EventArgs e)
+        private void CarregarComboBox<T>(ComboBox comboBox)
         {
-            if (JaCarregouClientes==false)
+            if (dadosCli==null)
             {
-                Cliente = new ClienteDAO();
-                this.Cursor = Cursors.WaitCursor;
-                glo.CarregarComboBox<tb.Cliente>(cmbCliente, Cliente);
-                this.Cursor = Cursors.Default;
-                dateTimePicker1.Value = DateTime.Now.AddDays(7);
-                JaCarregouClientes = true;
+                dadosCli = Cliente.GetDadosOrdenados();
+            }            
+            List<tb.ComboBoxItem> lista = new List<tb.ComboBoxItem>();
+            foreach (DataRow row in dadosCli.Rows)
+            {
+                int id = Convert.ToInt32(row["id"]);
+                string nome = row["Nome"].ToString();
+                tb.ComboBoxItem item = new tb.ComboBoxItem(id, nome);
+                lista.Add(item);
             }
+            comboBox.DataSource = lista;
+            comboBox.DisplayMember = "Nome";
+            comboBox.ValueMember = "Id";
         }
 
         private void btOK_Click(object sender, EventArgs e)
@@ -52,6 +60,7 @@ namespace TeleBonifacio
                 Fone = txTelefone.Text;
             }
             this.OK = true;
+            carregando = false;
             this.Visible = false;
         }        
 
@@ -109,6 +118,24 @@ namespace TeleBonifacio
         public DateTime getDtEnc()
         {
             return dateTimePicker1.Value.Date;
+        }
+
+        public void RecebeDadosCli(ref DataTable dadosCli)
+        {
+
+        }
+
+        private void pesCliente_Activated(object sender, EventArgs e)
+        {
+            if (carregando==false)
+            {
+                carregando = true;
+                Cliente = new ClienteDAO();
+                this.Cursor = Cursors.WaitCursor;
+                CarregarComboBox<tb.Cliente>(cmbCliente);
+                this.Cursor = Cursors.Default;
+                dateTimePicker1.Value = DateTime.Now.AddDays(7);
+            }
         }
     }
 }

@@ -16,6 +16,7 @@ namespace TeleBonifacio
         private FornecedorDao Forn;
         private EncomendasDao EncoDao;
         private ProdutosDao cDaoP;
+        private pesCliente FpesCliente;
         private bool carregando = true;
         private string UID = "";
         private int iID = 0;
@@ -30,13 +31,13 @@ namespace TeleBonifacio
         private string Bakmarca = "";
         private string BakObs = "";
         private string iUser = "";
-        private bool AtualizarGridP = true;
-        private bool AtualizarGridE = true;
         private string BakCodigoLost = "";
         private int BakidVendedor = 0;
-        private int bakEmFalta = 0;
-        private pesCliente FpesCliente;
+        private int bakEmFalta = 0;        
         private int idCliente = 0;
+        private bool AtualizarGridP = true;
+        private bool AtualizarGridE = true;
+        private bool AtualizarGridG = true;
 
         #region Inicializacao
 
@@ -481,22 +482,16 @@ namespace TeleBonifacio
                     int itemId = 0;
                     if (oItem != null)
                     {
-                        if (oItem is int directInt) // Trata diretamente como inteiro
+                        if (oItem is int directInt) 
                         {
                             itemId = Convert.ToInt32(oItem.ToString());
                         }
                         else                         
                         {
-                            // int convertedInt = 0;
                             if (oItem is string itemAsString && int.TryParse(itemAsString, out int convertedInt))
                                 itemId = convertedInt;
                         }
                     }
-                    //if (oItem is string itemAsString && !string.IsNullOrEmpty(itemAsString))
-                    //{
-                    //    itemId = Convert.ToInt32(itemAsString);
-                    //}
-
                     var itemEncontrado = items.Find(i => i.Id == itemId);
                     if (itemEncontrado != null)
                     {
@@ -1034,6 +1029,19 @@ namespace TeleBonifacio
                             carregando = false;
                         }
                         break;
+                    case 3:
+                        btComprei.Visible = false;
+                        ckEmFalta.Visible = false;
+                        if (AtualizarGridE)
+                        {
+                            carregando = true;
+                            cmbVendedor.SelectedIndex = -1;
+                            cmbVendedor.Enabled = false;
+                            CarregaGridG();
+                            AtualizarGridG = false;
+                            carregando = false;
+                        }
+                        break;
                 }
                 Limpar();
             }
@@ -1088,6 +1096,40 @@ namespace TeleBonifacio
                 txObs.BackColor = originalBackgroundColor;
                 carregando = false;
             }
+        }
+
+        #endregion
+
+        #region Garantias
+
+        private void btGarantia_Click(object sender, EventArgs e)
+        {
+            operGarantia FoperGarantia = new operGarantia();
+            FoperGarantia.ShowDialog();
+        }
+
+        private void CarregaGridG()
+        {
+            GarantiasDao cDaoG = new GarantiasDao();
+            DataTable dados = cDaoG.getDados(BakidForn);
+            List<tb.Fornecedor> Fornecs = Forn.getForns();
+            dataGrid4.DataSource = dados;
+            if (dados != null)
+            {
+                ConfigurarGridG();
+            }
+        }
+
+        private void ConfigurarGridG()
+        {
+            dataGrid4.Columns[0].Visible = false;   // Id
+            dataGrid4.Columns[1].Width = 80;        // Data
+            dataGrid4.Columns[2].Visible = false;   // idForn
+            dataGrid4.Columns[3].Width = 50;        // Nota
+            dataGrid4.Columns[4].Width = 80;        // Prometida
+            dataGrid4.Columns[5].Width = 80;        // DataDoForn
+            dataGrid4.Columns[6].Width = 200;      // Fornecedor
+            dataGrid4.Invalidate();
         }
 
         #endregion
