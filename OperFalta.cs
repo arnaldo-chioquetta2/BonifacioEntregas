@@ -646,18 +646,27 @@ namespace TeleBonifacio
                 {
                     case 0:
                         faltasDAO.Atualiza(gID, idTipo, idForn, codigo, quantidade, marca, obs, descr);
-                        CarregaGrid();
                         break;
                     case 1:
                         cDaoP.Atualiza(gID, idTipo, idForn, codigo, quantidade, marca, obs, descr);
-                        CarregaGridP();
                         break;
                     case 2:
                         EncoDao.Atualiza(gID, this.idCliente, idForn, codigo, quantidade, marca, obs, descr);
-                        CarregaGridE();
                         break;
                 }
-            }            
+            }
+            switch (tbFaltas.SelectedIndex)
+            {
+                case 0:
+                    CarregaGrid();
+                    break;
+                case 1:
+                    CarregaGridP();
+                    break;
+                case 2:
+                    CarregaGridE();
+                    break;
+            }
             if (grid.Rows.Count > 0)
             {
                 grid.FirstDisplayedScrollingRowIndex = scrollPosition;
