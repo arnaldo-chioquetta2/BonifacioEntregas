@@ -635,6 +635,10 @@ namespace TeleBonifacio
         {
             HashSet<string> selectedCodes = new HashSet<string>();
             int scrollPosition = grid.FirstDisplayedScrollingRowIndex;
+            if (grid.SelectedRows.Count>1)
+            {
+                codigo = "";
+            }
             foreach (DataGridViewRow row in grid.SelectedRows)
             {
                 string sID = Convert.ToString(row.Cells["ID"].Value);
