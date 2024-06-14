@@ -17,6 +17,7 @@ namespace TeleBonifacio
         private EncomendasDao EncoDao;
         private ProdutosDao cDaoP;
         private pesCliente FpesCliente;
+        private GarantiasDao cDaoG;
         private bool carregando = true;
         private string UID = "";
         private int iID = 0;
@@ -30,6 +31,7 @@ namespace TeleBonifacio
         private int Bakquantidade = -1;
         private string Bakmarca = "";
         private string BakObs = "";
+        private string BakDescr = "";
         private string iUser = "";
         private string BakCodigoLost = "";
         private int BakidVendedor = 0;
@@ -305,7 +307,6 @@ namespace TeleBonifacio
                 int gID = Convert.ToInt32(row.Cells["ID"].Value);
                 string UID = Convert.ToString(row.Cells["UID"].Value);
                 glo.Loga($@"FD,{gID}, {UID}");
-
                 switch (tbFaltas.SelectedIndex)
                 {
                     case 0:
@@ -316,6 +317,9 @@ namespace TeleBonifacio
                         break;
                     case 2:
                         EncoDao.Exclui(gID);
+                        break;
+                    case 3:
+                        cDaoG.Exclui(gID);
                         break;
                     default:
                         return;
@@ -344,6 +348,10 @@ namespace TeleBonifacio
                     case 2:
                         ExcluirRegistrosDaGrid(dataGrid3);
                         CarregaGridE();
+                        break;
+                    case 3:
+                        ExcluirRegistrosDaGrid(dataGrid4);
+                        CarregaGridG();
                         break;
                     default:
                         return;
@@ -383,7 +391,7 @@ namespace TeleBonifacio
         private void CarregaGrid()
         {
             FaltasDAO faltasDAO = new FaltasDAO();
-            DataTable dados = faltasDAO.getDados(BakidTipo, BakidForn, bakComprado, Bakcodigo, Bakquantidade, Bakmarca, BakObs, BakidVendedor, bakEmFalta);
+            DataTable dados = faltasDAO.getDados(BakidTipo, BakidForn, bakComprado, Bakcodigo, Bakquantidade, Bakmarca, BakObs, BakidVendedor, bakEmFalta, BakDescr);
             List<tb.TpoFalta> tipos = TpoFalta.getTipos();
             List<tb.Fornecedor> Fornecs = Forn.getForns();
             dataGrid1.DataSource = dados;
@@ -548,11 +556,6 @@ namespace TeleBonifacio
             else
             {
                 // ATUALIZAÇÃO
-                string codigo = "";
-                if (txtCodigo.Tag=="M")
-                {
-                    codigo = txtCodigo.Text;
-                }
                 int idForn = 0;
                 if (cmbForn.Tag == "M")
                 {
@@ -560,52 +563,71 @@ namespace TeleBonifacio
                     if (iForn > -1)
                     {
                         idForn = ((tb.ComboBoxItem)cmbForn.Items[iForn]).Id;
-                    }                
-                }
-                int idTipo = 0;
-                if (cmbTipos.Tag == "M")
-                {
-                    int iTpo = cmbTipos.SelectedIndex;
-                    if (iTpo > -1)
-                    {
-                        idTipo = ((tb.ComboBoxItem)cmbTipos.Items[iTpo]).Id;
                     }
                 }
-                int quantidade = -1;
-                if (txQuantidade.Tag == "M")
+                if (tbFaltas.SelectedIndex == 3)
                 {
-                    if (!int.TryParse(txQuantidade.Text, out quantidade))
+                    string sID = dataGrid4.SelectedRows[0].Cells[0].Value.ToString();
+                    string UID = dataGrid4.SelectedRows[0].Cells[5].Value.ToString();
+                    int gID = Convert.ToInt32(sID);                    
+                    glo.Loga($@"FG,{gID}, {idForn}, {UID}");
+                    cDaoG.MudaForn(gID, idForn);
+                    CarregaGridG();
+                    Limpar();
+                }
+                else
+                {
+                    string codigo = "";
+                    if (txtCodigo.Tag == "M")
                     {
-                        quantidade = -1;
+                        codigo = txtCodigo.Text;
+                    }
+                    int idTipo = 0;
+                    if (cmbTipos.Tag == "M")
+                    {
+                        int iTpo = cmbTipos.SelectedIndex;
+                        if (iTpo > -1)
+                        {
+                            idTipo = ((tb.ComboBoxItem)cmbTipos.Items[iTpo]).Id;
+                        }
+                    }
+                    int quantidade = -1;
+                    if (txQuantidade.Tag == "M")
+                    {
+                        if (!int.TryParse(txQuantidade.Text, out quantidade))
+                        {
+                            quantidade = -1;
+                        }
+                    }
+                    string marca = "";
+                    if (txMarca.Tag == "M")
+                    {
+                        marca = txMarca.Text;
+                    }
+                    string Obs = "";
+                    if (txObs.Tag == "M")
+                    {
+                        Obs = txObs.Text;
+                    }
+                    string Descr = "";
+                    if (txDescr.Tag == "M")
+                    {
+                        Descr = txDescr.Text;
+                    }
+                    switch (tbFaltas.SelectedIndex)
+                    {
+                        case 0:
+                            AtualizaItensSelecionados(0, dataGrid1, idTipo, idForn, codigo, quantidade, marca, Obs, Descr);
+                            break;
+                        case 1:
+                            AtualizaItensSelecionados(1, dataGrid2, idTipo, idForn, codigo, quantidade, marca, Obs, Descr);
+                            break;
+                        case 2:
+                            AtualizaItensSelecionados(2, dataGrid3, idTipo, idForn, codigo, quantidade, marca, Obs, Descr);
+                            break;
                     }
                 }
-                string marca = "";
-                if (txMarca.Tag == "M")
-                {
-                    marca = txMarca.Text;
-                }
-                string Obs = "";
-                if (txObs.Tag == "M")
-                {
-                    Obs = txObs.Text;
-                }
-                string Descr = "";
-                if (txDescr.Tag == "M")
-                {
-                    Descr = txDescr.Text;
-                }
-                switch (tbFaltas.SelectedIndex)
-                {
-                    case 0:
-                        AtualizaItensSelecionados(0, dataGrid1, idTipo, idForn, codigo, quantidade, marca, Obs, Descr);
-                        break;
-                    case 1:
-                        AtualizaItensSelecionados(1, dataGrid2, idTipo, idForn, codigo, quantidade, marca, Obs, Descr);
-                        break;
-                    case 2:
-                        AtualizaItensSelecionados(2, dataGrid3, idTipo, idForn, codigo, quantidade, marca, Obs, Descr);
-                        break;
-                }
+
             }
         }
 
@@ -613,7 +635,6 @@ namespace TeleBonifacio
         {
             HashSet<string> selectedCodes = new HashSet<string>();
             int scrollPosition = grid.FirstDisplayedScrollingRowIndex;
-
             foreach (DataGridViewRow row in grid.SelectedRows)
             {
                 string sID = Convert.ToString(row.Cells["ID"].Value);
@@ -625,28 +646,18 @@ namespace TeleBonifacio
                 {
                     case 0:
                         faltasDAO.Atualiza(gID, idTipo, idForn, codigo, quantidade, marca, obs, descr);
+                        CarregaGrid();
                         break;
                     case 1:
                         cDaoP.Atualiza(gID, idTipo, idForn, codigo, quantidade, marca, obs, descr);
+                        CarregaGridP();
                         break;
                     case 2:
                         EncoDao.Atualiza(gID, this.idCliente, idForn, codigo, quantidade, marca, obs, descr);
+                        CarregaGridE();
                         break;
                 }
             }            
-            switch (tbFaltas.SelectedIndex)
-            {
-                case 0:
-                    CarregaGrid();
-                    break;
-                case 1:
-                    CarregaGridP();
-                    break;
-                case 2:
-                    CarregaGridE();
-                    break;
-            }
-
             if (grid.Rows.Count > 0)
             {
                 grid.FirstDisplayedScrollingRowIndex = scrollPosition;
@@ -801,8 +812,29 @@ namespace TeleBonifacio
             }
             else
             {
-                RetCmboTpo();
-                Limpar();
+
+                if (btComprei.Text == "Em Falta")
+                {
+                    DialogResult result = MessageBox.Show("Tem certeza que deseja retornar para faltas?",
+                                                          "Esta em falta",
+                                                          MessageBoxButtons.YesNo,
+                                                          MessageBoxIcon.Question);
+                    if (result == DialogResult.Yes)
+                    {
+                        foreach (DataGridViewRow row in dataGrid2.SelectedRows)
+                        {
+                            int gID = Convert.ToInt32(row.Cells["ID"].Value);
+                            cDaoP.EmFalta(gID);
+                        }
+                        CarregaGridP();
+                        CarregaGrid();
+                        AtualizouEmBaixo();
+                    }
+                } else
+                {
+                    RetCmboTpo();
+                    Limpar();
+                }
             }
         }
 
@@ -846,73 +878,75 @@ namespace TeleBonifacio
 
         private void button2_Click(object sender, EventArgs e)
         {
-            int idTipo = cmbTipos.SelectedIndex;
-            BakidTipo = 0;
-            if (idTipo > 0)
-            {
-                BakidTipo = ((tb.ComboBoxItem)cmbTipos.Items[idTipo]).Id;
-            }
             int iForn = cmbForn.SelectedIndex;
             BakidForn = 0;
             if (iForn > 0)
             {
                 BakidForn = ((tb.ComboBoxItem)cmbForn.Items[iForn]).Id;
+                
             }
-
-            if (cmbVendedor.FlatStyle == FlatStyle.Flat)
+            if (tbFaltas.SelectedIndex == 3)
             {
-                int idVendedor = cmbVendedor.SelectedIndex;
-                BakidVendedor = ((tb.ComboBoxItem)cmbVendedor.Items[idVendedor]).Id;
+                CarregaGridG();
             }
-
-            Bakcodigo = "";
-            if (txtCodigo.Tag == "M")
+            else
             {
-                Bakcodigo = txtCodigo.Text;
-            }
-            Bakquantidade = -1;
-            if (txQuantidade.Tag == "M")
-            {
-                if (!int.TryParse(txQuantidade.Text, out Bakquantidade))
+                int idTipo = cmbTipos.SelectedIndex;
+                BakidTipo = 0;
+                if (idTipo > 0)
                 {
-                    Bakquantidade = -1;
+                    BakidTipo = ((tb.ComboBoxItem)cmbTipos.Items[idTipo]).Id;
                 }
-            }
-            Bakmarca = "";
-            if (txMarca.Tag == "M")
-            {
-                Bakmarca = txMarca.Text;
-            }
-            BakObs = "";
-            if (txObs.Tag == "M")
-            {
-                BakObs = txObs.Text;
-            }
+                if (cmbVendedor.FlatStyle == FlatStyle.Flat)
+                {
+                    int idVendedor = cmbVendedor.SelectedIndex;
+                    BakidVendedor = ((tb.ComboBoxItem)cmbVendedor.Items[idVendedor]).Id;
+                }
 
-            switch (tbFaltas.SelectedIndex)
-            {
-                case 0:
-                    bakEmFalta = (ckEmFalta.Checked == true) ? 1 : 0;
-                    CarregaGrid(); break;
-                case 1:
-                    CarregaGridP();
-                    break;
-                case 2:
-                    CarregaGridE();
-                    break;
+                Bakcodigo = "";
+                if (txtCodigo.Tag == "M")
+                {
+                    Bakcodigo = txtCodigo.Text;
+                }
+                Bakquantidade = -1;
+                if (txQuantidade.Tag == "M")
+                {
+                    if (!int.TryParse(txQuantidade.Text, out Bakquantidade))
+                    {
+                        Bakquantidade = -1;
+                    }
+                }
+                Bakmarca = "";
+                if (txMarca.Tag == "M")
+                {
+                    Bakmarca = txMarca.Text;
+                }
+                BakObs = "";
+                if (txObs.Tag == "M")
+                {
+                    BakObs = txObs.Text;
+                }
+                BakDescr = "";
+                if (txDescr.Tag == "M")
+                {
+                    BakDescr = txDescr.Text;
+                }
+                switch (tbFaltas.SelectedIndex)
+                {
+                    case 0:
+                        bakEmFalta = (ckEmFalta.Checked == true) ? 1 : 0;
+                        CarregaGrid(); 
+                        break;
+                    case 1:
+                        CarregaGridP();
+                        break;
+                    case 2:
+                        CarregaGridE();
+                        break;
+                }
+                btnAdicionar.Text = "Limpar";
+                btAdicTpo.Enabled = false;
             }
-            //if (tbFaltas.SelectedIndex == 1)
-            //{
-            //    CarregaGridP();
-            //}
-            //else
-            //{
-            //    bakEmFalta = (ckEmFalta.Checked == true) ? 1 : 0;
-            //    CarregaGrid();
-            //}
-
-            btnAdicionar.Text = "Limpar";
-            btAdicTpo.Enabled = false;
         }
 
         private void ckComprado_Click(object sender, EventArgs e)
@@ -930,7 +964,6 @@ namespace TeleBonifacio
             Bakquantidade = -1;
             Bakmarca = "";
             BakObs = "";
-
             switch (tbFaltas.SelectedIndex)
             {
                 case 0:
@@ -941,6 +974,9 @@ namespace TeleBonifacio
                     break;
                 case 2:
                     CarregaGridE();
+                    break;
+                case 3:
+                    CarregaGridG();
                     break;
             }
         }
@@ -953,7 +989,7 @@ namespace TeleBonifacio
         {
             dataGrid2.Columns[0].Width = 100;       // Compra
             dataGrid2.Columns[1].Width = 130;       // Forn
-            dataGrid2.Columns[2].Visible = false;   // ID
+            // dataGrid2.Columns[2].Visible = false;   // ID
             dataGrid2.Columns[3].Width = 100;       // Data
             dataGrid2.Columns[4].Width = 80;        // Código
             dataGrid2.Columns[5].Width = 50;        // Quantidade
@@ -970,7 +1006,7 @@ namespace TeleBonifacio
         private void CarregaGridP()
         {
             cDaoP = new ProdutosDao();
-            DataTable dados = cDaoP.getDados(BakidTipo, BakidForn, Bakcodigo, Bakquantidade, Bakmarca, BakObs);
+            DataTable dados = cDaoP.getDados(BakidTipo, BakidForn, Bakcodigo, Bakquantidade, Bakmarca, BakObs, BakDescr);
             List<tb.TpoFalta> tipos = TpoFalta.getTipos();
             List<tb.Fornecedor> Fornecs = Forn.getForns();
             dataGrid2.DataSource = dados;
@@ -991,8 +1027,11 @@ namespace TeleBonifacio
             {
                 switch (tbFaltas.SelectedIndex)
                 {
-                    case 0:
+                    case 0: // Faltas
+                        groupBox1.Enabled = true;
+                        cmbTipos.Enabled = true;
                         btComprei.Visible = true;
+                        btComprei.Text = "Em Falta";
                         ckEmFalta.Visible = true;
                          if (iUser.Length > 0)
                         {
@@ -1003,8 +1042,11 @@ namespace TeleBonifacio
                             cmbVendedor.Enabled = true;
                         }
                         break;
-                    case 1:
-                        btComprei.Visible = false;
+                    case 1: // Produtos
+                        groupBox1.Enabled = true;
+                        cmbTipos.Enabled = true;
+                        btComprei.Visible = true;
+                        btComprei.Text = "Em Falta";
                         ckEmFalta.Visible = false;
                          if (AtualizarGridP)
                         {
@@ -1017,6 +1059,8 @@ namespace TeleBonifacio
                         }
                         break;
                     case 2:
+                        groupBox1.Enabled = true;
+                        cmbTipos.Enabled = true;
                         btComprei.Visible = false;
                         ckEmFalta.Visible = false;
                          if (AtualizarGridE)
@@ -1030,6 +1074,8 @@ namespace TeleBonifacio
                         }
                         break;
                     case 3:
+                        groupBox1.Enabled = false;
+                        cmbTipos.Enabled = false;
                         btComprei.Visible = false;
                         ckEmFalta.Visible = false;
                         if (AtualizarGridE)
@@ -1037,8 +1083,7 @@ namespace TeleBonifacio
                             carregando = true;
                             cmbVendedor.SelectedIndex = -1;
                             cmbVendedor.Enabled = false;
-                            CarregaGridG();
-                            AtualizarGridG = false;
+                            CarregaGridG();                            
                             carregando = false;
                         }
                         break;
@@ -1079,6 +1124,7 @@ namespace TeleBonifacio
                 }
                 ReadlyOnly(true);
                 btnExcluir.Enabled = true;
+                btComprei.Enabled = true;
                 txQuantidade.ReadOnly = false;
                 txMarca.ReadOnly = false;
                 if (dataGrid2.SelectedRows.Count == 1)
@@ -1106,18 +1152,23 @@ namespace TeleBonifacio
         {
             operGarantia FoperGarantia = new operGarantia();
             FoperGarantia.ShowDialog();
+            if (tbFaltas.SelectedIndex==3)
+            {
+                CarregaGridG();
+            }
         }
 
         private void CarregaGridG()
         {
-            GarantiasDao cDaoG = new GarantiasDao();
+            AtualizarGridG = false;
+            cDaoG = new GarantiasDao();
             DataTable dados = cDaoG.getDados(BakidForn);
             List<tb.Fornecedor> Fornecs = Forn.getForns();
             dataGrid4.DataSource = dados;
             if (dados != null)
             {
                 ConfigurarGridG();
-            }
+            }            
         }
 
         private void ConfigurarGridG()
@@ -1128,8 +1179,31 @@ namespace TeleBonifacio
             dataGrid4.Columns[3].Width = 50;        // Nota
             dataGrid4.Columns[4].Width = 80;        // Prometida
             dataGrid4.Columns[5].Width = 80;        // DataDoForn
-            dataGrid4.Columns[6].Width = 200;      // Fornecedor
+            dataGrid4.Columns[6].Visible = false;   // UID
+            dataGrid4.Columns[7].Width = 200;       // Fornecedor
             dataGrid4.Invalidate();
+        }
+
+        private void dataGrid4_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            DataGridView grid = (DataGridView)sender;
+            if (grid != null && e.RowIndex >= 0 && e.RowIndex < grid.Rows.Count)
+            {
+                carregando = true;
+                DataGridViewRow selectedRow = grid.Rows[e.RowIndex];
+                this.iID = Convert.ToInt32(selectedRow.Cells["ID"].Value);
+                this.UID = Convert.ToString(selectedRow.Cells["UID"].Value);
+                try
+                {
+                    cmbForn.SelectedValue = Convert.ToInt32(selectedRow.Cells["idForn"].Value);
+                }
+                catch (Exception)
+                {
+                    cmbForn.SelectedValue = -1;
+                }
+                btnExcluir.Enabled = true;
+                carregando = false;
+            }
         }
 
         #endregion
@@ -1150,7 +1224,6 @@ namespace TeleBonifacio
             {
                 if (dataGrid1.SelectedRows.Count == 1)
                 {
-
                     if (dataGrid1.Rows.Count == 1 || dataGrid1.SelectedRows[0].Index != 0)
                     {
                         Descricao = dataGrid1.SelectedRows[0].Cells["Descricao"].Value.ToString();
@@ -1242,7 +1315,7 @@ namespace TeleBonifacio
         private void CarregaGridE()
         {
             EncoDao = new EncomendasDao();
-            DataTable dados = EncoDao.getDados(BakidTipo, BakidForn, Bakcodigo, Bakquantidade, Bakmarca, BakObs);
+            DataTable dados = EncoDao.getDados(BakidTipo, BakidForn, Bakcodigo, Bakquantidade, Bakmarca, BakObs, BakDescr);
             List<tb.TpoFalta> tipos = TpoFalta.getTipos();
             List<tb.Fornecedor> Fornecs = Forn.getForns();
             dataGrid3.DataSource = dados;

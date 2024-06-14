@@ -21,13 +21,13 @@ namespace TeleBonifacio.dao
             DB.ExecutarComandoSQL(sql);
         }
 
-        public DataTable getDados(int tipo, int idForn, string codigo, int quantidade, string marca, string Obs)
+        public DataTable getDados(int tipo, int idForn, string codigo, int quantidade, string marca, string Obs, string Descr)
         {
             StringBuilder query = new StringBuilder();
             query.Append(@"SELECT E.ID, IIf(E.Nome IS NULL OR E.Nome = '', Clientes.Nome, E.Nome) AS Nome, E.Data, E.Codigo, E.Quant, 
-                           E.Marca, E.Descricao, E.UID, E.Tipo, E.Compra, '' as Forn, E.idForn, E.Obs, E.idCliente 
-                           FROM Encomendas E 
-                           Left Join Clientes on Clientes.NrCli = E.idCliente ");
+                   E.Marca, E.Descricao, E.UID, E.Tipo, E.Compra, '' as Forn, E.idForn, E.Obs, E.idCliente 
+                   FROM Encomendas E 
+                   LEFT JOIN Clientes ON Clientes.NrCli = E.idCliente ");
             StringBuilder alteracoes = new StringBuilder();
             if (tipo > 0)
             {
@@ -39,7 +39,7 @@ namespace TeleBonifacio.dao
             }
             if (!string.IsNullOrEmpty(codigo))
             {
-                alteracoes.Append($@" E.Codigo = '{codigo}' AND ");
+                alteracoes.Append($" E.Codigo LIKE '{codigo}%' AND "); // Modificado para usar LIKE com % após o valor de pesquisa
             }
             if (quantidade > -1)
             {
@@ -47,21 +47,72 @@ namespace TeleBonifacio.dao
             }
             if (!string.IsNullOrEmpty(marca))
             {
-                alteracoes.Append($@" E.Marca = '{marca}' AND ");
+                alteracoes.Append($" E.Marca LIKE '{marca}%' AND "); // Modificado para usar LIKE com % após o valor de pesquisa
             }
             if (!string.IsNullOrEmpty(Obs))
             {
-                alteracoes.Append($@" E.Obs = '{Obs}' AND ");
+                alteracoes.Append($" E.Obs LIKE '{Obs}%'' AND "); // Modificado para usar LIKE com % após o valor de pesquisa
+            }
+            if (Descr.Length > 0)
+            {
+                alteracoes.Append($" E.Descricao LIKE '{Descr}%' AND "); // Modificado para usar LIKE com % após o valor de pesquisa
             }
             if (alteracoes.Length > 0)
             {
-                alteracoes.Length -= 4; 
+                alteracoes.Length -= 4; // Remove o último 'AND'
                 query.Append($@" WHERE {alteracoes}");
             }
             query.Append(" ORDER BY E.Data DESC");
             DataTable dt = DB.ExecutarConsulta(query.ToString());
             return dt;
         }
+
+
+        //public DataTable getDados(int tipo, int idForn, string codigo, int quantidade, string marca, string Obs, string Descr)
+        //{
+        //    StringBuilder query = new StringBuilder();
+        //    query.Append(@"SELECT E.ID, IIf(E.Nome IS NULL OR E.Nome = '', Clientes.Nome, E.Nome) AS Nome, E.Data, E.Codigo, E.Quant, 
+        //                   E.Marca, E.Descricao, E.UID, E.Tipo, E.Compra, '' as Forn, E.idForn, E.Obs, E.idCliente 
+        //                   FROM Encomendas E 
+        //                   Left Join Clientes on Clientes.NrCli = E.idCliente ");
+        //    StringBuilder alteracoes = new StringBuilder();
+        //    if (tipo > 0)
+        //    {
+        //        alteracoes.Append($@" E.Tipo = '{tipo}' AND ");
+        //    }
+        //    if (idForn > 0)
+        //    {
+        //        alteracoes.Append($@" E.idForn = {idForn} AND ");
+        //    }
+        //    if (!string.IsNullOrEmpty(codigo))
+        //    {
+        //        alteracoes.Append($@" E.Codigo = '{codigo}' AND ");
+        //    }
+        //    if (quantidade > -1)
+        //    {
+        //        alteracoes.Append($@" E.Quant = {quantidade} AND ");
+        //    }
+        //    if (!string.IsNullOrEmpty(marca))
+        //    {
+        //        alteracoes.Append($@" E.Marca = '{marca}' AND ");
+        //    }
+        //    if (!string.IsNullOrEmpty(Obs))
+        //    {
+        //        alteracoes.Append($@" E.Obs = '{Obs}' AND ");
+        //    }
+        //    if (Descr.Length > 0)
+        //    {
+        //        alteracoes.Append($@" F.Descricao = '{Descr}' and ");
+        //    }
+        //    if (alteracoes.Length > 0)
+        //    {
+        //        alteracoes.Length -= 4; 
+        //        query.Append($@" WHERE {alteracoes}");
+        //    }
+        //    query.Append(" ORDER BY E.Data DESC");
+        //    DataTable dt = DB.ExecutarConsulta(query.ToString());
+        //    return dt;
+        //}
 
         public void Exclui(int id)
         {

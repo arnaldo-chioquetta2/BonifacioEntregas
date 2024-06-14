@@ -32,6 +32,7 @@ namespace TeleBonifacio
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(OperFalta));
             this.panel1 = new System.Windows.Forms.Panel();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.btGarantia = new System.Windows.Forms.Button();
             this.btEncomenda = new System.Windows.Forms.Button();
             this.ckEmFalta = new System.Windows.Forms.CheckBox();
             this.btComprei = new System.Windows.Forms.Button();
@@ -66,7 +67,6 @@ namespace TeleBonifacio
             this.dataGrid2 = new System.Windows.Forms.DataGridView();
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.dataGrid3 = new System.Windows.Forms.DataGridView();
-            this.btGarantia = new System.Windows.Forms.Button();
             this.tabPage4 = new System.Windows.Forms.TabPage();
             this.dataGrid4 = new System.Windows.Forms.DataGridView();
             this.panel1.SuspendLayout();
@@ -116,6 +116,17 @@ namespace TeleBonifacio
             this.groupBox3.TabIndex = 41;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Filtro";
+            // 
+            // btGarantia
+            // 
+            this.btGarantia.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.btGarantia.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btGarantia.Location = new System.Drawing.Point(826, 23);
+            this.btGarantia.Name = "btGarantia";
+            this.btGarantia.Size = new System.Drawing.Size(75, 23);
+            this.btGarantia.TabIndex = 55;
+            this.btGarantia.Text = "Garantia";
+            this.btGarantia.Click += new System.EventHandler(this.btGarantia_Click);
             // 
             // btEncomenda
             // 
@@ -497,17 +508,6 @@ namespace TeleBonifacio
             this.dataGrid3.TabIndex = 17;
             this.dataGrid3.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGrid3_CellClick);
             // 
-            // btGarantia
-            // 
-            this.btGarantia.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.btGarantia.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btGarantia.Location = new System.Drawing.Point(826, 23);
-            this.btGarantia.Name = "btGarantia";
-            this.btGarantia.Size = new System.Drawing.Size(75, 23);
-            this.btGarantia.TabIndex = 55;
-            this.btGarantia.Text = "Garantia";
-            this.btGarantia.Click += new System.EventHandler(this.btGarantia_Click);
-            // 
             // tabPage4
             // 
             this.tabPage4.Controls.Add(this.dataGrid4);
@@ -528,6 +528,7 @@ namespace TeleBonifacio
             this.dataGrid4.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dataGrid4.Size = new System.Drawing.Size(1128, 298);
             this.dataGrid4.TabIndex = 18;
+            this.dataGrid4.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGrid4_CellClick);
             // 
             // OperFalta
             // 

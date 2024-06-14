@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Data;
+using System.Data.SqlClient;
 using System.Text;
 
 namespace TeleBonifacio.dao
@@ -21,13 +22,12 @@ namespace TeleBonifacio.dao
             DB.ExecutarComandoSQL(sql);
         }
 
-        public DataTable getDados(int tipo, int idForn, string codigo, int quantidade, string marca, string Obs)
+        public DataTable getDados(int tipo, int idForn, string codigo, int quantidade, string marca, string Obs, string Descr)
         {
             StringBuilder query = new StringBuilder();
-
             query.Append(@"SELECT F.Compra, '' as Forn, F.ID, F.Data, F.Codigo, F.Quant, F.Marca, F.Descricao, 
-                    F.UID, F.Tipo, F.Tipo as TipoOrig, F.idForn, F.Obs 
-                FROM Produtos F ");
+            F.UID, F.Tipo, F.Tipo as TipoOrig, F.idForn, F.Obs 
+        FROM Produtos F ");
             StringBuilder alteracoes = new StringBuilder();
             if (tipo > 0)
             {
@@ -37,13 +37,9 @@ namespace TeleBonifacio.dao
             {
                 alteracoes.Append($@" F.idForn = {idForn} and ");
             }
-            //if (Comprado > 0)
-            //{
-            //    alteracoes.Append(" F.Compra is not null and ");
-            //}
             if (codigo.Length > 0)
             {
-                alteracoes.Append($@" F.Codigo = '{codigo}' and ");
+                alteracoes.Append($" F.Codigo LIKE '{codigo}%' and "); // Modificado para usar LIKE com % após o valor de pesquisa
             }
             if (quantidade > -1)
             {
@@ -51,16 +47,20 @@ namespace TeleBonifacio.dao
             }
             if (marca.Length > 0)
             {
-                alteracoes.Append($@" F.Marca = '{marca}' and ");
+                alteracoes.Append($" F.Marca LIKE '{marca}%' and "); // Modificado para usar LIKE com % após o valor de pesquisa
             }
             if (Obs.Length > 0)
             {
-                alteracoes.Append($@" F.Obs = '{Obs}' and ");
+                alteracoes.Append($" F.Obs LIKE '{Obs}%' and "); // Modificado para usar LIKE com % após o valor de pesquisa
+            }
+            if (Descr.Length > 0)
+            {
+                alteracoes.Append($" F.Descricao LIKE '{Descr}%' and "); // Modificado para usar LIKE com % após o valor de pesquisa
             }
             if (alteracoes.Length > 0)
             {
-                alteracoes.Length -= 4;
-                query.Append($@" Where {alteracoes} ");
+                alteracoes.Length -= 4; // Remove o último 'and'
+                query.Append($@" WHERE {alteracoes}");
             }
             query.Append(" ORDER BY F.Descricao ");
             DataTable dt = DB.ExecutarConsulta(query.ToString());
@@ -136,5 +136,16 @@ namespace TeleBonifacio.dao
             }
             return ret;
         }
+
+        public void EmFalta(int gID)
+        {
+            DataTable encomendaData = DB.ExecutarConsulta($"SELECT * FROM Produtos WHERE ID = {gID} ");
+            DataRow Row = encomendaData.Rows[0];
+            string insertQuery = $@"INSERT INTO Faltas (Data, Quant, Codigo, Marca, UID, Tipo, Descricao, idForn, Obs) 
+                        VALUES (Now, {Row["Quant"]}, '{Row["Codigo"]}', '{Row["Marca"]}', '{Row["UID"]}', '{Row["Tipo"]}', '{Row["Descricao"]}', {Row["idForn"]}, '{Row["Obs"]}' )";
+            DB.ExecutarComandoSQL(insertQuery);
+            string sql = $@"DELETE FROM Produtos WHERE ID = {gID} ";
+            DB.ExecutarComandoSQL(sql);
+        }        
     }
 }

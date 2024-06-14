@@ -23,14 +23,13 @@ namespace TeleBonifacio.dao
             DB.ExecutarComandoSQL(sql); 
         }
 
-        public DataTable getDados(int tipo, int idForn, int Comprado, string codigo, int quantidade, string marca, string Obs, int idVendedor, int EmFalta)
+        public DataTable getDados(int tipo, int idForn, int Comprado, string codigo, int quantidade, string marca, string Obs, int idVendedor, int EmFalta, string Descr)
         {
             StringBuilder query = new StringBuilder();
-
             query.Append(@"SELECT F.Compra, '' as Forn, F.ID, F.IDBalconista, F.Data, F.Codigo, F.Quant, F.Marca, F.Descricao, 
-                    V.Nome AS Balconista, F.UID, F.Tipo, F.Tipo as TipoOrig, F.idForn, F.Obs 
-                FROM Faltas F
-                INNER JOIN Vendedores V ON V.ID = F.IDBalconista ");
+            V.Nome AS Balconista, F.UID, F.Tipo, F.Tipo as TipoOrig, F.idForn, F.Obs 
+        FROM Faltas F
+        LEFT JOIN Vendedores V ON V.ID = F.IDBalconista ");
             StringBuilder alteracoes = new StringBuilder();
             if (tipo > 0)
             {
@@ -44,9 +43,9 @@ namespace TeleBonifacio.dao
             {
                 alteracoes.Append(" F.Compra is not null and ");
             }
-            if (codigo.Length>0)
+            if (codigo.Length > 0)
             {
-                alteracoes.Append($@" F.Codigo = '{codigo}' and ");
+                alteracoes.Append($" F.Codigo LIKE '{codigo}%' and "); // Modificado para usar LIKE com % após o valor de pesquisa
             }
             if (quantidade > -1)
             {
@@ -54,13 +53,13 @@ namespace TeleBonifacio.dao
             }
             if (marca.Length > 0)
             {
-                alteracoes.Append($@" F.Marca = '{marca}' and ");
+                alteracoes.Append($" F.Marca LIKE '{marca}%' and "); // Modificado para usar LIKE com % após o valor de pesquisa
             }
             if (Obs.Length > 0)
             {
-                alteracoes.Append($@" F.Obs = '{Obs}' and ");
+                alteracoes.Append($" F.Obs LIKE '{Obs}%' and "); // Modificado para usar LIKE com % após o valor de pesquisa
             }
-            if (idVendedor>0)
+            if (idVendedor > 0)
             {
                 alteracoes.Append($@" F.IDBalconista = {idVendedor} and ");
             }
@@ -68,15 +67,77 @@ namespace TeleBonifacio.dao
             {
                 alteracoes.Append($@" F.Tipo = '8' and ");
             }
-            if (alteracoes.Length>0)
+            if (Descr.Length > 0)
             {
-                alteracoes.Length -= 4;
-                query.Append($@" Where {alteracoes} ");
+                alteracoes.Append($" F.Descricao LIKE '{Descr}%' and "); // Modificado para usar LIKE com % após o valor de pesquisa
             }
-            query.Append(" ORDER BY F.Data desc, V.Nome");
+            if (alteracoes.Length > 0)
+            {
+                alteracoes.Length -= 4; // Remove o último 'and'
+                query.Append($@" WHERE {alteracoes} ");
+            }
+            query.Append(" ORDER BY F.Data DESC, V.Nome");
             DataTable dt = DB.ExecutarConsulta(query.ToString());
             return dt;
         }
+
+        //public DataTable getDados(int tipo, int idForn, int Comprado, string codigo, int quantidade, string marca, string Obs, int idVendedor, int EmFalta, string Descr)
+        //{
+        //    StringBuilder query = new StringBuilder();
+        //    query.Append(@"SELECT F.Compra, '' as Forn, F.ID, F.IDBalconista, F.Data, F.Codigo, F.Quant, F.Marca, F.Descricao, 
+        //            V.Nome AS Balconista, F.UID, F.Tipo, F.Tipo as TipoOrig, F.idForn, F.Obs 
+        //        FROM Faltas F
+        //        INNER JOIN Vendedores V ON V.ID = F.IDBalconista ");
+        //    StringBuilder alteracoes = new StringBuilder();
+        //    if (tipo > 0)
+        //    {
+        //        alteracoes.Append($@" F.Tipo = '{tipo}' and ");
+        //    }
+        //    if (idForn > 0)
+        //    {
+        //        alteracoes.Append($@" F.idForn = {idForn} and ");
+        //    }
+        //    if (Comprado > 0)
+        //    {
+        //        alteracoes.Append(" F.Compra is not null and ");
+        //    }
+        //    if (codigo.Length>0)
+        //    {
+        //        alteracoes.Append($@" F.Codigo = '{codigo}' and ");
+        //    }
+        //    if (quantidade > -1)
+        //    {
+        //        alteracoes.Append($@" F.Quant = {quantidade} and ");
+        //    }
+        //    if (marca.Length > 0)
+        //    {
+        //        alteracoes.Append($@" F.Marca = '{marca}' and ");
+        //    }
+        //    if (Obs.Length > 0)
+        //    {
+        //        alteracoes.Append($@" F.Obs = '{Obs}' and ");
+        //    }
+        //    if (idVendedor>0)
+        //    {
+        //        alteracoes.Append($@" F.IDBalconista = {idVendedor} and ");
+        //    }
+        //    if (EmFalta > 0)
+        //    {
+        //        alteracoes.Append($@" F.Tipo = '8' and ");
+        //    }
+        //    if (Descr.Length > 0)
+        //    {
+        //        alteracoes.Append($@" F.Descricao = '{Descr}' and ");
+        //    }
+        //    if (alteracoes.Length>0)
+        //    {
+        //        alteracoes.Length -= 4;
+        //        query.Append($@" Where {alteracoes} ");
+        //    }
+        //    query.Append(" ORDER BY F.Data desc, V.Nome");
+        //    DataTable dt = DB.ExecutarConsulta(query.ToString());
+        //    return dt;
+        //}
 
         public void Exclui(int id)
         {

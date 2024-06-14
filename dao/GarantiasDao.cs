@@ -34,19 +34,26 @@ namespace TeleBonifacio.dao
             DB.ExecutarComandoSQL(sql);
         }
 
+        public void MudaForn(int id, int idForn)
+        {
+            string sql = $@"UPDATE Garantias SET 
+                idForn = {idForn} 
+                WHERE ID = {id}";
+            DB.ExecutarComandoSQL(sql);
+        }
+
         public DataTable getDados(int idForn)
         {
             string sWhe = "";
             if (idForn > 0)
             {
-                sWhe = " Where idForn = " + idForn.ToString();
+                sWhe = " Where Garantias.idForn = " + idForn.ToString();
             }
             string sql = $@"SELECT Garantias.*, Fornecedores.Nome as Forn
                             FROM Garantias
                             Inner Join Fornecedores on Fornecedores.idForn = Garantias.idForn
                             {sWhe}
-                            ORDER BY Garantias.Data DESC ";
-            // string sql = $@"SELECT * FROM Garantias {sWhe} ORDER BY Data DESC";
+                            ORDER BY Garantias.ID DESC ";
             DataTable dt = DB.ExecutarConsulta(sql);
             return dt;
         }
