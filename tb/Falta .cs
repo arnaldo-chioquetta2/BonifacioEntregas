@@ -10,7 +10,7 @@ namespace TeleBonifacio.tb
 
         public DateTime Data { get; set; } 
 
-        public float Quant { get; set; } 
+        public string Quant { get; set; } 
 
         public string Codigo { get; set; } 
         public bool Adicao { get; set; }

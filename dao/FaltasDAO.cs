@@ -7,11 +7,11 @@ namespace TeleBonifacio.dao
 {
     public class FaltasDAO
     {
-        public void Adiciona(int idBalconista, float quantidade, string codigo, string Marca, string Descr, string Obs, int idForn, int idTipo, string UID)
+        public void Adiciona(int idBalconista, string quantidade, string codigo, string Marca, string Descr, string Obs, int idForn, int idTipo, string UID)
         {
             string sql = $@"INSERT INTO Faltas (IDBalconista, Quant, Codigo, Marca, Data, Descricao, Obs, Tipo, idForn, UID) VALUES (
                 {idBalconista}, 
-                {quantidade}, 
+                '{quantidade}', 
                 '{codigo}', 
                 '{Marca}', 
                 Now, 
@@ -23,7 +23,7 @@ namespace TeleBonifacio.dao
             DB.ExecutarComandoSQL(sql); 
         }
 
-        public DataTable getDados(int tipo, int idForn, int Comprado, string codigo, int quantidade, string marca, string Obs, int idVendedor, int EmFalta, string Descr)
+        public DataTable getDados(int tipo, int idForn, int Comprado, string codigo, string quantidade, string marca, string Obs, int idVendedor, int EmFalta, string Descr)
         {
             StringBuilder query = new StringBuilder();
             query.Append(@"SELECT F.Compra, '' as Forn, F.ID, F.IDBalconista, F.Data, F.Codigo, F.Quant, F.Marca, F.Descricao, 
@@ -45,19 +45,19 @@ namespace TeleBonifacio.dao
             }
             if (codigo.Length > 0)
             {
-                alteracoes.Append($" F.Codigo LIKE '{codigo}%' and "); // Modificado para usar LIKE com % após o valor de pesquisa
+                alteracoes.Append($" F.Codigo LIKE '{codigo}%' and "); 
             }
-            if (quantidade > -1)
+            if (quantidade.Length > 0)
             {
-                alteracoes.Append($@" F.Quant = {quantidade} and ");
+                alteracoes.Append($" F.Quant Like '{quantidade}%' and ");
             }
             if (marca.Length > 0)
             {
-                alteracoes.Append($" F.Marca LIKE '{marca}%' and "); // Modificado para usar LIKE com % após o valor de pesquisa
+                alteracoes.Append($" F.Marca LIKE '{marca}%' and "); 
             }
             if (Obs.Length > 0)
             {
-                alteracoes.Append($" F.Obs LIKE '{Obs}%' and "); // Modificado para usar LIKE com % após o valor de pesquisa
+                alteracoes.Append($" F.Obs LIKE '{Obs}%' and "); 
             }
             if (idVendedor > 0)
             {
@@ -69,11 +69,11 @@ namespace TeleBonifacio.dao
             }
             if (Descr.Length > 0)
             {
-                alteracoes.Append($" F.Descricao LIKE '{Descr}%' and "); // Modificado para usar LIKE com % após o valor de pesquisa
+                alteracoes.Append($" F.Descricao LIKE '{Descr}%' and "); 
             }
             if (alteracoes.Length > 0)
             {
-                alteracoes.Length -= 4; // Remove o último 'and'
+                alteracoes.Length -= 4; 
                 query.Append($@" WHERE {alteracoes} ");
             }
             query.Append(" ORDER BY F.Data DESC, V.Nome");
@@ -81,81 +81,23 @@ namespace TeleBonifacio.dao
             return dt;
         }
 
-        //public DataTable getDados(int tipo, int idForn, int Comprado, string codigo, int quantidade, string marca, string Obs, int idVendedor, int EmFalta, string Descr)
-        //{
-        //    StringBuilder query = new StringBuilder();
-        //    query.Append(@"SELECT F.Compra, '' as Forn, F.ID, F.IDBalconista, F.Data, F.Codigo, F.Quant, F.Marca, F.Descricao, 
-        //            V.Nome AS Balconista, F.UID, F.Tipo, F.Tipo as TipoOrig, F.idForn, F.Obs 
-        //        FROM Faltas F
-        //        INNER JOIN Vendedores V ON V.ID = F.IDBalconista ");
-        //    StringBuilder alteracoes = new StringBuilder();
-        //    if (tipo > 0)
-        //    {
-        //        alteracoes.Append($@" F.Tipo = '{tipo}' and ");
-        //    }
-        //    if (idForn > 0)
-        //    {
-        //        alteracoes.Append($@" F.idForn = {idForn} and ");
-        //    }
-        //    if (Comprado > 0)
-        //    {
-        //        alteracoes.Append(" F.Compra is not null and ");
-        //    }
-        //    if (codigo.Length>0)
-        //    {
-        //        alteracoes.Append($@" F.Codigo = '{codigo}' and ");
-        //    }
-        //    if (quantidade > -1)
-        //    {
-        //        alteracoes.Append($@" F.Quant = {quantidade} and ");
-        //    }
-        //    if (marca.Length > 0)
-        //    {
-        //        alteracoes.Append($@" F.Marca = '{marca}' and ");
-        //    }
-        //    if (Obs.Length > 0)
-        //    {
-        //        alteracoes.Append($@" F.Obs = '{Obs}' and ");
-        //    }
-        //    if (idVendedor>0)
-        //    {
-        //        alteracoes.Append($@" F.IDBalconista = {idVendedor} and ");
-        //    }
-        //    if (EmFalta > 0)
-        //    {
-        //        alteracoes.Append($@" F.Tipo = '8' and ");
-        //    }
-        //    if (Descr.Length > 0)
-        //    {
-        //        alteracoes.Append($@" F.Descricao = '{Descr}' and ");
-        //    }
-        //    if (alteracoes.Length>0)
-        //    {
-        //        alteracoes.Length -= 4;
-        //        query.Append($@" Where {alteracoes} ");
-        //    }
-        //    query.Append(" ORDER BY F.Data desc, V.Nome");
-        //    DataTable dt = DB.ExecutarConsulta(query.ToString());
-        //    return dt;
-        //}
-
         public void Exclui(int id)
         {
             string sql = $@"DELETE FROM Faltas WHERE ID = {id}";
             DB.ExecutarComandoSQL(sql);
         }
 
-        public void Edita(int id, int idBalconista, float quantidade, string codigo)
+        public void Edita(int id, int idBalconista, string quantidade, string codigo)
         {
             string sql = $@"UPDATE Faltas SET 
                 IDBalconista = {idBalconista}, 
-                Quant = {quantidade}, 
+                Quant = '{quantidade}', 
                 Codigo = '{codigo}'
                 WHERE ID = {id}";
             DB.ExecutarComandoSQL(sql);
         }
 
-        public void Atualiza(int iID, int iTpo, int idForn, string codigo, int quantidade, string marca, string Obs, string Descr)
+        public void Atualiza(int iID, int iTpo, int idForn, string codigo, string quantidade, string marca, string Obs, string Descr)
         {
             StringBuilder alteracoes = new StringBuilder();
             if (iTpo > 0)
@@ -170,9 +112,9 @@ namespace TeleBonifacio.dao
             {
                 alteracoes.Append($"Codigo = '{codigo}', ");
             }
-            if (quantidade > -1)
+            if (quantidade.Length > 0)
             {
-                alteracoes.Append($"Quant = {quantidade}, ");
+                alteracoes.Append($"Quant = '{quantidade}', ");
             }
             if (!string.IsNullOrEmpty(marca))
             {
@@ -198,7 +140,7 @@ namespace TeleBonifacio.dao
             string UID = glo.GenerateUID();
             int idForn = (faltaRow["idForn"].ToString().Length==0) ? 0 : Convert.ToInt16(faltaRow["idForn"]);
             string insertQuery = $@"INSERT INTO Produtos (Data, Quant, Codigo, Marca, UID, Tipo, Compra, Descricao, idForn, Obs) 
-                            VALUES (Now, {faltaRow["Quant"]}, '{faltaRow["Codigo"]}', '{faltaRow["Marca"]}', '{UID}', '{faltaRow["Tipo"]}', Now(), '{faltaRow["Descricao"]}', {idForn}, '{faltaRow["Obs"]}')";
+                            VALUES (Now, '{faltaRow["Quant"]}', '{faltaRow["Codigo"]}', '{faltaRow["Marca"]}', '{UID}', '{faltaRow["Tipo"]}', Now(), '{faltaRow["Descricao"]}', {idForn}, '{faltaRow["Obs"]}')";
             DB.ExecutarComandoSQL(insertQuery);
             string updateFaltaQuery = $@"Delete From Faltas WHERE ID = {iID}";
             DB.ExecutarComandoSQL(updateFaltaQuery);
@@ -222,7 +164,7 @@ namespace TeleBonifacio.dao
                 DataRow encomendaRow = encomendaData.Rows[0];
                 int idForn = (encomendaRow["idForn"].ToString().Length == 0) ? 0 : Convert.ToInt16(encomendaRow["idForn"]);
                 string insertQuery = $@"INSERT INTO Encomendas (idCliente, Data, Quant, Codigo, Marca, UID, Tipo, Compra, Descricao, idForn, Obs, Nome, Telefone) 
-                        VALUES ({idCliente}, '{sDtAgora}', {encomendaRow["Quant"]}, '{encomendaRow["Codigo"]}', '{encomendaRow["Marca"]}', '{encomendaRow["UID"]}', '{encomendaRow["Tipo"]}', '{sCompra}', '{encomendaRow["Descricao"]}', {idForn}, '{encomendaRow["Obs"]}','{Nome}' ,'{Fone}' )";
+                        VALUES ({idCliente}, '{sDtAgora}', '{encomendaRow["Quant"]}', '{encomendaRow["Codigo"]}', '{encomendaRow["Marca"]}', '{encomendaRow["UID"]}', '{encomendaRow["Tipo"]}', '{sCompra}', '{encomendaRow["Descricao"]}', {idForn}, '{encomendaRow["Obs"]}','{Nome}' ,'{Fone}' )";
                 DB.ExecutarComandoSQL(insertQuery);
                 string updateFaltaQuery = $@"DELETE FROM Faltas WHERE ID = {iID}";
                 DB.ExecutarComandoSQL(updateFaltaQuery);

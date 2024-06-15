@@ -17,7 +17,8 @@ namespace TeleBonifacio
         public int ClienteLocalizado = 0;
         public bool OK = false;        
         private bool achou = false;        
-        private bool carregando = false;        
+        private bool carregando = false;
+        private bool JaMostrouCombo = false;
 
         public pesCliente()
         {
@@ -26,10 +27,11 @@ namespace TeleBonifacio
 
         private void CarregarComboBox<T>(ComboBox comboBox)
         {
-            if (dadosCli==null)
-            {
-                dadosCli = Cliente.GetDadosOrdenados();
-            }            
+            //if (dadosCli==null)
+            //{
+            //    dadosCli = Cliente.GetDadosOrdenados();
+            //}
+            
             List<tb.ComboBoxItem> lista = new List<tb.ComboBoxItem>();
             foreach (DataRow row in dadosCli.Rows)
             {
@@ -66,21 +68,24 @@ namespace TeleBonifacio
 
         private void cmbCliente_TextChanged(object sender, EventArgs e)
         {
-            string textoAtual = cmbCliente.Text;
-            if (textoAtual.Length >= 3 && textoAtual != ultimoTexto)
+            if (carregando==false)
             {
-                ultimoTexto = textoAtual;
-                this.Cursor = Cursors.WaitCursor;
-                try
+                string textoAtual = cmbCliente.Text;
+                if (textoAtual.Length >= 3 && textoAtual != ultimoTexto)
                 {
-                    telefone = Cliente.BuscarTelefonePorNomeParcial(textoAtual);
-                    int nrCli = Cliente.getIdAtual();
-                    txTelefone.Text = telefone;
-                    achou = (telefone.Length > 0);
-                }
-                finally
-                {
-                    this.Cursor = Cursors.Default;
+                    ultimoTexto = textoAtual;
+                    this.Cursor = Cursors.WaitCursor;
+                    try
+                    {
+                        telefone = Cliente.BuscarTelefonePorNomeParcial(textoAtual);
+                        int nrCli = Cliente.getIdAtual();
+                        txTelefone.Text = telefone;
+                        achou = (telefone.Length > 0);
+                    }
+                    finally
+                    {
+                        this.Cursor = Cursors.Default;
+                    }
                 }
             }
         }
@@ -120,9 +125,9 @@ namespace TeleBonifacio
             return dateTimePicker1.Value.Date;
         }
 
-        public void RecebeDadosCli(ref DataTable dadosCli)
+        public void RecebeDadosCli(ref DataTable dados)
         {
-
+            dadosCli = dados;
         }
 
         private void pesCliente_Activated(object sender, EventArgs e)
@@ -130,11 +135,15 @@ namespace TeleBonifacio
             if (carregando==false)
             {
                 carregando = true;
-                Cliente = new ClienteDAO();
-                this.Cursor = Cursors.WaitCursor;
-                CarregarComboBox<tb.Cliente>(cmbCliente);
+                if (JaMostrouCombo==false)
+                {
+                    // Cliente = new ClienteDAO();
+                    this.Cursor = Cursors.WaitCursor;
+                    CarregarComboBox<tb.Cliente>(cmbCliente);
+                    dateTimePicker1.Value = DateTime.Now.AddDays(7);
+                }
                 this.Cursor = Cursors.Default;
-                dateTimePicker1.Value = DateTime.Now.AddDays(7);
+                carregando = false;
             }
         }
     }

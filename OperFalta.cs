@@ -16,19 +16,18 @@ namespace TeleBonifacio
         private FornecedorDao Forn;
         private EncomendasDao EncoDao;
         private ProdutosDao cDaoP;
-        private pesCliente FpesCliente;
+        // private ClienteDAO Cliente;
         private GarantiasDao cDaoG;
+        private pesCliente FpesCliente;        
+        private DataTable dadosCli;        
         private bool carregando = true;
-        private string UID = "";
-        private int iID = 0;
         private bool Restrito = false;
         private Color originalBackgroundColor;
-
         private int BakidTipo = 0;
         private int BakidForn = 0;
         private int bakComprado =  0;
         private string Bakcodigo = "";
-        private int Bakquantidade = -1;
+        private string Bakquantidade = "";
         private string Bakmarca = "";
         private string BakObs = "";
         private string BakDescr = "";
@@ -40,6 +39,8 @@ namespace TeleBonifacio
         private bool AtualizarGridP = true;
         private bool AtualizarGridE = true;
         private bool AtualizarGridG = true;
+        private int iID = 0;
+        private string UID = "";
 
         #region Inicializacao
 
@@ -139,12 +140,8 @@ namespace TeleBonifacio
                     MessageBox.Show(ret, "Erro", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 } else
                 {
-                    int idBalconista = Convert.ToInt32(cmbVendedor.SelectedValue); // Assumindo que cmbVendedor agora representa o balconista
-                    float quantidade;
-                    if (!float.TryParse(txQuantidade.Text, out quantidade))
-                    {
-                        quantidade = 0;
-                    }
+                    int idBalconista = Convert.ToInt32(cmbVendedor.SelectedValue); 
+                    string quantidade = txQuantidade.Text;
                     string Marca = txMarca.Text;
                     string Descr = txDescr.Text;
                     string Obs = txObs.Text;
@@ -204,7 +201,7 @@ namespace TeleBonifacio
             BakidForn = 0;
             bakComprado = 0;
             Bakcodigo = "";
-            Bakquantidade = -1;
+            Bakquantidade = "";
             Bakmarca = "";
             BakObs = "";
             txtCodigo.Focus();
@@ -591,13 +588,10 @@ namespace TeleBonifacio
                             idTipo = ((tb.ComboBoxItem)cmbTipos.Items[iTpo]).Id;
                         }
                     }
-                    int quantidade = -1;
+                    string quantidade = "";
                     if (txQuantidade.Tag == "M")
                     {
-                        if (!int.TryParse(txQuantidade.Text, out quantidade))
-                        {
-                            quantidade = -1;
-                        }
+                        quantidade = txQuantidade.Text;
                     }
                     string marca = "";
                     if (txMarca.Tag == "M")
@@ -631,7 +625,7 @@ namespace TeleBonifacio
             }
         }
 
-        private void AtualizaItensSelecionados(int nrGrid, DataGridView grid, int idTipo, int idForn, string codigo, int quantidade, string marca, string obs, string descr)
+        private void AtualizaItensSelecionados(int nrGrid, DataGridView grid, int idTipo, int idForn, string codigo, string quantidade, string marca, string obs, string descr)
         {
             HashSet<string> selectedCodes = new HashSet<string>();
             int scrollPosition = grid.FirstDisplayedScrollingRowIndex;
@@ -686,6 +680,10 @@ namespace TeleBonifacio
                         }
                     }
                 }
+            }
+            if (grid.SelectedRows.Count > 1)
+            {
+                Limpar();
             }
         }
 
@@ -921,13 +919,10 @@ namespace TeleBonifacio
                 {
                     Bakcodigo = txtCodigo.Text;
                 }
-                Bakquantidade = -1;
+                Bakquantidade = "";
                 if (txQuantidade.Tag == "M")
                 {
-                    if (!int.TryParse(txQuantidade.Text, out Bakquantidade))
-                    {
-                        Bakquantidade = -1;
-                    }
+                    Bakquantidade = txQuantidade.Text;
                 }
                 Bakmarca = "";
                 if (txMarca.Tag == "M")
@@ -974,7 +969,7 @@ namespace TeleBonifacio
             BakidForn = 0;
             bakComprado = 0;
             Bakcodigo = "";
-            Bakquantidade = -1;
+            Bakquantidade = "";
             Bakmarca = "";
             BakObs = "";
             switch (tbFaltas.SelectedIndex)
@@ -1002,7 +997,7 @@ namespace TeleBonifacio
         {
             dataGrid2.Columns[0].Width = 100;       // Compra
             dataGrid2.Columns[1].Width = 130;       // Forn
-            // dataGrid2.Columns[2].Visible = false;   // ID
+            dataGrid2.Columns[2].Visible = false;   // ID
             dataGrid2.Columns[3].Width = 100;       // Data
             dataGrid2.Columns[4].Width = 80;        // Código
             dataGrid2.Columns[5].Width = 50;        // Quantidade
@@ -1091,7 +1086,7 @@ namespace TeleBonifacio
                         cmbTipos.Enabled = false;
                         btComprei.Visible = false;
                         ckEmFalta.Visible = false;
-                        if (AtualizarGridE)
+                        if (AtualizarGridG)
                         {
                             carregando = true;
                             cmbVendedor.SelectedIndex = -1;
@@ -1193,7 +1188,14 @@ namespace TeleBonifacio
             dataGrid4.Columns[4].Width = 80;        // Prometida
             dataGrid4.Columns[5].Width = 80;        // DataDoForn
             dataGrid4.Columns[6].Visible = false;   // UID
-            dataGrid4.Columns[7].Width = 200;       // Fornecedor
+            try
+            {
+                dataGrid4.Columns[7].Width = 200;       // Fornecedor
+            }
+            catch (Exception)
+            {
+                // 
+            }            
             dataGrid4.Invalidate();
         }
 
@@ -1250,22 +1252,31 @@ namespace TeleBonifacio
             btEncomenda.Enabled = false; 
             if (FpesCliente == null)
             {
-                FpesCliente = new pesCliente();
-                FpesCliente.SetDescricao(Descricao, ProdNovo);
-                FpesCliente.ShowDialog();
+                Console.WriteLine("AcionaPesq(true, Descricao, ProdNovo)");
+                AcionaPesq(true, Descricao, ProdNovo);
+                //FpesCliente = new pesCliente();
+                //FpesCliente.SetDescricao(Descricao, ProdNovo);
+                //ClienteDAO Cliente = new ClienteDAO();
+                //dadosCli = Cliente.GetDadosOrdenados();
+                //FpesCliente.RecebeDadosCli(ref dadosCli)
+                //FpesCliente.ShowDialog();
             }
             else
             {                
                 try
                 {
-                    FpesCliente.SetDescricao(Descricao, ProdNovo);
-                    FpesCliente.Visible = true;
+                    Console.WriteLine("AcionaPesq(false, Descricao, ProdNovo)");
+                    AcionaPesq(false, Descricao, ProdNovo);
+                    //FpesCliente.SetDescricao(Descricao, ProdNovo);
+                    //FpesCliente.Visible = true;
                 }
                 catch (Exception)
                 {
-                    FpesCliente = new pesCliente();
-                    FpesCliente.SetDescricao(Descricao, ProdNovo);
-                    FpesCliente.ShowDialog();
+                    Console.WriteLine("AcionaPesq(true, Descricao, ProdNovo) no Exception");
+                    AcionaPesq(true, Descricao, ProdNovo);
+                    //FpesCliente = new pesCliente();
+                    //FpesCliente.SetDescricao(Descricao, ProdNovo);
+                    //FpesCliente.ShowDialog();
                 }                
             }
             if (!glo.ODBC)
@@ -1305,6 +1316,35 @@ namespace TeleBonifacio
                 }
             }
         }
+
+        private void AcionaPesq(bool Instanciar, string Descricao, bool ProdNovo)
+        {
+            if (Instanciar)
+            {
+                Console.WriteLine("FpesCliente = new pesCliente()");
+                FpesCliente = new pesCliente();
+            }
+            Console.WriteLine("FpesCliente.SetDescricao(Descricao, ProdNovo)");
+            FpesCliente.SetDescricao(Descricao, ProdNovo);
+            if (dadosCli == null)
+            {
+                Console.WriteLine("ClienteDAO Cliente = new ClienteDAO()");
+                ClienteDAO Cliente = new ClienteDAO();
+                Console.WriteLine("dadosCli = Cliente.GetDadosOrdenados()");
+                dadosCli = Cliente.GetDadosOrdenados();
+                Console.WriteLine("FpesCliente.RecebeDadosCli(ref dadosCli)");
+                FpesCliente.RecebeDadosCli(ref dadosCli);
+            }                                    
+            if (Instanciar)
+            {
+                Console.WriteLine("FpesCliente.ShowDialog()");
+                FpesCliente.ShowDialog();                
+            } else
+            {
+                Console.WriteLine("FpesCliente.Visible = true");
+                FpesCliente.Visible = true;
+            }
+        } 
 
         private void ConfigurarGridE()
         {

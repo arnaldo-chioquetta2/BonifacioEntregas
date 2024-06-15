@@ -21,7 +21,7 @@ namespace TeleBonifacio.dao
             DB.ExecutarComandoSQL(sql);
         }
 
-        public DataTable getDados(int tipo, int idForn, string codigo, int quantidade, string marca, string Obs, string Descr)
+        public DataTable getDados(int tipo, int idForn, string codigo, string quantidade, string marca, string Obs, string Descr)
         {
             StringBuilder query = new StringBuilder();
             query.Append(@"SELECT E.ID, IIf(E.Nome IS NULL OR E.Nome = '', Clientes.Nome, E.Nome) AS Nome, E.Data, E.Codigo, E.Quant, 
@@ -39,11 +39,11 @@ namespace TeleBonifacio.dao
             }
             if (!string.IsNullOrEmpty(codigo))
             {
-                alteracoes.Append($" E.Codigo LIKE '{codigo}%' AND "); // Modificado para usar LIKE com % após o valor de pesquisa
+                alteracoes.Append($" E.Codigo LIKE '{codigo}%' AND "); 
             }
-            if (quantidade > -1)
+            if (!string.IsNullOrEmpty(quantidade))
             {
-                alteracoes.Append($@" E.Quant = {quantidade} AND ");
+                alteracoes.Append($" E.Quant LIKE '{quantidade}%' AND ");
             }
             if (!string.IsNullOrEmpty(marca))
             {
@@ -134,7 +134,7 @@ namespace TeleBonifacio.dao
             DB.ExecutarComandoSQL(sql);
         }
 
-        public void Atualiza(int iID, int idCliente, int idForn, string codigo, int quantidade, string marca, string obs, string descr)
+        public void Atualiza(int iID, int idCliente, int idForn, string codigo, string quantidade, string marca, string obs, string descr)
         {
             StringBuilder alteracoes = new StringBuilder();
             if (idCliente > 0)
@@ -149,9 +149,9 @@ namespace TeleBonifacio.dao
             {
                 alteracoes.Append($"Codigo = '{codigo}', ");
             }
-            if (quantidade > -1)
+            if (!string.IsNullOrEmpty(quantidade))
             {
-                alteracoes.Append($"Quant = {quantidade}, ");
+                alteracoes.Append($"Quant = '{quantidade}', ");
             }
             if (!string.IsNullOrEmpty(marca))
             {

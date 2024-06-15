@@ -22,7 +22,7 @@ namespace TeleBonifacio.dao
             DB.ExecutarComandoSQL(sql);
         }
 
-        public DataTable getDados(int tipo, int idForn, string codigo, int quantidade, string marca, string Obs, string Descr)
+        public DataTable getDados(int tipo, int idForn, string codigo, string quantidade, string marca, string Obs, string Descr)
         {
             StringBuilder query = new StringBuilder();
             query.Append(@"SELECT F.Compra, '' as Forn, F.ID, F.Data, F.Codigo, F.Quant, F.Marca, F.Descricao, 
@@ -41,9 +41,9 @@ namespace TeleBonifacio.dao
             {
                 alteracoes.Append($" F.Codigo LIKE '{codigo}%' and "); // Modificado para usar LIKE com % após o valor de pesquisa
             }
-            if (quantidade > -1)
+            if (quantidade.Length > 0)
             {
-                alteracoes.Append($@" F.Quant = {quantidade} and ");
+                alteracoes.Append($@" F.Quant Like ' {quantidade}%' and ");
             }
             if (marca.Length > 0)
             {
@@ -73,17 +73,17 @@ namespace TeleBonifacio.dao
             DB.ExecutarComandoSQL(sql);
         }
 
-        public void Edita(int id, int idBalconista, float quantidade, string codigo)
+        public void Edita(int id, int idBalconista, string quantidade, string codigo)
         {
             string sql = $@"UPDATE Produtos SET 
                 IDBalconista = {idBalconista}, 
-                Quant = {quantidade}, 
+                Quant = '{quantidade}', 
                 Codigo = '{codigo}'
                 WHERE ID = {id}";
             DB.ExecutarComandoSQL(sql);
         }
 
-        public void Atualiza(int iID, int iTpo, int idForn, string codigo, int quantidade, string marca, string Obs, string descr)
+        public void Atualiza(int iID, int iTpo, int idForn, string codigo, string quantidade, string marca, string Obs, string descr)
         {
             StringBuilder alteracoes = new StringBuilder();
             if (iTpo > 0)
@@ -98,9 +98,9 @@ namespace TeleBonifacio.dao
             {
                 alteracoes.Append($"Codigo = '{codigo}', ");
             }
-            if (quantidade > -1)
+            if (!string.IsNullOrEmpty(quantidade))
             {
-                alteracoes.Append($"Quant = {quantidade}, ");
+                alteracoes.Append($"Quant = '{quantidade}', ");
             }
             if (!string.IsNullOrEmpty(marca))
             {

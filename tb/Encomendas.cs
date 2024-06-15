@@ -7,7 +7,7 @@ namespace TeleBonifacio.tb
         public int Id { get; set; }
         public int idCliente { get; set; }
         public DateTime Data { get; set; }
-        public float Quant { get; set; }
+        public string Quant { get; set; }
         public string Codigo { get; set; }
         public string Marca { get; set; }
         public string UID { get; set; }

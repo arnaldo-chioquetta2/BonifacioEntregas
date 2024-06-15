@@ -331,6 +331,7 @@ namespace TeleBonifacio.dao
 
         public override DataTable GetDadosOrdenados(string filtro = "", string ordem = "")
         {
+            Console.WriteLine("SELECT * FROM Clientes Order By Nome ");
             string query = "SELECT * FROM Clientes Order By Nome ";
             return ExecutarConsulta(query);
         }
