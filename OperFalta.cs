@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Windows.Forms;
 using TeleBonifacio.dao;
 using TeleBonifacio.gen;
@@ -15,17 +16,16 @@ namespace TeleBonifacio
         private TpoFaltaDAO TpoFalta;
         private FornecedorDao Forn;
         private EncomendasDao EncoDao;
-        private ProdutosDao cDaoP;
-        // private ClienteDAO Cliente;
+        private ProdutosDao cDaoP;      
         private GarantiasDao cDaoG;
-        private pesCliente FpesCliente;        
-        private DataTable dadosCli;        
+        private pesCliente FpesCliente;
+        private DataTable dadosCli;
         private bool carregando = true;
         private bool Restrito = false;
         private Color originalBackgroundColor;
         private int BakidTipo = 0;
         private int BakidForn = 0;
-        private int bakComprado =  0;
+        private int bakComprado = 0;
         private string Bakcodigo = "";
         private string Bakquantidade = "";
         private string Bakmarca = "";
@@ -34,13 +34,14 @@ namespace TeleBonifacio
         private string iUser = "";
         private string BakCodigoLost = "";
         private int BakidVendedor = 0;
-        private int bakEmFalta = 0;        
+        private int bakEmFalta = 0;
         private int idCliente = 0;
         private bool AtualizarGridP = true;
         private bool AtualizarGridE = true;
         private bool AtualizarGridG = true;
         private int iID = 0;
         private string UID = "";
+        private bool SalvaAnota;
 
         #region Inicializacao
 
@@ -84,6 +85,7 @@ namespace TeleBonifacio
 
         private void CarregarComboBoxV<T>(ComboBox comboBox, VendedoresDAO vendedor, string iUser)
         {
+            glo.Loga("Dentro de CarregarComboBoxV");
             DataTable dados = vendedor.getBalconistas();
             List<tb.ComboBoxItem> lista = new List<tb.ComboBoxItem>();
             int NrLista = 0;
@@ -131,16 +133,17 @@ namespace TeleBonifacio
             {
                 string codigo = txtCodigo.Text;
                 string ret = "";
-                if (codigo.Length>0)
+                if (codigo.Length > 0)
                 {
                     ret = faltasDAO.VeSeJaTem(codigo);
-                }                
-                if (ret.Length>0)
+                }
+                if (ret.Length > 0)
                 {
                     MessageBox.Show(ret, "Erro", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                } else
+                }
+                else
                 {
-                    int idBalconista = Convert.ToInt32(cmbVendedor.SelectedValue); 
+                    int idBalconista = Convert.ToInt32(cmbVendedor.SelectedValue);
                     string quantidade = txQuantidade.Text;
                     string Marca = txMarca.Text;
                     string Descr = txDescr.Text;
@@ -188,11 +191,11 @@ namespace TeleBonifacio
             cmbForn.FlatStyle = FlatStyle.System;
             cmbForn.SelectedIndex = 0;
             cmbForn.Tag = "";
-            Normaliza(txtCodigo,1);
-            Normaliza(txMarca,1);
-            Normaliza(txDescr,1);
-            Normaliza(txObs,1);
-            Normaliza(txQuantidade,1);
+            Normaliza(txtCodigo, 1);
+            Normaliza(txMarca, 1);
+            Normaliza(txDescr, 1);
+            Normaliza(txObs, 1);
+            Normaliza(txQuantidade, 1);
             btnAdicionar.Text = "Adicionar";
             btnExcluir.Enabled = false;
             btAdicTpo.Enabled = false;
@@ -209,9 +212,10 @@ namespace TeleBonifacio
 
         private void Normaliza(TextBox obj, int tipo)
         {
-            if (tipo==1) {
+            if (tipo == 1)
+            {
                 obj.Text = "";
-            }            
+            }
             obj.BackColor = originalBackgroundColor;
             obj.ReadOnly = false;
             obj.Tag = "";
@@ -223,29 +227,29 @@ namespace TeleBonifacio
             if (tbFaltas.SelectedIndex == 0)
             {
                 btnAdicionar.Enabled = true;
-            }                
+            }
         }
 
-        private void VeSeHab(TextBox obj=null)
+        private void VeSeHab(TextBox obj = null)
         {
-            if (obj!=null)
+            if (obj != null)
             {
                 if (!Restrito)
                 {
                     if (!obj.ReadOnly)
                     {
-                        if (obj.Text.Length>0)
+                        if (obj.Text.Length > 0)
                         {
                             if (tbFaltas.SelectedIndex == 0)
                             {
                                 obj.BackColor = Color.Yellow;
 
-                            } 
+                            }
                             button2.Enabled = btLmpFiltro.Enabled = true;
                             btAdicTpo.Enabled = true;
                             obj.Tag = "M";
                         }
-                    }                    
+                    }
                 }
             }
             bool ok = true;
@@ -320,7 +324,7 @@ namespace TeleBonifacio
                         break;
                     default:
                         return;
-                }                    
+                }
             }
         }
 
@@ -400,7 +404,8 @@ namespace TeleBonifacio
                     if (tipoId == 8)
                     {
                         row.DefaultCellStyle.BackColor = Color.LightGreen;
-                    } else
+                    }
+                    else
                     {
                         if (tipoId == 26)
                         {
@@ -454,7 +459,7 @@ namespace TeleBonifacio
                 btnExcluir.Enabled = true;
                 btComprei.Enabled = true;
                 txQuantidade.ReadOnly = false;
-                txMarca.ReadOnly = false;                
+                txMarca.ReadOnly = false;
                 if (dataGrid1.SelectedRows.Count == 1)
                 {
                     txtCodigo.ReadOnly = false;
@@ -487,11 +492,11 @@ namespace TeleBonifacio
                     int itemId = 0;
                     if (oItem != null)
                     {
-                        if (oItem is int directInt) 
+                        if (oItem is int directInt)
                         {
                             itemId = Convert.ToInt32(oItem.ToString());
                         }
-                        else                         
+                        else
                         {
                             if (oItem is string itemAsString && int.TryParse(itemAsString, out int convertedInt))
                                 itemId = convertedInt;
@@ -520,7 +525,8 @@ namespace TeleBonifacio
             {
                 glo.CarregarComboBox<tb.TpoFalta>(cmbTipos, TpoFalta, "ESCOLHA");
                 glo.CarregarComboBox<tb.Fornecedor>(cmbForn, Forn, "ESCOLHA");
-            } else
+            }
+            else
             {
                 glo.CarregarComboBox<tb.TpoFalta>(cmbTipos, TpoFalta, "ESCOLHA", ItemFinal: "ADICIONE", ItemFinal2: "EDIÇÃO");
                 glo.CarregarComboBox<tb.Fornecedor>(cmbForn, Forn, "ESCOLHA", ItemFinal: "ADICIONE", ItemFinal2: "EDIÇÃO");
@@ -531,7 +537,7 @@ namespace TeleBonifacio
         {
             if (btAdicTpo.Text == "Adicionar")
             {
-                if ((txNvTipo.Text.Length == 0) && (txNvForn.Text.Length==0))
+                if ((txNvTipo.Text.Length == 0) && (txNvForn.Text.Length == 0))
                 {
                     MessageBox.Show("Só é possível adicionar se dizer qual ele é",
                                                   "Faltou dizer",
@@ -543,10 +549,11 @@ namespace TeleBonifacio
                     if (txNvTipo.Visible)
                     {
                         TpoFalta.Adiciona(txNvTipo.Text);
-                    } else
+                    }
+                    else
                     {
                         Forn.Adiciona(txNvForn.Text);
-                    }                    
+                    }
                     RetCmboTpo();
                 }
             }
@@ -566,7 +573,7 @@ namespace TeleBonifacio
                 {
                     string sID = dataGrid4.SelectedRows[0].Cells[0].Value.ToString();
                     string UID = dataGrid4.SelectedRows[0].Cells[5].Value.ToString();
-                    int gID = Convert.ToInt32(sID);                    
+                    int gID = Convert.ToInt32(sID);
                     glo.Loga($@"FG,{gID}, {idForn}, {UID}");
                     cDaoG.MudaForn(gID, idForn);
                     CarregaGridG();
@@ -629,7 +636,7 @@ namespace TeleBonifacio
         {
             HashSet<string> selectedCodes = new HashSet<string>();
             int scrollPosition = grid.FirstDisplayedScrollingRowIndex;
-            if (grid.SelectedRows.Count>1)
+            if (grid.SelectedRows.Count > 1)
             {
                 codigo = "";
             }
@@ -756,7 +763,7 @@ namespace TeleBonifacio
                                 btAdicTpo.Enabled = true;
                             }
                         }
-                    } 
+                    }
                 }
             }
         }
@@ -795,7 +802,7 @@ namespace TeleBonifacio
                                 cmbForn.Tag = "M";
                                 button2.Enabled = true;
                                 btLmpFiltro.Enabled = true;
-                                btAdicTpo.Enabled = true;                                
+                                btAdicTpo.Enabled = true;
                             }
                         }
                     }
@@ -841,7 +848,8 @@ namespace TeleBonifacio
                         CarregaGrid();
                         AtualizouEmBaixo();
                     }
-                } else
+                }
+                else
                 {
                     RetCmboTpo();
                     Limpar();
@@ -866,10 +874,11 @@ namespace TeleBonifacio
                             if (ret.Contains("comprado"))
                             {
                                 txtCodigo.BackColor = Color.Red;
-                            } else
+                            }
+                            else
                             {
                                 txtCodigo.BackColor = Color.Orange;
-                            }                            
+                            }
                         }
                     }
                 }
@@ -883,7 +892,7 @@ namespace TeleBonifacio
         {
             if (!carregando)
             {
-                button2.Enabled = btLmpFiltro.Enabled = true;                
+                button2.Enabled = btLmpFiltro.Enabled = true;
             }
         }
 
@@ -894,7 +903,7 @@ namespace TeleBonifacio
             if (iForn > 0)
             {
                 BakidForn = ((tb.ComboBoxItem)cmbForn.Items[iForn]).Id;
-                
+
             }
             if (tbFaltas.SelectedIndex == 3)
             {
@@ -943,7 +952,7 @@ namespace TeleBonifacio
                 {
                     case 0:
                         bakEmFalta = (ckEmFalta.Checked == true) ? 1 : 0;
-                        CarregaGrid(); 
+                        CarregaGrid();
                         break;
                     case 1:
                         CarregaGridP();
@@ -1041,7 +1050,7 @@ namespace TeleBonifacio
                         btComprei.Visible = true;
                         btComprei.Text = "Em Falta";
                         ckEmFalta.Visible = true;
-                         if (iUser.Length > 0)
+                        if (iUser.Length > 0)
                         {
                             cmbVendedor.SelectedItem = Convert.ToInt16(iUser);
                         }
@@ -1056,7 +1065,7 @@ namespace TeleBonifacio
                         btComprei.Visible = true;
                         btComprei.Text = "Em Falta";
                         ckEmFalta.Visible = false;
-                         if (AtualizarGridP)
+                        if (AtualizarGridP)
                         {
                             carregando = true;
                             cmbVendedor.SelectedIndex = -1;
@@ -1066,12 +1075,12 @@ namespace TeleBonifacio
                             carregando = false;
                         }
                         break;
-                    case 2:
+                    case 2: //Encomendas
                         groupBox1.Enabled = true;
                         cmbTipos.Enabled = true;
                         btComprei.Visible = false;
                         ckEmFalta.Visible = false;
-                         if (AtualizarGridE)
+                        if (AtualizarGridE)
                         {
                             carregando = true;
                             cmbVendedor.SelectedIndex = -1;
@@ -1081,7 +1090,7 @@ namespace TeleBonifacio
                             carregando = false;
                         }
                         break;
-                    case 3:
+                    case 3: // Garantias
                         groupBox1.Enabled = false;
                         cmbTipos.Enabled = false;
                         btComprei.Visible = false;
@@ -1091,14 +1100,31 @@ namespace TeleBonifacio
                             carregando = true;
                             cmbVendedor.SelectedIndex = -1;
                             cmbVendedor.Enabled = false;
-                            CarregaGridG();                            
+                            CarregaGridG();
+                            carregando = false;
+                        }
+                        break;
+                    case 4: // Anotações
+                        groupBox1.Enabled = false;
+                        cmbTipos.Enabled = false;
+                        btComprei.Visible = false;
+                        ckEmFalta.Visible = false;
+                        if (rtfTexto.Text.Length == 0)
+                        {
+                            int padding = 5;
+                            int toolbarHeight = toolStrip1.Height;
+                            carregando = true;
+                            rtfTexto.Location = new Point(0, toolbarHeight + padding);
+                            rtfTexto.Size = new Size(tabPage5.Width, tabPage5.Height - toolbarHeight - padding);
+                            string caminhoDoArquivo = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "anotacoes.rtf");
+                            rtfTexto.LoadFile(caminhoDoArquivo);
                             carregando = false;
                         }
                         break;
                 }
                 Limpar();
             }
-        }              
+        }
 
         private void dataGrid2_CellClick(object sender, DataGridViewCellEventArgs e)
         {
@@ -1160,7 +1186,7 @@ namespace TeleBonifacio
         {
             operGarantia FoperGarantia = new operGarantia();
             FoperGarantia.ShowDialog();
-            if (tbFaltas.SelectedIndex==3)
+            if (tbFaltas.SelectedIndex == 3)
             {
                 CarregaGridG();
             }
@@ -1176,7 +1202,7 @@ namespace TeleBonifacio
             if (dados != null)
             {
                 ConfigurarGridG();
-            }            
+            }
         }
 
         private void ConfigurarGridG()
@@ -1195,7 +1221,7 @@ namespace TeleBonifacio
             catch (Exception)
             {
                 // 
-            }            
+            }
             dataGrid4.Invalidate();
         }
 
@@ -1235,7 +1261,7 @@ namespace TeleBonifacio
             glo.IdAdicionado = 0;
             string Descricao = "";
             bool ProdNovo = false;
-            if (dataGrid1.SelectedRows.Count==1)
+            if (dataGrid1.SelectedRows.Count == 1)
             {
                 if (dataGrid1.SelectedRows.Count == 1)
                 {
@@ -1249,40 +1275,29 @@ namespace TeleBonifacio
                     }
                 }
             }
-            btEncomenda.Enabled = false; 
+            btEncomenda.Enabled = false;
             if (FpesCliente == null)
             {
                 Console.WriteLine("AcionaPesq(true, Descricao, ProdNovo)");
                 AcionaPesq(true, Descricao, ProdNovo);
-                //FpesCliente = new pesCliente();
-                //FpesCliente.SetDescricao(Descricao, ProdNovo);
-                //ClienteDAO Cliente = new ClienteDAO();
-                //dadosCli = Cliente.GetDadosOrdenados();
-                //FpesCliente.RecebeDadosCli(ref dadosCli)
-                //FpesCliente.ShowDialog();
             }
             else
-            {                
+            {
                 try
                 {
                     Console.WriteLine("AcionaPesq(false, Descricao, ProdNovo)");
                     AcionaPesq(false, Descricao, ProdNovo);
-                    //FpesCliente.SetDescricao(Descricao, ProdNovo);
-                    //FpesCliente.Visible = true;
                 }
                 catch (Exception)
                 {
                     Console.WriteLine("AcionaPesq(true, Descricao, ProdNovo) no Exception");
                     AcionaPesq(true, Descricao, ProdNovo);
-                    //FpesCliente = new pesCliente();
-                    //FpesCliente.SetDescricao(Descricao, ProdNovo);
-                    //FpesCliente.ShowDialog();
-                }                
+                }
             }
             if (!glo.ODBC)
             {
                 btEncomenda.Enabled = true;
-            }            
+            }
             if (FpesCliente.OK)
             {
                 string Nome = "";
@@ -1306,9 +1321,9 @@ namespace TeleBonifacio
                     faltasDAO.ConfirmaEncomenda(gID, Nome, Fone, NovaDesc, DtAgora, DtEnc);
                 }
                 AtualizarGridE = true;
-                if (ProdNovo==false)
+                if (ProdNovo == false)
                 {
-                    if (tbFaltas.SelectedIndex==0)
+                    if (tbFaltas.SelectedIndex == 0)
                     {
                         CarregaGrid();
                         AtualizouEmBaixo();
@@ -1334,17 +1349,18 @@ namespace TeleBonifacio
                 dadosCli = Cliente.GetDadosOrdenados();
                 Console.WriteLine("FpesCliente.RecebeDadosCli(ref dadosCli)");
                 FpesCliente.RecebeDadosCli(ref dadosCli);
-            }                                    
+            }
             if (Instanciar)
             {
                 Console.WriteLine("FpesCliente.ShowDialog()");
-                FpesCliente.ShowDialog();                
-            } else
+                FpesCliente.ShowDialog();
+            }
+            else
             {
                 Console.WriteLine("FpesCliente.Visible = true");
                 FpesCliente.Visible = true;
             }
-        } 
+        }
 
         private void ConfigurarGridE()
         {
@@ -1434,14 +1450,156 @@ namespace TeleBonifacio
         private string FiltraOZero(object Value)
         {
             string texto = Convert.ToString(Value);
-            if (texto=="0")
+            if (texto == "0")
             {
                 return "";
-            } else
+            }
+            else
             {
                 return texto;
             }
         }
+
+        #region Anotações
+
+        private void rtfTexto_KeyUp(object sender, KeyEventArgs e)
+        {
+            //this.SalvaAnota = true;
+        }
+
+        private void rtfTexto_TextChanged(object sender, EventArgs e)
+        {
+            if (!carregando)
+            {
+                timer1.Enabled = true;
+            }            
+        }
+
+        private void timer1_Tick(object sender, EventArgs e)
+        {
+            timer1.Enabled = false;
+            string caminhoDoArquivo = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "anotacoes.rtf");
+            rtfTexto.SaveFile(caminhoDoArquivo);
+        }
+
+        private void ChangeTextColor(object red)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void toolStripButtonRedo_Click(object sender, EventArgs e)
+        {
+            if (rtfTexto.CanRedo)
+            {
+                rtfTexto.Redo();
+            }
+        }
+
+        private void toolStripButtonUndo_Click(object sender, EventArgs e)
+        {
+            if (rtfTexto.CanUndo)
+            {
+                rtfTexto.Undo();
+            }
+        }
+
+        private void toolStripButtonDecreaseFont_Click(object sender, EventArgs e)
+        {
+            float newSize = this.rtfTexto.SelectionFont.Size - 1;
+            this.rtfTexto.SelectionFont = new Font(this.rtfTexto.SelectionFont.FontFamily, Math.Max(newSize, 1), this.rtfTexto.SelectionFont.Style); // Garante que o tamanho mínimo seja 1
+        }
+
+        private void toolStripButtonIncreaseFont_Click(object sender, EventArgs e)
+        {
+            float newSize = this.rtfTexto.SelectionFont.Size + 1;
+            this.rtfTexto.SelectionFont = new Font(this.rtfTexto.SelectionFont.FontFamily, newSize, this.rtfTexto.SelectionFont.Style);
+        }
+
+        private void toolStripButtonUnderline_Click(object sender, EventArgs e)
+        {
+            if (rtfTexto.SelectionFont != null)
+            {
+                FontStyle currentStyle = rtfTexto.SelectionFont.Style;
+                FontStyle newStyle;
+                if (rtfTexto.SelectionFont.Underline)
+                {
+                    newStyle = currentStyle & ~FontStyle.Underline;
+                }
+                else
+                {
+                    newStyle = currentStyle | FontStyle.Underline;
+                }
+                rtfTexto.SelectionFont = new Font(rtfTexto.SelectionFont.FontFamily, rtfTexto.SelectionFont.Size, newStyle);
+            }
+        }
+
+        private void toolStripButtonItalic_Click(object sender, EventArgs e)
+        {
+            if (rtfTexto.SelectionFont != null)
+            {
+                FontStyle currentStyle = rtfTexto.SelectionFont.Style;
+                FontStyle newStyle;
+                if (rtfTexto.SelectionFont.Italic)
+                {
+                    newStyle = currentStyle & ~FontStyle.Italic;
+                }
+                else
+                {
+                    newStyle = currentStyle | FontStyle.Italic;
+                }
+                rtfTexto.SelectionFont = new Font(rtfTexto.SelectionFont.FontFamily, rtfTexto.SelectionFont.Size, newStyle);
+            }
+        }
+
+        private void toolStripButtonBold_Click(object sender, EventArgs e)
+        {
+            if (rtfTexto.SelectionFont != null)
+            {
+                FontStyle currentStyle = rtfTexto.SelectionFont.Style;
+                FontStyle newStyle;
+                if (rtfTexto.SelectionFont.Bold)
+                {
+                    newStyle = currentStyle & ~FontStyle.Bold;
+                }
+                else
+                {
+                    newStyle = currentStyle | FontStyle.Bold;
+                }
+                rtfTexto.SelectionFont = new Font(rtfTexto.SelectionFont.FontFamily, rtfTexto.SelectionFont.Size, newStyle);
+            }
+        }
+
+
+        private void tsVermelho_Click(object sender, EventArgs e)
+        {
+            rtfTexto.SelectionColor = Color.Red;
+        }
+
+        private void tsAzul_Click(object sender, EventArgs e)
+        {
+            rtfTexto.SelectionColor = Color.Blue;
+        }
+
+        private void tsVerde_Click(object sender, EventArgs e)
+        {
+            rtfTexto.SelectionColor = Color.Green;
+        }
+
+        private void tsLaranja_Click(object sender, EventArgs e)
+        {
+            rtfTexto.SelectionColor = Color.Orange;
+        }
+
+        private void tsPreto_Click(object sender, EventArgs e)
+        {
+            rtfTexto.SelectionColor = Color.Black;
+        }
+
+        private void tsCinza_Click(object sender, EventArgs e)
+        {
+            rtfTexto.SelectionColor = Color.Gray;
+        }
+        #endregion
 
     }
 }

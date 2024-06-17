@@ -49,7 +49,9 @@ namespace TeleBonifacio
             {
                 if (ODBC)
                 {
-                    return "Driver={Microsoft Access Driver (*.mdb)};DBQ=C:\\Entregas\\MbCarros.mdb;";
+                    glo.Loga("DSN=MbCarros;");
+                    return "connectionString = 'DSN=MbCarros;' ";
+                    // return "Driver={Microsoft Access Driver (*.mdb)};DBQ=\\SERVIDOR\\MbCarros\\MbCarros.mdb;";
                 } else
                 {
                     return @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + CaminhoBase + ";";

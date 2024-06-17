@@ -27,11 +27,6 @@ namespace TeleBonifacio
 
         private void CarregarComboBox<T>(ComboBox comboBox)
         {
-            //if (dadosCli==null)
-            //{
-            //    dadosCli = Cliente.GetDadosOrdenados();
-            //}
-            
             List<tb.ComboBoxItem> lista = new List<tb.ComboBoxItem>();
             foreach (DataRow row in dadosCli.Rows)
             {

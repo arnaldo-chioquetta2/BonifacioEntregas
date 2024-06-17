@@ -10,8 +10,9 @@
 
 namespace TeleBonifacio.Properties {
     using System;
-    
-    
+    using System.Drawing;
+
+
     /// <summary>
     ///   Uma classe de recurso de tipo de alta segurança, para pesquisar cadeias de caracteres localizadas etc.
     /// </summary>
@@ -23,7 +24,13 @@ namespace TeleBonifacio.Properties {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class Resources {
-        
+        internal static Image bold_icon;
+        internal static Image italic_icon;
+        internal static Image underline_icon;
+        internal static Image decrease_font_icon;
+        internal static Image undo_icon;
+        internal static Image redo_icon;
+        internal static Image color_wheel_icon;
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;

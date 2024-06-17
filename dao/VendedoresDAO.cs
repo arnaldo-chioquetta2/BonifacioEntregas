@@ -73,6 +73,7 @@ namespace TeleBonifacio.dao
 
         internal DataTable getBalconistas()
         {
+            glo.Loga("Dentro de getBalconistas");
             string query = $"SELECT * FROM Vendedores Where Nro > '0' Order By Nome ";
             return ExecutarConsultaVendedor(query);
         }
@@ -116,17 +117,20 @@ namespace TeleBonifacio.dao
 
         public DataTable ExecutarConsultaVendedor(string query)
         {
+            glo.Loga("Dentro de ExecutarConsultaVendedor");
             if (glo.ODBC)
             {
+                glo.Loga("ODBC");
                 return ExecutarConsultaVendedorODBC(query);
             } else
             {
+                glo.Loga("Não ODBC");
                 return ExecutarConsultaVendedorADO(query);
             }
         }
 
         private DataTable ExecutarConsultaVendedorODBC(string query)
-        {
+        {            
             using (OdbcConnection connection = new OdbcConnection(glo.connectionString))
             {
                 try
