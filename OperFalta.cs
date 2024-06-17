@@ -1117,7 +1117,14 @@ namespace TeleBonifacio
                             rtfTexto.Location = new Point(0, toolbarHeight + padding);
                             rtfTexto.Size = new Size(tabPage5.Width, tabPage5.Height - toolbarHeight - padding);
                             string caminhoDoArquivo = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "anotacoes.rtf");
-                            rtfTexto.LoadFile(caminhoDoArquivo);
+                            try
+                            {
+                                rtfTexto.LoadFile(caminhoDoArquivo);
+                            }
+                            catch (Exception)
+                            {
+                                // 
+                            }                            
                             carregando = false;
                         }
                         break;
@@ -1326,7 +1333,7 @@ namespace TeleBonifacio
                     if (tbFaltas.SelectedIndex == 0)
                     {
                         CarregaGrid();
-                        AtualizouEmBaixo();
+                        //AtualizouEmBaixo();
                     }
                 }
             }
