@@ -83,20 +83,14 @@ namespace TeleBonifacio
             this.toolStripButtonDecreaseFont = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonUndo = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonRedo = new System.Windows.Forms.ToolStripButton();
-            this.toolStripDropDownButtonColors = new System.Windows.Forms.ToolStripDropDownButton();
-            this.vermelhoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.azulToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.verdeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.laranjaToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.pretoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.rtfTexto = new System.Windows.Forms.RichTextBox();
-            this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.tsVermelho = new System.Windows.Forms.ToolStripButton();
             this.tsAzul = new System.Windows.Forms.ToolStripButton();
             this.tsVerde = new System.Windows.Forms.ToolStripButton();
             this.tsLaranja = new System.Windows.Forms.ToolStripButton();
             this.tsPreto = new System.Windows.Forms.ToolStripButton();
             this.tsCinza = new System.Windows.Forms.ToolStripButton();
+            this.rtfTexto = new System.Windows.Forms.RichTextBox();
+            this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.panel1.SuspendLayout();
             this.groupBox3.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -582,7 +576,6 @@ namespace TeleBonifacio
             this.toolStripButtonDecreaseFont,
             this.toolStripButtonUndo,
             this.toolStripButtonRedo,
-            this.toolStripDropDownButtonColors,
             this.tsVermelho,
             this.tsAzul,
             this.tsVerde,
@@ -665,66 +658,6 @@ namespace TeleBonifacio
             this.toolStripButtonRedo.Text = "Refazer";
             this.toolStripButtonRedo.Click += new System.EventHandler(this.toolStripButtonRedo_Click);
             // 
-            // toolStripDropDownButtonColors
-            // 
-            this.toolStripDropDownButtonColors.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripDropDownButtonColors.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.vermelhoToolStripMenuItem,
-            this.azulToolStripMenuItem,
-            this.verdeToolStripMenuItem,
-            this.laranjaToolStripMenuItem,
-            this.pretoToolStripMenuItem});
-            this.toolStripDropDownButtonColors.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripDropDownButtonColors.Name = "toolStripDropDownButtonColors";
-            this.toolStripDropDownButtonColors.Size = new System.Drawing.Size(13, 22);
-            this.toolStripDropDownButtonColors.Text = "Cores";
-            // 
-            // vermelhoToolStripMenuItem
-            // 
-            this.vermelhoToolStripMenuItem.Name = "vermelhoToolStripMenuItem";
-            this.vermelhoToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.vermelhoToolStripMenuItem.Text = "Vermelho";
-            // 
-            // azulToolStripMenuItem
-            // 
-            this.azulToolStripMenuItem.Name = "azulToolStripMenuItem";
-            this.azulToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.azulToolStripMenuItem.Text = "Azul";
-            // 
-            // verdeToolStripMenuItem
-            // 
-            this.verdeToolStripMenuItem.Name = "verdeToolStripMenuItem";
-            this.verdeToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.verdeToolStripMenuItem.Text = "Verde";
-            // 
-            // laranjaToolStripMenuItem
-            // 
-            this.laranjaToolStripMenuItem.Name = "laranjaToolStripMenuItem";
-            this.laranjaToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.laranjaToolStripMenuItem.Text = "Laranja";
-            // 
-            // pretoToolStripMenuItem
-            // 
-            this.pretoToolStripMenuItem.Name = "pretoToolStripMenuItem";
-            this.pretoToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.pretoToolStripMenuItem.Text = "Preto";
-            // 
-            // rtfTexto
-            // 
-            this.rtfTexto.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.rtfTexto.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.rtfTexto.Location = new System.Drawing.Point(0, 23);
-            this.rtfTexto.Name = "rtfTexto";
-            this.rtfTexto.Size = new System.Drawing.Size(1128, 275);
-            this.rtfTexto.TabIndex = 0;
-            this.rtfTexto.Text = "";
-            this.rtfTexto.TextChanged += new System.EventHandler(this.rtfTexto_TextChanged);
-            this.rtfTexto.KeyUp += new System.Windows.Forms.KeyEventHandler(this.rtfTexto_KeyUp);
-            // 
-            // timer1
-            // 
-            this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
-            // 
             // tsVermelho
             // 
             this.tsVermelho.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
@@ -784,6 +717,22 @@ namespace TeleBonifacio
             this.tsCinza.Size = new System.Drawing.Size(23, 22);
             this.tsCinza.Text = "toolStripButton6";
             this.tsCinza.Click += new System.EventHandler(this.tsCinza_Click);
+            // 
+            // rtfTexto
+            // 
+            this.rtfTexto.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.rtfTexto.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.rtfTexto.Location = new System.Drawing.Point(0, 23);
+            this.rtfTexto.Name = "rtfTexto";
+            this.rtfTexto.Size = new System.Drawing.Size(1128, 275);
+            this.rtfTexto.TabIndex = 0;
+            this.rtfTexto.Text = "";
+            this.rtfTexto.TextChanged += new System.EventHandler(this.rtfTexto_TextChanged);
+            this.rtfTexto.KeyUp += new System.Windows.Forms.KeyEventHandler(this.rtfTexto_KeyUp);
+            // 
+            // timer1
+            // 
+            this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
             // 
             // OperFalta
             // 
@@ -869,12 +818,6 @@ namespace TeleBonifacio
         private ToolStripButton toolStripButtonDecreaseFont;
         private ToolStripButton toolStripButtonUndo;
         private ToolStripButton toolStripButtonRedo;
-        private ToolStripDropDownButton toolStripDropDownButtonColors;
-        private ToolStripMenuItem vermelhoToolStripMenuItem;
-        private ToolStripMenuItem azulToolStripMenuItem;
-        private ToolStripMenuItem verdeToolStripMenuItem;
-        private ToolStripMenuItem laranjaToolStripMenuItem;
-        private ToolStripMenuItem pretoToolStripMenuItem;
         private ToolStripButton tsVermelho;
         private ToolStripButton tsAzul;
         private ToolStripButton tsVerde;

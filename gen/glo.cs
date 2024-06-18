@@ -23,6 +23,7 @@ namespace TeleBonifacio
         public static int Nivel = 0;
         public static int iUsuario = 0;
         public static bool ODBC = false;
+        //private static bool LogInicializado = false;
 
         public static string CaminhoBase
         {

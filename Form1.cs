@@ -159,7 +159,6 @@ namespace TeleBonifacio
                     }
                 }
                 this.Text = titulo;
-
             }
         }
 
@@ -168,6 +167,7 @@ namespace TeleBonifacio
         {
             bool ret = false;
             string pastaAtual = Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName);
+            NovoLog();
             glo.Loga("Executado a partir de "+ pastaAtual);            
             int diaAtual = DateTime.Now.Day;
             int UltExec = cINI.ReadInt("INI", "UltExec", 0);
@@ -249,6 +249,38 @@ namespace TeleBonifacio
                 }                
             }
             return ret;
+        }
+
+        private static void NovoLog()
+        {
+            string baseDirectory = @"C:\Entregas";
+            string logFileName = "Entregas.txt";
+            string logFilePath = Path.Combine(baseDirectory, logFileName);
+            string backupPath = Path.Combine(baseDirectory, "Logs", $"{DateTime.Now:yyyyMMdd}_Entregas.txt"); // Rename based on current date
+            Directory.CreateDirectory(Path.GetDirectoryName(backupPath));
+            if (!File.Exists(logFilePath))
+            {
+                if (File.Exists(backupPath))
+                {
+                    File.Copy(backupPath, logFilePath, true);
+                    Console.WriteLine($"Log do dia anterior copiado para {logFilePath}");
+                }
+            }
+            else
+            {
+                FileInfo fileInfo = new FileInfo(logFilePath);
+                DateTime logCreationDate = fileInfo.CreationTime.Date;
+                if (logCreationDate < DateTime.Today)
+                {
+                    string backupName = $"{DateTime.Now:yyyyMMdd}_{logFileName}";
+                    string backupFullPath = Path.Combine(baseDirectory, "Logs", backupName);
+                    File.Copy(logFilePath, backupFullPath, true);
+                    using (StreamWriter sw = File.CreateText(logFilePath))
+                    {
+                        sw.WriteLine($"Log de {logCreationDate.ToShortDateString()} copiado para Logs/{backupName}");
+                    }
+                }
+            }
         }
 
         #endregion

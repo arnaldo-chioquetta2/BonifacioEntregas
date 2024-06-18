@@ -826,7 +826,7 @@ namespace TeleBonifacio
                 }
                 AtualizarGridP = true;
                 CarregaGrid();
-                AtualizouEmBaixo();
+                // AtualizouEmBaixo();
             }
             else
             {
@@ -1333,7 +1333,7 @@ namespace TeleBonifacio
                     if (tbFaltas.SelectedIndex == 0)
                     {
                         CarregaGrid();
-                        //AtualizouEmBaixo();
+                        AtualizouEmBaixo();
                     }
                 }
             }
