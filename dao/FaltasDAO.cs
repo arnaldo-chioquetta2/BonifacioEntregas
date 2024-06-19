@@ -133,14 +133,15 @@ namespace TeleBonifacio.dao
             DB.ExecutarComandoSQL(sql);
         }
 
-        public void Comprou(int iID)
+        public void Comprou(int iID, float Valor)
         {
             DataTable faltaData = DB.ExecutarConsulta($"SELECT * FROM Faltas WHERE ID = {iID}");
             DataRow faltaRow = faltaData.Rows[0];
             string UID = glo.GenerateUID();
+            string sValor = glo.sv(Valor);
             int idForn = (faltaRow["idForn"].ToString().Length==0) ? 0 : Convert.ToInt16(faltaRow["idForn"]);
-            string insertQuery = $@"INSERT INTO Produtos (Data, Quant, Codigo, Marca, UID, Tipo, Compra, Descricao, idForn, Obs) 
-                            VALUES (Now, '{faltaRow["Quant"]}', '{faltaRow["Codigo"]}', '{faltaRow["Marca"]}', '{UID}', '{faltaRow["Tipo"]}', Now(), '{faltaRow["Descricao"]}', {idForn}, '{faltaRow["Obs"]}')";
+            string insertQuery = $@"INSERT INTO Produtos (Data, Quant, Codigo, Marca, UID, Tipo, Compra, Descricao, idForn, Obs, Valor) 
+                            VALUES (Now, '{faltaRow["Quant"]}', '{faltaRow["Codigo"]}', '{faltaRow["Marca"]}', '{UID}', '{faltaRow["Tipo"]}', Now(), '{faltaRow["Descricao"]}', {idForn}, '{faltaRow["Obs"]}', {sValor} ) ";
             DB.ExecutarComandoSQL(insertQuery);
             string updateFaltaQuery = $@"Delete From Faltas WHERE ID = {iID}";
             DB.ExecutarComandoSQL(updateFaltaQuery);

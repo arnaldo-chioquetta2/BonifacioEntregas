@@ -20,7 +20,12 @@ namespace TeleBonifacio
         // 0 Modo neutro
         // < 0 ID adicionado
         public static int IdAdicionado=0;
+
         public static int Nivel = 0;
+        // 0 Balconista, ve só as faltas  
+        // 1 Caixa
+        // 2 Adm
+
         public static int iUsuario = 0;
         public static bool ODBC = false;
         //private static bool LogInicializado = false;

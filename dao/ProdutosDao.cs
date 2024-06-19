@@ -25,7 +25,7 @@ namespace TeleBonifacio.dao
         public DataTable getDados(int tipo, int idForn, string codigo, string quantidade, string marca, string Obs, string Descr)
         {
             StringBuilder query = new StringBuilder();
-            query.Append(@"SELECT F.Compra, '' as Forn, F.ID, F.Data, F.Codigo, F.Quant, F.Marca, F.Descricao, 
+            query.Append(@"SELECT F.Compra, '' as Forn, F.ID, F.Data, F.Codigo, F.Valor, F.Quant, F.Marca, F.Descricao, 
             F.UID, F.Tipo, F.Tipo as TipoOrig, F.idForn, F.Obs 
         FROM Produtos F ");
             StringBuilder alteracoes = new StringBuilder();
@@ -83,7 +83,7 @@ namespace TeleBonifacio.dao
             DB.ExecutarComandoSQL(sql);
         }
 
-        public void Atualiza(int iID, int iTpo, int idForn, string codigo, string quantidade, string marca, string Obs, string descr)
+        public void Atualiza(int iID, int iTpo, int idForn, string codigo, string quantidade, string marca, string Obs, string descr, float Valor)
         {
             StringBuilder alteracoes = new StringBuilder();
             if (iTpo > 0)
@@ -114,8 +114,8 @@ namespace TeleBonifacio.dao
             {
                 alteracoes.Append($"Descricao = '{descr}', ");
             }
-            alteracoes.Length -= 2;
-            string sql = $@"UPDATE Produtos SET {alteracoes} WHERE ID = {iID}";
+            string sValor = glo.sv(Valor);
+            string sql = $@"UPDATE Produtos SET {alteracoes} Valor = {sValor} WHERE ID = {iID}";
             DB.ExecutarComandoSQL(sql);
         }
 

@@ -196,6 +196,7 @@ namespace TeleBonifacio
             Normaliza(txDescr, 1);
             Normaliza(txObs, 1);
             Normaliza(txQuantidade, 1);
+            Normaliza(txValor, 1);
             btnAdicionar.Text = "Adicionar";
             btnExcluir.Enabled = false;
             btAdicTpo.Enabled = false;
@@ -378,6 +379,7 @@ namespace TeleBonifacio
             dataGrid1.Columns[4].Width = 75;       // Data
             dataGrid1.Columns[5].Width = 80;        // Código
             dataGrid1.Columns[6].Width = 50;        // Quantidade
+            dataGrid1.Columns[6].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
             dataGrid1.Columns[7].Width = 80;        // Marca
             dataGrid1.Columns[8].Width = 160;       // Descrição
             dataGrid1.Columns[9].Width = 130;       // Balconista
@@ -615,16 +617,21 @@ namespace TeleBonifacio
                     {
                         Descr = txDescr.Text;
                     }
+                    float Vlr = 0;
+                    if (txValor.Tag == "M")
+                    {
+                        Vlr = glo.LeValor(txValor.Text);
+                    }
                     switch (tbFaltas.SelectedIndex)
                     {
                         case 0:
-                            AtualizaItensSelecionados(0, dataGrid1, idTipo, idForn, codigo, quantidade, marca, Obs, Descr);
+                            AtualizaItensSelecionados(0, dataGrid1, idTipo, idForn, codigo, quantidade, marca, Obs, Descr, Vlr);
                             break;
                         case 1:
-                            AtualizaItensSelecionados(1, dataGrid2, idTipo, idForn, codigo, quantidade, marca, Obs, Descr);
+                            AtualizaItensSelecionados(1, dataGrid2, idTipo, idForn, codigo, quantidade, marca, Obs, Descr, Vlr);
                             break;
                         case 2:
-                            AtualizaItensSelecionados(2, dataGrid3, idTipo, idForn, codigo, quantidade, marca, Obs, Descr);
+                            AtualizaItensSelecionados(2, dataGrid3, idTipo, idForn, codigo, quantidade, marca, Obs, Descr, Vlr);
                             break;
                     }
                 }
@@ -632,7 +639,7 @@ namespace TeleBonifacio
             }
         }
 
-        private void AtualizaItensSelecionados(int nrGrid, DataGridView grid, int idTipo, int idForn, string codigo, string quantidade, string marca, string obs, string descr)
+        private void AtualizaItensSelecionados(int nrGrid, DataGridView grid, int idTipo, int idForn, string codigo, string quantidade, string marca, string obs, string descr, float Vlr)
         {
             HashSet<string> selectedCodes = new HashSet<string>();
             int scrollPosition = grid.FirstDisplayedScrollingRowIndex;
@@ -646,14 +653,14 @@ namespace TeleBonifacio
                 selectedCodes.Add(sID);
                 int gID = Convert.ToInt32(row.Cells["ID"].Value);
                 string UID = Convert.ToString(row.Cells["UID"].Value);
-                glo.Loga($@"FA,{gID}, {idTipo}, {idForn}, {codigo}, {quantidade}, {marca}, {obs}, {descr}, {UID}");
+                glo.Loga($@"FA,{gID}, {idTipo}, {idForn}, {codigo}, {quantidade}, {marca}, {obs}, {descr}, {Vlr}, {UID}");
                 switch (tbFaltas.SelectedIndex)
                 {
                     case 0:
                         faltasDAO.Atualiza(gID, idTipo, idForn, codigo, quantidade, marca, obs, descr);
                         break;
                     case 1:
-                        cDaoP.Atualiza(gID, idTipo, idForn, codigo, quantidade, marca, obs, descr);
+                        cDaoP.Atualiza(gID, idTipo, idForn, codigo, quantidade, marca, obs, descr, Vlr);
                         break;
                     case 2:
                         EncoDao.Atualiza(gID, this.idCliente, idForn, codigo, quantidade, marca, obs, descr);
@@ -819,14 +826,23 @@ namespace TeleBonifacio
         {
             if (btComprei.Text == "Comprei")
             {
-                foreach (DataGridViewRow row in dataGrid1.SelectedRows)
+                if (dataGrid1.SelectedRows.Count==1)
                 {
-                    int gID = Convert.ToInt32(row.Cells["ID"].Value);
-                    faltasDAO.Comprou(gID);
+                    string sID = dataGrid1.SelectedRows[0].Cells[2].Value.ToString();
+                    int gID = Convert.ToInt32(sID);
+                    string inputValue = Microsoft.VisualBasic.Interaction.InputBox("Valor de compra", "Input Value", "0", -1, -1);
+                    float valor = glo.LeValor(inputValue);
+                    faltasDAO.Comprou(gID, valor);
+                } else
+                {
+                    foreach (DataGridViewRow row in dataGrid1.SelectedRows)
+                    {
+                        int gID = Convert.ToInt32(row.Cells["ID"].Value);
+                        faltasDAO.Comprou(gID, 0);
+                    }
                 }
                 AtualizarGridP = true;
                 CarregaGrid();
-                // AtualizouEmBaixo();
             }
             else
             {
@@ -1009,14 +1025,24 @@ namespace TeleBonifacio
             dataGrid2.Columns[2].Visible = false;   // ID
             dataGrid2.Columns[3].Width = 100;       // Data
             dataGrid2.Columns[4].Width = 80;        // Código
-            dataGrid2.Columns[5].Width = 50;        // Quantidade
-            dataGrid2.Columns[6].Width = 80;        // Marca
-            dataGrid2.Columns[7].Width = 150;       // Descrição
-            dataGrid2.Columns[8].Visible = false;  // UID
-            dataGrid2.Columns[9].Width = 130;      // Tipo - colocado o texto
-            dataGrid2.Columns[10].Visible = false;  // Tipo valor original
-            dataGrid2.Columns[11].Visible = false;  // idForn
-            dataGrid2.Columns[12].Width = 100;      // Obs
+            if (glo.Nivel==2)
+            {
+                dataGrid2.Columns[5].Visible = true;
+                dataGrid2.Columns[5].Width = 50;        // Valor
+                dataGrid2.Columns[5].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+            } else
+            {
+                dataGrid2.Columns[5].Visible = false;
+            }
+            dataGrid2.Columns[6].Width = 50;        // Quantidade
+            dataGrid2.Columns[6].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+            dataGrid2.Columns[7].Width = 80;        // Marca
+            dataGrid2.Columns[8].Width = 150;       // Descrição
+            dataGrid2.Columns[9].Visible = false;  // UID
+            dataGrid2.Columns[10].Width = 130;      // Tipo - colocado o texto
+            dataGrid2.Columns[11].Visible = false;  // Tipo valor original
+            dataGrid2.Columns[12].Visible = false;  // idForn
+            dataGrid2.Columns[13].Width = 100;      // Obs
             dataGrid2.Invalidate();
         }
 
@@ -1048,8 +1074,10 @@ namespace TeleBonifacio
                         groupBox1.Enabled = true;
                         cmbTipos.Enabled = true;
                         btComprei.Visible = true;
-                        btComprei.Text = "Em Falta";
+                        btComprei.Text = "Comprei";
                         ckEmFalta.Visible = true;
+                        lbVlor.Visible = false;
+                        txValor.Visible = false;
                         if (iUser.Length > 0)
                         {
                             cmbVendedor.SelectedItem = Convert.ToInt16(iUser);
@@ -1065,6 +1093,11 @@ namespace TeleBonifacio
                         btComprei.Visible = true;
                         btComprei.Text = "Em Falta";
                         ckEmFalta.Visible = false;
+                        if (glo.Nivel==2)
+                        {
+                            lbVlor.Visible = true;
+                            txValor.Visible = true;
+                        }
                         if (AtualizarGridP)
                         {
                             carregando = true;
@@ -1080,6 +1113,8 @@ namespace TeleBonifacio
                         cmbTipos.Enabled = true;
                         btComprei.Visible = false;
                         ckEmFalta.Visible = false;
+                        lbVlor.Visible = false;
+                        txValor.Visible = false;
                         if (AtualizarGridE)
                         {
                             carregando = true;
@@ -1095,6 +1130,8 @@ namespace TeleBonifacio
                         cmbTipos.Enabled = false;
                         btComprei.Visible = false;
                         ckEmFalta.Visible = false;
+                        lbVlor.Visible = false;
+                        txValor.Visible = false;
                         if (AtualizarGridG)
                         {
                             carregando = true;
@@ -1109,6 +1146,8 @@ namespace TeleBonifacio
                         cmbTipos.Enabled = false;
                         btComprei.Visible = false;
                         ckEmFalta.Visible = false;
+                        lbVlor.Visible = false;
+                        txValor.Visible = false;
                         if (rtfTexto.Text.Length == 0)
                         {
                             int padding = 5;
@@ -1146,6 +1185,7 @@ namespace TeleBonifacio
                 txMarca.Text = FiltraOZero(selectedRow.Cells["Marca"].Value);
                 txObs.Text = FiltraOZero(selectedRow.Cells["Obs"].Value);
                 txDescr.Text = Convert.ToString(selectedRow.Cells["Descricao"].Value);
+                txValor.Text = glo.fmtVlr(Convert.ToString(selectedRow.Cells["Valor"].Value));
                 this.UID = Convert.ToString(selectedRow.Cells["UID"].Value);
                 try
                 {
@@ -1183,6 +1223,11 @@ namespace TeleBonifacio
                 txObs.BackColor = originalBackgroundColor;
                 carregando = false;
             }
+        }
+
+        private void txValor_KeyUp(object sender, KeyEventArgs e)
+        {
+            VeSeHab(txValor);
         }
 
         #endregion
@@ -1376,6 +1421,7 @@ namespace TeleBonifacio
             dataGrid3.Columns[2].Width = 100;       // Data
             dataGrid3.Columns[3].Width = 100;       // Código
             dataGrid3.Columns[4].Width = 40;        // Quant
+            dataGrid3.Columns[5].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
             dataGrid3.Columns[5].Width = 50;        // Marca
             dataGrid3.Columns[6].Width = 190;       // Descrição
             dataGrid3.Columns[7].Visible = false;   // UID
