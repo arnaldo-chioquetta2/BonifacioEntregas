@@ -67,27 +67,6 @@ namespace TeleBonifacio
             dataGrid1.Invalidate();
         }
 
-        //private void CarregarComboBox<T>(ComboBox comboBox, BaseDAO classe, string ItemZero = "") where T : IDataEntity, new()
-        //{
-        //    DataTable dados = classe.GetDadosOrdenados();
-        //    List<ComboBoxItem> lista = new List<ComboBoxItem>();
-        //    if (ItemZero.Length > 0)
-        //    {
-        //        ComboBoxItem item = new ComboBoxItem(0, ItemZero);
-        //        lista.Add(item);
-        //    }
-        //    foreach (DataRow row in dados.Rows)
-        //    {
-        //        int id = Convert.ToInt32(row["id"]);
-        //        string nome = row["Nome"].ToString();
-        //        ComboBoxItem item = new ComboBoxItem(id, nome);
-        //        lista.Add(item);
-        //    }
-        //    comboBox.DataSource = lista;
-        //    comboBox.DisplayMember = "Nome";
-        //    comboBox.ValueMember = "Id";
-        //}
-
         #endregion
 
         #region Lançamentos

@@ -141,8 +141,11 @@ namespace TeleBonifacio.dao
         {
             DataTable encomendaData = DB.ExecutarConsulta($"SELECT * FROM Produtos WHERE ID = {gID} ");
             DataRow Row = encomendaData.Rows[0];
-            string insertQuery = $@"INSERT INTO Faltas (Data, Quant, Codigo, Marca, UID, Tipo, Descricao, idForn, Obs) 
-                        VALUES (Now, {Row["Quant"]}, '{Row["Codigo"]}', '{Row["Marca"]}', '{Row["UID"]}', '{Row["Tipo"]}', '{Row["Descricao"]}', {Row["idForn"]}, '{Row["Obs"]}' )";
+            string sValor = Row["Valor"].ToString();
+            float fValor = glo.LeValor(sValor);
+            sValor = glo.sv(fValor);
+            string insertQuery = $@"INSERT INTO Faltas (Data, Quant, Codigo, Marca, UID, Tipo, Descricao, idForn, Obs, Valor) 
+                        VALUES (Now, {Row["Quant"]}, '{Row["Codigo"]}', '{Row["Marca"]}', '{Row["UID"]}', '{Row["Tipo"]}', '{Row["Descricao"]}', {Row["idForn"]}, '{Row["Obs"]}', {sValor} )";
             DB.ExecutarComandoSQL(insertQuery);
             string sql = $@"DELETE FROM Produtos WHERE ID = {gID} ";
             DB.ExecutarComandoSQL(sql);

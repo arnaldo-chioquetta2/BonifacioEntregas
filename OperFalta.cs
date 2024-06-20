@@ -73,6 +73,11 @@ namespace TeleBonifacio
             {
                 btEncomenda.Enabled = false;
             }
+            if (glo.Nivel==2)
+            {
+                lbVlor.Visible = true;
+                txValor.Visible = true;
+            }
         }
 
         private void SetStartPosition()
@@ -387,7 +392,19 @@ namespace TeleBonifacio
             dataGrid1.Columns[11].Width = 130;      // Tipo - colocado o texto
             dataGrid1.Columns[12].Visible = false;  // Tipo valor original
             dataGrid1.Columns[13].Visible = false;  // idForn
-            dataGrid1.Columns[14].Width = 100;      // Obs
+
+            if (glo.Nivel == 2)
+            {
+                dataGrid1.Columns[14].Visible = true;   // Valor
+                dataGrid1.Columns[14].Width = 50; 
+                dataGrid1.Columns[14].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+            }
+            else
+            {
+                dataGrid1.Columns[14].Visible = false;  // Valor
+            }            
+
+            dataGrid1.Columns[15].Width = 100;      // Obs
             dataGrid1.Invalidate();
         }
 
@@ -437,6 +454,7 @@ namespace TeleBonifacio
                 txMarca.Text = FiltraOZero(selectedRow.Cells["Marca"].Value);
                 txObs.Text = FiltraOZero(selectedRow.Cells["Obs"].Value);
                 txDescr.Text = Convert.ToString(selectedRow.Cells["Descricao"].Value);
+                txValor.Text = glo.fmtVlr(Convert.ToString(selectedRow.Cells["Valor"].Value));
                 cmbVendedor.SelectedValue = Convert.ToInt32(selectedRow.Cells["IDBalconista"].Value);
                 this.UID = Convert.ToString(selectedRow.Cells["UID"].Value);
                 try
@@ -657,7 +675,7 @@ namespace TeleBonifacio
                 switch (tbFaltas.SelectedIndex)
                 {
                     case 0:
-                        faltasDAO.Atualiza(gID, idTipo, idForn, codigo, quantidade, marca, obs, descr);
+                        faltasDAO.Atualiza(gID, idTipo, idForn, codigo, quantidade, marca, obs, descr, Vlr);
                         break;
                     case 1:
                         cDaoP.Atualiza(gID, idTipo, idForn, codigo, quantidade, marca, obs, descr, Vlr);
@@ -826,13 +844,22 @@ namespace TeleBonifacio
         {
             if (btComprei.Text == "Comprei")
             {
+                //  COMPROU A MERCADORIA QUE ESTAVA EM FALTA
                 if (dataGrid1.SelectedRows.Count==1)
                 {
                     string sID = dataGrid1.SelectedRows[0].Cells[2].Value.ToString();
                     int gID = Convert.ToInt32(sID);
-                    string inputValue = Microsoft.VisualBasic.Interaction.InputBox("Valor de compra", "Input Value", "0", -1, -1);
-                    float valor = glo.LeValor(inputValue);
-                    faltasDAO.Comprou(gID, valor);
+                    string sVlr = dataGrid1.SelectedRows[0].Cells[14].Value.ToString();
+                    if (sVlr.Length==0)
+                    {
+                        sVlr = "0";
+                    }
+                    string inputValue = Microsoft.VisualBasic.Interaction.InputBox("Valor de compra", "Input Value", sVlr, -1, -1);
+                    if (inputValue.Length>0)
+                    {
+                        float valor = glo.LeValor(inputValue);
+                        faltasDAO.Comprou(gID, valor);
+                    }
                 } else
                 {
                     foreach (DataGridViewRow row in dataGrid1.SelectedRows)
@@ -846,9 +873,9 @@ namespace TeleBonifacio
             }
             else
             {
-
                 if (btComprei.Text == "Em Falta")
                 {
+                    // RETORNOU PARA EM FALTA A MERCADORIA QUE ESTAVA COMO COMPRADA
                     DialogResult result = MessageBox.Show("Tem certeza que deseja retornar para faltas?",
                                                           "Esta em falta",
                                                           MessageBoxButtons.YesNo,
@@ -1514,11 +1541,6 @@ namespace TeleBonifacio
         }
 
         #region Anotações
-
-        private void rtfTexto_KeyUp(object sender, KeyEventArgs e)
-        {
-            //this.SalvaAnota = true;
-        }
 
         private void rtfTexto_TextChanged(object sender, EventArgs e)
         {

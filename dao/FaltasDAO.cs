@@ -27,7 +27,7 @@ namespace TeleBonifacio.dao
         {
             StringBuilder query = new StringBuilder();
             query.Append(@"SELECT F.Compra, '' as Forn, F.ID, F.IDBalconista, F.Data, F.Codigo, F.Quant, F.Marca, F.Descricao, 
-            V.Nome AS Balconista, F.UID, F.Tipo, F.Tipo as TipoOrig, F.idForn, F.Obs 
+            V.Nome AS Balconista, F.UID, F.Tipo, F.Tipo as TipoOrig, F.idForn, F.Valor, F.Obs 
         FROM Faltas F
         LEFT JOIN Vendedores V ON V.ID = F.IDBalconista ");
             StringBuilder alteracoes = new StringBuilder();
@@ -97,7 +97,7 @@ namespace TeleBonifacio.dao
             DB.ExecutarComandoSQL(sql);
         }
 
-        public void Atualiza(int iID, int iTpo, int idForn, string codigo, string quantidade, string marca, string Obs, string Descr)
+        public void Atualiza(int iID, int iTpo, int idForn, string codigo, string quantidade, string marca, string Obs, string Descr, float Valor)
         {
             StringBuilder alteracoes = new StringBuilder();
             if (iTpo > 0)
@@ -127,9 +127,10 @@ namespace TeleBonifacio.dao
             if (!string.IsNullOrEmpty(Descr))
             {
                 alteracoes.Append($"Descricao = '{Descr}', ");
-            }            
-            alteracoes.Length -= 2;
-            string sql = $@"UPDATE Faltas SET {alteracoes} WHERE ID = {iID}";
+            }
+            // alteracoes.Length -= 2;
+            string sValor = glo.sv(Valor);
+            string sql = $@"UPDATE Faltas SET {alteracoes} Valor = {sValor} WHERE ID = {iID}";
             DB.ExecutarComandoSQL(sql);
         }
 

@@ -52,6 +52,8 @@ namespace TeleBonifacio
             this.label3 = new System.Windows.Forms.Label();
             this.txNvTipo = new System.Windows.Forms.TextBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.txValor = new System.Windows.Forms.TextBox();
+            this.lbVlor = new System.Windows.Forms.Label();
             this.label10 = new System.Windows.Forms.Label();
             this.txObs = new System.Windows.Forms.TextBox();
             this.label8 = new System.Windows.Forms.Label();
@@ -91,8 +93,6 @@ namespace TeleBonifacio
             this.tsCinza = new System.Windows.Forms.ToolStripButton();
             this.rtfTexto = new System.Windows.Forms.RichTextBox();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
-            this.lbVlor = new System.Windows.Forms.Label();
-            this.txValor = new System.Windows.Forms.TextBox();
             this.panel1.SuspendLayout();
             this.groupBox3.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -321,6 +321,28 @@ namespace TeleBonifacio
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Adição";
             // 
+            // txValor
+            // 
+            this.txValor.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txValor.Location = new System.Drawing.Point(824, 20);
+            this.txValor.Name = "txValor";
+            this.txValor.Size = new System.Drawing.Size(62, 21);
+            this.txValor.TabIndex = 50;
+            this.txValor.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.txValor.Visible = false;
+            this.txValor.KeyUp += new System.Windows.Forms.KeyEventHandler(this.txValor_KeyUp);
+            // 
+            // lbVlor
+            // 
+            this.lbVlor.AutoSize = true;
+            this.lbVlor.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbVlor.Location = new System.Drawing.Point(796, 23);
+            this.lbVlor.Name = "lbVlor";
+            this.lbVlor.Size = new System.Drawing.Size(27, 16);
+            this.lbVlor.TabIndex = 49;
+            this.lbVlor.Text = "Vlr.";
+            this.lbVlor.Visible = false;
+            // 
             // label10
             // 
             this.label10.AutoSize = true;
@@ -520,7 +542,7 @@ namespace TeleBonifacio
             this.tabPage3.Controls.Add(this.dataGrid3);
             this.tabPage3.Location = new System.Drawing.Point(4, 22);
             this.tabPage3.Name = "tabPage3";
-            this.tabPage3.Size = new System.Drawing.Size(1128, 298);
+            this.tabPage3.Size = new System.Drawing.Size(1156, 298);
             this.tabPage3.TabIndex = 2;
             this.tabPage3.Text = "Encomenda";
             this.tabPage3.UseVisualStyleBackColor = true;
@@ -533,7 +555,7 @@ namespace TeleBonifacio
             this.dataGrid3.Name = "dataGrid3";
             this.dataGrid3.ReadOnly = true;
             this.dataGrid3.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dataGrid3.Size = new System.Drawing.Size(1128, 298);
+            this.dataGrid3.Size = new System.Drawing.Size(1156, 298);
             this.dataGrid3.TabIndex = 17;
             this.dataGrid3.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGrid3_CellClick);
             // 
@@ -542,7 +564,7 @@ namespace TeleBonifacio
             this.tabPage4.Controls.Add(this.dataGrid4);
             this.tabPage4.Location = new System.Drawing.Point(4, 22);
             this.tabPage4.Name = "tabPage4";
-            this.tabPage4.Size = new System.Drawing.Size(1128, 298);
+            this.tabPage4.Size = new System.Drawing.Size(1156, 298);
             this.tabPage4.TabIndex = 3;
             this.tabPage4.Text = "Garantia";
             this.tabPage4.UseVisualStyleBackColor = true;
@@ -555,7 +577,7 @@ namespace TeleBonifacio
             this.dataGrid4.Name = "dataGrid4";
             this.dataGrid4.ReadOnly = true;
             this.dataGrid4.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dataGrid4.Size = new System.Drawing.Size(1128, 298);
+            this.dataGrid4.Size = new System.Drawing.Size(1156, 298);
             this.dataGrid4.TabIndex = 18;
             this.dataGrid4.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGrid4_CellClick);
             // 
@@ -565,7 +587,7 @@ namespace TeleBonifacio
             this.tabPage5.Controls.Add(this.rtfTexto);
             this.tabPage5.Location = new System.Drawing.Point(4, 22);
             this.tabPage5.Name = "tabPage5";
-            this.tabPage5.Size = new System.Drawing.Size(1128, 298);
+            this.tabPage5.Size = new System.Drawing.Size(1156, 298);
             this.tabPage5.TabIndex = 4;
             this.tabPage5.Text = "Anotações";
             this.tabPage5.UseVisualStyleBackColor = true;
@@ -588,7 +610,7 @@ namespace TeleBonifacio
             this.tsCinza});
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.Size = new System.Drawing.Size(1128, 25);
+            this.toolStrip1.Size = new System.Drawing.Size(1156, 25);
             this.toolStrip1.TabIndex = 0;
             this.toolStrip1.Text = "toolStrip1";
             // 
@@ -728,37 +750,14 @@ namespace TeleBonifacio
             this.rtfTexto.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.rtfTexto.Location = new System.Drawing.Point(0, 23);
             this.rtfTexto.Name = "rtfTexto";
-            this.rtfTexto.Size = new System.Drawing.Size(1128, 275);
+            this.rtfTexto.Size = new System.Drawing.Size(1156, 275);
             this.rtfTexto.TabIndex = 0;
             this.rtfTexto.Text = "";
             this.rtfTexto.TextChanged += new System.EventHandler(this.rtfTexto_TextChanged);
-            this.rtfTexto.KeyUp += new System.Windows.Forms.KeyEventHandler(this.rtfTexto_KeyUp);
             // 
             // timer1
             // 
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
-            // 
-            // lbVlor
-            // 
-            this.lbVlor.AutoSize = true;
-            this.lbVlor.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbVlor.Location = new System.Drawing.Point(796, 23);
-            this.lbVlor.Name = "lbVlor";
-            this.lbVlor.Size = new System.Drawing.Size(27, 16);
-            this.lbVlor.TabIndex = 49;
-            this.lbVlor.Text = "Vlr.";
-            this.lbVlor.Visible = false;
-            // 
-            // txValor
-            // 
-            this.txValor.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txValor.Location = new System.Drawing.Point(824, 20);
-            this.txValor.Name = "txValor";
-            this.txValor.Size = new System.Drawing.Size(62, 21);
-            this.txValor.TabIndex = 50;
-            this.txValor.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-            this.txValor.Visible = false;
-            this.txValor.KeyUp += new System.Windows.Forms.KeyEventHandler(this.txValor_KeyUp);
             // 
             // OperFalta
             // 
