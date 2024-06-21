@@ -76,7 +76,13 @@ namespace TeleBonifacio
             if (glo.Nivel==2)
             {
                 lbVlor.Visible = true;
-                txValor.Visible = true;
+                txValor.Visible = true;                
+            } else
+            {
+                tbFaltas.TabPages.Remove(tabPage2);
+                tbFaltas.TabPages.Remove(tabPage3);
+                tbFaltas.TabPages.Remove(tabPage4);
+                tbFaltas.TabPages.Remove(tabPage5);
             }
         }
 
@@ -1105,6 +1111,7 @@ namespace TeleBonifacio
                         ckEmFalta.Visible = true;
                         lbVlor.Visible = false;
                         txValor.Visible = false;
+                        timer1.Enabled = false;
                         if (iUser.Length > 0)
                         {
                             cmbVendedor.SelectedItem = Convert.ToInt16(iUser);
@@ -1120,6 +1127,7 @@ namespace TeleBonifacio
                         btComprei.Visible = true;
                         btComprei.Text = "Em Falta";
                         ckEmFalta.Visible = false;
+                        timer1.Enabled = false;
                         if (glo.Nivel==2)
                         {
                             lbVlor.Visible = true;
@@ -1142,6 +1150,7 @@ namespace TeleBonifacio
                         ckEmFalta.Visible = false;
                         lbVlor.Visible = false;
                         txValor.Visible = false;
+                        timer1.Enabled = false;
                         if (AtualizarGridE)
                         {
                             carregando = true;
@@ -1159,6 +1168,7 @@ namespace TeleBonifacio
                         ckEmFalta.Visible = false;
                         lbVlor.Visible = false;
                         txValor.Visible = false;
+                        timer1.Enabled = false;
                         if (AtualizarGridG)
                         {
                             carregando = true;
@@ -1557,11 +1567,6 @@ namespace TeleBonifacio
             rtfTexto.SaveFile(caminhoDoArquivo);
         }
 
-        private void ChangeTextColor(object red)
-        {
-            throw new NotImplementedException();
-        }
-
         private void toolStripButtonRedo_Click(object sender, EventArgs e)
         {
             if (rtfTexto.CanRedo)
@@ -1643,7 +1648,6 @@ namespace TeleBonifacio
                 rtfTexto.SelectionFont = new Font(rtfTexto.SelectionFont.FontFamily, rtfTexto.SelectionFont.Size, newStyle);
             }
         }
-
 
         private void tsVermelho_Click(object sender, EventArgs e)
         {

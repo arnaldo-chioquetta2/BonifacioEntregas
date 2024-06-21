@@ -128,6 +128,11 @@ namespace TeleBonifacio
             AbrirOuFocarFormulario<CadFornec>();
         }
 
+        private void pictureBox14_Click(object sender, EventArgs e)
+        {
+            AbrirOuFocarFormulario<OperPagar>();
+        }
+
         #endregion
 
         private void Form1_Shown(object sender, EventArgs e)
@@ -465,6 +470,7 @@ namespace TeleBonifacio
                         label9.Visible = false;
                         label12.Visible = false;
                         label13.Visible = false;
+                        label14.Visible = false;
                         pictureBox1.Visible = false;
                         pictureBox2.Visible = false;
                         pictureBox3.Visible = false;
@@ -476,6 +482,7 @@ namespace TeleBonifacio
                         pictureBox9.Visible = false;
                         pictureBox12.Visible = false;
                         pictureBox13.Visible = false;
+                        pictureBox14.Visible = false;
                         label10.Visible = true;
                         pictureBox10.Visible = true;
                         label11.Visible = true;
@@ -501,6 +508,7 @@ namespace TeleBonifacio
         {
             Application.Exit();
         }
+
     }
 
 }
