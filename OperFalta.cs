@@ -409,7 +409,6 @@ namespace TeleBonifacio
             {
                 dataGrid1.Columns[14].Visible = false;  // Valor
             }            
-
             dataGrid1.Columns[15].Width = 100;      // Obs
             dataGrid1.Invalidate();
         }

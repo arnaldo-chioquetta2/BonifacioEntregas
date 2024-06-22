@@ -23,12 +23,13 @@ namespace TeleBonifacio
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(OperPagar));
             this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.ckPago = new System.Windows.Forms.CheckBox();
+            this.chPermanente = new System.Windows.Forms.CheckBox();
             this.button1 = new System.Windows.Forms.Button();
             this.dtpDataPagamento = new System.Windows.Forms.DateTimePicker();
             this.dtpDataVencimento = new System.Windows.Forms.DateTimePicker();
             this.dtpDataEmissao = new System.Windows.Forms.DateTimePicker();
             this.btnAdicionar = new System.Windows.Forms.Button();
-            this.btAtualizar = new System.Windows.Forms.Button();
             this.btExcluir = new System.Windows.Forms.Button();
             this.btLimparFiltro = new System.Windows.Forms.Button();
             this.labelFornecedor = new System.Windows.Forms.Label();
@@ -41,13 +42,13 @@ namespace TeleBonifacio
             this.txChaveNotaFiscal = new System.Windows.Forms.TextBox();
             this.labelDescricao = new System.Windows.Forms.Label();
             this.txDescricao = new System.Windows.Forms.TextBox();
-            this.labelPago = new System.Windows.Forms.Label();
-            this.ckPago = new System.Windows.Forms.CheckBox();
             this.labelDataPagamento = new System.Windows.Forms.Label();
             this.labelObservacoes = new System.Windows.Forms.Label();
             this.txObservacoes = new System.Windows.Forms.TextBox();
             this.panel1 = new System.Windows.Forms.Panel();
             this.dataGrid1 = new System.Windows.Forms.DataGridView();
+            this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
+            this.btPDF = new System.Windows.Forms.Button();
             this.groupBox3.SuspendLayout();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGrid1)).BeginInit();
@@ -55,12 +56,14 @@ namespace TeleBonifacio
             // 
             // groupBox3
             // 
+            this.groupBox3.Controls.Add(this.btPDF);
+            this.groupBox3.Controls.Add(this.ckPago);
+            this.groupBox3.Controls.Add(this.chPermanente);
             this.groupBox3.Controls.Add(this.button1);
             this.groupBox3.Controls.Add(this.dtpDataPagamento);
             this.groupBox3.Controls.Add(this.dtpDataVencimento);
             this.groupBox3.Controls.Add(this.dtpDataEmissao);
             this.groupBox3.Controls.Add(this.btnAdicionar);
-            this.groupBox3.Controls.Add(this.btAtualizar);
             this.groupBox3.Controls.Add(this.btExcluir);
             this.groupBox3.Controls.Add(this.btLimparFiltro);
             this.groupBox3.Controls.Add(this.labelFornecedor);
@@ -73,8 +76,6 @@ namespace TeleBonifacio
             this.groupBox3.Controls.Add(this.txChaveNotaFiscal);
             this.groupBox3.Controls.Add(this.labelDescricao);
             this.groupBox3.Controls.Add(this.txDescricao);
-            this.groupBox3.Controls.Add(this.labelPago);
-            this.groupBox3.Controls.Add(this.ckPago);
             this.groupBox3.Controls.Add(this.labelDataPagamento);
             this.groupBox3.Controls.Add(this.labelObservacoes);
             this.groupBox3.Controls.Add(this.txObservacoes);
@@ -84,6 +85,29 @@ namespace TeleBonifacio
             this.groupBox3.Size = new System.Drawing.Size(720, 166);
             this.groupBox3.TabIndex = 41;
             this.groupBox3.TabStop = false;
+            // 
+            // ckPago
+            // 
+            this.ckPago.AutoSize = true;
+            this.ckPago.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ckPago.Location = new System.Drawing.Point(591, 82);
+            this.ckPago.Name = "ckPago";
+            this.ckPago.Size = new System.Drawing.Size(55, 19);
+            this.ckPago.TabIndex = 48;
+            this.ckPago.Text = "Pago";
+            this.ckPago.UseVisualStyleBackColor = true;
+            this.ckPago.CheckedChanged += new System.EventHandler(this.ckPago_CheckedChanged);
+            // 
+            // chPermanente
+            // 
+            this.chPermanente.AutoSize = true;
+            this.chPermanente.Enabled = false;
+            this.chPermanente.Location = new System.Drawing.Point(558, 147);
+            this.chPermanente.Name = "chPermanente";
+            this.chPermanente.Size = new System.Drawing.Size(83, 17);
+            this.chPermanente.TabIndex = 15;
+            this.chPermanente.Text = "Permanente";
+            this.chPermanente.UseVisualStyleBackColor = true;
             // 
             // button1
             // 
@@ -138,18 +162,6 @@ namespace TeleBonifacio
             this.btnAdicionar.Text = "Adicionar";
             this.btnAdicionar.UseVisualStyleBackColor = true;
             this.btnAdicionar.Click += new System.EventHandler(this.btnAdicionar_Click_1);
-            // 
-            // btAtualizar
-            // 
-            this.btAtualizar.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.btAtualizar.Enabled = false;
-            this.btAtualizar.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F);
-            this.btAtualizar.Location = new System.Drawing.Point(477, 143);
-            this.btAtualizar.Name = "btAtualizar";
-            this.btAtualizar.Size = new System.Drawing.Size(75, 23);
-            this.btAtualizar.TabIndex = 13;
-            this.btAtualizar.Text = "PDF";
-            this.btAtualizar.UseVisualStyleBackColor = true;
             // 
             // btExcluir
             // 
@@ -275,26 +287,6 @@ namespace TeleBonifacio
             this.txDescricao.TabIndex = 2;
             this.txDescricao.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             // 
-            // labelPago
-            // 
-            this.labelPago.AutoSize = true;
-            this.labelPago.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F);
-            this.labelPago.Location = new System.Drawing.Point(612, 79);
-            this.labelPago.Name = "labelPago";
-            this.labelPago.Size = new System.Drawing.Size(41, 16);
-            this.labelPago.TabIndex = 7;
-            this.labelPago.Text = "Pago";
-            // 
-            // ckPago
-            // 
-            this.ckPago.AutoSize = true;
-            this.ckPago.Location = new System.Drawing.Point(591, 81);
-            this.ckPago.Name = "ckPago";
-            this.ckPago.Size = new System.Drawing.Size(15, 14);
-            this.ckPago.TabIndex = 49;
-            this.ckPago.UseVisualStyleBackColor = true;
-            this.ckPago.CheckedChanged += new System.EventHandler(this.ckPago_CheckedChanged);
-            // 
             // labelDataPagamento
             // 
             this.labelDataPagamento.AutoSize = true;
@@ -338,11 +330,30 @@ namespace TeleBonifacio
             this.dataGrid1.AllowUserToAddRows = false;
             this.dataGrid1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataGrid1.Location = new System.Drawing.Point(0, 181);
+            this.dataGrid1.MultiSelect = false;
             this.dataGrid1.Name = "dataGrid1";
             this.dataGrid1.ReadOnly = true;
             this.dataGrid1.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dataGrid1.Size = new System.Drawing.Size(720, 251);
             this.dataGrid1.TabIndex = 14;
+            this.dataGrid1.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGrid1_CellClick);
+            // 
+            // openFileDialog
+            // 
+            this.openFileDialog.FileName = "openFileDialog1";
+            // 
+            // btPDF
+            // 
+            this.btPDF.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.btPDF.Enabled = false;
+            this.btPDF.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F);
+            this.btPDF.Location = new System.Drawing.Point(477, 142);
+            this.btPDF.Name = "btPDF";
+            this.btPDF.Size = new System.Drawing.Size(75, 23);
+            this.btPDF.TabIndex = 49;
+            this.btPDF.Text = "PDF";
+            this.btPDF.UseVisualStyleBackColor = true;
+            this.btPDF.Click += new System.EventHandler(this.btPDF_Click);
             // 
             // OperPagar
             // 
@@ -370,7 +381,6 @@ namespace TeleBonifacio
         private DateTimePicker dtpDataVencimento;
         private DateTimePicker dtpDataEmissao;
         private Button btnAdicionar;
-        private Button btAtualizar;
         private Button btExcluir;
         private Button btLimparFiltro;
         private Label labelFornecedor;
@@ -383,12 +393,14 @@ namespace TeleBonifacio
         private TextBox txChaveNotaFiscal;
         private Label labelDescricao;
         private TextBox txDescricao;
-        private Label labelPago;
-        private CheckBox ckPago;
         private Label labelDataPagamento;
         private Label labelObservacoes;
         private TextBox txObservacoes;
         private Panel panel1;
         private DataGridView dataGrid1;
+        private CheckBox ckPago;
+        private CheckBox chPermanente;
+        private OpenFileDialog openFileDialog;
+        private Button btPDF;
     }
 }
