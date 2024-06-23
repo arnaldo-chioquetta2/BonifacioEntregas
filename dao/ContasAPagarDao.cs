@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Data;
+using System.IO;
 
 namespace TeleBonifacio.dao
 {
@@ -23,10 +24,19 @@ namespace TeleBonifacio.dao
             DB.ExecutarComandoSQL(sql);
         }
 
-        public void Exclui(int id)
+        public void Exclui(string id, string CaminhoPDF)
         {
-            string sql = $@"DELETE FROM ContasAPagar WHERE ID = {id}";
+            string sql = $@"DELETE FROM ContasAPagar WHERE ID = {id} ";
             DB.ExecutarComandoSQL(sql);
+            try
+            {
+                File.Delete(CaminhoPDF);
+            }
+            catch (Exception ex)
+            {
+                // 
+
+            }
         }
 
         public void Edita(int id, int idFornecedor, DateTime dataEmissao, DateTime dataVencimento, float valorTotal, string chaveNotaFiscal, string descricao, string caminhoPDF, bool pago, DateTime? dataPagamento, string observacoes, bool perm)
@@ -55,17 +65,17 @@ namespace TeleBonifacio.dao
             DB.ExecutarComandoSQL(sql);
         }
 
-        public DataTable GetDados(int idFornecedor)
+        public DataTable GetDados(int idFornecedor, int Tipo)
         {
             string sWhe = "";
             if (idFornecedor > 0)
             {
-                sWhe = " WHERE ContasAPagar.idFornecedor = " + idFornecedor;
+                sWhe = " And ContasAPagar.idFornecedor = " + idFornecedor;
             }           
             string sql = $@"SELECT ContasAPagar.ID, ContasAPagar.idFornecedor, Fornecedores.Nome as Fornecedor, ContasAPagar.DataEmissao, ContasAPagar.DataVencimento, ContasAPagar.ValorTotal, ContasAPagar.ChaveNotaFiscal, ContasAPagar.Descricao, ContasAPagar.CaminhoPDF, ContasAPagar.Pago, ContasAPagar.DataPagamento, ContasAPagar.Observacoes, ContasAPagar.Perm, ContasAPagar.UID 
-                            FROM ContasAPagar
-                            INNER JOIN Fornecedores ON Fornecedores.IdForn = ContasAPagar.idFornecedor
-                            {sWhe}
+                            FROM ContasAPagar                            
+                            LEFT JOIN Fornecedores ON Fornecedores.IdForn = ContasAPagar.idFornecedor
+                            WHERE ContasAPagar.Perm = {Tipo} {sWhe} 
                             ORDER BY ContasAPagar.ID DESC ";
             DataTable dt = DB.ExecutarConsulta(sql);
             return dt;
