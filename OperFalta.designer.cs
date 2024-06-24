@@ -193,7 +193,7 @@ namespace TeleBonifacio
             this.cmbForn.DisplayMember = "Nome";
             this.cmbForn.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbForn.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cmbForn.Location = new System.Drawing.Point(286, 23);
+            this.cmbForn.Location = new System.Drawing.Point(288, 24);
             this.cmbForn.Name = "cmbForn";
             this.cmbForn.Size = new System.Drawing.Size(204, 23);
             this.cmbForn.TabIndex = 49;

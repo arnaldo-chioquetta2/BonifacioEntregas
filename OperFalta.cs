@@ -140,6 +140,9 @@ namespace TeleBonifacio
         #region Adição
         private void btnAdicionar_Click(object sender, EventArgs e)
         {
+            // 
+
+
             if (btnAdicionar.Text != "Limpar")
             {
                 string codigo = txtCodigo.Text;
@@ -260,7 +263,7 @@ namespace TeleBonifacio
                             button2.Enabled = btLmpFiltro.Enabled = true;
                             btAdicTpo.Enabled = true;
                             obj.Tag = "M";
-                        }
+                        } 
                     }
                 }
             }

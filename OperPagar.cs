@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Data;
+using System.Data.OleDb;
 using System.Diagnostics;
-using System.Drawing;
+using System.IO;
 using System.Windows.Forms;
 using TeleBonifacio.dao;
 
@@ -13,12 +14,14 @@ namespace TeleBonifacio
         private ContasAPagarDao contasAPagarDao;
         private string UID = "";
         private bool carregando = true;
-        private int BakidForn=0;
-        private string CaminhoPDF = "";        
+        private string CaminhoPDF = "";
         private int iID = 0;
+        private int idArquivo = 0;
         private bool CarregarT = true;
         private bool CarregarP = true;
-        // private Color cor = Color.FromArgb(255, 192, 192); 
+        private string Apagar = "";
+        string CaminhoBasePDF = "";
+        string connectionStringPDF = "";
 
         #region Inicializacao
 
@@ -41,7 +44,9 @@ namespace TeleBonifacio
             Forn = new FornecedorDao();
             contasAPagarDao = new ContasAPagarDao();
             glo.CarregarComboBox<tb.Fornecedor>(cmbForn, Forn, "ESCOLHA", ItemFinal: "ADICIONE", ItemFinal2: "EDIÇÃO");
-            CarregaGrid();            
+            CarregaGridGenerico(dataGrid1, 0);
+            CaminhoBasePDF = Path.GetDirectoryName(glo.CaminhoBase) + "\\Docs.mdb";
+            connectionStringPDF = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + CaminhoBasePDF + ";";
             carregando = false;
         }
 
@@ -61,10 +66,21 @@ namespace TeleBonifacio
             chPermanente.Enabled = false;
             btLimparFiltro.Enabled = false;
             btExcluir.Enabled = false;
+            dtpDataPagamento.Tag = "";
+            dtpDataVencimento.Tag = "";
+            dtpDataEmissao.Tag = "";
+            txValorTotal.Tag = "";
+            txDescricao.Tag = "";
+            txObservacoes.Tag = "";
+            ckPago.Tag = "";
         }
 
-        private void VeSeHab(TextBox obj = null)
+        private void VeSeHab(TextBox obj)
         {
+            if (obj.Text.Length > 0)
+            {
+                obj.Tag = "M";
+            }
             bool ok = false;
             if (cmbForn.SelectedIndex != -1)
             {
@@ -77,134 +93,188 @@ namespace TeleBonifacio
                 }
             }
             btnAdicionar.Enabled = ok;
-            // btPDF.Enabled = ok;
             chPermanente.Enabled = ok;
             btLimparFiltro.Enabled = ok;
         }
 
-        private void cmbVendedor_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if (!carregando)
-            {
-                VeSeHab();
-            }
-        }
-
-        private void btnExcluir_Click(object sender, EventArgs e)
-        {
-            string sID = "";
-            string UID = "";
-            if (tbContas.SelectedIndex == 0)
-            {
-                sID = dataGrid1.SelectedRows[0].Cells["ID"].Value.ToString();
-                UID = dataGrid1.SelectedRows[0].Cells["UID"].Value.ToString();
-            } else
-            {
-                sID = dataGrid2.SelectedRows[0].Cells["ID"].Value.ToString();
-                UID = dataGrid2.SelectedRows[0].Cells["UID"].Value.ToString();
-            }
-            glo.Loga($@"PD,{sID}, {UID}");
-            contasAPagarDao.Exclui(sID, this.CaminhoPDF);
-            if (tbContas.SelectedIndex == 0)
-            {
-                CarregaGrid();
-            } else
-            {
-                CarregaGridP();
-            }
-            Limpar();
-        }
-
         private void btnAdicionar_Click_1(object sender, EventArgs e)
         {
-            if (btnAdicionar.Text == "Adicionar")
+            if (txNvForn.Visible)
             {
-                if (openFileDialog.ShowDialog() != DialogResult.OK)
+                Forn.Adiciona(txNvForn.Text);
+                txNvForn.Visible = false;
+                cmbForn.Visible = true;
+                glo.CarregarComboBox<tb.Fornecedor>(cmbForn, Forn, "ESCOLHA", ItemFinal: "ADICIONE", ItemFinal2: "EDIÇÃO");
+            } else
+            {
+                if (btnAdicionar.Text == "Adicionar")
                 {
-                    return;
-                }
-                this.CaminhoPDF = openFileDialog.FileName;
-            }                        
-            // btPDF.BackColor = cor;
-            int idFornecedor = 0;
-            int iForn = cmbForn.SelectedIndex;
-            if (iForn > -1)
-            {
-                idFornecedor = ((tb.ComboBoxItem)cmbForn.Items[iForn]).Id;
-            }
-            DateTime dataEmissao = dtpDataEmissao.Value;
-            DateTime dataVencimento = dtpDataVencimento.Value;
-            float valorTotal = glo.LeValor(txValorTotal.Text);
-            string chaveNotaFiscal = txChaveNotaFiscal.Text;
-            string descricao = txDescricao.Text;
-            bool pago = ckPago.Checked;
-            DateTime? dataPagamento = null;
-            if (pago)
-            {
-                dataPagamento = dtpDataPagamento.Value;
-            }
-            string observacoes = txObservacoes.Text;
-            bool perm = chPermanente.Checked;
-            if (btnAdicionar.Text == "Alterar")
-            {
-                glo.Loga($@"PE,{idFornecedor}, {dataEmissao}, {dataVencimento}, {valorTotal}, {chaveNotaFiscal}, {descricao}, {this.CaminhoPDF}, {pago}, {dataPagamento}, {observacoes}, {perm}, {UID} ");
-                contasAPagarDao.Edita(this.iID, idFornecedor, dataEmissao, dataVencimento, valorTotal, chaveNotaFiscal, descricao, this.CaminhoPDF, pago, dataPagamento, observacoes, perm);
-                btnAdicionar.Text = "Adicionar";
-                if (tbContas.SelectedIndex == 0)
-                {
-                    CarregaGrid();
-                } else
-                {
-                    CarregaGridP();
-                }
-            }
-            else
-            {
-                string UID = glo.GenerateUID();
-                glo.Loga($@"PA,{idFornecedor}, {dataEmissao}, {dataVencimento}, {valorTotal}, {chaveNotaFiscal}, {descricao}, {this.CaminhoPDF}, {pago}, {dataPagamento}, {observacoes}, {perm}, {UID} ");
-                contasAPagarDao.Adiciona(idFornecedor, dataEmissao, dataVencimento, valorTotal, chaveNotaFiscal, descricao, this.CaminhoPDF, pago, dataPagamento, observacoes, perm, UID);
-                if (tbContas.SelectedIndex == 0)
-                {
-                    if (!perm)
+                    if (openFileDialog.ShowDialog() != DialogResult.OK)
                     {
-                        CarregaGrid();
+                        return;
                     }
-                    else
-                    {
-                        CarregarP = true;
-                    }
+                    this.CaminhoPDF = openFileDialog.FileName;
+                }
+                int idFornecedor = 0;
+                int iForn = cmbForn.SelectedIndex;
+                if (iForn > -1)
+                {
+                    idFornecedor = ((tb.ComboBoxItem)cmbForn.Items[iForn]).Id;
+                }
+                DateTime dataEmissao = dtpDataEmissao.Value;
+                DateTime dataVencimento = dtpDataVencimento.Value;
+                float valorTotal = glo.LeValor(txValorTotal.Text);
+                string chaveNotaFiscal = txChaveNotaFiscal.Text;
+                string descricao = txDescricao.Text;
+                bool pago = ckPago.Checked;
+                DateTime? dataPagamento = null;
+                if (pago)
+                {
+                    dataPagamento = dtpDataPagamento.Value;
+                }
+                string observacoes = txObservacoes.Text;
+                bool perm = chPermanente.Checked;
+                if (btnAdicionar.Text == "Alterar")
+                {
+                    glo.Loga($@"PE,{idFornecedor}, {dataEmissao}, {dataVencimento}, {valorTotal}, {chaveNotaFiscal}, {descricao}, {this.CaminhoPDF}, {pago}, {dataPagamento}, {observacoes}, {perm}, {UID} ");
+                    contasAPagarDao.Edita(this.iID, idFornecedor, dataEmissao, dataVencimento, valorTotal, chaveNotaFiscal, descricao, this.CaminhoPDF, pago, dataPagamento, observacoes, perm);
+                    btnAdicionar.Text = "Adicionar";
+                    AtualizaGrids();
                 }
                 else
                 {
+                    string UID = glo.GenerateUID();
+                    glo.Loga($@"PA,{idFornecedor}, {dataEmissao}, {dataVencimento}, {valorTotal}, {chaveNotaFiscal}, {descricao}, {this.CaminhoPDF}, {pago}, {dataPagamento}, {observacoes}, {perm}, {UID} ");
+                    int idArquivo = 0;
                     if (perm)
                     {
-                        CarregaGridP();
+                        idArquivo = GravaPDF();
+                    }                     
+                    contasAPagarDao.Adiciona(idFornecedor, dataEmissao, dataVencimento, valorTotal, chaveNotaFiscal, descricao, this.CaminhoPDF, pago, dataPagamento, observacoes, perm, UID, idArquivo);
+                    if (perm)
+                    {
+                        //MandarApagar();
+                    }                        
+                    Limpar();
+                    if (tbContas.SelectedIndex == 0)
+                    {
+                        if (!perm)
+                        {
+                            CarregaGridGenerico(dataGrid1, 0);
+                        }
+                        else
+                        {
+                            CarregarP = true;
+                        }
                     }
                     else
                     {
-                        CarregarT = true;
+                        if (perm)
+                        {
+                            CarregaGridGenerico(dataGrid2, -1);
+                        }
+                        else
+                        {
+                            CarregarT = true;
+                        }
                     }
-                }
-
+                }                
             }
-            Limpar();
-            //btPDF.BackColor = SystemColors.Control;
-            this.CaminhoPDF = "";
         }
 
         #endregion
 
-        #region Grid do Temporários
+        #region PDF
 
-        private void CarregaGrid()
+        private void btPDF_Click(object sender, EventArgs e)
         {
-            DataTable dados = contasAPagarDao.GetDados(BakidForn, 0);
-            dataGrid1.DataSource = dados;
-            if (dados != null)
+            if (chPermanente.Checked)
             {
-                ConfigurarGrid(ref dataGrid1);
+                AbreArquivo();
+            }
+            else
+            {
+
+                DialogResult result = MessageBox.Show("Deseja excluir o arquivo?\nPara mante-lo escolha Não", "Impressão",
+                                      MessageBoxButtons.YesNo,
+                                      MessageBoxIcon.Question);
+                if (result == DialogResult.Yes)
+                {
+                    MandarApagar();
+                }
+                try
+                {
+                    Process.Start(this.CaminhoPDF);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Erro ao abrir o arquivo: {ex.Message}");
+                }
             }
         }
+
+        private int GravaPDF()
+        {
+            string fileExtension = Path.GetExtension(this.CaminhoPDF).TrimStart('.');
+            int insertedId = -1;
+            byte[] fileContent = File.ReadAllBytes(this.CaminhoPDF);  
+            using (OleDbConnection connection = new OleDbConnection(this.connectionStringPDF))
+            {
+                connection.Open();
+                using (OleDbCommand insertCommand = new OleDbCommand("INSERT INTO Docs (Conteudo, ext) VALUES (?, ?)", connection))
+                {
+                    insertCommand.Parameters.AddWithValue("@Conteudo", fileContent);
+                    insertCommand.Parameters.AddWithValue("@ext", fileExtension);
+                    insertCommand.ExecuteNonQuery();
+                }
+                using (OleDbCommand selectCommand = new OleDbCommand("SELECT @@IDENTITY", connection))
+                {
+                    insertedId = Convert.ToInt32(selectCommand.ExecuteScalar());
+                }
+            }
+            return insertedId;
+        }
+
+        private void AbreArquivo()
+        {
+            string query = "SELECT * FROM Docs WHERE ID = ?";
+            string tempFolderPath = @"C:\Temp";
+            string fileName = "DenisTemp";
+            string fileExtension;
+            string tempFilePath = "";
+            try
+            {
+                using (OleDbConnection connection = new OleDbConnection(this.connectionStringPDF))
+                {
+                    connection.Open();
+                    using (OleDbCommand command = new OleDbCommand(query, connection))
+                    {
+                        command.Parameters.AddWithValue("@ID", this.idArquivo);
+                        using (OleDbDataReader reader = command.ExecuteReader())
+                        {
+                            if (reader.Read())
+                            {
+                                fileExtension = reader["ext"].ToString().Trim();
+                                tempFilePath = Path.Combine(tempFolderPath, $"{fileName}.{fileExtension}");
+                                long contentLength = reader.GetBytes(reader.GetOrdinal("Conteudo"), 0, null, 0, 0);
+                                byte[] content = new byte[contentLength];
+                                reader.GetBytes(reader.GetOrdinal("Conteudo"), 0, content, 0, content.Length);
+                                File.WriteAllBytes(tempFilePath, content);  
+                            }
+                        }
+                    }
+                }
+                Process.Start(new ProcessStartInfo(tempFilePath) { UseShellExecute = true });
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Erro ao abrir o arquivo: {ex.Message}");
+            }
+        }
+
+        #endregion
+
+        #region Grid 
 
         private void ConfigurarGrid(ref DataGridView Grid)
         {
@@ -223,6 +293,7 @@ namespace TeleBonifacio
             Grid.Columns[11].Width = 100;          // Obs
             Grid.Columns[12].Visible = false;      // Perm
             Grid.Columns[13].Visible = false;      // ContasAPagar
+            Grid.Columns[14].Visible = false;       // idArquivo
             Grid.Invalidate();
         }
 
@@ -240,6 +311,7 @@ namespace TeleBonifacio
                 DataGridViewRow selectedRow = grid.Rows[e.RowIndex];
                 this.iID = Convert.ToInt32(selectedRow.Cells["ID"].Value);
                 this.UID = Convert.ToString(selectedRow.Cells["UID"].Value);
+                this.idArquivo = Convert.ToInt32(selectedRow.Cells["idArquivo"].Value);
                 cmbForn.SelectedValue = Convert.ToInt32(selectedRow.Cells["idFornecedor"].Value);
                 dtpDataEmissao.Value = Convert.ToDateTime(selectedRow.Cells["DataEmissao"].Value);
                 dtpDataVencimento.Value = Convert.ToDateTime(selectedRow.Cells["DataVencimento"].Value);
@@ -258,13 +330,6 @@ namespace TeleBonifacio
                     dtpDataPagamento.Enabled = false;
                 }
                 this.CaminhoPDF = Convert.ToString(selectedRow.Cells["CaminhoPDF"].Value);
-                //if (this.CaminhoPDF.Length>0)
-                //{                    
-                //    btPDF.BackColor = cor; 
-                //} else
-                //{
-                //    btPDF.BackColor = SystemColors.Control;
-                //}
                 txObservacoes.Text = Convert.ToString(selectedRow.Cells["Observacoes"].Value);
                 chPermanente.Checked = Convert.ToBoolean(selectedRow.Cells["Perm"].Value);                
                 btnAdicionar.Text = "Alterar";
@@ -276,76 +341,90 @@ namespace TeleBonifacio
             }
         }
 
-        #endregion
-
-        #region Grid dos Permanentes
-
-        private void CarregaGridP()
+        private void AtualizaGrids()
         {
-            DataTable dados = contasAPagarDao.GetDados(BakidForn, -1);
-            dataGrid2.DataSource = dados;
-            if (dados != null)
+            if (tbContas.SelectedIndex == 0)
             {
-                ConfigurarGrid(ref dataGrid2);
+                CarregaGridGenerico(dataGrid1, 0);
+            }
+            else
+            {
+                CarregaGridGenerico(dataGrid2, -1);
             }
         }
 
         #endregion
 
-        #region Tipos
-
-        private void btAdicTpo_Click(object sender, EventArgs e)
+        private void CarregaGridGenerico(DataGridView dataGrid, int filter)
         {
-
+            int idForne = 0;
+            if (cmbForn.Tag=="M")
+            {
+                int iForn = cmbForn.SelectedIndex;
+                idForne = ((tb.ComboBoxItem)cmbForn.Items[iForn]).Id;
+            }
+            DateTime? dataPagamento = dtpDataPagamento.Tag?.ToString() == "M" && dtpDataPagamento.Checked ? (DateTime?)dtpDataPagamento.Value : null;
+            DateTime? dataVencimento = dtpDataVencimento.Tag?.ToString() == "M" && dtpDataVencimento.Checked ? (DateTime?)dtpDataVencimento.Value : null;
+            DateTime? dataEmissao = dtpDataEmissao.Tag?.ToString() == "M" && dtpDataEmissao.Checked ? (DateTime?)dtpDataEmissao.Value : null;
+            string valorTotal = txValorTotal.Tag?.ToString() == "M" && !string.IsNullOrWhiteSpace(txValorTotal.Text) ? txValorTotal.Text : null;
+            string descricao = txDescricao.Tag?.ToString() == "M" && !string.IsNullOrWhiteSpace(txDescricao.Text) ? txDescricao.Text : null;
+            string observacoes = txObservacoes.Tag?.ToString() == "M" && !string.IsNullOrWhiteSpace(txObservacoes.Text) ? txObservacoes.Text : null;
+            bool? pago = ckPago.Tag?.ToString() == "M" && ckPago.CheckState != CheckState.Indeterminate ? (bool?)ckPago.Checked : null;
+            DataTable dados = contasAPagarDao.GetDados(idForne, filter, dataPagamento, dataVencimento, dataEmissao, valorTotal, descricao, observacoes, pago);
+            dataGrid.DataSource = dados;
+            if (dados != null)
+            {
+                ConfigurarGrid(ref dataGrid);
+            }
         }
-
-        #endregion
 
         #region Filtro
 
+        private void btFiltrar_Click(object sender, EventArgs e)
+        {
+            AtualizaGrids();
+        }
+
         #endregion
-
-        private void ckPago_CheckedChanged(object sender, EventArgs e)
-        {
-            dtpDataPagamento.Enabled = ckPago.Checked;
-        }
-
-        private void txValorTotal_KeyUp(object sender, KeyEventArgs e)
-        {
-            VeSeHab();
-        }
-
         private void cmbForn_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (!carregando)
             {
-                VeSeHab();
-            }            
+                if (cmbForn.SelectedItem != null)
+                {
+                    string ItemCombo = cmbForn.SelectedItem.ToString();
+                    if (ItemCombo != "ESCOLHA")
+                    {
+                        if (ItemCombo == "ADICIONE")
+                        {
+                            txNvForn.Visible = true;
+                            cmbForn.Visible = false;
+                            btnAdicionar.Enabled = true;
+                            txNvForn.Focus();
+                        }
+                        else
+                        {
+                            if (ItemCombo == "EDIÇÃO")
+                            {
+                                fCadTiposFaltas novoForm = new fCadTiposFaltas();
+                                novoForm.ShowDialog();
+                                glo.CarregarComboBox<tb.Fornecedor>(cmbForn, Forn, "ESCOLHA", ItemFinal: "ADICIONE", ItemFinal2: "EDIÇÃO");
+                            }
+                            else
+                            {                                
+                                cmbForn.Tag = "M";
+                                btLimparFiltro.Enabled = true;
+                                btFiltrar.Enabled = true;
+                            }
+                        }
+                    }
+                }
+            }
         }
 
         private void btLimparFiltro_Click(object sender, EventArgs e)
         {
             Limpar();
-        }
-
-        private void btPDF_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                Process.Start(this.CaminhoPDF);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Erro ao abrir o arquivo: {ex.Message}");
-            }
-        }
-
-        private void txDescricao_KeyUp(object sender, KeyEventArgs e)
-        {
-            if (!carregando)
-            {
-                VeSeHab();
-            }
         }
 
         private void dataGrid2_CellClick(object sender, DataGridViewCellEventArgs e)
@@ -354,21 +433,139 @@ namespace TeleBonifacio
             Mostra(ref grid, ref e);
         }
 
+        #region Eventos de Teclado
+
+        private void ckPago_CheckedChanged(object sender, EventArgs e)
+        {
+            dtpDataPagamento.Enabled = ckPago.Checked;
+        }
+
+        private void txValorTotal_KeyUp(object sender, KeyEventArgs e)
+        {
+            VeSeHab(txValorTotal);
+        }
+
+        private void txDescricao_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (!carregando)
+            {
+                VeSeHab(txDescricao);
+            }
+        }
+
         private void tbContas_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (tbContas.SelectedIndex==0)
+            if (tbContas.SelectedIndex == 0)
             {
                 if (CarregarT)
                 {
-                    CarregaGrid();
+                    CarregaGridGenerico(dataGrid1, 0);
                 }
-            } else
+            }
+            else
             {
                 if (CarregarP)
                 {
-                    CarregaGridP();
+                    CarregaGridGenerico(dataGrid2, -1);
                 }
             }
         }
+
+        private void txDescricao_TextChanged(object sender, EventArgs e)
+        {
+            VeSeHab(txDescricao);
+        }
+
+        private void dtpDataEmissao_ValueChanged(object sender, EventArgs e)
+        {
+            if (!carregando)
+            {
+                VeSeHab(txObservacoes);
+            }
+        }
+
+        private void txChaveNotaFiscal_KeyUp(object sender, KeyEventArgs e)
+        {
+            VeSeHab(txChaveNotaFiscal);
+        }
+
+        private void txObservacoes_KeyUp(object sender, KeyEventArgs e)
+        {
+            VeSeHab(txObservacoes);
+        }
+
+        private void dtpDataVencimento_ValueChanged(object sender, EventArgs e)
+        {
+            if (!carregando)
+            {
+                dtpDataVencimento.Tag = "M";
+            }
+        }
+
+        private void dtpDataPagamento_ValueChanged(object sender, EventArgs e)
+        {
+            dtpDataVencimento.Tag = "M";
+        }
+
+        private void chPermanente_CheckedChanged(object sender, EventArgs e)
+        {
+            if (!carregando)
+            {
+                chPermanente.Tag = "M";
+            }
+        }
+
+
+        #endregion
+
+        #region Deleção
+
+        private void timer1_Tick(object sender, EventArgs e)
+        {
+            timer1.Enabled = false;
+            File.Delete(this.Apagar);
+            this.Apagar = "";
+        }
+
+        private void MandarApagar()
+        {
+            this.Apagar = this.CaminhoPDF;
+            timer1.Enabled = true;
+        }
+        private void ApagaRegistro()
+        {
+            string sID = "";
+            string UID = "";
+            if (tbContas.SelectedIndex == 0)
+            {
+                sID = dataGrid1.SelectedRows[0].Cells["ID"].Value.ToString();
+                UID = dataGrid1.SelectedRows[0].Cells["UID"].Value.ToString();
+            }
+            else
+            {
+                sID = dataGrid2.SelectedRows[0].Cells["ID"].Value.ToString();
+                UID = dataGrid2.SelectedRows[0].Cells["UID"].Value.ToString();
+            }
+            glo.Loga($@"PD,{sID}, {UID}");
+            contasAPagarDao.Exclui(sID, this.CaminhoPDF);
+            MandarApagar();
+            Limpar();
+            AtualizaGrids();
+        }
+
+        private void btnExcluir_Click(object sender, EventArgs e)
+        {
+            DialogResult result = MessageBox.Show("Tem certeza que deseja excluir este registro?",
+                                                  "Confirmar Deleção",
+                                                  MessageBoxButtons.YesNo,
+                                                  MessageBoxIcon.Question);
+            if (result == DialogResult.Yes)
+            {
+                ApagaRegistro();
+            }
+        }
+
+        #endregion
+
     }
 }

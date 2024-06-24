@@ -6,9 +6,9 @@ namespace TeleBonifacio.dao
 {
     public class ContasAPagarDao
     {
-        public void Adiciona(int idFornecedor, DateTime dataEmissao, DateTime dataVencimento, float valorTotal, string chaveNotaFiscal, string descricao, string caminhoPDF, bool pago, DateTime? dataPagamento, string observacoes, bool perm, string UID)
+        public void Adiciona(int idFornecedor, DateTime dataEmissao, DateTime dataVencimento, float valorTotal, string chaveNotaFiscal, string descricao, string caminhoPDF, bool pago, DateTime? dataPagamento, string observacoes, bool perm, string UID, int idArquivo)
         {
-            string sql = $@"INSERT INTO ContasAPagar (idFornecedor, DataEmissao, DataVencimento, ValorTotal, ChaveNotaFiscal, Descricao, CaminhoPDF, Pago, DataPagamento, Observacoes, Perm, UID) VALUES (
+            string sql = $@"INSERT INTO ContasAPagar (idFornecedor, DataEmissao, DataVencimento, ValorTotal, ChaveNotaFiscal, Descricao, CaminhoPDF, Pago, DataPagamento, Observacoes, Perm, UID, idArquivo) VALUES (
                 {idFornecedor}, 
                 '{dataEmissao.ToString("yyyy-MM-dd HH:mm:ss")}', 
                 '{dataVencimento.ToString("yyyy-MM-dd HH:mm:ss")}', 
@@ -20,7 +20,8 @@ namespace TeleBonifacio.dao
                 {(dataPagamento.HasValue ? $"'{dataPagamento.Value.ToString("yyyy-MM-dd HH:mm:ss")}'" : "NULL")}, 
                 '{observacoes}',
                 {(perm ? 1 : 0)},
-                '{UID}')";
+                '{UID}',
+                 {idArquivo} )";
             DB.ExecutarComandoSQL(sql);
         }
 
@@ -28,15 +29,6 @@ namespace TeleBonifacio.dao
         {
             string sql = $@"DELETE FROM ContasAPagar WHERE ID = {id} ";
             DB.ExecutarComandoSQL(sql);
-            try
-            {
-                File.Delete(CaminhoPDF);
-            }
-            catch (Exception ex)
-            {
-                // 
-
-            }
         }
 
         public void Edita(int id, int idFornecedor, DateTime dataEmissao, DateTime dataVencimento, float valorTotal, string chaveNotaFiscal, string descricao, string caminhoPDF, bool pago, DateTime? dataPagamento, string observacoes, bool perm)
@@ -65,20 +57,113 @@ namespace TeleBonifacio.dao
             DB.ExecutarComandoSQL(sql);
         }
 
-        public DataTable GetDados(int idFornecedor, int Tipo)
+        public DataTable GetDados(int idFornecedor, int tipo, DateTime? dataPagamento, DateTime? dataVencimento, DateTime? dataEmissao, string valorTotal, string descricao, string observacoes, bool? pago)
         {
             string sWhe = "";
-            if (idFornecedor > 0)
+            if (idFornecedor>0)
             {
-                sWhe = " And ContasAPagar.idFornecedor = " + idFornecedor;
-            }           
-            string sql = $@"SELECT ContasAPagar.ID, ContasAPagar.idFornecedor, Fornecedores.Nome as Fornecedor, ContasAPagar.DataEmissao, ContasAPagar.DataVencimento, ContasAPagar.ValorTotal, ContasAPagar.ChaveNotaFiscal, ContasAPagar.Descricao, ContasAPagar.CaminhoPDF, ContasAPagar.Pago, ContasAPagar.DataPagamento, ContasAPagar.Observacoes, ContasAPagar.Perm, ContasAPagar.UID 
-                            FROM ContasAPagar                            
-                            LEFT JOIN Fornecedores ON Fornecedores.IdForn = ContasAPagar.idFornecedor
-                            WHERE ContasAPagar.Perm = {Tipo} {sWhe} 
-                            ORDER BY ContasAPagar.ID DESC ";
+                sWhe += " And ContasAPagar.idFornecedor = " + idFornecedor;
+            }
+            if (dataPagamento.HasValue)
+            {
+                sWhe += " And ContasAPagar.DataPagamento = #" + dataPagamento.Value.ToString("yyyy-MM-dd") + "#";
+            }
+            if (dataVencimento.HasValue)
+            {
+                sWhe += " And ContasAPagar.DataVencimento = #" + dataVencimento.Value.ToString("yyyy-MM-dd") + "#";
+            }
+            if (dataEmissao.HasValue)
+            {
+                sWhe += " And ContasAPagar.DataEmissao = #" + dataEmissao.Value.ToString("yyyy-MM-dd") + "#";
+            }
+            if (!string.IsNullOrEmpty(valorTotal))
+            {
+                sWhe += " And ContasAPagar.ValorTotal LIKE '%" + valorTotal + "%'";
+            }
+            if (!string.IsNullOrEmpty(descricao))
+            {
+                sWhe += " And ContasAPagar.Descricao LIKE '%" + descricao + "%'";
+            }
+            if (!string.IsNullOrEmpty(observacoes))
+            {
+                sWhe += " And ContasAPagar.Observacoes LIKE '%" + observacoes + "%'";
+            }
+            if (pago.HasValue)
+            {
+                sWhe += " And ContasAPagar.Pago = " + (pago.Value ? "True" : "False");
+            }
+
+            string sql = $@"SELECT ContasAPagar.ID, ContasAPagar.idFornecedor, Fornecedores.Nome as Fornecedor, ContasAPagar.DataEmissao,
+                            ContasAPagar.DataVencimento, ContasAPagar.ValorTotal, ContasAPagar.ChaveNotaFiscal, ContasAPagar.Descricao, 
+                            ContasAPagar.CaminhoPDF, ContasAPagar.Pago, ContasAPagar.DataPagamento, ContasAPagar.Observacoes, 
+                            ContasAPagar.Perm, ContasAPagar.UID, ContasAPagar.idArquivo 
+                    FROM ContasAPagar                            
+                    LEFT JOIN Fornecedores ON Fornecedores.IdForn = ContasAPagar.idFornecedor
+                    WHERE ContasAPagar.Perm = {tipo} {sWhe} 
+                    ORDER BY ContasAPagar.ID DESC";
             DataTable dt = DB.ExecutarConsulta(sql);
             return dt;
         }
+
+        //public DataTable GetDados(int idFornecedor, int tipo, DateTime? dataPagamento, DateTime? dataVencimento, DateTime? dataEmissao, string valorTotal, string descricao, string observacoes, bool? pago)
+        //{
+        //    string sWhe = "";
+        //    if (idFornecedor > 0)
+        //    {
+        //        sWhe += " And ContasAPagar.idFornecedor = " + idFornecedor;
+        //    }
+        //    if (dataPagamento.HasValue)
+        //    {
+        //        sWhe += " And ContasAPagar.DataPagamento = #" + dataPagamento.Value.ToString("yyyy-MM-dd") + "#";
+        //    }
+        //    if (dataVencimento.HasValue)
+        //    {
+        //        sWhe += " And ContasAPagar.DataVencimento = #" + dataVencimento.Value.ToString("yyyy-MM-dd") + "#";
+        //    }
+        //    if (dataEmissao.HasValue)
+        //    {
+        //        sWhe += " And ContasAPagar.DataEmissao = #" + dataEmissao.Value.ToString("yyyy-MM-dd") + "#";
+        //    }
+        //    if (!string.IsNullOrEmpty(valorTotal))
+        //    {
+        //        sWhe += " And ContasAPagar.ValorTotal LIKE '%" + valorTotal + "%'";
+        //    }
+        //    if (!string.IsNullOrEmpty(descricao))
+        //    {
+        //        sWhe += " And ContasAPagar.Descricao LIKE '%" + descricao + "%'";
+        //    }
+        //    if (!string.IsNullOrEmpty(observacoes))
+        //    {
+        //        sWhe += " And ContasAPagar.Observacoes LIKE '%" + observacoes + "%'";
+        //    }
+        //    if (pago.HasValue)
+        //    {
+        //        sWhe += " And ContasAPagar.Pago = " + (pago.Value ? "True" : "False");
+        //    }
+
+        //    string sql = $@"SELECT ContasAPagar.ID, ContasAPagar.idFornecedor, Fornecedores.Nome as Fornecedor, ContasAPagar.DataEmissao, ContasAPagar.DataVencimento, ContasAPagar.ValorTotal, ContasAPagar.ChaveNotaFiscal, ContasAPagar.Descricao, ContasAPagar.CaminhoPDF, ContasAPagar.Pago, ContasAPagar.DataPagamento, ContasAPagar.Observacoes, ContasAPagar.Perm, ContasAPagar.UID 
+        //            FROM ContasAPagar                            
+        //            LEFT JOIN Fornecedores ON Fornecedores.IdForn = ContasAPagar.idFornecedor
+        //            WHERE ContasAPagar.Perm = {tipo} {sWhe} 
+        //            ORDER BY ContasAPagar.ID DESC ";
+        //    DataTable dt = DB.ExecutarConsulta(sql);
+        //    return dt;
+        //}
+
+        //public DataTable GetDados(int idFornecedor, int Tipo)
+        //{
+        //    string sWhe = "";
+        //    if (idFornecedor > 0)
+        //    {
+        //        sWhe = " And ContasAPagar.idFornecedor = " + idFornecedor;
+        //    }           
+        //    string sql = $@"SELECT ContasAPagar.ID, ContasAPagar.idFornecedor, Fornecedores.Nome as Fornecedor, ContasAPagar.DataEmissao, ContasAPagar.DataVencimento, ContasAPagar.ValorTotal, ContasAPagar.ChaveNotaFiscal, ContasAPagar.Descricao, ContasAPagar.CaminhoPDF, ContasAPagar.Pago, ContasAPagar.DataPagamento, ContasAPagar.Observacoes, ContasAPagar.Perm, ContasAPagar.UID 
+        //                    FROM ContasAPagar                            
+        //                    LEFT JOIN Fornecedores ON Fornecedores.IdForn = ContasAPagar.idFornecedor
+        //                    WHERE ContasAPagar.Perm = {Tipo} {sWhe} 
+        //                    ORDER BY ContasAPagar.ID DESC ";
+        //    DataTable dt = DB.ExecutarConsulta(sql);
+        //    return dt;
+        //}
     }
 }

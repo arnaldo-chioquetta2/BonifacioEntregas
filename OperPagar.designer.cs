@@ -21,12 +21,13 @@ namespace TeleBonifacio
 
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(OperPagar));
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.btPDF = new System.Windows.Forms.Button();
             this.ckPago = new System.Windows.Forms.CheckBox();
             this.chPermanente = new System.Windows.Forms.CheckBox();
-            this.button1 = new System.Windows.Forms.Button();
+            this.btFiltrar = new System.Windows.Forms.Button();
             this.dtpDataPagamento = new System.Windows.Forms.DateTimePicker();
             this.dtpDataVencimento = new System.Windows.Forms.DateTimePicker();
             this.dtpDataEmissao = new System.Windows.Forms.DateTimePicker();
@@ -53,6 +54,8 @@ namespace TeleBonifacio
             this.dataGrid1 = new System.Windows.Forms.DataGridView();
             this.tbPerms = new System.Windows.Forms.TabPage();
             this.dataGrid2 = new System.Windows.Forms.DataGridView();
+            this.txNvForn = new System.Windows.Forms.TextBox();
+            this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.groupBox3.SuspendLayout();
             this.panel1.SuspendLayout();
             this.tbContas.SuspendLayout();
@@ -67,7 +70,7 @@ namespace TeleBonifacio
             this.groupBox3.Controls.Add(this.btPDF);
             this.groupBox3.Controls.Add(this.ckPago);
             this.groupBox3.Controls.Add(this.chPermanente);
-            this.groupBox3.Controls.Add(this.button1);
+            this.groupBox3.Controls.Add(this.btFiltrar);
             this.groupBox3.Controls.Add(this.dtpDataPagamento);
             this.groupBox3.Controls.Add(this.dtpDataVencimento);
             this.groupBox3.Controls.Add(this.dtpDataEmissao);
@@ -87,6 +90,7 @@ namespace TeleBonifacio
             this.groupBox3.Controls.Add(this.labelDataPagamento);
             this.groupBox3.Controls.Add(this.labelObservacoes);
             this.groupBox3.Controls.Add(this.txObservacoes);
+            this.groupBox3.Controls.Add(this.txNvForn);
             this.groupBox3.Dock = System.Windows.Forms.DockStyle.Top;
             this.groupBox3.Location = new System.Drawing.Point(0, 0);
             this.groupBox3.Name = "groupBox3";
@@ -129,17 +133,19 @@ namespace TeleBonifacio
             this.chPermanente.TabIndex = 15;
             this.chPermanente.Text = "Permanente";
             this.chPermanente.UseVisualStyleBackColor = true;
+            this.chPermanente.CheckedChanged += new System.EventHandler(this.chPermanente_CheckedChanged);
             // 
-            // button1
+            // btFiltrar
             // 
-            this.button1.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.button1.Enabled = false;
-            this.button1.Location = new System.Drawing.Point(211, 139);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
-            this.button1.TabIndex = 10;
-            this.button1.Text = "Filtrar";
-            this.button1.UseVisualStyleBackColor = true;
+            this.btFiltrar.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.btFiltrar.Enabled = false;
+            this.btFiltrar.Location = new System.Drawing.Point(211, 139);
+            this.btFiltrar.Name = "btFiltrar";
+            this.btFiltrar.Size = new System.Drawing.Size(75, 23);
+            this.btFiltrar.TabIndex = 10;
+            this.btFiltrar.Text = "Filtrar";
+            this.btFiltrar.UseVisualStyleBackColor = true;
+            this.btFiltrar.Click += new System.EventHandler(this.btFiltrar_Click);
             // 
             // dtpDataPagamento
             // 
@@ -151,6 +157,7 @@ namespace TeleBonifacio
             this.dtpDataPagamento.Size = new System.Drawing.Size(90, 23);
             this.dtpDataPagamento.TabIndex = 6;
             this.dtpDataPagamento.Tag = "H";
+            this.dtpDataPagamento.ValueChanged += new System.EventHandler(this.dtpDataPagamento_ValueChanged);
             // 
             // dtpDataVencimento
             // 
@@ -161,6 +168,7 @@ namespace TeleBonifacio
             this.dtpDataVencimento.Size = new System.Drawing.Size(90, 23);
             this.dtpDataVencimento.TabIndex = 5;
             this.dtpDataVencimento.Tag = "H";
+            this.dtpDataVencimento.ValueChanged += new System.EventHandler(this.dtpDataVencimento_ValueChanged);
             // 
             // dtpDataEmissao
             // 
@@ -171,6 +179,7 @@ namespace TeleBonifacio
             this.dtpDataEmissao.Size = new System.Drawing.Size(90, 23);
             this.dtpDataEmissao.TabIndex = 4;
             this.dtpDataEmissao.Tag = "H";
+            this.dtpDataEmissao.ValueChanged += new System.EventHandler(this.dtpDataEmissao_ValueChanged);
             // 
             // btnAdicionar
             // 
@@ -224,7 +233,7 @@ namespace TeleBonifacio
             this.cmbForn.DisplayMember = "Nome";
             this.cmbForn.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbForn.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F);
-            this.cmbForn.Location = new System.Drawing.Point(174, 17);
+            this.cmbForn.Location = new System.Drawing.Point(174, 19);
             this.cmbForn.Name = "cmbForn";
             this.cmbForn.Size = new System.Drawing.Size(204, 23);
             this.cmbForn.TabIndex = 0;
@@ -289,6 +298,7 @@ namespace TeleBonifacio
             this.txChaveNotaFiscal.Size = new System.Drawing.Size(204, 21);
             this.txChaveNotaFiscal.TabIndex = 1;
             this.txChaveNotaFiscal.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.txChaveNotaFiscal.KeyUp += new System.Windows.Forms.KeyEventHandler(this.txChaveNotaFiscal_KeyUp);
             // 
             // labelDescricao
             // 
@@ -338,6 +348,7 @@ namespace TeleBonifacio
             this.txObservacoes.Size = new System.Drawing.Size(204, 21);
             this.txObservacoes.TabIndex = 3;
             this.txObservacoes.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.txObservacoes.KeyUp += new System.Windows.Forms.KeyEventHandler(this.txObservacoes_KeyUp);
             // 
             // panel1
             // 
@@ -410,6 +421,20 @@ namespace TeleBonifacio
             this.dataGrid2.TabIndex = 17;
             this.dataGrid2.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGrid2_CellClick);
             // 
+            // txNvForn
+            // 
+            this.txNvForn.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txNvForn.Location = new System.Drawing.Point(174, 19);
+            this.txNvForn.Name = "txNvForn";
+            this.txNvForn.Size = new System.Drawing.Size(204, 21);
+            this.txNvForn.TabIndex = 51;
+            this.txNvForn.Visible = false;
+            // 
+            // timer1
+            // 
+            this.timer1.Interval = 2000;
+            this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
+            // 
             // OperPagar
             // 
             this.ClientSize = new System.Drawing.Size(720, 432);
@@ -435,7 +460,7 @@ namespace TeleBonifacio
         #endregion
 
         private GroupBox groupBox3;
-        private Button button1;
+        private Button btFiltrar;
         private DateTimePicker dtpDataPagamento;
         private DateTimePicker dtpDataVencimento;
         private DateTimePicker dtpDataEmissao;
@@ -465,5 +490,7 @@ namespace TeleBonifacio
         private TabPage tbPerms;
         private DataGridView dataGrid1;
         private DataGridView dataGrid2;
+        private TextBox txNvForn;
+        private Timer timer1;
     }
 }

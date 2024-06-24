@@ -1,2 +1,2 @@
-2.1.1
-CONTAS A PAGAR - INICIOCREATE TABLE ContasAPagar ( ID COUNTER PRIMARY KEY, idFornecedor INTEGER, DataEmissao DATETIME, DataVencimento DATETIME, ValorTotal DECIMAL(15, 2), ChaveNotaFiscal TEXT(44),    Descricao TEXT(255), CaminhoPDF TEXT(255), Pago BIT, DataPagamento DATETIME, Observacoes TEXT(255) )
+2.1.3
+ABA PARA DOCUMENTOS PERMANENTES
