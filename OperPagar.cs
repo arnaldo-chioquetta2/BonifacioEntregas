@@ -13,17 +13,14 @@ namespace TeleBonifacio
     {
         private FornecedorDao Forn;
         private ContasAPagarDao contasAPagarDao;
-        private List<string> arquivosParaApagar = new List<string>();
         private string UID = "";
         private bool carregando = true;
         private string CaminhoPDF = "";
         private int iID = 0;
-        private int idArquivo = 0;
         private bool CarregarT = true;
         private bool CarregarP = true;
         private string Apagar = "";
-        string CaminhoBasePDF = "";
-        string connectionStringPDF = "";
+        private string CaminhoBasePDF = "";
 
         #region Inicializacao
 
@@ -47,8 +44,7 @@ namespace TeleBonifacio
             contasAPagarDao = new ContasAPagarDao();
             glo.CarregarComboBox<tb.Fornecedor>(cmbForn, Forn, "ESCOLHA", ItemFinal: "ADICIONE", ItemFinal2: "EDIÇÃO");
             CarregaGridGenerico(dataGrid1, 0);
-            CaminhoBasePDF = Path.GetDirectoryName(glo.CaminhoBase) + "\\Docs.mdb";
-            connectionStringPDF = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + CaminhoBasePDF + ";";
+            CaminhoBasePDF = Path.GetDirectoryName(glo.CaminhoBase) + "\\Docs";            
             carregando = false;
         }
 
@@ -153,14 +149,10 @@ namespace TeleBonifacio
                 {
                     string UID = glo.GenerateUID();
                     glo.Loga($@"PA,{idFornecedor}, {dataEmissao}, {dataVencimento}, {valorTotal}, {chaveNotaFiscal}, {descricao}, {this.CaminhoPDF}, {pago}, {dataPagamento}, {observacoes}, {perm}, {UID} ");
-                    int idArquivo = 0;
+                    int idAdic = contasAPagarDao.Adiciona(idFornecedor, dataEmissao, dataVencimento, valorTotal, chaveNotaFiscal, descricao, this.CaminhoPDF, pago, dataPagamento, observacoes, perm, UID);
                     if (perm)
                     {
-                        idArquivo = GravaPDF();
-                    }
-                    contasAPagarDao.Adiciona(idFornecedor, dataEmissao, dataVencimento, valorTotal, chaveNotaFiscal, descricao, this.CaminhoPDF, pago, dataPagamento, observacoes, perm, UID, idArquivo);
-                    if (perm)
-                    {
+                        GravaPDF(idAdic);
                         AdicionarAoArquivoINI(this.CaminhoPDF);
                     }
                     Limpar();
@@ -231,6 +223,8 @@ namespace TeleBonifacio
                         AdicionarAoArquivoINI(this.CaminhoPDF);
                         CarregaGridGenerico(dataGrid1, 0);
                         Limpar();
+                        btLimparFiltro.Enabled = false;
+                        cmbForn.SelectedIndex = 0;
                     }
                 }
                 else
@@ -259,85 +253,56 @@ namespace TeleBonifacio
                 // MODO BANCO DE DADOS
                 if (dataGrid2.SelectedRows.Count == 1)
                 {
-                    AbreArquivo(0);
+                    AbreArquivo(this.iID);
                 }
                 else
                 {
                     int i = 1;
                     foreach (DataGridViewRow row in dataGrid2.SelectedRows)
                     {
-                        this.idArquivo = (int)row.Cells["idArquivo"].Value;
-                        AbreArquivo(i);
+                        int idArquivo = (int)row.Cells["ID"].Value;
+                        AbreArquivo(idArquivo);
                         i++;
                     }
                 }
             }
         }
 
-        private int GravaPDF()
+        private void GravaPDF(int numero)
         {
-            string fileExtension = Path.GetExtension(this.CaminhoPDF).TrimStart('.');
-            int insertedId = -1;
-            byte[] fileContent = File.ReadAllBytes(this.CaminhoPDF);
-            using (OleDbConnection connection = new OleDbConnection(this.connectionStringPDF))
-            {
-                connection.Open();
-                using (OleDbCommand insertCommand = new OleDbCommand("INSERT INTO Docs (Conteudo, ext) VALUES (?, ?)", connection))
-                {
-                    insertCommand.Parameters.AddWithValue("@Conteudo", fileContent);
-                    insertCommand.Parameters.AddWithValue("@ext", fileExtension);
-                    insertCommand.ExecuteNonQuery();
-                }
-                using (OleDbCommand selectCommand = new OleDbCommand("SELECT @@IDENTITY", connection))
-                {
-                    insertedId = Convert.ToInt32(selectCommand.ExecuteScalar());
-                }
-            }
-            return insertedId;
-        }
-
-        private void AbreArquivo(int Nro)
-        {
-            string query = "SELECT Conteudo, ext FROM Docs WHERE ID = ?";
-            string tempFolderPath = Path.GetTempPath();
-            string fileNamePrefix = "DenisTemp";
-            if (Nro > 0)
-            {
-                fileNamePrefix += Nro.ToString();
-            }
+            string fileExtension = Path.GetExtension(this.CaminhoPDF).TrimStart('.');            
+            string destinationFileName = $"Doc{numero}.{fileExtension}";
+            string destinationFilePath = Path.Combine(CaminhoBasePDF, destinationFileName);
             try
             {
-                using (OleDbConnection connection = new OleDbConnection(this.connectionStringPDF))
+                if (!Directory.Exists(CaminhoBasePDF))
                 {
-                    connection.Open();
-                    using (OleDbCommand command = new OleDbCommand(query, connection))
-                    {
-                        command.Parameters.AddWithValue("@ID", this.idArquivo);
-                        using (OleDbDataReader reader = command.ExecuteReader())
-                        {
-                            int fileCounter = 1;
-                            while (reader.Read())
-                            {
-                                string fileExtension = reader["ext"].ToString().Trim();
-                                string tempFilePath = Path.Combine(tempFolderPath, $"{fileNamePrefix}.{fileExtension}");
-                                long contentLength = reader.GetBytes(reader.GetOrdinal("Conteudo"), 0, null, 0, 0);
-                                byte[] content = new byte[contentLength];
-                                reader.GetBytes(reader.GetOrdinal("Conteudo"), 0, content, 0, content.Length);
-                                File.WriteAllBytes(tempFilePath, content);
+                    Directory.CreateDirectory(CaminhoBasePDF);
+                }
+                File.Copy(this.CaminhoPDF, destinationFilePath, true);
+                Console.WriteLine($"Arquivo copiado para: {destinationFilePath}");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Erro ao copiar o arquivo: {ex.Message}");
+            }
+        }
+        private void AbreArquivo(int Nro)
+        {
+            string fileNamePrefix = "Doc";
+            string fileExtension = Path.GetExtension(this.CaminhoPDF).TrimStart('.');
+            string sourceFilePath = Path.Combine(CaminhoBasePDF, $"{fileNamePrefix}{Nro}.{fileExtension}");
 
-                                //string fileExtension = reader["ext"].ToString().Trim();
-                                //string tempFilePath = Path.Combine(tempFolderPath, $"{fileNamePrefix}_{fileCounter++}.{fileExtension}");
-
-                                //int contentOrdinal = reader.GetOrdinal("Conteudo");
-                                //long contentLength = reader.GetBytes(contentOrdinal, 0, null, 0, 0);
-                                //byte[] content = new byte[contentLength];
-                                //reader.GetBytes(contentOrdinal, 0, content, 0, (int)contentLength);
-
-                                //File.WriteAllBytes(tempFilePath, content);
-                                //Process.Start(new ProcessStartInfo(tempFilePath) { UseShellExecute = true });
-                            }
-                        }
-                    }
+            try
+            {
+                // Verifique se o arquivo existe antes de tentar abri-lo.
+                if (File.Exists(sourceFilePath))
+                {
+                    Process.Start(new ProcessStartInfo(sourceFilePath) { UseShellExecute = true });
+                }
+                else
+                {
+                    Console.WriteLine($"Arquivo não encontrado: {sourceFilePath}");
                 }
             }
             catch (Exception ex)
@@ -346,105 +311,6 @@ namespace TeleBonifacio
             }
         }
 
-        //private void AbreArquivo(int Nro)
-        //{
-        //    string query = "SELECT * FROM Docs WHERE ID = ?";
-        //    string tempFolderPath = Path.GetTempPath();
-        //    string fileNamePrefix = "DenisTemp";
-        //    if (Nro > 0)
-        //    {
-        //        fileNamePrefix += Nro.ToString();
-        //    }
-        //    try
-        //    {
-        //        using (OleDbConnection connection = new OleDbConnection(this.connectionStringPDF))
-        //        {
-        //            connection.Open();
-        //            using (OleDbCommand command = new OleDbCommand(query, connection))
-        //            {
-        //                command.Parameters.AddWithValue("@ID", this.idArquivo);
-        //                using (OleDbDataReader reader = command.ExecuteReader())
-        //                {
-        //                    int fileCounter = 1;
-        //                    while (reader.Read())
-        //                    {
-        //                        string fileExtension = reader["ext"].ToString().Trim();
-        //                        string tempFilePath = Path.Combine(tempFolderPath, $"{fileNamePrefix}_{fileCounter++}.{fileExtension}");
-        //                        int contentOrdinal = reader.GetOrdinal("Conteudo");
-        //                        long contentLength = reader.GetBytes(contentOrdinal, 0, null, 0, 0);
-        //                        byte[] content = new byte[contentLength];
-        //                        reader.GetBytes(contentOrdinal, 0, content, 0, (int)contentLength);
-        //                        File.WriteAllBytes(tempFilePath, content);
-        //                        Process.Start(new ProcessStartInfo(tempFilePath) { UseShellExecute = true });
-        //                    }
-        //                }
-        //            }
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        Console.WriteLine($"Erro ao abrir o arquivo: {ex.Message}");
-        //    }
-        //}
-        //private void AbreArquivo(int Nro)
-        //{
-        //    string query = "SELECT * FROM Docs WHERE ID = ?";
-        //    string tempFolderPath = Path.GetTempPath();
-        //    string fileNamePrefix = "DenisTemp";
-        //    if (Nro>0)
-        //    {
-        //        fileNamePrefix += Nro.ToString();
-        //    }
-        //    try
-        //    {
-        //        using (OleDbConnection connection = new OleDbConnection(this.connectionStringPDF))
-        //        {
-        //            connection.Open();
-        //            using (OleDbCommand command = new OleDbCommand(query, connection))
-        //            {
-        //                command.Parameters.AddWithValue("@ID", this.idArquivo);
-        //                using (OleDbDataReader reader = command.ExecuteReader())
-        //                {
-        //                    int fileCounter = 0;
-        //                    while (reader.Read())
-        //                    {
-        //                        string fileExtension = reader["ext"].ToString().Trim();
-        //                        string tempFilePath = Path.Combine(tempFolderPath, $"{fileNamePrefix}_{fileCounter++}.{fileExtension}");
-        //                        long contentLength = reader.GetBytes(reader.GetOrdinal("Conteudo"), 0, null, 0, 0);
-        //                        byte[] content = new byte[contentLength];
-        //                        reader.GetBytes(reader.GetOrdinal("Conteudo"), 0, content, 0, content.Length);
-        //                        File.WriteAllBytes(tempFilePath, content);
-        //                        Process.Start(new ProcessStartInfo(tempFilePath) { UseShellExecute = true });
-        //                    }
-        //                }
-        //            }
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        Console.WriteLine($"Erro ao abrir o arquivo: {ex.Message}");
-        //    }
-        //}
-
-        private void ApagaDoc(int idArquivo)
-        {
-            try
-            {
-                using (OleDbConnection connection = new OleDbConnection(this.connectionStringPDF))
-                {
-                    connection.Open();
-                    string query = $"DELETE FROM Docs WHERE ID = {idArquivo}";
-                    using (OleDbCommand command = new OleDbCommand(query, connection))
-                    {
-                        command.ExecuteNonQuery();
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("Erro ao tentar excluir o registro: " + ex.Message);
-            }
-        }
 
         #endregion
 
@@ -467,7 +333,7 @@ namespace TeleBonifacio
             Grid.Columns[11].Width = 100;          // Obs
             Grid.Columns[12].Visible = false;      // Perm
             Grid.Columns[13].Visible = false;      // ContasAPagar
-            Grid.Columns[14].Visible = false;       // idArquivo
+            //Grid.Columns[14].Visible = false;       // idArquivo
             Grid.Invalidate();
         }
 
@@ -485,15 +351,15 @@ namespace TeleBonifacio
                 DataGridViewRow selectedRow = grid.Rows[e.RowIndex];
                 this.iID = Convert.ToInt32(selectedRow.Cells["ID"].Value);
                 this.UID = Convert.ToString(selectedRow.Cells["UID"].Value);
-                object oArq = selectedRow.Cells["idArquivo"].Value;
-                if (oArq == System.DBNull.Value)
-                {
-                    this.idArquivo = 0;
-                }
-                else
-                {
-                    this.idArquivo = Convert.ToInt32(oArq);
-                }
+                //object oArq = selectedRow.Cells["idArquivo"].Value;
+                //if (oArq == System.DBNull.Value)
+                //{
+                //    this.idArquivo = 0;
+                //}
+                //else
+                //{
+                //    this.idArquivo = Convert.ToInt32(oArq);
+                //}
                 cmbForn.SelectedValue = Convert.ToInt32(selectedRow.Cells["idFornecedor"].Value);
                 dtpDataEmissao.Value = Convert.ToDateTime(selectedRow.Cells["DataEmissao"].Value);
                 dtpDataVencimento.Value = Convert.ToDateTime(selectedRow.Cells["DataVencimento"].Value);
@@ -720,14 +586,7 @@ namespace TeleBonifacio
         {
             glo.Loga($@"PD,{this.iID}, {this.UID}");
             contasAPagarDao.Exclui(this.iID.ToString(), this.CaminhoPDF);
-            if (this.idArquivo > 0)
-            {
-                ApagaDoc(this.idArquivo);
-            }            
-            btLimparFiltro.Enabled = false;
-            cmbForn.SelectedIndex = 0;
-            //Limpar();
-            //AtualizaGrids();
+
         }
 
         private void btnExcluir_Click(object sender, EventArgs e)
@@ -744,22 +603,26 @@ namespace TeleBonifacio
                     {
                         ApagaRegistro();
                         File.Delete(this.CaminhoBasePDF);
+                        btLimparFiltro.Enabled = false;
+                        cmbForn.SelectedIndex = 0;
                     } else
                     {
                         foreach (DataGridViewRow row in dataGrid1.SelectedRows)
                         {
                             this.iID = Convert.ToInt32(row.Cells["ID"].Value);
                             this.UID = Convert.ToString(row.Cells["UID"].Value);
-                            this.CaminhoBasePDF = row.Cells["CaminhoPDF"].Value.ToString();
+                            this.CaminhoPDF = row.Cells["CaminhoPDF"].Value.ToString();
                             ApagaRegistro();
                             try
                             {
-                                File.Delete(this.CaminhoBasePDF);
+                                File.Delete(this.CaminhoPDF);
                             }
                             catch (Exception ex)
                             {
                                 Console.WriteLine($"Erro ao apagar o arquivo: {ex.Message}");
                             }
+                            btLimparFiltro.Enabled = false;
+                            cmbForn.SelectedIndex = 0;
                         }
                     }
                     Limpar();
@@ -767,9 +630,10 @@ namespace TeleBonifacio
                 }
                 else
                 {
-                    if (dataGrid1.SelectedRows.Count == 1)
+                    if (dataGrid2.SelectedRows.Count == 1)
                     {
                         ApagaRegistro();
+                        ApagarArquivo(this.iID);
                     } else
                     {
                         foreach (DataGridViewRow row in dataGrid2.SelectedRows)
@@ -777,34 +641,41 @@ namespace TeleBonifacio
                             this.iID = Convert.ToInt32(row.Cells["ID"].Value);
                             this.UID = Convert.ToString(row.Cells["UID"].Value);
                             ApagaRegistro();
+                            ApagarArquivo(this.iID);
                         }
                     }
                     CarregaGridGenerico(dataGrid2, -1);
                     Limpar();
+                    btLimparFiltro.Enabled = false;
+                    cmbForn.SelectedIndex = 0;
                 }
             }
         }
 
-        //private void btnExcluir_Click(object sender, EventArgs e)
-        //{
-        //    DialogResult result = MessageBox.Show("Tem certeza que deseja excluir este registro?",
-        //                                          "Confirmar Deleção",
-        //                                          MessageBoxButtons.YesNo,
-        //                                          MessageBoxIcon.Question);
-        //    if (result == DialogResult.Yes)
-        //    {
-        //        ApagaRegistro();
-        //        if (tbContas.SelectedIndex == 0)
-        //        {                    
-        //            File.Delete(this.CaminhoBasePDF);
-        //            CarregaGridGenerico(dataGrid1, 0);
-        //        }
-        //        else
-        //        {
-        //            CarregaGridGenerico(dataGrid2, -1);
-        //        }
-        //    }
-        //}
+        private void ApagarArquivo(int numero)
+        {
+            string fileExtension = Path.GetExtension(this.CaminhoPDF).TrimStart('.');
+            string destinationFolder = @"C:\Entregas\Docs";
+            string destinationFileName = $"Doc{numero}.{fileExtension}";
+            string destinationFilePath = Path.Combine(destinationFolder, destinationFileName);
+            try
+            {
+                if (File.Exists(destinationFilePath))
+                {
+                    File.Delete(destinationFilePath);
+                    Console.WriteLine($"Arquivo apagado: {destinationFilePath}");
+                }
+                else
+                {
+                    Console.WriteLine($"Arquivo não encontrado: {destinationFilePath}");
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Erro ao apagar o arquivo: {ex.Message}");
+            }
+        }
+
 
         #endregion
 

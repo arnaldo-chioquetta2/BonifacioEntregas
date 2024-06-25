@@ -6,9 +6,9 @@ namespace TeleBonifacio.dao
 {
     public class ContasAPagarDao
     {
-        public void Adiciona(int idFornecedor, DateTime dataEmissao, DateTime dataVencimento, float valorTotal, string chaveNotaFiscal, string descricao, string caminhoPDF, bool pago, DateTime? dataPagamento, string observacoes, bool perm, string UID, int idArquivo)
+        public int Adiciona(int idFornecedor, DateTime dataEmissao, DateTime dataVencimento, float valorTotal, string chaveNotaFiscal, string descricao, string caminhoPDF, bool pago, DateTime? dataPagamento, string observacoes, bool perm, string UID)
         {
-            string sql = $@"INSERT INTO ContasAPagar (idFornecedor, DataEmissao, DataVencimento, ValorTotal, ChaveNotaFiscal, Descricao, CaminhoPDF, Pago, DataPagamento, Observacoes, Perm, UID, idArquivo) VALUES (
+            string sql = $@"INSERT INTO ContasAPagar (idFornecedor, DataEmissao, DataVencimento, ValorTotal, ChaveNotaFiscal, Descricao, CaminhoPDF, Pago, DataPagamento, Observacoes, Perm, UID) VALUES (
                 {idFornecedor}, 
                 '{dataEmissao.ToString("yyyy-MM-dd HH:mm:ss")}', 
                 '{dataVencimento.ToString("yyyy-MM-dd HH:mm:ss")}', 
@@ -20,9 +20,10 @@ namespace TeleBonifacio.dao
                 {(dataPagamento.HasValue ? $"'{dataPagamento.Value.ToString("yyyy-MM-dd HH:mm:ss")}'" : "NULL")}, 
                 '{observacoes}',
                 {(perm ? 1 : 0)},
-                '{UID}',
-                 {idArquivo} )";
+                '{UID}' )";
             DB.ExecutarComandoSQL(sql);
+            string queryNome = $"SELECT Max(ID) FROM ContasAPagar ";
+            return DB.ExecutarConsultaCount(queryNome);
         }
 
         public void Exclui(string id, string CaminhoPDF)

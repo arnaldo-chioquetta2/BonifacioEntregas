@@ -11,8 +11,9 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyCulture("")]
 [assembly: ComVisible(false)]
 [assembly: Guid("308c57af-e663-456d-8a2c-188bbd61423d")]
-[assembly: AssemblyVersion("2.1.6.0")]
-[assembly: AssemblyFileVersion("2.1.6.0")]
+[assembly: AssemblyVersion("2.1.7.0")]
+[assembly: AssemblyFileVersion("2.1.7.0")]
+// 2.1.5 Abordagem em arquivos
 // 2.1.4 Banco de dados para documentos
 // 2.1.3 Aba para documentos permanentes
 // 2.1.2 Vinculação dos arquivos
