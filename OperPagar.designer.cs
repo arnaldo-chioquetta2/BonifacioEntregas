@@ -21,7 +21,6 @@ namespace TeleBonifacio
 
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(OperPagar));
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.btPDF = new System.Windows.Forms.Button();
@@ -47,6 +46,7 @@ namespace TeleBonifacio
             this.labelDataPagamento = new System.Windows.Forms.Label();
             this.labelObservacoes = new System.Windows.Forms.Label();
             this.txObservacoes = new System.Windows.Forms.TextBox();
+            this.txNvForn = new System.Windows.Forms.TextBox();
             this.panel1 = new System.Windows.Forms.Panel();
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.tbContas = new System.Windows.Forms.TabControl();
@@ -54,8 +54,6 @@ namespace TeleBonifacio
             this.dataGrid1 = new System.Windows.Forms.DataGridView();
             this.tbPerms = new System.Windows.Forms.TabPage();
             this.dataGrid2 = new System.Windows.Forms.DataGridView();
-            this.txNvForn = new System.Windows.Forms.TextBox();
-            this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.groupBox3.SuspendLayout();
             this.panel1.SuspendLayout();
             this.tbContas.SuspendLayout();
@@ -350,6 +348,15 @@ namespace TeleBonifacio
             this.txObservacoes.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.txObservacoes.KeyUp += new System.Windows.Forms.KeyEventHandler(this.txObservacoes_KeyUp);
             // 
+            // txNvForn
+            // 
+            this.txNvForn.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txNvForn.Location = new System.Drawing.Point(174, 19);
+            this.txNvForn.Name = "txNvForn";
+            this.txNvForn.Size = new System.Drawing.Size(204, 21);
+            this.txNvForn.TabIndex = 51;
+            this.txNvForn.Visible = false;
+            // 
             // panel1
             // 
             this.panel1.Controls.Add(this.groupBox3);
@@ -358,10 +365,6 @@ namespace TeleBonifacio
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(720, 181);
             this.panel1.TabIndex = 13;
-            // 
-            // openFileDialog
-            // 
-            this.openFileDialog.FileName = "openFileDialog1";
             // 
             // tbContas
             // 
@@ -421,20 +424,6 @@ namespace TeleBonifacio
             this.dataGrid2.TabIndex = 17;
             this.dataGrid2.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGrid2_CellClick);
             // 
-            // txNvForn
-            // 
-            this.txNvForn.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txNvForn.Location = new System.Drawing.Point(174, 19);
-            this.txNvForn.Name = "txNvForn";
-            this.txNvForn.Size = new System.Drawing.Size(204, 21);
-            this.txNvForn.TabIndex = 51;
-            this.txNvForn.Visible = false;
-            // 
-            // timer1
-            // 
-            this.timer1.Interval = 2000;
-            this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
-            // 
             // OperPagar
             // 
             this.ClientSize = new System.Drawing.Size(720, 432);
@@ -491,6 +480,5 @@ namespace TeleBonifacio
         private DataGridView dataGrid1;
         private DataGridView dataGrid2;
         private TextBox txNvForn;
-        private Timer timer1;
     }
 }

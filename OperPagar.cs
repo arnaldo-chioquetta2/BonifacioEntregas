@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Data.OleDb;
 using System.Diagnostics;
@@ -12,6 +13,7 @@ namespace TeleBonifacio
     {
         private FornecedorDao Forn;
         private ContasAPagarDao contasAPagarDao;
+        private List<string> arquivosParaApagar = new List<string>();
         private string UID = "";
         private bool carregando = true;
         private string CaminhoPDF = "";
@@ -56,7 +58,6 @@ namespace TeleBonifacio
 
         private void Limpar()
         {
-            cmbForn.SelectedIndex = 0;
             txValorTotal.Text = "";
             txChaveNotaFiscal.Text = "";
             txDescricao.Text = "";
@@ -64,7 +65,6 @@ namespace TeleBonifacio
             txObservacoes.Text = "";
             chPermanente.Checked = false;
             chPermanente.Enabled = false;
-            btLimparFiltro.Enabled = false;
             btExcluir.Enabled = false;
             dtpDataPagamento.Tag = "";
             dtpDataVencimento.Tag = "";
@@ -75,17 +75,21 @@ namespace TeleBonifacio
             ckPago.Tag = "";
         }
 
-        private void VeSeHab(TextBox obj)
+        private void VeSeHab(TextBox obj = null)
         {
-            if (obj.Text.Length > 0)
+            if (obj != null)
             {
-                obj.Tag = "M";
+                if (obj.Text.Length > 0)
+                {
+                    obj.Tag = "M";
+                }
             }
             bool ok = false;
             if (cmbForn.SelectedIndex != -1)
             {
                 ok = true;
-            } else
+            }
+            else
             {
                 if (txDescricao.Text.Length > 0)
                 {
@@ -94,6 +98,7 @@ namespace TeleBonifacio
             }
             btnAdicionar.Enabled = ok;
             chPermanente.Enabled = ok;
+            btPDF.Enabled = false;
             btLimparFiltro.Enabled = ok;
         }
 
@@ -105,7 +110,10 @@ namespace TeleBonifacio
                 txNvForn.Visible = false;
                 cmbForn.Visible = true;
                 glo.CarregarComboBox<tb.Fornecedor>(cmbForn, Forn, "ESCOLHA", ItemFinal: "ADICIONE", ItemFinal2: "EDIÇÃO");
-            } else
+                cmbForn.Text = txNvForn.Text;
+                VeSeHab();
+            }
+            else
             {
                 if (btnAdicionar.Text == "Adicionar")
                 {
@@ -149,12 +157,12 @@ namespace TeleBonifacio
                     if (perm)
                     {
                         idArquivo = GravaPDF();
-                    }                     
+                    }
                     contasAPagarDao.Adiciona(idFornecedor, dataEmissao, dataVencimento, valorTotal, chaveNotaFiscal, descricao, this.CaminhoPDF, pago, dataPagamento, observacoes, perm, UID, idArquivo);
                     if (perm)
                     {
-                        //MandarApagar();
-                    }                        
+                        AdicionarAoArquivoINI(this.CaminhoPDF);
+                    }
                     Limpar();
                     if (tbContas.SelectedIndex == 0)
                     {
@@ -178,7 +186,12 @@ namespace TeleBonifacio
                             CarregarT = true;
                         }
                     }
-                }                
+                    if (idFornecedor>0)
+                    {
+                        btnAdicionar.Enabled = true;
+                        chPermanente.Enabled = true;
+                    } 
+                }
             }
         }
 
@@ -188,27 +201,75 @@ namespace TeleBonifacio
 
         private void btPDF_Click(object sender, EventArgs e)
         {
-            if (chPermanente.Checked)
+            if (tbContas.SelectedIndex == 0)
             {
-                AbreArquivo();
+                // Modo Arquivo
+                if (dataGrid1.SelectedRows.Count == 1)
+                {
+                    DialogResult result = MessageBox.Show("Deseja excluir o arquivo?\nPara mante-lo escolha Não", "Impressão",
+                                          MessageBoxButtons.YesNo,
+                                          MessageBoxIcon.Question);
+                    if (result == DialogResult.Yes)
+                    {
+                        AdicionarAoArquivoINI(this.CaminhoPDF);
+                    }
+                    bool ok = false;
+                    try
+                    {
+                        Process.Start(this.CaminhoPDF);
+                        ok = true;
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(ex.ToString(), "Erro ao abrir arquivo",
+                            MessageBoxButtons.OK,
+                            MessageBoxIcon.Error);
+                    }
+                    if (ok && result == DialogResult.Yes)
+                    {
+                        ApagaRegistro();
+                        AdicionarAoArquivoINI(this.CaminhoPDF);
+                        CarregaGridGenerico(dataGrid1, 0);
+                        Limpar();
+                    }
+                }
+                else
+                {
+                    // Lista de registros
+                    DialogResult result = MessageBox.Show("Deseja excluir os arquivos após impressão?\nPara mante-los escolha Não", "Impressão",
+                                          MessageBoxButtons.YesNo,
+                                          MessageBoxIcon.Question);
+                    foreach (DataGridViewRow row in dataGrid1.SelectedRows)
+                    {
+                        string caminhoPDF = row.Cells["CaminhoPDF"].Value.ToString();
+                        if (result == DialogResult.Yes)
+                        {
+                            AdicionarAoArquivoINI(caminhoPDF);
+                        }
+                        Process.Start(caminhoPDF);
+                    }
+                    if (result == DialogResult.Yes)
+                    {
+                        CarregaGridGenerico(dataGrid1, 0);
+                    }
+                }
             }
             else
             {
-
-                DialogResult result = MessageBox.Show("Deseja excluir o arquivo?\nPara mante-lo escolha Não", "Impressão",
-                                      MessageBoxButtons.YesNo,
-                                      MessageBoxIcon.Question);
-                if (result == DialogResult.Yes)
+                // MODO BANCO DE DADOS
+                if (dataGrid2.SelectedRows.Count == 1)
                 {
-                    MandarApagar();
+                    AbreArquivo(0);
                 }
-                try
+                else
                 {
-                    Process.Start(this.CaminhoPDF);
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine($"Erro ao abrir o arquivo: {ex.Message}");
+                    int i = 1;
+                    foreach (DataGridViewRow row in dataGrid2.SelectedRows)
+                    {
+                        this.idArquivo = (int)row.Cells["idArquivo"].Value;
+                        AbreArquivo(i);
+                        i++;
+                    }
                 }
             }
         }
@@ -217,7 +278,7 @@ namespace TeleBonifacio
         {
             string fileExtension = Path.GetExtension(this.CaminhoPDF).TrimStart('.');
             int insertedId = -1;
-            byte[] fileContent = File.ReadAllBytes(this.CaminhoPDF);  
+            byte[] fileContent = File.ReadAllBytes(this.CaminhoPDF);
             using (OleDbConnection connection = new OleDbConnection(this.connectionStringPDF))
             {
                 connection.Open();
@@ -235,13 +296,15 @@ namespace TeleBonifacio
             return insertedId;
         }
 
-        private void AbreArquivo()
+        private void AbreArquivo(int Nro)
         {
-            string query = "SELECT * FROM Docs WHERE ID = ?";
-            string tempFolderPath = @"C:\Temp";
-            string fileName = "DenisTemp";
-            string fileExtension;
-            string tempFilePath = "";
+            string query = "SELECT Conteudo, ext FROM Docs WHERE ID = ?";
+            string tempFolderPath = Path.GetTempPath();
+            string fileNamePrefix = "DenisTemp";
+            if (Nro > 0)
+            {
+                fileNamePrefix += Nro.ToString();
+            }
             try
             {
                 using (OleDbConnection connection = new OleDbConnection(this.connectionStringPDF))
@@ -252,23 +315,134 @@ namespace TeleBonifacio
                         command.Parameters.AddWithValue("@ID", this.idArquivo);
                         using (OleDbDataReader reader = command.ExecuteReader())
                         {
-                            if (reader.Read())
+                            int fileCounter = 1;
+                            while (reader.Read())
                             {
-                                fileExtension = reader["ext"].ToString().Trim();
-                                tempFilePath = Path.Combine(tempFolderPath, $"{fileName}.{fileExtension}");
+                                string fileExtension = reader["ext"].ToString().Trim();
+                                string tempFilePath = Path.Combine(tempFolderPath, $"{fileNamePrefix}.{fileExtension}");
                                 long contentLength = reader.GetBytes(reader.GetOrdinal("Conteudo"), 0, null, 0, 0);
                                 byte[] content = new byte[contentLength];
                                 reader.GetBytes(reader.GetOrdinal("Conteudo"), 0, content, 0, content.Length);
-                                File.WriteAllBytes(tempFilePath, content);  
+                                File.WriteAllBytes(tempFilePath, content);
+
+                                //string fileExtension = reader["ext"].ToString().Trim();
+                                //string tempFilePath = Path.Combine(tempFolderPath, $"{fileNamePrefix}_{fileCounter++}.{fileExtension}");
+
+                                //int contentOrdinal = reader.GetOrdinal("Conteudo");
+                                //long contentLength = reader.GetBytes(contentOrdinal, 0, null, 0, 0);
+                                //byte[] content = new byte[contentLength];
+                                //reader.GetBytes(contentOrdinal, 0, content, 0, (int)contentLength);
+
+                                //File.WriteAllBytes(tempFilePath, content);
+                                //Process.Start(new ProcessStartInfo(tempFilePath) { UseShellExecute = true });
                             }
                         }
                     }
                 }
-                Process.Start(new ProcessStartInfo(tempFilePath) { UseShellExecute = true });
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"Erro ao abrir o arquivo: {ex.Message}");
+            }
+        }
+
+        //private void AbreArquivo(int Nro)
+        //{
+        //    string query = "SELECT * FROM Docs WHERE ID = ?";
+        //    string tempFolderPath = Path.GetTempPath();
+        //    string fileNamePrefix = "DenisTemp";
+        //    if (Nro > 0)
+        //    {
+        //        fileNamePrefix += Nro.ToString();
+        //    }
+        //    try
+        //    {
+        //        using (OleDbConnection connection = new OleDbConnection(this.connectionStringPDF))
+        //        {
+        //            connection.Open();
+        //            using (OleDbCommand command = new OleDbCommand(query, connection))
+        //            {
+        //                command.Parameters.AddWithValue("@ID", this.idArquivo);
+        //                using (OleDbDataReader reader = command.ExecuteReader())
+        //                {
+        //                    int fileCounter = 1;
+        //                    while (reader.Read())
+        //                    {
+        //                        string fileExtension = reader["ext"].ToString().Trim();
+        //                        string tempFilePath = Path.Combine(tempFolderPath, $"{fileNamePrefix}_{fileCounter++}.{fileExtension}");
+        //                        int contentOrdinal = reader.GetOrdinal("Conteudo");
+        //                        long contentLength = reader.GetBytes(contentOrdinal, 0, null, 0, 0);
+        //                        byte[] content = new byte[contentLength];
+        //                        reader.GetBytes(contentOrdinal, 0, content, 0, (int)contentLength);
+        //                        File.WriteAllBytes(tempFilePath, content);
+        //                        Process.Start(new ProcessStartInfo(tempFilePath) { UseShellExecute = true });
+        //                    }
+        //                }
+        //            }
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        Console.WriteLine($"Erro ao abrir o arquivo: {ex.Message}");
+        //    }
+        //}
+        //private void AbreArquivo(int Nro)
+        //{
+        //    string query = "SELECT * FROM Docs WHERE ID = ?";
+        //    string tempFolderPath = Path.GetTempPath();
+        //    string fileNamePrefix = "DenisTemp";
+        //    if (Nro>0)
+        //    {
+        //        fileNamePrefix += Nro.ToString();
+        //    }
+        //    try
+        //    {
+        //        using (OleDbConnection connection = new OleDbConnection(this.connectionStringPDF))
+        //        {
+        //            connection.Open();
+        //            using (OleDbCommand command = new OleDbCommand(query, connection))
+        //            {
+        //                command.Parameters.AddWithValue("@ID", this.idArquivo);
+        //                using (OleDbDataReader reader = command.ExecuteReader())
+        //                {
+        //                    int fileCounter = 0;
+        //                    while (reader.Read())
+        //                    {
+        //                        string fileExtension = reader["ext"].ToString().Trim();
+        //                        string tempFilePath = Path.Combine(tempFolderPath, $"{fileNamePrefix}_{fileCounter++}.{fileExtension}");
+        //                        long contentLength = reader.GetBytes(reader.GetOrdinal("Conteudo"), 0, null, 0, 0);
+        //                        byte[] content = new byte[contentLength];
+        //                        reader.GetBytes(reader.GetOrdinal("Conteudo"), 0, content, 0, content.Length);
+        //                        File.WriteAllBytes(tempFilePath, content);
+        //                        Process.Start(new ProcessStartInfo(tempFilePath) { UseShellExecute = true });
+        //                    }
+        //                }
+        //            }
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        Console.WriteLine($"Erro ao abrir o arquivo: {ex.Message}");
+        //    }
+        //}
+
+        private void ApagaDoc(int idArquivo)
+        {
+            try
+            {
+                using (OleDbConnection connection = new OleDbConnection(this.connectionStringPDF))
+                {
+                    connection.Open();
+                    string query = $"DELETE FROM Docs WHERE ID = {idArquivo}";
+                    using (OleDbCommand command = new OleDbCommand(query, connection))
+                    {
+                        command.ExecuteNonQuery();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Erro ao tentar excluir o registro: " + ex.Message);
             }
         }
 
@@ -298,7 +472,7 @@ namespace TeleBonifacio
         }
 
         private void dataGrid1_CellClick(object sender, DataGridViewCellEventArgs e)
-        {            
+        {
             DataGridView grid = (DataGridView)sender;
             Mostra(ref grid, ref e);
         }
@@ -311,7 +485,15 @@ namespace TeleBonifacio
                 DataGridViewRow selectedRow = grid.Rows[e.RowIndex];
                 this.iID = Convert.ToInt32(selectedRow.Cells["ID"].Value);
                 this.UID = Convert.ToString(selectedRow.Cells["UID"].Value);
-                this.idArquivo = Convert.ToInt32(selectedRow.Cells["idArquivo"].Value);
+                object oArq = selectedRow.Cells["idArquivo"].Value;
+                if (oArq == System.DBNull.Value)
+                {
+                    this.idArquivo = 0;
+                }
+                else
+                {
+                    this.idArquivo = Convert.ToInt32(oArq);
+                }
                 cmbForn.SelectedValue = Convert.ToInt32(selectedRow.Cells["idFornecedor"].Value);
                 dtpDataEmissao.Value = Convert.ToDateTime(selectedRow.Cells["DataEmissao"].Value);
                 dtpDataVencimento.Value = Convert.ToDateTime(selectedRow.Cells["DataVencimento"].Value);
@@ -331,7 +513,7 @@ namespace TeleBonifacio
                 }
                 this.CaminhoPDF = Convert.ToString(selectedRow.Cells["CaminhoPDF"].Value);
                 txObservacoes.Text = Convert.ToString(selectedRow.Cells["Observacoes"].Value);
-                chPermanente.Checked = Convert.ToBoolean(selectedRow.Cells["Perm"].Value);                
+                chPermanente.Checked = Convert.ToBoolean(selectedRow.Cells["Perm"].Value);
                 btnAdicionar.Text = "Alterar";
                 btnAdicionar.Enabled = true;
                 btLimparFiltro.Enabled = true;
@@ -358,7 +540,7 @@ namespace TeleBonifacio
         private void CarregaGridGenerico(DataGridView dataGrid, int filter)
         {
             int idForne = 0;
-            if (cmbForn.Tag=="M")
+            if (cmbForn.Tag == "M")
             {
                 int iForn = cmbForn.SelectedIndex;
                 idForne = ((tb.ComboBoxItem)cmbForn.Items[iForn]).Id;
@@ -411,10 +593,13 @@ namespace TeleBonifacio
                                 glo.CarregarComboBox<tb.Fornecedor>(cmbForn, Forn, "ESCOLHA", ItemFinal: "ADICIONE", ItemFinal2: "EDIÇÃO");
                             }
                             else
-                            {                                
+                            {
                                 cmbForn.Tag = "M";
                                 btLimparFiltro.Enabled = true;
                                 btFiltrar.Enabled = true;
+                                btnAdicionar.Enabled = true;
+                                btnAdicionar.Text = "Adicionar";
+                                chPermanente.Enabled = true;
                             }
                         }
                     }
@@ -425,6 +610,9 @@ namespace TeleBonifacio
         private void btLimparFiltro_Click(object sender, EventArgs e)
         {
             Limpar();
+            cmbForn.SelectedIndex = 0;
+            btLimparFiltro.Enabled = false;
+            btnAdicionar.Enabled = false;
         }
 
         private void dataGrid2_CellClick(object sender, DataGridViewCellEventArgs e)
@@ -515,55 +703,108 @@ namespace TeleBonifacio
             }
         }
 
-
         #endregion
 
         #region Deleção
 
-        private void timer1_Tick(object sender, EventArgs e)
+        private void AdicionarAoArquivoINI(string caminhoPDF)
         {
-            timer1.Enabled = false;
-            File.Delete(this.Apagar);
-            this.Apagar = "";
+            INI cINI = new INI();
+            int nro = cINI.ReadInt("Apagar", "Nro", 0);
+            nro++;
+            cINI.WriteString("Apagar", "Arq" + nro, caminhoPDF);
+            cINI.WriteInt("Apagar", "Nro", nro);
         }
 
-        private void MandarApagar()
-        {
-            this.Apagar = this.CaminhoPDF;
-            timer1.Enabled = true;
-        }
         private void ApagaRegistro()
         {
-            string sID = "";
-            string UID = "";
-            if (tbContas.SelectedIndex == 0)
+            glo.Loga($@"PD,{this.iID}, {this.UID}");
+            contasAPagarDao.Exclui(this.iID.ToString(), this.CaminhoPDF);
+            if (this.idArquivo > 0)
             {
-                sID = dataGrid1.SelectedRows[0].Cells["ID"].Value.ToString();
-                UID = dataGrid1.SelectedRows[0].Cells["UID"].Value.ToString();
-            }
-            else
-            {
-                sID = dataGrid2.SelectedRows[0].Cells["ID"].Value.ToString();
-                UID = dataGrid2.SelectedRows[0].Cells["UID"].Value.ToString();
-            }
-            glo.Loga($@"PD,{sID}, {UID}");
-            contasAPagarDao.Exclui(sID, this.CaminhoPDF);
-            MandarApagar();
-            Limpar();
-            AtualizaGrids();
+                ApagaDoc(this.idArquivo);
+            }            
+            btLimparFiltro.Enabled = false;
+            cmbForn.SelectedIndex = 0;
+            //Limpar();
+            //AtualizaGrids();
         }
 
         private void btnExcluir_Click(object sender, EventArgs e)
         {
-            DialogResult result = MessageBox.Show("Tem certeza que deseja excluir este registro?",
+            DialogResult result = MessageBox.Show("Tem certeza que deseja excluir os registros selecionados?",
                                                   "Confirmar Deleção",
                                                   MessageBoxButtons.YesNo,
                                                   MessageBoxIcon.Question);
             if (result == DialogResult.Yes)
             {
-                ApagaRegistro();
+                if (tbContas.SelectedIndex == 0)
+                {
+                    if (dataGrid1.SelectedRows.Count == 1)
+                    {
+                        ApagaRegistro();
+                        File.Delete(this.CaminhoBasePDF);
+                    } else
+                    {
+                        foreach (DataGridViewRow row in dataGrid1.SelectedRows)
+                        {
+                            this.iID = Convert.ToInt32(row.Cells["ID"].Value);
+                            this.UID = Convert.ToString(row.Cells["UID"].Value);
+                            this.CaminhoBasePDF = row.Cells["CaminhoPDF"].Value.ToString();
+                            ApagaRegistro();
+                            try
+                            {
+                                File.Delete(this.CaminhoBasePDF);
+                            }
+                            catch (Exception ex)
+                            {
+                                Console.WriteLine($"Erro ao apagar o arquivo: {ex.Message}");
+                            }
+                        }
+                    }
+                    Limpar();
+                    CarregaGridGenerico(dataGrid1, 0);
+                }
+                else
+                {
+                    if (dataGrid1.SelectedRows.Count == 1)
+                    {
+                        ApagaRegistro();
+                    } else
+                    {
+                        foreach (DataGridViewRow row in dataGrid2.SelectedRows)
+                        {
+                            this.iID = Convert.ToInt32(row.Cells["ID"].Value);
+                            this.UID = Convert.ToString(row.Cells["UID"].Value);
+                            ApagaRegistro();
+                        }
+                    }
+                    CarregaGridGenerico(dataGrid2, -1);
+                    Limpar();
+                }
             }
         }
+
+        //private void btnExcluir_Click(object sender, EventArgs e)
+        //{
+        //    DialogResult result = MessageBox.Show("Tem certeza que deseja excluir este registro?",
+        //                                          "Confirmar Deleção",
+        //                                          MessageBoxButtons.YesNo,
+        //                                          MessageBoxIcon.Question);
+        //    if (result == DialogResult.Yes)
+        //    {
+        //        ApagaRegistro();
+        //        if (tbContas.SelectedIndex == 0)
+        //        {                    
+        //            File.Delete(this.CaminhoBasePDF);
+        //            CarregaGridGenerico(dataGrid1, 0);
+        //        }
+        //        else
+        //        {
+        //            CarregaGridGenerico(dataGrid2, -1);
+        //        }
+        //    }
+        //}
 
         #endregion
 

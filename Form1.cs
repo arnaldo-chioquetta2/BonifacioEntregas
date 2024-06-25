@@ -164,7 +164,19 @@ namespace TeleBonifacio
                     }
                 }
                 this.Text = titulo;
+                VeSeTemQueApagar();
             }
+        }
+
+        private void VeSeTemQueApagar()
+        {
+            int nro = cINI.ReadInt("Apagar", "Nro", 0);
+            for (int i = 0; i < nro; i++)
+            {
+                string nmArq = cINI.ReadString("Apagar", "Arq" + nro, "");
+                File.Delete(nmArq);
+            }
+            cINI.WriteInt("Apagar", "Nro", 0);
         }
 
         #region Atualizacao 
