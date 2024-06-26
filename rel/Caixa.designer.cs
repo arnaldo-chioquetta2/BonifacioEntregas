@@ -106,7 +106,8 @@ namespace TeleBonifacio.rel
             "Cartão",
             "Pix",
             "Despesa",
-            "Itaú"});
+            "Itaú",
+            "Sicred"});
             this.cmbTipo.Location = new System.Drawing.Point(374, 14);
             this.cmbTipo.Name = "cmbTipo";
             this.cmbTipo.Size = new System.Drawing.Size(225, 21);

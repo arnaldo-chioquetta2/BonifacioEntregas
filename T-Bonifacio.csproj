@@ -71,6 +71,9 @@
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="EditRtf">
+      <HintPath>D:\Prog\EditRtf\EditRtf\bin\Debug\net5.0-windows\EditRtf.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.VisualBasic" />
     <Reference Include="SourceGrid, Version=4.40.4580.29115, Culture=neutral, PublicKeyToken=df6f5e538749e85d, processorArchitecture=MSIL">
       <HintPath>packages\SourceGrid.4.4.0\lib\net35\SourceGrid.dll</HintPath>

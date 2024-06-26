@@ -38,6 +38,7 @@ namespace TeleBonifacio
             btDinheiro.Enabled = OK;
             btCartao.Enabled = OK;
             btItau.Enabled = OK;
+            btSicred.Enabled = OK;
         }
 
         private void MostraTotal()
@@ -154,6 +155,11 @@ namespace TeleBonifacio
             Registra(6);
         }
 
+        private void btSicred_Click(object sender, EventArgs e)
+        {
+            Registra(7);
+        }
+
         #endregion
 
         #region Botões
@@ -165,11 +171,13 @@ namespace TeleBonifacio
             this.btPix.Enabled = true;
             this.btCartao.Enabled = true;
             this.btItau.Enabled = true;
+            this.btSicred.Enabled = true;
             this.btDinheiro.BackColor = SystemColors.Control;
             this.btDespeza.BackColor = SystemColors.Control;
             this.btPix.BackColor = SystemColors.Control;
             this.btCartao.BackColor = SystemColors.Control;
             this.btItau.BackColor = SystemColors.Control;
+            this.btSicred.BackColor = SystemColors.Control;
             btExcluir.Visible = false;
             btEditar.Visible = false;
         }
@@ -297,6 +305,9 @@ namespace TeleBonifacio
                         break;
                     case 6:
                         this.btItau.BackColor = cor;
+                        break;
+                    case 7:
+                        this.btSicred.BackColor = cor;
                         break;
 
                 }

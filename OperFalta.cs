@@ -41,7 +41,27 @@ namespace TeleBonifacio
         private bool AtualizarGridG = true;
         private int iID = 0;
         private string UID = "";
-        private bool SalvaAnota;
+        private string caminhoDoArquivo = "";
+
+        private int critopgrafia = 0;
+        private bool Criptografia
+        {
+            get
+            {
+                if (critopgrafia==0)
+                {
+                    INI MeuIni = new INI();
+                    critopgrafia = MeuIni.ReadInt("Config", "Opcao1", 0);
+                }
+                return (critopgrafia==-1);
+            }
+            set
+            {
+                critopgrafia = (value == true) ? -1 : 0;
+                INI MeuIni = new INI();
+                MeuIni.WriteInt("Config", "Opcao1", critopgrafia);
+            }
+        }
 
         #region Inicializacao
 
@@ -1194,10 +1214,17 @@ namespace TeleBonifacio
                             carregando = true;
                             rtfTexto.Location = new Point(0, toolbarHeight + padding);
                             rtfTexto.Size = new Size(tabPage5.Width, tabPage5.Height - toolbarHeight - padding);
-                            string caminhoDoArquivo = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "anotacoes.rtf");
+                            caminhoDoArquivo = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "anotacoes.rtf");
                             try
                             {
-                                rtfTexto.LoadFile(caminhoDoArquivo);
+                                string Conteudo = File.ReadAllText(caminhoDoArquivo);
+                                if (Criptografia)
+                                {
+                                    Conteudo = Cripto.Decrypt(Conteudo);
+                                    tsDescriptar.Visible = true;
+                                    tsEncriptar.Visible = false;
+                                } 
+                                rtfTexto.Rtf = Conteudo;
                             }
                             catch (Exception)
                             {
@@ -1565,8 +1592,17 @@ namespace TeleBonifacio
         private void timer1_Tick(object sender, EventArgs e)
         {
             timer1.Enabled = false;
-            string caminhoDoArquivo = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "anotacoes.rtf");
-            rtfTexto.SaveFile(caminhoDoArquivo);
+            SalvaRTF();
+        }
+
+        private void SalvaRTF()
+        {
+            string Conteudo = rtfTexto.Rtf;
+            if (Criptografia)
+            {
+                Conteudo = Cripto.Encrypt(Conteudo);
+            }
+            File.WriteAllText(caminhoDoArquivo, Conteudo);
         }
 
         private void toolStripButtonRedo_Click(object sender, EventArgs e)
@@ -1680,6 +1716,23 @@ namespace TeleBonifacio
         {
             rtfTexto.SelectionColor = Color.Gray;
         }
+
+        private void toolStripButtonEncrypt_Click(object sender, EventArgs e)
+        {
+            tsDescriptar.Visible = true;
+            tsEncriptar.Visible = false;
+            Criptografia = true;
+            SalvaRTF();
+        }
+
+        private void tsDescriptar_Click(object sender, EventArgs e)
+        {
+            tsDescriptar.Visible = false;
+            tsEncriptar.Visible = true;
+            Criptografia = false;
+            SalvaRTF();
+        }
+
         #endregion
 
     }

@@ -91,6 +91,8 @@ namespace TeleBonifacio
             this.tsLaranja = new System.Windows.Forms.ToolStripButton();
             this.tsPreto = new System.Windows.Forms.ToolStripButton();
             this.tsCinza = new System.Windows.Forms.ToolStripButton();
+            this.tsEncriptar = new System.Windows.Forms.ToolStripButton();
+            this.tsDescriptar = new System.Windows.Forms.ToolStripButton();
             this.rtfTexto = new System.Windows.Forms.RichTextBox();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.panel1.SuspendLayout();
@@ -607,7 +609,9 @@ namespace TeleBonifacio
             this.tsVerde,
             this.tsLaranja,
             this.tsPreto,
-            this.tsCinza});
+            this.tsCinza,
+            this.tsEncriptar,
+            this.tsDescriptar});
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
             this.toolStrip1.Size = new System.Drawing.Size(1156, 25);
@@ -741,8 +745,29 @@ namespace TeleBonifacio
             this.tsCinza.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsCinza.Name = "tsCinza";
             this.tsCinza.Size = new System.Drawing.Size(23, 22);
-            this.tsCinza.Text = "toolStripButton6";
+            this.tsCinza.Text = "Cinza";
             this.tsCinza.Click += new System.EventHandler(this.tsCinza_Click);
+            // 
+            // tsEncriptar
+            // 
+            this.tsEncriptar.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.tsEncriptar.Image = ((System.Drawing.Image)(resources.GetObject("tsEncriptar.Image")));
+            this.tsEncriptar.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsEncriptar.Name = "tsEncriptar";
+            this.tsEncriptar.Size = new System.Drawing.Size(23, 22);
+            this.tsEncriptar.Text = "Ligar Encriptação";
+            this.tsEncriptar.Click += new System.EventHandler(this.toolStripButtonEncrypt_Click);
+            // 
+            // tsDescriptar
+            // 
+            this.tsDescriptar.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.tsDescriptar.Image = ((System.Drawing.Image)(resources.GetObject("tsDescriptar.Image")));
+            this.tsDescriptar.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsDescriptar.Name = "tsDescriptar";
+            this.tsDescriptar.Size = new System.Drawing.Size(23, 22);
+            this.tsDescriptar.Text = "Desligar Encriptação";
+            this.tsDescriptar.Visible = false;
+            this.tsDescriptar.Click += new System.EventHandler(this.tsDescriptar_Click);
             // 
             // rtfTexto
             // 
@@ -833,9 +858,10 @@ namespace TeleBonifacio
         private System.Windows.Forms.TabPage tabPage4;
         private System.Windows.Forms.DataGridView dataGrid4;
         private System.Windows.Forms.TabPage tabPage5;
-        private System.Windows.Forms.RichTextBox rtfTexto;
-        private System.Windows.Forms.ToolStrip toolStrip1;
         private System.Windows.Forms.Timer timer1;
+        private TextBox txValor;
+        private Label lbVlor;
+        private ToolStrip toolStrip1;
         private ToolStripButton toolStripButtonBold;
         private ToolStripButton toolStripButtonItalic;
         private ToolStripButton toolStripButtonUnderline;
@@ -849,8 +875,9 @@ namespace TeleBonifacio
         private ToolStripButton tsLaranja;
         private ToolStripButton tsPreto;
         private ToolStripButton tsCinza;
-        private TextBox txValor;
-        private Label lbVlor;
+        private RichTextBox rtfTexto;
+        private ToolStripButton tsEncriptar;
+        private ToolStripButton tsDescriptar;
     }
 }
 

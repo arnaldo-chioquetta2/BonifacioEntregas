@@ -287,6 +287,7 @@ namespace TeleBonifacio
                 Console.WriteLine($"Erro ao copiar o arquivo: {ex.Message}");
             }
         }
+
         private void AbreArquivo(int Nro)
         {
             string fileNamePrefix = "Doc";
@@ -310,7 +311,6 @@ namespace TeleBonifacio
                 Console.WriteLine($"Erro ao abrir o arquivo: {ex.Message}");
             }
         }
-
 
         #endregion
 
@@ -675,7 +675,6 @@ namespace TeleBonifacio
                 Console.WriteLine($"Erro ao apagar o arquivo: {ex.Message}");
             }
         }
-
 
         #endregion
 

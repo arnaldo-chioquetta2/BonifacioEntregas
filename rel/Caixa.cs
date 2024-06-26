@@ -13,8 +13,7 @@ namespace TeleBonifacio.rel
     {
 
         private bool ativou = false;
-        //private DateTime? DataInicio { get; set; }
-        //private DateTime DataFim { get; set; }
+
         private List<Lanctos> relcaixa { get; set; }
         public DateTime DT1 { get; set; }
         public DateTime DT2 { get; set; }
@@ -114,6 +113,9 @@ namespace TeleBonifacio.rel
                 case "Itaú":
                     ret = 6;
                     break;
+                case "Sicred":
+                    ret = 7;
+                    break;
             }
             return ret;
         }
@@ -141,6 +143,9 @@ namespace TeleBonifacio.rel
                 case 6:
                     ret = "Itau";
                     break;
+                case 7:
+                    ret = "Sicred";
+                    break;
             }
             return ret;
         }
@@ -159,6 +164,7 @@ namespace TeleBonifacio.rel
             decimal TPix = 0;
             decimal TDespesa = 0;
             decimal TItau = 0;
+            decimal TSicred = 0;
             foreach (var lancos in relcaixa)
             {
                 string ID = glo.ComplStr(lancos.ID.ToString(), 4, 2);
@@ -187,6 +193,10 @@ namespace TeleBonifacio.rel
                     case 6:
                         TItau += lancos.Entrada - lancos.Desconto;
                         break;
+                    case 7:
+                        TSicred += lancos.Entrada - lancos.Desconto;
+                        break;
+                        
                 }
             }
             sb.AppendLine();
@@ -196,13 +206,8 @@ namespace TeleBonifacio.rel
             TotForma(ref sb, $"Pix:      ", TPix);
             TotForma(ref sb, $"Despesas: ", TDespesa);
             TotForma(ref sb, $"Itau:     ", TItau);
-            //sb.AppendLine($"Dinheiro: " + glo.ComplStr(TDinheiro.ToString("N2"), 9, 2));
-            //sb.AppendLine($"Cartão:   " + glo.ComplStr(TCartao.ToString("N2"), 9, 2));
-            //sb.AppendLine($"Pix:      " + glo.ComplStr(TPix.ToString("N2"), 9, 2));
-            //sb.AppendLine($"Despesas: " + glo.ComplStr(TDespesa.ToString("N2"), 9, 2));
-            //sb.AppendLine($"Itau:     " + glo.ComplStr(TItau.ToString("N2"), 9, 2));
-
-            decimal Entradas = TDinheiro + TCartao + TPix + TItau;
+            TotForma(ref sb, $"Sicred:   ", TSicred);
+            decimal Entradas = TDinheiro + TCartao + TPix + TItau + TSicred;
             decimal saldo = Entradas - TDespesa;
             sb.AppendLine("");
             sb.AppendLine("Total de entradas:"+ glo.ComplStr(Entradas.ToString("N2"), 9, 2));
