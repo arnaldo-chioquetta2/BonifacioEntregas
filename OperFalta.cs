@@ -43,26 +43,6 @@ namespace TeleBonifacio
         private string UID = "";
         private string caminhoDoArquivo = "";
 
-        private int critopgrafia = 0;
-        private bool Criptografia
-        {
-            get
-            {
-                if (critopgrafia==0)
-                {
-                    INI MeuIni = new INI();
-                    critopgrafia = MeuIni.ReadInt("Config", "Opcao1", 0);
-                }
-                return (critopgrafia==-1);
-            }
-            set
-            {
-                critopgrafia = (value == true) ? -1 : 0;
-                INI MeuIni = new INI();
-                MeuIni.WriteInt("Config", "Opcao1", critopgrafia);
-            }
-        }
-
         #region Inicializacao
 
         public OperFalta()
@@ -1218,12 +1198,9 @@ namespace TeleBonifacio
                             try
                             {
                                 string Conteudo = File.ReadAllText(caminhoDoArquivo);
-                                if (Criptografia)
-                                {
-                                    Conteudo = Cripto.Decrypt(Conteudo);
-                                    tsDescriptar.Visible = true;
-                                    tsEncriptar.Visible = false;
-                                } 
+                                Conteudo = Cripto.Decrypt(Conteudo);
+                                tsDescriptar.Visible = true;
+                                tsEncriptar.Visible = false;
                                 rtfTexto.Rtf = Conteudo;
                             }
                             catch (Exception)
@@ -1598,10 +1575,7 @@ namespace TeleBonifacio
         private void SalvaRTF()
         {
             string Conteudo = rtfTexto.Rtf;
-            if (Criptografia)
-            {
-                Conteudo = Cripto.Encrypt(Conteudo);
-            }
+            Conteudo = Cripto.Encrypt(Conteudo);
             File.WriteAllText(caminhoDoArquivo, Conteudo);
         }
 
@@ -1719,18 +1693,18 @@ namespace TeleBonifacio
 
         private void toolStripButtonEncrypt_Click(object sender, EventArgs e)
         {
-            tsDescriptar.Visible = true;
-            tsEncriptar.Visible = false;
-            Criptografia = true;
-            SalvaRTF();
+            //tsDescriptar.Visible = true;
+            //tsEncriptar.Visible = false;
+            //Criptografia = true;
+            //SalvaRTF();
         }
 
         private void tsDescriptar_Click(object sender, EventArgs e)
         {
-            tsDescriptar.Visible = false;
-            tsEncriptar.Visible = true;
-            Criptografia = false;
-            SalvaRTF();
+            //tsDescriptar.Visible = false;
+            //tsEncriptar.Visible = true;
+            //Criptografia = false;
+            //SalvaRTF();
         }
 
         #endregion

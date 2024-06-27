@@ -36,3 +36,5 @@ C:\Prog\T-Bonifacio\T-Bonifacio\obj\Release\TeleBonifacio.operLogin.resources
 C:\Prog\T-Bonifacio\T-Bonifacio\obj\Release\TeleBonifacio.pesCliente.resources
 C:\Prog\T-Bonifacio\T-Bonifacio\obj\Release\TeleBonifacio.operGarantia.resources
 C:\Prog\T-Bonifacio\T-Bonifacio\obj\Release\TeleBonifacio.OperPagar.resources
+C:\Prog\T-Bonifacio\T-Bonifacio\bin\Release\EditRtf.dll
+C:\Prog\T-Bonifacio\T-Bonifacio\bin\Release\EditRtf.pdb

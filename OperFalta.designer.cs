@@ -756,6 +756,7 @@ namespace TeleBonifacio
             this.tsEncriptar.Name = "tsEncriptar";
             this.tsEncriptar.Size = new System.Drawing.Size(23, 22);
             this.tsEncriptar.Text = "Ligar Encriptação";
+            this.tsEncriptar.Visible = false;
             this.tsEncriptar.Click += new System.EventHandler(this.toolStripButtonEncrypt_Click);
             // 
             // tsDescriptar
