@@ -11,8 +11,10 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyCulture("")]
 [assembly: ComVisible(false)]
 [assembly: Guid("308c57af-e663-456d-8a2c-188bbd61423d")]
-[assembly: AssemblyVersion("2.1.7.0")]
-[assembly: AssemblyFileVersion("2.1.7.0")]
+[assembly: AssemblyVersion("2.1.9.0")]
+[assembly: AssemblyFileVersion("2.1.9.0")]
+// 2.1.9 Log nas anotações
+// 2.1.8 Manter o scrol na exclusão e compra
 // 2.1.7 Criptografia fixa
 // 2.1.6 Criptografia e Sicred
 // 2.1.5 Abordagem em arquivos

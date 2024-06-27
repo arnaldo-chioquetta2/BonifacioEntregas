@@ -351,23 +351,32 @@ namespace TeleBonifacio
                                                   MessageBoxIcon.Question);
             if (result == DialogResult.Yes)
             {
+                int scrollPosition = 0;
                 switch (tbFaltas.SelectedIndex)
                 {
                     case 0:
+                        scrollPosition = dataGrid1.FirstDisplayedScrollingRowIndex;
                         ExcluirRegistrosDaGrid(dataGrid1);
                         CarregaGrid();
+                        dataGrid1.FirstDisplayedScrollingRowIndex = scrollPosition;
                         break;
                     case 1:
+                        scrollPosition = dataGrid2.FirstDisplayedScrollingRowIndex;
                         ExcluirRegistrosDaGrid(dataGrid2);
                         CarregaGridP();
+                        dataGrid2.FirstDisplayedScrollingRowIndex = scrollPosition;
                         break;
                     case 2:
+                        scrollPosition = dataGrid3.FirstDisplayedScrollingRowIndex;
                         ExcluirRegistrosDaGrid(dataGrid3);
                         CarregaGridE();
+                        dataGrid3.FirstDisplayedScrollingRowIndex = scrollPosition;
                         break;
                     case 3:
+                        scrollPosition = dataGrid4.FirstDisplayedScrollingRowIndex;
                         ExcluirRegistrosDaGrid(dataGrid4);
                         CarregaGridG();
+                        dataGrid4.FirstDisplayedScrollingRowIndex = scrollPosition;
                         break;
                     default:
                         return;
@@ -853,6 +862,7 @@ namespace TeleBonifacio
             if (btComprei.Text == "Comprei")
             {
                 //  COMPROU A MERCADORIA QUE ESTAVA EM FALTA
+                int scrollPosition = dataGrid1.FirstDisplayedScrollingRowIndex;
                 if (dataGrid1.SelectedRows.Count==1)
                 {
                     string sID = dataGrid1.SelectedRows[0].Cells[2].Value.ToString();
@@ -878,6 +888,7 @@ namespace TeleBonifacio
                 }
                 AtualizarGridP = true;
                 CarregaGrid();
+                dataGrid1.FirstDisplayedScrollingRowIndex = scrollPosition;
             }
             else
             {
@@ -1197,11 +1208,13 @@ namespace TeleBonifacio
                             caminhoDoArquivo = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "anotacoes.rtf");
                             try
                             {
-                                string Conteudo = File.ReadAllText(caminhoDoArquivo);
-                                Conteudo = Cripto.Decrypt(Conteudo);
+                                string Orig = File.ReadAllText(caminhoDoArquivo);
+                                glo.Loga("Leu RTF criptografado, 10 primeiros caracteres" + Orig.Substring(0, 10));
+                                string Conteudo = Cripto.Decrypt(Orig);
                                 tsDescriptar.Visible = true;
                                 tsEncriptar.Visible = false;
                                 rtfTexto.Rtf = Conteudo;
+                                glo.Loga("Mostrou RTF, 10 primeiros caracteres" + Conteudo.Substring(0, 10));
                             }
                             catch (Exception)
                             {
@@ -1562,7 +1575,10 @@ namespace TeleBonifacio
         {
             if (!carregando)
             {
-                timer1.Enabled = true;
+                if (!timer1.Enabled)
+                {
+                    timer1.Enabled = true;
+                }                
             }            
         }
 
@@ -1570,13 +1586,19 @@ namespace TeleBonifacio
         {
             timer1.Enabled = false;
             SalvaRTF();
+            if (timer1.Interval>500)
+            {
+                timer1.Interval -= 100;
+            }
         }
 
         private void SalvaRTF()
         {
-            string Conteudo = rtfTexto.Rtf;
-            Conteudo = Cripto.Encrypt(Conteudo);
+            string Orig = rtfTexto.Rtf;
+            glo.Loga("Gravar RTF, 10 primeiros caracteres" + Orig.Substring(0, 10));
+            string Conteudo = Cripto.Encrypt(Orig);
             File.WriteAllText(caminhoDoArquivo, Conteudo);
+            glo.Loga("Gravou RTF, 10 primeiros caracteres" + Conteudo.Substring(0, 10));
         }
 
         private void toolStripButtonRedo_Click(object sender, EventArgs e)
