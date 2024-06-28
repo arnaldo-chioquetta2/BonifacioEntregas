@@ -397,7 +397,7 @@ namespace TeleBonifacio
         {
             dataGrid1.Columns[0].Width = 100;       // Compra
             dataGrid1.Columns[1].Width = 130;       // Forn
-            dataGrid1.Columns[2].Visible = false;
+            dataGrid1.Columns[2].Visible = true;    // ID false;
             dataGrid1.Columns[3].Visible = false;
             dataGrid1.Columns[4].Width = 75;       // Data
             dataGrid1.Columns[5].Width = 80;        // Código
@@ -550,6 +550,11 @@ namespace TeleBonifacio
                     }
                 }
             }
+        }
+        
+        private void ckEmFalta_Click(object sender, EventArgs e)
+        {
+            button2.Enabled = true;
         }
 
         #endregion
@@ -1357,49 +1362,45 @@ namespace TeleBonifacio
 
         #endregion
 
-        private void ckEmFalta_Click(object sender, EventArgs e)
-        {
-            button2.Enabled = true;
-        }
-
         #region Encomendas
+
+        private void ConfirmarEncomendaIndividual(int gID, int selectedIndex, string Nome, string Fone, string NovaDesc, DateTime DtAgora, DateTime DtEnc, string codigo, decimal Valor, int idForn)
+        {
+            faltasDAO.ConfirmaEncomenda(gID, Nome, Fone, NovaDesc, DtAgora, DtEnc, codigo, Valor, idForn, selectedIndex);
+        }
 
         private void btEncomenda_Click(object sender, EventArgs e)
         {
             glo.IdAdicionado = 0;
             string Descricao = "";
+            string codigo = "";
             bool ProdNovo = false;
-            if (dataGrid1.SelectedRows.Count == 1)
+            switch (tbFaltas.SelectedIndex)
             {
-                if (dataGrid1.SelectedRows.Count == 1)
-                {
-                    if (dataGrid1.Rows.Count == 1 || dataGrid1.SelectedRows[0].Index != 0)
-                    {
-                        Descricao = dataGrid1.SelectedRows[0].Cells["Descricao"].Value.ToString();
-                    }
-                    else
-                    {
-                        ProdNovo = true;
-                    }
-                }
+                case 0: // Faltas                    
+                    DefineCampos(dataGrid1, ref Descricao, ref ProdNovo, ref codigo);
+                    break;
+                case 1: // Produtos
+                    DefineCampos(dataGrid2, ref Descricao, ref ProdNovo, ref codigo);
+                    break;
+                default:
+                    ProdNovo = true;
+                    break;
             }
             btEncomenda.Enabled = false;
             if (FpesCliente == null)
             {
-                Console.WriteLine("AcionaPesq(true, Descricao, ProdNovo)");
-                AcionaPesq(true, Descricao, ProdNovo);
+                AcionaPesq(true, Descricao, ProdNovo, codigo);
             }
             else
             {
                 try
                 {
-                    Console.WriteLine("AcionaPesq(false, Descricao, ProdNovo)");
-                    AcionaPesq(false, Descricao, ProdNovo);
+                    AcionaPesq(false, Descricao, ProdNovo, codigo);
                 }
                 catch (Exception)
                 {
-                    Console.WriteLine("AcionaPesq(true, Descricao, ProdNovo) no Exception");
-                    AcionaPesq(true, Descricao, ProdNovo);
+                    AcionaPesq(true, Descricao, ProdNovo, codigo);
                 }
             }
             if (!glo.ODBC)
@@ -1420,52 +1421,110 @@ namespace TeleBonifacio
                 if (ProdNovo)
                 {
                     NovaDesc = FpesCliente.getDescricao();
+                    codigo = FpesCliente.getcodigo();
                 }
+                int idForn = FpesCliente.getidForn();
+                decimal Valor = FpesCliente.getValor();
                 DateTime DtAgora = FpesCliente.getDtAgora();
                 DateTime DtEnc = FpesCliente.getDtEnc();
-                foreach (DataGridViewRow row in dataGrid1.SelectedRows)
+
+                int selectedIndex = tbFaltas.SelectedIndex;
+                DataGridView selectedGrid = selectedIndex == 0 ? dataGrid1 : dataGrid2;
+                if (selectedIndex == 0 || selectedIndex == 1)
                 {
-                    int gID = Convert.ToInt16(row.Cells["ID"].Value);
-                    faltasDAO.ConfirmaEncomenda(gID, Nome, Fone, NovaDesc, DtAgora, DtEnc);
-                }
-                AtualizarGridE = true;
-                if (ProdNovo == false)
-                {
-                    if (tbFaltas.SelectedIndex == 0)
+                    foreach (DataGridViewRow row in selectedGrid.SelectedRows)
                     {
-                        CarregaGrid();
-                        AtualizouEmBaixo();
+                        int gID = Convert.ToInt16(row.Cells["ID"].Value);
+                        ConfirmarEncomendaIndividual(gID, selectedIndex, Nome, Fone, NovaDesc, DtAgora, DtEnc, codigo, Valor, idForn);
+                    }
+                }
+                else
+                {
+                    ConfirmarEncomendaIndividual(0, selectedIndex, Nome, Fone, NovaDesc, DtAgora, DtEnc, codigo, Valor, idForn);
+                }
+                
+                //switch (tbFaltas.SelectedIndex)
+                //{
+                //    case 0: // Faltas                    
+                //        foreach (DataGridViewRow row in dataGrid1.SelectedRows)
+                //        {
+                //            int gID = Convert.ToInt16(row.Cells["ID"].Value);
+                //            faltasDAO.ConfirmaEncomenda(gID, Nome, Fone, NovaDesc, DtAgora, DtEnc, codigo, Valor, idForn, tbFaltas.SelectedIndex);
+                //        }
+                //        break;
+                //    case 1: // Produtos
+                //        foreach (DataGridViewRow row in dataGrid2.SelectedRows)
+                //        {
+                //            int gID = Convert.ToInt16(row.Cells["ID"].Value);
+                //            faltasDAO.ConfirmaEncomenda(gID, Nome, Fone, NovaDesc, DtAgora, DtEnc, codigo, Valor, idForn, tbFaltas.SelectedIndex);
+                //        }
+                //        break;
+                //    default:
+                //        faltasDAO.ConfirmaEncomenda(0, Nome, Fone, NovaDesc, DtAgora, DtEnc, codigo, Valor, idForn, tbFaltas.SelectedIndex);
+                //        break;
+                //}                
+                //foreach (DataGridViewRow row in dataGrid1.SelectedRows)
+                //{
+                //    int gID = Convert.ToInt16(row.Cells["ID"].Value);
+                //    faltasDAO.ConfirmaEncomenda(gID, Nome, Fone, NovaDesc, DtAgora, DtEnc, codigo, Valor, idForn, tbFaltas.SelectedIndex);
+                //}
+                if (tbFaltas.SelectedIndex==2)
+                {
+                    CarregaGridE();
+                } else
+                {
+                    AtualizarGridE = true;
+                    if (ProdNovo == false)
+                    {
+                        if (tbFaltas.SelectedIndex == 0)
+                        {
+                            CarregaGrid();
+                            AtualizouEmBaixo();
+                        }
                     }
                 }
             }
         }
 
-        private void AcionaPesq(bool Instanciar, string Descricao, bool ProdNovo)
+        private void DefineCampos(DataGridView Grid, ref string descricao, ref bool ProdNovo, ref string codigo)
+        {
+            if (Grid.SelectedRows.Count == 1)
+            {
+                if (Grid.SelectedRows.Count == 1)
+                {
+                    if (Grid.Rows.Count == 1 || Grid.SelectedRows[0].Index != 0)
+                    {
+                        descricao = Grid.SelectedRows[0].Cells["Descricao"].Value.ToString();
+                        codigo = FiltraOZero(Grid.SelectedRows[0].Cells["Codigo"].Value.ToString());
+                    }
+                    else
+                    {
+                        ProdNovo = true;
+                    }
+                }
+            }
+
+        }
+
+        private void AcionaPesq(bool Instanciar, string Descricao, bool ProdNovo, string codigo)
         {
             if (Instanciar)
             {
-                Console.WriteLine("FpesCliente = new pesCliente()");
                 FpesCliente = new pesCliente();
             }
-            Console.WriteLine("FpesCliente.SetDescricao(Descricao, ProdNovo)");
-            FpesCliente.SetDescricao(Descricao, ProdNovo);
+            FpesCliente.SetDescricao(Descricao, ProdNovo, codigo);
             if (dadosCli == null)
             {
-                Console.WriteLine("ClienteDAO Cliente = new ClienteDAO()");
                 ClienteDAO Cliente = new ClienteDAO();
-                Console.WriteLine("dadosCli = Cliente.GetDadosOrdenados()");
                 dadosCli = Cliente.GetDadosOrdenados();
-                Console.WriteLine("FpesCliente.RecebeDadosCli(ref dadosCli)");
-                FpesCliente.RecebeDadosCli(ref dadosCli);
+                FpesCliente.RecebeDadosCli(ref dadosCli, ref Forn);
             }
             if (Instanciar)
             {
-                Console.WriteLine("FpesCliente.ShowDialog()");
                 FpesCliente.ShowDialog();
             }
             else
             {
-                Console.WriteLine("FpesCliente.Visible = true");
                 FpesCliente.Visible = true;
             }
         }
@@ -1476,17 +1535,19 @@ namespace TeleBonifacio
             dataGrid3.Columns[1].Width = 130;       // Cliente
             dataGrid3.Columns[2].Width = 100;       // Data
             dataGrid3.Columns[3].Width = 100;       // Código
-            dataGrid3.Columns[4].Width = 40;        // Quant
-            dataGrid3.Columns[5].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
-            dataGrid3.Columns[5].Width = 50;        // Marca
-            dataGrid3.Columns[6].Width = 190;       // Descrição
-            dataGrid3.Columns[7].Visible = false;   // UID
-            dataGrid3.Columns[8].Width = 100;       // Tipo
-            dataGrid3.Columns[9].Width = 130;       // Compra
-            dataGrid3.Columns[10].Width = 100;      // Forn
-            dataGrid3.Columns[11].Visible = false;  // IdForn
-            dataGrid3.Columns[12].Width = 100;      // Obs
-            dataGrid3.Columns[13].Visible = false;  // idCliente 
+            dataGrid3.Columns[4].Width = 50;        // Valor
+            dataGrid3.Columns[4].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+            dataGrid3.Columns[5].Width = 40;        // Quant
+            dataGrid3.Columns[6].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+            dataGrid3.Columns[6].Width = 50;        // Marca
+            dataGrid3.Columns[7].Width = 190;       // Descrição
+            dataGrid3.Columns[8].Visible = false;   // UID
+            dataGrid3.Columns[9].Width = 100;       // Tipo
+            dataGrid3.Columns[10].Width = 130;      // Compra
+            dataGrid3.Columns[11].Width = 100;      // Forn
+            dataGrid3.Columns[12].Visible = false;  // IdForn
+            dataGrid3.Columns[13].Width = 100;      // Obs
+            dataGrid3.Columns[14].Visible = false;  // idCliente 
             dataGrid3.Invalidate();
         }
 

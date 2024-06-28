@@ -165,6 +165,12 @@ namespace TeleBonifacio
             return str.Replace(",", ".");
         }
 
+        public static string sv(decimal vlr)
+        {
+            string str = vlr.ToString();
+            return str.Replace(",", ".");
+        }
+
         public static bool IsDateTimeValid(int year, int month, int day)
         {
             if (year < DateTime.MinValue.Year || year > DateTime.MaxValue.Year)
@@ -242,7 +248,6 @@ namespace TeleBonifacio
                 return dado;
             }
         }
-
 
         #endregion
 
