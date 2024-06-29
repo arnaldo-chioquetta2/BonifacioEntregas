@@ -48,7 +48,7 @@ namespace TeleBonifacio
             this.label6 = new System.Windows.Forms.Label();
             this.txDescr = new System.Windows.Forms.TextBox();
             this.label5 = new System.Windows.Forms.Label();
-            this.dateTimePicker2 = new System.Windows.Forms.DateTimePicker();
+            this.dtpHora = new System.Windows.Forms.DateTimePicker();
             this.label9 = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -56,6 +56,7 @@ namespace TeleBonifacio
             // 
             // btOK
             // 
+            this.btOK.Enabled = false;
             this.btOK.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btOK.Location = new System.Drawing.Point(147, 376);
             this.btOK.Name = "btOK";
@@ -84,6 +85,7 @@ namespace TeleBonifacio
             this.dtpData.Size = new System.Drawing.Size(105, 26);
             this.dtpData.TabIndex = 7;
             this.dtpData.Tag = "H";
+            this.dtpData.ValueChanged += new System.EventHandler(this.dtpData_ValueChanged);
             // 
             // label3
             // 
@@ -104,6 +106,7 @@ namespace TeleBonifacio
             this.dateTimePicker1.Size = new System.Drawing.Size(105, 26);
             this.dateTimePicker1.TabIndex = 8;
             this.dateTimePicker1.Tag = "H";
+            this.dateTimePicker1.ValueChanged += new System.EventHandler(this.dateTimePicker1_ValueChanged);
             // 
             // groupBox1
             // 
@@ -125,6 +128,7 @@ namespace TeleBonifacio
             this.txTelefone.Name = "txTelefone";
             this.txTelefone.Size = new System.Drawing.Size(105, 26);
             this.txTelefone.TabIndex = 1;
+            this.txTelefone.TextChanged += new System.EventHandler(this.txTelefone_TextChanged);
             // 
             // label4
             // 
@@ -147,6 +151,7 @@ namespace TeleBonifacio
             this.cmbCliente.Size = new System.Drawing.Size(287, 28);
             this.cmbCliente.Sorted = true;
             this.cmbCliente.TabIndex = 0;
+            this.cmbCliente.SelectedIndexChanged += new System.EventHandler(this.cmbCliente_SelectedIndexChanged);
             // 
             // label1
             // 
@@ -182,6 +187,7 @@ namespace TeleBonifacio
             this.txValor.Name = "txValor";
             this.txValor.Size = new System.Drawing.Size(105, 26);
             this.txValor.TabIndex = 6;
+            this.txValor.TextChanged += new System.EventHandler(this.txValor_TextChanged);
             // 
             // label8
             // 
@@ -200,6 +206,7 @@ namespace TeleBonifacio
             this.txCodigo.Name = "txCodigo";
             this.txCodigo.Size = new System.Drawing.Size(197, 26);
             this.txCodigo.TabIndex = 5;
+            this.txCodigo.TextChanged += new System.EventHandler(this.txCodigo_TextChanged);
             // 
             // lbCodigo
             // 
@@ -222,6 +229,7 @@ namespace TeleBonifacio
             this.cmbForn.Size = new System.Drawing.Size(287, 28);
             this.cmbForn.Sorted = true;
             this.cmbForn.TabIndex = 3;
+            this.cmbForn.SelectedIndexChanged += new System.EventHandler(this.cmbForn_SelectedIndexChanged);
             // 
             // label6
             // 
@@ -240,6 +248,7 @@ namespace TeleBonifacio
             this.txDescr.Name = "txDescr";
             this.txDescr.Size = new System.Drawing.Size(286, 26);
             this.txDescr.TabIndex = 4;
+            this.txDescr.TextChanged += new System.EventHandler(this.txDescr_TextChanged);
             // 
             // label5
             // 
@@ -251,14 +260,15 @@ namespace TeleBonifacio
             this.label5.TabIndex = 43;
             this.label5.Text = "Descrição";
             // 
-            // dateTimePicker2
+            // dtpHora
             // 
-            this.dateTimePicker2.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.dateTimePicker2.Format = System.Windows.Forms.DateTimePickerFormat.Time;
-            this.dateTimePicker2.Location = new System.Drawing.Point(257, 331);
-            this.dateTimePicker2.Name = "dateTimePicker2";
-            this.dateTimePicker2.Size = new System.Drawing.Size(81, 26);
-            this.dateTimePicker2.TabIndex = 9;
+            this.dtpHora.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.dtpHora.Format = System.Windows.Forms.DateTimePickerFormat.Time;
+            this.dtpHora.Location = new System.Drawing.Point(257, 331);
+            this.dtpHora.Name = "dtpHora";
+            this.dtpHora.Size = new System.Drawing.Size(81, 26);
+            this.dtpHora.TabIndex = 9;
+            this.dtpHora.ValueChanged += new System.EventHandler(this.dtpHora_ValueChanged);
             // 
             // label9
             // 
@@ -276,7 +286,7 @@ namespace TeleBonifacio
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(398, 440);
             this.Controls.Add(this.label9);
-            this.Controls.Add(this.dateTimePicker2);
+            this.Controls.Add(this.dtpHora);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.dateTimePicker1);
@@ -291,6 +301,7 @@ namespace TeleBonifacio
             this.Text = "Pesquisa de Clientes";
             this.TopMost = true;
             this.Activated += new System.EventHandler(this.pesCliente_Activated);
+            this.Load += new System.EventHandler(this.pesCliente_Load);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.groupBox2.ResumeLayout(false);
@@ -320,7 +331,7 @@ namespace TeleBonifacio
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.TextBox txDescr;
         private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.DateTimePicker dateTimePicker2;
+        private System.Windows.Forms.DateTimePicker dtpHora;
         private System.Windows.Forms.Label label9;
     }
 }

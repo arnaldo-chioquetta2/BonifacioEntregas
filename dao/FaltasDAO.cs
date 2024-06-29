@@ -148,41 +148,6 @@ namespace TeleBonifacio.dao
             DB.ExecutarComandoSQL(updateFaltaQuery);
         }
 
-        public void ConfirmaEncomenda(int iID, string Nome, string Fone, string NovaDesc, DateTime DtAgora, DateTime DtEnc, string codigo, decimal Valor, int idFornNvProd, int tbIndex)
-        {
-            int idCliente = glo.IdAdicionado;
-            string sCompra = DtEnc.ToString("yyyy-MM-dd"); 
-            string sDtAgora = DtAgora.ToString("yyyy-MM-dd");
-            string sValor = glo.sv(Valor);
-            if (NovaDesc.Length>0)
-            {
-                string UID = glo.GenerateUID();
-                string insertQuery = $@"INSERT INTO Encomendas (idCliente, Data, UID, Descricao, Nome, Telefone, Compra, codigo, Valor, idForn) 
-                            VALUES ({idCliente}, '{sDtAgora}', '{UID}', '{NovaDesc}', '{Nome}', '{Fone}', '{sCompra}', '{codigo}', {sValor}, {idFornNvProd} )";
-                DB.ExecutarComandoSQL(insertQuery);
-            }
-            else
-            {
-                string nmTb = "";
-                if (tbIndex==0)
-                {
-                    nmTb = "Faltas";
-                } else
-                {
-                    nmTb = "Produtos";
-                }
-                string SQL = $"SELECT * From {nmTb} WHERE ID = {iID}";
-                DataTable encomendaData = DB.ExecutarConsulta(SQL);
-                DataRow encomendaRow = encomendaData.Rows[0];
-                int idForn = (encomendaRow["idForn"].ToString().Length == 0) ? 0 : Convert.ToInt16(encomendaRow["idForn"]);
-                string insertQuery = $@"INSERT INTO Encomendas (idCliente, Data, Quant, Codigo, Marca, UID, Tipo, Compra, Descricao, idForn, Obs, Nome, Telefone, Valor) 
-                        VALUES ({idCliente}, '{sDtAgora}', '{encomendaRow["Quant"]}', '{encomendaRow["Codigo"]}', '{encomendaRow["Marca"]}', '{encomendaRow["UID"]}', '{encomendaRow["Tipo"]}', '{sCompra}', '{encomendaRow["Descricao"]}', {idForn}, '{encomendaRow["Obs"]}','{Nome}' ,'{Fone}', {sValor} )";
-                DB.ExecutarComandoSQL(insertQuery);
-                string updateFaltaQuery = $@"DELETE FROM {nmTb} WHERE ID = {iID}";
-                DB.ExecutarComandoSQL(updateFaltaQuery);
-            }
-        }
-
         public string VeSeJaTem(string codigo)
         {
             string query = $@"SELECT Count(*) FROM Faltas Where Codigo = '{codigo}' ";

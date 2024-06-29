@@ -351,32 +351,23 @@ namespace TeleBonifacio
                                                   MessageBoxIcon.Question);
             if (result == DialogResult.Yes)
             {
-                int scrollPosition = 0;
                 switch (tbFaltas.SelectedIndex)
                 {
                     case 0:
-                        scrollPosition = dataGrid1.FirstDisplayedScrollingRowIndex;
                         ExcluirRegistrosDaGrid(dataGrid1);
                         CarregaGrid();
-                        dataGrid1.FirstDisplayedScrollingRowIndex = scrollPosition;
                         break;
                     case 1:
-                        scrollPosition = dataGrid2.FirstDisplayedScrollingRowIndex;
                         ExcluirRegistrosDaGrid(dataGrid2);
                         CarregaGridP();
-                        dataGrid2.FirstDisplayedScrollingRowIndex = scrollPosition;
                         break;
                     case 2:
-                        scrollPosition = dataGrid3.FirstDisplayedScrollingRowIndex;
                         ExcluirRegistrosDaGrid(dataGrid3);
                         CarregaGridE();
-                        dataGrid3.FirstDisplayedScrollingRowIndex = scrollPosition;
                         break;
                     case 3:
-                        scrollPosition = dataGrid4.FirstDisplayedScrollingRowIndex;
                         ExcluirRegistrosDaGrid(dataGrid4);
                         CarregaGridG();
-                        dataGrid4.FirstDisplayedScrollingRowIndex = scrollPosition;
                         break;
                     default:
                         return;
@@ -427,6 +418,11 @@ namespace TeleBonifacio
 
         private void CarregaGrid()
         {
+            if (!carregando)
+            {
+
+            }
+            int scrollPosition = dataGrid1.FirstDisplayedScrollingRowIndex;            
             FaltasDAO faltasDAO = new FaltasDAO();
             DataTable dados = faltasDAO.getDados(BakidTipo, BakidForn, bakComprado, Bakcodigo, Bakquantidade, Bakmarca, BakObs, BakidVendedor, bakEmFalta, BakDescr);
             List<tb.TpoFalta> tipos = TpoFalta.getTipos();
@@ -455,7 +451,9 @@ namespace TeleBonifacio
             if (dados != null)
             {
                 ConfigurarGrid();
-            }
+                if (scrollPosition>-1)
+                    dataGrid1.FirstDisplayedScrollingRowIndex = scrollPosition;
+            }            
         }
 
         private void dataGrid1_CellClick_1(object sender, DataGridViewCellEventArgs e)
@@ -1099,6 +1097,7 @@ namespace TeleBonifacio
 
         private void CarregaGridP()
         {
+            int scrollPosition = dataGrid2.FirstDisplayedScrollingRowIndex;
             cDaoP = new ProdutosDao();
             DataTable dados = cDaoP.getDados(BakidTipo, BakidForn, Bakcodigo, Bakquantidade, Bakmarca, BakObs, BakDescr);
             List<tb.TpoFalta> tipos = TpoFalta.getTipos();
@@ -1112,6 +1111,8 @@ namespace TeleBonifacio
             if (dados != null)
             {
                 ConfigurarGridP();
+                if (scrollPosition > 0)
+                    dataGrid2.FirstDisplayedScrollingRowIndex = scrollPosition;
             }
         }
 
@@ -1307,6 +1308,7 @@ namespace TeleBonifacio
 
         private void CarregaGridG()
         {
+            int scrollPosition = dataGrid4.FirstDisplayedScrollingRowIndex;
             AtualizarGridG = false;
             cDaoG = new GarantiasDao();
             DataTable dados = cDaoG.getDados(BakidForn);
@@ -1315,6 +1317,8 @@ namespace TeleBonifacio
             if (dados != null)
             {
                 ConfigurarGridG();
+                if (scrollPosition > 0)
+                    dataGrid4.FirstDisplayedScrollingRowIndex = scrollPosition;
             }
         }
 
@@ -1364,9 +1368,9 @@ namespace TeleBonifacio
 
         #region Encomendas
 
-        private void ConfirmarEncomendaIndividual(int gID, int selectedIndex, string Nome, string Fone, string NovaDesc, DateTime DtAgora, DateTime DtEnc, string codigo, decimal Valor, int idForn)
+        private void ConfirmarEncomendaIndividual(int gID, int selectedIndex, string Nome, string Fone, string NovaDesc, DateTime DtAgora, DateTime DtEnc, DateTime HoraEntrega, string codigo, decimal Valor, int idForn)
         {
-            faltasDAO.ConfirmaEncomenda(gID, Nome, Fone, NovaDesc, DtAgora, DtEnc, codigo, Valor, idForn, selectedIndex);
+            EncoDao.ConfirmaEncomenda(gID, Nome, Fone, NovaDesc, DtAgora, DtEnc, HoraEntrega, codigo, Valor, idForn, selectedIndex);
         }
 
         private void btEncomenda_Click(object sender, EventArgs e)
@@ -1427,7 +1431,7 @@ namespace TeleBonifacio
                 decimal Valor = FpesCliente.getValor();
                 DateTime DtAgora = FpesCliente.getDtAgora();
                 DateTime DtEnc = FpesCliente.getDtEnc();
-
+                DateTime HoraEntrega = FpesCliente.getHora();
                 int selectedIndex = tbFaltas.SelectedIndex;
                 DataGridView selectedGrid = selectedIndex == 0 ? dataGrid1 : dataGrid2;
                 if (selectedIndex == 0 || selectedIndex == 1)
@@ -1435,39 +1439,14 @@ namespace TeleBonifacio
                     foreach (DataGridViewRow row in selectedGrid.SelectedRows)
                     {
                         int gID = Convert.ToInt16(row.Cells["ID"].Value);
-                        ConfirmarEncomendaIndividual(gID, selectedIndex, Nome, Fone, NovaDesc, DtAgora, DtEnc, codigo, Valor, idForn);
+                        ConfirmarEncomendaIndividual(gID, selectedIndex, Nome, Fone, NovaDesc, DtAgora, DtEnc, HoraEntrega, codigo, Valor, idForn);
                     }
                 }
                 else
                 {
-                    ConfirmarEncomendaIndividual(0, selectedIndex, Nome, Fone, NovaDesc, DtAgora, DtEnc, codigo, Valor, idForn);
+                    ConfirmarEncomendaIndividual(0, selectedIndex, Nome, Fone, NovaDesc, DtAgora, DtEnc, HoraEntrega, codigo, Valor, idForn);
                 }
                 
-                //switch (tbFaltas.SelectedIndex)
-                //{
-                //    case 0: // Faltas                    
-                //        foreach (DataGridViewRow row in dataGrid1.SelectedRows)
-                //        {
-                //            int gID = Convert.ToInt16(row.Cells["ID"].Value);
-                //            faltasDAO.ConfirmaEncomenda(gID, Nome, Fone, NovaDesc, DtAgora, DtEnc, codigo, Valor, idForn, tbFaltas.SelectedIndex);
-                //        }
-                //        break;
-                //    case 1: // Produtos
-                //        foreach (DataGridViewRow row in dataGrid2.SelectedRows)
-                //        {
-                //            int gID = Convert.ToInt16(row.Cells["ID"].Value);
-                //            faltasDAO.ConfirmaEncomenda(gID, Nome, Fone, NovaDesc, DtAgora, DtEnc, codigo, Valor, idForn, tbFaltas.SelectedIndex);
-                //        }
-                //        break;
-                //    default:
-                //        faltasDAO.ConfirmaEncomenda(0, Nome, Fone, NovaDesc, DtAgora, DtEnc, codigo, Valor, idForn, tbFaltas.SelectedIndex);
-                //        break;
-                //}                
-                //foreach (DataGridViewRow row in dataGrid1.SelectedRows)
-                //{
-                //    int gID = Convert.ToInt16(row.Cells["ID"].Value);
-                //    faltasDAO.ConfirmaEncomenda(gID, Nome, Fone, NovaDesc, DtAgora, DtEnc, codigo, Valor, idForn, tbFaltas.SelectedIndex);
-                //}
                 if (tbFaltas.SelectedIndex==2)
                 {
                     CarregaGridE();
@@ -1482,6 +1461,59 @@ namespace TeleBonifacio
                             AtualizouEmBaixo();
                         }
                     }
+                }
+            }
+        }
+
+        private void dataGrid3_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex >= 0)
+            {
+                DataGridView grid = sender as DataGridView;
+                DataGridViewRow row = grid.Rows[e.RowIndex];
+                this.iID = Convert.ToInt32(row.Cells["ID"].Value);
+                string nome = row.Cells["Nome"].Value?.ToString() ?? "";
+                string telefone = row.Cells["Telefone"].Value?.ToString() ?? "";
+                DateTime data = Convert.ToDateTime(row.Cells["Data"].Value);
+                DateTime dataPrometida = Convert.ToDateTime(row.Cells["DtPrometida"].Value);
+                string codigo = row.Cells["Codigo"].Value?.ToString() ?? "";
+                decimal valor = Convert.ToDecimal(row.Cells["Valor"].Value);
+                string descricao = row.Cells["Descricao"].Value?.ToString() ?? "";
+                bool Instanciar = false;
+                if (FpesCliente == null)
+                {
+                    FpesCliente = new pesCliente();
+                    Instanciar = true;
+                    if (dadosCli == null)
+                    {
+                        ClienteDAO Cliente = new ClienteDAO();
+                        dadosCli = Cliente.GetDadosOrdenados();
+                        FpesCliente.RecebeDadosCli(ref dadosCli, ref Forn);
+                    }
+                }
+                FpesCliente.CarregarDados(nome, telefone, data, dataPrometida, codigo, valor, descricao);
+                if (Instanciar)
+                {
+                    FpesCliente.ShowDialog();
+                }
+                else
+                {
+                    FpesCliente.Visible = true;
+                }
+                if (FpesCliente.getAlterado())
+                {
+                    nome = FpesCliente.Nome;
+                    telefone = FpesCliente.Fone;
+                    descricao = FpesCliente.getDescricao();
+                    codigo = FpesCliente.getcodigo();
+                    int idForn = FpesCliente.getidForn();
+                    decimal Valor = FpesCliente.getValor();
+                    dataPrometida = FpesCliente.getDtEnc();
+                    DateTime HoraEntrega = FpesCliente.getHora();
+                    int idCliente = FpesCliente.getCliente();
+                    EncoDao.Edita(this.iID, idCliente, codigo, descricao, idForn, dataPrometida, HoraEntrega, Valor);
+                    CarregaGridE();
+                    Limpar();                                       
                 }
             }
         }
@@ -1548,12 +1580,17 @@ namespace TeleBonifacio
             dataGrid3.Columns[12].Visible = false;  // IdForn
             dataGrid3.Columns[13].Width = 100;      // Obs
             dataGrid3.Columns[14].Visible = false;  // idCliente 
+            dataGrid3.Columns[15].Visible = false;  // Telefone
+            dataGrid3.Columns[16].Visible = false;  // DtPrometida
+            dataGrid3.Columns[17].Visible = false;  // idCliente
             dataGrid3.Invalidate();
         }
 
         private void CarregaGridE()
         {
-            EncoDao = new EncomendasDao();
+            int scrollPosition = dataGrid3.FirstDisplayedScrollingRowIndex;            
+            if (EncoDao==null)
+                EncoDao = new EncomendasDao();
             DataTable dados = EncoDao.getDados(BakidTipo, BakidForn, Bakcodigo, Bakquantidade, Bakmarca, BakObs, BakDescr);
             List<tb.TpoFalta> tipos = TpoFalta.getTipos();
             List<tb.Fornecedor> Fornecs = Forn.getForns();
@@ -1566,7 +1603,10 @@ namespace TeleBonifacio
             if (dados != null)
             {
                 ConfigurarGridE();
+            if (scrollPosition > 0)
+                dataGrid3.FirstDisplayedScrollingRowIndex = scrollPosition;
             }
+            scrollPosition = dataGrid3.FirstDisplayedScrollingRowIndex;
         }
 
         private void dataGrid3_CellClick(object sender, DataGridViewCellEventArgs e)
