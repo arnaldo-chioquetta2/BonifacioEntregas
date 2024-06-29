@@ -12,6 +12,7 @@ namespace TeleBonifacio
         private ClienteDAO Cliente;
         private DataTable dadosCli;
         private FornecedorDao forn;
+        private EncomendasDao EncoDao;
         public string Nome = "";
         public string Fone = "";
         public int ClienteLocalizado = 0;
@@ -23,7 +24,26 @@ namespace TeleBonifacio
         private bool carregando = false;
         private bool JaMostrouCombo = false;
         private int TamNaoAchou = 100;
-        private bool alterado = false;
+        private bool _alterado = false;
+        private int ID;
+        private int selectedIndex;
+
+        public bool alterado
+        {
+            get
+            {
+                return _alterado;
+            }
+            set
+            {
+                _alterado = value;
+                if (value)
+                {
+                    btOK.Enabled = true;
+                }
+            }
+        }
+
 
         public pesCliente()
         {
@@ -54,6 +74,14 @@ namespace TeleBonifacio
 
         private void btOK_Click(object sender, EventArgs e)
         {
+            string nome = cmbCliente.Text;
+            string telefone = txTelefone.Text;
+            string descricao = txDescr.Text;
+            string codigo = txCodigo.Text;
+            int idForn = getidForn();
+            decimal Valor = getValor();
+            DateTime dataPrometida = dateTimePicker1.Value;
+            DateTime HoraEntrega = getHora();
             if (Operacao==1) // Adição
             {
                 if (achou)
@@ -71,6 +99,7 @@ namespace TeleBonifacio
                     Nome = cmbCliente.Text;
                     Fone = txTelefone.Text;
                 }
+                EncoDao.ConfirmaEncomenda(0, Nome, Fone, descricao, dataPrometida, dataPrometida, HoraEntrega, codigo, Valor, idForn, selectedIndex);
                 this.OK = true;
                 carregando = false;
                 this.Visible = false;
@@ -79,7 +108,8 @@ namespace TeleBonifacio
                 if (cmbCliente.Tag == "M")
                 {
                     ClienteLocalizado = Convert.ToInt32(cmbCliente.SelectedValue);
-                }                
+                }
+                EncoDao.Edita(this.ID, ClienteLocalizado, codigo, descricao, idForn, dataPrometida, HoraEntrega, Valor);
                 this.OK = true;
                 this.Visible = false;
             }
@@ -133,21 +163,19 @@ namespace TeleBonifacio
             return dateTimePicker1.Value.Date;
         }
 
-        private void pesCliente_Activated(object sender, EventArgs e)
+        public void Ativar()
         {
-            if (carregando==false)
+            carregando = true;
+            if (JaMostrouCombo == false)
             {
-                carregando = true;
-                if (JaMostrouCombo==false)
-                {
-                    Cliente = new ClienteDAO();
-                    this.Cursor = Cursors.WaitCursor;
-                    CarregarComboBox<tb.Cliente>(cmbCliente);
-                    dateTimePicker1.Value = DateTime.Now.AddDays(7);
-                }
-                this.Cursor = Cursors.Default;
-                carregando = false;
+                Cliente = new ClienteDAO();
+                this.Cursor = Cursors.WaitCursor;
+                CarregarComboBox<tb.Cliente>(cmbCliente);
+                dateTimePicker1.Value = DateTime.Now.AddDays(7);
             }
+            this.Cursor = Cursors.Default;
+            carregando = false;
+
         }
 
         public string getcodigo()
@@ -190,7 +218,7 @@ namespace TeleBonifacio
             var random = new Random();
             char[] characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789".ToCharArray();
             char[] allCharacters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-".ToCharArray(); // Incluindo '-' para os outros caracteres
-            double exponent = 1.9; // Ajuste para mostrar códigos menores
+            double exponent = 2.2; // Quanto maior menos caracteres
             int length = (int)Math.Round(Math.Pow(random.NextDouble(), exponent) * (maxLength - minLength) + minLength);
             var stringBuilder = new StringBuilder(length);
             stringBuilder.Append(characters[random.Next(characters.Length)]);
@@ -201,21 +229,6 @@ namespace TeleBonifacio
             }
             return stringBuilder.ToString();
         }
-
-        //private string GenerateRandomCode(int minLength, int maxLength)
-        //{
-        //    var random = new Random();
-        //    char[] characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-".ToCharArray();
-        //    double exponent = 1.9; // Ajuste para mostrar códidos menores
-        //    int length = (int)Math.Round(Math.Pow(random.NextDouble(), exponent) * (maxLength - minLength) + minLength);
-        //    var stringBuilder = new StringBuilder(length);
-        //    for (int i = 0; i < length; i++)
-        //    {
-        //        char selectedChar = characters[random.Next(characters.Length)];
-        //        stringBuilder.Append(selectedChar);
-        //    }
-        //    return stringBuilder.ToString();
-        //}
 
         private string GerarCodigoUnico()
         {
@@ -265,6 +278,11 @@ namespace TeleBonifacio
 
         #region Sets
 
+        public void setId(int oId)
+        {
+            this.ID = oId;
+        }
+
         public void SetDescricao(string Descricao, bool ProdNovo, string codigo)
         {
             if (Descricao.Length > 0)
@@ -279,24 +297,28 @@ namespace TeleBonifacio
             {
                 if (ProdNovo)
                 {
-                    txDescr.Text = "";
-                    txCodigo.Text = "";
-                    txDescr.Enabled = true;
-                    txCodigo.Text = GerarCodigoUnico();
-                    lbCodigo.Text = "Código Randomico";
-                    lbCodigo.Refresh();
-                    //} else
-                    //{
-                    //    txDescr.Text = "Vários";
-                    //    txDescr.Enabled = false;
+                    LimpaNovo();
                 }
             }
         }
 
-        public void RecebeDadosCli(ref DataTable dadosC, ref FornecedorDao DadosForn)
+        private void LimpaNovo()
+        {
+            txDescr.Text = "";
+            txCodigo.Text = "";
+            txDescr.Enabled = true;
+            txValor.Text = "";
+            txCodigo.Text = GerarCodigoUnico();
+            lbCodigo.Text = "Código Randomico";
+            lbCodigo.Refresh();
+        }
+
+        public void RecebeDadosCli(ref DataTable dadosC, ref FornecedorDao DadosForn, ref EncomendasDao encoDao, int IselectedIndex)
         {
             dadosCli = dadosC;
-            forn = DadosForn;
+            forn = DadosForn;    
+            EncoDao = encoDao;
+            selectedIndex = IselectedIndex;
             glo.CarregarComboBox<tb.Fornecedor>(cmbForn, forn);
         }
 
@@ -309,12 +331,16 @@ namespace TeleBonifacio
             txCodigo.Text = codigo;
             txValor.Text = valor.ToString();
             txDescr.Text = descricao;
-            cmbCliente.Tag = "";
+            cmbCliente.Tag = "";            
         }
 
         public void setOperacao(int iOperacao)
         {
             Operacao = iOperacao;
+            if (Operacao==1)
+            {
+                LimpaNovo();
+            }
         }
 
         public void setidCliente (int idCliente )

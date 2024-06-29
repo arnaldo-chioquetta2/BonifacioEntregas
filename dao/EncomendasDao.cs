@@ -60,7 +60,7 @@ namespace TeleBonifacio.dao
             string sDtAgora = DtAgora.ToString("yyyy-MM-dd");
             string sValor = glo.sv(Valor);
             string sHoraEntrega = HoraEntrega.ToString("HH:mm:ss");
-            if (NovaDesc.Length > 0)
+            if (iID== 0)
             {
                 string UID = glo.GenerateUID();
                 string insertQuery = $@"INSERT INTO Encomendas (idCliente, Data, UID, Descricao, Nome, Telefone, Compra, codigo, Valor, idForn, HoraEntrega, DtPrometida) 

@@ -388,7 +388,7 @@ namespace TeleBonifacio
         {
             dataGrid1.Columns[0].Width = 100;       // Compra
             dataGrid1.Columns[1].Width = 130;       // Forn
-            dataGrid1.Columns[2].Visible = true;    // ID false;
+            dataGrid1.Columns[2].Visible = false;    // ID false;
             dataGrid1.Columns[3].Visible = false;
             dataGrid1.Columns[4].Width = 75;       // Data
             dataGrid1.Columns[5].Width = 80;        // Código
@@ -1413,40 +1413,6 @@ namespace TeleBonifacio
             }
             if (FpesCliente.OK)
             {
-                string Nome = "";
-                string Fone = "";
-                string NovaDesc = "";
-                int ClienteAdicioado = FpesCliente.ClienteLocalizado;
-                if (ClienteAdicioado == 0)
-                {
-                    Nome = FpesCliente.Nome;
-                    Fone = FpesCliente.Fone;
-                }
-                if (ProdNovo)
-                {
-                    NovaDesc = FpesCliente.getDescricao();
-                    codigo = FpesCliente.getcodigo();
-                }
-                int idForn = FpesCliente.getidForn();
-                decimal Valor = FpesCliente.getValor();
-                DateTime DtAgora = FpesCliente.getDtAgora();
-                DateTime DtEnc = FpesCliente.getDtEnc();
-                DateTime HoraEntrega = FpesCliente.getHora();
-                int selectedIndex = tbFaltas.SelectedIndex;
-                DataGridView selectedGrid = selectedIndex == 0 ? dataGrid1 : dataGrid2;
-                if (selectedIndex == 0 || selectedIndex == 1)
-                {
-                    foreach (DataGridViewRow row in selectedGrid.SelectedRows)
-                    {
-                        int gID = Convert.ToInt16(row.Cells["ID"].Value);
-                        ConfirmarEncomendaIndividual(gID, selectedIndex, Nome, Fone, NovaDesc, DtAgora, DtEnc, HoraEntrega, codigo, Valor, idForn);
-                    }
-                }
-                else
-                {
-                    ConfirmarEncomendaIndividual(0, selectedIndex, Nome, Fone, NovaDesc, DtAgora, DtEnc, HoraEntrega, codigo, Valor, idForn);
-                }
-                
                 if (tbFaltas.SelectedIndex==2)
                 {
                     CarregaGridE();
@@ -1488,30 +1454,31 @@ namespace TeleBonifacio
                     {
                         ClienteDAO Cliente = new ClienteDAO();
                         dadosCli = Cliente.GetDadosOrdenados();
-                        FpesCliente.RecebeDadosCli(ref dadosCli, ref Forn);
+                        FpesCliente.RecebeDadosCli(ref dadosCli, ref Forn, ref EncoDao, tbFaltas.SelectedIndex);
                     }
                 }
+                FpesCliente.setOperacao(2);
+                FpesCliente.setId(this.iID);
                 FpesCliente.CarregarDados(nome, telefone, data, dataPrometida, codigo, valor, descricao);
                 if (Instanciar)
                 {
+                    FpesCliente.Ativar();
                     FpesCliente.ShowDialog();
                 }
                 else
                 {
-                    FpesCliente.Visible = true;
+                    try
+                    {
+                        FpesCliente.Visible = true;
+                    }
+                    catch (Exception)
+                    {
+                        FpesCliente.Ativar();
+                        FpesCliente.ShowDialog();
+                    }                    
                 }
                 if (FpesCliente.getAlterado())
                 {
-                    nome = FpesCliente.Nome;
-                    telefone = FpesCliente.Fone;
-                    descricao = FpesCliente.getDescricao();
-                    codigo = FpesCliente.getcodigo();
-                    int idForn = FpesCliente.getidForn();
-                    decimal Valor = FpesCliente.getValor();
-                    dataPrometida = FpesCliente.getDtEnc();
-                    DateTime HoraEntrega = FpesCliente.getHora();
-                    int idCliente = FpesCliente.getCliente();
-                    EncoDao.Edita(this.iID, idCliente, codigo, descricao, idForn, dataPrometida, HoraEntrega, Valor);
                     CarregaGridE();
                     Limpar();                                       
                 }
@@ -1548,16 +1515,18 @@ namespace TeleBonifacio
             if (dadosCli == null)
             {
                 ClienteDAO Cliente = new ClienteDAO();
-                dadosCli = Cliente.GetDadosOrdenados();
-                FpesCliente.RecebeDadosCli(ref dadosCli, ref Forn);
+                dadosCli = Cliente.GetDadosOrdenados();                
             }
+            FpesCliente.setOperacao(1);
             if (Instanciar)
             {
+                FpesCliente.RecebeDadosCli(ref dadosCli, ref Forn, ref EncoDao, tbFaltas.SelectedIndex);
+                FpesCliente.Ativar();                
                 FpesCliente.ShowDialog();
             }
             else
             {
-                FpesCliente.Visible = true;
+                FpesCliente.ShowDialog();
             }
         }
 

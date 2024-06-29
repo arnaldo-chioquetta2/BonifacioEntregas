@@ -300,7 +300,6 @@ namespace TeleBonifacio
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Pesquisa de Clientes";
             this.TopMost = true;
-            this.Activated += new System.EventHandler(this.pesCliente_Activated);
             this.Load += new System.EventHandler(this.pesCliente_Load);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
