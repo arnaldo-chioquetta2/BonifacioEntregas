@@ -170,6 +170,7 @@ namespace TeleBonifacio
             {
                 Cliente = new ClienteDAO();
                 this.Cursor = Cursors.WaitCursor;
+                glo.Loga("CarregarComboBox<tb.Cliente>(cmbCliente) em pesCliente");
                 CarregarComboBox<tb.Cliente>(cmbCliente);
                 dateTimePicker1.Value = DateTime.Now.AddDays(7);
             }
@@ -324,6 +325,7 @@ namespace TeleBonifacio
 
         public void CarregarDados(string nome, string telefone, DateTime data, DateTime dataPrometida, string codigo, decimal valor, string descricao)
         {
+            glo.Loga($"cmbCliente.Text = {nome}");
             cmbCliente.Text = nome;
             txTelefone.Text = telefone;
             dtpData.Value = data;

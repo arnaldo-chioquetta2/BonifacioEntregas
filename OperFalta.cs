@@ -1368,11 +1368,6 @@ namespace TeleBonifacio
 
         #region Encomendas
 
-        private void ConfirmarEncomendaIndividual(int gID, int selectedIndex, string Nome, string Fone, string NovaDesc, DateTime DtAgora, DateTime DtEnc, DateTime HoraEntrega, string codigo, decimal Valor, int idForn)
-        {
-            EncoDao.ConfirmaEncomenda(gID, Nome, Fone, NovaDesc, DtAgora, DtEnc, HoraEntrega, codigo, Valor, idForn, selectedIndex);
-        }
-
         private void btEncomenda_Click(object sender, EventArgs e)
         {
             glo.IdAdicionado = 0;
@@ -1448,32 +1443,40 @@ namespace TeleBonifacio
                 bool Instanciar = false;
                 if (FpesCliente == null)
                 {
+                    glo.Loga("FpesCliente = null");
                     FpesCliente = new pesCliente();
                     Instanciar = true;
                     if (dadosCli == null)
                     {
+                        glo.Loga("dadosCli = null");
                         ClienteDAO Cliente = new ClienteDAO();
                         dadosCli = Cliente.GetDadosOrdenados();
                         FpesCliente.RecebeDadosCli(ref dadosCli, ref Forn, ref EncoDao, tbFaltas.SelectedIndex);
                     }
                 }
                 FpesCliente.setOperacao(2);
+                glo.Loga($"setId({this.iID})");
                 FpesCliente.setId(this.iID);
+                glo.Loga($"CarregarDados({nome}, {telefone}, {data}, {dataPrometida}, {codigo}, {valor}, {descricao})");
                 FpesCliente.CarregarDados(nome, telefone, data, dataPrometida, codigo, valor, descricao);
+                glo.Loga($"Instanciar = {Instanciar}");
                 if (Instanciar)
                 {
                     FpesCliente.Ativar();
                     FpesCliente.ShowDialog();
                 }
                 else
-                {
+                {                    
                     try
                     {
+                        glo.Loga("Visible = true");
                         FpesCliente.Visible = true;
                     }
                     catch (Exception)
                     {
+                        glo.Loga("Ativar()");
                         FpesCliente.Ativar();
+                        glo.Loga("ShowDialog()");
                         FpesCliente.ShowDialog();
                     }                    
                 }
