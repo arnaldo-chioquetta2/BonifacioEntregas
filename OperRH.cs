@@ -12,7 +12,6 @@ namespace TeleBonifacio
     {
 
         private bool ativou = false;
-
         private RHDAO cRHDAO;
         private int iID = 0;
         private string UID = "";
@@ -90,7 +89,7 @@ namespace TeleBonifacio
 
         private void cmbVendedor_SelectedIndexChanged(object sender, EventArgs e)
         {
-            btLancar.Enabled = (cmbVendedor.SelectedIndex > 0);
+            btLancar.Enabled = btImprimir.Enabled = (cmbVendedor.SelectedIndex > 0);
         }
 
         private TimeSpan ProcHora(string sHora)
@@ -323,7 +322,6 @@ namespace TeleBonifacio
                 totalRowData[9] = totalzao.TotalHours.ToString("N2");
                 dataGrid1.Rows.Add(totalRowData);
             }
-            //dataGrid1.Columns[10].Width = 0;
             this.carregando = false;
         }
 
@@ -378,6 +376,12 @@ namespace TeleBonifacio
 
         #endregion
 
+        private void btImprimir_Click(object sender, EventArgs e)
+        {
+            rel.RH fRel = new rel.RH();
+            fRel.SetDados(cmbVendedor.SelectedIndex, dtpDataIN.Value, dtnDtFim.Value);
+            fRel.Show();
+        }
     }
 
 }

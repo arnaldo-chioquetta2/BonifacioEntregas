@@ -38,3 +38,4 @@ C:\Prog\T-Bonifacio\T-Bonifacio\obj\Debug\TeleBonifacio.operGarantia.resources
 C:\Prog\T-Bonifacio\T-Bonifacio\obj\Debug\TeleBonifacio.OperPagar.resources
 C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug\EditRtf.dll
 C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug\EditRtf.pdb
+C:\Prog\T-Bonifacio\T-Bonifacio\obj\Debug\TeleBonifacio.rel.RH.resources

@@ -185,6 +185,7 @@ namespace TeleBonifacio
             this.btImprimir.Size = new System.Drawing.Size(75, 23);
             this.btImprimir.TabIndex = 47;
             this.btImprimir.Text = "Imprimir";
+            this.btImprimir.Click += new System.EventHandler(this.btImprimir_Click);
             // 
             // btnFiltrar
             // 

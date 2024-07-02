@@ -273,6 +273,12 @@
     <Compile Include="rel\RelEntregas.designer.cs">
       <DependentUpon>RelEntregas.cs</DependentUpon>
     </Compile>
+    <Compile Include="rel\RH.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="rel\RH.designer.cs">
+      <DependentUpon>RH.cs</DependentUpon>
+    </Compile>
     <Compile Include="tb\CampoTagInfo.cs" />
     <Compile Include="tb\Cliente.cs" />
     <Compile Include="tb\ComboBoxItem.cs" />
@@ -374,6 +380,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="rel\RelEntregas.resx">
       <DependentUpon>RelEntregas.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="rel\RH.resx">
+      <DependentUpon>RH.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
