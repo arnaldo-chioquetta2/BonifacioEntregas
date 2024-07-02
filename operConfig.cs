@@ -25,6 +25,7 @@ namespace TeleBonifacio
             txFone.Text = cINI.ReadString("Identidade", "Fone", "");
             Version version = Assembly.GetExecutingAssembly().GetName().Version;
             int versionInt = (version.Major * 100) + (version.Minor * 10) + version.Build;
+            txDocs.Text = cINI.ReadString("Config", "Docs", "");
             string NovaVersao = cINI.ReadString("Config", "NovaVersao", "");            
             if (NovaVersao.Length>0)
             {
@@ -62,6 +63,7 @@ namespace TeleBonifacio
             cINI.WriteString("Identidade", "Fone", txFone.Text);
             string Backup = ckBackup.Checked ? "1" : "0";
             cINI.WriteString("Backup", "Ativo", Backup);
+            cINI.WriteString("Config", "Docs", txDocs.Text);
             this.Close();
         }
 
@@ -159,12 +161,12 @@ namespace TeleBonifacio
             Environment.Exit(0);
         }
 
-        private void label2_DoubleClick(object sender, EventArgs e)
+        private void button4_Click(object sender, EventArgs e)
         {
-            //string novaSenha = "81446407";
-            //string sql = $"UPDATE MSysObjects SET Pwd = {novaSenha} WHERE Type = 1 AND Name = 'DB' ";
-            //glo.ExecutarComandoSQL(sql);
+            if (folderBrowserDialog1.ShowDialog() == DialogResult.OK)
+            {
+                txDocs.Text = folderBrowserDialog1.SelectedPath;
+            }            
         }
-
     }    
 }

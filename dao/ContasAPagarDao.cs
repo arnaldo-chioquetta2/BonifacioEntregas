@@ -6,20 +6,29 @@ namespace TeleBonifacio.dao
 {
     public class ContasAPagarDao
     {
-        public int Adiciona(int idFornecedor, DateTime dataEmissao, DateTime dataVencimento, float valorTotal, string chaveNotaFiscal, string descricao, string caminhoPDF, bool pago, DateTime? dataPagamento, string observacoes, bool perm, string UID)
+        public int Adiciona(int idFornecedor, DateTime dataEmissao, DateTime dataVencimento, float valorTotal, string chaveNotaFiscal, string descricao, bool pago, DateTime? dataPagamento, string observacoes, string UID)
         {
-            string sql = $@"INSERT INTO ContasAPagar (idFornecedor, DataEmissao, DataVencimento, ValorTotal, ChaveNotaFiscal, Descricao, CaminhoPDF, Pago, DataPagamento, Observacoes, Perm, UID) VALUES (
+            string sql = $@"INSERT INTO ContasAPagar (idFornecedor, DataEmissao, DataVencimento, ValorTotal, ChaveNotaFiscal, Descricao, Pago, DataPagamento, Observacoes, Perm, UID) VALUES (
                 {idFornecedor}, 
                 '{dataEmissao.ToString("yyyy-MM-dd HH:mm:ss")}', 
                 '{dataVencimento.ToString("yyyy-MM-dd HH:mm:ss")}', 
                 {glo.sv(valorTotal)}, 
                 '{chaveNotaFiscal}', 
                 '{descricao}', 
-                '{caminhoPDF}', 
                 {(pago ? 1 : 0)}, 
                 {(dataPagamento.HasValue ? $"'{dataPagamento.Value.ToString("yyyy-MM-dd HH:mm:ss")}'" : "NULL")}, 
                 '{observacoes}',
-                {(perm ? 1 : 0)},
+                '{UID}' )";
+            DB.ExecutarComandoSQL(sql);
+            string queryNome = $"SELECT Max(ID) FROM ContasAPagar ";
+            return DB.ExecutarConsultaCount(queryNome);
+        }
+
+        public int AdicObter(DateTime dataEmissao, string NmArq, string UID)
+        {
+            string sql = $@"INSERT INTO ContasAPagar (DataEmissao, CaminhoPDF, UID) VALUES (
+                '{dataEmissao.ToString("yyyy-MM-dd HH:mm:ss")}', 
+                '{NmArq}',
                 '{UID}' )";
             DB.ExecutarComandoSQL(sql);
             string queryNome = $"SELECT Max(ID) FROM ContasAPagar ";
@@ -32,18 +41,20 @@ namespace TeleBonifacio.dao
             DB.ExecutarComandoSQL(sql);
         }
 
-        public void Edita(int id, int idFornecedor, DateTime dataEmissao, DateTime dataVencimento, float valorTotal, string chaveNotaFiscal, string descricao, string caminhoPDF, bool pago, DateTime? dataPagamento, string observacoes, bool perm)
+        public void Edita(int id, int idFornecedor, DateTime dataEmissao, DateTime dataVencimento, float valorTotal, string chaveNotaFiscal, string caminhoPDF, bool pago, DateTime? dataPagamento, string observacoes)
         {
+            string sVenc = "";
+            if (dataVencimento!=DateTime.MinValue)
+            {
+                sVenc = $@"DataVencimento = '{dataVencimento.ToString("yyyy -MM-dd HH:mm:ss")}', ";
+            }
             string sql = $@"UPDATE ContasAPagar SET 
                 idFornecedor = {idFornecedor}, 
                 DataEmissao = '{dataEmissao.ToString("yyyy-MM-dd HH:mm:ss")}', 
-                DataVencimento = '{dataVencimento.ToString("yyyy-MM-dd HH:mm:ss")}', 
+                {sVenc}
                 ValorTotal = {glo.sv(valorTotal)}, 
                 ChaveNotaFiscal = '{chaveNotaFiscal}', 
-                Descricao = '{descricao}', 
-                CaminhoPDF = '{caminhoPDF}', 
                 Pago = {(pago ? 1 : 0)}, 
-                Perm = {(perm ? 1 : 0)}, 
                 DataPagamento = {(dataPagamento.HasValue ? $"'{dataPagamento.Value.ToString("yyyy-MM-dd HH:mm:ss")}'" : "NULL")}, 
                 Observacoes = '{observacoes}'
                 WHERE ID = {id}";
@@ -58,7 +69,7 @@ namespace TeleBonifacio.dao
             DB.ExecutarComandoSQL(sql);
         }
 
-        public DataTable GetDados(int idFornecedor, int tipo, DateTime? dataPagamento, DateTime? dataVencimento, DateTime? dataEmissao, string valorTotal, string descricao, string observacoes, bool? pago)
+        public DataTable GetDados(int idFornecedor, DateTime? dataPagamento, DateTime? dataVencimento, DateTime? dataEmissao, string valorTotal, string descricao, string observacoes, bool? pago)
         {
             string sWhe = "";
             if (idFornecedor>0)
@@ -93,14 +104,17 @@ namespace TeleBonifacio.dao
             {
                 sWhe += " And ContasAPagar.Pago = " + (pago.Value ? "True" : "False");
             }
+            if (sWhe.Length>0)
+            {
 
-            string sql = $@"SELECT ContasAPagar.ID, ContasAPagar.idFornecedor, Fornecedores.Nome as Fornecedor, ContasAPagar.DataEmissao,
+            }
+            string sql = $@"SELECT ContasAPagar.CaminhoPDF as Arquivo, ContasAPagar.ID, ContasAPagar.idFornecedor, Fornecedores.Nome as Fornecedor, ContasAPagar.DataEmissao,
                             ContasAPagar.DataVencimento, ContasAPagar.ValorTotal, ContasAPagar.ChaveNotaFiscal, ContasAPagar.Descricao, 
                             ContasAPagar.CaminhoPDF, ContasAPagar.Pago, ContasAPagar.DataPagamento, ContasAPagar.Observacoes, 
                             ContasAPagar.Perm, ContasAPagar.UID, ContasAPagar.idArquivo 
                     FROM ContasAPagar                            
                     LEFT JOIN Fornecedores ON Fornecedores.IdForn = ContasAPagar.idFornecedor
-                    WHERE ContasAPagar.Perm = {tipo} {sWhe} 
+                    {sWhe} 
                     ORDER BY ContasAPagar.ID DESC";
             DataTable dt = DB.ExecutarConsulta(sql);
             return dt;

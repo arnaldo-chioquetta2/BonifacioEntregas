@@ -159,7 +159,7 @@ namespace TeleBonifacio
             Stream responseStream = response.GetResponseStream();
             StreamReader reader = new StreamReader(responseStream);
             string info = reader.ReadToEnd();
-            string[] lines = info.Split(new[] { "\r\n", "\r", "\n" }, StringSplitOptions.None);          
+            string[] lines = info.Split('|');
             string versaoTexto = lines[0];
             if (lines.Length>1)
             {
