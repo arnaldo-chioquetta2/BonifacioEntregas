@@ -1,14 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Drawing;
 using System.Globalization;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Reflection;
 using System.Windows.Forms;
-using TeleBonifacio.gen;
 
 namespace TeleBonifacio
 {
@@ -174,7 +172,14 @@ namespace TeleBonifacio
             for (int i = 0; i < nro; i++)
             {
                 string nmArq = cINI.ReadString("Apagar", "Arq" + nro, "");
-                File.Delete(nmArq);
+                try
+                {
+                    File.Delete(nmArq);
+                }
+                catch (Exception)
+                {
+                    // NÃO FAZ NADA
+                }                
             }
             cINI.WriteInt("Apagar", "Nro", 0);
         }
@@ -521,6 +526,19 @@ namespace TeleBonifacio
             Application.Exit();
         }
 
+        private void Form1_Resize(object sender, EventArgs e)
+        {
+            Form form = sender as Form;
+            if (form != null)
+            {
+                string sResize = $@"Form1_Resize: Form size is now Width={form.Width}, Height={form.Height}";
+                glo.Loga(sResize);
+            }
+            else
+            {
+                glo.Loga("Form1_Resize: Sender is not a Form.");
+            }
+        }
     }
 
 }

@@ -13,7 +13,7 @@ using System.Runtime.InteropServices;
 [assembly: Guid("308c57af-e663-456d-8a2c-188bbd61423d")]
 [assembly: AssemblyVersion("2.2.4.0")]
 [assembly: AssemblyFileVersion("2.2.4.0")]
-// 2.2.4 Tela de documentos simplificada e obtenção de arquivos
+// 2.2.4 Tela de documentos simplificada e obtenção de arquivos e inicio do relatório de RH
 // 2.2.3 Logs na operação de mostragem das encomendas
 // 2.2.2 Ajustes nas encomendas
 // 2.2.1 DuploClick para editar as encomendas
