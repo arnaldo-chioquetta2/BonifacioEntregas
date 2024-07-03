@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Drawing;
 using System.Drawing.Printing;
+using System.Globalization;
 using System.Text;
 using System.Windows.Forms;
 using TeleBonifacio.dao;
@@ -58,7 +59,6 @@ namespace TeleBonifacio.rel
                     FnTrd = row["FnTrd"].ToString(),
                     FuncID = Convert.ToInt32(row["FuncID"])
                 };
-
                 TimeSpan inMan = ProcHora(lancto.InMan);
                 TimeSpan fmMan = ProcHora(lancto.FmMan);
                 TimeSpan inTrd = ProcHora(lancto.InTrd);
@@ -67,7 +67,6 @@ namespace TeleBonifacio.rel
                 lancto.Total = total.ToString(@"hh\:mm");
                 relcaixa.Add(lancto);
             }
-
             GerarRelCaixa();
             this.carregando = false;
         }
@@ -79,29 +78,90 @@ namespace TeleBonifacio.rel
             sb.AppendLine();
             sb.AppendLine($"Período: {dtpDataIN.Value.ToString("dd/MM/yyyy")} a {dtnDtFim.Value.ToString("dd/MM/yyyy")}");
             sb.AppendLine();
-            sb.AppendLine("ID    Data       Nome           InMan  FmMan  InTrd  FnTrd  Total");
+            sb.AppendLine("Data       Nome            InMan FmMan InTrd FnTrd Total");
             TimeSpan totalzao = TimeSpan.Zero;
             foreach (var lancto in relcaixa)
             {
-                string ID = glo.ComplStr(lancto.ID.ToString(), 4, 2);
+                if (lancto.Data.DayOfWeek == DayOfWeek.Sunday)
+                {
+                    continue; 
+                }
                 string Data = glo.ComplStr(lancto.Data.ToString("dd/MM/yyyy"), 10, 2);
                 string Nome = glo.ComplStr(lancto.Nome, 15, 2);
-                string InMan = glo.ComplStr(lancto.InMan, 5, 2);
-                string FmMan = glo.ComplStr(lancto.FmMan, 5, 2);
-                string InTrd = glo.ComplStr(lancto.InTrd, 5, 2);
-                string FnTrd = glo.ComplStr(lancto.FnTrd, 5, 2);
-                string Total = glo.ComplStr(lancto.Total, 5, 2);
+                string InMan = "";
+                string FmMan = "";
+                string InTrd = "";
+                string FnTrd = "";
+                string Total = "";
+                bool fez = false;
+                if ((lancto.InMan.Length==0) && (lancto.InTrd.Length == 0))
+                {
+                    fez = true;
+                    sb.AppendLine($"{Data} {Nome}           F A L T A             {Total}");
+                } else
+                {
+                    if (lancto.InMan.Length == 0)
+                    {
+                        fez = true;
+                        InTrd = glo.ComplStr(lancto.InTrd, 5, 2);
+                        FnTrd = glo.ComplStr(lancto.FnTrd, 5, 2);
+                        Total = glo.ComplStr(lancto.Total, 5, 2);
+                        sb.AppendLine($"{Data} {Nome}  F A L T A  {InTrd} {FnTrd} {Total}");                        
+                    } else
+                    {
+                        if (lancto.InTrd.Length == 0)
+                        {
+                            fez = true;
+                            InMan = glo.ComplStr(lancto.InMan, 5, 2);
+                            FmMan = glo.ComplStr(lancto.FmMan, 5, 2);
+                            Total = glo.ComplStr(lancto.Total, 5, 2);
+                            sb.AppendLine($"{Data} {Nome} {InMan} {FmMan}  F A L T A  {Total}");
+                        }
+                    }
+                }
+                if (!fez)
+                {
+                    InMan = glo.ComplStr(lancto.InMan, 5, 2);
+                    FmMan = glo.ComplStr(lancto.FmMan, 5, 2);
+                    InTrd = glo.ComplStr(lancto.InTrd, 5, 2);
+                    FnTrd = glo.ComplStr(lancto.FnTrd, 5, 2);
+                    Total = glo.ComplStr(lancto.Total, 5, 2);
+                    sb.AppendLine($"{Data} {Nome} {InMan} {FmMan} {InTrd} {FnTrd} {Total}");
+                }
+                TimeSpan totalDoDia = TimeSpan.Zero;
+                TimeSpan tinMan = ParseTimeString(lancto.InMan);
+                TimeSpan tfmMan = ParseTimeString(lancto.FmMan);
+                TimeSpan tinTrd = ParseTimeString(lancto.InTrd);
+                TimeSpan tfnTrd = ParseTimeString(lancto.FnTrd);
+                if (lancto.InMan != "00:00")
+                {
+                    totalDoDia += tfmMan - tinMan;
+                }
+                if (lancto.InTrd != "00:00")
+                {
+                    totalDoDia += tfnTrd - tinTrd;
+                }
+                totalzao += totalDoDia;  
 
-                sb.AppendLine($"{ID} {Data} {Nome} {InMan} {FmMan} {InTrd} {FnTrd} {Total}");
-                totalzao += TimeSpan.Parse(lancto.Total);
             }
-
             sb.AppendLine();
-            sb.AppendLine("Total de horas: " + totalzao.ToString(@"hh\:mm"));
+            int totalHoras = (int)totalzao.TotalHours; 
+            int totalMinutos = totalzao.Minutes; 
+            sb.AppendLine($"Total de horas: {totalHoras} horas {totalMinutos} minutos");
             textBox1.Text = sb.ToString();
             textBox1.SelectionStart = textBox1.Text.Length;
             textBox1.ScrollToCaret();
         }
+
+        private TimeSpan ParseTimeString(string time)
+        {
+            if (TimeSpan.TryParseExact(time, @"hh\:mm", CultureInfo.InvariantCulture, out TimeSpan result))
+            {
+                return result;
+            }
+            return TimeSpan.Zero;
+        }
+
 
         private TimeSpan ProcHora(string horaStr)
         {
