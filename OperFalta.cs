@@ -451,7 +451,7 @@ namespace TeleBonifacio
             if (dados != null)
             {
                 ConfigurarGrid();
-                if (scrollPosition>-1)
+                if (scrollPosition>0)
                     dataGrid1.FirstDisplayedScrollingRowIndex = scrollPosition;
             }            
         }
@@ -891,7 +891,8 @@ namespace TeleBonifacio
                 }
                 AtualizarGridP = true;
                 CarregaGrid();
-                dataGrid1.FirstDisplayedScrollingRowIndex = scrollPosition;
+                if (scrollPosition>0)  
+                    dataGrid1.FirstDisplayedScrollingRowIndex = scrollPosition;
             }
             else
             {
@@ -963,6 +964,7 @@ namespace TeleBonifacio
 
         private void button2_Click(object sender, EventArgs e)
         {
+            glo.Loga("Filtro");
             int iForn = cmbForn.SelectedIndex;
             BakidForn = 0;
             if (iForn > 0)
@@ -987,7 +989,6 @@ namespace TeleBonifacio
                     int idVendedor = cmbVendedor.SelectedIndex;
                     BakidVendedor = ((tb.ComboBoxItem)cmbVendedor.Items[idVendedor]).Id;
                 }
-
                 Bakcodigo = "";
                 if (txtCodigo.Tag == "M")
                 {
@@ -1038,6 +1039,7 @@ namespace TeleBonifacio
 
         private void btLmpFiltro_Click(object sender, EventArgs e)
         {
+            btLmpFiltro.Enabled = false; 
             Limpar();
             BakidTipo = 0;
             BakidForn = 0;
@@ -1061,6 +1063,7 @@ namespace TeleBonifacio
                     CarregaGridG();
                     break;
             }
+            btLmpFiltro.Enabled = true;
         }
 
         #endregion

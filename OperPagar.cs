@@ -523,38 +523,41 @@ namespace TeleBonifacio
         private void btObter_Click(object sender, EventArgs e)
         {
             btObter.Enabled = false;
-            if (!Directory.Exists(CaminhoBasePDF))
+            if (!Directory.Exists(sourceDirectory))
             {
-                Directory.CreateDirectory(CaminhoBasePDF);
-            }
-            bool Perm = false;
-            if (tabControl1.SelectedIndex==0)
-            {
-                tabPage1.Tag = "A";
+                MessageBox.Show("A pasta não existe ou não é acessível no momento.");
             } else
             {
-                tabPage2.Tag = "A";
-                Perm = true;
-            }             
-            foreach (string filePath in Directory.GetFiles(sourceDirectory))
-            {
-                try
+                bool Perm = false;
+                if (tabControl1.SelectedIndex == 0)
                 {
-                    string UID = glo.GenerateUID();
-                    string fileName = Path.GetFileName(filePath);
-                    DateTime dataEmissao = DateTime.Now; 
-                    int idAdic = contasAPagarDao.AdicObter(Perm, DateTime.Now, fileName, UID);
-                    string fileExtension = Path.GetExtension(fileName).TrimStart('.');
-                    string destinationFileName = $"Doc{idAdic}.{fileExtension}";
-                    string destinationFilePath = Path.Combine(CaminhoBasePDF, destinationFileName);
-                    File.Move(filePath, destinationFilePath);                    
+                    tabPage1.Tag = "A";
                 }
-                catch (Exception ex)
+                else
                 {
-                    MessageBox.Show($"Erro ao processar o arquivo {filePath}: {ex.Message}");
+                    tabPage2.Tag = "A";
+                    Perm = true;
                 }
+                foreach (string filePath in Directory.GetFiles(sourceDirectory))
+                {
+                    try
+                    {
+                        string UID = glo.GenerateUID();
+                        string fileName = Path.GetFileName(filePath);
+                        DateTime dataEmissao = DateTime.Now;
+                        int idAdic = contasAPagarDao.AdicObter(Perm, DateTime.Now, fileName, UID);
+                        string fileExtension = Path.GetExtension(fileName).TrimStart('.');
+                        string destinationFileName = $"Doc{idAdic}.{fileExtension}";
+                        string destinationFilePath = Path.Combine(CaminhoBasePDF, destinationFileName);
+                        File.Move(filePath, destinationFilePath);
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show($"Erro ao processar o arquivo {filePath}: {ex.Message}");
+                    }
+                }
+                AtualizaGrids();
             }
-            AtualizaGrids();
             btObter.Enabled = true;
         }
 
