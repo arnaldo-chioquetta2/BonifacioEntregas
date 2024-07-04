@@ -87,7 +87,6 @@ namespace TeleBonifacio.rel
             bool isFirstMonth = true;
             foreach (Lanctos lancto in relcaixa)
             {
-
                 if (lancto.Data.DayOfWeek != DayOfWeek.Sunday)
                 {
                     if (currentMonth != lancto.Data.Month)
@@ -107,19 +106,7 @@ namespace TeleBonifacio.rel
                         firstEntry = false;
                     }
                     AdicionarLinhaLancamento(sb, lancto);
-                    TimeSpan totalDoDia = TimeSpan.Zero;
-                    TimeSpan tinMan = ParseTimeString(lancto.InMan);
-                    TimeSpan tfmMan = ParseTimeString(lancto.FmMan);
-                    TimeSpan tinTrd = ParseTimeString(lancto.InTrd);
-                    TimeSpan tfnTrd = ParseTimeString(lancto.FnTrd);
-                    if (lancto.InMan != "00:00")
-                    {
-                        totalDoDia += tfmMan - tinMan;
-                    }
-                    if (lancto.InTrd != "00:00")
-                    {
-                        totalDoDia += tfnTrd - tinTrd;
-                    }
+                    TimeSpan totalDoDia = CalcularTotalDoDia(lancto);
                     totalMensal += totalDoDia;
                     totalzao += totalDoDia;
                 }
@@ -129,12 +116,34 @@ namespace TeleBonifacio.rel
                 sb.AppendLine($"Total do mês: {totalMensal.TotalHours:n0} horas {totalMensal.Minutes} minutos");
             }
             sb.AppendLine();
-            int totalHoras = (int)totalzao.TotalHours; 
-            int totalMinutos = totalzao.Minutes; 
-            sb.AppendLine($"Total de horas: {totalHoras} horas {totalMinutos} minutos");
+            sb.AppendLine($"Total de horas: {totalzao.TotalHours:n0} horas {totalzao.Minutes} minutos");
             textBox1.Text = sb.ToString();
             textBox1.SelectionStart = textBox1.Text.Length;
             textBox1.ScrollToCaret();
+        }
+
+        private TimeSpan CalcularTotalDoDia(Lanctos lancto)
+        {
+            TimeSpan totalDoDia = TimeSpan.Zero;
+            TimeSpan tinMan = ParseTimeString(lancto.InMan);
+            TimeSpan tfmMan = ParseTimeString(lancto.FmMan);
+            TimeSpan tinTrd = ParseTimeString(lancto.InTrd);
+            TimeSpan tfnTrd = ParseTimeString(lancto.FnTrd);
+            if (tinMan != TimeSpan.Zero && tfmMan != TimeSpan.Zero)
+            {
+                totalDoDia += tfmMan - tinMan;
+            }
+            if (tinTrd != TimeSpan.Zero && tfnTrd != TimeSpan.Zero)
+            {
+                totalDoDia += tfnTrd - tinTrd;
+            }
+            Console.WriteLine(totalDoDia);
+            return totalDoDia;
+        }
+
+        private TimeSpan ParseTimeString(string timeString)
+        {
+            return TimeSpan.TryParse(timeString, out TimeSpan result) ? result : TimeSpan.Zero;
         }
 
         private void AdicionarLinhaLancamento(StringBuilder sb, Lanctos lancto)
@@ -163,15 +172,6 @@ namespace TeleBonifacio.rel
             {
                 sb.AppendLine($"{Data} {Nome} {InMan} {FmMan} {InTrd} {FnTrd} {Total}");
             }
-        }
-
-        private TimeSpan ParseTimeString(string time)
-        {
-            if (TimeSpan.TryParseExact(time, @"hh\:mm", CultureInfo.InvariantCulture, out TimeSpan result))
-            {
-                return result;
-            }
-            return TimeSpan.Zero;
         }
 
         private TimeSpan ProcHora(string horaStr)
