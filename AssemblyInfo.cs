@@ -11,8 +11,9 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyCulture("")]
 [assembly: ComVisible(false)]
 [assembly: Guid("308c57af-e663-456d-8a2c-188bbd61423d")]
-[assembly: AssemblyVersion("2.2.7.0")]
-[assembly: AssemblyFileVersion("2.2.7.0")]
+[assembly: AssemblyVersion("2.2.8.0")]
+[assembly: AssemblyFileVersion("2.2.8.0")]
+// 2.2.8 Ajuste no total geral do relatório de RH
 // 2.2.7 Finalização do relatório de RH
 // 2.2.6 Previsão pra filtro vazio depois da compra
 // 2.2.5 Ajustes no PDF e na impressão do RH

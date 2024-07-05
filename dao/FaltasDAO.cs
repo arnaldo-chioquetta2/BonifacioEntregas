@@ -128,9 +128,13 @@ namespace TeleBonifacio.dao
             {
                 alteracoes.Append($"Descricao = '{Descr}', ");
             }
-            // alteracoes.Length -= 2;
+            if (Valor > 0)
+            {
+                alteracoes.Append($"Valor = {glo.sv(Valor)}, ");
+            }
+            alteracoes.Length -= 2;
             string sValor = glo.sv(Valor);
-            string sql = $@"UPDATE Faltas SET {alteracoes} Valor = {sValor} WHERE ID = {iID}";
+            string sql = $@"UPDATE Faltas SET {alteracoes} WHERE ID = {iID} ";
             DB.ExecutarComandoSQL(sql);
         }
 
