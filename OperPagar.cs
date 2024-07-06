@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Data;
 using System.Diagnostics;
+using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
 using TeleBonifacio.dao;
@@ -182,7 +183,10 @@ namespace TeleBonifacio
                 int idArquivo = (int)row.Cells["ID"].Value;
                 string ArquivoOrig = (string)row.Cells["Arquivo"].Value; 
                 AbreArquivo(idArquivo, ArquivoOrig);
+                contasAPagarDao.Imprimiu(idArquivo);
+                row.DefaultCellStyle.BackColor = Color.LightGreen;
             }
+            targetGrid.Refresh();
         }
 
         private void AbreArquivo(int Nro, string ArquivoOrig)
@@ -242,8 +246,7 @@ namespace TeleBonifacio
             btnAdicionar.Enabled = true;
             btLimparFiltro.Enabled = true;
             btExcluir.Enabled = true;
-            btMudar.Enabled = true;
-            carregando = false;
+            btMudar.Enabled = true;            
         }
 
         private void Mostra(ref DataGridView grid, ref DataGridViewCellEventArgs e)
@@ -259,26 +262,27 @@ namespace TeleBonifacio
                 if (selectedRow.Cells["idFornecedor"].Value != DBNull.Value)
                 {
                     cmbForn.SelectedValue = Convert.ToInt32(selectedRow.Cells["idFornecedor"].Value);
-                    if (selectedRow.Cells["DataVencimento"].Value != DBNull.Value)
-                    {
-                        dtpDataVencimento.Value = Convert.ToDateTime(selectedRow.Cells["DataVencimento"].Value);
-                    }                        
-                    txValorTotal.Text = Convert.ToString(selectedRow.Cells["ValorTotal"].Value);
-                    txChaveNotaFiscal.Text = Convert.ToString(selectedRow.Cells["ChaveNotaFiscal"].Value);
-                    txDescricao.Text = Convert.ToString(selectedRow.Cells["Descricao"].Value);
-                    ckPago.Checked = Convert.ToBoolean(selectedRow.Cells["Pago"].Value);                    
-                    if (ckPago.Checked)
-                    {
-                        dtpDataPagamento.Enabled = true;
-                        dtpDataPagamento.Value = Convert.ToDateTime(selectedRow.Cells["DataPagamento"].Value);
-                    }
-                    else
-                    {
-                        dtpDataPagamento.Enabled = false;
-                    }
-                    this.CaminhoPDF = Convert.ToString(selectedRow.Cells["CaminhoPDF"].Value);
-                    txObservacoes.Text = Convert.ToString(selectedRow.Cells["Observacoes"].Value);
                 }
+                if (selectedRow.Cells["DataVencimento"].Value != DBNull.Value)
+                {
+                    dtpDataVencimento.Value = Convert.ToDateTime(selectedRow.Cells["DataVencimento"].Value);
+                }
+                txValorTotal.Text = Convert.ToString(selectedRow.Cells["ValorTotal"].Value);
+                txChaveNotaFiscal.Text = Convert.ToString(selectedRow.Cells["ChaveNotaFiscal"].Value);
+                txDescricao.Text = Convert.ToString(selectedRow.Cells["Descricao"].Value);
+                ckPago.Checked = Convert.ToBoolean(selectedRow.Cells["Pago"].Value);
+                if (ckPago.Checked)
+                {
+                    dtpDataPagamento.Enabled = true;
+                    dtpDataPagamento.Value = Convert.ToDateTime(selectedRow.Cells["DataPagamento"].Value);
+                }
+                else
+                {
+                    dtpDataPagamento.Enabled = false;
+                }
+                this.CaminhoPDF = Convert.ToString(selectedRow.Cells["CaminhoPDF"].Value);
+                txObservacoes.Text = Convert.ToString(selectedRow.Cells["Observacoes"].Value);
+                carregando = false;
             }
         }
 
@@ -321,6 +325,16 @@ namespace TeleBonifacio
             bool? pago = ckPago.Tag?.ToString() == "M" && ckPago.CheckState != CheckState.Indeterminate ? (bool?)ckPago.Checked : null;
             DataTable dados = contasAPagarDao.GetDados(Perm, idForne, dataPagamento, dataVencimento, dataEmissao, valorTotal, descricao, observacoes, pago);
             dataGrid.DataSource = dados;
+            foreach (DataGridViewRow row in dataGrid.Rows)
+            {
+                if (!row.Cells["idArquivo"].Value.Equals(DBNull.Value))
+                {
+                    if (row.Cells["idArquivo"].Value.ToString()=="1")
+                    {
+                        row.DefaultCellStyle.BackColor = Color.LightGreen;
+                    }
+                }
+            }
             if (dados != null)
             {
                 ConfigurarGrid(ref dataGrid);
@@ -585,6 +599,13 @@ namespace TeleBonifacio
             contasAPagarDao.Muda(this.iID, (tabControl1.SelectedIndex == 0));            
             CarregaGridGenerico((tabControl1.SelectedIndex == 0 ? dataGrid1 : dataGrid2), 0, (tabControl1.SelectedIndex==1));
             Limpar();
+            if (tabControl1.SelectedIndex==0)
+            {
+                tabPage2.Tag = "A";
+            } else
+            {
+                tabPage1.Tag = "A";
+            }
         }
     }
 }

@@ -24,7 +24,7 @@ namespace TeleBonifacio.dao
             DB.ExecutarComandoSQL(sql);
         }
 
-        public void Edita(int id, int idFornecedor, DateTime dataEmissao, DateTime dataVencimento, float valorTotal, string chaveNotaFiscal, string caminhoPDF, bool pago, DateTime? dataPagamento, string observacoes)
+        public void Edita(int id, int idFornecedor, DateTime dataEmissao, DateTime dataVencimento, float valorTotal, string chaveNotaFiscal, string Descricao, bool pago, DateTime? dataPagamento, string observacoes)
         {
             string sVenc = "";
             if (dataVencimento!=DateTime.MinValue)
@@ -39,7 +39,8 @@ namespace TeleBonifacio.dao
                 ChaveNotaFiscal = '{chaveNotaFiscal}', 
                 Pago = {(pago ? 1 : 0)}, 
                 DataPagamento = {(dataPagamento.HasValue ? $"'{dataPagamento.Value.ToString("yyyy-MM-dd HH:mm:ss")}'" : "NULL")}, 
-                Observacoes = '{observacoes}'
+                Observacoes = '{observacoes}',
+                Descricao = '{Descricao}' 
                 WHERE ID = {id}";
             Console.WriteLine(sql);
             DB.ExecutarComandoSQL(sql);
@@ -104,6 +105,12 @@ namespace TeleBonifacio.dao
         public void Muda(int iID, bool v)
         {
             string sql = $@"UPDATE ContasAPagar SET Perm = {(v ? 1 : 0)} WHERE ID = {iID}";
+            DB.ExecutarComandoSQL(sql);
+        }
+
+        public void Imprimiu(int iID)
+        {
+            string sql = $@"UPDATE ContasAPagar SET idArquivo = 1 WHERE ID = {iID} ";
             DB.ExecutarComandoSQL(sql);
         }
     }
