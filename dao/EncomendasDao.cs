@@ -62,10 +62,22 @@ namespace TeleBonifacio.dao
             string sHoraEntrega = HoraEntrega.ToString("HH:mm:ss");
             if (iID== 0)
             {
+
+                if (idCliente == 0)
+                {
+                    string insertClienteQuery = $@"INSERT INTO Clientes (Nome, Telefone, Data) VALUES (
+                        '{Nome}', '{Fone}', '{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")}' )";
+                    DB.ExecutarComandoSQL(insertClienteQuery);
+                    string queryCount = $"SELECT Max(NrCli) as NrCli FROM Clientes ";
+                    DataTable dt = DB.ExecutarConsulta(queryCount); 
+                    idCliente = (int)dt.Rows[0]["NrCli"];
+                    glo.IdAdicionado = idCliente; 
+                }
                 string UID = glo.GenerateUID();
                 string insertQuery = $@"INSERT INTO Encomendas (idCliente, Data, UID, Descricao, Nome, Telefone, Compra, codigo, Valor, idForn, HoraEntrega, DtPrometida) 
                         VALUES ({idCliente}, Now, '{UID}', '{NovaDesc}', '{Nome}', '{Fone}', '{sCompra}', '{codigo}', {sValor}, {idFornNvProd}, '{sHoraEntrega}', '{sDtAgora}' )";
                 DB.ExecutarComandoSQL(insertQuery);
+
             }
             else
             {
@@ -78,7 +90,7 @@ namespace TeleBonifacio.dao
                 {
                     nmTb = "Produtos";
                 }
-                string SQL = $"SELECT * From {nmTb} WHERE ID = {iID}";
+                string SQL = $"SELECT * From {nmTb} WHERE ID = {iID} ";
                 DataTable encomendaData = DB.ExecutarConsulta(SQL);
                 DataRow encomendaRow = encomendaData.Rows[0];
                 int idForn = (encomendaRow["idForn"].ToString().Length == 0) ? 0 : Convert.ToInt16(encomendaRow["idForn"]);

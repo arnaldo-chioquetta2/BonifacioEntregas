@@ -50,6 +50,7 @@ namespace TeleBonifacio
             this.label5 = new System.Windows.Forms.Label();
             this.dtpHora = new System.Windows.Forms.DateTimePicker();
             this.label9 = new System.Windows.Forms.Label();
+            this.btFechar = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.SuspendLayout();
@@ -58,7 +59,7 @@ namespace TeleBonifacio
             // 
             this.btOK.Enabled = false;
             this.btOK.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btOK.Location = new System.Drawing.Point(147, 376);
+            this.btOK.Location = new System.Drawing.Point(66, 377);
             this.btOK.Name = "btOK";
             this.btOK.Size = new System.Drawing.Size(105, 39);
             this.btOK.TabIndex = 10;
@@ -152,6 +153,7 @@ namespace TeleBonifacio
             this.cmbCliente.Sorted = true;
             this.cmbCliente.TabIndex = 0;
             this.cmbCliente.SelectedIndexChanged += new System.EventHandler(this.cmbCliente_SelectedIndexChanged);
+            this.cmbCliente.TextChanged += new System.EventHandler(this.cmbCliente_TextChanged_1);
             // 
             // label1
             // 
@@ -280,11 +282,24 @@ namespace TeleBonifacio
             this.label9.TabIndex = 46;
             this.label9.Text = "Hora Esperada";
             // 
+            // btFechar
+            // 
+            this.btFechar.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btFechar.Location = new System.Drawing.Point(233, 377);
+            this.btFechar.Name = "btFechar";
+            this.btFechar.Size = new System.Drawing.Size(105, 39);
+            this.btFechar.TabIndex = 47;
+            this.btFechar.Text = "Fechar";
+            this.btFechar.UseVisualStyleBackColor = true;
+            this.btFechar.Click += new System.EventHandler(this.btFechar_Click);
+            // 
             // pesCliente
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(398, 440);
+            this.ControlBox = false;
+            this.Controls.Add(this.btFechar);
             this.Controls.Add(this.label9);
             this.Controls.Add(this.dtpHora);
             this.Controls.Add(this.groupBox2);
@@ -296,6 +311,7 @@ namespace TeleBonifacio
             this.Controls.Add(this.btOK);
             this.KeyPreview = true;
             this.MaximizeBox = false;
+            this.MinimizeBox = false;
             this.Name = "pesCliente";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Pesquisa de Clientes";
@@ -332,5 +348,6 @@ namespace TeleBonifacio
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.DateTimePicker dtpHora;
         private System.Windows.Forms.Label label9;
+        private System.Windows.Forms.Button btFechar;
     }
 }

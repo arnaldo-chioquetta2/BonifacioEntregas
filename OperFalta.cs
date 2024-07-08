@@ -40,8 +40,9 @@ namespace TeleBonifacio
         private bool AtualizarGridE = true;
         private bool AtualizarGridG = true;
         private int iID = 0;
-        private string UID = "";
+        // private string UID = "";
         private string caminhoDoArquivo = "";
+        private bool Instanciar = true;
 
         #region Inicializacao
 
@@ -471,7 +472,7 @@ namespace TeleBonifacio
                 txDescr.Text = Convert.ToString(selectedRow.Cells["Descricao"].Value);
                 txValor.Text = glo.fmtVlr(Convert.ToString(selectedRow.Cells["Valor"].Value));
                 cmbVendedor.SelectedValue = Convert.ToInt32(selectedRow.Cells["IDBalconista"].Value);
-                this.UID = Convert.ToString(selectedRow.Cells["UID"].Value);
+                //this.UID = Convert.ToString(selectedRow.Cells["UID"].Value);
                 try
                 {
                     cmbForn.SelectedValue = Convert.ToInt32(selectedRow.Cells["idForn"].Value);
@@ -1251,7 +1252,7 @@ namespace TeleBonifacio
                 txObs.Text = FiltraOZero(selectedRow.Cells["Obs"].Value);
                 txDescr.Text = Convert.ToString(selectedRow.Cells["Descricao"].Value);
                 txValor.Text = glo.fmtVlr(Convert.ToString(selectedRow.Cells["Valor"].Value));
-                this.UID = Convert.ToString(selectedRow.Cells["UID"].Value);
+                // this.UID = Convert.ToString(selectedRow.Cells["UID"].Value);
                 try
                 {
                     cmbForn.SelectedValue = Convert.ToInt32(selectedRow.Cells["idForn"].Value);
@@ -1353,7 +1354,7 @@ namespace TeleBonifacio
                 carregando = true;
                 DataGridViewRow selectedRow = grid.Rows[e.RowIndex];
                 this.iID = Convert.ToInt32(selectedRow.Cells["ID"].Value);
-                this.UID = Convert.ToString(selectedRow.Cells["UID"].Value);
+                //this.UID = Convert.ToString(selectedRow.Cells["UID"].Value);
                 try
                 {
                     cmbForn.SelectedValue = Convert.ToInt32(selectedRow.Cells["idForn"].Value);
@@ -1443,12 +1444,25 @@ namespace TeleBonifacio
                 string codigo = row.Cells["Codigo"].Value?.ToString() ?? "";
                 decimal valor = Convert.ToDecimal(row.Cells["Valor"].Value);
                 string descricao = row.Cells["Descricao"].Value?.ToString() ?? "";
-                bool Instanciar = false;
+                PrepareAndShowFpesCliente(Instanciar, nome, telefone, data, dataPrometida, codigo, valor, descricao);
+                if (FpesCliente.getAlterado())
+                {
+                    CarregaGridE();
+                    Limpar();                                       
+                }
+            }
+        }
+
+        private void PrepareAndShowFpesCliente(bool instanciar, string nome, string telefone, DateTime data, DateTime dataPrometida, string codigo, decimal valor, string descricao)
+        {
+            bool sair = false;
+            while (sair==false)
+            {
+                glo.Loga("Preparando FpesCliente");
                 if (FpesCliente == null)
                 {
                     glo.Loga("FpesCliente = null");
                     FpesCliente = new pesCliente();
-                    Instanciar = true;
                     if (dadosCli == null)
                     {
                         glo.Loga("dadosCli = null");
@@ -1458,35 +1472,25 @@ namespace TeleBonifacio
                     }
                 }
                 FpesCliente.setOperacao(2);
-                glo.Loga($"setId({this.iID})");
                 FpesCliente.setId(this.iID);
-                glo.Loga($"CarregarDados({nome}, {telefone}, {data}, {dataPrometida}, {codigo}, {valor}, {descricao})");
                 FpesCliente.CarregarDados(nome, telefone, data, dataPrometida, codigo, valor, descricao);
-                glo.Loga($"Instanciar = {Instanciar}");
-                if (Instanciar)
+                if (instanciar)
                 {
                     FpesCliente.Ativar();
                     FpesCliente.ShowDialog();
+                    sair = true;
                 }
                 else
-                {                    
+                {
                     try
                     {
-                        glo.Loga("Visible = true");
-                        FpesCliente.Visible = true;
+                        FpesCliente.Visible = true;                        
                     }
                     catch (Exception)
                     {
-                        glo.Loga("Ativar()");
-                        FpesCliente.Ativar();
-                        glo.Loga("ShowDialog()");
-                        FpesCliente.ShowDialog();
+                        FpesCliente = null;
+                        instanciar = true;
                     }                    
-                }
-                if (FpesCliente.getAlterado())
-                {
-                    CarregaGridE();
-                    Limpar();                                       
                 }
             }
         }
@@ -1597,7 +1601,7 @@ namespace TeleBonifacio
                 txMarca.Text = FiltraOZero(selectedRow.Cells["Marca"].Value);
                 txObs.Text = FiltraOZero(selectedRow.Cells["Obs"].Value);
                 txDescr.Text = Convert.ToString(selectedRow.Cells["Descricao"].Value);
-                this.UID = Convert.ToString(selectedRow.Cells["UID"].Value);
+                //this.UID = Convert.ToString(selectedRow.Cells["UID"].Value);
                 this.idCliente = Convert.ToInt16(selectedRow.Cells["idCliente"].Value);
                 try
                 {
