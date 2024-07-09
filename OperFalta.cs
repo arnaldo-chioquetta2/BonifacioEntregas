@@ -6,7 +6,6 @@ using System.IO;
 using System.Windows.Forms;
 using TeleBonifacio.dao;
 using TeleBonifacio.gen;
-using static System.Windows.Forms.DataGrid;
 
 namespace TeleBonifacio
 {
@@ -40,7 +39,6 @@ namespace TeleBonifacio
         private bool AtualizarGridE = true;
         private bool AtualizarGridG = true;
         private int iID = 0;
-        // private string UID = "";
         private string caminhoDoArquivo = "";
         private bool Instanciar = true;
 
@@ -141,9 +139,6 @@ namespace TeleBonifacio
         #region Adição
         private void btnAdicionar_Click(object sender, EventArgs e)
         {
-            // 
-
-
             if (btnAdicionar.Text != "Limpar")
             {
                 string codigo = txtCodigo.Text;
@@ -199,19 +194,13 @@ namespace TeleBonifacio
         }
 
         private void Limpar()
-        {
-            cmbTipos.SelectedIndex = 0;
+        {            
             cmbTipos.FlatStyle = FlatStyle.System;
-            cmbTipos.Tag = "";
             cmbForn.FlatStyle = FlatStyle.System;
-            cmbForn.SelectedIndex = 0;
+            cmbTipos.Tag = "";
             cmbForn.Tag = "";
-            Normaliza(txtCodigo, 1);
-            Normaliza(txMarca, 1);
-            Normaliza(txDescr, 1);
-            Normaliza(txObs, 1);
-            Normaliza(txQuantidade, 1);
-            Normaliza(txValor, 1);
+            cmbTipos.SelectedIndex = 0;
+            cmbForn.SelectedIndex = 0;            
             btnAdicionar.Text = "Adicionar";
             btnExcluir.Enabled = false;
             btAdicTpo.Enabled = false;
@@ -224,6 +213,21 @@ namespace TeleBonifacio
             Bakmarca = "";
             BakObs = "";
             txtCodigo.Focus();
+        }
+
+        private void NormalizaCampos()
+        {
+            Normaliza(txtCodigo, 0);
+            Normaliza(txMarca, 0);
+            Normaliza(txDescr, 0);
+            Normaliza(txObs, 0);
+            Normaliza(txQuantidade, 0);
+            Normaliza(txValor, 0);
+            cmbTipos.FlatStyle = FlatStyle.System;
+            cmbForn.FlatStyle = FlatStyle.System;
+            cmbTipos.Tag = "";
+            cmbForn.Tag = "";
+
         }
 
         private void Normaliza(TextBox obj, int tipo)
@@ -472,7 +476,6 @@ namespace TeleBonifacio
                 txDescr.Text = Convert.ToString(selectedRow.Cells["Descricao"].Value);
                 txValor.Text = glo.fmtVlr(Convert.ToString(selectedRow.Cells["Valor"].Value));
                 cmbVendedor.SelectedValue = Convert.ToInt32(selectedRow.Cells["IDBalconista"].Value);
-                //this.UID = Convert.ToString(selectedRow.Cells["UID"].Value);
                 try
                 {
                     cmbForn.SelectedValue = Convert.ToInt32(selectedRow.Cells["idForn"].Value);
@@ -735,8 +738,8 @@ namespace TeleBonifacio
                 }
             }
             if (grid.SelectedRows.Count > 1)
-            {
-                Limpar();
+            {                
+                NormalizaCampos();
             }
         }
 
@@ -965,6 +968,7 @@ namespace TeleBonifacio
 
         private void button2_Click(object sender, EventArgs e)
         {
+            button2.Tag = "F";
             glo.Loga("Filtro");
             int iForn = cmbForn.SelectedIndex;
             BakidForn = 0;
@@ -1040,6 +1044,7 @@ namespace TeleBonifacio
 
         private void btLmpFiltro_Click(object sender, EventArgs e)
         {
+            button2.Tag = "";
             btLmpFiltro.Enabled = false; 
             Limpar();
             BakidTipo = 0;
@@ -1252,7 +1257,6 @@ namespace TeleBonifacio
                 txObs.Text = FiltraOZero(selectedRow.Cells["Obs"].Value);
                 txDescr.Text = Convert.ToString(selectedRow.Cells["Descricao"].Value);
                 txValor.Text = glo.fmtVlr(Convert.ToString(selectedRow.Cells["Valor"].Value));
-                // this.UID = Convert.ToString(selectedRow.Cells["UID"].Value);
                 try
                 {
                     cmbForn.SelectedValue = Convert.ToInt32(selectedRow.Cells["idForn"].Value);
@@ -1601,7 +1605,6 @@ namespace TeleBonifacio
                 txMarca.Text = FiltraOZero(selectedRow.Cells["Marca"].Value);
                 txObs.Text = FiltraOZero(selectedRow.Cells["Obs"].Value);
                 txDescr.Text = Convert.ToString(selectedRow.Cells["Descricao"].Value);
-                //this.UID = Convert.ToString(selectedRow.Cells["UID"].Value);
                 this.idCliente = Convert.ToInt16(selectedRow.Cells["idCliente"].Value);
                 try
                 {
