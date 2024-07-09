@@ -212,6 +212,12 @@ namespace TeleBonifacio
             Bakquantidade = "";
             Bakmarca = "";
             BakObs = "";
+            Normaliza(txtCodigo, 1);
+            Normaliza(txMarca, 1);
+            Normaliza(txDescr, 1);
+            Normaliza(txObs, 1);
+            Normaliza(txQuantidade, 1);
+            Normaliza(txValor, 1);
             txtCodigo.Focus();
         }
 

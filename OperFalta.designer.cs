@@ -329,7 +329,7 @@ namespace TeleBonifacio
             this.txValor.Location = new System.Drawing.Point(824, 20);
             this.txValor.Name = "txValor";
             this.txValor.Size = new System.Drawing.Size(62, 21);
-            this.txValor.TabIndex = 50;
+            this.txValor.TabIndex = 5;
             this.txValor.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.txValor.Visible = false;
             this.txValor.KeyUp += new System.Windows.Forms.KeyEventHandler(this.txValor_KeyUp);
@@ -393,7 +393,7 @@ namespace TeleBonifacio
             this.cmbVendedor.Location = new System.Drawing.Point(972, 18);
             this.cmbVendedor.Name = "cmbVendedor";
             this.cmbVendedor.Size = new System.Drawing.Size(101, 23);
-            this.cmbVendedor.TabIndex = 5;
+            this.cmbVendedor.TabIndex = 6;
             this.cmbVendedor.ValueMember = "Id";
             this.cmbVendedor.SelectedIndexChanged += new System.EventHandler(this.cmbVendedor_SelectedIndexChanged);
             // 
@@ -474,7 +474,7 @@ namespace TeleBonifacio
             this.btnAdicionar.Location = new System.Drawing.Point(1077, 19);
             this.btnAdicionar.Name = "btnAdicionar";
             this.btnAdicionar.Size = new System.Drawing.Size(75, 23);
-            this.btnAdicionar.TabIndex = 6;
+            this.btnAdicionar.TabIndex = 7;
             this.btnAdicionar.Text = "Adicionar";
             this.btnAdicionar.Click += new System.EventHandler(this.btnAdicionar_Click);
             // 
