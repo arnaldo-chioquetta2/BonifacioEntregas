@@ -51,21 +51,6 @@ namespace TeleBonifacio
             }
         }
 
-        private void PreparaGrid()
-        {
-            dataGrid1.Columns[0].Visible = false;
-            dataGrid1.Columns[1].Visible = false;
-            dataGrid1.Columns[2].Width = 75;
-            dataGrid1.Columns[3].Width = 110;
-            dataGrid1.Columns[4].Width = 70;
-            dataGrid1.Columns[5].Width = 70;
-            dataGrid1.Columns[6].Width = 70;
-            dataGrid1.Columns[7].Width = 70;
-            dataGrid1.Columns[8].Width = 70; // .Visible = false;
-            dataGrid1.Columns[9].Width = 70;
-            dataGrid1.Invalidate();
-        }
-
         #endregion
 
         #region Lançamentos
@@ -274,6 +259,25 @@ namespace TeleBonifacio
 
         #region Grid
 
+        private void PreparaGrid()
+        {
+            dataGrid1.Columns[0].Visible = false;
+            dataGrid1.Columns[1].Visible = false;
+            dataGrid1.Columns[2].Width = 75;
+            dataGrid1.Columns[3].Width = 110;
+            dataGrid1.Columns[4].Width = 70;
+            dataGrid1.Columns[5].Width = 70;
+            dataGrid1.Columns[6].Width = 70;
+            dataGrid1.Columns[7].Width = 70;
+            dataGrid1.Columns[8].Width = 70; 
+            dataGrid1.Columns[9].Width = 70;
+            dataGrid1.Columns[10].Width = 70;
+            dataGrid1.Columns[11].Width = 70;
+            dataGrid1.Columns[12].Visible = false;  // idFunc
+            dataGrid1.Columns[13].Width = 70;       // Total
+            dataGrid1.Invalidate();
+        }
+
         private void Mostra()
         {
             this.carregando = true;
@@ -304,20 +308,15 @@ namespace TeleBonifacio
                 {
                     rowData[i] = row[i].ToString();
                 }
-
-                // Processamento dos horários de trabalho e café
-                TimeSpan inMan = ProcHora(rowData[4]);  // Entrada pela manhã
-                TimeSpan fmMan = ProcHora(rowData[7]);  // Saída pela manhã
+                TimeSpan inMan = ProcHora(rowData[4]);      // Entrada pela manhã
                 TimeSpan inCafeMan = ProcHora(rowData[5]);  // Início do café da manhã
                 TimeSpan fmCafeMan = ProcHora(rowData[6]);  // Fim do café da manhã
-                TimeSpan inTrd = ProcHora(rowData[8]);  // Entrada pela tarde
-                TimeSpan fnTrd = ProcHora(rowData[11]); // Saída pela tarde
+                TimeSpan fmMan = ProcHora(rowData[7]);      // Saída pela manhã
+                TimeSpan inTrd = ProcHora(rowData[8]);      // Entrada pela tarde
                 TimeSpan inCafeTrd = ProcHora(rowData[9]);  // Início do café da tarde
                 TimeSpan fmCafeTrd = ProcHora(rowData[10]); // Fim do café da tarde
-
+                TimeSpan fnTrd = ProcHora(rowData[11]);     // Saída pela tarde                
                 TimeSpan totalDia = TimeSpan.Zero;
-
-                // 1) Inicio da manhã até o inicio do café da manhã (só se tiver inicio do café da manhã)
                 if (inMan != TimeSpan.Zero && (inCafeMan != TimeSpan.Zero || fmMan != TimeSpan.Zero))
                 {
                     if (inCafeMan != TimeSpan.Zero)
@@ -325,8 +324,6 @@ namespace TeleBonifacio
                     else
                         totalDia += fmMan - inMan;
                 }
-
-                // 2) Fim do café da manhã até a saída da manhã (só se tiver saída da manhã)
                 if (fmCafeMan != TimeSpan.Zero && fmMan != TimeSpan.Zero)
                 {
                     totalDia += fmMan - fmCafeMan;
@@ -335,8 +332,6 @@ namespace TeleBonifacio
                 {
                     totalDia += fmMan - inCafeMan;
                 }
-
-                // 3) Inicio da tarde até o inicio do café da tarde (só se tiver inicio de café da tarde)
                 if (inTrd != TimeSpan.Zero && (inCafeTrd != TimeSpan.Zero || fnTrd != TimeSpan.Zero))
                 {
                     if (inCafeTrd != TimeSpan.Zero)
@@ -344,8 +339,6 @@ namespace TeleBonifacio
                     else
                         totalDia += fnTrd - inTrd;
                 }
-
-                // 4) Fim do café da tarde até fim do turno (só se tiver fim do turno)
                 if (fmCafeTrd != TimeSpan.Zero && fnTrd != TimeSpan.Zero)
                 {
                     totalDia += fnTrd - fmCafeTrd;
@@ -356,12 +349,9 @@ namespace TeleBonifacio
                 }
 
                 totalzao += totalDia;
-
-                // Calcula o total de horas e minutos corretamente, mesmo para valores acima de 24 horas
-                int totalHoras = (int)totalDia.TotalHours; // TotalHours inclui horas completas de todos os minutos
+                int totalHoras = (int)totalDia.TotalHours; 
                 int totalMinutos = totalDia.Minutes;
-
-                rowData[12] = $"{totalHoras:00}:{totalMinutos:00}";  // Exibição correta do total
+                rowData[13] = $"{totalHoras:00}:{totalMinutos:00}";  
                 dataGrid1.Rows.Add(rowData);
             }
             if (idFunc > 0)
@@ -371,7 +361,7 @@ namespace TeleBonifacio
                 {
                     totalRowData[i] = "";
                 }
-                totalRowData[12] = totalzao.ToString(@"hh\:mm");
+                totalRowData[13] = totalzao.ToString(@"hh\:mm");
                 dataGrid1.Rows.Add(totalRowData);
             }
         this.carregando = false;
@@ -422,7 +412,6 @@ namespace TeleBonifacio
                     txInTrd.Text = selectedRow.Cells["InTrd"].Value.ToString();
                     txFnTrd.Text = selectedRow.Cells["FnTrd"].Value.ToString();
                 }
-
             }
         }
 
