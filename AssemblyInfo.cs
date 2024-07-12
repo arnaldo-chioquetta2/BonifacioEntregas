@@ -11,8 +11,9 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyCulture("")]
 [assembly: ComVisible(false)]
 [assembly: Guid("308c57af-e663-456d-8a2c-188bbd61423d")]
-[assembly: AssemblyVersion("2.3.3.0")]
-[assembly: AssemblyFileVersion("2.3.3.0")]
+[assembly: AssemblyVersion("2.3.4.0")]
+[assembly: AssemblyFileVersion("2.3.4.0")]
+// 2.3.4 Campos de folga do café
 // 2.3.3 Limpeza dos campos depois da adição
 // 2.3.2 Ajustes nas operaçoes de Atualização e Compra
 // 2.3.1 Ajustes nas encomendas

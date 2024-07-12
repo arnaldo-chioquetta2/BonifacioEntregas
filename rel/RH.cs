@@ -45,6 +45,9 @@ namespace TeleBonifacio.rel
             int idFunc = Convert.ToInt32(cmbVendedor.SelectedValue.ToString());
             DataTable dados = cRHDAO.getDados(DT1, DT2, idFunc);
             relcaixa = new List<Lanctos>();
+
+            TimeSpan totalzao = TimeSpan.Zero;
+
             foreach (DataRow row in dados.Rows)
             {
                 Lanctos lancto = new Lanctos
@@ -57,16 +60,83 @@ namespace TeleBonifacio.rel
                     FmMan = row["FmMan"].ToString(),
                     InTrd = row["InTrd"].ToString(),
                     FnTrd = row["FnTrd"].ToString(),
+                    InCafeMan = row["InCafeMan"].ToString(),
+                    FmCafeMan = row["FmCafeMan"].ToString(),
+                    InCafeTrd = row["InCafeTrd"].ToString(),
+                    FmCafeTrd = row["FmCafeTrd"].ToString(),
                     FuncID = Convert.ToInt32(row["FuncID"])
                 };
+
                 TimeSpan inMan = ProcHora(lancto.InMan);
                 TimeSpan fmMan = ProcHora(lancto.FmMan);
+                TimeSpan inCafeMan = ProcHora(lancto.InCafeMan);
+                TimeSpan fmCafeMan = ProcHora(lancto.FmCafeMan);
                 TimeSpan inTrd = ProcHora(lancto.InTrd);
                 TimeSpan fnTrd = ProcHora(lancto.FnTrd);
-                TimeSpan total = (fmMan - inMan) + (fnTrd - inTrd);
-                lancto.Total = total.ToString(@"hh\:mm");
+                TimeSpan inCafeTrd = ProcHora(lancto.InCafeTrd);
+                TimeSpan fmCafeTrd = ProcHora(lancto.FmCafeTrd);
+
+                TimeSpan totalDia = TimeSpan.Zero;
+
+                // 1) Inicio da manhã até o inicio do café da manhã (só se tiver inicio do café da manhã)
+                if (inMan != TimeSpan.Zero && (inCafeMan != TimeSpan.Zero || fmMan != TimeSpan.Zero))
+                {
+                    if (inCafeMan != TimeSpan.Zero)
+                        totalDia += inCafeMan - inMan;
+                    else
+                        totalDia += fmMan - inMan;
+                }
+
+                // 2) Fim do café da manhã até a saída da manhã (só se tiver saída da manhã)
+                if (fmCafeMan != TimeSpan.Zero && fmMan != TimeSpan.Zero)
+                {
+                    totalDia += fmMan - fmCafeMan;
+                }
+                else if (fmMan != TimeSpan.Zero && inCafeMan != TimeSpan.Zero)
+                {
+                    totalDia += fmMan - inCafeMan;
+                }
+
+                // 3) Inicio da tarde até o inicio do café da tarde (só se tiver inicio de café da tarde)
+                if (inTrd != TimeSpan.Zero && (inCafeTrd != TimeSpan.Zero || fnTrd != TimeSpan.Zero))
+                {
+                    if (inCafeTrd != TimeSpan.Zero)
+                        totalDia += inCafeTrd - inTrd;
+                    else
+                        totalDia += fnTrd - inTrd;
+                }
+
+                // 4) Fim do café da tarde até fim do turno (só se tiver fim do turno)
+                if (fmCafeTrd != TimeSpan.Zero && fnTrd != TimeSpan.Zero)
+                {
+                    totalDia += fnTrd - fmCafeTrd;
+                }
+                else if (fnTrd != TimeSpan.Zero && inCafeTrd != TimeSpan.Zero)
+                {
+                    totalDia += fnTrd - inCafeTrd;
+                }
+
+                totalzao += totalDia;
+
+                // Calcula o total de horas e minutos corretamente, mesmo para valores acima de 24 horas
+                int totalHoras = (int)totalDia.TotalHours; // TotalHours inclui horas completas de todos os minutos
+                int totalMinutos = totalDia.Minutes;
+
+                lancto.Total = $"{totalHoras:D2}:{totalMinutos:D2}";
                 relcaixa.Add(lancto);
             }
+
+            //if (idFunc > 0)
+            //{
+            //    string[] totalRowData = new string[dados.Columns.Count + 1];
+            //    for (int i = 0; i < dados.Columns.Count; i++)
+            //    {
+            //        totalRowData[i] = "";
+            //    }
+            //    totalRowData[12] = $"{(int)totalzao.TotalHours:D2}:{totalzao.Minutes:D2}";
+            //    dataGrid1.Rows.Add(totalRowData);
+            //}
+
             GerarRelCaixa();
             this.carregando = false;
         }
@@ -79,12 +149,13 @@ namespace TeleBonifacio.rel
             string dDatas = $"Período: {dtpDataIN.Value.ToString("dd/MM/yyyy")} a {dtnDtFim.Value.ToString("dd/MM/yyyy")}";
             sb.AppendLine(glo.ComplStr(dDatas, 57, 1));
             sb.AppendLine();
-            sb.AppendLine("Data       Nome            InMan FmMan InTrd FnTrd Total");
+            sb.AppendLine("Data       Nome            InMan InCafe FmCafe FmMan InTrd InCafe FmCafe FnTrd  Total");
             TimeSpan totalzao = TimeSpan.Zero;
             TimeSpan totalMensal = TimeSpan.Zero;
             int currentMonth = -1;
             bool firstEntry = true;
             bool isFirstMonth = true;
+
             foreach (Lanctos lancto in relcaixa)
             {
                 if (lancto.Data.DayOfWeek != DayOfWeek.Sunday)
@@ -111,7 +182,7 @@ namespace TeleBonifacio.rel
                     totalzao += totalDoDia;
                 }
             }
-            if (currentMonth != -1) 
+            if (currentMonth != -1)
             {
                 sb.AppendLine($"Total do mês: {totalMensal.TotalHours:n0} horas {totalMensal.Minutes} minutos");
             }
@@ -122,23 +193,60 @@ namespace TeleBonifacio.rel
             textBox1.ScrollToCaret();
         }
 
+        // 12/07/2024         SHIRLEI 08:01 09:44   10:01 12:02 13:03  16:33 16:45  18:00  08:29
+
         private TimeSpan CalcularTotalDoDia(Lanctos lancto)
         {
-            TimeSpan totalDoDia = TimeSpan.Zero;
-            TimeSpan tinMan = ParseTimeString(lancto.InMan);
-            TimeSpan tfmMan = ParseTimeString(lancto.FmMan);
-            TimeSpan tinTrd = ParseTimeString(lancto.InTrd);
-            TimeSpan tfnTrd = ParseTimeString(lancto.FnTrd);
-            if (tinMan != TimeSpan.Zero && tfmMan != TimeSpan.Zero)
+            TimeSpan inMan = ProcHora(lancto.InMan);
+            TimeSpan fmMan = ProcHora(lancto.FmMan);
+            TimeSpan inCafeMan = ProcHora(lancto.InCafeMan);
+            TimeSpan fmCafeMan = ProcHora(lancto.FmCafeMan);
+            TimeSpan inTrd = ProcHora(lancto.InTrd);
+            TimeSpan fnTrd = ProcHora(lancto.FnTrd);
+            TimeSpan inCafeTrd = ProcHora(lancto.InCafeTrd);
+            TimeSpan fmCafeTrd = ProcHora(lancto.FmCafeTrd);
+
+            TimeSpan totalDia = TimeSpan.Zero;
+
+            // 1) Inicio da manhã até o inicio do café da manhã (só se tiver inicio do café da manhã)
+            if (inMan != TimeSpan.Zero && (inCafeMan != TimeSpan.Zero || fmMan != TimeSpan.Zero))
             {
-                totalDoDia += tfmMan - tinMan;
+                if (inCafeMan != TimeSpan.Zero)
+                    totalDia += inCafeMan - inMan;
+                else
+                    totalDia += fmMan - inMan;
             }
-            if (tinTrd != TimeSpan.Zero && tfnTrd != TimeSpan.Zero)
+
+            // 2) Fim do café da manhã até a saída da manhã (só se tiver saída da manhã)
+            if (fmCafeMan != TimeSpan.Zero && fmMan != TimeSpan.Zero)
             {
-                totalDoDia += tfnTrd - tinTrd;
+                totalDia += fmMan - fmCafeMan;
             }
-            Console.WriteLine(totalDoDia);
-            return totalDoDia;
+            else if (fmMan != TimeSpan.Zero && inCafeMan != TimeSpan.Zero)
+            {
+                totalDia += fmMan - inCafeMan;
+            }
+
+            // 3) Inicio da tarde até o inicio do café da tarde (só se tiver inicio de café da tarde)
+            if (inTrd != TimeSpan.Zero && (inCafeTrd != TimeSpan.Zero || fnTrd != TimeSpan.Zero))
+            {
+                if (inCafeTrd != TimeSpan.Zero)
+                    totalDia += inCafeTrd - inTrd;
+                else
+                    totalDia += fnTrd - inTrd;
+            }
+
+            // 4) Fim do café da tarde até fim do turno (só se tiver fim do turno)
+            if (fmCafeTrd != TimeSpan.Zero && fnTrd != TimeSpan.Zero)
+            {
+                totalDia += fnTrd - fmCafeTrd;
+            }
+            else if (fnTrd != TimeSpan.Zero && inCafeTrd != TimeSpan.Zero)
+            {
+                totalDia += fnTrd - inCafeTrd;
+            }
+
+            return totalDia;
         }
 
         private TimeSpan ParseTimeString(string timeString)
@@ -151,26 +259,30 @@ namespace TeleBonifacio.rel
             string Data = glo.ComplStr(lancto.Data.ToString("dd/MM/yyyy"), 10, 2);
             string Nome = glo.ComplStr(lancto.Nome, 15, 2);
             string InMan = glo.ComplStr(lancto.InMan, 5, 2);
+            string InCafeMan = glo.ComplStr(lancto.InCafeMan, 5, 2);
+            string FmCafeMan = glo.ComplStr(lancto.FmCafeMan, 5, 2);
             string FmMan = glo.ComplStr(lancto.FmMan, 5, 2);
             string InTrd = glo.ComplStr(lancto.InTrd, 5, 2);
+            string InCafeTrd = glo.ComplStr(lancto.InCafeTrd, 5, 2);
+            string FmCafeTrd = glo.ComplStr(lancto.FmCafeTrd, 5, 2);
             string FnTrd = glo.ComplStr(lancto.FnTrd, 5, 2);
             string Total = glo.ComplStr(lancto.Total, 5, 2);
 
-            if (lancto.InMan.Length == 0 && lancto.InTrd.Length == 0)
+            if (string.IsNullOrEmpty(lancto.InMan) && string.IsNullOrEmpty(lancto.InTrd))
             {
-                sb.AppendLine($"{Data} {Nome}         F A L T A");
+                sb.AppendLine($"{Data} {Nome}                      F A L T A");
             }
-            else if (lancto.InMan.Length == 0)
+            else if (string.IsNullOrEmpty(lancto.InMan))
             {
-                sb.AppendLine($"{Data} {Nome}  F A L T A  {InTrd} {FnTrd} {Total}");
+                sb.AppendLine($"{Data} {Nome}        F A L T A          {InTrd} {InCafeTrd} {FmCafeTrd} {FnTrd}    {Total}");
             }
-            else if (lancto.InTrd.Length == 0)
+            else if (string.IsNullOrEmpty(lancto.InTrd))
             {
-                sb.AppendLine($"{Data} {Nome} {InMan} {FmMan}  F A L T A  {Total}");
+                sb.AppendLine($"{Data} {Nome} {InMan} {InCafeMan} {FmCafeMan}   {FmMan}          F A L T A         {Total}");
             }
             else
             {
-                sb.AppendLine($"{Data} {Nome} {InMan} {FmMan} {InTrd} {FnTrd} {Total}");
+                sb.AppendLine($"{Data} {Nome} {InMan} {InCafeMan} {FmCafeMan}   {FmMan} {InTrd} {InCafeTrd} {FmCafeTrd} {FnTrd}    {Total}");
             }
         }
 
@@ -226,7 +338,7 @@ namespace TeleBonifacio.rel
             }
         }
 
-        private class Lanctos
+        public class Lanctos
         {
             public int ID { get; set; }
             public string UID { get; set; }
@@ -236,6 +348,10 @@ namespace TeleBonifacio.rel
             public string FmMan { get; set; }
             public string InTrd { get; set; }
             public string FnTrd { get; set; }
+            public string InCafeMan { get; set; }
+            public string FmCafeMan { get; set; }
+            public string InCafeTrd { get; set; }
+            public string FmCafeTrd { get; set; }
             public int FuncID { get; set; }
             public string Total { get; set; }
         }

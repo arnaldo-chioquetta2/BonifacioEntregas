@@ -32,15 +32,19 @@ namespace TeleBonifacio.dao
         public DataTable getDados(DateTime? DT1, DateTime? DT2, int idFunc)
         {
             StringBuilder query = new StringBuilder();
-        query.Append($@"Select Horarios.ID, Horarios.uid, 
+            query.Append($@"SELECT Horarios.ID, Horarios.uid, 
                 Horarios.Data, Vendedores.Nome, 
                 IIF(FORMAT(Horarios.txInMan, 'hh:mm') = '00:00', '', FORMAT(Horarios.txInMan, 'hh:mm')) AS InMan,
-                IIF(FORMAT(Horarios.txFmMan, 'hh:mm') = '00:00', '', FORMAT(Horarios.txFmMan, 'hh:mm')) AS FmMan,
+                IIF(FORMAT(Horarios.txInCafeMan, 'hh:mm') = '00:00', '', FORMAT(Horarios.txInCafeMan, 'hh:mm')) AS InCafeMan,
+                IIF(FORMAT(Horarios.txFmCafeMan, 'hh:mm') = '00:00', '', FORMAT(Horarios.txFmCafeMan, 'hh:mm')) AS FmCafeMan,
+                IIF(FORMAT(Horarios.txFmMan, 'hh:mm') = '00:00', '', FORMAT(Horarios.txFmMan, 'hh:mm')) AS FmMan,                                
                 IIF(FORMAT(Horarios.txInTrd, 'hh:mm') = '00:00', '', FORMAT(Horarios.txInTrd, 'hh:mm')) AS InTrd,
+                IIF(FORMAT(Horarios.txInCafeTrd, 'hh:mm') = '00:00', '', FORMAT(Horarios.txInCafeTrd, 'hh:mm')) AS InCafeTrd,
+                IIF(FORMAT(Horarios.txFmCafeTrd, 'hh:mm') = '00:00', '', FORMAT(Horarios.txFmCafeTrd, 'hh:mm')) AS FmCafeTrd,
                 IIF(FORMAT(Horarios.txFnTrd, 'hh:mm') = '00:00', '', FORMAT(Horarios.txFnTrd, 'hh:mm')) AS FnTrd,
                 Vendedores.ID as FuncID
-            From Horarios
-            Inner Join Vendedores on Vendedores.ID = Horarios.idFunc ");
+            FROM Horarios
+            INNER JOIN Vendedores ON Vendedores.ID = Horarios.idFunc ");
             DateTime dataInicio = DT1.Value.Date;
             DateTime dataFim = DT2.Value.Date;
             string dataInicioStr = dataInicio.ToString("MM/dd/yyyy HH:mm:ss");

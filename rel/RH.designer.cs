@@ -60,7 +60,7 @@ namespace TeleBonifacio.rel
             this.textBox1.Name = "textBox1";
             this.textBox1.ReadOnly = true;
             this.textBox1.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.textBox1.Size = new System.Drawing.Size(682, 401);
+            this.textBox1.Size = new System.Drawing.Size(997, 401);
             this.textBox1.TabIndex = 11;
             // 
             // panel1
@@ -75,7 +75,7 @@ namespace TeleBonifacio.rel
             this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(682, 49);
+            this.panel1.Size = new System.Drawing.Size(997, 49);
             this.panel1.TabIndex = 10;
             // 
             // cmbVendedor
@@ -94,7 +94,7 @@ namespace TeleBonifacio.rel
             this.label5.AutoSize = true;
             this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F);
             this.label5.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.label5.Location = new System.Drawing.Point(252, 15);
+            this.label5.Location = new System.Drawing.Point(409, 15);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(99, 16);
             this.label5.TabIndex = 48;
@@ -103,7 +103,7 @@ namespace TeleBonifacio.rel
             // btImprimir
             // 
             this.btImprimir.Anchor = System.Windows.Forms.AnchorStyles.Right;
-            this.btImprimir.Location = new System.Drawing.Point(599, 12);
+            this.btImprimir.Location = new System.Drawing.Point(914, 12);
             this.btImprimir.Name = "btImprimir";
             this.btImprimir.Size = new System.Drawing.Size(75, 23);
             this.btImprimir.TabIndex = 47;
@@ -113,7 +113,7 @@ namespace TeleBonifacio.rel
             // btnFiltrar
             // 
             this.btnFiltrar.Anchor = System.Windows.Forms.AnchorStyles.Right;
-            this.btnFiltrar.Location = new System.Drawing.Point(518, 12);
+            this.btnFiltrar.Location = new System.Drawing.Point(833, 12);
             this.btnFiltrar.Name = "btnFiltrar";
             this.btnFiltrar.Size = new System.Drawing.Size(75, 23);
             this.btnFiltrar.TabIndex = 46;
@@ -144,7 +144,7 @@ namespace TeleBonifacio.rel
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(682, 450);
+            this.ClientSize = new System.Drawing.Size(997, 450);
             this.Controls.Add(this.textBox1);
             this.Controls.Add(this.panel1);
             this.MaximizeBox = false;

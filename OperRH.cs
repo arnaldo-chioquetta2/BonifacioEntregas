@@ -61,7 +61,7 @@ namespace TeleBonifacio
             dataGrid1.Columns[5].Width = 70;
             dataGrid1.Columns[6].Width = 70;
             dataGrid1.Columns[7].Width = 70;
-            dataGrid1.Columns[8].Visible = false;
+            dataGrid1.Columns[8].Width = 70; // .Visible = false;
             dataGrid1.Columns[9].Width = 70;
             dataGrid1.Invalidate();
         }
@@ -294,7 +294,9 @@ namespace TeleBonifacio
                 dataGrid1.Columns.Add("Total", "Total");
             }            
             this.AdicCol = true;
-            TimeSpan totalzao = TimeSpan.Zero;            
+
+            TimeSpan totalzao = TimeSpan.Zero;
+
             foreach (DataRow row in dados.Rows)
             {
                 string[] rowData = new string[dados.Columns.Count + 1];
@@ -302,28 +304,78 @@ namespace TeleBonifacio
                 {
                     rowData[i] = row[i].ToString();
                 }
-                TimeSpan inMan = ProcHora(rowData[4]);
-                TimeSpan fmMan = ProcHora(rowData[5]);
-                TimeSpan inTrd = ProcHora(rowData[6]);
-                TimeSpan fnTrd = ProcHora(rowData[7]);
-                TimeSpan total = fmMan - inMan; 
-                total += fnTrd - inTrd;
-                totalzao += total;
-                rowData[9] = total.ToString(@"hh\:mm");
+
+                // Processamento dos horários de trabalho e café
+                TimeSpan inMan = ProcHora(rowData[4]);  // Entrada pela manhã
+                TimeSpan fmMan = ProcHora(rowData[7]);  // Saída pela manhã
+                TimeSpan inCafeMan = ProcHora(rowData[5]);  // Início do café da manhã
+                TimeSpan fmCafeMan = ProcHora(rowData[6]);  // Fim do café da manhã
+                TimeSpan inTrd = ProcHora(rowData[8]);  // Entrada pela tarde
+                TimeSpan fnTrd = ProcHora(rowData[11]); // Saída pela tarde
+                TimeSpan inCafeTrd = ProcHora(rowData[9]);  // Início do café da tarde
+                TimeSpan fmCafeTrd = ProcHora(rowData[10]); // Fim do café da tarde
+
+                TimeSpan totalDia = TimeSpan.Zero;
+
+                // 1) Inicio da manhã até o inicio do café da manhã (só se tiver inicio do café da manhã)
+                if (inMan != TimeSpan.Zero && (inCafeMan != TimeSpan.Zero || fmMan != TimeSpan.Zero))
+                {
+                    if (inCafeMan != TimeSpan.Zero)
+                        totalDia += inCafeMan - inMan;
+                    else
+                        totalDia += fmMan - inMan;
+                }
+
+                // 2) Fim do café da manhã até a saída da manhã (só se tiver saída da manhã)
+                if (fmCafeMan != TimeSpan.Zero && fmMan != TimeSpan.Zero)
+                {
+                    totalDia += fmMan - fmCafeMan;
+                }
+                else if (fmMan != TimeSpan.Zero && inCafeMan != TimeSpan.Zero)
+                {
+                    totalDia += fmMan - inCafeMan;
+                }
+
+                // 3) Inicio da tarde até o inicio do café da tarde (só se tiver inicio de café da tarde)
+                if (inTrd != TimeSpan.Zero && (inCafeTrd != TimeSpan.Zero || fnTrd != TimeSpan.Zero))
+                {
+                    if (inCafeTrd != TimeSpan.Zero)
+                        totalDia += inCafeTrd - inTrd;
+                    else
+                        totalDia += fnTrd - inTrd;
+                }
+
+                // 4) Fim do café da tarde até fim do turno (só se tiver fim do turno)
+                if (fmCafeTrd != TimeSpan.Zero && fnTrd != TimeSpan.Zero)
+                {
+                    totalDia += fnTrd - fmCafeTrd;
+                }
+                else if (fnTrd != TimeSpan.Zero && inCafeTrd != TimeSpan.Zero)
+                {
+                    totalDia += fnTrd - inCafeTrd;
+                }
+
+                totalzao += totalDia;
+
+                // Calcula o total de horas e minutos corretamente, mesmo para valores acima de 24 horas
+                int totalHoras = (int)totalDia.TotalHours; // TotalHours inclui horas completas de todos os minutos
+                int totalMinutos = totalDia.Minutes;
+
+                rowData[12] = $"{totalHoras:00}:{totalMinutos:00}";  // Exibição correta do total
                 dataGrid1.Rows.Add(rowData);
             }
-            if (idFunc>0)
+            if (idFunc > 0)
             {
                 string[] totalRowData = new string[dados.Columns.Count + 1];
                 for (int i = 0; i < dados.Columns.Count; i++)
                 {
                     totalRowData[i] = "";
                 }
-                totalRowData[9] = totalzao.TotalHours.ToString("N2");
+                totalRowData[12] = totalzao.ToString(@"hh\:mm");
                 dataGrid1.Rows.Add(totalRowData);
             }
-            this.carregando = false;
-        }
+        this.carregando = false;
+    }
 
         private void btnFiltrar_Click(object sender, EventArgs e)
         {
@@ -381,6 +433,31 @@ namespace TeleBonifacio
             rel.RH fRel = new rel.RH();
             fRel.SetDados(cmbVendedor.SelectedIndex, dtpDataIN.Value, dtnDtFim.Value);
             fRel.Show();
+        }
+
+        private void dtpHorario_ValueChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void txInMan_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void txFmMan_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void txInTrd_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void txFnTrd_TextChanged(object sender, EventArgs e)
+        {
+
         }
     }
 
