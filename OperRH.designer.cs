@@ -29,6 +29,7 @@ namespace TeleBonifacio
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(OperRH));
             this.lblTitulo = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
@@ -48,6 +49,11 @@ namespace TeleBonifacio
             this.dtnDtFim = new System.Windows.Forms.DateTimePicker();
             this.dtpDataIN = new System.Windows.Forms.DateTimePicker();
             this.dataGrid1 = new System.Windows.Forms.DataGridView();
+            this.txInCafeMan = new System.Windows.Forms.TextBox();
+            this.txFmCafeMan = new System.Windows.Forms.TextBox();
+            this.txInCafeTrd = new System.Windows.Forms.TextBox();
+            this.txFmCafeTrd = new System.Windows.Forms.TextBox();
+            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGrid1)).BeginInit();
             this.SuspendLayout();
@@ -64,6 +70,10 @@ namespace TeleBonifacio
             // 
             // panel1
             // 
+            this.panel1.Controls.Add(this.txFmCafeTrd);
+            this.panel1.Controls.Add(this.txInCafeTrd);
+            this.panel1.Controls.Add(this.txFmCafeMan);
+            this.panel1.Controls.Add(this.txInCafeMan);
             this.panel1.Controls.Add(this.btExcluir);
             this.panel1.Controls.Add(this.dtpHorario);
             this.panel1.Controls.Add(this.btGravar);
@@ -90,7 +100,7 @@ namespace TeleBonifacio
             // 
             this.btExcluir.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.btExcluir.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(128)))));
-            this.btExcluir.Location = new System.Drawing.Point(346, 45);
+            this.btExcluir.Location = new System.Drawing.Point(142, 46);
             this.btExcluir.Name = "btExcluir";
             this.btExcluir.Size = new System.Drawing.Size(75, 23);
             this.btExcluir.TabIndex = 56;
@@ -103,10 +113,10 @@ namespace TeleBonifacio
             // 
             this.dtpHorario.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
             this.dtpHorario.Format = System.Windows.Forms.DateTimePickerFormat.Short;
-            this.dtpHorario.Location = new System.Drawing.Point(518, 45);
+            this.dtpHorario.Location = new System.Drawing.Point(314, 46);
             this.dtpHorario.Name = "dtpHorario";
             this.dtpHorario.Size = new System.Drawing.Size(90, 23);
-            this.dtpHorario.TabIndex = 55;
+            this.dtpHorario.TabIndex = 50;
             this.dtpHorario.Tag = "H";
             this.dtpHorario.ValueChanged += new System.EventHandler(this.dtpHorario_ValueChanged);
             // 
@@ -123,46 +133,49 @@ namespace TeleBonifacio
             // 
             // txFnTrd
             // 
-            this.txFnTrd.Location = new System.Drawing.Point(799, 45);
+            this.txFnTrd.Location = new System.Drawing.Point(851, 46);
             this.txFnTrd.Name = "txFnTrd";
             this.txFnTrd.Size = new System.Drawing.Size(55, 20);
-            this.txFnTrd.TabIndex = 53;
-            this.txFnTrd.TextChanged += new System.EventHandler(this.txFnTrd_TextChanged);
+            this.txFnTrd.TabIndex = 58;
+            this.txFnTrd.Enter += new System.EventHandler(this.txInMan_Enter);
             this.txFnTrd.KeyUp += new System.Windows.Forms.KeyEventHandler(this.txInMan_KeyUp);
+            this.txFnTrd.MouseHover += new System.EventHandler(this.txInMan_MouseHover);
             // 
             // txInTrd
             // 
-            this.txInTrd.Location = new System.Drawing.Point(738, 45);
+            this.txInTrd.Location = new System.Drawing.Point(668, 46);
             this.txInTrd.Name = "txInTrd";
             this.txInTrd.Size = new System.Drawing.Size(55, 20);
-            this.txInTrd.TabIndex = 52;
-            this.txInTrd.TextChanged += new System.EventHandler(this.txInTrd_TextChanged);
+            this.txInTrd.TabIndex = 55;
+            this.txInTrd.Enter += new System.EventHandler(this.txInMan_Enter);
             this.txInTrd.KeyUp += new System.Windows.Forms.KeyEventHandler(this.txInMan_KeyUp);
+            this.txInTrd.MouseHover += new System.EventHandler(this.txInMan_MouseHover);
             // 
             // txFmMan
             // 
-            this.txFmMan.Location = new System.Drawing.Point(677, 45);
+            this.txFmMan.Location = new System.Drawing.Point(607, 46);
             this.txFmMan.Name = "txFmMan";
             this.txFmMan.Size = new System.Drawing.Size(55, 20);
-            this.txFmMan.TabIndex = 51;
-            this.txFmMan.TextChanged += new System.EventHandler(this.txFmMan_TextChanged);
+            this.txFmMan.TabIndex = 54;
+            this.txFmMan.Enter += new System.EventHandler(this.txInMan_Enter);
             this.txFmMan.KeyUp += new System.Windows.Forms.KeyEventHandler(this.txInMan_KeyUp);
+            this.txFmMan.MouseHover += new System.EventHandler(this.txInMan_MouseHover);
             // 
             // txInMan
             // 
-            this.txInMan.Location = new System.Drawing.Point(616, 45);
+            this.txInMan.Location = new System.Drawing.Point(419, 46);
             this.txInMan.Name = "txInMan";
             this.txInMan.Size = new System.Drawing.Size(55, 20);
-            this.txInMan.TabIndex = 50;
-            this.txInMan.TextChanged += new System.EventHandler(this.txInMan_TextChanged);
+            this.txInMan.TabIndex = 51;
             this.txInMan.KeyUp += new System.Windows.Forms.KeyEventHandler(this.txInMan_KeyUp);
+            this.txInMan.MouseHover += new System.EventHandler(this.txInMan_MouseHover);
             // 
             // lbColaborador
             // 
             this.lbColaborador.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.lbColaborador.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F);
             this.lbColaborador.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.lbColaborador.Location = new System.Drawing.Point(312, 47);
+            this.lbColaborador.Location = new System.Drawing.Point(108, 48);
             this.lbColaborador.Name = "lbColaborador";
             this.lbColaborador.Size = new System.Drawing.Size(196, 19);
             this.lbColaborador.TabIndex = 49;
@@ -264,6 +277,46 @@ namespace TeleBonifacio
             this.dataGrid1.TabIndex = 11;
             this.dataGrid1.SelectionChanged += new System.EventHandler(this.dataGrid1_SelectionChanged);
             // 
+            // txInCafeMan
+            // 
+            this.txInCafeMan.Location = new System.Drawing.Point(482, 46);
+            this.txInCafeMan.Name = "txInCafeMan";
+            this.txInCafeMan.Size = new System.Drawing.Size(55, 20);
+            this.txInCafeMan.TabIndex = 52;
+            this.txInCafeMan.Enter += new System.EventHandler(this.txInCafeMan_Enter);
+            this.txInCafeMan.KeyUp += new System.Windows.Forms.KeyEventHandler(this.txInMan_KeyUp);
+            this.txInCafeMan.MouseHover += new System.EventHandler(this.txInMan_MouseHover);
+            // 
+            // txFmCafeMan
+            // 
+            this.txFmCafeMan.Location = new System.Drawing.Point(543, 46);
+            this.txFmCafeMan.Name = "txFmCafeMan";
+            this.txFmCafeMan.Size = new System.Drawing.Size(55, 20);
+            this.txFmCafeMan.TabIndex = 53;
+            this.txFmCafeMan.Enter += new System.EventHandler(this.txInMan_Enter);
+            this.txFmCafeMan.KeyUp += new System.Windows.Forms.KeyEventHandler(this.txInMan_KeyUp);
+            this.txFmCafeMan.MouseHover += new System.EventHandler(this.txInMan_MouseHover);
+            // 
+            // txInCafeTrd
+            // 
+            this.txInCafeTrd.Location = new System.Drawing.Point(729, 46);
+            this.txInCafeTrd.Name = "txInCafeTrd";
+            this.txInCafeTrd.Size = new System.Drawing.Size(55, 20);
+            this.txInCafeTrd.TabIndex = 56;
+            this.txInCafeTrd.Enter += new System.EventHandler(this.txInMan_Enter);
+            this.txInCafeTrd.KeyUp += new System.Windows.Forms.KeyEventHandler(this.txInMan_KeyUp);
+            this.txInCafeTrd.MouseHover += new System.EventHandler(this.txInMan_MouseHover);
+            // 
+            // txFmCafeTrd
+            // 
+            this.txFmCafeTrd.Location = new System.Drawing.Point(790, 46);
+            this.txFmCafeTrd.Name = "txFmCafeTrd";
+            this.txFmCafeTrd.Size = new System.Drawing.Size(55, 20);
+            this.txFmCafeTrd.TabIndex = 57;
+            this.txFmCafeTrd.Enter += new System.EventHandler(this.txInMan_Enter);
+            this.txFmCafeTrd.KeyUp += new System.Windows.Forms.KeyEventHandler(this.txInMan_KeyUp);
+            this.txFmCafeTrd.MouseHover += new System.EventHandler(this.txInMan_MouseHover);
+            // 
             // OperRH
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -303,6 +356,11 @@ namespace TeleBonifacio
         private System.Windows.Forms.DateTimePicker dtpHorario;
         private System.Windows.Forms.DataGridView dataGrid1;
         private System.Windows.Forms.Button btExcluir;
+        private System.Windows.Forms.TextBox txFmCafeTrd;
+        private System.Windows.Forms.TextBox txInCafeTrd;
+        private System.Windows.Forms.TextBox txFmCafeMan;
+        private System.Windows.Forms.TextBox txInCafeMan;
+        private System.Windows.Forms.ToolTip toolTip1;
     }
 }
 

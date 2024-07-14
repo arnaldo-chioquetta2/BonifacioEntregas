@@ -11,8 +11,10 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyCulture("")]
 [assembly: ComVisible(false)]
 [assembly: Guid("308c57af-e663-456d-8a2c-188bbd61423d")]
-[assembly: AssemblyVersion("2.3.4.0")]
-[assembly: AssemblyFileVersion("2.3.4.0")]
+[assembly: AssemblyVersion("2.3.7.0")]
+[assembly: AssemblyFileVersion("2.3.7.0")]
+// 2.3.7 Cor nos horários de cafés quando ultrapassa
+// 2.3.6 Cores nos cafés atrasados e edição dos horários dos cafés
 // 2.3.5 Ajuste na grid do RH
 // 2.3.4 Campos de folga do café
 // 2.3.3 Limpeza dos campos depois da adição
