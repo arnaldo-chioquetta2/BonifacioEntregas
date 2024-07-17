@@ -83,6 +83,18 @@ namespace TeleBonifacio
                 tbFaltas.TabPages.Remove(tabPage4);
                 tbFaltas.TabPages.Remove(tabPage5);
             }
+            ConfigureDataGridView(this.dataGrid1);
+            ConfigureDataGridView(this.dataGrid2);
+            ConfigureDataGridView(this.dataGrid3);
+            ConfigureDataGridView(this.dataGrid4);
+        }
+
+        private void ConfigureDataGridView(DataGridView grid)
+        {
+            grid.Font = new System.Drawing.Font("Segoe UI", 12);
+            grid.ColumnHeadersDefaultCellStyle.Font = new System.Drawing.Font("Segoe UI", 12, System.Drawing.FontStyle.Regular);
+            grid.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.EnableResizing;
+            grid.ColumnHeadersHeight = 30; 
         }
 
         private void SetStartPosition()
@@ -1341,7 +1353,10 @@ namespace TeleBonifacio
             dataGrid4.Columns[0].Visible = false;   // Id
             dataGrid4.Columns[1].Width = 80;        // Data
             dataGrid4.Columns[2].Visible = false;   // idForn
-            dataGrid4.Columns[3].Width = 50;        // Nota
+
+            // dataGrid4.Columns[3].Width = 50;        // Nota
+            dataGrid4.Columns[3].Width = 70;        // Nota
+
             dataGrid4.Columns[4].Width = 80;        // Prometida
             dataGrid4.Columns[5].Width = 80;        // DataDoForn
             dataGrid4.Columns[6].Visible = false;   // UID
@@ -1540,6 +1555,8 @@ namespace TeleBonifacio
             FpesCliente.setOperacao(1);
             if (Instanciar)
             {
+                if (EncoDao == null)
+                    EncoDao = new EncomendasDao();
                 FpesCliente.RecebeDadosCli(ref dadosCli, ref Forn, ref EncoDao, tbFaltas.SelectedIndex);
                 FpesCliente.Ativar();                
                 FpesCliente.ShowDialog();

@@ -59,6 +59,7 @@ namespace TeleBonifacio
             decimal Valor = getValor();
             DateTime dataPrometida = dateTimePicker1.Value;
             DateTime HoraEntrega = getHora();
+            // EncoDao
             if (Operacao==1) // Adição
             {
                 if (achou)
@@ -73,8 +74,7 @@ namespace TeleBonifacio
                 else
                 {
                     ClienteLocalizado = 0;
-                    // Nome = cmbCliente.Text;
-                    // Fone = txTelefone.Text;
+                    glo.IdAdicionado = -1;
                 }
                 EncoDao.ConfirmaEncomenda(0, Nome, Fone, descricao, dataPrometida, dataPrometida, HoraEntrega, codigo, Valor, idForn, selectedIndex);
                 this.OK = true;

@@ -73,11 +73,14 @@ namespace TeleBonifacio.dao
                     idCliente = (int)dt.Rows[0]["NrCli"];
                     glo.IdAdicionado = idCliente; 
                 }
+                if (idCliente==-1)
+                {
+                    idCliente = 0;
+                }
                 string UID = glo.GenerateUID();
                 string insertQuery = $@"INSERT INTO Encomendas (idCliente, Data, UID, Descricao, Nome, Telefone, Compra, codigo, Valor, idForn, HoraEntrega, DtPrometida) 
                         VALUES ({idCliente}, Now, '{UID}', '{NovaDesc}', '{Nome}', '{Fone}', '{sCompra}', '{codigo}', {sValor}, {idFornNvProd}, '{sHoraEntrega}', '{sDtAgora}' )";
                 DB.ExecutarComandoSQL(insertQuery);
-
             }
             else
             {
