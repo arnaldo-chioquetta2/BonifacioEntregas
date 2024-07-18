@@ -25,7 +25,7 @@ namespace TeleBonifacio.dao
         public DataTable getDados(int tipo, int idForn, string codigo, string quantidade, string marca, string Obs, string Descr)
         {
             StringBuilder query = new StringBuilder();
-            query.Append(@"SELECT F.Compra, '' as Forn, F.ID, F.Data, F.Codigo, F.Valor, F.Quant, F.Marca, F.Descricao, 
+            query.Append(@"SELECT F.Compra, '' as Forn, F.ID, FORMAT(F.Data, 'dd/MM/yy') as Data, F.Codigo, F.Valor, F.Quant, F.Marca, F.Descricao, 
             F.UID, F.Tipo, F.Tipo as TipoOrig, F.idForn, F.Obs 
         FROM Produtos F ");
             StringBuilder alteracoes = new StringBuilder();

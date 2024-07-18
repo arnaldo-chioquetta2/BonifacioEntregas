@@ -118,7 +118,7 @@ namespace TeleBonifacio
             this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(1164, 108);
+            this.panel1.Size = new System.Drawing.Size(1220, 108);
             this.panel1.TabIndex = 13;
             // 
             // groupBox3
@@ -140,7 +140,7 @@ namespace TeleBonifacio
             this.groupBox3.Dock = System.Windows.Forms.DockStyle.Top;
             this.groupBox3.Location = new System.Drawing.Point(0, 50);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(1164, 50);
+            this.groupBox3.Size = new System.Drawing.Size(1220, 50);
             this.groupBox3.TabIndex = 41;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Filtro";
@@ -149,7 +149,7 @@ namespace TeleBonifacio
             // 
             this.btGarantia.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.btGarantia.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btGarantia.Location = new System.Drawing.Point(838, 23);
+            this.btGarantia.Location = new System.Drawing.Point(866, 23);
             this.btGarantia.Name = "btGarantia";
             this.btGarantia.Size = new System.Drawing.Size(75, 23);
             this.btGarantia.TabIndex = 55;
@@ -160,7 +160,7 @@ namespace TeleBonifacio
             // 
             this.btEncomenda.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.btEncomenda.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btEncomenda.Location = new System.Drawing.Point(750, 23);
+            this.btEncomenda.Location = new System.Drawing.Point(778, 23);
             this.btEncomenda.Name = "btEncomenda";
             this.btEncomenda.Size = new System.Drawing.Size(82, 23);
             this.btEncomenda.TabIndex = 54;
@@ -183,7 +183,7 @@ namespace TeleBonifacio
             this.btComprei.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.btComprei.Enabled = false;
             this.btComprei.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btComprei.Location = new System.Drawing.Point(1001, 23);
+            this.btComprei.Location = new System.Drawing.Point(1029, 23);
             this.btComprei.Name = "btComprei";
             this.btComprei.Size = new System.Drawing.Size(75, 23);
             this.btComprei.TabIndex = 48;
@@ -207,7 +207,7 @@ namespace TeleBonifacio
             this.btAdicTpo.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.btAdicTpo.Enabled = false;
             this.btAdicTpo.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btAdicTpo.Location = new System.Drawing.Point(669, 23);
+            this.btAdicTpo.Location = new System.Drawing.Point(697, 23);
             this.btAdicTpo.Name = "btAdicTpo";
             this.btAdicTpo.Size = new System.Drawing.Size(75, 23);
             this.btAdicTpo.TabIndex = 42;
@@ -219,7 +219,7 @@ namespace TeleBonifacio
             this.btnExcluir.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.btnExcluir.Enabled = false;
             this.btnExcluir.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnExcluir.Location = new System.Drawing.Point(920, 23);
+            this.btnExcluir.Location = new System.Drawing.Point(948, 23);
             this.btnExcluir.Name = "btnExcluir";
             this.btnExcluir.Size = new System.Drawing.Size(75, 23);
             this.btnExcluir.TabIndex = 39;
@@ -230,7 +230,7 @@ namespace TeleBonifacio
             // 
             this.btLmpFiltro.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.btLmpFiltro.Enabled = false;
-            this.btLmpFiltro.Location = new System.Drawing.Point(588, 23);
+            this.btLmpFiltro.Location = new System.Drawing.Point(616, 23);
             this.btLmpFiltro.Name = "btLmpFiltro";
             this.btLmpFiltro.Size = new System.Drawing.Size(75, 23);
             this.btLmpFiltro.TabIndex = 53;
@@ -272,7 +272,7 @@ namespace TeleBonifacio
             // 
             this.button2.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.button2.Enabled = false;
-            this.button2.Location = new System.Drawing.Point(507, 23);
+            this.button2.Location = new System.Drawing.Point(535, 23);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(75, 23);
             this.button2.TabIndex = 44;
@@ -318,7 +318,7 @@ namespace TeleBonifacio
             this.groupBox1.Dock = System.Windows.Forms.DockStyle.Top;
             this.groupBox1.Location = new System.Drawing.Point(0, 0);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(1164, 50);
+            this.groupBox1.Size = new System.Drawing.Size(1220, 50);
             this.groupBox1.TabIndex = 39;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Adição";
@@ -471,7 +471,7 @@ namespace TeleBonifacio
             // 
             this.btnAdicionar.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.btnAdicionar.Enabled = false;
-            this.btnAdicionar.Location = new System.Drawing.Point(1077, 19);
+            this.btnAdicionar.Location = new System.Drawing.Point(1105, 19);
             this.btnAdicionar.Name = "btnAdicionar";
             this.btnAdicionar.Size = new System.Drawing.Size(75, 23);
             this.btnAdicionar.TabIndex = 7;
@@ -489,7 +489,7 @@ namespace TeleBonifacio
             this.tbFaltas.Location = new System.Drawing.Point(0, 108);
             this.tbFaltas.Name = "tbFaltas";
             this.tbFaltas.SelectedIndex = 0;
-            this.tbFaltas.Size = new System.Drawing.Size(1164, 324);
+            this.tbFaltas.Size = new System.Drawing.Size(1220, 324);
             this.tbFaltas.TabIndex = 14;
             this.tbFaltas.SelectedIndexChanged += new System.EventHandler(this.tbFaltas_SelectedIndexChanged);
             // 
@@ -499,7 +499,7 @@ namespace TeleBonifacio
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(1156, 298);
+            this.tabPage1.Size = new System.Drawing.Size(1212, 298);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Faltas";
             this.tabPage1.UseVisualStyleBackColor = true;
@@ -512,10 +512,9 @@ namespace TeleBonifacio
             this.dataGrid1.Name = "dataGrid1";
             this.dataGrid1.ReadOnly = true;
             this.dataGrid1.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dataGrid1.Size = new System.Drawing.Size(1150, 292);
+            this.dataGrid1.Size = new System.Drawing.Size(1206, 292);
             this.dataGrid1.TabIndex = 1;
             this.dataGrid1.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGrid1_CellClick_1);
-            // this.dataGrid1.ColumnHeadersDefaultCellStyle.Font = new System.Drawing.Font("Segoe UI", 12, System.Drawing.FontStyle.Bold);
             // 
             // tabPage2
             // 
@@ -790,7 +789,7 @@ namespace TeleBonifacio
             // 
             // OperFalta
             // 
-            this.ClientSize = new System.Drawing.Size(1164, 432);
+            this.ClientSize = new System.Drawing.Size(1220, 432);
             this.Controls.Add(this.tbFaltas);
             this.Controls.Add(this.panel1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));

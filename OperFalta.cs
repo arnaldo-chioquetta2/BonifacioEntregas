@@ -58,7 +58,7 @@ namespace TeleBonifacio
             faltasDAO = new FaltasDAO();
             TpoFalta = new TpoFaltaDAO();
             Forn = new FornecedorDao();
-            CarregaGrid();
+            // CarregaGrid();
             MostraTipos();
             if (iUser.Length == 0)
             {
@@ -83,6 +83,8 @@ namespace TeleBonifacio
                 tbFaltas.TabPages.Remove(tabPage4);
                 tbFaltas.TabPages.Remove(tabPage5);
             }
+            carregando = false;
+            CarregaGrid();
             ConfigureDataGridView(this.dataGrid1);
             ConfigureDataGridView(this.dataGrid2);
             ConfigureDataGridView(this.dataGrid3);
@@ -413,7 +415,7 @@ namespace TeleBonifacio
             dataGrid1.Columns[1].Width = 130;       // Forn
             dataGrid1.Columns[2].Visible = false;    // ID false;
             dataGrid1.Columns[3].Visible = false;
-            dataGrid1.Columns[4].Width = 75;       // Data
+            dataGrid1.Columns[4].Width = 80;        // Data
             dataGrid1.Columns[5].Width = 80;        // Código
             dataGrid1.Columns[6].Width = 50;        // Quantidade
             dataGrid1.Columns[6].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
@@ -421,7 +423,7 @@ namespace TeleBonifacio
             dataGrid1.Columns[8].Width = 160;       // Descrição
             dataGrid1.Columns[9].Width = 130;       // Balconista
             dataGrid1.Columns[10].Visible = false;  // UID
-            dataGrid1.Columns[11].Width = 130;      // Tipo - colocado o texto
+            dataGrid1.Columns[11].Width = 110;  //  130;      // Tipo - colocado o texto
             dataGrid1.Columns[12].Visible = false;  // Tipo valor original
             dataGrid1.Columns[13].Visible = false;  // idForn
 
@@ -435,7 +437,7 @@ namespace TeleBonifacio
             {
                 dataGrid1.Columns[14].Visible = false;  // Valor
             }            
-            dataGrid1.Columns[15].Width = 100;      // Obs
+            dataGrid1.Columns[15].Width = 170;      // Obs
             dataGrid1.Invalidate();
         }
 
@@ -443,40 +445,45 @@ namespace TeleBonifacio
         {
             if (!carregando)
             {
-
-            }
-            int scrollPosition = dataGrid1.FirstDisplayedScrollingRowIndex;            
-            FaltasDAO faltasDAO = new FaltasDAO();
-            DataTable dados = faltasDAO.getDados(BakidTipo, BakidForn, bakComprado, Bakcodigo, Bakquantidade, Bakmarca, BakObs, BakidVendedor, bakEmFalta, BakDescr);
-            List<tb.TpoFalta> tipos = TpoFalta.getTipos();
-            List<tb.Fornecedor> Fornecs = Forn.getForns();
-            dataGrid1.DataSource = dados;
-            foreach (DataGridViewRow row in dataGrid1.Rows)
-            {
-                if (!row.Cells["Tipo"].Value.Equals(DBNull.Value))
+                int scrollPosition = dataGrid1.FirstDisplayedScrollingRowIndex;
+                FaltasDAO faltasDAO = new FaltasDAO();
+                DataTable dados = faltasDAO.getDados(BakidTipo, BakidForn, bakComprado, Bakcodigo, Bakquantidade, Bakmarca, BakObs, BakidVendedor, bakEmFalta, BakDescr);
+                List<tb.TpoFalta> tipos = TpoFalta.getTipos();
+                List<tb.Fornecedor> Fornecs = Forn.getForns();
+                dataGrid1.DataSource = dados;
+                foreach (DataGridViewRow row in dataGrid1.Rows)
                 {
-                    int tipoId = Convert.ToInt32(row.Cells["Tipo"].Value);
-                    if (tipoId == 8)
+                    if (!row.Cells["Tipo"].Value.Equals(DBNull.Value))
                     {
-                        row.DefaultCellStyle.BackColor = Color.LightGreen;
-                    }
-                    else
-                    {
-                        if (tipoId == 26)
+                        int tipoId = Convert.ToInt32(row.Cells["Tipo"].Value);
+                        if (tipoId == 8)
                         {
-                            row.DefaultCellStyle.BackColor = Color.Red;
+                            row.DefaultCellStyle.BackColor = Color.LightGreen;
+                        }
+                        else
+                        {
+                            if (tipoId == 26)
+                            {
+                                row.DefaultCellStyle.BackColor = Color.Red;
+                            }
                         }
                     }
+                    AtualizarLinha(row, tipos, "Tipo", "Tipo");
+                    AtualizarLinha(row, Fornecs, "idForn", "Forn");
+                    //if (row.Cells["Data"].Value != DBNull.Value)
+                    //{
+                    //    DateTime data = Convert.ToDateTime(row.Cells["Data"].Value);
+                    //    row.Cells["Data"].Value = data.ToString("dd/MM/yy");
+                    //}
                 }
-                AtualizarLinha(row, tipos, "Tipo", "Tipo");
-                AtualizarLinha(row, Fornecs, "idForn", "Forn");
+                if (dados != null)
+                {
+                    ConfigurarGrid();
+                    if (scrollPosition > 0)
+                        dataGrid1.FirstDisplayedScrollingRowIndex = scrollPosition;
+                }
+
             }
-            if (dados != null)
-            {
-                ConfigurarGrid();
-                if (scrollPosition>0)
-                    dataGrid1.FirstDisplayedScrollingRowIndex = scrollPosition;
-            }            
         }
 
         private void dataGrid1_CellClick_1(object sender, DataGridViewCellEventArgs e)
@@ -1099,7 +1106,7 @@ namespace TeleBonifacio
             dataGrid2.Columns[0].Width = 100;       // Compra
             dataGrid2.Columns[1].Width = 130;       // Forn
             dataGrid2.Columns[2].Visible = false;   // ID
-            dataGrid2.Columns[3].Width = 100;       // Data
+            dataGrid2.Columns[3].Width = 80; // 100;       // Data
             dataGrid2.Columns[4].Width = 80;        // Código
             if (glo.Nivel==2)
             {
@@ -1118,7 +1125,7 @@ namespace TeleBonifacio
             dataGrid2.Columns[10].Width = 130;      // Tipo - colocado o texto
             dataGrid2.Columns[11].Visible = false;  // Tipo valor original
             dataGrid2.Columns[12].Visible = false;  // idForn
-            dataGrid2.Columns[13].Width = 100;      // Obs
+            dataGrid2.Columns[13].Width = 290;      // Obs
             dataGrid2.Invalidate();
         }
 
@@ -1351,14 +1358,11 @@ namespace TeleBonifacio
         private void ConfigurarGridG()
         {
             dataGrid4.Columns[0].Visible = false;   // Id
-            dataGrid4.Columns[1].Width = 80;        // Data
+            dataGrid4.Columns[1].Width = 110;        // Data
             dataGrid4.Columns[2].Visible = false;   // idForn
-
-            // dataGrid4.Columns[3].Width = 50;        // Nota
             dataGrid4.Columns[3].Width = 70;        // Nota
-
-            dataGrid4.Columns[4].Width = 80;        // Prometida
-            dataGrid4.Columns[5].Width = 80;        // DataDoForn
+            dataGrid4.Columns[4].Width = 110;        // Prometida
+            dataGrid4.Columns[5].Width = 110;        // DataDoForn
             dataGrid4.Columns[6].Visible = false;   // UID
             try
             {
@@ -1571,20 +1575,20 @@ namespace TeleBonifacio
         {
             dataGrid3.Columns[0].Visible = false;   // ID
             dataGrid3.Columns[1].Width = 130;       // Cliente
-            dataGrid3.Columns[2].Width = 100;       // Data
+            dataGrid3.Columns[2].Width = 80; // 100;       // Data
             dataGrid3.Columns[3].Width = 100;       // Código
             dataGrid3.Columns[4].Width = 50;        // Valor
             dataGrid3.Columns[4].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
             dataGrid3.Columns[5].Width = 40;        // Quant
             dataGrid3.Columns[6].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
-            dataGrid3.Columns[6].Width = 50;        // Marca
+            dataGrid3.Columns[6].Width = 60;        // Marca
             dataGrid3.Columns[7].Width = 190;       // Descrição
             dataGrid3.Columns[8].Visible = false;   // UID
             dataGrid3.Columns[9].Width = 100;       // Tipo
-            dataGrid3.Columns[10].Width = 130;      // Compra
+            dataGrid3.Columns[10].Width = 80; // 130;      // Compra
             dataGrid3.Columns[11].Width = 100;      // Forn
             dataGrid3.Columns[12].Visible = false;  // IdForn
-            dataGrid3.Columns[13].Width = 100;      // Obs
+            dataGrid3.Columns[13].Width = 220;      // Obs
             dataGrid3.Columns[14].Visible = false;  // idCliente 
             dataGrid3.Columns[15].Visible = false;  // Telefone
             dataGrid3.Columns[16].Visible = false;  // DtPrometida

@@ -26,10 +26,10 @@ namespace TeleBonifacio.dao
         public DataTable getDados(int tipo, int idForn, int Comprado, string codigo, string quantidade, string marca, string Obs, int idVendedor, int EmFalta, string Descr)
         {
             StringBuilder query = new StringBuilder();
-            query.Append(@"SELECT F.Compra, '' as Forn, F.ID, F.IDBalconista, F.Data, F.Codigo, F.Quant, F.Marca, F.Descricao, 
-            V.Nome AS Balconista, F.UID, F.Tipo, F.Tipo as TipoOrig, F.idForn, F.Valor, F.Obs 
-        FROM Faltas F
-        LEFT JOIN Vendedores V ON V.ID = F.IDBalconista ");
+            query.Append(@"SELECT F.Compra, '' as Forn, F.ID, F.IDBalconista, FORMAT(F.Data, 'dd/MM/yy') as Data, F.Codigo, F.Quant, F.Marca, F.Descricao, 
+                    V.Nome AS Balconista, F.UID, F.Tipo, F.Tipo as TipoOrig, F.idForn, F.Valor, F.Obs 
+                FROM Faltas F
+                LEFT JOIN Vendedores V ON V.ID = F.IDBalconista ");
             StringBuilder alteracoes = new StringBuilder();
             if (tipo > 0)
             {

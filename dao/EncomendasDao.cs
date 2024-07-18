@@ -10,8 +10,8 @@ namespace TeleBonifacio.dao
         public DataTable getDados(int tipo, int idForn, string codigo, string quantidade, string marca, string Obs, string Descr)
         {
             StringBuilder query = new StringBuilder();
-            query.Append(@"SELECT E.ID, IIf(E.Nome IS NULL OR E.Nome = '', Clientes.Nome, E.Nome) AS Nome, E.Data, E.Codigo, E.Valor, E.Quant, 
-                   E.Marca, E.Descricao, E.UID, E.Tipo, E.Compra, '' as Forn, E.idForn, E.Obs, E.idCliente, Clientes.Telefone, E.DtPrometida, E.idCliente 
+            query.Append(@"SELECT E.ID, IIf(E.Nome IS NULL OR E.Nome = '', Clientes.Nome, E.Nome) AS Nome, FORMAT(E.Data, 'dd/MM/yy') as Data, E.Codigo, E.Valor, E.Quant, 
+                   E.Marca, E.Descricao, E.UID, E.Tipo, FORMAT(E.Compra, 'dd/MM/yy') as Compra, '' as Forn, E.idForn, E.Obs, E.idCliente, Clientes.Telefone, E.DtPrometida, E.idCliente 
                    FROM Encomendas E 
                    LEFT JOIN Clientes ON Clientes.NrCli = E.idCliente ");
             StringBuilder alteracoes = new StringBuilder();
