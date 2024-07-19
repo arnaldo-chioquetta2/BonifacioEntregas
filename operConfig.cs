@@ -26,7 +26,8 @@ namespace TeleBonifacio
             Version version = Assembly.GetExecutingAssembly().GetName().Version;
             int versionInt = (version.Major * 100) + (version.Minor * 10) + version.Build;
             txDocs.Text = cINI.ReadString("Config", "Docs", "");
-            string NovaVersao = cINI.ReadString("Config", "NovaVersao", "");            
+            string NovaVersao = cINI.ReadString("Config", "NovaVersao", "");
+            ckAdaptar.Checked = (cINI.ReadString("Config", "Adaptar", "") == "1");
             if (NovaVersao.Length>0)
             {
                 int NovaVersaoInt = int.Parse(NovaVersao.Replace(".", ""));
@@ -44,6 +45,7 @@ namespace TeleBonifacio
                 ckBackup.Visible = true;
                 ckBackup.Checked = (cINI.ReadString("Backup", "Ativo", "")=="1");
             }
+            glo.AdjustFormComponents(this);
             Carregando = false;
         }
 
@@ -64,6 +66,9 @@ namespace TeleBonifacio
             string Backup = ckBackup.Checked ? "1" : "0";
             cINI.WriteString("Backup", "Ativo", Backup);
             cINI.WriteString("Config", "Docs", txDocs.Text);
+            glo.Adaptar = ckAdaptar.Checked;
+            string sAdaptar = (glo.Adaptar) ? "1" : "0";
+            cINI.WriteString("Config", "Adaptar", sAdaptar);
             this.Close();
         }
 

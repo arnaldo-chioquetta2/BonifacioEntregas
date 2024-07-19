@@ -21,6 +21,7 @@ namespace TeleBonifacio
             base.reg = DAO.GetUltimo() as tb.Entregador;
             base.Mostra();
             base.LerTagsDosCamposDeTexto();
+            glo.AdjustFormComponents(this);
         }
 
         private void cntrole1_Load(object sender, EventArgs e)

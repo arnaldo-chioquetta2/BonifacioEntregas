@@ -8,7 +8,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
-using System.Data.Odbc;
+using System.Drawing;
 
 namespace TeleBonifacio
 {
@@ -28,6 +28,8 @@ namespace TeleBonifacio
 
         public static int iUsuario = 0;
         public static bool ODBC = false;
+
+        public static bool Adaptar = false;
 
         public static string CaminhoBase
         {
@@ -62,7 +64,7 @@ namespace TeleBonifacio
                     return @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + CaminhoBase + ";";
                 }
             }
-        }
+        }        
 
         #region FormatacaoTela
 
@@ -251,37 +253,6 @@ namespace TeleBonifacio
 
         #endregion
 
-        public static void CarregarComboBox<T>(ComboBox comboBox, dao.BaseDAO classe, string ItemZero = "", string filtro = "", string ordem = "", string ItemFinal="", string ItemFinal2 = "") where T : tb.IDataEntity, new()
-        {
-            DataTable dados = classe.GetDadosOrdenados(filtro, ordem);
-            List<tb.ComboBoxItem> lista = new List<tb.ComboBoxItem>();
-            if (ItemZero.Length > 0)
-            {
-                tb.ComboBoxItem item = new tb.ComboBoxItem(0, ItemZero);
-                lista.Add(item);
-            }
-            foreach (DataRow row in dados.Rows)
-            {
-                int id = Convert.ToInt32(row["id"]);
-                string nome = row["Nome"].ToString();
-                tb.ComboBoxItem item = new tb.ComboBoxItem(id, nome);
-                lista.Add(item);
-            }
-            if (ItemFinal.Length > 0)
-            {
-                tb.ComboBoxItem item = new tb.ComboBoxItem(0, ItemFinal);
-                lista.Add(item);
-                if (ItemFinal2.Length > 0)
-                {
-                    tb.ComboBoxItem item2 = new tb.ComboBoxItem(0, ItemFinal2);
-                    lista.Add(item2);
-                }
-            }
-            comboBox.DataSource = lista;
-            comboBox.DisplayMember = "Nome";
-            comboBox.ValueMember = "Id";
-        }
-
         public static void Loga(string message)
         {
             string logFilePath = @"C:\Entregas\Entregas.txt";
@@ -320,6 +291,108 @@ namespace TeleBonifacio
             return null;
         }
 
+        public static void CarregarComboBox<T>(ComboBox comboBox, dao.BaseDAO classe, string ItemZero = "", string filtro = "", string ordem = "", string ItemFinal = "", string ItemFinal2 = "") where T : tb.IDataEntity, new()
+        {
+            DataTable dados = classe.GetDadosOrdenados(filtro, ordem);
+            List<tb.ComboBoxItem> lista = new List<tb.ComboBoxItem>();
+            if (ItemZero.Length > 0)
+            {
+                tb.ComboBoxItem item = new tb.ComboBoxItem(0, ItemZero);
+                lista.Add(item);
+            }
+            foreach (DataRow row in dados.Rows)
+            {
+                int id = Convert.ToInt32(row["id"]);
+                string nome = row["Nome"].ToString();
+                tb.ComboBoxItem item = new tb.ComboBoxItem(id, nome);
+                lista.Add(item);
+            }
+            if (ItemFinal.Length > 0)
+            {
+                tb.ComboBoxItem item = new tb.ComboBoxItem(0, ItemFinal);
+                lista.Add(item);
+                if (ItemFinal2.Length > 0)
+                {
+                    tb.ComboBoxItem item2 = new tb.ComboBoxItem(0, ItemFinal2);
+                    lista.Add(item2);
+                }
+            }
+            comboBox.DataSource = lista;
+            comboBox.DisplayMember = "Nome";
+            comboBox.ValueMember = "Id";
+        }
+
         #endregion
+
+        #region AutoAjuste        
+
+        public static bool IsLargeScreen()
+        {
+            Rectangle resolution = Screen.PrimaryScreen.Bounds;
+            return resolution.Width >= 1920 && resolution.Height >= 1080;
+        }
+
+        private static void AdjustDataGridView(DataGridView dgv)
+        {
+            float scaleFactor = 1.4f; 
+            dgv.DefaultCellStyle.Font = new Font("Segoe UI", 12 * scaleFactor);
+            dgv.ColumnHeadersDefaultCellStyle.Font = new Font("Segoe UI", 12 * scaleFactor, FontStyle.Regular);
+            dgv.RowTemplate.Height = (int)(dgv.RowTemplate.Height * scaleFactor);
+            foreach (DataGridViewRow row in dgv.Rows)
+            {
+                row.Height = (int)(row.Height * scaleFactor);
+            }
+            foreach (DataGridViewColumn col in dgv.Columns)
+            {
+                col.Width = (int)(col.Width * scaleFactor);
+            }
+            dgv.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.EnableResizing;
+            dgv.ColumnHeadersHeight = (int)(dgv.ColumnHeadersHeight * scaleFactor);
+        }
+
+        public static void AdjustFormComponents(Form form)
+        {
+            if (Adaptar)
+            {
+                if (IsLargeScreen())
+                {
+                    form.Size = new Size((int)(form.Width * 1.4), (int)(form.Height * 1.4));
+                    foreach (Control ctrl in form.Controls)
+                    {
+                        if (ctrl is DataGridView dgv)
+                        {
+                            AdjustDataGridView(dgv);
+                        } else
+                        {
+                            AdjustControl(ctrl);
+                        }                            
+                    }
+                }
+            }
+        }
+
+        public static void AdjustControl(Control ctrl)
+        {
+            ctrl.Location = new Point((int)(ctrl.Location.X * 1.4), (int)(ctrl.Location.Y * 1.4));
+            ctrl.Size = new Size((int)(ctrl.Width * 1.4), (int)(ctrl.Height * 1.4));
+            if (ctrl.Font != null)
+            {
+                ctrl.Font = new Font(ctrl.Font.FontFamily, ctrl.Font.Size * 1.4f, ctrl.Font.Style);
+            }
+            foreach (Control child in ctrl.Controls)
+            {
+                AdjustControl(child);
+            }
+            if (ctrl is DataGridView grid)
+            {
+                foreach (DataGridViewColumn col in grid.Columns)
+                {
+                    col.Width = (int)(col.Width * 1.4);
+                }
+            }
+        }
+
+        #endregion
+
     }
 }

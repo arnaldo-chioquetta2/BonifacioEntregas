@@ -48,6 +48,7 @@ namespace TeleBonifacio
             this.txDocs = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
+            this.ckAdaptar = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // lblNome
@@ -80,7 +81,7 @@ namespace TeleBonifacio
             // button2
             // 
             this.button2.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.button2.Location = new System.Drawing.Point(454, 149);
+            this.button2.Location = new System.Drawing.Point(473, 155);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(75, 23);
             this.button2.TabIndex = 11;
@@ -91,7 +92,7 @@ namespace TeleBonifacio
             // button3
             // 
             this.button3.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.button3.Location = new System.Drawing.Point(374, 149);
+            this.button3.Location = new System.Drawing.Point(393, 155);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(75, 23);
             this.button3.TabIndex = 10;
@@ -156,7 +157,7 @@ namespace TeleBonifacio
             // btAtu
             // 
             this.btAtu.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.btAtu.Location = new System.Drawing.Point(145, 149);
+            this.btAtu.Location = new System.Drawing.Point(164, 155);
             this.btAtu.Name = "btAtu";
             this.btAtu.Size = new System.Drawing.Size(121, 23);
             this.btAtu.TabIndex = 8;
@@ -167,7 +168,7 @@ namespace TeleBonifacio
             // ckBackup
             // 
             this.ckBackup.AutoSize = true;
-            this.ckBackup.Location = new System.Drawing.Point(21, 155);
+            this.ckBackup.Location = new System.Drawing.Point(29, 144);
             this.ckBackup.Name = "ckBackup";
             this.ckBackup.Size = new System.Drawing.Size(119, 17);
             this.ckBackup.TabIndex = 7;
@@ -177,7 +178,7 @@ namespace TeleBonifacio
             // btRetVersao
             // 
             this.btRetVersao.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.btRetVersao.Location = new System.Drawing.Point(271, 149);
+            this.btRetVersao.Location = new System.Drawing.Point(290, 155);
             this.btRetVersao.Name = "btRetVersao";
             this.btRetVersao.Size = new System.Drawing.Size(98, 23);
             this.btRetVersao.TabIndex = 9;
@@ -211,11 +212,22 @@ namespace TeleBonifacio
             this.label4.TabIndex = 19;
             this.label4.Text = "Localização dos Documentos";
             // 
+            // ckAdaptar
+            // 
+            this.ckAdaptar.AutoSize = true;
+            this.ckAdaptar.Location = new System.Drawing.Point(29, 167);
+            this.ckAdaptar.Name = "ckAdaptar";
+            this.ckAdaptar.Size = new System.Drawing.Size(92, 17);
+            this.ckAdaptar.TabIndex = 20;
+            this.ckAdaptar.Text = "Adaptar a tela";
+            this.ckAdaptar.UseVisualStyleBackColor = true;
+            // 
             // oprConfig
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(556, 180);
+            this.ClientSize = new System.Drawing.Size(556, 194);
+            this.Controls.Add(this.ckAdaptar);
             this.Controls.Add(this.button4);
             this.Controls.Add(this.txDocs);
             this.Controls.Add(this.label4);
@@ -264,5 +276,6 @@ namespace TeleBonifacio
         private System.Windows.Forms.TextBox txDocs;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.FolderBrowserDialog folderBrowserDialog1;
+        private System.Windows.Forms.CheckBox ckAdaptar;
     }
 }

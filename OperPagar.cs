@@ -58,7 +58,8 @@ namespace TeleBonifacio
             CaminhoBasePDF = Path.GetDirectoryName(glo.CaminhoBase) + "\\Docs";
             cINI = new INI();
             sourceDirectory = cINI.ReadString("Config", "Docs", "");
-            carregando = false;
+            glo.AdjustFormComponents(this);
+            carregando = false;            
         }
 
         #endregion

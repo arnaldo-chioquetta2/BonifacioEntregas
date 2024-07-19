@@ -18,6 +18,7 @@ namespace TeleBonifacio
         public operCaixa()
         {
             InitializeComponent();
+            glo.AdjustFormComponents(this);
         }
 
         private void txCompra_KeyUp(object sender, KeyEventArgs e)

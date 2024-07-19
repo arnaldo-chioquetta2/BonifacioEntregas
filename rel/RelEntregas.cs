@@ -23,6 +23,7 @@ namespace TeleBonifacio.rel
         {
             InitializeComponent();
             SetStartPosition();
+            glo.AdjustFormComponents(this);
         }
 
         private void SetStartPosition()

@@ -19,6 +19,9 @@ namespace TeleBonifacio
             {
                 glo.ODBC = true;
             }
+            INI cINI = new INI();
+            glo.Adaptar = cINI.ReadString("Config", "Adaptar", "") == "1";
+            glo.AdjustFormComponents(this);
         }
 
         private void button1_Click(object sender, EventArgs e)

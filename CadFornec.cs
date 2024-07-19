@@ -26,7 +26,8 @@ namespace TeleBonifacio
             base.reg = getUlt();
             ID = base.reg.Id;
             base.Mostra();
-            base.LerTagsDosCamposDeTexto();
+            base.LerTagsDosCamposDeTexto(); 
+            glo.AdjustFormComponents(this);
             Carregando = false;
         }
 

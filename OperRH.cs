@@ -264,6 +264,7 @@ namespace TeleBonifacio
             this.toolTip1.SetToolTip(this.txInCafeTrd, "Inicio do Café da Tarde");
             this.toolTip1.SetToolTip(this.txFmCafeMan, "Fim do Café da Manhã");
             this.toolTip1.SetToolTip(this.txInCafeMan, "Inicio do Café da Manhã");
+            glo.AdjustFormComponents(this);
         }
 
         private void SetStartPosition()

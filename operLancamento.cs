@@ -30,6 +30,7 @@ namespace TeleBonifacio
             glo.CarregarComboBox<Vendedor>(cmbVendedor, Vendedor,"", " Where Vendedores.Atende = 1 ", " desc ");
             cmbMotoBoy.SelectedIndex = 0;
             cmbCliente.SelectedIndex = -1;
+            glo.AdjustFormComponents(this);
         }
 
         #region MetodosPrincipais

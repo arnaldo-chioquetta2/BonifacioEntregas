@@ -89,6 +89,7 @@ namespace TeleBonifacio
             ConfigureDataGridView(this.dataGrid2);
             ConfigureDataGridView(this.dataGrid3);
             ConfigureDataGridView(this.dataGrid4);
+            glo.AdjustFormComponents(this);
         }
 
         private void ConfigureDataGridView(DataGridView grid)

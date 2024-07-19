@@ -29,6 +29,7 @@ namespace TeleBonifacio
             dtpDataIN.Value = dtnDtFim.Value.AddDays(-7);
             CarregaGrid();
             ConfigurarGrid();
+            glo.AdjustFormComponents(this);
         }
 
         private void PopulaVendedores()

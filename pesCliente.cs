@@ -31,6 +31,7 @@ namespace TeleBonifacio
         public pesCliente()
         {
             InitializeComponent();
+            glo.AdjustFormComponents(this);
         }
 
         public bool alterado
