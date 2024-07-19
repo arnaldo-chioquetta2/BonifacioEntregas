@@ -62,7 +62,6 @@ namespace TeleBonifacio.dao
             string sHoraEntrega = HoraEntrega.ToString("HH:mm:ss");
             if (iID== 0)
             {
-
                 if (idCliente == 0)
                 {
                     string insertClienteQuery = $@"INSERT INTO Clientes (Nome, Telefone, Data) VALUES (

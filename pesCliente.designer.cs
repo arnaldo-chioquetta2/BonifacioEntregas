@@ -125,9 +125,9 @@ namespace TeleBonifacio
             // txTelefone
             // 
             this.txTelefone.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txTelefone.Location = new System.Drawing.Point(281, 46);
+            this.txTelefone.Location = new System.Drawing.Point(221, 46);
             this.txTelefone.Name = "txTelefone";
-            this.txTelefone.Size = new System.Drawing.Size(105, 26);
+            this.txTelefone.Size = new System.Drawing.Size(165, 26);
             this.txTelefone.TabIndex = 1;
             this.txTelefone.TextChanged += new System.EventHandler(this.txTelefone_TextChanged);
             // 
@@ -135,7 +135,7 @@ namespace TeleBonifacio
             // 
             this.label4.AutoSize = true;
             this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label4.Location = new System.Drawing.Point(204, 49);
+            this.label4.Location = new System.Drawing.Point(144, 49);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(71, 20);
             this.label4.TabIndex = 37;

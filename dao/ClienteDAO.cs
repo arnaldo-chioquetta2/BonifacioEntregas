@@ -118,6 +118,15 @@ namespace TeleBonifacio.dao
             }
         }
 
+        public int InserirNovoCliente(string nome, string telefone)
+        {
+            tb.Cliente ret = GetUltimo() as tb.Cliente;
+            string query = $@"INSERT INTO Clientes (NrCli, Nome, Telefone, Data) VALUES (
+                        {ret.Id+1}, '{nome}', '{telefone}', '{DateTime.Now:yyyy-MM-dd HH:mm:ss}' ) ";
+            DB.ExecutarComandoSQL(query);
+            return ret.Id + 1;
+        }
+
         public override tb.IDataEntity Apagar(int direcao, tb.IDataEntity entidade)
         {
             DB.ExecutarComandoSQL("DELETE FROM Clientes WHERE NrCli = " + id.ToString(), null);
@@ -287,16 +296,6 @@ namespace TeleBonifacio.dao
                                 row["email"] = reader["email"];
                                 row["Ender"] = reader["Ender"];
                                 row["NrOutro"] = reader["NrOutro"];
-
-                                //row["id"] = reader.GetInt32(reader.GetOrdinal("NrCli")); // Assumindo que "NrCli" é o campo ID
-                                //row["Nome"] = reader.GetString(reader.GetOrdinal("Nome"));
-                                //row["Telefone"] = reader.GetString(reader.GetOrdinal("Telefone"));
-
-                                //row["email"] = reader["email"];
-                                //// row["email"] = reader.GetString(reader.GetOrdinal("email"));
-
-                                //row["Ender"] = reader.GetString(reader.GetOrdinal("Ender"));
-                                //row["NrOutro"] = reader.GetString(reader.GetOrdinal("NrOutro"));
                                 dataTable.Rows.Add(row);
                             }
                             return dataTable;
