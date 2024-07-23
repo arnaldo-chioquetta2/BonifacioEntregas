@@ -30,7 +30,7 @@ namespace TeleBonifacio
             glo.CarregarComboBox<Vendedor>(cmbVendedor, Vendedor,"", " Where Vendedores.Atende = 1 ", " desc ");
             cmbMotoBoy.SelectedIndex = 0;
             cmbCliente.SelectedIndex = -1;
-            glo.AdjustFormComponents(this);
+            rt.AdjustFormComponents(this);
         }
 
         #region MetodosPrincipais
@@ -52,6 +52,13 @@ namespace TeleBonifacio
             dataGrid1.Columns[12].Width = 0;
             dataGrid1.Columns[13].Width = 0;
             dataGrid1.Columns[14].Width = 0;
+            if (rt.IsLargeScreen())
+            {
+                for (int i = 0; i < 9; i++)
+                {
+                    dataGrid1.Columns[i].Width = (int)(dataGrid1.Columns[i].Width * rt.scaleFactor);
+                }
+            }
             dataGrid1.Invalidate();
         }
 

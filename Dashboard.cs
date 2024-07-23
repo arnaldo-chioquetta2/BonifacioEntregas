@@ -49,7 +49,7 @@ namespace TeleBonifacio
             dataGridView1 = new DataGridView();
             dataGridView1.Dock = DockStyle.Fill;
             tabPage1.Controls.Add(dataGridView1);
-            glo.AdjustFormComponents(this);
+            rt.AdjustFormComponents(this);
         }
 
         private void Dashboard_Load(object sender, EventArgs e)

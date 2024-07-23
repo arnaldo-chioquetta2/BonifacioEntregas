@@ -14,7 +14,7 @@ namespace TeleBonifacio
             glo.CarregarComboBox<tb.Fornecedor>(cmbForn, Forn);
             DateTime Agora = DateTime.Now;
             dtpPrometda.Value = dtpFornec.Value = Agora.AddDays(30);
-            glo.AdjustFormComponents(this);
+            rt.AdjustFormComponents(this);
         }
 
         private void btOK_Click(object sender, EventArgs e)

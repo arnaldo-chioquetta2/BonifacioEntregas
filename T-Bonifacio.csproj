@@ -168,6 +168,7 @@
     <Compile Include="gen\INI.cs" />
     <Compile Include="gen\INI2.cs" />
     <Compile Include="gen\odbc.cs" />
+    <Compile Include="gen\rt.cs" />
     <Compile Include="gen\ValorPorExtenso.cs" />
     <Compile Include="operAvanc.cs">
       <SubType>Form</SubType>

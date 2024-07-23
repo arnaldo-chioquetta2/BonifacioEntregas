@@ -519,7 +519,7 @@ namespace TeleBonifacio
                         break;
                 }
             }            
-            glo.AdjustFormComponents(this);
+            rt.AdjustFormComponents(this);
         }
 
         private void Form1_FormClosed(object sender, FormClosedEventArgs e)

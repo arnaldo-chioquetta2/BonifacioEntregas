@@ -58,7 +58,7 @@ namespace TeleBonifacio
             CaminhoBasePDF = Path.GetDirectoryName(glo.CaminhoBase) + "\\Docs";
             cINI = new INI();
             sourceDirectory = cINI.ReadString("Config", "Docs", "");
-            glo.AdjustFormComponents(this);
+            rt.AdjustFormComponents(this);
             carregando = false;            
         }
 
@@ -237,6 +237,13 @@ namespace TeleBonifacio
             Grid.Columns[13].Visible = false;      // Perm
             Grid.Columns[14].Visible = false;      // ContasAPagar
             Grid.Columns[15].Visible = false;      // idArquivo
+            if (rt.IsLargeScreen())
+            {
+                for (int i = 0; i < 12; i++)
+                {
+                    Grid.Columns[i].Width = (int)(Grid.Columns[i].Width * rt.scaleFactor);
+                }
+            }
             Grid.Invalidate();
         }
 
@@ -339,7 +346,7 @@ namespace TeleBonifacio
             if (dados != null)
             {
                 ConfigurarGrid(ref dataGrid);
-            }
+            }            
         }
 
         #region Filtro

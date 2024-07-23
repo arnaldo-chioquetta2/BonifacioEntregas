@@ -8,7 +8,6 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
-using System.Drawing;
 
 namespace TeleBonifacio
 {
@@ -320,76 +319,6 @@ namespace TeleBonifacio
             comboBox.DataSource = lista;
             comboBox.DisplayMember = "Nome";
             comboBox.ValueMember = "Id";
-        }
-
-        #endregion
-
-        #region AutoAjuste        
-
-        public static bool IsLargeScreen()
-        {
-            Rectangle resolution = Screen.PrimaryScreen.Bounds;
-            return resolution.Width >= 1920 && resolution.Height >= 1080;
-        }
-
-        private static void AdjustDataGridView(DataGridView dgv)
-        {
-            float scaleFactor = 1.4f; 
-            dgv.DefaultCellStyle.Font = new Font("Segoe UI", 12 * scaleFactor);
-            dgv.ColumnHeadersDefaultCellStyle.Font = new Font("Segoe UI", 12 * scaleFactor, FontStyle.Regular);
-            dgv.RowTemplate.Height = (int)(dgv.RowTemplate.Height * scaleFactor);
-            foreach (DataGridViewRow row in dgv.Rows)
-            {
-                row.Height = (int)(row.Height * scaleFactor);
-            }
-            foreach (DataGridViewColumn col in dgv.Columns)
-            {
-                col.Width = (int)(col.Width * scaleFactor);
-            }
-            dgv.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.EnableResizing;
-            dgv.ColumnHeadersHeight = (int)(dgv.ColumnHeadersHeight * scaleFactor);
-        }
-
-        public static void AdjustFormComponents(Form form)
-        {
-            if (Adaptar)
-            {
-                if (IsLargeScreen())
-                {
-                    form.Size = new Size((int)(form.Width * 1.4), (int)(form.Height * 1.4));
-                    foreach (Control ctrl in form.Controls)
-                    {
-                        if (ctrl is DataGridView dgv)
-                        {
-                            AdjustDataGridView(dgv);
-                        } else
-                        {
-                            AdjustControl(ctrl);
-                        }                            
-                    }
-                }
-            }
-        }
-
-        public static void AdjustControl(Control ctrl)
-        {
-            ctrl.Location = new Point((int)(ctrl.Location.X * 1.4), (int)(ctrl.Location.Y * 1.4));
-            ctrl.Size = new Size((int)(ctrl.Width * 1.4), (int)(ctrl.Height * 1.4));
-            if (ctrl.Font != null)
-            {
-                ctrl.Font = new Font(ctrl.Font.FontFamily, ctrl.Font.Size * 1.4f, ctrl.Font.Style);
-            }
-            foreach (Control child in ctrl.Controls)
-            {
-                AdjustControl(child);
-            }
-            if (ctrl is DataGridView grid)
-            {
-                foreach (DataGridViewColumn col in grid.Columns)
-                {
-                    col.Width = (int)(col.Width * 1.4);
-                }
-            }
         }
 
         #endregion

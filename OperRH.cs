@@ -77,9 +77,12 @@ namespace TeleBonifacio
             dataGrid1.Columns[13].Width = 70;      // FnTrd (Saída pela tarde)
             dataGrid1.Columns[14].Visible = false; // FuncID
             dataGrid1.Columns[TOTAL_TIME].Width = 70;  // Total
-            for (int i = 4; i <= TOTAL_TIME; i++)      // Assuming columns 4 to 11 are the ones with time data
+            for (int i = 2; i <= TOTAL_TIME; i++)      // Assuming columns 4 to 11 are the ones with time data
             {
-                dataGrid1.Columns[i].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
+                if (i<4) 
+                    dataGrid1.Columns[i].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
+                if (rt.IsLargeScreen())
+                    dataGrid1.Columns[i].Width = (int)(dataGrid1.Columns[i].Width * rt.scaleFactor);
             }
             dataGrid1.Invalidate();
         }
@@ -264,7 +267,7 @@ namespace TeleBonifacio
             this.toolTip1.SetToolTip(this.txInCafeTrd, "Inicio do Café da Tarde");
             this.toolTip1.SetToolTip(this.txFmCafeMan, "Fim do Café da Manhã");
             this.toolTip1.SetToolTip(this.txInCafeMan, "Inicio do Café da Manhã");
-            glo.AdjustFormComponents(this);
+            rt.AdjustFormComponents(this);
         }
 
         private void SetStartPosition()

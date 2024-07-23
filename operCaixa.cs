@@ -18,7 +18,7 @@ namespace TeleBonifacio
         public operCaixa()
         {
             InitializeComponent();
-            glo.AdjustFormComponents(this);
+            rt.AdjustFormComponents(this);
         }
 
         private void txCompra_KeyUp(object sender, KeyEventArgs e)
@@ -338,6 +338,13 @@ namespace TeleBonifacio
             dataGrid1.Columns[10].Visible = false;
             dataGrid1.Columns[11].Visible = false;
             dataGrid1.Columns[12].Visible = false;
+            if (rt.IsLargeScreen())
+            {
+                for (int i = 1; i < 12; i++)
+                {
+                    dataGrid1.Columns[i].Width = (int)(dataGrid1.Columns[i].Width * rt.scaleFactor);
+                }
+            }
         }
 
         #endregion

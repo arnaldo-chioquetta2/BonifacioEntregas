@@ -45,7 +45,7 @@ namespace TeleBonifacio
                 ckBackup.Visible = true;
                 ckBackup.Checked = (cINI.ReadString("Backup", "Ativo", "")=="1");
             }
-            glo.AdjustFormComponents(this);
+            rt.AdjustFormComponents(this);
             Carregando = false;
         }
 

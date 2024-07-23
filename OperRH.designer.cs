@@ -33,6 +33,10 @@ namespace TeleBonifacio
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(OperRH));
             this.lblTitulo = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.txFmCafeTrd = new System.Windows.Forms.TextBox();
+            this.txInCafeTrd = new System.Windows.Forms.TextBox();
+            this.txFmCafeMan = new System.Windows.Forms.TextBox();
+            this.txInCafeMan = new System.Windows.Forms.TextBox();
             this.btExcluir = new System.Windows.Forms.Button();
             this.dtpHorario = new System.Windows.Forms.DateTimePicker();
             this.btGravar = new System.Windows.Forms.Button();
@@ -49,10 +53,6 @@ namespace TeleBonifacio
             this.dtnDtFim = new System.Windows.Forms.DateTimePicker();
             this.dtpDataIN = new System.Windows.Forms.DateTimePicker();
             this.dataGrid1 = new System.Windows.Forms.DataGridView();
-            this.txInCafeMan = new System.Windows.Forms.TextBox();
-            this.txFmCafeMan = new System.Windows.Forms.TextBox();
-            this.txInCafeTrd = new System.Windows.Forms.TextBox();
-            this.txFmCafeTrd = new System.Windows.Forms.TextBox();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGrid1)).BeginInit();
@@ -95,6 +95,46 @@ namespace TeleBonifacio
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(994, 83);
             this.panel1.TabIndex = 10;
+            // 
+            // txFmCafeTrd
+            // 
+            this.txFmCafeTrd.Location = new System.Drawing.Point(790, 46);
+            this.txFmCafeTrd.Name = "txFmCafeTrd";
+            this.txFmCafeTrd.Size = new System.Drawing.Size(55, 20);
+            this.txFmCafeTrd.TabIndex = 57;
+            this.txFmCafeTrd.Enter += new System.EventHandler(this.txInMan_Enter);
+            this.txFmCafeTrd.KeyUp += new System.Windows.Forms.KeyEventHandler(this.txInMan_KeyUp);
+            this.txFmCafeTrd.MouseHover += new System.EventHandler(this.txInMan_MouseHover);
+            // 
+            // txInCafeTrd
+            // 
+            this.txInCafeTrd.Location = new System.Drawing.Point(729, 46);
+            this.txInCafeTrd.Name = "txInCafeTrd";
+            this.txInCafeTrd.Size = new System.Drawing.Size(55, 20);
+            this.txInCafeTrd.TabIndex = 56;
+            this.txInCafeTrd.Enter += new System.EventHandler(this.txInMan_Enter);
+            this.txInCafeTrd.KeyUp += new System.Windows.Forms.KeyEventHandler(this.txInMan_KeyUp);
+            this.txInCafeTrd.MouseHover += new System.EventHandler(this.txInMan_MouseHover);
+            // 
+            // txFmCafeMan
+            // 
+            this.txFmCafeMan.Location = new System.Drawing.Point(543, 46);
+            this.txFmCafeMan.Name = "txFmCafeMan";
+            this.txFmCafeMan.Size = new System.Drawing.Size(55, 20);
+            this.txFmCafeMan.TabIndex = 53;
+            this.txFmCafeMan.Enter += new System.EventHandler(this.txInMan_Enter);
+            this.txFmCafeMan.KeyUp += new System.Windows.Forms.KeyEventHandler(this.txInMan_KeyUp);
+            this.txFmCafeMan.MouseHover += new System.EventHandler(this.txInMan_MouseHover);
+            // 
+            // txInCafeMan
+            // 
+            this.txInCafeMan.Location = new System.Drawing.Point(482, 46);
+            this.txInCafeMan.Name = "txInCafeMan";
+            this.txInCafeMan.Size = new System.Drawing.Size(55, 20);
+            this.txInCafeMan.TabIndex = 52;
+            this.txInCafeMan.Enter += new System.EventHandler(this.txInCafeMan_Enter);
+            this.txInCafeMan.KeyUp += new System.Windows.Forms.KeyEventHandler(this.txInMan_KeyUp);
+            this.txInCafeMan.MouseHover += new System.EventHandler(this.txInMan_MouseHover);
             // 
             // btExcluir
             // 
@@ -186,7 +226,7 @@ namespace TeleBonifacio
             // 
             this.btLancar.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.btLancar.Enabled = false;
-            this.btLancar.Location = new System.Drawing.Point(836, 14);
+            this.btLancar.Location = new System.Drawing.Point(831, 14);
             this.btLancar.Name = "btLancar";
             this.btLancar.Size = new System.Drawing.Size(75, 23);
             this.btLancar.TabIndex = 48;
@@ -218,6 +258,7 @@ namespace TeleBonifacio
             // 
             // cmbVendedor
             // 
+            this.cmbVendedor.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.cmbVendedor.DisplayMember = "Nome";
             this.cmbVendedor.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbVendedor.Items.AddRange(new object[] {
@@ -276,46 +317,6 @@ namespace TeleBonifacio
             this.dataGrid1.Size = new System.Drawing.Size(994, 367);
             this.dataGrid1.TabIndex = 11;
             this.dataGrid1.SelectionChanged += new System.EventHandler(this.dataGrid1_SelectionChanged);
-            // 
-            // txInCafeMan
-            // 
-            this.txInCafeMan.Location = new System.Drawing.Point(482, 46);
-            this.txInCafeMan.Name = "txInCafeMan";
-            this.txInCafeMan.Size = new System.Drawing.Size(55, 20);
-            this.txInCafeMan.TabIndex = 52;
-            this.txInCafeMan.Enter += new System.EventHandler(this.txInCafeMan_Enter);
-            this.txInCafeMan.KeyUp += new System.Windows.Forms.KeyEventHandler(this.txInMan_KeyUp);
-            this.txInCafeMan.MouseHover += new System.EventHandler(this.txInMan_MouseHover);
-            // 
-            // txFmCafeMan
-            // 
-            this.txFmCafeMan.Location = new System.Drawing.Point(543, 46);
-            this.txFmCafeMan.Name = "txFmCafeMan";
-            this.txFmCafeMan.Size = new System.Drawing.Size(55, 20);
-            this.txFmCafeMan.TabIndex = 53;
-            this.txFmCafeMan.Enter += new System.EventHandler(this.txInMan_Enter);
-            this.txFmCafeMan.KeyUp += new System.Windows.Forms.KeyEventHandler(this.txInMan_KeyUp);
-            this.txFmCafeMan.MouseHover += new System.EventHandler(this.txInMan_MouseHover);
-            // 
-            // txInCafeTrd
-            // 
-            this.txInCafeTrd.Location = new System.Drawing.Point(729, 46);
-            this.txInCafeTrd.Name = "txInCafeTrd";
-            this.txInCafeTrd.Size = new System.Drawing.Size(55, 20);
-            this.txInCafeTrd.TabIndex = 56;
-            this.txInCafeTrd.Enter += new System.EventHandler(this.txInMan_Enter);
-            this.txInCafeTrd.KeyUp += new System.Windows.Forms.KeyEventHandler(this.txInMan_KeyUp);
-            this.txInCafeTrd.MouseHover += new System.EventHandler(this.txInMan_MouseHover);
-            // 
-            // txFmCafeTrd
-            // 
-            this.txFmCafeTrd.Location = new System.Drawing.Point(790, 46);
-            this.txFmCafeTrd.Name = "txFmCafeTrd";
-            this.txFmCafeTrd.Size = new System.Drawing.Size(55, 20);
-            this.txFmCafeTrd.TabIndex = 57;
-            this.txFmCafeTrd.Enter += new System.EventHandler(this.txInMan_Enter);
-            this.txFmCafeTrd.KeyUp += new System.Windows.Forms.KeyEventHandler(this.txInMan_KeyUp);
-            this.txFmCafeTrd.MouseHover += new System.EventHandler(this.txInMan_MouseHover);
             // 
             // OperRH
             // 

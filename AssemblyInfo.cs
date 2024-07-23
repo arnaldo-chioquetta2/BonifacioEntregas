@@ -13,6 +13,7 @@ using System.Runtime.InteropServices;
 [assembly: Guid("308c57af-e663-456d-8a2c-188bbd61423d")]
 [assembly: AssemblyVersion("2.4.0.0")]
 [assembly: AssemblyFileVersion("2.4.0.0")]
+// 2.4.2 AutoAjuste trabalho nas telas de RH Faltas Entregas e Caixa 
 // 2.4.1 AutoAjuste inicio
 // 2.4.0 Ajuste na gravação do cliente novo na encomenda
 // 2.3.9 Ajustes nas colunas de datas e observações das grid da tela de faltas

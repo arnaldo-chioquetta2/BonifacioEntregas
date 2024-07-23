@@ -90,10 +90,10 @@ namespace TeleBonifacio
             // 
             // btRelat
             // 
-            this.btRelat.Anchor = System.Windows.Forms.AnchorStyles.Right;
-            this.btRelat.Location = new System.Drawing.Point(796, 11);
+            this.btRelat.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btRelat.Location = new System.Drawing.Point(780, 11);
             this.btRelat.Name = "btRelat";
-            this.btRelat.Size = new System.Drawing.Size(75, 23);
+            this.btRelat.Size = new System.Drawing.Size(91, 23);
             this.btRelat.TabIndex = 35;
             this.btRelat.Text = "Relatório";
             this.btRelat.Click += new System.EventHandler(this.btRelat_Click);
@@ -159,16 +159,16 @@ namespace TeleBonifacio
             // 
             // txObs
             // 
-            this.txObs.Location = new System.Drawing.Point(191, 103);
+            this.txObs.Location = new System.Drawing.Point(222, 101);
             this.txObs.Name = "txObs";
-            this.txObs.Size = new System.Drawing.Size(460, 20);
+            this.txObs.Size = new System.Drawing.Size(443, 20);
             this.txObs.TabIndex = 28;
             // 
             // label5
             // 
             this.label5.AutoSize = true;
             this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label5.Location = new System.Drawing.Point(102, 104);
+            this.label5.Location = new System.Drawing.Point(133, 102);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(83, 16);
             this.label5.TabIndex = 27;
@@ -283,31 +283,31 @@ namespace TeleBonifacio
             // 
             // btnLimpar
             // 
-            this.btnLimpar.Anchor = System.Windows.Forms.AnchorStyles.Right;
-            this.btnLimpar.Location = new System.Drawing.Point(796, 38);
+            this.btnLimpar.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnLimpar.Location = new System.Drawing.Point(780, 38);
             this.btnLimpar.Name = "btnLimpar";
-            this.btnLimpar.Size = new System.Drawing.Size(75, 23);
+            this.btnLimpar.Size = new System.Drawing.Size(91, 23);
             this.btnLimpar.TabIndex = 16;
             this.btnLimpar.Text = "Limpar";
             this.btnLimpar.Click += new System.EventHandler(this.btnLimpar_Click);
             // 
             // btnAdicionar
             // 
-            this.btnAdicionar.Anchor = System.Windows.Forms.AnchorStyles.Right;
+            this.btnAdicionar.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnAdicionar.Enabled = false;
-            this.btnAdicionar.Location = new System.Drawing.Point(796, 68);
+            this.btnAdicionar.Location = new System.Drawing.Point(780, 68);
             this.btnAdicionar.Name = "btnAdicionar";
-            this.btnAdicionar.Size = new System.Drawing.Size(75, 23);
+            this.btnAdicionar.Size = new System.Drawing.Size(91, 23);
             this.btnAdicionar.TabIndex = 17;
             this.btnAdicionar.Text = "Adicionar";
             this.btnAdicionar.Click += new System.EventHandler(this.btnAdicionar_Click);
             // 
             // btnFiltrar
             // 
-            this.btnFiltrar.Anchor = System.Windows.Forms.AnchorStyles.Right;
-            this.btnFiltrar.Location = new System.Drawing.Point(796, 97);
+            this.btnFiltrar.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnFiltrar.Location = new System.Drawing.Point(780, 97);
             this.btnFiltrar.Name = "btnFiltrar";
-            this.btnFiltrar.Size = new System.Drawing.Size(75, 23);
+            this.btnFiltrar.Size = new System.Drawing.Size(91, 23);
             this.btnFiltrar.TabIndex = 18;
             this.btnFiltrar.Text = "Filtrar";
             this.btnFiltrar.Click += new System.EventHandler(this.btnFiltrar_Click);
@@ -316,7 +316,7 @@ namespace TeleBonifacio
             // 
             this.btnNovoCliente.Location = new System.Drawing.Point(13, 101);
             this.btnNovoCliente.Name = "btnNovoCliente";
-            this.btnNovoCliente.Size = new System.Drawing.Size(83, 23);
+            this.btnNovoCliente.Size = new System.Drawing.Size(96, 23);
             this.btnNovoCliente.TabIndex = 19;
             this.btnNovoCliente.Text = "Novo Cliente";
             this.btnNovoCliente.Click += new System.EventHandler(this.btnNovoCliente_Click);

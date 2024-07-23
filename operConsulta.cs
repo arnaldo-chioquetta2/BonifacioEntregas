@@ -45,7 +45,7 @@ namespace TeleBonifacio
             dtpDataFim.Value = DT2;
             CarregaGrid(DT1, DT2);
             ConfigurarGrid();
-            glo.AdjustFormComponents(this);
+            rt.AdjustFormComponents(this);
         }
 
         private void CarregaGrid(DateTime? DT1 = null, DateTime? DT2 = null)

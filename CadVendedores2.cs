@@ -27,7 +27,7 @@ namespace TeleBonifacio
             lista.Add("Caixa");
             lista.Add("Escritório");
             base.setListCombo(lista);
-            glo.AdjustFormComponents(this);
+            rt.AdjustFormComponents(this);
             Carregando = false;
         }
 

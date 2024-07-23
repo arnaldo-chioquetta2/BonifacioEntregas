@@ -89,7 +89,7 @@ namespace TeleBonifacio
             ConfigureDataGridView(this.dataGrid2);
             ConfigureDataGridView(this.dataGrid3);
             ConfigureDataGridView(this.dataGrid4);
-            glo.AdjustFormComponents(this);
+            rt.AdjustFormComponents(this);
         }
 
         private void ConfigureDataGridView(DataGridView grid)
@@ -439,6 +439,13 @@ namespace TeleBonifacio
                 dataGrid1.Columns[14].Visible = false;  // Valor
             }            
             dataGrid1.Columns[15].Width = 170;      // Obs
+            if (rt.IsLargeScreen())
+            {
+                for (int i = 0; i < 15; i++)
+                {
+                    dataGrid1.Columns[i].Width = (int)(dataGrid1.Columns[i].Width * rt.scaleFactor);
+                }
+            }
             dataGrid1.Invalidate();
         }
 
@@ -1127,6 +1134,13 @@ namespace TeleBonifacio
             dataGrid2.Columns[11].Visible = false;  // Tipo valor original
             dataGrid2.Columns[12].Visible = false;  // idForn
             dataGrid2.Columns[13].Width = 290;      // Obs
+            if (rt.IsLargeScreen())
+            {
+                for (int i = 0; i < 13; i++)
+                {
+                    dataGrid2.Columns[i].Width = (int)(dataGrid2.Columns[i].Width * rt.scaleFactor);
+                }
+            }
             dataGrid2.Invalidate();
         }
 
@@ -1373,6 +1387,13 @@ namespace TeleBonifacio
             {
                 // 
             }
+            if (rt.IsLargeScreen())
+            {
+                for (int i = 0; i < 5; i++)
+                {
+                    dataGrid4.Columns[i].Width = (int)(dataGrid4.Columns[i].Width * rt.scaleFactor);
+                }
+            }
             dataGrid4.Invalidate();
         }
 
@@ -1594,6 +1615,13 @@ namespace TeleBonifacio
             dataGrid3.Columns[15].Visible = false;  // Telefone
             dataGrid3.Columns[16].Visible = false;  // DtPrometida
             dataGrid3.Columns[17].Visible = false;  // idCliente
+            if (rt.IsLargeScreen())
+            {
+                for (int i = 1; i < 13; i++)
+                {
+                    dataGrid3.Columns[i].Width = (int)(dataGrid3.Columns[i].Width * rt.scaleFactor);
+                }
+            }
             dataGrid3.Invalidate();
         }
 
