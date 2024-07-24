@@ -11,8 +11,9 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyCulture("")]
 [assembly: ComVisible(false)]
 [assembly: Guid("308c57af-e663-456d-8a2c-188bbd61423d")]
-[assembly: AssemblyVersion("2.4.0.0")]
-[assembly: AssemblyFileVersion("2.4.0.0")]
+[assembly: AssemblyVersion("2.4.3.0")]
+[assembly: AssemblyFileVersion("2.4.3.0")]
+// 2.4.3 Mais campos para a tela de funcionários
 // 2.4.2 AutoAjuste trabalho nas telas de RH Faltas Entregas e Caixa 
 // 2.4.1 AutoAjuste inicio
 // 2.4.0 Ajuste na gravação do cliente novo na encomenda

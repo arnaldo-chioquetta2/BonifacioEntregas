@@ -236,15 +236,56 @@ namespace TeleBonifacio
 
         private void MapearTextBoxParaModelo(TextBox textBox, dao.BaseDAO reg)
         {
-            string propertyName = textBox.Name.Substring(3); // Remove o prefixo 'txt'
+            string propertyName = textBox.Name.Substring(3);
             PropertyInfo propertyInfo = reg.GetType().GetProperty(propertyName);
-            if (propertyInfo == null)
+
+            if (propertyInfo != null)
             {
-                propertyInfo.SetValue(reg, null, null);
+                if (propertyInfo.PropertyType == typeof(int))
+                {
+                    if (int.TryParse(textBox.Text, out int value))
+                    {
+                        propertyInfo.SetValue(reg, value, null);
+                    }
+                    else
+                    {
+                        Console.WriteLine($"Falha na conversão para inteiro: {textBox.Text}");
+                    }
+                }
+                else if (propertyInfo.PropertyType == typeof(decimal))
+                {
+                    if (decimal.TryParse(textBox.Text, out decimal value))
+                    {
+                        propertyInfo.SetValue(reg, value, null);
+                    }
+                    else
+                    {
+                        Console.WriteLine($"Falha na conversão para decimal: {textBox.Text}");
+                    }
+                }
+                else if (propertyInfo.PropertyType == typeof(string))
+                {
+                    propertyInfo.SetValue(reg, textBox.Text, null);
+                }
+                else if (propertyInfo.PropertyType == typeof(TimeSpan))
+                {
+                    if (TimeSpan.TryParse(textBox.Text, out TimeSpan timeSpanValue))
+                    {
+                        propertyInfo.SetValue(reg, timeSpanValue, null);
+                    }
+                    else
+                    {
+                        Console.WriteLine($"Falha na conversão para TimeSpan: {textBox.Text}");
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("Tipo de propriedade não suportado");
+                }
             }
             else
             {
-                propertyInfo.SetValue(reg, textBox.Text, null);
+                Console.WriteLine($"Propriedade '{propertyName}' não encontrada");
             }
         }
 

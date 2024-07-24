@@ -11,8 +11,8 @@ namespace TeleBonifacio
         public static bool IsLargeScreen()
         {
             Rectangle resolution = Screen.PrimaryScreen.Bounds;
-            // return resolution.Width >= 1920 && resolution.Height >= 1080;
-            return true;
+            return resolution.Width >= 1920 && resolution.Height >= 1080;
+            // return true;
         }
 
         public static void AdjustControl(Control ctrl, Form form)

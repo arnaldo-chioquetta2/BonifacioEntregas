@@ -49,7 +49,8 @@ namespace TeleBonifacio
             dataGridView1 = new DataGridView();
             dataGridView1.Dock = DockStyle.Fill;
             tabPage1.Controls.Add(dataGridView1);
-            rt.AdjustFormComponents(this);
+            if (rt.IsLargeScreen())
+                this.WindowState = FormWindowState.Maximized;
         }
 
         private void Dashboard_Load(object sender, EventArgs e)

@@ -145,7 +145,7 @@ namespace TeleBonifacio
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(106, 20);
             this.label7.TabIndex = 13;
-            this.label7.Text = "Vendedores";
+            this.label7.Text = "Funcionários";
             this.label7.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // label8
