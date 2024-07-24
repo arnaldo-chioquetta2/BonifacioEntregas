@@ -273,10 +273,52 @@ namespace TeleBonifacio.dao
                                 row["DataNascimento"] = reader["DataNascimento"];
                                 row["DataAdmissao"] = reader["DataAdmissao"];
                                 row["Salario"] = reader["Salario"];
-                                row["HorarioSemanaInicio"] = TimeSpan.Parse(reader["HorarioSemanaInicio"].ToString());
-                                row["HorarioSemanaFim"] = TimeSpan.Parse(reader["HorarioSemanaFim"].ToString());
-                                row["HorarioSabadoInicio"] = TimeSpan.Parse(reader["HorarioSabadoInicio"].ToString());
-                                row["HorarioSabadoFim"] = TimeSpan.Parse(reader["HorarioSabadoFim"].ToString());
+
+                                row["HorarioSemanaInicio"] = ParseNullableTimeSpan(reader, "HorarioSemanaInicio");
+                                row["HorarioSemanaFim"] = ParseNullableTimeSpan(reader, "HorarioSemanaFim");
+                                row["HorarioSabadoInicio"] = ParseNullableTimeSpan(reader, "HorarioSabadoInicio");
+                                row["HorarioSabadoFim"] = ParseNullableTimeSpan(reader, "HorarioSabadoFim");
+
+                                // Verifica se o valor é DBNull antes de tentar converter para TimeSpan
+                                //if (!reader.IsDBNull(reader.GetOrdinal("HorarioSemanaInicio")))
+                                //{
+                                //    row["HorarioSemanaInicio"] = TimeSpan.Parse(reader["HorarioSemanaInicio"].ToString());
+                                //}
+                                //else
+                                //{
+                                //    // Trata o valor nulo como necessário, por exemplo, definindo um valor padrão ou deixando-o vazio
+                                //    row["HorarioSemanaInicio"] = default(TimeSpan); // Valor padrão para TimeSpan é Zero
+                                //}
+
+                                //// Repete o processo para outros campos de TimeSpan
+                                //if (!reader.IsDBNull(reader.GetOrdinal("HorarioSemanaFim")))
+                                //{
+                                //    row["HorarioSemanaFim"] = TimeSpan.Parse(reader["HorarioSemanaFim"].ToString());
+                                //}
+                                //else
+                                //{
+                                //    row["HorarioSemanaFim"] = default(TimeSpan);
+                                //}
+
+                                //if (!reader.IsDBNull(reader.GetOrdinal("HorarioSabadoInicio")))
+                                //{
+                                //    row["HorarioSabadoInicio"] = TimeSpan.Parse(reader["HorarioSabadoInicio"].ToString());
+                                //}
+                                //else
+                                //{
+                                //    row["HorarioSabadoInicio"] = default(TimeSpan);
+                                //}
+
+                                //if (!reader.IsDBNull(reader.GetOrdinal("HorarioSabadoFim")))
+                                //{
+                                //    row["HorarioSabadoFim"] = TimeSpan.Parse(reader["HorarioSabadoFim"].ToString());
+                                //}
+                                //else
+                                //{
+                                //    row["HorarioSabadoFim"] = default(TimeSpan);
+                                //}
+
+                                // Continua preenchendo outras colunas...
                                 row["FormaPagamento"] = reader["FormaPagamento"];
                                 row["ValeAlimentacao"] = reader["ValeAlimentacao"];
                                 row["ValeTransporte"] = reader["ValeTransporte"];
@@ -290,9 +332,44 @@ namespace TeleBonifacio.dao
                                 row["QtdFilhosMenor14"] = reader["QtdFilhosMenor14"];
                                 row["FilhoComDeficiencia"] = reader["FilhoComDeficiencia"];
                                 row["CTPS"] = reader["CTPS"];
+
                                 dataTable.Rows.Add(row);
                             }
                             return dataTable;
+                            //while (reader.Read())
+                            //{
+                            //    DataRow row = dataTable.NewRow();
+                            //    row["ID"] = reader["ID"];
+                            //    row["Nome"] = reader["Nome"];
+                            //    row["Loja"] = reader["Loja"];
+                            //    row["Atende"] = reader["Atende"];
+                            //    row["Nro"] = reader["Nro"];
+                            //    row["Usuario"] = reader["Usuario"];
+                            //    row["Senha"] = reader["Senha"];
+                            //    row["Nivel"] = reader["Nivel"];
+                            //    row["DataNascimento"] = reader["DataNascimento"];
+                            //    row["DataAdmissao"] = reader["DataAdmissao"];
+                            //    row["Salario"] = reader["Salario"];
+                            //    row["HorarioSemanaInicio"] = TimeSpan.Parse(reader["HorarioSemanaInicio"].ToString());
+                            //    row["HorarioSemanaFim"] = TimeSpan.Parse(reader["HorarioSemanaFim"].ToString());
+                            //    row["HorarioSabadoInicio"] = TimeSpan.Parse(reader["HorarioSabadoInicio"].ToString());
+                            //    row["HorarioSabadoFim"] = TimeSpan.Parse(reader["HorarioSabadoFim"].ToString());
+                            //    row["FormaPagamento"] = reader["FormaPagamento"];
+                            //    row["ValeAlimentacao"] = reader["ValeAlimentacao"];
+                            //    row["ValeTransporte"] = reader["ValeTransporte"];
+                            //    row["LinhaOnibus"] = reader["LinhaOnibus"];
+                            //    row["DataDemissao"] = reader["DataDemissao"];
+                            //    row["MotivoDemissao"] = reader["MotivoDemissao"];
+                            //    row["RG"] = reader["RG"];
+                            //    row["CPF"] = reader["CPF"];
+                            //    row["Cargo"] = reader["Cargo"];
+                            //    row["FoneEmergencia"] = reader["FoneEmergencia"];
+                            //    row["QtdFilhosMenor14"] = reader["QtdFilhosMenor14"];
+                            //    row["FilhoComDeficiencia"] = reader["FilhoComDeficiencia"];
+                            //    row["CTPS"] = reader["CTPS"];
+                            //    dataTable.Rows.Add(row);
+                            //}
+
                         }
                     }
                 }
@@ -301,6 +378,19 @@ namespace TeleBonifacio.dao
                     Console.WriteLine(ex.ToString());
                     return null;
                 }
+            }
+        }
+
+        private TimeSpan ParseNullableTimeSpan(OleDbDataReader reader, string columnName)
+        {
+            if (!reader.IsDBNull(reader.GetOrdinal(columnName)))
+            {
+                return TimeSpan.Parse(reader[columnName].ToString());
+            }
+            else
+            {
+                // Retorna o valor padrão para TimeSpan, que é Zero
+                return default(TimeSpan);
             }
         }
 
