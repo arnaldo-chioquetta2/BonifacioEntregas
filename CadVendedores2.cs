@@ -3,6 +3,7 @@ using System;
 using System.Data.OleDb;
 using System.Windows.Forms;
 using System.Collections.Generic;
+using System.Reflection;
 
 namespace TeleBonifacio
 {
@@ -12,6 +13,7 @@ namespace TeleBonifacio
         private int ID = 0;
         private bool Adicionando = false;
         private string Nome = "";
+        private INI cINI;
 
         public CadVendedores2()
         {
@@ -28,8 +30,55 @@ namespace TeleBonifacio
             lista.Add("Escritório");
             base.setListCombo(lista);
             rt.AdjustFormComponents(this);
+            cINI = new INI();
+            VerificaHorarios(base.reg);
             Carregando = false;
         }
+
+        private void VerificaHorarios(tb.IDataEntity modelo)
+        {
+            AjustarDateTimePicker(dtpHorarioSemanaInicio, "Turnos", "ManIni", "08:00", modelo);
+            AjustarDateTimePicker(dtpHorarioSemanaFim, "Turnos", "ManFim", "12:00", modelo);
+            AjustarDateTimePicker(dtpHorarioSabadoInicio, "Turnos", "TarIni", "13:00", modelo);
+            AjustarDateTimePicker(dtpHorarioSabadoFim, "Turnos", "TarFim", "18:30", modelo);
+        }
+
+        private void AjustarDateTimePicker(DateTimePicker dtp, string section, string key, string defaultValue, object modelo)
+        {
+            string fieldName = dtp.Name.Substring(3);
+            PropertyInfo propertyInfo = modelo.GetType().GetProperty(fieldName);
+            if (propertyInfo != null)
+            {
+                object fieldValue = propertyInfo.GetValue(modelo);
+                if (fieldValue == null || (fieldValue is DateTime dateTimeValue && dateTimeValue.TimeOfDay == TimeSpan.Zero))
+                {
+                    TimeSpan time = GetIniTime(section, key, defaultValue);
+                    dtp.Value = DateTime.Today + time; 
+                    dtp.Format = DateTimePickerFormat.Time;
+                    dtp.ShowUpDown = true;
+                }
+                else if (fieldValue is TimeSpan timeSpanValue && timeSpanValue == TimeSpan.Zero)
+                {
+                    TimeSpan time = GetIniTime(section, key, defaultValue);
+                    dtp.Value = DateTime.Today + time; 
+                    dtp.Format = DateTimePickerFormat.Time;
+                    dtp.ShowUpDown = true;
+                }
+                else
+                {
+                    dtp.Value = DateTime.Today + (TimeSpan)fieldValue;
+                    dtp.Format = DateTimePickerFormat.Time;
+                    dtp.ShowUpDown = true;
+                }
+            }
+        }
+
+        private TimeSpan GetIniTime(string section, string key, string defaultValue)
+        {
+            string timeStr = cINI.ReadString(section, key, defaultValue);
+            return TimeSpan.TryParse(timeStr, out TimeSpan result) ? result : TimeSpan.Parse(defaultValue);
+        }
+
 
         private tb.Vendedor getUlt()
         {
@@ -38,99 +87,86 @@ namespace TeleBonifacio
         }
 
         private Vendedor ExecutarConsulta(string query)
+    {
+        using (OleDbConnection connection = new OleDbConnection(glo.connectionString))
         {
-            using (OleDbConnection connection = new OleDbConnection(glo.connectionString))
+            try
             {
-                try
+                connection.Open();
+                using (OleDbCommand command = new OleDbCommand(query, connection))
                 {
-                    connection.Open();
-                    using (OleDbCommand command = new OleDbCommand(query, connection))
+                    using (OleDbDataReader reader = command.ExecuteReader())
                     {
-                        using (OleDbDataReader reader = command.ExecuteReader())
+                        Vendedor ret = new Vendedor();
+                        if (reader.Read())
                         {
-                            Vendedor ret = new Vendedor();
-                            while (reader.Read())
-                            {
-                                ret.Id = (int)reader["ID"];
-                                ret.Nome = (string)reader["Nome"];
-                                ret.Loja = (string)reader["Loja"];
-                                object oAt = reader["Atende"];
-                                if (oAt== System.DBNull.Value)
-                                {
-                                    ret.Atende = false;
-                                } else
-                                {
-                                    int iAt = (int)oAt;
-                                    ret.Atende = (iAt == -1);
-                                }
-                                object oNro = reader["Nro"];
-                                if (oNro == System.DBNull.Value)
-                                {
-                                    ret.Nro = "0";
-                                }
-                                else
-                                {
-                                    ret.Nro = (string)oNro;
-                                }
-
-                                object oUsuario = reader["Usuario"];
-                                if (oUsuario == System.DBNull.Value)
-                                {
-                                    ret.Usuario = "";
-                                }
-                                else
-                                {
-                                    ret.Usuario = (string)oUsuario;
-                                }
-
-                                object oSenha = reader["Senha"];
-                                if (oSenha == System.DBNull.Value)
-                                {
-                                    ret.Senha = "";
-                                }
-                                else
-                                {
-                                    ret.Senha = (string)oSenha;
-                                }
-
-                                object oNivel = reader["Nivel"];
-                                if (oNivel == System.DBNull.Value)
-                                {
-                                    ret.Nivel = 0;
-                                }
-                                else
-                                {
-                                    ret.Nivel = (int)oNivel;
-                                }
-
-                            }
-
-                            return ret;
+                            ret.Id = (int)reader["ID"];
+                            ret.Nome = reader["Nome"].ToString();
+                            ret.Loja = reader["Loja"].ToString();
+                            ret.Atende = reader["Atende"] != DBNull.Value && (int)reader["Atende"] == 1;
+                            ret.Nro = reader["Nro"].ToString();
+                            ret.Usuario = reader["Usuario"].ToString();
+                            ret.Senha = reader["Senha"].ToString();
+                            ret.Nivel = reader["Nivel"] != DBNull.Value ? (int)reader["Nivel"] : 0;
+                            ret.DataNascimento = reader["DataNascimento"] != DBNull.Value ? (DateTime)reader["DataNascimento"] : DateTime.MinValue;
+                            ret.DataAdmissao = reader["DataAdmissao"] != DBNull.Value ? (DateTime)reader["DataAdmissao"] : DateTime.MinValue;
+                            ret.Salario = reader["Salario"] != DBNull.Value ? (decimal)reader["Salario"] : 0;
+                            ret.HorarioSemanaInicio = ParseTimeFromDateTime(reader, "HorarioSemanaInicio");
+                            ret.HorarioSemanaFim = ParseTimeFromDateTime(reader, "HorarioSemanaFim");
+                            ret.HorarioSabadoInicio = ParseTimeFromDateTime(reader, "HorarioSabadoInicio");
+                            ret.HorarioSabadoFim = ParseTimeFromDateTime(reader, "HorarioSabadoFim");
+                            ret.FormaPagamento = reader["FormaPagamento"].ToString();
+                            ret.ValeAlimentacao = reader["ValeAlimentacao"] != DBNull.Value && (int)reader["ValeAlimentacao"] == 1;
+                            ret.ValeTransporte = reader["ValeTransporte"] != DBNull.Value && (int)reader["ValeTransporte"] == 1;
+                            ret.LinhaOnibus = reader["LinhaOnibus"].ToString();
+                            ret.DataDemissao = reader["DataDemissao"] != DBNull.Value ? (DateTime)reader["DataDemissao"] : DateTime.MinValue;
+                            ret.MotivoDemissao = reader["MotivoDemissao"].ToString();
+                            ret.RG = reader["RG"].ToString();
+                            ret.CPF = reader["CPF"].ToString();
+                            ret.Cargo = reader["Cargo"].ToString();
+                            ret.FoneEmergencia = reader["FoneEmergencia"].ToString();
+                            ret.QtdFilhosMenor14 = reader["QtdFilhosMenor14"] != DBNull.Value ? (int)reader["QtdFilhosMenor14"] : 0;
+                            ret.FilhoComDeficiencia = reader["FilhoComDeficiencia"] != DBNull.Value && (int)reader["FilhoComDeficiencia"] == 1;
+                            ret.CTPS = reader["CTPS"].ToString();
+                            ret.Fone = reader["Fone"].ToString();
+                            ret.Amigo = reader["Amigo"].ToString();
                         }
+                        return ret;
                     }
                 }
-                catch (Exception ex)
-                {
-                    Console.WriteLine(ex.ToString());
-                    throw;
-                }
-
             }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error during database operation: " + ex.Message);
+                throw;
+            }
+        }
+    }
+
+        private TimeSpan ParseTimeFromDateTime(OleDbDataReader reader, string columnName)
+        {
+            if (!reader.IsDBNull(reader.GetOrdinal(columnName)))
+            {
+                DateTime tempDate = (DateTime)reader[columnName];
+                return tempDate.TimeOfDay;
+            }
+            return TimeSpan.Zero;
         }
 
         private void cntrole1_AcaoRealizada(object sender, AcaoEventArgs e)
         {
             Carregando = true;
-            if (!Adicionando)
+            if (e.Acao== "Adicionar")
             {
-                base.DAO.SetId(ID);
-                base.DAO.SetNome(Nome);
+                Adicionando = true;
+            } else
+            {
+                if (!Adicionando)
+                {
+                    base.DAO.SetId(ID);
+                    base.DAO.SetNome(Nome);
+                }
             }
-            //if (e.Acao == "OK")
-            //{
-            //    base.DAO.SetSenha(txtSenha.Text);
-            //}
-
             base.cntrole1_AcaoRealizada(sender, e, base.reg);
             try
             {
@@ -140,6 +176,10 @@ namespace TeleBonifacio
             catch (Exception)
             {
                 // Não faz nada
+            }
+            if ((e.Acao == "ParaFrente") || (e.Acao == "ParaTras"))
+            {
+                VerificaHorarios(base.reg);
             }
             Carregando = false;
         }
@@ -184,6 +224,53 @@ namespace TeleBonifacio
         private void cnbNivel_Click(object sender, EventArgs e)
         {
             base.cntrole1.EmEdicao = true;
+        }
+
+        private void dtpDataAdmissao_ValueChanged(object sender, EventArgs e)
+        {
+            DateTimePicker dtp = sender as DateTimePicker;
+            if (dtp.Format == DateTimePickerFormat.Custom && dtp.Value != DateTime.MinValue)
+            {
+                dtp.Format = DateTimePickerFormat.Short; // Volta para o formato de data curta
+            }
+            else if (dtp.Value == DateTime.MinValue)
+            {
+                dtp.CustomFormat = " "; // Apresenta o controle como vazio.
+            }
+        }
+
+        private void dtpDataNascimento_ValueChanged(object sender, EventArgs e)
+        {
+            DateTimePicker dtp = sender as DateTimePicker;
+            if (dtp.Format == DateTimePickerFormat.Custom && dtp.Value != DateTime.MinValue)
+            {
+                dtp.Format = DateTimePickerFormat.Short; // Volta para o formato de data curta
+            }
+            else if (dtp.Value == DateTime.MinValue)
+            {
+                dtp.CustomFormat = " "; // Apresenta o controle como vazio.
+            }
+
+        }
+
+        private void dtpDataAdmissao_Enter(object sender, EventArgs e)
+        {
+            DateTimePicker dtp = sender as DateTimePicker;
+            if (dtp.Format == DateTimePickerFormat.Custom)
+            {
+                dtp.Value = DateTime.Today;  // Ajusta para a data atual quando o controle é ativado.
+                dtp.Format = DateTimePickerFormat.Short; // Muda para o formato curto para mostrar a data.
+            }
+        }
+
+        private void dtpDataDemissao_Enter(object sender, EventArgs e)
+        {
+            DateTimePicker dtp = sender as DateTimePicker;
+            if (dtp.Format == DateTimePickerFormat.Custom)
+            {
+                dtp.Value = DateTime.Today;
+                dtp.Format = DateTimePickerFormat.Short;
+            }
         }
 
     }

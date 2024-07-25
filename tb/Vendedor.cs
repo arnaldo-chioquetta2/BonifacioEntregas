@@ -42,5 +42,9 @@ namespace TeleBonifacio.tb
 
         public bool FilhoComDeficiencia { get; set; }
 
+        public string Amigo { get; set; }
+
+        public string Fone { get; set; }
+
     }
 }

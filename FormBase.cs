@@ -152,7 +152,7 @@ namespace TeleBonifacio
                 DateTime? data = propertyInfo.GetValue(reg, null) as DateTime?;
                 if (!data.HasValue || data.Value == DateTime.MinValue)
                 {
-                    dtpControl.CustomFormat = " ";
+                    dtpControl.CustomFormat = " "; 
                     dtpControl.Format = DateTimePickerFormat.Custom;
                 }
                 else
@@ -162,6 +162,7 @@ namespace TeleBonifacio
                 }
             }
         }
+
 
         private void MapearCamposParaModelo(dao.BaseDAO reg)
         {

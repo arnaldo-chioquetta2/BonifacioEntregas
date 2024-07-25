@@ -53,6 +53,10 @@ namespace TeleBonifacio.dao
 
         public bool FilhoComDeficiencia { get; set; }
 
+        public string Amigo { get; set; }
+
+        public string Fone { get; set; }
+
         public VendedoresDAO()
         {
             
@@ -69,55 +73,65 @@ namespace TeleBonifacio.dao
             {
                 sCript = Cripto.Encrypt(vendedor.Senha);
             }
+            string formattedSalary = vendedor.Salario.ToString("F2", System.Globalization.CultureInfo.InvariantCulture);
+            int valeAlimentacao = vendedor.ValeAlimentacao ? 1 : 0;
+            int valeTransporte = vendedor.ValeTransporte ? 1 : 0;
+            int filhoComDeficiencia = vendedor.FilhoComDeficiencia ? 1 : 0;
             if (vendedor.Adicao)
             {
-                query = $"INSERT INTO Vendedores (Nome, Loja, Atende, Nro, Usuario, Senha, Nivel, DataNascimento, DataAdmissao, Salario, HorarioSemanaInicio, HorarioSemanaFim, HorarioSabadoInicio, HorarioSabadoFim, FormaPagamento, ValeAlimentacao, ValeTransporte, LinhaOnibus, DataDemissao, MotivoDemissao, RG, CPF, Cargo, FoneEmergencia, QtdFilhosMenor14, FilhoComDeficiencia, QtdFilhosMenor14, CTPS) " +
-                        $"VALUES ('{vendedor.Nome}', '{vendedor.Loja}', {iAtende}, '{vendedor.Nro}', '{vendedor.Usuario}', '{sCript}', {vendedor.Nivel}, '{vendedor.DataNascimento:yyyy-MM-dd}', '{vendedor.DataAdmissao:yyyy-MM-dd}', {vendedor.Salario:F2}, '{vendedor.HorarioSemanaInicio}', '{vendedor.HorarioSemanaFim}', '{vendedor.HorarioSabadoInicio}', '{vendedor.HorarioSabadoFim}', '{vendedor.FormaPagamento}', {vendedor.ValeAlimentacao}, {vendedor.ValeTransporte}, '{vendedor.LinhaOnibus}', '{vendedor.DataDemissao:yyyy-MM-dd}', '{vendedor.MotivoDemissao}', '{vendedor.RG}', '{vendedor.CPF}', '{vendedor.Cargo}', '{vendedor.FoneEmergencia}', {vendedor.QtdFilhosMenor14}, {vendedor.FilhoComDeficiencia}, '{vendedor.CTPS}')";
+                query = $"INSERT INTO Vendedores (Nome, Loja, Atende, Nro, Usuario, Senha, Nivel, DataNascimento, DataAdmissao, Salario, HorarioSemanaInicio, HorarioSemanaFim, HorarioSabadoInicio, HorarioSabadoFim, FormaPagamento, ValeAlimentacao, ValeTransporte, LinhaOnibus, DataDemissao, MotivoDemissao, RG, CPF, Cargo, FoneEmergencia, QtdFilhosMenor14, FilhoComDeficiencia, CTPS, Fone, Amigo) " +
+                        $"VALUES ('{vendedor.Nome}', '{vendedor.Loja}', {iAtende}, '{vendedor.Nro}', '{vendedor.Usuario}', '{sCript}', {vendedor.Nivel}, '{vendedor.DataNascimento:yyyy-MM-dd}', '{vendedor.DataAdmissao:yyyy-MM-dd}', {formattedSalary}, '{vendedor.HorarioSemanaInicio}', '{vendedor.HorarioSemanaFim}', '{vendedor.HorarioSabadoInicio}', '{vendedor.HorarioSabadoFim}', '{vendedor.FormaPagamento}', {valeAlimentacao}, {valeTransporte}, '{vendedor.LinhaOnibus}', '{vendedor.DataDemissao:yyyy-MM-dd}', '{vendedor.MotivoDemissao}', '{vendedor.RG}', '{vendedor.CPF}', '{vendedor.Cargo}', '{vendedor.FoneEmergencia}', {vendedor.QtdFilhosMenor14}, {filhoComDeficiencia}, '{vendedor.CTPS}', '{vendedor.Fone}', '{vendedor.Amigo}')";
             }
             else
             {
-                string formattedSalary = vendedor.Salario.ToString("F2", System.Globalization.CultureInfo.InvariantCulture);
-                int valeAlimentacao = vendedor.ValeAlimentacao ? 1 : 0;
-                int valeTransporte = vendedor.ValeTransporte ? 1 : 0;
-                int filhoComDeficiencia = vendedor.FilhoComDeficiencia ? 1 : 0;
-                // query = $"UPDATE Vendedores SET Nome = '{vendedor.Nome}', Loja = '{vendedor.Loja}', Atende = {iAtende}, Nro = '{vendedor.Nro}', Usuario = '{vendedor.Usuario}', Senha = '{sCript}', Nivel = {vendedor.Nivel}, DataNascimento = '#{vendedor.DataNascimento:yyyy-MM-dd}#', DataAdmissao = '#{vendedor.DataAdmissao:yyyy-MM-dd}#', Salario = {vendedor.Salario.ToString(System.Globalization.CultureInfo.InvariantCulture)}, HorarioSemanaInicio = '#{vendedor.HorarioSemanaInicio:hh\\:mm}#', HorarioSemanaFim = '#{vendedor.HorarioSemanaFim:hh\\:mm}#', HorarioSabadoInicio = '#{vendedor.HorarioSabadoInicio:hh\\:mm}#', HorarioSabadoFim = '{vendedor.HorarioSabadoFim:hh\\:mm}', FormaPagamento = '{vendedor.FormaPagamento}', ValeAlimentacao = {valeAlimentacao}, ValeTransporte = {valeTransporte}, LinhaOnibus = '{vendedor.LinhaOnibus}', DataDemissao = '#{vendedor.DataDemissao:yyyy-MM-dd}#', MotivoDemissao = '{vendedor.MotivoDemissao}', RG = '{vendedor.RG}', CPF = '{vendedor.CPF}', Cargo = '{vendedor.Cargo}', FoneEmergencia = '{vendedor.FoneEmergencia}', QtdFilhosMenor14 = {vendedor.QtdFilhosMenor14}, FilhoComDeficiencia = {filhoComDeficiencia}, CTPS = '{vendedor.CTPS}' WHERE ID = {vendedor.Id}";
-                // query = $"UPDATE Vendedores SET Nome = '{vendedor.Nome}', Loja = '{vendedor.Loja}', Atende = {iAtende}, Nro = '{vendedor.Nro}', Usuario = '{vendedor.Usuario}', Senha = '{sCript}', Nivel = {vendedor.Nivel}, DataNascimento = '#{vendedor.DataNascimento:yyyy-MM-dd}#', DataAdmissao = '#{vendedor.DataAdmissao:yyyy-MM-dd}#', Salario = {formattedSalary}, HorarioSemanaInicio = '#{vendedor.HorarioSemanaInicio:hh\\:mm}#', HorarioSemanaFim = '#{vendedor.HorarioSemanaFim:hh\\:mm}#', HorarioSabadoInicio = '#{vendedor.HorarioSabadoInicio:hh\\:mm}#', HorarioSabadoFim = '#{vendedor.HorarioSabadoFim:hh\\:mm}#', FormaPagamento = '{vendedor.FormaPagamento}', ValeAlimentacao = {valeAlimentacao}, ValeTransporte = {valeTransporte}, LinhaOnibus = '{vendedor.LinhaOnibus}', DataDemissao = '#{vendedor.DataDemissao:yyyy-MM-dd}#', MotivoDemissao = '{vendedor.MotivoDemissao}', RG = '{vendedor.RG}', CPF = '{vendedor.CPF}', Cargo = '{vendedor.Cargo}', FoneEmergencia = '{vendedor.FoneEmergencia}', QtdFilhosMenor14 = {vendedor.QtdFilhosMenor14}, FilhoComDeficiencia = {filhoComDeficiencia}, CTPS = '{vendedor.CTPS}' WHERE ID = {vendedor.Id}";
-
-                // Criando a base do comando SQL
                 StringBuilder sqlBuilder = new StringBuilder();
-                sqlBuilder.Append($"UPDATE Vendedores SET Nome = '{vendedor.Nome}', Loja = '{vendedor.Loja}', Atende = {iAtende}, Nro = '{vendedor.Nro}', Usuario = '{vendedor.Usuario}', Senha = '{sCript}', Nivel = {vendedor.Nivel}, ");
+                sqlBuilder.Append($"UPDATE Vendedores SET ");
+                sqlBuilder.Append($"Nome = '{vendedor.Nome}', ");
+                sqlBuilder.Append($"Loja = '{vendedor.Loja}', ");
+                sqlBuilder.Append($"Atende = {iAtende}, "); // Assegura que True seja -1 e False seja 0
+                sqlBuilder.Append($"Nro = '{vendedor.Nro}', ");
+                sqlBuilder.Append($"Usuario = '{vendedor.Usuario}', ");
+                sqlBuilder.Append($"Senha = '{sCript}', ");
+                sqlBuilder.Append($"Nivel = {vendedor.Nivel}, ");
+                sqlBuilder.Append($"Fone = '{vendedor.Fone}', ");
+                sqlBuilder.Append($"Amigo = '{vendedor.Amigo}', ");
 
-                // Adicionando campos condicionalmente
-                if (vendedor.DataNascimento > new DateTime(0001, 01, 01))
-                    sqlBuilder.Append($"DataNascimento = '#{vendedor.DataNascimento:yyyy-MM-dd}#', ");
+                //if (vendedor.DataNascimento > new DateTime(0001, 01, 01))
+                //    sqlBuilder.Append($"DataNascimento = '#{vendedor.DataNascimento:yyyy-MM-dd}#', ");
+                //if (vendedor.DataAdmissao > new DateTime(0001, 01, 01))
+                //    sqlBuilder.Append($"DataAdmissao = '#{vendedor.DataAdmissao:yyyy-MM-dd}#', ");
+                //if (vendedor.DataDemissao > new DateTime(0001, 01, 01))
+                //    sqlBuilder.Append($"DataDemissao = '#{vendedor.DataDemissao:yyyy-MM-dd}#', ");
 
-                if (vendedor.DataAdmissao > new DateTime(0001, 01, 01))
-                    sqlBuilder.Append($"DataAdmissao = '#{vendedor.DataAdmissao:yyyy-MM-dd}#', ");
-
-                sqlBuilder.Append($"Salario = {vendedor.Salario.ToString(System.Globalization.CultureInfo.InvariantCulture)}, ");
-
+                // Tratamento especial para os campos de horário
                 if (vendedor.HorarioSemanaInicio != TimeSpan.Zero)
                     sqlBuilder.Append($"HorarioSemanaInicio = '#{vendedor.HorarioSemanaInicio:hh\\:mm}#', ");
-
                 if (vendedor.HorarioSemanaFim != TimeSpan.Zero)
                     sqlBuilder.Append($"HorarioSemanaFim = '#{vendedor.HorarioSemanaFim:hh\\:mm}#', ");
-
                 if (vendedor.HorarioSabadoInicio != TimeSpan.Zero)
                     sqlBuilder.Append($"HorarioSabadoInicio = '#{vendedor.HorarioSabadoInicio:hh\\:mm}#', ");
-
                 if (vendedor.HorarioSabadoFim != TimeSpan.Zero)
                     sqlBuilder.Append($"HorarioSabadoFim = '#{vendedor.HorarioSabadoFim:hh\\:mm}#', ");
 
-                sqlBuilder.Append($"FormaPagamento = '{vendedor.FormaPagamento}', ValeAlimentacao = {vendedor.ValeAlimentacao}, ValeTransporte = {vendedor.ValeTransporte}, LinhaOnibus = '{vendedor.LinhaOnibus}', ");
+                // Campos simples
+                sqlBuilder.Append($"Salario = {vendedor.Salario.ToString("F2", System.Globalization.CultureInfo.InvariantCulture)}, ");
+                sqlBuilder.Append($"FormaPagamento = '{vendedor.FormaPagamento}', ");
+                sqlBuilder.Append($"ValeAlimentacao = {valeAlimentacao}, ");
+                sqlBuilder.Append($"ValeTransporte = {valeTransporte}, "); // True como -1 e False como 0
+                sqlBuilder.Append($"LinhaOnibus = '{vendedor.LinhaOnibus}', ");
+                sqlBuilder.Append($"MotivoDemissao = '{vendedor.MotivoDemissao}', ");
+                sqlBuilder.Append($"RG = '{vendedor.RG}', ");
+                sqlBuilder.Append($"CPF = '{vendedor.CPF}', ");
+                sqlBuilder.Append($"Cargo = '{vendedor.Cargo}', ");
+                sqlBuilder.Append($"FoneEmergencia = '{vendedor.FoneEmergencia}', ");
+                sqlBuilder.Append($"QtdFilhosMenor14 = {vendedor.QtdFilhosMenor14}, ");
+                sqlBuilder.Append($"FilhoComDeficiencia = {filhoComDeficiencia}, "); // True como -1 e False como 0
+                sqlBuilder.Append($"CTPS = '{vendedor.CTPS}' ");
 
-                if (vendedor.DataDemissao > new DateTime(0001, 01, 01))
-                    sqlBuilder.Append($"DataDemissao = '#{vendedor.DataDemissao:yyyy-MM-dd}#', ");
+                // Cláusula WHERE para finalizar a atualização
+                sqlBuilder.Append($"WHERE ID = {vendedor.Id};");
 
-                sqlBuilder.Append($"MotivoDemissao = '{vendedor.MotivoDemissao}', RG = '{vendedor.RG}', CPF = '{vendedor.CPF}', Cargo = '{vendedor.Cargo}', FoneEmergencia = '{vendedor.FoneEmergencia}', QtdFilhosMenor14 = {vendedor.QtdFilhosMenor14}, FilhoComDeficiencia = {vendedor.FilhoComDeficiencia}, CTPS = '{vendedor.CTPS}' ");
-
-                // Finalizando comando com WHERE
-                sqlBuilder.Append($"WHERE ID = {vendedor.Id}");
-
+                // Convertendo tudo para string para ser utilizado no comando SQL
                 query = sqlBuilder.ToString();
 
             }
@@ -136,6 +150,7 @@ namespace TeleBonifacio.dao
         {
             using (OdbcConnection connection = new OdbcConnection(glo.connectionString))
             {
+                DataTable dataTable = new DataTable();
                 try
                 {
                     connection.Open();
@@ -143,78 +158,15 @@ namespace TeleBonifacio.dao
                     {
                         using (OdbcDataReader reader = command.ExecuteReader())
                         {
-                            DataTable dataTable = new DataTable();
-                            dataTable.Columns.Add("ID", typeof(int));
-                            dataTable.Columns.Add("Nome", typeof(string));
-                            dataTable.Columns.Add("Loja", typeof(string));
-                            dataTable.Columns.Add("Atende", typeof(string));
-                            dataTable.Columns.Add("Nro", typeof(string));
-                            dataTable.Columns.Add("Usuario", typeof(string));
-                            dataTable.Columns.Add("Senha", typeof(string));
-                            dataTable.Columns.Add("Nivel", typeof(int));
-                            dataTable.Columns.Add("DataNascimento", typeof(DateTime));
-                            dataTable.Columns.Add("DataAdmissao", typeof(DateTime));
-                            dataTable.Columns.Add("Salario", typeof(decimal));
-                            dataTable.Columns.Add("HorarioSemanaInicio", typeof(TimeSpan));
-                            dataTable.Columns.Add("HorarioSemanaFim", typeof(TimeSpan));
-                            dataTable.Columns.Add("HorarioSabadoInicio", typeof(TimeSpan));
-                            dataTable.Columns.Add("HorarioSabadoFim", typeof(TimeSpan));
-                            dataTable.Columns.Add("FormaPagamento", typeof(string));
-                            dataTable.Columns.Add("ValeAlimentacao", typeof(bool));
-                            dataTable.Columns.Add("ValeTransporte", typeof(bool));
-                            dataTable.Columns.Add("LinhaOnibus", typeof(string));
-                            dataTable.Columns.Add("DataDemissao", typeof(DateTime));
-                            dataTable.Columns.Add("MotivoDemissao", typeof(string));
-                            dataTable.Columns.Add("RG", typeof(string));
-                            dataTable.Columns.Add("CPF", typeof(string));
-                            dataTable.Columns.Add("Cargo", typeof(string));
-                            dataTable.Columns.Add("FoneEmergencia", typeof(string));
-                            dataTable.Columns.Add("QtdFilhosMenor14", typeof(int));
-                            dataTable.Columns.Add("FilhoComDeficiencia", typeof(bool));
-                            dataTable.Columns.Add("CTPS", typeof(string));
-
-                            while (reader.Read())
-                            {
-                                DataRow row = dataTable.NewRow();
-                                row["ID"] = reader.GetInt32(reader.GetOrdinal("ID"));
-                                row["Nome"] = reader.GetString(reader.GetOrdinal("Nome"));
-                                row["Loja"] = reader.GetString(reader.GetOrdinal("Loja"));
-                                row["Atende"] = reader.GetString(reader.GetOrdinal("Atende"));
-                                row["Nro"] = reader.GetString(reader.GetOrdinal("Nro"));
-                                row["Usuario"] = reader.GetString(reader.GetOrdinal("Usuario"));
-                                row["Senha"] = reader.GetString(reader.GetOrdinal("Senha"));
-                                row["Nivel"] = reader.GetInt32(reader.GetOrdinal("Nivel"));
-                                row["DataNascimento"] = reader.GetDateTime(reader.GetOrdinal("DataNascimento"));
-                                row["DataAdmissao"] = reader.GetDateTime(reader.GetOrdinal("DataAdmissao"));
-                                row["Salario"] = reader.GetDecimal(reader.GetOrdinal("Salario"));
-                                row["HorarioSemanaInicio"] = TimeSpan.Parse(reader.GetString(reader.GetOrdinal("HorarioSemanaInicio")));
-                                row["HorarioSemanaFim"] = TimeSpan.Parse(reader.GetString(reader.GetOrdinal("HorarioSemanaFim")));
-                                row["HorarioSabadoInicio"] = TimeSpan.Parse(reader.GetString(reader.GetOrdinal("HorarioSabadoInicio")));
-                                row["HorarioSabadoFim"] = TimeSpan.Parse(reader.GetString(reader.GetOrdinal("HorarioSabadoFim")));
-                                row["FormaPagamento"] = reader.GetString(reader.GetOrdinal("FormaPagamento"));
-                                row["ValeAlimentacao"] = reader.GetBoolean(reader.GetOrdinal("ValeAlimentacao"));
-                                row["ValeTransporte"] = reader.GetBoolean(reader.GetOrdinal("ValeTransporte"));
-                                row["LinhaOnibus"] = reader.GetString(reader.GetOrdinal("LinhaOnibus"));
-                                row["DataDemissao"] = reader.GetDateTime(reader.GetOrdinal("DataDemissao"));
-                                row["MotivoDemissao"] = reader.GetString(reader.GetOrdinal("MotivoDemissao"));
-                                row["RG"] = reader.GetString(reader.GetOrdinal("RG"));
-                                row["CPF"] = reader.GetString(reader.GetOrdinal("CPF"));
-                                row["Cargo"] = reader.GetString(reader.GetOrdinal("Cargo"));
-                                row["FoneEmergencia"] = reader.GetString(reader.GetOrdinal("FoneEmergencia"));
-                                row["QtdFilhosMenor14"] = reader.GetInt32(reader.GetOrdinal("QtdFilhosMenor14"));
-                                row["FilhoComDeficiencia"] = reader.GetBoolean(reader.GetOrdinal("FilhoComDeficiencia"));
-                                row["CTPS"] = reader.GetString(reader.GetOrdinal("CTPS"));
-                                dataTable.Rows.Add(row);
-                            }
-                            return dataTable;
+                            dataTable.Load(reader);
                         }
                     }
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine(ex.ToString());
-                    return null;
+                    Console.WriteLine("ODBC execution error: " + ex.Message);
                 }
+                return dataTable;
             }
         }
 
@@ -222,6 +174,7 @@ namespace TeleBonifacio.dao
         {
             using (OleDbConnection connection = new OleDbConnection(glo.connectionString))
             {
+                DataTable dataTable = new DataTable();
                 try
                 {
                     connection.Open();
@@ -229,168 +182,15 @@ namespace TeleBonifacio.dao
                     {
                         using (OleDbDataReader reader = command.ExecuteReader())
                         {
-                            DataTable dataTable = new DataTable();
-                            dataTable.Columns.Add("ID", typeof(int));
-                            dataTable.Columns.Add("Nome", typeof(string));
-                            dataTable.Columns.Add("Loja", typeof(string));
-                            dataTable.Columns.Add("Atende", typeof(string));
-                            dataTable.Columns.Add("Nro", typeof(string));
-                            dataTable.Columns.Add("Usuario", typeof(string));
-                            dataTable.Columns.Add("Senha", typeof(string));
-                            dataTable.Columns.Add("Nivel", typeof(int));
-                            dataTable.Columns.Add("DataNascimento", typeof(DateTime));
-                            dataTable.Columns.Add("DataAdmissao", typeof(DateTime));
-                            dataTable.Columns.Add("Salario", typeof(decimal));
-                            dataTable.Columns.Add("HorarioSemanaInicio", typeof(TimeSpan));
-                            dataTable.Columns.Add("HorarioSemanaFim", typeof(TimeSpan));
-                            dataTable.Columns.Add("HorarioSabadoInicio", typeof(TimeSpan));
-                            dataTable.Columns.Add("HorarioSabadoFim", typeof(TimeSpan));
-                            dataTable.Columns.Add("FormaPagamento", typeof(string));
-                            dataTable.Columns.Add("ValeAlimentacao", typeof(bool));
-                            dataTable.Columns.Add("ValeTransporte", typeof(bool));
-                            dataTable.Columns.Add("LinhaOnibus", typeof(string));
-                            dataTable.Columns.Add("DataDemissao", typeof(DateTime));
-                            dataTable.Columns.Add("MotivoDemissao", typeof(string));
-                            dataTable.Columns.Add("RG", typeof(string));
-                            dataTable.Columns.Add("CPF", typeof(string));
-                            dataTable.Columns.Add("Cargo", typeof(string));
-                            dataTable.Columns.Add("FoneEmergencia", typeof(string));
-                            dataTable.Columns.Add("QtdFilhosMenor14", typeof(int));
-                            dataTable.Columns.Add("FilhoComDeficiencia", typeof(bool));
-                            dataTable.Columns.Add("CTPS", typeof(string));
-
-                            while (reader.Read())
-                            {
-                                DataRow row = dataTable.NewRow();
-                                row["ID"] = reader["ID"];
-                                row["Nome"] = reader["Nome"];
-                                row["Loja"] = reader["Loja"];
-                                row["Atende"] = reader["Atende"];
-                                row["Nro"] = reader["Nro"];
-                                row["Usuario"] = reader["Usuario"];
-                                row["Senha"] = reader["Senha"];
-                                row["Nivel"] = reader["Nivel"];
-                                row["DataNascimento"] = reader["DataNascimento"];
-                                row["DataAdmissao"] = reader["DataAdmissao"];
-                                row["Salario"] = reader["Salario"];
-
-                                row["HorarioSemanaInicio"] = ParseNullableTimeSpan(reader, "HorarioSemanaInicio");
-                                row["HorarioSemanaFim"] = ParseNullableTimeSpan(reader, "HorarioSemanaFim");
-                                row["HorarioSabadoInicio"] = ParseNullableTimeSpan(reader, "HorarioSabadoInicio");
-                                row["HorarioSabadoFim"] = ParseNullableTimeSpan(reader, "HorarioSabadoFim");
-
-                                // Verifica se o valor é DBNull antes de tentar converter para TimeSpan
-                                //if (!reader.IsDBNull(reader.GetOrdinal("HorarioSemanaInicio")))
-                                //{
-                                //    row["HorarioSemanaInicio"] = TimeSpan.Parse(reader["HorarioSemanaInicio"].ToString());
-                                //}
-                                //else
-                                //{
-                                //    // Trata o valor nulo como necessário, por exemplo, definindo um valor padrão ou deixando-o vazio
-                                //    row["HorarioSemanaInicio"] = default(TimeSpan); // Valor padrão para TimeSpan é Zero
-                                //}
-
-                                //// Repete o processo para outros campos de TimeSpan
-                                //if (!reader.IsDBNull(reader.GetOrdinal("HorarioSemanaFim")))
-                                //{
-                                //    row["HorarioSemanaFim"] = TimeSpan.Parse(reader["HorarioSemanaFim"].ToString());
-                                //}
-                                //else
-                                //{
-                                //    row["HorarioSemanaFim"] = default(TimeSpan);
-                                //}
-
-                                //if (!reader.IsDBNull(reader.GetOrdinal("HorarioSabadoInicio")))
-                                //{
-                                //    row["HorarioSabadoInicio"] = TimeSpan.Parse(reader["HorarioSabadoInicio"].ToString());
-                                //}
-                                //else
-                                //{
-                                //    row["HorarioSabadoInicio"] = default(TimeSpan);
-                                //}
-
-                                //if (!reader.IsDBNull(reader.GetOrdinal("HorarioSabadoFim")))
-                                //{
-                                //    row["HorarioSabadoFim"] = TimeSpan.Parse(reader["HorarioSabadoFim"].ToString());
-                                //}
-                                //else
-                                //{
-                                //    row["HorarioSabadoFim"] = default(TimeSpan);
-                                //}
-
-                                // Continua preenchendo outras colunas...
-                                row["FormaPagamento"] = reader["FormaPagamento"];
-                                row["ValeAlimentacao"] = reader["ValeAlimentacao"];
-                                row["ValeTransporte"] = reader["ValeTransporte"];
-                                row["LinhaOnibus"] = reader["LinhaOnibus"];
-                                row["DataDemissao"] = reader["DataDemissao"];
-                                row["MotivoDemissao"] = reader["MotivoDemissao"];
-                                row["RG"] = reader["RG"];
-                                row["CPF"] = reader["CPF"];
-                                row["Cargo"] = reader["Cargo"];
-                                row["FoneEmergencia"] = reader["FoneEmergencia"];
-                                row["QtdFilhosMenor14"] = reader["QtdFilhosMenor14"];
-                                row["FilhoComDeficiencia"] = reader["FilhoComDeficiencia"];
-                                row["CTPS"] = reader["CTPS"];
-
-                                dataTable.Rows.Add(row);
-                            }
-                            return dataTable;
-                            //while (reader.Read())
-                            //{
-                            //    DataRow row = dataTable.NewRow();
-                            //    row["ID"] = reader["ID"];
-                            //    row["Nome"] = reader["Nome"];
-                            //    row["Loja"] = reader["Loja"];
-                            //    row["Atende"] = reader["Atende"];
-                            //    row["Nro"] = reader["Nro"];
-                            //    row["Usuario"] = reader["Usuario"];
-                            //    row["Senha"] = reader["Senha"];
-                            //    row["Nivel"] = reader["Nivel"];
-                            //    row["DataNascimento"] = reader["DataNascimento"];
-                            //    row["DataAdmissao"] = reader["DataAdmissao"];
-                            //    row["Salario"] = reader["Salario"];
-                            //    row["HorarioSemanaInicio"] = TimeSpan.Parse(reader["HorarioSemanaInicio"].ToString());
-                            //    row["HorarioSemanaFim"] = TimeSpan.Parse(reader["HorarioSemanaFim"].ToString());
-                            //    row["HorarioSabadoInicio"] = TimeSpan.Parse(reader["HorarioSabadoInicio"].ToString());
-                            //    row["HorarioSabadoFim"] = TimeSpan.Parse(reader["HorarioSabadoFim"].ToString());
-                            //    row["FormaPagamento"] = reader["FormaPagamento"];
-                            //    row["ValeAlimentacao"] = reader["ValeAlimentacao"];
-                            //    row["ValeTransporte"] = reader["ValeTransporte"];
-                            //    row["LinhaOnibus"] = reader["LinhaOnibus"];
-                            //    row["DataDemissao"] = reader["DataDemissao"];
-                            //    row["MotivoDemissao"] = reader["MotivoDemissao"];
-                            //    row["RG"] = reader["RG"];
-                            //    row["CPF"] = reader["CPF"];
-                            //    row["Cargo"] = reader["Cargo"];
-                            //    row["FoneEmergencia"] = reader["FoneEmergencia"];
-                            //    row["QtdFilhosMenor14"] = reader["QtdFilhosMenor14"];
-                            //    row["FilhoComDeficiencia"] = reader["FilhoComDeficiencia"];
-                            //    row["CTPS"] = reader["CTPS"];
-                            //    dataTable.Rows.Add(row);
-                            //}
-
+                            dataTable.Load(reader);
                         }
                     }
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine(ex.ToString());
-                    return null;
+                    Console.WriteLine("ADO execution error: " + ex.Message);
                 }
-            }
-        }
-
-        private TimeSpan ParseNullableTimeSpan(OleDbDataReader reader, string columnName)
-        {
-            if (!reader.IsDBNull(reader.GetOrdinal(columnName)))
-            {
-                return TimeSpan.Parse(reader[columnName].ToString());
-            }
-            else
-            {
-                // Retorna o valor padrão para TimeSpan, que é Zero
-                return default(TimeSpan);
+                return dataTable;
             }
         }
 
@@ -444,7 +244,8 @@ namespace TeleBonifacio.dao
                                 QtdFilhosMenor14 = reader["QtdFilhosMenor14"] == DBNull.Value ? 0 : Convert.ToInt32(reader["QtdFilhosMenor14"]);
                                 FilhoComDeficiencia = reader["FilhoComDeficiencia"] == DBNull.Value ? false : Convert.ToBoolean(reader["FilhoComDeficiencia"]);
                                 CTPS = reader["CTPS"].ToString();
-
+                                Fone = reader["Fone"].ToString();
+                                Amigo = reader["Amigo"].ToString();
                                 return (tb.Vendedor)GetEsse();
                             }
                         }
@@ -489,15 +290,23 @@ namespace TeleBonifacio.dao
                 FoneEmergencia = FoneEmergencia,
                 QtdFilhosMenor14 = QtdFilhosMenor14,
                 FilhoComDeficiencia = FilhoComDeficiencia,
-                CTPS = CTPS
+                CTPS = CTPS,
+                Fone = Fone,
+                Amigo = Amigo
             };
         }
 
         public DataTable getBalconistas()
         {
-            glo.Loga("Dentro de getBalconistas");
-            string query = $"SELECT * FROM Vendedores Where Nro > '0' Order By Nome ";
-            return ExecutarConsultaVendedor(query);
+            string query = "SELECT ID, Nro, Nome FROM Vendedores WHERE Nro > '0' ORDER BY Nome";
+            if (glo.ODBC)
+            {
+                return ExecutarConsultaVendedorODBC(query);
+            }
+            else
+            {
+                return ExecutarConsultaVendedorADO(query);
+            }
         }
 
         public override object GetUltimo()
@@ -505,37 +314,6 @@ namespace TeleBonifacio.dao
             string query = "SELECT TOP 1 * FROM Vendedores ORDER BY ID Desc";
             return ExecutarConsultaVendedor(query); ;
         }
-
-        //public override void Grava(object obj)
-        //{
-        //    VendedoresDAO vendedor = (VendedoresDAO)obj;
-        //    string query;
-        //    List<OleDbParameter> parameters=null;
-        //    int iAtende = vendedor.Atende ? 1 : 0;
-        //    string sCript = "";
-        //    if (vendedor.Senha.Length>0)
-        //    {
-        //        sCript = Cripto.Encrypt(vendedor.Senha);
-        //    }
-        //    if (vendedor.Adicao)
-        //    {
-        //        query = $"INSERT INTO Vendedores (Nome, Loja, Atende, Nro, Usuario, Senha, Nivel) " +
-        //            $"VALUES ('{vendedor.Nome}', '{vendedor.Loja}', {iAtende}, '{vendedor.Nro}','{vendedor.Usuario}' ,'{sCript}' ,{vendedor.Nivel} )";
-        //    }
-        //    else
-        //    {                
-        //        query = $"UPDATE Vendedores SET Nome = '{vendedor.Nome}', Loja = '{vendedor.Loja}', Atende = {iAtende}, Nro = '{vendedor.Nro}', Usuario = '{vendedor.Usuario}', Senha = '{sCript}', Nivel = {vendedor.Nivel} WHERE ID = {vendedor.Id} ";
-        //    }
-        //    try
-        //    {
-        //        DB.ExecutarComandoSQL(query, parameters);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        string x = ex.ToString();
-        //        MessageBox.Show(x, "Erro na operação do banco de dados", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-        //    }
-        //}
 
         public DataTable ExecutarConsultaVendedor(string query)
         {
@@ -550,114 +328,6 @@ namespace TeleBonifacio.dao
             }
         }
 
-        //private DataTable ExecutarConsultaVendedorODBC(string query)
-        //{            
-        //    using (OdbcConnection connection = new OdbcConnection(glo.connectionString))
-        //    {
-        //        try
-        //        {
-        //            connection.Open();
-        //            using (OdbcCommand command = new OdbcCommand(query, connection))
-        //            {
-        //                using (OdbcDataReader reader = command.ExecuteReader())
-        //                {
-        //                    DataTable dataTable = new DataTable();
-        //                    dataTable.Columns.Add("ID", typeof(int));
-        //                    dataTable.Columns.Add("Nome", typeof(string));
-        //                    dataTable.Columns.Add("Loja", typeof(string));
-        //                    dataTable.Columns.Add("Atende", typeof(string));
-        //                    dataTable.Columns.Add("Nro", typeof(string));
-        //                    dataTable.Columns.Add("Usuario", typeof(string));
-        //                    dataTable.Columns.Add("Senha", typeof(string));
-        //                    dataTable.Columns.Add("Nivel", typeof(int));
-
-        //                    while (reader.Read())
-        //                    {
-        //                        DataRow row = dataTable.NewRow();
-        //                        row["ID"] = reader.GetInt32(reader.GetOrdinal("ID"));
-        //                        row["Nome"] = reader.GetString(reader.GetOrdinal("Nome"));
-        //                        row["Loja"] = reader.GetString(reader.GetOrdinal("Loja"));
-        //                        row["Atende"] = reader.GetString(reader.GetOrdinal("Atende"));
-        //                        row["Nro"] = reader.GetString(reader.GetOrdinal("Nro"));
-        //                        row["Usuario"] = reader.GetString(reader.GetOrdinal("Usuario"));
-        //                        row["Senha"] = reader.GetString(reader.GetOrdinal("Senha"));
-        //                        row["Nivel"] = reader.GetInt32(reader.GetOrdinal("Nivel"));
-        //                        dataTable.Rows.Add(row);
-        //                    }
-        //                    return dataTable;
-        //                }
-        //            }
-        //        }
-        //        catch (Exception ex)
-        //        {
-        //            Console.WriteLine(ex.ToString());
-        //            return null;
-        //        }
-        //    }
-        //}
-
-        //private DataTable ExecutarConsultaVendedorADO(string query)
-        //{
-        //    using (OleDbConnection connection = new OleDbConnection(glo.connectionString))
-        //    {
-        //        try
-        //        {
-        //            connection.Open();
-        //            using (OleDbCommand command = new OleDbCommand(query, connection))
-        //            {
-        //                using (OleDbDataReader reader = command.ExecuteReader())
-        //                {
-        //                    DataTable dataTable = new DataTable();
-        //                    dataTable.Columns.Add("ID", typeof(int));
-        //                    dataTable.Columns.Add("Nome", typeof(string));
-        //                    dataTable.Columns.Add("Loja", typeof(string));
-        //                    dataTable.Columns.Add("Atende", typeof(string));
-        //                    dataTable.Columns.Add("Nro", typeof(string));
-        //                    dataTable.Columns.Add("Usuario", typeof(string));
-        //                    dataTable.Columns.Add("Senha", typeof(string));
-        //                    dataTable.Columns.Add("Nivel", typeof(int));
-
-        //                    while (reader.Read())
-        //                    {
-        //                        DataRow row = dataTable.NewRow();
-        //                        row["ID"] = reader["ID"];
-        //                        row["Nome"] = reader["Nome"];
-        //                        row["Loja"] = reader["Loja"];
-        //                        row["Atende"] = reader["Atende"];
-        //                        row["Nro"] = reader["Nro"];
-        //                        row["Usuario"] = reader["Usuario"];
-        //                        row["Senha"] = reader["Senha"];
-        //                        row["Nivel"] = reader["Nivel"];
-        //                        dataTable.Rows.Add(row);
-        //                    }
-        //                    return dataTable;
-        //                }
-        //            }
-        //        }
-        //        catch (Exception ex)
-        //        {
-        //            Console.WriteLine(ex.ToString());
-        //            return null;
-        //        }
-        //    }
-        //}
-
-        //public override tb.IDataEntity GetEsse()
-        //{
-        //    return (tb.Vendedor)new tb.Vendedor
-        //    {
-        //        Id = Id,
-        //        Nome = Nome,
-        //        Loja = Loja,
-        //        Atende = Atende,
-        //        Nro = Nro,
-
-        //        Usuario = Usuario,
-        //        Senha = Senha,
-        //        Nivel = Nivel
-        //    };
-        //}
-
         public override DataTable getDados()
         {
             string query = $"SELECT * FROM Vendedores";
@@ -669,58 +339,6 @@ namespace TeleBonifacio.dao
             string query = $"SELECT * FROM Vendedores Where ID = {id} ";
             return ExecutarConsultaVendedor2(query);
         }
-
-        //private tb.Vendedor ExecutarConsultaVendedor2(string query)
-        //{            
-        //    using (OleDbConnection connection = new OleDbConnection(glo.connectionString))
-        //    {
-        //        try
-        //        {
-        //            connection.Open();
-        //            using (OleDbCommand command = new OleDbCommand(query, connection))
-        //            {
-        //                using (OleDbDataReader reader = command.ExecuteReader())
-        //                {
-        //                    if (reader.Read())
-        //                    {
-        //                        Nome = reader["Nome"].ToString();
-        //                        Id = Convert.ToInt32(reader["ID"]);
-        //                        Loja = reader["Loja"].ToString();
-        //                        object oAt = reader["Atende"];
-        //                        if (oAt == DBNull.Value)
-        //                        {
-        //                            Atende = false;
-        //                        } else
-        //                        {
-        //                            int iAt = Convert.ToInt32(oAt);
-        //                            Atende = !(iAt == 0);
-        //                        }     
-        //                        Nro = reader["Nro"].ToString();
-
-        //                        Usuario = reader["Usuario"].ToString();
-        //                        Senha = reader["Senha"].ToString();
-
-        //                        object oNivel = reader["Nivel"];
-        //                        if (oNivel == DBNull.Value)
-        //                        {
-        //                            Nivel = 0;
-        //                        } else
-        //                        {
-        //                            Nivel = Convert.ToInt32(oNivel);
-        //                        }                                    
-
-        //                        return (tb.Vendedor)GetEsse();
-        //                    }
-        //                }
-        //            }
-        //        }
-        //        catch (Exception ex)
-        //        {                    
-        //            return null;
-        //        }
-        //    }
-        //    return null;
-        //}
 
         public override tb.IDataEntity Apagar(int direcao, tb.IDataEntity entidade)
         {
