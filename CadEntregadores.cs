@@ -58,7 +58,7 @@ namespace TeleBonifacio
                 DateTimePicker picker = sender as DateTimePicker;
                 if (picker != null)
                 {
-                    string propertyName = picker.Name.Substring(3); // Remove o prefixo 'dtp'
+                    string propertyName = picker.Name.Substring(3); 
                     PropertyInfo propertyInfo = reg.GetType().GetProperty(propertyName);
                     if (propertyInfo != null && (propertyInfo.PropertyType == typeof(DateTime) || propertyInfo.PropertyType == typeof(DateTime?)))
                     {

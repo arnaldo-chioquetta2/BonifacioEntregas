@@ -4,6 +4,7 @@ using System.Data.OleDb;
 using System.Windows.Forms;
 using System.Collections.Generic;
 using System.Reflection;
+using System.Linq;
 
 namespace TeleBonifacio
 {
@@ -14,6 +15,8 @@ namespace TeleBonifacio
         private bool Adicionando = false;
         private string Nome = "";
         private INI cINI;
+
+        #region Inicializaçao        
 
         public CadVendedores2()
         {
@@ -35,50 +38,17 @@ namespace TeleBonifacio
             Carregando = false;
         }
 
-        private void VerificaHorarios(tb.IDataEntity modelo)
+        private void CadVendedores2_Activated(object sender, EventArgs e)
         {
-            AjustarDateTimePicker(dtpHorarioSemanaInicio, "Turnos", "ManIni", "08:00", modelo);
-            AjustarDateTimePicker(dtpHorarioSemanaFim, "Turnos", "ManFim", "12:00", modelo);
-            AjustarDateTimePicker(dtpHorarioSabadoInicio, "Turnos", "TarIni", "13:00", modelo);
-            AjustarDateTimePicker(dtpHorarioSabadoFim, "Turnos", "TarFim", "18:30", modelo);
-        }
-
-        private void AjustarDateTimePicker(DateTimePicker dtp, string section, string key, string defaultValue, object modelo)
-        {
-            string fieldName = dtp.Name.Substring(3);
-            PropertyInfo propertyInfo = modelo.GetType().GetProperty(fieldName);
-            if (propertyInfo != null)
+            if (glo.IdAdicionado == -1)
             {
-                object fieldValue = propertyInfo.GetValue(modelo);
-                if (fieldValue == null || (fieldValue is DateTime dateTimeValue && dateTimeValue.TimeOfDay == TimeSpan.Zero))
-                {
-                    TimeSpan time = GetIniTime(section, key, defaultValue);
-                    dtp.Value = DateTime.Today + time; 
-                    dtp.Format = DateTimePickerFormat.Time;
-                    dtp.ShowUpDown = true;
-                }
-                else if (fieldValue is TimeSpan timeSpanValue && timeSpanValue == TimeSpan.Zero)
-                {
-                    TimeSpan time = GetIniTime(section, key, defaultValue);
-                    dtp.Value = DateTime.Today + time; 
-                    dtp.Format = DateTimePickerFormat.Time;
-                    dtp.ShowUpDown = true;
-                }
-                else
-                {
-                    dtp.Value = DateTime.Today + (TimeSpan)fieldValue;
-                    dtp.Format = DateTimePickerFormat.Time;
-                    dtp.ShowUpDown = true;
-                }
+                Adicionando = true;
             }
         }
 
-        private TimeSpan GetIniTime(string section, string key, string defaultValue)
-        {
-            string timeStr = cINI.ReadString(section, key, defaultValue);
-            return TimeSpan.TryParse(timeStr, out TimeSpan result) ? result : TimeSpan.Parse(defaultValue);
-        }
+        #endregion
 
+        #region Metodos de Base de Dados        
 
         private tb.Vendedor getUlt()
         {
@@ -143,6 +113,10 @@ namespace TeleBonifacio
         }
     }
 
+        #endregion
+
+        #region Funções auxiliares        
+
         private TimeSpan ParseTimeFromDateTime(OleDbDataReader reader, string columnName)
         {
             if (!reader.IsDBNull(reader.GetOrdinal(columnName)))
@@ -153,13 +127,74 @@ namespace TeleBonifacio
             return TimeSpan.Zero;
         }
 
+        private void VerificaHorarios(tb.IDataEntity modelo)
+        {
+            AjustarDateTimePicker(dtpHorarioSemanaInicio, "Turnos", "ManIni", "08:00", modelo);
+            AjustarDateTimePicker(dtpHorarioSemanaFim, "Turnos", "ManFim", "12:00", modelo);
+            AjustarDateTimePicker(dtpHorarioSabadoInicio, "Turnos", "TarIni", "13:00", modelo);
+            AjustarDateTimePicker(dtpHorarioSabadoFim, "Turnos", "TarFim", "18:30", modelo);
+        }
+
+        private void AjustarDateTimePicker(DateTimePicker dtp, string section, string key, string defaultValue, object modelo)
+        {
+            string fieldName = dtp.Name.Substring(3);
+            PropertyInfo propertyInfo = modelo.GetType().GetProperty(fieldName);
+            if (propertyInfo != null)
+            {
+                object fieldValue = propertyInfo.GetValue(modelo);
+                if (fieldValue == null || (fieldValue is DateTime dateTimeValue && dateTimeValue.TimeOfDay == TimeSpan.Zero))
+                {
+                    TimeSpan time = GetIniTime(section, key, defaultValue);
+                    dtp.Value = DateTime.Today + time;
+                }
+                else if (fieldValue is TimeSpan timeSpanValue && timeSpanValue == TimeSpan.Zero)
+                {
+                    TimeSpan time = GetIniTime(section, key, defaultValue);
+                    dtp.Value = DateTime.Today + time;
+                }
+                else
+                {
+                    dtp.Value = DateTime.Today + (TimeSpan)fieldValue;
+                }
+
+                // Configurações comuns para todos os casos
+                dtp.Format = DateTimePickerFormat.Custom;
+                dtp.ShowUpDown = true;
+                dtp.CustomFormat = "HH:mm";
+            }
+        }
+
+        private TimeSpan GetIniTime(string section, string key, string defaultValue)
+        {
+            string timeStr = cINI.ReadString(section, key, defaultValue);
+            return TimeSpan.TryParse(timeStr, out TimeSpan result) ? result : TimeSpan.Parse(defaultValue);
+        }
+
+        #endregion
+
         private void cntrole1_AcaoRealizada(object sender, AcaoEventArgs e)
         {
             Carregando = true;
-            if (e.Acao== "Adicionar")
+            if (e.Acao == "Adicionar" || e.Acao == "OK")
             {
-                Adicionando = true;
-            } else
+                if (!SaoHorariosValidos())
+                {
+                    MessageBox.Show("Os horários de trabalho são inválidos. Por favor, verifique e corrija.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    Carregando = false;
+                    return;
+                }
+                if (!string.IsNullOrWhiteSpace(txtCPF.Text) && !IsCPFValido(txtCPF.Text))
+                {
+                    MessageBox.Show("O CPF informado é inválido. Por favor, verifique e corrija.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    Carregando = false;
+                    return;
+                }
+                if (e.Acao == "Adicionar")
+                {
+                    Adicionando = true;
+                }
+            }
+            else
             {
                 if (!Adicionando)
                 {
@@ -183,6 +218,42 @@ namespace TeleBonifacio
             }
             Carregando = false;
         }
+
+        private bool IsCPFValido(string cpf)
+        {
+            cpf = new string(cpf.Where(char.IsDigit).ToArray());
+            if (cpf.Length != 11)
+                return false;
+            if (cpf.Distinct().Count() == 1)
+                return false;
+            int soma = 0;
+            for (int i = 0; i < 9; i++)
+                soma += int.Parse(cpf[i].ToString()) * (10 - i);
+            int resto = soma % 11;
+            int digito1 = resto < 2 ? 0 : 11 - resto;
+            if (int.Parse(cpf[9].ToString()) != digito1)
+                return false;
+            soma = 0;
+            for (int i = 0; i < 10; i++)
+                soma += int.Parse(cpf[i].ToString()) * (11 - i);
+            resto = soma % 11;
+            int digito2 = resto < 2 ? 0 : 11 - resto;
+            return int.Parse(cpf[10].ToString()) == digito2;
+        }
+        private bool SaoHorariosValidos()
+        {
+            TimeSpan semanaInicio = dtpHorarioSemanaInicio.Value.TimeOfDay;
+            TimeSpan semanaFim = dtpHorarioSemanaFim.Value.TimeOfDay;
+            TimeSpan sabadoInicio = dtpHorarioSabadoInicio.Value.TimeOfDay;
+            TimeSpan sabadoFim = dtpHorarioSabadoFim.Value.TimeOfDay;
+            if (semanaFim <= semanaInicio || sabadoFim <= sabadoInicio)
+            {
+                return false;
+            }
+            return true;
+        }
+        #region Eventos
+
 
         private void CadVendedor_KeyUp(object sender, KeyEventArgs e)
         {
@@ -211,16 +282,6 @@ namespace TeleBonifacio
             }            
         }
 
-        private void CadVendedores2_Activated(object sender, EventArgs e)
-        {
-            if (glo.IdAdicionado == -1)
-            {
-                // glo.IdAdicionado = 0;
-                Adicionando = true;
-                // base.Adicionar();
-            }
-        }
-
         private void cnbNivel_Click(object sender, EventArgs e)
         {
             base.cntrole1.EmEdicao = true;
@@ -228,29 +289,36 @@ namespace TeleBonifacio
 
         private void dtpDataAdmissao_ValueChanged(object sender, EventArgs e)
         {
-            DateTimePicker dtp = sender as DateTimePicker;
-            if (dtp.Format == DateTimePickerFormat.Custom && dtp.Value != DateTime.MinValue)
+            if (!Carregando)
             {
-                dtp.Format = DateTimePickerFormat.Short; // Volta para o formato de data curta
-            }
-            else if (dtp.Value == DateTime.MinValue)
-            {
-                dtp.CustomFormat = " "; // Apresenta o controle como vazio.
+                DateTimePicker dtp = sender as DateTimePicker;
+                if (dtp.Value != DateTime.MinValue)
+                {
+                    dtp.Format = DateTimePickerFormat.Short;
+                    base.cntrole1.EmEdicao = true;
+                }
+                else if (dtp.Value == DateTime.MinValue)
+                {
+                    dtp.CustomFormat = " ";
+                }
             }
         }
 
         private void dtpDataNascimento_ValueChanged(object sender, EventArgs e)
         {
-            DateTimePicker dtp = sender as DateTimePicker;
-            if (dtp.Format == DateTimePickerFormat.Custom && dtp.Value != DateTime.MinValue)
+            if (!Carregando)
             {
-                dtp.Format = DateTimePickerFormat.Short; // Volta para o formato de data curta
+                DateTimePicker dtp = sender as DateTimePicker;
+                if (dtp.Value != DateTime.MinValue)
+                {
+                    dtp.Format = DateTimePickerFormat.Short;
+                    base.cntrole1.EmEdicao = true;
+                }
+                else if (dtp.Value == DateTime.MinValue)
+                {
+                    dtp.CustomFormat = " ";
+                }
             }
-            else if (dtp.Value == DateTime.MinValue)
-            {
-                dtp.CustomFormat = " "; // Apresenta o controle como vazio.
-            }
-
         }
 
         private void dtpDataAdmissao_Enter(object sender, EventArgs e)
@@ -272,6 +340,16 @@ namespace TeleBonifacio
                 dtp.Format = DateTimePickerFormat.Short;
             }
         }
+
+        private void dtpHorarioSemanaInicio_ValueChanged(object sender, EventArgs e)
+        {
+            if (!Carregando)
+            {
+                base.cntrole1.EmEdicao = true;
+            }
+        }
+
+        #endregion
 
     }
 }

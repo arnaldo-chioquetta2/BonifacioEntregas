@@ -88,22 +88,16 @@ namespace TeleBonifacio.dao
                 sqlBuilder.Append($"UPDATE Vendedores SET ");
                 sqlBuilder.Append($"Nome = '{vendedor.Nome}', ");
                 sqlBuilder.Append($"Loja = '{vendedor.Loja}', ");
-                sqlBuilder.Append($"Atende = {iAtende}, "); // Assegura que True seja -1 e False seja 0
+                sqlBuilder.Append($"Atende = {iAtende}, ");
                 sqlBuilder.Append($"Nro = '{vendedor.Nro}', ");
                 sqlBuilder.Append($"Usuario = '{vendedor.Usuario}', ");
                 sqlBuilder.Append($"Senha = '{sCript}', ");
                 sqlBuilder.Append($"Nivel = {vendedor.Nivel}, ");
                 sqlBuilder.Append($"Fone = '{vendedor.Fone}', ");
                 sqlBuilder.Append($"Amigo = '{vendedor.Amigo}', ");
-
-                //if (vendedor.DataNascimento > new DateTime(0001, 01, 01))
-                //    sqlBuilder.Append($"DataNascimento = '#{vendedor.DataNascimento:yyyy-MM-dd}#', ");
-                //if (vendedor.DataAdmissao > new DateTime(0001, 01, 01))
-                //    sqlBuilder.Append($"DataAdmissao = '#{vendedor.DataAdmissao:yyyy-MM-dd}#', ");
-                //if (vendedor.DataDemissao > new DateTime(0001, 01, 01))
-                //    sqlBuilder.Append($"DataDemissao = '#{vendedor.DataDemissao:yyyy-MM-dd}#', ");
-
-                // Tratamento especial para os campos de horário
+                sqlBuilder.Append(GetDataSqlPart(vendedor.DataNascimento, "DataNascimento"));
+                sqlBuilder.Append(GetDataSqlPart(vendedor.DataAdmissao, "DataAdmissao"));
+                sqlBuilder.Append(GetDataSqlPart(vendedor.DataDemissao, "DataDemissao"));
                 if (vendedor.HorarioSemanaInicio != TimeSpan.Zero)
                     sqlBuilder.Append($"HorarioSemanaInicio = '#{vendedor.HorarioSemanaInicio:hh\\:mm}#', ");
                 if (vendedor.HorarioSemanaFim != TimeSpan.Zero)
@@ -112,12 +106,10 @@ namespace TeleBonifacio.dao
                     sqlBuilder.Append($"HorarioSabadoInicio = '#{vendedor.HorarioSabadoInicio:hh\\:mm}#', ");
                 if (vendedor.HorarioSabadoFim != TimeSpan.Zero)
                     sqlBuilder.Append($"HorarioSabadoFim = '#{vendedor.HorarioSabadoFim:hh\\:mm}#', ");
-
-                // Campos simples
                 sqlBuilder.Append($"Salario = {vendedor.Salario.ToString("F2", System.Globalization.CultureInfo.InvariantCulture)}, ");
                 sqlBuilder.Append($"FormaPagamento = '{vendedor.FormaPagamento}', ");
                 sqlBuilder.Append($"ValeAlimentacao = {valeAlimentacao}, ");
-                sqlBuilder.Append($"ValeTransporte = {valeTransporte}, "); // True como -1 e False como 0
+                sqlBuilder.Append($"ValeTransporte = {valeTransporte}, "); 
                 sqlBuilder.Append($"LinhaOnibus = '{vendedor.LinhaOnibus}', ");
                 sqlBuilder.Append($"MotivoDemissao = '{vendedor.MotivoDemissao}', ");
                 sqlBuilder.Append($"RG = '{vendedor.RG}', ");
@@ -125,15 +117,10 @@ namespace TeleBonifacio.dao
                 sqlBuilder.Append($"Cargo = '{vendedor.Cargo}', ");
                 sqlBuilder.Append($"FoneEmergencia = '{vendedor.FoneEmergencia}', ");
                 sqlBuilder.Append($"QtdFilhosMenor14 = {vendedor.QtdFilhosMenor14}, ");
-                sqlBuilder.Append($"FilhoComDeficiencia = {filhoComDeficiencia}, "); // True como -1 e False como 0
+                sqlBuilder.Append($"FilhoComDeficiencia = {filhoComDeficiencia}, "); 
                 sqlBuilder.Append($"CTPS = '{vendedor.CTPS}' ");
-
-                // Cláusula WHERE para finalizar a atualização
                 sqlBuilder.Append($"WHERE ID = {vendedor.Id};");
-
-                // Convertendo tudo para string para ser utilizado no comando SQL
                 query = sqlBuilder.ToString();
-
             }
             try
             {
@@ -143,6 +130,19 @@ namespace TeleBonifacio.dao
             {
                 string x = ex.ToString();
                 MessageBox.Show(x, "Erro na operação do banco de dados", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+        }
+
+        public string GetDataSqlPart(DateTime? data, string fieldName)
+        {
+            DateTime D0 = new DateTime(2001, 01, 01).Date;
+            if (data.Value.Date != D0)
+            {
+                return $"{fieldName} = '{data.Value:yyyy-MM-dd}', ";
+            }
+            else
+            {
+                return "";
             }
         }
 

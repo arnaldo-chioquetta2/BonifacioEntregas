@@ -150,9 +150,9 @@ namespace TeleBonifacio
             if (propertyInfo != null && propertyInfo.PropertyType == typeof(DateTime) || propertyInfo.PropertyType == typeof(DateTime?))
             {
                 DateTime? data = propertyInfo.GetValue(reg, null) as DateTime?;
-                if (!data.HasValue || data.Value == DateTime.MinValue)
+                if (!data.HasValue || data.Value.Date == new DateTime(2001, 1, 1).Date)
                 {
-                    dtpControl.CustomFormat = " "; 
+                    dtpControl.CustomFormat = " ";
                     dtpControl.Format = DateTimePickerFormat.Custom;
                 }
                 else
@@ -162,7 +162,6 @@ namespace TeleBonifacio
                 }
             }
         }
-
 
         private void MapearCamposParaModelo(dao.BaseDAO reg)
         {
@@ -230,7 +229,6 @@ namespace TeleBonifacio
             }
             else
             {
-                // Verifica se o CheckBox está marcado e define o valor da propriedade correspondente
                 propertyInfo.SetValue(reg, check.Checked, null);
             }
         }
@@ -432,7 +430,6 @@ namespace TeleBonifacio
                 string mensJaTem = "";
                 if (EmAdicao)
                 {
-                    //DAO.SetId(0);
                     mensJaTem = DAO.VeSeJaTem(DAO);                    
                 } else
                 {
@@ -482,6 +479,7 @@ namespace TeleBonifacio
                 {
                     if (campoTag.Tag == "O")
                     {
+                        // OBRIGATÓRIO
                         object valor = propriedade.GetValue(objeto);
                         if (valor == null || (valor is string && string.IsNullOrEmpty((string)valor)))
                         {
@@ -490,6 +488,7 @@ namespace TeleBonifacio
                     }
                     else if (campoTag.Tag == "H" && propriedade.PropertyType == typeof(DateTime))
                     {
+                        // NÃO PODE SER SUPERIOR A HOJE
                         DateTime dataValor = (DateTime)propriedade.GetValue(objeto);
                         if (dataValor > DateTime.Today)
                         {

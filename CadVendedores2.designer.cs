@@ -405,7 +405,7 @@ namespace TeleBonifacio
             // 
             this.txtCargo.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
             this.txtCargo.Location = new System.Drawing.Point(166, 248);
-            this.txtCargo.MaxLength = 10;
+            this.txtCargo.MaxLength = 20;
             this.txtCargo.Name = "txtCargo";
             this.txtCargo.Size = new System.Drawing.Size(150, 23);
             this.txtCargo.TabIndex = 18;
@@ -473,7 +473,7 @@ namespace TeleBonifacio
             this.dtpDataAdmissao.Name = "dtpDataAdmissao";
             this.dtpDataAdmissao.Size = new System.Drawing.Size(90, 23);
             this.dtpDataAdmissao.TabIndex = 17;
-            this.dtpDataAdmissao.Tag = "H";
+            this.dtpDataAdmissao.Tag = "";
             this.dtpDataAdmissao.ValueChanged += new System.EventHandler(this.dtpDataAdmissao_ValueChanged);
             this.dtpDataAdmissao.Enter += new System.EventHandler(this.dtpDataAdmissao_Enter);
             // 
@@ -563,6 +563,7 @@ namespace TeleBonifacio
             this.dtpHorarioSemanaInicio.ShowUpDown = true;
             this.dtpHorarioSemanaInicio.Size = new System.Drawing.Size(59, 20);
             this.dtpHorarioSemanaInicio.TabIndex = 25;
+            this.dtpHorarioSemanaInicio.ValueChanged += new System.EventHandler(this.dtpHorarioSemanaInicio_ValueChanged);
             // 
             // dtpHorarioSemanaFim
             // 
