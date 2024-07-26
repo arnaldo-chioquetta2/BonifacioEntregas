@@ -63,7 +63,10 @@ namespace TeleBonifacio
                     return @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + CaminhoBase + ";";
                 }
             }
-        }        
+        }
+
+        public static DateTime D0 = new DateTime(1, 01, 01).Date;
+        public static DateTime D1 = new DateTime(2001, 01, 01).Date;
 
         #region FormatacaoTela
 

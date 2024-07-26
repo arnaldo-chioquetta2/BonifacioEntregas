@@ -134,9 +134,8 @@ namespace TeleBonifacio.dao
         }
 
         public string GetDataSqlPart(DateTime? data, string fieldName)
-        {
-            DateTime D0 = new DateTime(2001, 01, 01).Date;
-            if (data.Value.Date != D0)
+        {            
+            if (data.Value.Date != glo.D1)
             {
                 return $"{fieldName} = '{data.Value:yyyy-MM-dd}', ";
             }

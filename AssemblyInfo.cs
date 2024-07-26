@@ -11,8 +11,9 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyCulture("")]
 [assembly: ComVisible(false)]
 [assembly: Guid("308c57af-e663-456d-8a2c-188bbd61423d")]
-[assembly: AssemblyVersion("2.4.6.0")]
-[assembly: AssemblyFileVersion("2.4.6.0")]
+[assembly: AssemblyVersion("2.4.7.0")]
+[assembly: AssemblyFileVersion("2.4.7.0")]
+// 2.4.7 Tratamento de erro de data vazia na tela de funcionários
 // 2.4.6 Campos a mais de funcionários - finalização
 // 2.4.5 Gravação dos funcionários
 // 2.4.4 Previsão para horas vazias no carregamento de combo dos clientes

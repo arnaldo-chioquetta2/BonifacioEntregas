@@ -150,7 +150,7 @@ namespace TeleBonifacio
             if (propertyInfo != null && propertyInfo.PropertyType == typeof(DateTime) || propertyInfo.PropertyType == typeof(DateTime?))
             {
                 DateTime? data = propertyInfo.GetValue(reg, null) as DateTime?;
-                if (!data.HasValue || data.Value.Date == new DateTime(2001, 1, 1).Date)
+                if (!data.HasValue || (data.Value.Date == glo.D0) || (data.Value.Date == glo.D1))
                 {
                     dtpControl.CustomFormat = " ";
                     dtpControl.Format = DateTimePickerFormat.Custom;
