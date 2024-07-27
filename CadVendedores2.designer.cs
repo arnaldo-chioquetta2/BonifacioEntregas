@@ -540,7 +540,7 @@ namespace TeleBonifacio
             // 
             this.txtAmigo.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
             this.txtAmigo.Location = new System.Drawing.Point(646, 159);
-            this.txtAmigo.MaxLength = 10;
+            this.txtAmigo.MaxLength = 20;
             this.txtAmigo.Name = "txtAmigo";
             this.txtAmigo.Size = new System.Drawing.Size(150, 23);
             this.txtAmigo.TabIndex = 12;
