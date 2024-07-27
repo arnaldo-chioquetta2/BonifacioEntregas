@@ -8,6 +8,7 @@ using System.Reflection;
 using System.Windows.Forms;
 using TeleBonifacio.dao;
 using TeleBonifacio.gen;
+using System.Drawing.Printing;
 
 namespace TeleBonifacio
 {
@@ -684,6 +685,125 @@ namespace TeleBonifacio
         }
 
         #endregion
+
+        protected void Imprimir()
+        {
+            PrintDocument pd = new PrintDocument();
+            pd.DefaultPageSettings.Landscape = true; 
+            pd.DefaultPageSettings.Margins = new Margins(50, 50, 50, 50);
+            pd.PrintPage += (sender, e) =>
+            {
+                Graphics g = e.Graphics;
+                float scale = e.MarginBounds.Width / (float)this.Width; // Cálculo de escala baseado na largura disponível
+
+                foreach (Control ctrl in this.Controls.Cast<Control>().OrderBy(c => c.TabIndex))
+                {
+                    string text = GetControlText(ctrl); // Assumindo que GetControlText é um método que extrai o texto do controle
+                    using (Font scaledFont = new Font(ctrl.Font.FontFamily, ctrl.Font.Size * scale, ctrl.Font.Style))
+                    {
+                        SizeF size = g.MeasureString(text, scaledFont);
+                        g.DrawString(text, scaledFont, Brushes.Black, e.MarginBounds.Left + ctrl.Left * scale, e.MarginBounds.Top + ctrl.Top * scale);
+                    }
+                }
+            };
+            PrintDialog printDialog = new PrintDialog();
+            printDialog.Document = pd;
+            if (printDialog.ShowDialog() == DialogResult.OK)
+            {
+                pd.Print(); 
+            }
+        }
+
+        //protected void Imprimir()
+        //{
+        //    PrintDocument pd = new PrintDocument();
+        //    pd.DefaultPageSettings.Landscape = true; // Define para modo paisagem
+
+        //    // Ajustando as margens
+        //    pd.DefaultPageSettings.Margins = new Margins(50, 50, 20, 20); // Margens de 50 unidades em esquerda e direita, e 20 unidades em cima e embaixo
+
+        //    pd.PrintPage += (sender, e) =>
+        //    {
+        //        Graphics g = e.Graphics;
+        //        float pageWidth = e.PageBounds.Width - (pd.DefaultPageSettings.Margins.Left + pd.DefaultPageSettings.Margins.Right);
+        //        float x = pd.DefaultPageSettings.Margins.Left; // Começa da margem esquerda
+        //        float y = pd.DefaultPageSettings.Margins.Top; // Começa da margem superior
+
+        //        foreach (Control ctrl in this.Controls.Cast<Control>().OrderBy(c => c.TabIndex))
+        //        {
+        //            string textoParaImprimir = GetControlText(ctrl);
+        //            float deslocamentoY = ctrl.Top - this.Controls.Cast<Control>().Min(c => c.Top);
+        //            float deslocamentoX = ctrl.Left - this.Controls.Cast<Control>().Min(c => c.Left);
+
+        //            // Calculando a largura necessária para o texto
+        //            SizeF stringSize = g.MeasureString(textoParaImprimir, ctrl.Font);
+
+        //            // Escalando o texto se necessário
+        //            if (stringSize.Width > pageWidth)
+        //            {
+        //                float scaleFactor = pageWidth / stringSize.Width;
+        //                Font scaledFont = new Font(ctrl.Font.FontFamily, ctrl.Font.Size * scaleFactor, ctrl.Font.Style);
+        //                g.DrawString(textoParaImprimir, scaledFont, Brushes.Black, x + deslocamentoX, y + deslocamentoY);
+        //            }
+        //            else
+        //            {
+        //                g.DrawString(textoParaImprimir, ctrl.Font, Brushes.Black, x + deslocamentoX, y + deslocamentoY);
+        //            }
+        //        }
+        //    };
+
+        //    PrintPreviewDialog ppd = new PrintPreviewDialog
+        //    {
+        //        Document = pd
+        //    };
+        //    ppd.ShowDialog();
+        //}
+
+        //protected void Imprimir()
+        //{
+        //    PrintDocument pd = new PrintDocument();
+        //    pd.DefaultPageSettings.Landscape = true;
+        //    pd.PrintPage += (sender, e) =>
+        //    {
+        //        Graphics g = e.Graphics;
+        //        float x = 10; 
+        //        float y = 10; 
+        //        foreach (Control ctrl in this.Controls.Cast<Control>().OrderBy(c => c.TabIndex))
+        //        {
+        //            string textoParaImprimir = GetControlText(ctrl);
+        //            float deslocamentoY = ctrl.Top - this.Controls.Cast<Control>().Min(c => c.Top);
+        //            float deslocamentoX = ctrl.Left - this.Controls.Cast<Control>().Min(c => c.Left);
+        //            g.DrawString(textoParaImprimir, ctrl.Font, Brushes.Black, x + deslocamentoX, y + deslocamentoY);
+        //        }
+        //    };
+
+        //    PrintPreviewDialog ppd = new PrintPreviewDialog
+        //    {
+        //        Document = pd
+        //    };
+        //    ppd.ShowDialog();
+        //}
+
+        private string GetControlText(Control ctrl)
+        {
+            if (ctrl is TextBox textBox)
+            {
+                return textBox.Name.StartsWith("txtSenha") ? "******" : textBox.Text;
+            }
+            else if (ctrl is DateTimePicker dtp)
+            {
+                return dtp.Value.ToString("dd/MM/yyyy");
+            }
+            else if (ctrl is CheckBox checkBox)
+            {
+                return checkBox.Checked ? "Sim" : "Não";
+            }
+            else if (ctrl is Label label)
+            {
+                return label.Text;
+            }
+            return ctrl.Text;
+        }
 
     }
 }

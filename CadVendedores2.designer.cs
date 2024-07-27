@@ -91,6 +91,7 @@ namespace TeleBonifacio
             // 
             this.cntrole1.Size = new System.Drawing.Size(869, 54);
             this.cntrole1.AcaoRealizada += new System.EventHandler<AcaoEventArgs>(this.cntrole1_AcaoRealizada);
+            this.cntrole1.SolicitacaoImpressao += new System.EventHandler<System.EventArgs>(this.cntrole1_SolicitacaoImpressao);
             // 
             // txtLoja
             // 

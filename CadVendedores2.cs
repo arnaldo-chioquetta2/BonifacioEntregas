@@ -5,6 +5,9 @@ using System.Windows.Forms;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Linq;
+using System.Text;
+using System.Drawing.Printing;
+using System.Drawing;
 
 namespace TeleBonifacio
 {
@@ -35,6 +38,7 @@ namespace TeleBonifacio
             rt.AdjustFormComponents(this);
             cINI = new INI();
             VerificaHorarios(base.reg);
+            cntrole1.MostraImpressao();
             Carregando = false;
         }
 
@@ -240,6 +244,7 @@ namespace TeleBonifacio
             int digito2 = resto < 2 ? 0 : 11 - resto;
             return int.Parse(cpf[10].ToString()) == digito2;
         }
+        
         private bool SaoHorariosValidos()
         {
             TimeSpan semanaInicio = dtpHorarioSemanaInicio.Value.TimeOfDay;
@@ -252,6 +257,7 @@ namespace TeleBonifacio
             }
             return true;
         }
+        
         #region Eventos
 
 
@@ -350,6 +356,11 @@ namespace TeleBonifacio
         }
 
         #endregion
+
+        private void cntrole1_SolicitacaoImpressao(object sender, EventArgs e)
+        {
+            base.Imprimir();
+        }
 
     }
 }
