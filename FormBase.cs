@@ -714,76 +714,6 @@ namespace TeleBonifacio
             }
         }
 
-        //protected void Imprimir()
-        //{
-        //    PrintDocument pd = new PrintDocument();
-        //    pd.DefaultPageSettings.Landscape = true; // Define para modo paisagem
-
-        //    // Ajustando as margens
-        //    pd.DefaultPageSettings.Margins = new Margins(50, 50, 20, 20); // Margens de 50 unidades em esquerda e direita, e 20 unidades em cima e embaixo
-
-        //    pd.PrintPage += (sender, e) =>
-        //    {
-        //        Graphics g = e.Graphics;
-        //        float pageWidth = e.PageBounds.Width - (pd.DefaultPageSettings.Margins.Left + pd.DefaultPageSettings.Margins.Right);
-        //        float x = pd.DefaultPageSettings.Margins.Left; // Começa da margem esquerda
-        //        float y = pd.DefaultPageSettings.Margins.Top; // Começa da margem superior
-
-        //        foreach (Control ctrl in this.Controls.Cast<Control>().OrderBy(c => c.TabIndex))
-        //        {
-        //            string textoParaImprimir = GetControlText(ctrl);
-        //            float deslocamentoY = ctrl.Top - this.Controls.Cast<Control>().Min(c => c.Top);
-        //            float deslocamentoX = ctrl.Left - this.Controls.Cast<Control>().Min(c => c.Left);
-
-        //            // Calculando a largura necessária para o texto
-        //            SizeF stringSize = g.MeasureString(textoParaImprimir, ctrl.Font);
-
-        //            // Escalando o texto se necessário
-        //            if (stringSize.Width > pageWidth)
-        //            {
-        //                float scaleFactor = pageWidth / stringSize.Width;
-        //                Font scaledFont = new Font(ctrl.Font.FontFamily, ctrl.Font.Size * scaleFactor, ctrl.Font.Style);
-        //                g.DrawString(textoParaImprimir, scaledFont, Brushes.Black, x + deslocamentoX, y + deslocamentoY);
-        //            }
-        //            else
-        //            {
-        //                g.DrawString(textoParaImprimir, ctrl.Font, Brushes.Black, x + deslocamentoX, y + deslocamentoY);
-        //            }
-        //        }
-        //    };
-
-        //    PrintPreviewDialog ppd = new PrintPreviewDialog
-        //    {
-        //        Document = pd
-        //    };
-        //    ppd.ShowDialog();
-        //}
-
-        //protected void Imprimir()
-        //{
-        //    PrintDocument pd = new PrintDocument();
-        //    pd.DefaultPageSettings.Landscape = true;
-        //    pd.PrintPage += (sender, e) =>
-        //    {
-        //        Graphics g = e.Graphics;
-        //        float x = 10; 
-        //        float y = 10; 
-        //        foreach (Control ctrl in this.Controls.Cast<Control>().OrderBy(c => c.TabIndex))
-        //        {
-        //            string textoParaImprimir = GetControlText(ctrl);
-        //            float deslocamentoY = ctrl.Top - this.Controls.Cast<Control>().Min(c => c.Top);
-        //            float deslocamentoX = ctrl.Left - this.Controls.Cast<Control>().Min(c => c.Left);
-        //            g.DrawString(textoParaImprimir, ctrl.Font, Brushes.Black, x + deslocamentoX, y + deslocamentoY);
-        //        }
-        //    };
-
-        //    PrintPreviewDialog ppd = new PrintPreviewDialog
-        //    {
-        //        Document = pd
-        //    };
-        //    ppd.ShowDialog();
-        //}
-
         private string GetControlText(Control ctrl)
         {
             if (ctrl is TextBox textBox)
@@ -792,7 +722,14 @@ namespace TeleBonifacio
             }
             else if (ctrl is DateTimePicker dtp)
             {
-                return dtp.Value.ToString("dd/MM/yyyy");
+                if (dtp.Format == DateTimePickerFormat.Custom && dtp.CustomFormat == "HH:mm")
+                {
+                    return dtp.Value.ToString("HH:mm");
+                }
+                else
+                {
+                    return dtp.Value.ToShortDateString();
+                }
             }
             else if (ctrl is CheckBox checkBox)
             {
