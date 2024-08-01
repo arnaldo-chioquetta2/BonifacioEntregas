@@ -235,16 +235,52 @@ namespace TeleBonifacio.rel
 
         private float DesenharFaltaPeriodo(Graphics g, Font font, float currentX, float startY, float lineHeight, float[] columnWidths, string textoFalta, int startColIndex, int endColIndex)
         {
-            float periodWidth = columnWidths.Skip(startColIndex).Take(endColIndex - startColIndex + 1).Sum();
+            // Skip the date column
+            currentX += columnWidths[0];
+
+            // Calculate the width for the falta period
+            float periodWidth = columnWidths.Skip(startColIndex + 1).Take(endColIndex - startColIndex + 1).Sum();
+
             RectangleF faltaRect = new RectangleF(currentX, startY, periodWidth, lineHeight);
             g.FillRectangle(Brushes.White, faltaRect);
-            g.DrawString(textoFalta, font, Brushes.Black, faltaRect, new StringFormat() { Alignment = StringAlignment.Center, LineAlignment = StringAlignment.Center });
+            g.DrawString(textoFalta, font, Brushes.Black, faltaRect, new StringFormat()
+            {
+                Alignment = StringAlignment.Center,
+                LineAlignment = StringAlignment.Center
+            });
+
+            // Return the x-coordinate after the falta period
             return currentX + periodWidth;
         }
 
         private void DesenharTexto(Graphics g, Font font, string texto, RectangleF cellRect)
         {
             g.DrawString(texto, font, Brushes.Black, cellRect, new StringFormat() { Alignment = StringAlignment.Center, LineAlignment = StringAlignment.Center });
+        }
+
+        private void DesenharDados(Graphics g, Font font, List<string[]> gridData, int cabecalhoLinhas, float[] columnWidths, float startX, ref float startY, float lineHeight, PrintPageEventArgs e)
+        {
+            for (int i = cabecalhoLinhas; i < gridData.Count; i++)
+            {
+                float currentX = startX;
+                bool isDomingo = gridData[i].Length > 1 && gridData[i][1] == "DOMINGO";
+                bool isFalta = gridData[i].Length > 1 && gridData[i][1] == "FALTA";
+
+                int lastColumnIndex = isDomingo || isFalta ? 1 : gridData[i].Length - 1;
+
+                DesenharLinha(g, font, gridData, i, columnWidths, ref currentX, startY, lineHeight, isDomingo, isFalta, lastColumnIndex);
+
+                // Desenha o indicador de final de linha na última coluna válida
+                DesenharFinalLinha(g, columnWidths, startX, currentX, startY, lineHeight, isDomingo, isFalta, lastColumnIndex);
+
+                startY += lineHeight;
+
+                if (startY > e.MarginBounds.Bottom - lineHeight)
+                {
+                    e.HasMorePages = true;
+                    return;
+                }
+            }
         }
 
         private void DesenharGrade(object sender, PrintPageEventArgs e, List<string[]> gridData, int cabecalhoLinhas)
@@ -273,32 +309,7 @@ namespace TeleBonifacio.rel
                 g.DrawString(gridData[i][0], font, Brushes.Black, startX, startY);
                 startY += lineHeight;
             }
-        }
-
-        private void DesenharDados(Graphics g, Font font, List<string[]> gridData, int cabecalhoLinhas, float[] columnWidths, float startX, ref float startY, float lineHeight, PrintPageEventArgs e)
-        {
-            for (int i = cabecalhoLinhas; i < gridData.Count; i++)
-            {
-                float currentX = startX;
-                bool isDomingo = gridData[i].Length > 1 && gridData[i][1] == "DOMINGO";
-                bool isFalta = gridData[i].Length > 1 && gridData[i][1] == "FALTA";
-
-                int lastColumnIndex = isDomingo || isFalta ? 1 : gridData[i].Length - 1;
-
-                DesenharLinha(g, font, gridData, i, columnWidths, ref currentX, startY, lineHeight, isDomingo, isFalta, lastColumnIndex);
-
-                // Desenha o indicador de final de linha na última coluna válida
-                DesenharFinalLinha(g, columnWidths, startX, currentX, startY, lineHeight, isDomingo, isFalta, lastColumnIndex);
-
-                startY += lineHeight;
-
-                if (startY > e.MarginBounds.Bottom - lineHeight)
-                {
-                    e.HasMorePages = true;
-                    return;
-                }
-            }
-        }
+        }        
 
         private void DesenharFinalLinha(Graphics g, float[] columnWidths, float startX, float currentX, float startY, float lineHeight, bool isDomingo, bool isFalta, int lastColumnIndex)
         {
