@@ -180,8 +180,13 @@ namespace TeleBonifacio.rel
 
                 if (isDomingo)
                 {
-                    // Trata domingo de forma simples e centralizada
-                    g.DrawString("DOMINGO", font, Brushes.Black, cellRect, new StringFormat() { Alignment = StringAlignment.Center, LineAlignment = StringAlignment.Center });
+                    g.DrawString(gridData[i][0], font, Brushes.Black, cellRect, new StringFormat() { Alignment = StringAlignment.Center, LineAlignment = StringAlignment.Center });
+                    float domingoWidth = columnWidths.Take(lastColumnIndex + 3).Sum();  // Somando a largura das colunas até a última coluna válida
+                    RectangleF domingoRect = new RectangleF(currentX, startY, domingoWidth, lineHeight);
+                    g.DrawString("DOMINGO", font, Brushes.Black, domingoRect, new StringFormat() { Alignment = StringAlignment.Center, LineAlignment = StringAlignment.Center });
+                    currentX += domingoWidth;  // Move o currentX para o final da área ocupada por "DOMINGO"
+                    break;  // Interrompe o loop, pois "DOMINGO" ocupa todas as colunas necessárias
+
                 }
                 else
                 {
@@ -197,7 +202,7 @@ namespace TeleBonifacio.rel
                             // Falta o dia inteiro
                             float totalWidth = columnWidths.Sum() - columnWidths[0];
                             RectangleF faltaRect = new RectangleF(currentX, startY, totalWidth, lineHeight);
-                            g.FillRectangle(Brushes.LightGray, faltaRect);
+                            g.FillRectangle(Brushes.White, faltaRect);
                             g.DrawString("FALTA DIA INTEIRO", font, Brushes.Black, faltaRect, new StringFormat() { Alignment = StringAlignment.Center, LineAlignment = StringAlignment.Center });
                             currentX += totalWidth - columnWidths[1];  // Pula para o fim da linha
                         }
@@ -206,7 +211,7 @@ namespace TeleBonifacio.rel
                             // Falta pela manhã
                             float morningWidth = columnWidths[1] + columnWidths[2] + columnWidths[3] + columnWidths[4];  // Somente colunas da manhã
                             RectangleF faltaRect = new RectangleF(currentX, startY, morningWidth, lineHeight);
-                            g.FillRectangle(Brushes.LightGray, faltaRect);
+                            g.FillRectangle(Brushes.White, faltaRect);
                             g.DrawString("FALTA MANHÃ", font, Brushes.Black, faltaRect, new StringFormat() { Alignment = StringAlignment.Center, LineAlignment = StringAlignment.Center });
                             currentX += morningWidth;  // Pula para a tarde
                         }
@@ -215,7 +220,7 @@ namespace TeleBonifacio.rel
                             // Falta pela tarde
                             float afternoonWidth = columnWidths[5] + columnWidths[6] + columnWidths[7] + columnWidths[8];  // Somente colunas da tarde
                             RectangleF faltaRect = new RectangleF(currentX + columnWidths[1] + columnWidths[2] + columnWidths[3] + columnWidths[4], startY, afternoonWidth, lineHeight);
-                            g.FillRectangle(Brushes.LightGray, faltaRect);
+                            g.FillRectangle(Brushes.White, faltaRect);
                             g.DrawString("FALTA TARDE", font, Brushes.Black, faltaRect, new StringFormat() { Alignment = StringAlignment.Center, LineAlignment = StringAlignment.Center });
                             currentX += afternoonWidth + columnWidths[1] + columnWidths[2] + columnWidths[3] + columnWidths[4];  // Pula para o fim da linha
                         }
