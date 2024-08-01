@@ -186,54 +186,47 @@ namespace TeleBonifacio.rel
                     g.DrawString("DOMINGO", font, Brushes.Black, domingoRect, new StringFormat() { Alignment = StringAlignment.Center, LineAlignment = StringAlignment.Center });
                     currentX += domingoWidth;  // Move o currentX para o final da área ocupada por "DOMINGO"
                     break;  // Interrompe o loop, pois "DOMINGO" ocupa todas as colunas necessárias
-
                 }
                 else
                 {
-                    // Trata a falta de acordo com a hora do dia
                     if (isFalta && j == 1)  // Considera a segunda coluna como o início das verificações de falta
                     {
-                        // Verifica a presença de horários para determinar se há falta na manhã ou tarde
                         bool faltaManha = string.IsNullOrEmpty(gridData[i][2]);
                         bool faltaTarde = string.IsNullOrEmpty(gridData[i][5]);
 
                         if (faltaManha && faltaTarde)
                         {
-                            // Falta o dia inteiro
                             float totalWidth = columnWidths.Sum() - columnWidths[0];
                             RectangleF faltaRect = new RectangleF(currentX, startY, totalWidth, lineHeight);
-                            g.FillRectangle(Brushes.White, faltaRect);
                             g.DrawString("FALTA DIA INTEIRO", font, Brushes.Black, faltaRect, new StringFormat() { Alignment = StringAlignment.Center, LineAlignment = StringAlignment.Center });
-                            currentX += totalWidth - columnWidths[1];  // Pula para o fim da linha
+                            currentX += totalWidth; // Pula para o fim da linha
                         }
                         else if (faltaManha)
                         {
-                            // Falta pela manhã
-                            float morningWidth = columnWidths[1] + columnWidths[2] + columnWidths[3] + columnWidths[4];  // Somente colunas da manhã
+                            float morningWidth = columnWidths[1] + columnWidths[2] + columnWidths[3] + columnWidths[4]; // Somente colunas da manhã
                             RectangleF faltaRect = new RectangleF(currentX, startY, morningWidth, lineHeight);
                             g.FillRectangle(Brushes.White, faltaRect);
                             g.DrawString("FALTA MANHÃ", font, Brushes.Black, faltaRect, new StringFormat() { Alignment = StringAlignment.Center, LineAlignment = StringAlignment.Center });
-                            currentX += morningWidth;  // Pula para a tarde
+                            currentX += morningWidth; // Pula para a tarde
                         }
                         else if (faltaTarde)
                         {
-                            // Falta pela tarde
-                            float afternoonWidth = columnWidths[5] + columnWidths[6] + columnWidths[7] + columnWidths[8];  // Somente colunas da tarde
+                            float afternoonWidth = columnWidths[5] + columnWidths[6] + columnWidths[7] + columnWidths[8]; // Somente colunas da tarde
                             RectangleF faltaRect = new RectangleF(currentX + columnWidths[1] + columnWidths[2] + columnWidths[3] + columnWidths[4], startY, afternoonWidth, lineHeight);
                             g.FillRectangle(Brushes.White, faltaRect);
                             g.DrawString("FALTA TARDE", font, Brushes.Black, faltaRect, new StringFormat() { Alignment = StringAlignment.Center, LineAlignment = StringAlignment.Center });
-                            currentX += afternoonWidth + columnWidths[1] + columnWidths[2] + columnWidths[3] + columnWidths[4];  // Pula para o fim da linha
+                            currentX += afternoonWidth + columnWidths[1] + columnWidths[2] + columnWidths[3] + columnWidths[4]; // Pula para o fim da linha
                         }
                     }
                     else
                     {
-                        // Dias normais ou dias com horários parciais sem faltas
                         g.DrawString(gridData[i][j], font, Brushes.Black, cellRect, new StringFormat() { Alignment = StringAlignment.Center, LineAlignment = StringAlignment.Center });
                         currentX += columnWidths[j]; // Move para a próxima coluna
                     }
                 }
             }
         }
+
 
 
         private void DesenharGrade(object sender, PrintPageEventArgs e, List<string[]> gridData, int cabecalhoLinhas)
