@@ -171,55 +171,6 @@ namespace TeleBonifacio.rel
 
         #region Desenho
 
-        //private void DesenharLinha(Graphics g, Font font, List<string[]> gridData, int i, float[] columnWidths, ref float currentX, float startY, float lineHeight, bool isDomingo, bool isFalta, int lastColumnIndex)
-        //{
-        //    for (int j = 0; j <= lastColumnIndex; j++)
-        //    {
-        //        RectangleF cellRect = new RectangleF(currentX, startY, columnWidths[j], lineHeight);
-        //        g.DrawRectangle(Pens.Black, cellRect.X, cellRect.Y, cellRect.Width, cellRect.Height);
-
-        //        if (isDomingo)
-        //        {
-        //            g.DrawString(gridData[i][j], font, Brushes.Black, cellRect, new StringFormat() { Alignment = StringAlignment.Center, LineAlignment = StringAlignment.Center });
-        //        }
-        //        else if (isFalta)
-        //        {
-        //            if (j == 0) // Primeira coluna mostra a data
-        //            {
-        //                g.DrawString(gridData[i][j], font, Brushes.Black, cellRect, new StringFormat() { Alignment = StringAlignment.Center, LineAlignment = StringAlignment.Center });
-        //            }
-        //            else if (j == 1) // Segunda coluna e seguintes para "FALTA"
-        //            {
-        //                float totalWidth = columnWidths.Skip(1).Sum(); // Largura total das colunas após a primeira
-        //                RectangleF faltaRect = new RectangleF(currentX + columnWidths[1], startY, totalWidth - columnWidths[1], lineHeight);
-
-        //                // Preenche o espaço de "FALTA" com branco
-        //                g.FillRectangle(Brushes.White, faltaRect);
-
-        //                // Desenha a linha separadora entre a data e o "FALTA"
-        //                g.DrawLine(Pens.Black, currentX + columnWidths[0], startY, currentX + columnWidths[0], startY + lineHeight);
-
-        //                // Desenha "FALTA" centralizado no espaço restante
-        //                g.DrawString("FALTA", font, Brushes.Black, faltaRect, new StringFormat() { Alignment = StringAlignment.Center, LineAlignment = StringAlignment.Center });
-
-        //                currentX += totalWidth; // Ajusta currentX para o fim da linha
-        //                break; // Interrompe o loop, pois "FALTA" ocupa todas as colunas restantes
-        //            }
-        //        }
-        //        else // Dias normais
-        //        {
-        //            g.DrawString(gridData[i][j], font, Brushes.Black, cellRect, new StringFormat() { Alignment = StringAlignment.Center, LineAlignment = StringAlignment.Center });
-        //        }
-
-        //        if (!isFalta || j == 0) // Ajuste para mover a próxima coluna se não for "FALTA" ou ainda na primeira coluna
-        //        {
-        //            currentX += columnWidths[j]; // Move para a próxima coluna
-        //        }
-        //    }
-        //}
-
-
-        int FaltaMuitoADireita = 0;
         private void DesenharLinha(Graphics g, Font font, List<string[]> gridData, int i, float[] columnWidths, ref float currentX, float startY, float lineHeight, bool isDomingo, bool isFalta, int lastColumnIndex)
         {
             for (int j = 0; j <= lastColumnIndex; j++)
@@ -229,91 +180,56 @@ namespace TeleBonifacio.rel
 
                 if (isDomingo)
                 {
-                    if (j == 0) // Primeira coluna para "DOMINGO"
+                    // Trata domingo de forma simples e centralizada
+                    g.DrawString("DOMINGO", font, Brushes.Black, cellRect, new StringFormat() { Alignment = StringAlignment.Center, LineAlignment = StringAlignment.Center });
+                }
+                else
+                {
+                    // Trata a falta de acordo com a hora do dia
+                    if (isFalta && j == 1)  // Considera a segunda coluna como o início das verificações de falta
                     {
-                        g.DrawString(gridData[i][j], font, Brushes.Black, cellRect, new StringFormat() { Alignment = StringAlignment.Center, LineAlignment = StringAlignment.Center });
-                    }
-                    else if (j == 1) // Segunda coluna para "DOMINGO"
-                    {
-                        g.DrawString("DOMINGO", font, Brushes.Black, cellRect, new StringFormat() { Alignment = StringAlignment.Center, LineAlignment = StringAlignment.Center });
+                        // Verifica a presença de horários para determinar se há falta na manhã ou tarde
+                        bool faltaManha = string.IsNullOrEmpty(gridData[i][2]);
+                        bool faltaTarde = string.IsNullOrEmpty(gridData[i][5]);
+
+                        if (faltaManha && faltaTarde)
+                        {
+                            // Falta o dia inteiro
+                            float totalWidth = columnWidths.Sum() - columnWidths[0];
+                            RectangleF faltaRect = new RectangleF(currentX, startY, totalWidth, lineHeight);
+                            g.FillRectangle(Brushes.LightGray, faltaRect);
+                            g.DrawString("FALTA DIA INTEIRO", font, Brushes.Black, faltaRect, new StringFormat() { Alignment = StringAlignment.Center, LineAlignment = StringAlignment.Center });
+                            currentX += totalWidth - columnWidths[1];  // Pula para o fim da linha
+                        }
+                        else if (faltaManha)
+                        {
+                            // Falta pela manhã
+                            float morningWidth = columnWidths[1] + columnWidths[2] + columnWidths[3] + columnWidths[4];  // Somente colunas da manhã
+                            RectangleF faltaRect = new RectangleF(currentX, startY, morningWidth, lineHeight);
+                            g.FillRectangle(Brushes.LightGray, faltaRect);
+                            g.DrawString("FALTA MANHÃ", font, Brushes.Black, faltaRect, new StringFormat() { Alignment = StringAlignment.Center, LineAlignment = StringAlignment.Center });
+                            currentX += morningWidth;  // Pula para a tarde
+                        }
+                        else if (faltaTarde)
+                        {
+                            // Falta pela tarde
+                            float afternoonWidth = columnWidths[5] + columnWidths[6] + columnWidths[7] + columnWidths[8];  // Somente colunas da tarde
+                            RectangleF faltaRect = new RectangleF(currentX + columnWidths[1] + columnWidths[2] + columnWidths[3] + columnWidths[4], startY, afternoonWidth, lineHeight);
+                            g.FillRectangle(Brushes.LightGray, faltaRect);
+                            g.DrawString("FALTA TARDE", font, Brushes.Black, faltaRect, new StringFormat() { Alignment = StringAlignment.Center, LineAlignment = StringAlignment.Center });
+                            currentX += afternoonWidth + columnWidths[1] + columnWidths[2] + columnWidths[3] + columnWidths[4];  // Pula para o fim da linha
+                        }
                     }
                     else
                     {
+                        // Dias normais ou dias com horários parciais sem faltas
                         g.DrawString(gridData[i][j], font, Brushes.Black, cellRect, new StringFormat() { Alignment = StringAlignment.Center, LineAlignment = StringAlignment.Center });
+                        currentX += columnWidths[j]; // Move para a próxima coluna
                     }
                 }
-                else if (isFalta)
-                {
-                    if (j == 0) // Primeira coluna mostra a data
-                    {
-                        g.DrawString(gridData[i][j], font, Brushes.Black, cellRect, new StringFormat() { Alignment = StringAlignment.Center, LineAlignment = StringAlignment.Center });
-                    }
-                    else if (j == 1) // A partir da segunda coluna, "FALTA" será centralizado
-                    {
-                        float totalWidth = columnWidths.Sum() - columnWidths[0]; // Largura total das colunas após a primeira
-                        RectangleF faltaRect = new RectangleF(currentX, startY, totalWidth, lineHeight);
-                        g.FillRectangle(Brushes.White, faltaRect);
-
-                        // Adiciona a linha divisória
-                        g.DrawLine(Pens.Black, currentX, startY, currentX, startY + lineHeight);
-
-                        g.DrawString("FALTA", font, Brushes.Black, faltaRect, new StringFormat() { Alignment = StringAlignment.Center, LineAlignment = StringAlignment.Center });
-
-                        currentX += totalWidth - columnWidths[1]; // Ajusta currentX para o fim das colunas de "FALTA"
-                        break; // Interrompe o loop, pois "FALTA" ocupa todas as colunas restantes
-                    }
-                }
-
-                //else if (isFalta)
-                //{
-                //    if (j == 0) // Primeira coluna mostra a data
-                //    {
-                //        g.DrawString(gridData[i][j], font, Brushes.Black, cellRect, new StringFormat() { Alignment = StringAlignment.Center, LineAlignment = StringAlignment.Center });
-                //    }
-                //    else if (j == 1) // A partir da segunda coluna, "FALTA" será centralizado
-                //    {
-                //        float totalWidth = columnWidths.Sum() - columnWidths[0]; // Largura total das colunas após a primeira
-                //        RectangleF faltaRect = new RectangleF(currentX, startY, totalWidth, lineHeight);
-                //        g.FillRectangle(Brushes.White, faltaRect);
-                //        g.DrawString("FALTA", font, Brushes.Black, faltaRect, new StringFormat() { Alignment = StringAlignment.Center, LineAlignment = StringAlignment.Center });
-
-                //        currentX += totalWidth - columnWidths[j]; // Ajusta currentX para o fim das colunas de "FALTA"
-                //        break; // Interrompe o loop, pois "FALTA" ocupa todas as colunas restantes
-                //    }
-
-                //    //if (j == 0) // Primeira coluna mostra a data
-                //    //{
-                //    //    g.DrawString(gridData[i][j], font, Brushes.Black, cellRect, new StringFormat() { Alignment = StringAlignment.Center, LineAlignment = StringAlignment.Center });
-                //    //}
-                //    //else if (j == 1) // A partir da segunda coluna, "FALTA" será centralizado
-                //    //{
-                //    //    // Calcula a largura total das colunas restantes (incluindo a atual)
-                //    //    float totalWidth = columnWidths.Sum();
-
-                //    //    // Calcula a posição x do separador
-                //    //    float separatorX = currentX + columnWidths[0];
-
-                //    //    // Desenha o separador
-                //    //    RectangleF separatorRect = new RectangleF(separatorX, startY, 1, lineHeight); // Ajuste a largura do separador conforme necessário
-                //    //    g.FillRectangle(Brushes.Black, separatorRect);
-
-                //    //    // Desenha o retângulo de "FALTA"
-                //    //    RectangleF faltaRect = new RectangleF(currentX + columnWidths[0], startY, totalWidth - columnWidths[0], lineHeight);
-                //    //    g.FillRectangle(Brushes.White, faltaRect);
-                //    //    g.DrawString("FALTA", font, Brushes.Black, faltaRect, new StringFormat() { Alignment = StringAlignment.Center, LineAlignment = StringAlignment.Center });
-
-                //    //    currentX += totalWidth; // Ajusta currentX para o fim da linha
-                //    //    break; // Interrompe o loop, pois "FALTA" ocupa todas as colunas restantes
-                //    //}
-
-                //}
-                else // Dias normais
-                {
-                    g.DrawString(gridData[i][j], font, Brushes.Black, cellRect, new StringFormat() { Alignment = StringAlignment.Center, LineAlignment = StringAlignment.Center });
-                }
-                currentX += columnWidths[j]; // Move para a próxima coluna se não for "FALTA"
             }
         }
+
 
         private void DesenharGrade(object sender, PrintPageEventArgs e, List<string[]> gridData, int cabecalhoLinhas)
         {
