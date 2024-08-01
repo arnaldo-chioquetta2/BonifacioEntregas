@@ -483,9 +483,8 @@ namespace TeleBonifacio.rel
             {
                 AdicionarTotalMensal(corpoGridData, totalMensal);
             }
-
-            gridData.Add(new string[] { "Total de horas:", "", "", "", "", "", "", "", "", $"{totalzao.TotalHours:n0}:{totalzao.Minutes:00}" });
             gridData.AddRange(corpoGridData);
+            gridData.Add(new string[] { "Total de horas:", "", "", "", "", "", "", "", "", $"{totalzao.TotalHours:n0}:{totalzao.Minutes:00}" });
             GerarTextoParaTextBox(gridData);
             this.gridDataParaImpressao = gridData;
         }
