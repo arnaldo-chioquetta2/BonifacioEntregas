@@ -45,82 +45,86 @@ namespace TeleBonifacio.rel
             DateTime DT2 = dtnDtFim.Value.Date;
             int idFunc = Convert.ToInt32(cmbVendedor.SelectedValue.ToString());
             DataTable dados = cRHDAO.getDados(DT1, DT2, idFunc);
+
             relcaixa = new List<Lanctos>();
             TimeSpan totalzao = TimeSpan.Zero;
+
             foreach (DataRow row in dados.Rows)
             {
-                Lanctos lancto = new Lanctos
-                {
-                    ID = Convert.ToInt32(row["ID"]),
-                    UID = row["uid"].ToString(),
-                    Data = Convert.ToDateTime(row["Data"]),
-                    Nome = row["Nome"].ToString(),
-                    InMan = row["InMan"].ToString(),
-                    FmMan = row["FmMan"].ToString(),
-                    InTrd = row["InTrd"].ToString(),
-                    FnTrd = row["FnTrd"].ToString(),
-                    InCafeMan = row["InCafeMan"].ToString(),
-                    FmCafeMan = row["FmCafeMan"].ToString(),
-                    InCafeTrd = row["InCafeTrd"].ToString(),
-                    FmCafeTrd = row["FmCafeTrd"].ToString(),
-                    FuncID = Convert.ToInt32(row["FuncID"])
-                };
-                TimeSpan inMan = ProcHora(lancto.InMan);
-                TimeSpan fmMan = ProcHora(lancto.FmMan);
-                TimeSpan inCafeMan = ProcHora(lancto.InCafeMan);
-                TimeSpan fmCafeMan = ProcHora(lancto.FmCafeMan);
-                TimeSpan inTrd = ProcHora(lancto.InTrd);
-                TimeSpan fnTrd = ProcHora(lancto.FnTrd);
-                TimeSpan inCafeTrd = ProcHora(lancto.InCafeTrd);
-                TimeSpan fmCafeTrd = ProcHora(lancto.FmCafeTrd);
+                Lanctos lancto = CriarLancto(row);
+                TimeSpan totalDia = CalcularTotalDia(lancto);
 
-                TimeSpan totalDia = TimeSpan.Zero;
-
-                // 1) Inicio da manhã até o inicio do café da manhã (só se tiver inicio do café da manhã)
-                if (inMan != TimeSpan.Zero && (inCafeMan != TimeSpan.Zero || fmMan != TimeSpan.Zero))
-                {
-                    if (inCafeMan != TimeSpan.Zero)
-                        totalDia += inCafeMan - inMan;
-                    else
-                        totalDia += fmMan - inMan;
-                }
-
-                // 2) Fim do café da manhã até a saída da manhã (só se tiver saída da manhã)
-                if (fmCafeMan != TimeSpan.Zero && fmMan != TimeSpan.Zero)
-                {
-                    totalDia += fmMan - fmCafeMan;
-                }
-                else if (fmMan != TimeSpan.Zero && inCafeMan != TimeSpan.Zero)
-                {
-                    totalDia += fmMan - inCafeMan;
-                }
-
-                // 3) Inicio da tarde até o inicio do café da tarde (só se tiver inicio de café da tarde)
-                if (inTrd != TimeSpan.Zero && (inCafeTrd != TimeSpan.Zero || fnTrd != TimeSpan.Zero))
-                {
-                    if (inCafeTrd != TimeSpan.Zero)
-                        totalDia += inCafeTrd - inTrd;
-                    else
-                        totalDia += fnTrd - inTrd;
-                }
-
-                // 4) Fim do café da tarde até fim do turno (só se tiver fim do turno)
-                if (fmCafeTrd != TimeSpan.Zero && fnTrd != TimeSpan.Zero)
-                {
-                    totalDia += fnTrd - fmCafeTrd;
-                }
-                else if (fnTrd != TimeSpan.Zero && inCafeTrd != TimeSpan.Zero)
-                {
-                    totalDia += fnTrd - inCafeTrd;
-                }
                 totalzao += totalDia;
-                int totalHoras = (int)totalDia.TotalHours; 
-                int totalMinutos = totalDia.Minutes;
-                lancto.Total = $"{totalHoras:D2}:{totalMinutos:D2}";
+                lancto.Total = FormatTotal(totalDia);
                 relcaixa.Add(lancto);
             }
+
             GerarRelCaixa();
         }
+
+        private Lanctos CriarLancto(DataRow row)
+        {
+            return new Lanctos
+            {
+                ID = Convert.ToInt32(row["ID"]),
+                UID = row["uid"].ToString(),
+                Data = Convert.ToDateTime(row["Data"]),
+                Nome = row["Nome"].ToString(),
+                InMan = row["InMan"].ToString(),
+                FmMan = row["FmMan"].ToString(),
+                InTrd = row["InTrd"].ToString(),
+                FnTrd = row["FnTrd"].ToString(),
+                InCafeMan = row["InCafeMan"].ToString(),
+                FmCafeMan = row["FmCafeMan"].ToString(),
+                InCafeTrd = row["InCafeTrd"].ToString(),
+                FmCafeTrd = row["FmCafeTrd"].ToString(),
+                FuncID = Convert.ToInt32(row["FuncID"])
+            };
+        }
+
+        private TimeSpan CalcularTotalDia(Lanctos lancto)
+        {
+            TimeSpan inMan = ProcHora(lancto.InMan);
+            TimeSpan fmMan = ProcHora(lancto.FmMan);
+            TimeSpan inCafeMan = ProcHora(lancto.InCafeMan);
+            TimeSpan fmCafeMan = ProcHora(lancto.FmCafeMan);
+            TimeSpan inTrd = ProcHora(lancto.InTrd);
+            TimeSpan fnTrd = ProcHora(lancto.FnTrd);
+            TimeSpan inCafeTrd = ProcHora(lancto.InCafeTrd);
+            TimeSpan fmCafeTrd = ProcHora(lancto.FmCafeTrd);
+
+            TimeSpan totalDia = TimeSpan.Zero;
+
+            totalDia += CalcularPeriodo(inMan, inCafeMan, fmMan);
+            totalDia += CalcularPeriodo(fmCafeMan, fmMan, inCafeMan);
+            totalDia += CalcularPeriodo(inTrd, inCafeTrd, fnTrd);
+            totalDia += CalcularPeriodo(fmCafeTrd, fnTrd, inCafeTrd);
+
+            return totalDia;
+        }
+
+        private TimeSpan CalcularPeriodo(TimeSpan inicio, TimeSpan meio, TimeSpan fim)
+        {
+            TimeSpan periodo = TimeSpan.Zero;
+
+            if (inicio != TimeSpan.Zero && (meio != TimeSpan.Zero || fim != TimeSpan.Zero))
+            {
+                if (meio != TimeSpan.Zero)
+                    periodo += meio - inicio;
+                else
+                    periodo += fim - inicio;
+            }
+
+            return periodo;
+        }
+
+        private string FormatTotal(TimeSpan totalDia)
+        {
+            int totalHoras = (int)totalDia.TotalHours;
+            int totalMinutos = totalDia.Minutes;
+            return $"{totalHoras:D2}:{totalMinutos:D2}";
+        }
+        
         private void GerarTextoParaTextBox(List<string[]> gridData)
         {
             StringBuilder sb = new StringBuilder();
