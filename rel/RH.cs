@@ -300,7 +300,7 @@ namespace TeleBonifacio.rel
 
         private void DesenharDados(Graphics g, Font font, List<string[]> gridData, int cabecalhoLinhas, float[] columnWidths, float startX, ref float startY, float lineHeight, PrintPageEventArgs e)
         {
-            for (int i = cabecalhoLinhas; i < gridData.Count; i++)
+            for (int i = (cabecalhoLinhas-1); i < gridData.Count; i++)
             {
                 float currentX = startX;
                 bool isDomingo = gridData[i].Length > 1 && gridData[i][1] == "DOMINGO";
@@ -327,15 +327,21 @@ namespace TeleBonifacio.rel
         {
             Graphics g = e.Graphics;
             Font font = new Font("Arial", 8);
-            float lineHeight = font.GetHeight() + 2;
-            float startY = e.MarginBounds.Top;
-            float startX = e.MarginBounds.Left;
-            float[] columnWidths = { 80, 100, 50, 50, 50, 50, 50, 50, 50, 60 }; // Ajuste conforme necessário
+            float lineHeight = font.GetHeight() + 2;  // Altura de cada linha de texto
+            float startY = e.MarginBounds.Top;        // Ponto de início vertical
+            float startX = e.MarginBounds.Left;       // Ponto de início horizontal
+            float[] columnWidths = { 80, 100, 50, 50, 50, 50, 50, 50, 50, 60 }; // Larguras das colunas
 
-            // Desenha o cabeçalho sem as colunas
+            // Desenha o cabeçalho que não faz parte da grid de dados
             DesenharCabecalho(g, font, gridData, ref startY, startX, lineHeight, cabecalhoLinhas);
 
             // Adiciona um espaço extra entre o cabeçalho e a grade de dados
+            startY += lineHeight * 2;  // Dobrar a linha de espaço para garantir separação
+
+            // Desenha o cabeçalho dos campos da grid
+            DesenharCabecalho2(g, font, columnWidths, startX, startY, lineHeight);
+
+            // Aumentar startY após o cabeçalho da grid para iniciar os dados abaixo deste
             startY += lineHeight;
 
             // Desenha a grade de dados começando após o cabeçalho
@@ -349,7 +355,22 @@ namespace TeleBonifacio.rel
                 g.DrawString(gridData[i][0], font, Brushes.Black, startX, startY);
                 startY += lineHeight;
             }
-        }        
+        }
+
+        private void DesenharCabecalho2(Graphics g, Font font, float[] columnWidths, float startX, float startY, float lineHeight)
+        {
+            float currentX = startX;
+            string[] cabecalhos = new string[] { "Data", "InMan", "FmMan", "InTrd", "FnTrd", "InCafeMan", "FmCafeMan", "InCafeTrd", "FmCafeTrd", "Total" };
+
+            for (int i = 0; i < cabecalhos.Length; i++)
+            {
+                RectangleF cellRect = new RectangleF(currentX, startY, columnWidths[i], lineHeight);
+                g.DrawRectangle(Pens.Black, cellRect.X, cellRect.Y, cellRect.Width, cellRect.Height);
+                DesenharTexto(g, font, cabecalhos[i], cellRect);
+                currentX += columnWidths[i];
+            }
+        }
+
 
         private void DesenharFinalLinha(Graphics g, float[] columnWidths, float startX, float currentX, float startY, float lineHeight, bool isDomingo, bool isFalta, int lastColumnIndex)
         {
