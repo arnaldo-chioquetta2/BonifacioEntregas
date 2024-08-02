@@ -188,6 +188,10 @@ namespace TeleBonifacio.rel
                 {
                     currentX = DesenharFalta(g, font, gridData, i, currentX, startY, lineHeight, columnWidths);
                 }
+                else if (gridData[i][j] == "FALTA" && j > 4)
+                {
+                    currentX = DesenharFaltaPeriodo(g, font, currentX, startY, lineHeight, columnWidths, "FALTA TARDE", j, 8);
+                }
                 else
                 {
                     DesenharTexto(g, font, gridData[i][j], cellRect);
