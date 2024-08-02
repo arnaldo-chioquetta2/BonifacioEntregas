@@ -216,6 +216,10 @@ namespace TeleBonifacio.rel
                     DesenharTexto(g, font, gridData[i][j], cellRect);
                     currentX += columnWidths[j];
                 }
+                RectangleF cellRectT = new RectangleF(currentX, startY, columnWidths[9], lineHeight);
+                g.DrawRectangle(Pens.Black, cellRectT.X, cellRectT.Y, cellRectT.Width, cellRectT.Height);
+                DesenharTexto(g, font, gridData[i][9], cellRectT);
+                currentX += columnWidths[9];
                 return currentX;
             }
             else if (faltaTarde)
