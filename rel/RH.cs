@@ -178,12 +178,10 @@ namespace TeleBonifacio.rel
                 DesenharDomingo(g, font, gridData, i, currentX, startY, lineHeight, columnWidths, lastColumnIndex);
                 return;
             }
-
             for (int j = 0; j <= lastColumnIndex; j++)
             {
                 RectangleF cellRect = new RectangleF(currentX, startY, columnWidths[j], lineHeight);
                 g.DrawRectangle(Pens.Black, cellRect.X, cellRect.Y, cellRect.Width, cellRect.Height);
-
                 if (isFalta && j == 1)
                 {
                     currentX = DesenharFalta(g, font, gridData, i, currentX, startY, lineHeight, columnWidths);
@@ -191,6 +189,10 @@ namespace TeleBonifacio.rel
                 else if (gridData[i][j] == "FALTA" && j > 4)
                 {
                     currentX = DesenharFaltaPeriodo(g, font, currentX, startY, lineHeight, columnWidths, "FALTA TARDE", j, 8);
+                    RectangleF cellRectT = new RectangleF(currentX + columnWidths[4] + columnWidths[5] + columnWidths[6] + columnWidths[7], startY, columnWidths[9], lineHeight);
+                    g.DrawRectangle(Pens.Black, cellRectT.X, cellRectT.Y, cellRectT.Width, cellRectT.Height);
+                    DesenharTexto(g, font, gridData[i][9], cellRectT);
+                    break;
                 }
                 else
                 {
@@ -245,16 +247,29 @@ namespace TeleBonifacio.rel
         private float DesenharFaltaPeriodo(Graphics g, Font font, float currentX, float startY, float lineHeight, float[] columnWidths, string textoFalta, int startColIndex, int endColIndex)
         {
             float periodWidth = columnWidths.Skip(startColIndex).Take(endColIndex - startColIndex + 1).Sum();
-
-            RectangleF faltaRect = new RectangleF(currentX, startY, periodWidth, lineHeight);
-            g.FillRectangle(Brushes.White, faltaRect);
-            g.DrawString(textoFalta, font, Brushes.Black, faltaRect, new StringFormat()
+            float MX = 0;
+            float MY = 0;
+            if (textoFalta == "FALTA TARDE")
+            {
+                MX = 2;
+                MY = 2;
+            }
+            RectangleF faltaRect = new RectangleF(currentX+MX, startY+MY, periodWidth, lineHeight);
+            g.FillRectangle(Brushes.White, faltaRect); 
+            RectangleF faltaRectT = new RectangleF(currentX, startY, periodWidth, lineHeight);
+            g.DrawString(textoFalta, font, Brushes.Black, faltaRectT, new StringFormat()
             {
                 Alignment = StringAlignment.Center,
                 LineAlignment = StringAlignment.Center
             });
-
-            return currentX + periodWidth;
+            if (textoFalta == "FALTA TARDE")
+            {
+                return currentX;
+            }
+            else
+            {
+                return currentX + periodWidth;
+            }
         }
 
         private void DesenharDomingo(Graphics g, Font font, List<string[]> gridData, int i, float currentX, float startY, float lineHeight, float[] columnWidths, int lastColumnIndex)
