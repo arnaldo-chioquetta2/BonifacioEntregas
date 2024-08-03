@@ -241,46 +241,9 @@ namespace TeleBonifacio
 
             if (propertyInfo != null)
             {
-                if (propertyInfo.PropertyType == typeof(int))
+                if (!TrySetPropertyValue(propertyInfo, reg, textBox.Text))
                 {
-                    if (int.TryParse(textBox.Text, out int value))
-                    {
-                        propertyInfo.SetValue(reg, value, null);
-                    }
-                    else
-                    {
-                        Console.WriteLine($"Falha na conversão para inteiro: {textBox.Text}");
-                    }
-                }
-                else if (propertyInfo.PropertyType == typeof(decimal))
-                {
-                    if (decimal.TryParse(textBox.Text, out decimal value))
-                    {
-                        propertyInfo.SetValue(reg, value, null);
-                    }
-                    else
-                    {
-                        Console.WriteLine($"Falha na conversão para decimal: {textBox.Text}");
-                    }
-                }
-                else if (propertyInfo.PropertyType == typeof(string))
-                {
-                    propertyInfo.SetValue(reg, textBox.Text, null);
-                }
-                else if (propertyInfo.PropertyType == typeof(TimeSpan))
-                {
-                    if (TimeSpan.TryParse(textBox.Text, out TimeSpan timeSpanValue))
-                    {
-                        propertyInfo.SetValue(reg, timeSpanValue, null);
-                    }
-                    else
-                    {
-                        Console.WriteLine($"Falha na conversão para TimeSpan: {textBox.Text}");
-                    }
-                }
-                else
-                {
-                    Console.WriteLine("Tipo de propriedade não suportado");
+                    Console.WriteLine($"Falha na conversão para {propertyInfo.PropertyType}: {textBox.Text}");
                 }
             }
             else
@@ -288,6 +251,62 @@ namespace TeleBonifacio
                 Console.WriteLine($"Propriedade '{propertyName}' não encontrada");
             }
         }
+
+        private bool TrySetPropertyValue(PropertyInfo propertyInfo, dao.BaseDAO reg, string text)
+        {
+            if (propertyInfo.PropertyType == typeof(int))
+            {
+                return TrySetIntProperty(propertyInfo, reg, text);
+            }
+            else if (propertyInfo.PropertyType == typeof(decimal))
+            {
+                return TrySetDecimalProperty(propertyInfo, reg, text);
+            }
+            else if (propertyInfo.PropertyType == typeof(string))
+            {
+                propertyInfo.SetValue(reg, text, null);
+                return true;
+            }
+            else if (propertyInfo.PropertyType == typeof(TimeSpan))
+            {
+                return TrySetTimeSpanProperty(propertyInfo, reg, text);
+            }
+            else
+            {
+                Console.WriteLine("Tipo de propriedade não suportado");
+                return false;
+            }
+        }
+
+        private bool TrySetIntProperty(PropertyInfo propertyInfo, dao.BaseDAO reg, string text)
+        {
+            if (int.TryParse(text, out int value))
+            {
+                propertyInfo.SetValue(reg, value, null);
+                return true;
+            }
+            return false;
+        }
+
+        private bool TrySetDecimalProperty(PropertyInfo propertyInfo, dao.BaseDAO reg, string text)
+        {
+            if (decimal.TryParse(text, out decimal value))
+            {
+                propertyInfo.SetValue(reg, value, null);
+                return true;
+            }
+            return false;
+        }
+
+        private bool TrySetTimeSpanProperty(PropertyInfo propertyInfo, dao.BaseDAO reg, string text)
+        {
+            if (TimeSpan.TryParse(text, out TimeSpan value))
+            {
+                propertyInfo.SetValue(reg, value, null);
+                return true;
+            }
+            return false;
+        }        
 
         private void MapearDateTimePickerParaModelo(DateTimePicker dtpControl, dao.BaseDAO reg)
         {

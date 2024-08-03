@@ -178,35 +178,59 @@ namespace TeleBonifacio
 
         private void cntrole1_AcaoRealizada(object sender, AcaoEventArgs e)
         {
+            // Refatorado em 02/08/24
             Carregando = true;
             if (e.Acao == "Adicionar" || e.Acao == "OK")
             {
-                if (!SaoHorariosValidos())
-                {
-                    MessageBox.Show("Os horários de trabalho são inválidos. Por favor, verifique e corrija.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    Carregando = false;
-                    return;
-                }
-                if (!string.IsNullOrWhiteSpace(txtCPF.Text) && !IsCPFValido(txtCPF.Text))
-                {
-                    MessageBox.Show("O CPF informado é inválido. Por favor, verifique e corrija.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    Carregando = false;
-                    return;
-                }
-                if (e.Acao == "Adicionar")
-                {
-                    Adicionando = true;
-                }
+                if (!ValidarHorariosECPF()) return;
+                if (e.Acao == "Adicionar") Adicionando = true;
             }
             else
             {
-                if (!Adicionando)
-                {
-                    base.DAO.SetId(ID);
-                    base.DAO.SetNome(Nome);
-                }
+                ConfigurarDAO();
             }
             base.cntrole1_AcaoRealizada(sender, e, base.reg);
+            AtribuirIdENomeBase();
+            if ((e.Acao == "ParaFrente") || (e.Acao == "ParaTras"))
+            {
+                VerificaHorarios(base.reg);
+            }
+            Carregando = false;
+        }
+
+        private bool ValidarHorariosECPF()
+        {
+            if (!SaoHorariosValidos())
+            {
+                ExibirMensagemErro("Os horários de trabalho são inválidos. Por favor, verifique e corrija.");
+                Carregando = false;
+                return false;
+            }
+            if (!string.IsNullOrWhiteSpace(txtCPF.Text) && !IsCPFValido(txtCPF.Text))
+            {
+                ExibirMensagemErro("O CPF informado é inválido. Por favor, verifique e corrija.");
+                Carregando = false;
+                return false;
+            }
+            return true;
+        }
+
+        private void ExibirMensagemErro(string mensagem)
+        {
+            MessageBox.Show(mensagem, "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        }
+
+        private void ConfigurarDAO()
+        {
+            if (!Adicionando)
+            {
+                base.DAO.SetId(ID);
+                base.DAO.SetNome(Nome);
+            }
+        }
+
+        private void AtribuirIdENomeBase()
+        {
             try
             {
                 ID = base.reg.Id;
@@ -216,11 +240,6 @@ namespace TeleBonifacio
             {
                 // Não faz nada
             }
-            if ((e.Acao == "ParaFrente") || (e.Acao == "ParaTras"))
-            {
-                VerificaHorarios(base.reg);
-            }
-            Carregando = false;
         }
 
         private bool IsCPFValido(string cpf)
