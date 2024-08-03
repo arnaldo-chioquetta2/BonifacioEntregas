@@ -575,6 +575,7 @@ namespace TeleBonifacio
             this.dtpHorarioSemanaFim.ShowUpDown = true;
             this.dtpHorarioSemanaFim.Size = new System.Drawing.Size(59, 20);
             this.dtpHorarioSemanaFim.TabIndex = 26;
+            this.dtpHorarioSemanaFim.ValueChanged += new System.EventHandler(this.dtpHorarioSemanaInicio_ValueChanged);
             // 
             // dtpHorarioSabadoInicio
             // 
@@ -585,6 +586,7 @@ namespace TeleBonifacio
             this.dtpHorarioSabadoInicio.ShowUpDown = true;
             this.dtpHorarioSabadoInicio.Size = new System.Drawing.Size(59, 20);
             this.dtpHorarioSabadoInicio.TabIndex = 27;
+            this.dtpHorarioSabadoInicio.ValueChanged += new System.EventHandler(this.dtpHorarioSemanaInicio_ValueChanged);
             // 
             // dtpHorarioSabadoFim
             // 
@@ -595,6 +597,7 @@ namespace TeleBonifacio
             this.dtpHorarioSabadoFim.ShowUpDown = true;
             this.dtpHorarioSabadoFim.Size = new System.Drawing.Size(59, 20);
             this.dtpHorarioSabadoFim.TabIndex = 28;
+            this.dtpHorarioSabadoFim.ValueChanged += new System.EventHandler(this.dtpHorarioSemanaInicio_ValueChanged);
             // 
             // CadVendedores2
             // 

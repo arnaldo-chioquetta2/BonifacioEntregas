@@ -97,15 +97,11 @@ namespace TeleBonifacio.dao
                 sqlBuilder.Append($"Amigo = '{vendedor.Amigo}', ");
                 sqlBuilder.Append(GetDataSqlPart(vendedor.DataNascimento, "DataNascimento"));
                 sqlBuilder.Append(GetDataSqlPart(vendedor.DataAdmissao, "DataAdmissao"));
-                sqlBuilder.Append(GetDataSqlPart(vendedor.DataDemissao, "DataDemissao"));
-                if (vendedor.HorarioSemanaInicio != TimeSpan.Zero)
-                    sqlBuilder.Append($"HorarioSemanaInicio = '#{vendedor.HorarioSemanaInicio:hh\\:mm}#', ");
-                if (vendedor.HorarioSemanaFim != TimeSpan.Zero)
-                    sqlBuilder.Append($"HorarioSemanaFim = '#{vendedor.HorarioSemanaFim:hh\\:mm}#', ");
-                if (vendedor.HorarioSabadoInicio != TimeSpan.Zero)
-                    sqlBuilder.Append($"HorarioSabadoInicio = '#{vendedor.HorarioSabadoInicio:hh\\:mm}#', ");
-                if (vendedor.HorarioSabadoFim != TimeSpan.Zero)
-                    sqlBuilder.Append($"HorarioSabadoFim = '#{vendedor.HorarioSabadoFim:hh\\:mm}#', ");
+                sqlBuilder.Append(GetDataSqlPart(vendedor.DataDemissao, "DataDemissao"));                
+                sqlBuilder.Append($"HorarioSemanaInicio = #{vendedor.HorarioSemanaInicio:hh\\:mm\\:ss}#, ");                
+                sqlBuilder.Append($"HorarioSemanaFim = #{vendedor.HorarioSemanaFim:hh\\:mm\\:ss}#, ");                
+                sqlBuilder.Append($"HorarioSabadoInicio = #{vendedor.HorarioSabadoInicio:hh\\:mm\\:ss}#, ");                
+                sqlBuilder.Append($"HorarioSabadoFim = #{vendedor.HorarioSabadoFim:hh\\:mm\\:ss}#, ");
                 sqlBuilder.Append($"Salario = {vendedor.Salario.ToString("F2", System.Globalization.CultureInfo.InvariantCulture)}, ");
                 sqlBuilder.Append($"FormaPagamento = '{vendedor.FormaPagamento}', ");
                 sqlBuilder.Append($"ValeAlimentacao = {valeAlimentacao}, ");

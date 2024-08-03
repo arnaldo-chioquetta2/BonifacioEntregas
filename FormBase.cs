@@ -291,17 +291,26 @@ namespace TeleBonifacio
 
         private void MapearDateTimePickerParaModelo(DateTimePicker dtpControl, dao.BaseDAO reg)
         {
-            string propertyName = dtpControl.Name.Substring(3); // Remove o prefixo 'dtp'
+            string propertyName = dtpControl.Name.Substring(3);
             PropertyInfo propertyInfo = reg.GetType().GetProperty(propertyName);
-            if (propertyInfo != null && (propertyInfo.PropertyType == typeof(DateTime) || propertyInfo.PropertyType == typeof(DateTime?)))
+
+            if (propertyInfo != null)
             {
-                if (dtpControl.Format != DateTimePickerFormat.Custom)
+                if (propertyInfo.PropertyType == typeof(DateTime) || propertyInfo.PropertyType == typeof(DateTime?))
                 {
-                    propertyInfo.SetValue(reg, dtpControl.Value, null);
+                    if (dtpControl.Format != DateTimePickerFormat.Custom)
+                    {
+                        propertyInfo.SetValue(reg, dtpControl.Value, null);
+                    }
+                    else
+                    {
+                        propertyInfo.SetValue(reg, null, null);
+                    }
                 }
-                else
+                else if (propertyInfo.PropertyType == typeof(TimeSpan) || propertyInfo.PropertyType == typeof(TimeSpan?))
                 {
-                    propertyInfo.SetValue(reg, null, null); // ou DateTime.MinValue
+                    TimeSpan timeSpanValue = dtpControl.Value.TimeOfDay;
+                    propertyInfo.SetValue(reg, timeSpanValue, null);
                 }
             }
         }
