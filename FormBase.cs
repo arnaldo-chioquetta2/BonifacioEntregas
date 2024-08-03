@@ -359,44 +359,22 @@ namespace TeleBonifacio
             }
         }
 
+        // Refatorado em 03/08/24 Original 62 linhas, resultado 32 linhas
         protected void cntrole1_AcaoRealizada(object sender, AcaoEventArgs e, tb.IDataEntity entidade)
         {
             switch (e.Acao)
             {
                 case "Adicionar":
-                    LimparCampos();
-                    EmAdicao = true;
+                    HandleAdicionar();
                     break;
                 case "Delete":
-                    reg = DAO.Apagar(Direcao, entidade);
-                    if (!Mostra())
-                    {
-                        if (Direcao == 1)
-                        {
-                            cntrole1.Ultimo = true;
-                        }
-                        else
-                        {
-                            cntrole1.Primeiro = true;
-                        }
-                    }
+                    HandleDelete(entidade);
                     break;
                 case "ParaTras":
-                    Direcao = -1;
-                    reg = DAO.ParaTraz();
-                    if (!Mostra())
-                    {
-                        cntrole1.Ultimo = true;
-                    }
+                    HandleParaTras();
                     break;
                 case "ParaFrente":
-                    Direcao = 1; ;
-                    reg = DAO.ParaFrente();
-                    
-                    if (!Mostra())
-                    {
-                        cntrole1.Primeiro = true;
-                    }
+                    HandleParaFrente();
                     break;
                 case "Editar":
                     // this.Text = "clicou";
@@ -421,6 +399,111 @@ namespace TeleBonifacio
                     break;
             }
         }
+
+        private void HandleAdicionar()
+        {
+            LimparCampos();
+            EmAdicao = true;
+        }
+
+        private void HandleDelete(tb.IDataEntity entidade)
+        {
+            reg = DAO.Apagar(Direcao, entidade);
+            if (!Mostra())
+            {
+                if (Direcao == 1)
+                {
+                    cntrole1.Ultimo = true;
+                }
+                else
+                {
+                    cntrole1.Primeiro = true;
+                }
+            }
+        }
+
+        private void HandleParaTras()
+        {
+            Direcao = -1;
+            reg = DAO.ParaTraz();
+            if (!Mostra())
+            {
+                cntrole1.Ultimo = true;
+            }
+        }
+
+        private void HandleParaFrente()
+        {
+            Direcao = 1;
+            reg = DAO.ParaFrente();
+            if (!Mostra())
+            {
+                cntrole1.Primeiro = true;
+            }
+        }
+
+        //protected void cntrole1_AcaoRealizada(object sender, AcaoEventArgs e, tb.IDataEntity entidade)
+        //{
+        //    switch (e.Acao)
+        //    {
+        //        case "Adicionar":
+        //            LimparCampos();
+        //            EmAdicao = true;
+        //            break;
+        //        case "Delete":
+        //            reg = DAO.Apagar(Direcao, entidade);
+        //            if (!Mostra())
+        //            {
+        //                if (Direcao == 1)
+        //                {
+        //                    cntrole1.Ultimo = true;
+        //                }
+        //                else
+        //                {
+        //                    cntrole1.Primeiro = true;
+        //                }
+        //            }
+        //            break;
+        //        case "ParaTras":
+        //            Direcao = -1;
+        //            reg = DAO.ParaTraz();
+        //            if (!Mostra())
+        //            {
+        //                cntrole1.Ultimo = true;
+        //            }
+        //            break;
+        //        case "ParaFrente":
+        //            Direcao = 1; ;
+        //            reg = DAO.ParaFrente();
+
+        //            if (!Mostra())
+        //            {
+        //                cntrole1.Primeiro = true;
+        //            }
+        //            break;
+        //        case "Editar":
+        //            // this.Text = "clicou";
+        //            break;
+        //        case "CANC":
+        //            Cancela();
+        //            break;
+        //        case "OK":
+        //            Grava();
+        //            break;
+        //        case "PesqON":
+        //            LigaGrid();
+        //            break;
+        //        case "PesqAcionar":
+        //            PesqAcionar();
+        //            break;
+        //        case "PesqOFF":
+        //            PesqOFF();
+        //            break;
+        //        case "Pesquisar":
+        //            Pesquisar();
+        //            break;
+        //    }
+        //}
 
         private void PesqOFF()
         {
@@ -750,6 +833,10 @@ namespace TeleBonifacio
             }
             else if (ctrl is DateTimePicker dtp)
             {
+                if (dtp.Format == DateTimePickerFormat.Custom) 
+                {
+                    return "";
+                }                    
                 if (dtp.Format == DateTimePickerFormat.Custom && dtp.CustomFormat == "HH:mm")
                 {
                     return dtp.Value.ToString("HH:mm");
