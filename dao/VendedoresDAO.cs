@@ -222,10 +222,17 @@ namespace TeleBonifacio.dao
                                 DataNascimento = reader["DataNascimento"] == DBNull.Value ? DateTime.MinValue : Convert.ToDateTime(reader["DataNascimento"]);
                                 DataAdmissao = reader["DataAdmissao"] == DBNull.Value ? DateTime.MinValue : Convert.ToDateTime(reader["DataAdmissao"]);
                                 Salario = reader["Salario"] == DBNull.Value ? 0 : Convert.ToDecimal(reader["Salario"]);
-                                HorarioSemanaInicio = reader["HorarioSemanaInicio"] == DBNull.Value ? TimeSpan.Zero : TimeSpan.Parse(reader["HorarioSemanaInicio"].ToString());
-                                HorarioSemanaFim = reader["HorarioSemanaFim"] == DBNull.Value ? TimeSpan.Zero : TimeSpan.Parse(reader["HorarioSemanaFim"].ToString());
-                                HorarioSabadoInicio = reader["HorarioSabadoInicio"] == DBNull.Value ? TimeSpan.Zero : TimeSpan.Parse(reader["HorarioSabadoInicio"].ToString());
-                                HorarioSabadoFim = reader["HorarioSabadoFim"] == DBNull.Value ? TimeSpan.Zero : TimeSpan.Parse(reader["HorarioSabadoFim"].ToString());
+
+                                HorarioSemanaInicio = ConvertToTimeSpan(reader["HorarioSemanaInicio"]);
+                                HorarioSemanaFim = ConvertToTimeSpan(reader["HorarioSemanaFim"]);
+                                HorarioSabadoInicio = ConvertToTimeSpan(reader["HorarioSabadoInicio"]);
+                                HorarioSabadoFim = ConvertToTimeSpan(reader["HorarioSabadoFim"]);
+
+                                //HorarioSemanaInicio = reader["HorarioSemanaInicio"] == DBNull.Value ? TimeSpan.Zero : TimeSpan.Parse(reader["HorarioSemanaInicio"].ToString());
+                                //HorarioSemanaFim = reader["HorarioSemanaFim"] == DBNull.Value ? TimeSpan.Zero : TimeSpan.Parse(reader["HorarioSemanaFim"].ToString());
+                                //HorarioSabadoInicio = reader["HorarioSabadoInicio"] == DBNull.Value ? TimeSpan.Zero : TimeSpan.Parse(reader["HorarioSabadoInicio"].ToString());
+                                //HorarioSabadoFim = reader["HorarioSabadoFim"] == DBNull.Value ? TimeSpan.Zero : TimeSpan.Parse(reader["HorarioSabadoFim"].ToString());
+
                                 FormaPagamento = reader["FormaPagamento"].ToString();
                                 ValeAlimentacao = reader["ValeAlimentacao"] == DBNull.Value ? false : Convert.ToBoolean(reader["ValeAlimentacao"]);
                                 ValeTransporte = reader["ValeTransporte"] == DBNull.Value ? false : Convert.ToBoolean(reader["ValeTransporte"]);
@@ -254,6 +261,26 @@ namespace TeleBonifacio.dao
             return null;
         }
 
+        private TimeSpan ConvertToTimeSpan(object value)
+        {
+            if (value == DBNull.Value || value == null)
+            {
+                return TimeSpan.Zero;
+            }
+            if (value is DateTime dateTime)
+            {
+                return dateTime.TimeOfDay;
+            }
+            if (value is TimeSpan timeSpan)
+            {
+                return timeSpan;
+            }
+            if (value is string stringValue && TimeSpan.TryParse(stringValue, out var parsedTimeSpan))
+            {
+                return parsedTimeSpan;
+            }
+            return TimeSpan.Zero;
+        }
         public override tb.IDataEntity GetEsse()
         {
             return new tb.Vendedor

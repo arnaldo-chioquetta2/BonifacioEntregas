@@ -13,6 +13,7 @@ using System.Runtime.InteropServices;
 [assembly: Guid("308c57af-e663-456d-8a2c-188bbd61423d")]
 [assembly: AssemblyVersion("2.5.0.0")]
 [assembly: AssemblyFileVersion("2.5.0.0")]
+// 2.5.1 Correção para o caso da Giulia
 // 2.5.0 Gravação das horas e impressão correta da data de demissão
 // 2.4.9 Finalização do relatório do RH com Grids
 // 2.4.8 Impressão da ficha do funcionário - Domingo no Relatório
