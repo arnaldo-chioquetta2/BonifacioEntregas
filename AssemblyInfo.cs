@@ -11,8 +11,9 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyCulture("")]
 [assembly: ComVisible(false)]
 [assembly: Guid("308c57af-e663-456d-8a2c-188bbd61423d")]
-[assembly: AssemblyVersion("2.5.1.0")]
-[assembly: AssemblyFileVersion("2.5.1.0")]
+[assembly: AssemblyVersion("2.5.2.0")]
+[assembly: AssemblyFileVersion("2.5.2.0")]
+// 2.5.2 Mais campos de horários nos funcionários e Correção da navegação de vendedores
 // 2.5.1 Correção para o caso da Giulia
 // 2.5.0 Gravação das horas e impressão correta da data de demissão
 // 2.4.9 Finalização do relatório do RH com Grids

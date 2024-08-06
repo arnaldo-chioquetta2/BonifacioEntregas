@@ -49,8 +49,6 @@ namespace TeleBonifacio
             this.txtSalario = new System.Windows.Forms.TextBox();
             this.label9 = new System.Windows.Forms.Label();
             this.label10 = new System.Windows.Forms.Label();
-            this.label11 = new System.Windows.Forms.Label();
-            this.label12 = new System.Windows.Forms.Label();
             this.label13 = new System.Windows.Forms.Label();
             this.txtFormaPagamento = new System.Windows.Forms.TextBox();
             this.chkValeAlimentacao = new System.Windows.Forms.CheckBox();
@@ -85,11 +83,25 @@ namespace TeleBonifacio
             this.dtpHorarioSemanaFim = new System.Windows.Forms.DateTimePicker();
             this.dtpHorarioSabadoInicio = new System.Windows.Forms.DateTimePicker();
             this.dtpHorarioSabadoFim = new System.Windows.Forms.DateTimePicker();
+            this.dtpHSSaiMan = new System.Windows.Forms.DateTimePicker();
+            this.label25 = new System.Windows.Forms.Label();
+            this.dtpHSIniTrd = new System.Windows.Forms.DateTimePicker();
+            this.label26 = new System.Windows.Forms.Label();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.dtpHFSaiMan = new System.Windows.Forms.DateTimePicker();
+            this.dtpHFIniTrd = new System.Windows.Forms.DateTimePicker();
+            this.label27 = new System.Windows.Forms.Label();
+            this.label28 = new System.Windows.Forms.Label();
+            this.label29 = new System.Windows.Forms.Label();
+            this.label30 = new System.Windows.Forms.Label();
+            this.groupBox1.SuspendLayout();
+            this.groupBox2.SuspendLayout();
             this.SuspendLayout();
             // 
             // cntrole1
             // 
-            this.cntrole1.Size = new System.Drawing.Size(869, 54);
+            this.cntrole1.Size = new System.Drawing.Size(803, 54);
             this.cntrole1.AcaoRealizada += new System.EventHandler<AcaoEventArgs>(this.cntrole1_AcaoRealizada);
             this.cntrole1.SolicitacaoImpressao += new System.EventHandler<System.EventArgs>(this.cntrole1_SolicitacaoImpressao);
             // 
@@ -99,11 +111,11 @@ namespace TeleBonifacio
             this.txtLoja.Location = new System.Drawing.Point(166, 162);
             this.txtLoja.Name = "txtLoja";
             this.txtLoja.Size = new System.Drawing.Size(150, 23);
-            this.txtLoja.TabIndex = 10;
+            this.txtLoja.TabIndex = 4;
             // 
             // lblNome
             // 
-            this.lblNome.Location = new System.Drawing.Point(9, 60);
+            this.lblNome.Location = new System.Drawing.Point(8, 61);
             this.lblNome.Name = "lblNome";
             this.lblNome.Size = new System.Drawing.Size(100, 12);
             this.lblNome.TabIndex = 45;
@@ -114,15 +126,15 @@ namespace TeleBonifacio
             this.txtNome.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtNome.Location = new System.Drawing.Point(9, 75);
             this.txtNome.Name = "txtNome";
-            this.txtNome.Size = new System.Drawing.Size(310, 23);
+            this.txtNome.Size = new System.Drawing.Size(306, 23);
             this.txtNome.TabIndex = 0;
             // 
             // chkAtende
             // 
-            this.chkAtende.Location = new System.Drawing.Point(9, 197);
+            this.chkAtende.Location = new System.Drawing.Point(644, 251);
             this.chkAtende.Name = "chkAtende";
             this.chkAtende.Size = new System.Drawing.Size(104, 24);
-            this.chkAtende.TabIndex = 13;
+            this.chkAtende.TabIndex = 24;
             this.chkAtende.Text = "Atende Whats";
             // 
             // txtNro
@@ -131,7 +143,7 @@ namespace TeleBonifacio
             this.txtNro.Location = new System.Drawing.Point(166, 205);
             this.txtNro.Name = "txtNro";
             this.txtNro.Size = new System.Drawing.Size(150, 23);
-            this.txtNro.TabIndex = 14;
+            this.txtNro.TabIndex = 6;
             // 
             // label2
             // 
@@ -144,7 +156,7 @@ namespace TeleBonifacio
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(9, 98);
+            this.label3.Location = new System.Drawing.Point(8, 99);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(43, 13);
             this.label3.TabIndex = 17;
@@ -153,11 +165,11 @@ namespace TeleBonifacio
             // txtUsuario
             // 
             this.txtUsuario.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtUsuario.Location = new System.Drawing.Point(9, 117);
+            this.txtUsuario.Location = new System.Drawing.Point(8, 118);
             this.txtUsuario.MaxLength = 100;
             this.txtUsuario.Name = "txtUsuario";
             this.txtUsuario.Size = new System.Drawing.Size(150, 23);
-            this.txtUsuario.TabIndex = 4;
+            this.txtUsuario.TabIndex = 1;
             this.txtUsuario.Tag = "";
             // 
             // label4
@@ -176,14 +188,14 @@ namespace TeleBonifacio
             this.txtSenha.MaxLength = 100;
             this.txtSenha.Name = "txtSenha";
             this.txtSenha.Size = new System.Drawing.Size(150, 23);
-            this.txtSenha.TabIndex = 5;
+            this.txtSenha.TabIndex = 2;
             this.txtSenha.Tag = "";
             this.txtSenha.UseSystemPasswordChar = true;
             // 
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(9, 146);
+            this.label5.Location = new System.Drawing.Point(8, 147);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(84, 13);
             this.label5.TabIndex = 20;
@@ -197,16 +209,16 @@ namespace TeleBonifacio
             "Balconísta",
             "Caixa",
             "Escritório"});
-            this.cnbNivel.Location = new System.Drawing.Point(9, 165);
+            this.cnbNivel.Location = new System.Drawing.Point(8, 166);
             this.cnbNivel.Name = "cnbNivel";
-            this.cnbNivel.Size = new System.Drawing.Size(121, 21);
-            this.cnbNivel.TabIndex = 9;
+            this.cnbNivel.Size = new System.Drawing.Size(150, 21);
+            this.cnbNivel.TabIndex = 3;
             this.cnbNivel.Click += new System.EventHandler(this.cnbNivel_Click);
             // 
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(325, 55);
+            this.label6.Location = new System.Drawing.Point(8, 189);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(104, 13);
             this.label6.TabIndex = 21;
@@ -215,7 +227,7 @@ namespace TeleBonifacio
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(9, 227);
+            this.label7.Location = new System.Drawing.Point(8, 234);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(93, 13);
             this.label7.TabIndex = 22;
@@ -224,7 +236,7 @@ namespace TeleBonifacio
             // label8
             // 
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(328, 230);
+            this.label8.Location = new System.Drawing.Point(325, 278);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(39, 13);
             this.label8.TabIndex = 23;
@@ -233,7 +245,7 @@ namespace TeleBonifacio
             // txtSalario
             // 
             this.txtSalario.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
-            this.txtSalario.Location = new System.Drawing.Point(331, 246);
+            this.txtSalario.Location = new System.Drawing.Point(328, 294);
             this.txtSalario.MaxLength = 20;
             this.txtSalario.Name = "txtSalario";
             this.txtSalario.Size = new System.Drawing.Size(150, 23);
@@ -242,43 +254,25 @@ namespace TeleBonifacio
             // label9
             // 
             this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(674, 195);
+            this.label9.Location = new System.Drawing.Point(7, 23);
             this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(113, 13);
+            this.label9.Size = new System.Drawing.Size(34, 13);
             this.label9.TabIndex = 24;
-            this.label9.Text = "Horário Semana Início";
+            this.label9.Text = "Início";
             // 
             // label10
             // 
             this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(674, 230);
+            this.label10.Location = new System.Drawing.Point(530, 23);
             this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(102, 13);
+            this.label10.Size = new System.Drawing.Size(23, 13);
             this.label10.TabIndex = 25;
-            this.label10.Text = "Horário Semana Fim";
-            // 
-            // label11
-            // 
-            this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(674, 260);
-            this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(111, 13);
-            this.label11.TabIndex = 26;
-            this.label11.Text = "Horário Sábado Início";
-            // 
-            // label12
-            // 
-            this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(674, 290);
-            this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(100, 13);
-            this.label12.TabIndex = 27;
-            this.label12.Text = "Horário Sábado Fim";
+            this.label10.Text = "Fim";
             // 
             // label13
             // 
             this.label13.AutoSize = true;
-            this.label13.Location = new System.Drawing.Point(485, 230);
+            this.label13.Location = new System.Drawing.Point(488, 278);
             this.label13.Name = "label13";
             this.label13.Size = new System.Drawing.Size(108, 13);
             this.label13.TabIndex = 28;
@@ -287,7 +281,7 @@ namespace TeleBonifacio
             // txtFormaPagamento
             // 
             this.txtFormaPagamento.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
-            this.txtFormaPagamento.Location = new System.Drawing.Point(487, 246);
+            this.txtFormaPagamento.Location = new System.Drawing.Point(487, 294);
             this.txtFormaPagamento.MaxLength = 20;
             this.txtFormaPagamento.Name = "txtFormaPagamento";
             this.txtFormaPagamento.Size = new System.Drawing.Size(150, 23);
@@ -296,27 +290,29 @@ namespace TeleBonifacio
             // chkValeAlimentacao
             // 
             this.chkValeAlimentacao.AutoSize = true;
-            this.chkValeAlimentacao.Location = new System.Drawing.Point(328, 116);
+            this.chkValeAlimentacao.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.chkValeAlimentacao.Location = new System.Drawing.Point(644, 165);
             this.chkValeAlimentacao.Name = "chkValeAlimentacao";
-            this.chkValeAlimentacao.Size = new System.Drawing.Size(108, 17);
-            this.chkValeAlimentacao.TabIndex = 6;
+            this.chkValeAlimentacao.Size = new System.Drawing.Size(133, 20);
+            this.chkValeAlimentacao.TabIndex = 22;
             this.chkValeAlimentacao.Text = "Vale Alimentação";
             this.chkValeAlimentacao.UseVisualStyleBackColor = true;
             // 
             // chkValeTransporte
             // 
             this.chkValeTransporte.AutoSize = true;
-            this.chkValeTransporte.Location = new System.Drawing.Point(488, 116);
+            this.chkValeTransporte.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.chkValeTransporte.Location = new System.Drawing.Point(644, 209);
             this.chkValeTransporte.Name = "chkValeTransporte";
-            this.chkValeTransporte.Size = new System.Drawing.Size(101, 17);
-            this.chkValeTransporte.TabIndex = 7;
+            this.chkValeTransporte.Size = new System.Drawing.Size(124, 20);
+            this.chkValeTransporte.TabIndex = 23;
             this.chkValeTransporte.Text = "Vale Transporte";
             this.chkValeTransporte.UseVisualStyleBackColor = true;
             // 
             // label14
             // 
             this.label14.AutoSize = true;
-            this.label14.Location = new System.Drawing.Point(328, 144);
+            this.label14.Location = new System.Drawing.Point(328, 190);
             this.label14.Name = "label14";
             this.label14.Size = new System.Drawing.Size(84, 13);
             this.label14.TabIndex = 29;
@@ -325,16 +321,16 @@ namespace TeleBonifacio
             // txtLinhaOnibus
             // 
             this.txtLinhaOnibus.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
-            this.txtLinhaOnibus.Location = new System.Drawing.Point(328, 160);
+            this.txtLinhaOnibus.Location = new System.Drawing.Point(328, 205);
             this.txtLinhaOnibus.MaxLength = 100;
             this.txtLinhaOnibus.Name = "txtLinhaOnibus";
             this.txtLinhaOnibus.Size = new System.Drawing.Size(310, 23);
-            this.txtLinhaOnibus.TabIndex = 11;
+            this.txtLinhaOnibus.TabIndex = 16;
             // 
             // label15
             // 
             this.label15.AutoSize = true;
-            this.label15.Location = new System.Drawing.Point(9, 277);
+            this.label15.Location = new System.Drawing.Point(8, 277);
             this.label15.Name = "label15";
             this.label15.Size = new System.Drawing.Size(94, 13);
             this.label15.TabIndex = 30;
@@ -343,7 +339,7 @@ namespace TeleBonifacio
             // label16
             // 
             this.label16.AutoSize = true;
-            this.label16.Location = new System.Drawing.Point(166, 277);
+            this.label16.Location = new System.Drawing.Point(163, 278);
             this.label16.Name = "label16";
             this.label16.Size = new System.Drawing.Size(103, 13);
             this.label16.TabIndex = 31;
@@ -352,16 +348,16 @@ namespace TeleBonifacio
             // txtMotivoDemissao
             // 
             this.txtMotivoDemissao.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
-            this.txtMotivoDemissao.Location = new System.Drawing.Point(166, 297);
+            this.txtMotivoDemissao.Location = new System.Drawing.Point(168, 294);
             this.txtMotivoDemissao.MaxLength = 255;
             this.txtMotivoDemissao.Name = "txtMotivoDemissao";
             this.txtMotivoDemissao.Size = new System.Drawing.Size(150, 23);
-            this.txtMotivoDemissao.TabIndex = 22;
+            this.txtMotivoDemissao.TabIndex = 10;
             // 
             // label17
             // 
             this.label17.AutoSize = true;
-            this.label17.Location = new System.Drawing.Point(328, 187);
+            this.label17.Location = new System.Drawing.Point(328, 231);
             this.label17.Name = "label17";
             this.label17.Size = new System.Drawing.Size(23, 13);
             this.label17.TabIndex = 32;
@@ -370,16 +366,16 @@ namespace TeleBonifacio
             // txtRG
             // 
             this.txtRG.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
-            this.txtRG.Location = new System.Drawing.Point(331, 203);
+            this.txtRG.Location = new System.Drawing.Point(328, 250);
             this.txtRG.MaxLength = 20;
             this.txtRG.Name = "txtRG";
             this.txtRG.Size = new System.Drawing.Size(150, 23);
-            this.txtRG.TabIndex = 15;
+            this.txtRG.TabIndex = 17;
             // 
             // label18
             // 
             this.label18.AutoSize = true;
-            this.label18.Location = new System.Drawing.Point(488, 185);
+            this.label18.Location = new System.Drawing.Point(488, 229);
             this.label18.Name = "label18";
             this.label18.Size = new System.Drawing.Size(27, 13);
             this.label18.TabIndex = 33;
@@ -388,11 +384,11 @@ namespace TeleBonifacio
             // txtCPF
             // 
             this.txtCPF.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
-            this.txtCPF.Location = new System.Drawing.Point(488, 204);
+            this.txtCPF.Location = new System.Drawing.Point(488, 251);
             this.txtCPF.MaxLength = 14;
             this.txtCPF.Name = "txtCPF";
             this.txtCPF.Size = new System.Drawing.Size(150, 23);
-            this.txtCPF.TabIndex = 16;
+            this.txtCPF.TabIndex = 18;
             // 
             // label1
             // 
@@ -409,7 +405,7 @@ namespace TeleBonifacio
             this.txtCargo.MaxLength = 20;
             this.txtCargo.Name = "txtCargo";
             this.txtCargo.Size = new System.Drawing.Size(150, 23);
-            this.txtCargo.TabIndex = 18;
+            this.txtCargo.TabIndex = 8;
             // 
             // label19
             // 
@@ -423,16 +419,16 @@ namespace TeleBonifacio
             // txtCTPS
             // 
             this.txtCTPS.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
-            this.txtCTPS.Location = new System.Drawing.Point(487, 73);
+            this.txtCTPS.Location = new System.Drawing.Point(487, 120);
             this.txtCTPS.MaxLength = 10;
             this.txtCTPS.Name = "txtCTPS";
             this.txtCTPS.Size = new System.Drawing.Size(150, 23);
-            this.txtCTPS.TabIndex = 2;
+            this.txtCTPS.TabIndex = 13;
             // 
             // label20
             // 
             this.label20.AutoSize = true;
-            this.label20.Location = new System.Drawing.Point(485, 55);
+            this.label20.Location = new System.Drawing.Point(485, 102);
             this.label20.Name = "label20";
             this.label20.Size = new System.Drawing.Size(49, 13);
             this.label20.TabIndex = 51;
@@ -441,7 +437,7 @@ namespace TeleBonifacio
             // label21
             // 
             this.label21.AutoSize = true;
-            this.label21.Location = new System.Drawing.Point(466, 277);
+            this.label21.Location = new System.Drawing.Point(328, 62);
             this.label21.Name = "label21";
             this.label21.Size = new System.Drawing.Size(203, 13);
             this.label21.TabIndex = 52;
@@ -450,19 +446,19 @@ namespace TeleBonifacio
             // txtQtdFilhosMenor14
             // 
             this.txtQtdFilhosMenor14.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtQtdFilhosMenor14.Location = new System.Drawing.Point(487, 299);
+            this.txtQtdFilhosMenor14.Location = new System.Drawing.Point(331, 79);
             this.txtQtdFilhosMenor14.Name = "txtQtdFilhosMenor14";
             this.txtQtdFilhosMenor14.Size = new System.Drawing.Size(150, 23);
-            this.txtQtdFilhosMenor14.TabIndex = 24;
+            this.txtQtdFilhosMenor14.TabIndex = 11;
             // 
             // txtFilhoComDeficiencia
             // 
             this.txtFilhoComDeficiencia.AutoSize = true;
             this.txtFilhoComDeficiencia.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtFilhoComDeficiencia.Location = new System.Drawing.Point(331, 303);
+            this.txtFilhoComDeficiencia.Location = new System.Drawing.Point(644, 124);
             this.txtFilhoComDeficiencia.Name = "txtFilhoComDeficiencia";
             this.txtFilhoComDeficiencia.Size = new System.Drawing.Size(158, 21);
-            this.txtFilhoComDeficiencia.TabIndex = 23;
+            this.txtFilhoComDeficiencia.TabIndex = 21;
             this.txtFilhoComDeficiencia.Text = "Filho com deficiência";
             this.txtFilhoComDeficiencia.UseVisualStyleBackColor = true;
             // 
@@ -470,10 +466,10 @@ namespace TeleBonifacio
             // 
             this.dtpDataAdmissao.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
             this.dtpDataAdmissao.Format = System.Windows.Forms.DateTimePickerFormat.Short;
-            this.dtpDataAdmissao.Location = new System.Drawing.Point(9, 246);
+            this.dtpDataAdmissao.Location = new System.Drawing.Point(8, 250);
             this.dtpDataAdmissao.Name = "dtpDataAdmissao";
             this.dtpDataAdmissao.Size = new System.Drawing.Size(90, 23);
-            this.dtpDataAdmissao.TabIndex = 17;
+            this.dtpDataAdmissao.TabIndex = 7;
             this.dtpDataAdmissao.Tag = "";
             this.dtpDataAdmissao.ValueChanged += new System.EventHandler(this.dtpDataAdmissao_ValueChanged);
             this.dtpDataAdmissao.Enter += new System.EventHandler(this.dtpDataAdmissao_Enter);
@@ -482,10 +478,10 @@ namespace TeleBonifacio
             // 
             this.dtpDataDemissao.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
             this.dtpDataDemissao.Format = System.Windows.Forms.DateTimePickerFormat.Short;
-            this.dtpDataDemissao.Location = new System.Drawing.Point(9, 297);
+            this.dtpDataDemissao.Location = new System.Drawing.Point(8, 296);
             this.dtpDataDemissao.Name = "dtpDataDemissao";
             this.dtpDataDemissao.Size = new System.Drawing.Size(90, 23);
-            this.dtpDataDemissao.TabIndex = 21;
+            this.dtpDataDemissao.TabIndex = 9;
             this.dtpDataDemissao.Tag = "H";
             this.dtpDataDemissao.ValueChanged += new System.EventHandler(this.dtpDataAdmissao_ValueChanged);
             this.dtpDataDemissao.Enter += new System.EventHandler(this.dtpDataDemissao_Enter);
@@ -494,26 +490,26 @@ namespace TeleBonifacio
             // 
             this.dtpDataNascimento.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
             this.dtpDataNascimento.Format = System.Windows.Forms.DateTimePickerFormat.Short;
-            this.dtpDataNascimento.Location = new System.Drawing.Point(328, 75);
+            this.dtpDataNascimento.Location = new System.Drawing.Point(8, 208);
             this.dtpDataNascimento.Name = "dtpDataNascimento";
             this.dtpDataNascimento.Size = new System.Drawing.Size(90, 23);
-            this.dtpDataNascimento.TabIndex = 1;
+            this.dtpDataNascimento.TabIndex = 5;
             this.dtpDataNascimento.Tag = "H";
             this.dtpDataNascimento.ValueChanged += new System.EventHandler(this.dtpDataNascimento_ValueChanged);
             // 
             // txtFoneEmergencia
             // 
             this.txtFoneEmergencia.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
-            this.txtFoneEmergencia.Location = new System.Drawing.Point(646, 117);
+            this.txtFoneEmergencia.Location = new System.Drawing.Point(328, 164);
             this.txtFoneEmergencia.MaxLength = 10;
             this.txtFoneEmergencia.Name = "txtFoneEmergencia";
             this.txtFoneEmergencia.Size = new System.Drawing.Size(150, 23);
-            this.txtFoneEmergencia.TabIndex = 8;
+            this.txtFoneEmergencia.TabIndex = 14;
             // 
             // label22
             // 
             this.label22.AutoSize = true;
-            this.label22.Location = new System.Drawing.Point(644, 99);
+            this.label22.Location = new System.Drawing.Point(328, 146);
             this.label22.Name = "label22";
             this.label22.Size = new System.Drawing.Size(137, 13);
             this.label22.TabIndex = 59;
@@ -522,16 +518,16 @@ namespace TeleBonifacio
             // txtFone
             // 
             this.txtFone.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
-            this.txtFone.Location = new System.Drawing.Point(645, 72);
+            this.txtFone.Location = new System.Drawing.Point(328, 120);
             this.txtFone.MaxLength = 10;
             this.txtFone.Name = "txtFone";
             this.txtFone.Size = new System.Drawing.Size(150, 23);
-            this.txtFone.TabIndex = 3;
+            this.txtFone.TabIndex = 12;
             // 
             // label23
             // 
             this.label23.AutoSize = true;
-            this.label23.Location = new System.Drawing.Point(643, 54);
+            this.label23.Location = new System.Drawing.Point(328, 102);
             this.label23.Name = "label23";
             this.label23.Size = new System.Drawing.Size(49, 13);
             this.label23.TabIndex = 61;
@@ -540,16 +536,16 @@ namespace TeleBonifacio
             // txtAmigo
             // 
             this.txtAmigo.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
-            this.txtAmigo.Location = new System.Drawing.Point(646, 159);
+            this.txtAmigo.Location = new System.Drawing.Point(488, 162);
             this.txtAmigo.MaxLength = 20;
             this.txtAmigo.Name = "txtAmigo";
             this.txtAmigo.Size = new System.Drawing.Size(150, 23);
-            this.txtAmigo.TabIndex = 12;
+            this.txtAmigo.TabIndex = 15;
             // 
             // label24
             // 
             this.label24.AutoSize = true;
-            this.label24.Location = new System.Drawing.Point(644, 141);
+            this.label24.Location = new System.Drawing.Point(485, 146);
             this.label24.Name = "label24";
             this.label24.Size = new System.Drawing.Size(132, 13);
             this.label24.TabIndex = 63;
@@ -559,7 +555,7 @@ namespace TeleBonifacio
             // 
             this.dtpHorarioSemanaInicio.CustomFormat = "HH:mm";
             this.dtpHorarioSemanaInicio.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-            this.dtpHorarioSemanaInicio.Location = new System.Drawing.Point(799, 189);
+            this.dtpHorarioSemanaInicio.Location = new System.Drawing.Point(62, 19);
             this.dtpHorarioSemanaInicio.Name = "dtpHorarioSemanaInicio";
             this.dtpHorarioSemanaInicio.ShowUpDown = true;
             this.dtpHorarioSemanaInicio.Size = new System.Drawing.Size(59, 20);
@@ -570,43 +566,173 @@ namespace TeleBonifacio
             // 
             this.dtpHorarioSemanaFim.CustomFormat = "HH:mm";
             this.dtpHorarioSemanaFim.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-            this.dtpHorarioSemanaFim.Location = new System.Drawing.Point(800, 221);
+            this.dtpHorarioSemanaFim.Location = new System.Drawing.Point(559, 17);
             this.dtpHorarioSemanaFim.Name = "dtpHorarioSemanaFim";
             this.dtpHorarioSemanaFim.ShowUpDown = true;
             this.dtpHorarioSemanaFim.Size = new System.Drawing.Size(59, 20);
-            this.dtpHorarioSemanaFim.TabIndex = 26;
+            this.dtpHorarioSemanaFim.TabIndex = 28;
             this.dtpHorarioSemanaFim.ValueChanged += new System.EventHandler(this.dtpHorarioSemanaInicio_ValueChanged);
             // 
             // dtpHorarioSabadoInicio
             // 
             this.dtpHorarioSabadoInicio.CustomFormat = "HH:mm";
             this.dtpHorarioSabadoInicio.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-            this.dtpHorarioSabadoInicio.Location = new System.Drawing.Point(798, 254);
+            this.dtpHorarioSabadoInicio.Location = new System.Drawing.Point(59, 19);
             this.dtpHorarioSabadoInicio.Name = "dtpHorarioSabadoInicio";
             this.dtpHorarioSabadoInicio.ShowUpDown = true;
             this.dtpHorarioSabadoInicio.Size = new System.Drawing.Size(59, 20);
-            this.dtpHorarioSabadoInicio.TabIndex = 27;
+            this.dtpHorarioSabadoInicio.TabIndex = 29;
             this.dtpHorarioSabadoInicio.ValueChanged += new System.EventHandler(this.dtpHorarioSemanaInicio_ValueChanged);
             // 
             // dtpHorarioSabadoFim
             // 
             this.dtpHorarioSabadoFim.CustomFormat = "HH:mm";
             this.dtpHorarioSabadoFim.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-            this.dtpHorarioSabadoFim.Location = new System.Drawing.Point(798, 284);
+            this.dtpHorarioSabadoFim.Location = new System.Drawing.Point(556, 19);
             this.dtpHorarioSabadoFim.Name = "dtpHorarioSabadoFim";
             this.dtpHorarioSabadoFim.ShowUpDown = true;
             this.dtpHorarioSabadoFim.Size = new System.Drawing.Size(59, 20);
-            this.dtpHorarioSabadoFim.TabIndex = 28;
+            this.dtpHorarioSabadoFim.TabIndex = 32;
             this.dtpHorarioSabadoFim.ValueChanged += new System.EventHandler(this.dtpHorarioSemanaInicio_ValueChanged);
+            // 
+            // dtpHSSaiMan
+            // 
+            this.dtpHSSaiMan.CustomFormat = "HH:mm";
+            this.dtpHSSaiMan.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
+            this.dtpHSSaiMan.Location = new System.Drawing.Point(250, 19);
+            this.dtpHSSaiMan.Name = "dtpHSSaiMan";
+            this.dtpHSSaiMan.ShowUpDown = true;
+            this.dtpHSSaiMan.Size = new System.Drawing.Size(59, 20);
+            this.dtpHSSaiMan.TabIndex = 26;
+            this.dtpHSSaiMan.ValueChanged += new System.EventHandler(this.dtpHorarioSemanaInicio_ValueChanged);
+            // 
+            // label25
+            // 
+            this.label25.AutoSize = true;
+            this.label25.Location = new System.Drawing.Point(157, 23);
+            this.label25.Name = "label25";
+            this.label25.Size = new System.Drawing.Size(87, 13);
+            this.label25.TabIndex = 26;
+            this.label25.Text = "Saída da Manhã";
+            // 
+            // dtpHSIniTrd
+            // 
+            this.dtpHSIniTrd.CustomFormat = "HH:mm";
+            this.dtpHSIniTrd.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
+            this.dtpHSIniTrd.Location = new System.Drawing.Point(435, 19);
+            this.dtpHSIniTrd.Name = "dtpHSIniTrd";
+            this.dtpHSIniTrd.ShowUpDown = true;
+            this.dtpHSIniTrd.Size = new System.Drawing.Size(59, 20);
+            this.dtpHSIniTrd.TabIndex = 27;
+            this.dtpHSIniTrd.ValueChanged += new System.EventHandler(this.dtpHorarioSemanaInicio_ValueChanged);
+            // 
+            // label26
+            // 
+            this.label26.AutoSize = true;
+            this.label26.Location = new System.Drawing.Point(343, 25);
+            this.label26.Name = "label26";
+            this.label26.Size = new System.Drawing.Size(84, 13);
+            this.label26.TabIndex = 66;
+            this.label26.Text = "Entrada a Tarde";
+            // 
+            // groupBox1
+            // 
+            this.groupBox1.Controls.Add(this.dtpHSSaiMan);
+            this.groupBox1.Controls.Add(this.dtpHSIniTrd);
+            this.groupBox1.Controls.Add(this.label9);
+            this.groupBox1.Controls.Add(this.label26);
+            this.groupBox1.Controls.Add(this.label10);
+            this.groupBox1.Controls.Add(this.dtpHorarioSemanaInicio);
+            this.groupBox1.Controls.Add(this.label25);
+            this.groupBox1.Controls.Add(this.dtpHorarioSemanaFim);
+            this.groupBox1.Location = new System.Drawing.Point(9, 323);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(629, 48);
+            this.groupBox1.TabIndex = 68;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "Dias de Semana";
+            // 
+            // groupBox2
+            // 
+            this.groupBox2.Controls.Add(this.dtpHFSaiMan);
+            this.groupBox2.Controls.Add(this.dtpHFIniTrd);
+            this.groupBox2.Controls.Add(this.label27);
+            this.groupBox2.Controls.Add(this.dtpHorarioSabadoFim);
+            this.groupBox2.Controls.Add(this.label28);
+            this.groupBox2.Controls.Add(this.dtpHorarioSabadoInicio);
+            this.groupBox2.Controls.Add(this.label29);
+            this.groupBox2.Controls.Add(this.label30);
+            this.groupBox2.Location = new System.Drawing.Point(12, 377);
+            this.groupBox2.Name = "groupBox2";
+            this.groupBox2.Size = new System.Drawing.Size(629, 48);
+            this.groupBox2.TabIndex = 69;
+            this.groupBox2.TabStop = false;
+            this.groupBox2.Text = "Fim de Semana";
+            // 
+            // dtpHFSaiMan
+            // 
+            this.dtpHFSaiMan.CustomFormat = "HH:mm";
+            this.dtpHFSaiMan.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
+            this.dtpHFSaiMan.Location = new System.Drawing.Point(250, 19);
+            this.dtpHFSaiMan.Name = "dtpHFSaiMan";
+            this.dtpHFSaiMan.ShowUpDown = true;
+            this.dtpHFSaiMan.Size = new System.Drawing.Size(59, 20);
+            this.dtpHFSaiMan.TabIndex = 30;
+            this.dtpHFSaiMan.ValueChanged += new System.EventHandler(this.dtpHorarioSemanaInicio_ValueChanged);
+            // 
+            // dtpHFIniTrd
+            // 
+            this.dtpHFIniTrd.CustomFormat = "HH:mm";
+            this.dtpHFIniTrd.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
+            this.dtpHFIniTrd.Location = new System.Drawing.Point(435, 19);
+            this.dtpHFIniTrd.Name = "dtpHFIniTrd";
+            this.dtpHFIniTrd.ShowUpDown = true;
+            this.dtpHFIniTrd.Size = new System.Drawing.Size(59, 20);
+            this.dtpHFIniTrd.TabIndex = 31;
+            this.dtpHFIniTrd.ValueChanged += new System.EventHandler(this.dtpHorarioSemanaInicio_ValueChanged);
+            // 
+            // label27
+            // 
+            this.label27.AutoSize = true;
+            this.label27.Location = new System.Drawing.Point(7, 23);
+            this.label27.Name = "label27";
+            this.label27.Size = new System.Drawing.Size(34, 13);
+            this.label27.TabIndex = 24;
+            this.label27.Text = "Início";
+            // 
+            // label28
+            // 
+            this.label28.AutoSize = true;
+            this.label28.Location = new System.Drawing.Point(343, 25);
+            this.label28.Name = "label28";
+            this.label28.Size = new System.Drawing.Size(84, 13);
+            this.label28.TabIndex = 66;
+            this.label28.Text = "Entrada a Tarde";
+            // 
+            // label29
+            // 
+            this.label29.AutoSize = true;
+            this.label29.Location = new System.Drawing.Point(530, 23);
+            this.label29.Name = "label29";
+            this.label29.Size = new System.Drawing.Size(23, 13);
+            this.label29.TabIndex = 25;
+            this.label29.Text = "Fim";
+            // 
+            // label30
+            // 
+            this.label30.AutoSize = true;
+            this.label30.Location = new System.Drawing.Point(157, 23);
+            this.label30.Name = "label30";
+            this.label30.Size = new System.Drawing.Size(87, 13);
+            this.label30.TabIndex = 64;
+            this.label30.Text = "Saída da Manhã";
             // 
             // CadVendedores2
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-            this.ClientSize = new System.Drawing.Size(869, 334);
-            this.Controls.Add(this.dtpHorarioSabadoFim);
-            this.Controls.Add(this.dtpHorarioSabadoInicio);
-            this.Controls.Add(this.dtpHorarioSemanaFim);
-            this.Controls.Add(this.dtpHorarioSemanaInicio);
+            this.ClientSize = new System.Drawing.Size(803, 435);
+            this.Controls.Add(this.groupBox2);
+            this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.txtQtdFilhosMenor14);
             this.Controls.Add(this.txtAmigo);
             this.Controls.Add(this.label24);
@@ -637,10 +763,6 @@ namespace TeleBonifacio
             this.Controls.Add(this.chkValeAlimentacao);
             this.Controls.Add(this.txtFormaPagamento);
             this.Controls.Add(this.label13);
-            this.Controls.Add(this.label12);
-            this.Controls.Add(this.label11);
-            this.Controls.Add(this.label10);
-            this.Controls.Add(this.label9);
             this.Controls.Add(this.txtSalario);
             this.Controls.Add(this.label8);
             this.Controls.Add(this.label7);
@@ -678,10 +800,6 @@ namespace TeleBonifacio
             this.Controls.SetChildIndex(this.label7, 0);
             this.Controls.SetChildIndex(this.label8, 0);
             this.Controls.SetChildIndex(this.txtSalario, 0);
-            this.Controls.SetChildIndex(this.label9, 0);
-            this.Controls.SetChildIndex(this.label10, 0);
-            this.Controls.SetChildIndex(this.label11, 0);
-            this.Controls.SetChildIndex(this.label12, 0);
             this.Controls.SetChildIndex(this.label13, 0);
             this.Controls.SetChildIndex(this.txtFormaPagamento, 0);
             this.Controls.SetChildIndex(this.chkValeAlimentacao, 0);
@@ -712,11 +830,13 @@ namespace TeleBonifacio
             this.Controls.SetChildIndex(this.label24, 0);
             this.Controls.SetChildIndex(this.txtAmigo, 0);
             this.Controls.SetChildIndex(this.txtQtdFilhosMenor14, 0);
-            this.Controls.SetChildIndex(this.dtpHorarioSemanaInicio, 0);
-            this.Controls.SetChildIndex(this.dtpHorarioSemanaFim, 0);
-            this.Controls.SetChildIndex(this.dtpHorarioSabadoInicio, 0);
-            this.Controls.SetChildIndex(this.dtpHorarioSabadoFim, 0);
+            this.Controls.SetChildIndex(this.groupBox1, 0);
+            this.Controls.SetChildIndex(this.groupBox2, 0);
             this.Controls.SetChildIndex(this.cntrole1, 0);
+            this.groupBox1.ResumeLayout(false);
+            this.groupBox1.PerformLayout();
+            this.groupBox2.ResumeLayout(false);
+            this.groupBox2.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -743,8 +863,6 @@ namespace TeleBonifacio
         private System.Windows.Forms.TextBox txtSalario;
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.Label label10;
-        private System.Windows.Forms.Label label11;
-        private System.Windows.Forms.Label label12;
         private System.Windows.Forms.Label label13;
         private System.Windows.Forms.TextBox txtFormaPagamento;
         private System.Windows.Forms.CheckBox chkValeAlimentacao;
@@ -779,5 +897,17 @@ namespace TeleBonifacio
         private System.Windows.Forms.DateTimePicker dtpHorarioSemanaFim;
         private System.Windows.Forms.DateTimePicker dtpHorarioSabadoInicio;
         private System.Windows.Forms.DateTimePicker dtpHorarioSabadoFim;
+        private System.Windows.Forms.DateTimePicker dtpHSSaiMan;
+        private System.Windows.Forms.Label label25;
+        private System.Windows.Forms.DateTimePicker dtpHSIniTrd;
+        private System.Windows.Forms.Label label26;
+        private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.GroupBox groupBox2;
+        private System.Windows.Forms.DateTimePicker dtpHFSaiMan;
+        private System.Windows.Forms.DateTimePicker dtpHFIniTrd;
+        private System.Windows.Forms.Label label27;
+        private System.Windows.Forms.Label label28;
+        private System.Windows.Forms.Label label29;
+        private System.Windows.Forms.Label label30;
     }
 }

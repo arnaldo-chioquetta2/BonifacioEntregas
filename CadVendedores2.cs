@@ -117,6 +117,15 @@ namespace TeleBonifacio
         }
     }
 
+        private void ConfigurarDAO()
+        {
+            if (!Adicionando)
+            {
+                base.DAO.SetId(ID);
+                base.DAO.SetNome(Nome);
+            }
+        }
+
         #endregion
 
         #region Funções auxiliares        
@@ -137,6 +146,12 @@ namespace TeleBonifacio
             AjustarDateTimePicker(dtpHorarioSemanaFim, "Turnos", "ManFim", "12:00", modelo);
             AjustarDateTimePicker(dtpHorarioSabadoInicio, "Turnos", "TarIni", "13:00", modelo);
             AjustarDateTimePicker(dtpHorarioSabadoFim, "Turnos", "TarFim", "18:30", modelo);
+
+            AjustarDateTimePicker(dtpHSSaiMan, "Turnos", "HSSaiMan", "12:00", modelo);
+            AjustarDateTimePicker(dtpHSIniTrd, "Turnos", "HSIniTrd", "13:00", modelo);
+            AjustarDateTimePicker(dtpHFSaiMan, "Turnos", "HFSaiMan", "12:00", modelo);
+            AjustarDateTimePicker(dtpHFIniTrd, "Turnos", "HFIniTrd", "13:00", modelo);
+
         }
 
         private void AjustarDateTimePicker(DateTimePicker dtp, string section, string key, string defaultValue, object modelo)
@@ -174,6 +189,63 @@ namespace TeleBonifacio
             return TimeSpan.TryParse(timeStr, out TimeSpan result) ? result : TimeSpan.Parse(defaultValue);
         }
 
+        private bool ValidarHorariosECPF()
+        {
+            if (!SaoHorariosValidos())
+            {
+                ExibirMensagemErro("Os horários de trabalho são inválidos. Por favor, verifique e corrija.");
+                Carregando = false;
+                return false;
+            }
+            if (!string.IsNullOrWhiteSpace(txtCPF.Text) && !IsCPFValido(txtCPF.Text))
+            {
+                ExibirMensagemErro("O CPF informado é inválido. Por favor, verifique e corrija.");
+                Carregando = false;
+                return false;
+            }
+            return true;
+        }
+
+        private void ExibirMensagemErro(string mensagem)
+        {
+            MessageBox.Show(mensagem, "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        }
+
+        private bool IsCPFValido(string cpf)
+        {
+            cpf = new string(cpf.Where(char.IsDigit).ToArray());
+            if (cpf.Length != 11)
+                return false;
+            if (cpf.Distinct().Count() == 1)
+                return false;
+            int soma = 0;
+            for (int i = 0; i < 9; i++)
+                soma += int.Parse(cpf[i].ToString()) * (10 - i);
+            int resto = soma % 11;
+            int digito1 = resto < 2 ? 0 : 11 - resto;
+            if (int.Parse(cpf[9].ToString()) != digito1)
+                return false;
+            soma = 0;
+            for (int i = 0; i < 10; i++)
+                soma += int.Parse(cpf[i].ToString()) * (11 - i);
+            resto = soma % 11;
+            int digito2 = resto < 2 ? 0 : 11 - resto;
+            return int.Parse(cpf[10].ToString()) == digito2;
+        }
+
+        private bool SaoHorariosValidos()
+        {
+            TimeSpan semanaInicio = dtpHorarioSemanaInicio.Value.TimeOfDay;
+            TimeSpan semanaFim = dtpHorarioSemanaFim.Value.TimeOfDay;
+            TimeSpan sabadoInicio = dtpHorarioSabadoInicio.Value.TimeOfDay;
+            TimeSpan sabadoFim = dtpHorarioSabadoFim.Value.TimeOfDay;
+            if (semanaFim <= semanaInicio || sabadoFim <= sabadoInicio)
+            {
+                return false;
+            }
+            return true;
+        }
+
         #endregion
 
         private void cntrole1_AcaoRealizada(object sender, AcaoEventArgs e)
@@ -200,86 +272,7 @@ namespace TeleBonifacio
                 }
             }
             Carregando = false;
-        }
-
-        private bool ValidarHorariosECPF()
-        {
-            if (!SaoHorariosValidos())
-            {
-                ExibirMensagemErro("Os horários de trabalho são inválidos. Por favor, verifique e corrija.");
-                Carregando = false;
-                return false;
-            }
-            if (!string.IsNullOrWhiteSpace(txtCPF.Text) && !IsCPFValido(txtCPF.Text))
-            {
-                ExibirMensagemErro("O CPF informado é inválido. Por favor, verifique e corrija.");
-                Carregando = false;
-                return false;
-            }
-            return true;
-        }
-
-        private void ExibirMensagemErro(string mensagem)
-        {
-            MessageBox.Show(mensagem, "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
-        }
-
-        private void ConfigurarDAO()
-        {
-            if (!Adicionando)
-            {
-                base.DAO.SetId(ID);
-                base.DAO.SetNome(Nome);
-            }
-        }
-
-        //private void AtribuirIdENomeBase()
-        //{
-        //    try
-        //    {
-        //        ID = base.reg.Id;
-        //        Nome = base.reg.Nome;
-        //    }
-        //    catch (Exception)
-        //    {
-        //        // Não faz nada
-        //    }
-        //}
-
-        private bool IsCPFValido(string cpf)
-        {
-            cpf = new string(cpf.Where(char.IsDigit).ToArray());
-            if (cpf.Length != 11)
-                return false;
-            if (cpf.Distinct().Count() == 1)
-                return false;
-            int soma = 0;
-            for (int i = 0; i < 9; i++)
-                soma += int.Parse(cpf[i].ToString()) * (10 - i);
-            int resto = soma % 11;
-            int digito1 = resto < 2 ? 0 : 11 - resto;
-            if (int.Parse(cpf[9].ToString()) != digito1)
-                return false;
-            soma = 0;
-            for (int i = 0; i < 10; i++)
-                soma += int.Parse(cpf[i].ToString()) * (11 - i);
-            resto = soma % 11;
-            int digito2 = resto < 2 ? 0 : 11 - resto;
-            return int.Parse(cpf[10].ToString()) == digito2;
-        }
-        
-        private bool SaoHorariosValidos()
-        {
-            TimeSpan semanaInicio = dtpHorarioSemanaInicio.Value.TimeOfDay;
-            TimeSpan semanaFim = dtpHorarioSemanaFim.Value.TimeOfDay;
-            TimeSpan sabadoInicio = dtpHorarioSabadoInicio.Value.TimeOfDay;
-            TimeSpan sabadoFim = dtpHorarioSabadoFim.Value.TimeOfDay;
-            if (semanaFim <= semanaInicio || sabadoFim <= sabadoInicio)
-            {
-                return false;
-            }
-            return true;
-        }
+        }        
         
         #region Eventos
 

@@ -46,5 +46,10 @@ namespace TeleBonifacio.tb
 
         public string Fone { get; set; }
 
+        public TimeSpan HSSaiMan { get; set; }
+        public TimeSpan HSIniTrd { get; set; }
+        public TimeSpan HFSaiMan { get; set; }
+        public TimeSpan HFIniTrd { get; set; }
+
     }
 }

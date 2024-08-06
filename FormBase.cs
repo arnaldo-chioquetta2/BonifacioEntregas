@@ -164,9 +164,11 @@ namespace TeleBonifacio
             }
         }
 
-        private void MapearCamposParaModelo(dao.BaseDAO reg)
+        private void MapearCamposParaModelo(dao.BaseDAO reg, Control container = null)
         {
-            foreach (Control control in this.Controls)
+            Control[] controls = container == null ? this.Controls.Cast<Control>().ToArray() : container.Controls.Cast<Control>().ToArray();
+
+            foreach (Control control in controls)
             {
                 try
                 {
@@ -177,15 +179,25 @@ namespace TeleBonifacio
                     else if (control is DateTimePicker dateTimePicker)
                     {
                         MapearDateTimePickerParaModelo(dateTimePicker, reg);
-                    } else if (control is CheckBox Check)
+                    }
+                    else if (control is CheckBox check)
                     {
-                        MapearCheckParaModelo(Check, reg);
+                        MapearCheckParaModelo(check, reg);
                     }
                     else if (control is ComboBox cmb)
                     {
                         MapearComboParaModelo(cmb, reg);
                     }
-
+                    else if (control is GroupBox groupBox)
+                    {
+                        // Chamada recursiva para mapear controles dentro do GroupBox
+                        MapearCamposParaModelo(reg, groupBox);
+                    }
+                    else if (control.HasChildren)
+                    {
+                        // Chamada recursiva para outros tipos de contêineres
+                        MapearCamposParaModelo(reg, control);
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -194,6 +206,36 @@ namespace TeleBonifacio
                 }
             }
         }
+        //private void MapearCamposParaModelo(dao.BaseDAO reg)
+        //{
+        //    foreach (Control control in this.Controls)
+        //    {
+        //        try
+        //        {
+        //            if (control is TextBox textBox)
+        //            {
+        //                MapearTextBoxParaModelo(textBox, reg);
+        //            }
+        //            else if (control is DateTimePicker dateTimePicker)
+        //            {
+        //                MapearDateTimePickerParaModelo(dateTimePicker, reg);
+        //            } else if (control is CheckBox Check)
+        //            {
+        //                MapearCheckParaModelo(Check, reg);
+        //            }
+        //            else if (control is ComboBox cmb)
+        //            {
+        //                MapearComboParaModelo(cmb, reg);
+        //            }
+
+        //        }
+        //        catch (Exception ex)
+        //        {
+        //            string x = ex.ToString();
+        //            // Tratamento adequado de exceções
+        //        }
+        //    }
+        //}
 
         private void MapearComboParaModelo(ComboBox cmb, BaseDAO reg)
         {
@@ -797,31 +839,50 @@ namespace TeleBonifacio
 
         #endregion
 
+        #region Impressão        
+
         protected void Imprimir()
         {
             PrintDocument pd = new PrintDocument();
-            pd.DefaultPageSettings.Landscape = true; 
+            pd.DefaultPageSettings.Landscape = true;
             pd.DefaultPageSettings.Margins = new Margins(50, 50, 50, 50);
             pd.PrintPage += (sender, e) =>
             {
                 Graphics g = e.Graphics;
-                float scale = e.MarginBounds.Width / (float)this.Width; // Cálculo de escala baseado na largura disponível
-
-                foreach (Control ctrl in this.Controls.Cast<Control>().OrderBy(c => c.TabIndex))
-                {
-                    string text = GetControlText(ctrl); // Assumindo que GetControlText é um método que extrai o texto do controle
-                    using (Font scaledFont = new Font(ctrl.Font.FontFamily, ctrl.Font.Size * scale, ctrl.Font.Style))
-                    {
-                        SizeF size = g.MeasureString(text, scaledFont);
-                        g.DrawString(text, scaledFont, Brushes.Black, e.MarginBounds.Left + ctrl.Left * scale, e.MarginBounds.Top + ctrl.Top * scale);
-                    }
-                }
+                float scale = e.MarginBounds.Width / (float)this.Width;
+                PrintControls(this.Controls, g, e.MarginBounds, scale, 0, 0);
             };
+
             PrintDialog printDialog = new PrintDialog();
             printDialog.Document = pd;
             if (printDialog.ShowDialog() == DialogResult.OK)
             {
-                pd.Print(); 
+                pd.Print();
+            }
+        }
+
+        private void PrintControls(Control.ControlCollection controls, Graphics g, Rectangle bounds, float scale, float parentX, float parentY)
+        {
+            foreach (Control ctrl in controls.Cast<Control>().OrderBy(c => c.TabIndex))
+            {
+                float x = parentX + ctrl.Left * scale;
+                float y = parentY + ctrl.Top * scale;
+
+                if (ctrl is GroupBox || ctrl.Controls.Count > 0)
+                {
+                    // Recursivamente imprimir controles dentro de contêineres
+                    PrintControls(ctrl.Controls, g, bounds, scale, x, y);
+                }
+
+                string text = GetControlText(ctrl);
+                if (!string.IsNullOrEmpty(text))
+                {
+                    using (Font scaledFont = new Font(ctrl.Font.FontFamily, ctrl.Font.Size * scale, ctrl.Font.Style))
+                    {
+                        SizeF size = g.MeasureString(text, scaledFont);
+                        g.DrawString(text, scaledFont, Brushes.Black, bounds.Left + x, bounds.Top + y);
+                    }
+                }
             }
         }
 
@@ -833,11 +894,19 @@ namespace TeleBonifacio
             }
             else if (ctrl is DateTimePicker dtp)
             {
-                if (dtp.Format == DateTimePickerFormat.Custom) 
+                if (dtp.Format == DateTimePickerFormat.Custom)
                 {
-                    return "";
-                }                    
-                if (dtp.Format == DateTimePickerFormat.Custom && dtp.CustomFormat == "HH:mm")
+                    if (dtp.CustomFormat == "HH:mm")
+                    {
+                        return dtp.Value.ToString("HH:mm");
+                    }
+                    else if (dtp.CustomFormat == " ")
+                    {
+                        return ""; // Retorna vazio se o DateTimePicker estiver vazio
+                    }
+                    return dtp.Text; // Para outros formatos customizados
+                }
+                else if (dtp.ShowUpDown) // Isso geralmente indica um seletor de hora
                 {
                     return dtp.Value.ToString("HH:mm");
                 }
@@ -856,6 +925,39 @@ namespace TeleBonifacio
             }
             return ctrl.Text;
         }
+        //private string GetControlText(Control ctrl)
+        //{
+        //    if (ctrl is TextBox textBox)
+        //    {
+        //        return textBox.Name.StartsWith("txtSenha") ? "******" : textBox.Text;
+        //    }
+        //    else if (ctrl is DateTimePicker dtp)
+        //    {
+        //        if (dtp.Format == DateTimePickerFormat.Custom)
+        //        {
+        //            return "";
+        //        }
+        //        if (dtp.Format == DateTimePickerFormat.Custom && dtp.CustomFormat == "HH:mm")
+        //        {
+        //            return dtp.Value.ToString("HH:mm");
+        //        }
+        //        else
+        //        {
+        //            return dtp.Value.ToShortDateString();
+        //        }
+        //    }
+        //    else if (ctrl is CheckBox checkBox)
+        //    {
+        //        return checkBox.Checked ? "Sim" : "Não";
+        //    }
+        //    else if (ctrl is Label label)
+        //    {
+        //        return label.Text;
+        //    }
+        //    return ctrl.Text;
+        //}
+
+        #endregion
 
     }
 }

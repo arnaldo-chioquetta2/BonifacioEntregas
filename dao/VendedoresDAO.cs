@@ -57,6 +57,11 @@ namespace TeleBonifacio.dao
 
         public string Fone { get; set; }
 
+        public TimeSpan HSSaiMan { get; set; }
+        public TimeSpan HSIniTrd { get; set; }
+        public TimeSpan HFSaiMan { get; set; }
+        public TimeSpan HFIniTrd { get; set; }
+
         public VendedoresDAO()
         {
             
@@ -79,8 +84,8 @@ namespace TeleBonifacio.dao
             int filhoComDeficiencia = vendedor.FilhoComDeficiencia ? 1 : 0;
             if (vendedor.Adicao)
             {
-                query = $"INSERT INTO Vendedores (Nome, Loja, Atende, Nro, Usuario, Senha, Nivel, DataNascimento, DataAdmissao, Salario, HorarioSemanaInicio, HorarioSemanaFim, HorarioSabadoInicio, HorarioSabadoFim, FormaPagamento, ValeAlimentacao, ValeTransporte, LinhaOnibus, DataDemissao, MotivoDemissao, RG, CPF, Cargo, FoneEmergencia, QtdFilhosMenor14, FilhoComDeficiencia, CTPS, Fone, Amigo) " +
-                        $"VALUES ('{vendedor.Nome}', '{vendedor.Loja}', {iAtende}, '{vendedor.Nro}', '{vendedor.Usuario}', '{sCript}', {vendedor.Nivel}, '{vendedor.DataNascimento:yyyy-MM-dd}', '{vendedor.DataAdmissao:yyyy-MM-dd}', {formattedSalary}, '{vendedor.HorarioSemanaInicio}', '{vendedor.HorarioSemanaFim}', '{vendedor.HorarioSabadoInicio}', '{vendedor.HorarioSabadoFim}', '{vendedor.FormaPagamento}', {valeAlimentacao}, {valeTransporte}, '{vendedor.LinhaOnibus}', '{vendedor.DataDemissao:yyyy-MM-dd}', '{vendedor.MotivoDemissao}', '{vendedor.RG}', '{vendedor.CPF}', '{vendedor.Cargo}', '{vendedor.FoneEmergencia}', {vendedor.QtdFilhosMenor14}, {filhoComDeficiencia}, '{vendedor.CTPS}', '{vendedor.Fone}', '{vendedor.Amigo}')";
+                query = $"INSERT INTO Vendedores (Nome, Loja, Atende, Nro, Usuario, Senha, Nivel, DataNascimento, DataAdmissao, Salario, HorarioSemanaInicio, HorarioSemanaFim, HorarioSabadoInicio, HorarioSabadoFim, FormaPagamento, ValeAlimentacao, ValeTransporte, LinhaOnibus, DataDemissao, MotivoDemissao, RG, CPF, Cargo, FoneEmergencia, QtdFilhosMenor14, FilhoComDeficiencia, CTPS, Fone, Amigo, HSSaiMan, HSIniTrd, HFSaiMan, HFIniTrd) " +
+                        $"VALUES ('{vendedor.Nome}', '{vendedor.Loja}', {iAtende}, '{vendedor.Nro}', '{vendedor.Usuario}', '{sCript}', {vendedor.Nivel}, '{vendedor.DataNascimento:yyyy-MM-dd}', '{vendedor.DataAdmissao:yyyy-MM-dd}', {formattedSalary}, '{vendedor.HorarioSemanaInicio}', '{vendedor.HorarioSemanaFim}', '{vendedor.HorarioSabadoInicio}', '{vendedor.HorarioSabadoFim}', '{vendedor.FormaPagamento}', {valeAlimentacao}, {valeTransporte}, '{vendedor.LinhaOnibus}', '{vendedor.DataDemissao:yyyy-MM-dd}', '{vendedor.MotivoDemissao}', '{vendedor.RG}', '{vendedor.CPF}', '{vendedor.Cargo}', '{vendedor.FoneEmergencia}', {vendedor.QtdFilhosMenor14}, {filhoComDeficiencia}, '{vendedor.CTPS}', '{vendedor.Fone}', '{vendedor.Amigo}', , '{vendedor.HSSaiMan}', '{vendedor.HSIniTrd}', '{vendedor.HFSaiMan}', '{vendedor.HFIniTrd}') ";
             }
             else
             {
@@ -114,6 +119,12 @@ namespace TeleBonifacio.dao
                 sqlBuilder.Append($"FoneEmergencia = '{vendedor.FoneEmergencia}', ");
                 sqlBuilder.Append($"QtdFilhosMenor14 = {vendedor.QtdFilhosMenor14}, ");
                 sqlBuilder.Append($"FilhoComDeficiencia = {filhoComDeficiencia}, "); 
+
+                sqlBuilder.Append($"HSSaiMan = #{vendedor.HSSaiMan:hh\\:mm\\:ss}#, ");
+                sqlBuilder.Append($"HSIniTrd = #{vendedor.HSIniTrd:hh\\:mm\\:ss}#, ");
+                sqlBuilder.Append($"HFSaiMan = #{vendedor.HFSaiMan:hh\\:mm\\:ss}#, ");
+                sqlBuilder.Append($"HFIniTrd = #{vendedor.HFIniTrd:hh\\:mm\\:ss}#, ");
+
                 sqlBuilder.Append($"CTPS = '{vendedor.CTPS}' ");
                 sqlBuilder.Append($"WHERE ID = {vendedor.Id};");
                 query = sqlBuilder.ToString();
@@ -228,10 +239,10 @@ namespace TeleBonifacio.dao
                                 HorarioSabadoInicio = ConvertToTimeSpan(reader["HorarioSabadoInicio"]);
                                 HorarioSabadoFim = ConvertToTimeSpan(reader["HorarioSabadoFim"]);
 
-                                //HorarioSemanaInicio = reader["HorarioSemanaInicio"] == DBNull.Value ? TimeSpan.Zero : TimeSpan.Parse(reader["HorarioSemanaInicio"].ToString());
-                                //HorarioSemanaFim = reader["HorarioSemanaFim"] == DBNull.Value ? TimeSpan.Zero : TimeSpan.Parse(reader["HorarioSemanaFim"].ToString());
-                                //HorarioSabadoInicio = reader["HorarioSabadoInicio"] == DBNull.Value ? TimeSpan.Zero : TimeSpan.Parse(reader["HorarioSabadoInicio"].ToString());
-                                //HorarioSabadoFim = reader["HorarioSabadoFim"] == DBNull.Value ? TimeSpan.Zero : TimeSpan.Parse(reader["HorarioSabadoFim"].ToString());
+                                HSSaiMan = ConvertToTimeSpan(reader["HSSaiMan"]);
+                                HSIniTrd = ConvertToTimeSpan(reader["HSIniTrd"]);
+                                HFSaiMan = ConvertToTimeSpan(reader["HFSaiMan"]);
+                                HFIniTrd = ConvertToTimeSpan(reader["HFIniTrd"]);
 
                                 FormaPagamento = reader["FormaPagamento"].ToString();
                                 ValeAlimentacao = reader["ValeAlimentacao"] == DBNull.Value ? false : Convert.ToBoolean(reader["ValeAlimentacao"]);
@@ -314,7 +325,11 @@ namespace TeleBonifacio.dao
                 FilhoComDeficiencia = FilhoComDeficiencia,
                 CTPS = CTPS,
                 Fone = Fone,
-                Amigo = Amigo
+                Amigo = Amigo,
+                HSSaiMan = HSSaiMan,
+                HSIniTrd = HSIniTrd,
+                HFSaiMan = HFSaiMan,
+                HFIniTrd = HFIniTrd
             };
         }
 
