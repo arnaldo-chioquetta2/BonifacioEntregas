@@ -190,10 +190,14 @@ namespace TeleBonifacio
                 ConfigurarDAO();
             }
             base.cntrole1_AcaoRealizada(sender, e, base.reg);
-            AtribuirIdENomeBase();
-            if ((e.Acao == "ParaFrente") || (e.Acao == "ParaTras"))
+            if (base.reg != null)
             {
-                VerificaHorarios(base.reg);
+                ID = base.reg.Id;
+                Nome = base.reg.Nome;
+                if ((e.Acao == "ParaFrente") || (e.Acao == "ParaTras"))
+                {
+                    VerificaHorarios(base.reg);
+                }
             }
             Carregando = false;
         }
@@ -229,18 +233,18 @@ namespace TeleBonifacio
             }
         }
 
-        private void AtribuirIdENomeBase()
-        {
-            try
-            {
-                ID = base.reg.Id;
-                Nome = base.reg.Nome;
-            }
-            catch (Exception)
-            {
-                // Não faz nada
-            }
-        }
+        //private void AtribuirIdENomeBase()
+        //{
+        //    try
+        //    {
+        //        ID = base.reg.Id;
+        //        Nome = base.reg.Nome;
+        //    }
+        //    catch (Exception)
+        //    {
+        //        // Não faz nada
+        //    }
+        //}
 
         private bool IsCPFValido(string cpf)
         {
