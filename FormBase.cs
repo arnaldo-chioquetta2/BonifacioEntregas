@@ -840,7 +840,6 @@ namespace TeleBonifacio
         #endregion
 
         #region Impressão        
-
         protected void Imprimir()
         {
             PrintDocument pd = new PrintDocument();
@@ -860,7 +859,6 @@ namespace TeleBonifacio
                 pd.Print();
             }
         }
-
         private void PrintControls(Control.ControlCollection controls, Graphics g, Rectangle bounds, float scale, float parentX, float parentY)
         {
             foreach (Control ctrl in controls.Cast<Control>().OrderBy(c => c.TabIndex))
@@ -885,7 +883,6 @@ namespace TeleBonifacio
                 }
             }
         }
-
         private string GetControlText(Control ctrl)
         {
             if (ctrl is TextBox textBox)
@@ -917,7 +914,7 @@ namespace TeleBonifacio
             }
             else if (ctrl is CheckBox checkBox)
             {
-                return checkBox.Checked ? "Sim" : "Não";
+                return $"{checkBox.Text}: {(checkBox.Checked ? "Sim" : "Não")}";
             }
             else if (ctrl is Label label)
             {
@@ -925,37 +922,6 @@ namespace TeleBonifacio
             }
             return ctrl.Text;
         }
-        //private string GetControlText(Control ctrl)
-        //{
-        //    if (ctrl is TextBox textBox)
-        //    {
-        //        return textBox.Name.StartsWith("txtSenha") ? "******" : textBox.Text;
-        //    }
-        //    else if (ctrl is DateTimePicker dtp)
-        //    {
-        //        if (dtp.Format == DateTimePickerFormat.Custom)
-        //        {
-        //            return "";
-        //        }
-        //        if (dtp.Format == DateTimePickerFormat.Custom && dtp.CustomFormat == "HH:mm")
-        //        {
-        //            return dtp.Value.ToString("HH:mm");
-        //        }
-        //        else
-        //        {
-        //            return dtp.Value.ToShortDateString();
-        //        }
-        //    }
-        //    else if (ctrl is CheckBox checkBox)
-        //    {
-        //        return checkBox.Checked ? "Sim" : "Não";
-        //    }
-        //    else if (ctrl is Label label)
-        //    {
-        //        return label.Text;
-        //    }
-        //    return ctrl.Text;
-        //}
 
         #endregion
 

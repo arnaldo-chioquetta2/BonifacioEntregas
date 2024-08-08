@@ -23,6 +23,7 @@ namespace TeleBonifacio
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(OperPagar));
             this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.btMudar = new System.Windows.Forms.Button();
             this.btObter = new System.Windows.Forms.Button();
             this.btPDF = new System.Windows.Forms.Button();
             this.ckPago = new System.Windows.Forms.CheckBox();
@@ -54,7 +55,7 @@ namespace TeleBonifacio
             this.dataGrid1 = new System.Windows.Forms.DataGridView();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.dataGrid2 = new System.Windows.Forms.DataGridView();
-            this.btMudar = new System.Windows.Forms.Button();
+            this.btEmail = new System.Windows.Forms.Button();
             this.groupBox3.SuspendLayout();
             this.panel1.SuspendLayout();
             this.tabControl1.SuspendLayout();
@@ -66,6 +67,7 @@ namespace TeleBonifacio
             // 
             // groupBox3
             // 
+            this.groupBox3.Controls.Add(this.btEmail);
             this.groupBox3.Controls.Add(this.btMudar);
             this.groupBox3.Controls.Add(this.btObter);
             this.groupBox3.Controls.Add(this.btPDF);
@@ -98,10 +100,23 @@ namespace TeleBonifacio
             this.groupBox3.TabIndex = 41;
             this.groupBox3.TabStop = false;
             // 
+            // btMudar
+            // 
+            this.btMudar.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.btMudar.Enabled = false;
+            this.btMudar.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F);
+            this.btMudar.Location = new System.Drawing.Point(292, 143);
+            this.btMudar.Name = "btMudar";
+            this.btMudar.Size = new System.Drawing.Size(75, 23);
+            this.btMudar.TabIndex = 53;
+            this.btMudar.Text = "Mudar";
+            this.btMudar.UseVisualStyleBackColor = true;
+            this.btMudar.Click += new System.EventHandler(this.btMudar_Click);
+            // 
             // btObter
             // 
             this.btObter.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.btObter.Location = new System.Drawing.Point(249, 142);
+            this.btObter.Location = new System.Drawing.Point(130, 142);
             this.btObter.Name = "btObter";
             this.btObter.Size = new System.Drawing.Size(75, 23);
             this.btObter.TabIndex = 52;
@@ -114,7 +129,7 @@ namespace TeleBonifacio
             this.btPDF.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.btPDF.Enabled = false;
             this.btPDF.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F);
-            this.btPDF.Location = new System.Drawing.Point(657, 143);
+            this.btPDF.Location = new System.Drawing.Point(538, 143);
             this.btPDF.Name = "btPDF";
             this.btPDF.Size = new System.Drawing.Size(75, 23);
             this.btPDF.TabIndex = 49;
@@ -138,7 +153,7 @@ namespace TeleBonifacio
             // 
             this.btFiltrar.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.btFiltrar.Enabled = false;
-            this.btFiltrar.Location = new System.Drawing.Point(495, 143);
+            this.btFiltrar.Location = new System.Drawing.Point(376, 143);
             this.btFiltrar.Name = "btFiltrar";
             this.btFiltrar.Size = new System.Drawing.Size(75, 23);
             this.btFiltrar.TabIndex = 10;
@@ -184,7 +199,7 @@ namespace TeleBonifacio
             // 
             this.btnAdicionar.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.btnAdicionar.Enabled = false;
-            this.btnAdicionar.Location = new System.Drawing.Point(330, 142);
+            this.btnAdicionar.Location = new System.Drawing.Point(211, 142);
             this.btnAdicionar.Name = "btnAdicionar";
             this.btnAdicionar.Size = new System.Drawing.Size(75, 23);
             this.btnAdicionar.TabIndex = 9;
@@ -197,7 +212,7 @@ namespace TeleBonifacio
             this.btExcluir.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.btExcluir.Enabled = false;
             this.btExcluir.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F);
-            this.btExcluir.Location = new System.Drawing.Point(738, 143);
+            this.btExcluir.Location = new System.Drawing.Point(700, 143);
             this.btExcluir.Name = "btExcluir";
             this.btExcluir.Size = new System.Drawing.Size(75, 23);
             this.btExcluir.TabIndex = 12;
@@ -209,7 +224,7 @@ namespace TeleBonifacio
             // 
             this.btLimparFiltro.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.btLimparFiltro.Enabled = false;
-            this.btLimparFiltro.Location = new System.Drawing.Point(576, 143);
+            this.btLimparFiltro.Location = new System.Drawing.Point(457, 143);
             this.btLimparFiltro.Name = "btLimparFiltro";
             this.btLimparFiltro.Size = new System.Drawing.Size(75, 23);
             this.btLimparFiltro.TabIndex = 11;
@@ -427,18 +442,18 @@ namespace TeleBonifacio
             this.dataGrid2.TabIndex = 55;
             this.dataGrid2.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGrid1_CellClick);
             // 
-            // btMudar
+            // btEmail
             // 
-            this.btMudar.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.btMudar.Enabled = false;
-            this.btMudar.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F);
-            this.btMudar.Location = new System.Drawing.Point(411, 143);
-            this.btMudar.Name = "btMudar";
-            this.btMudar.Size = new System.Drawing.Size(75, 23);
-            this.btMudar.TabIndex = 53;
-            this.btMudar.Text = "Mudar";
-            this.btMudar.UseVisualStyleBackColor = true;
-            this.btMudar.Click += new System.EventHandler(this.btMudar_Click);
+            this.btEmail.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.btEmail.Enabled = false;
+            this.btEmail.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F);
+            this.btEmail.Location = new System.Drawing.Point(619, 143);
+            this.btEmail.Name = "btEmail";
+            this.btEmail.Size = new System.Drawing.Size(75, 23);
+            this.btEmail.TabIndex = 54;
+            this.btEmail.Text = "Email";
+            this.btEmail.UseVisualStyleBackColor = true;
+            this.btEmail.Click += new System.EventHandler(this.btEmail_Click);
             // 
             // OperPagar
             // 
@@ -497,5 +512,6 @@ namespace TeleBonifacio
         private DataGridView dataGrid2;
         private DataGridView dataGrid1;
         private Button btMudar;
+        private Button btEmail;
     }
 }

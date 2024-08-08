@@ -107,7 +107,7 @@ namespace TeleBonifacio
                 }
             }
             btnAdicionar.Enabled = ok;
-            btPDF.Enabled = false;
+            btPDF.Enabled = btEmail.Enabled = false;            
             btLimparFiltro.Enabled = ok;
         }
 
@@ -266,7 +266,7 @@ namespace TeleBonifacio
                 this.iID = Convert.ToInt32(selectedRow.Cells["ID"].Value);
                 this.UID = Convert.ToString(selectedRow.Cells["UID"].Value);
                 dtpDataEmissao.Value = Convert.ToDateTime(selectedRow.Cells["DataEmissao"].Value);
-                btPDF.Enabled = true;
+                btPDF.Enabled = btEmail.Enabled = true;
                 if (selectedRow.Cells["idFornecedor"].Value != DBNull.Value)
                 {
                     cmbForn.SelectedValue = Convert.ToInt32(selectedRow.Cells["idFornecedor"].Value);
@@ -613,6 +613,26 @@ namespace TeleBonifacio
             } else
             {
                 tabPage1.Tag = "A";
+            }
+        }
+
+        private void btEmail_Click(object sender, EventArgs e)
+        {
+            Email cEmail = new Email();
+            string senha = "uhkikktxafjvpwem";
+            bool enviado = cEmail.EnviarEmail(
+                "xeviousbr@gmail.com",
+                "xeviousbr@gmail.com",
+                senha,
+                "bonifaciofinanceiro639@gmail.com",
+                @"C:\Temp\Teste.pdf",
+                "Email enviado pelo Sistema",
+                "Este foi um teste feito pelo programa."
+            );
+
+            if (enviado)
+            {
+                // Ação adicional em caso de sucesso, se necessário
             }
         }
     }
