@@ -53,7 +53,7 @@ namespace TeleBonifacio
         {
             Forn = new FornecedorDao();
             contasAPagarDao = new ContasAPagarDao();
-            glo.CarregarComboBox<tb.Fornecedor>(cmbForn, Forn, "ESCOLHA", ItemFinal: "ADICIONE", ItemFinal2: "EDIÇÃO");
+            glo.CarregarComboBox<tb.Fornecedor>(cmbForn, Forn, "ESCOLHA", ItemFinal: "ADICIONE", ItemFinal2: "EDIÇÃO", filtro: "EhForn = 1 ");
             CarregaGridGenerico(dataGrid1, 0, false);
             CaminhoBasePDF = Path.GetDirectoryName(glo.CaminhoBase) + "\\Docs";
             cINI = new INI();

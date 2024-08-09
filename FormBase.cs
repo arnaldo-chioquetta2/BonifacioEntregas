@@ -133,6 +133,9 @@ namespace TeleBonifacio
                     valor = Cripto.Decrypt(valor);
                 }
                 textBox.Text = valor;
+            } else
+            {
+                textBox.Text = "";
             }
         }
 

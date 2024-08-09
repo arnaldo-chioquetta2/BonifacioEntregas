@@ -13,6 +13,7 @@ using System.Runtime.InteropServices;
 [assembly: Guid("308c57af-e663-456d-8a2c-188bbd61423d")]
 [assembly: AssemblyVersion("2.5.3.0")]
 [assembly: AssemblyFileVersion("2.5.3.0")]
+// 2.5.4 Campo de email no fornecedor
 // 2.5.3 Impressão do texto do checkbox na impressão da tela
 // 2.5.2 Mais campos de horários nos funcionários e Correção da navegação de vendedores
 // 2.5.1 Correção para o caso da Giulia

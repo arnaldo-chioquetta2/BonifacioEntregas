@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Data.OleDb;
-using System.Drawing;
-using System.Text;
+using System.Text.RegularExpressions;
 using System.Windows.Forms;
 
 namespace TeleBonifacio
@@ -15,8 +11,8 @@ namespace TeleBonifacio
         private tb.Fornecedor clienteEspecifico;
 
         private bool Adicionando = false;
-        private bool Carregando = true;
         private int ID = 0;
+        private bool Carregando=true;
 
         public CadFornec()
         {
@@ -53,6 +49,14 @@ namespace TeleBonifacio
                             {
                                 ret.Id = (int)reader["IdForn"];
                                 ret.Nome = (string)reader["Nome"];
+                                ret.EhForn = (((int)reader["EhForn"])==1);
+                                if (reader["email"] != DBNull.Value)
+                                {
+                                    ret.email = (string)reader["email"];
+                                } else
+                                {
+                                    ret.email = "";
+                                }                                
                             }
                             return ret;
                         }
@@ -73,12 +77,44 @@ namespace TeleBonifacio
             if (!Adicionando)
             {
                 base.DAO.SetId(ID);
+            } 
+            if (e.Acao == "OK")
+            {
+                if (!ValidarEmail(txtemail.Text))
+                {
+                    MessageBox.Show("Email inválido", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+            } else
+            {
+                if (e.Acao == "Adicionar")
+                {
+                    chkEhForn.Checked = true;
+                }
             }
             base.cntrole1_AcaoRealizada(sender, e, base.reg);
             Carregando = false;
         }
 
-        private void fCadClientes_KeyUp(object sender, KeyEventArgs e)
+        private bool ValidarEmail(string email)
+        {
+            // Considera um e-mail vazio como válido
+            if (string.IsNullOrEmpty(email))
+            {
+                return true;
+            }
+
+            // Expressão Regular para validar o formato do e-mail
+            string pattern = @"^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$";
+
+            // Cria uma instância do Regex com o padrão definido
+            Regex regex = new Regex(pattern);
+
+            // Tenta corresponder o e-mail ao padrão
+            return regex.IsMatch(email);
+        }
+
+        private void CadFornec_KeyUp(object sender, System.Windows.Forms.KeyEventArgs e)
         {
             if (e.KeyCode != Keys.Left && e.KeyCode != Keys.Right && !(e.Control && e.KeyCode == Keys.C) && !(e.Control && e.KeyCode == Keys.A))
             {
@@ -96,15 +132,23 @@ namespace TeleBonifacio
             }
         }
 
-        private void fCadClientes_Activated(object sender, EventArgs e)
+        private void chkEhForn_CheckedChanged(object sender, EventArgs e)
         {
-            if (glo.IdAdicionado == -1)
+            if (!Carregando)
             {
-                glo.IdAdicionado = 0;
-                Adicionando = true;
-                base.Adicionar();
+                base.cntrole1.EmEdicao = true;
             }
         }
+
+        //    private void fCadClientes_Activated(object sender, EventArgs e)
+        //    {
+        //        if (glo.IdAdicionado == -1)
+        //        {
+        //            glo.IdAdicionado = 0;
+        //            Adicionando = true;
+        //            base.Adicionar();
+        //        }
+        //    }
 
     }
 }

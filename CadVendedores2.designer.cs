@@ -136,6 +136,7 @@ namespace TeleBonifacio
             this.chkAtende.Size = new System.Drawing.Size(104, 24);
             this.chkAtende.TabIndex = 24;
             this.chkAtende.Text = "Atende Whats";
+            this.chkAtende.CheckedChanged += new System.EventHandler(this.txtFilhoComDeficiencia_CheckedChanged);
             // 
             // txtNro
             // 
@@ -297,6 +298,7 @@ namespace TeleBonifacio
             this.chkValeAlimentacao.TabIndex = 22;
             this.chkValeAlimentacao.Text = "Vale Alimentação";
             this.chkValeAlimentacao.UseVisualStyleBackColor = true;
+            this.chkValeAlimentacao.CheckedChanged += new System.EventHandler(this.txtFilhoComDeficiencia_CheckedChanged);
             // 
             // chkValeTransporte
             // 
@@ -308,6 +310,7 @@ namespace TeleBonifacio
             this.chkValeTransporte.TabIndex = 23;
             this.chkValeTransporte.Text = "Vale Transporte";
             this.chkValeTransporte.UseVisualStyleBackColor = true;
+            this.chkValeTransporte.CheckedChanged += new System.EventHandler(this.txtFilhoComDeficiencia_CheckedChanged);
             // 
             // label14
             // 
@@ -461,6 +464,7 @@ namespace TeleBonifacio
             this.txtFilhoComDeficiencia.TabIndex = 21;
             this.txtFilhoComDeficiencia.Text = "Filho com deficiência";
             this.txtFilhoComDeficiencia.UseVisualStyleBackColor = true;
+            this.txtFilhoComDeficiencia.CheckedChanged += new System.EventHandler(this.txtFilhoComDeficiencia_CheckedChanged);
             // 
             // dtpDataAdmissao
             // 

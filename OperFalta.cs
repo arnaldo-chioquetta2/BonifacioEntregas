@@ -58,7 +58,6 @@ namespace TeleBonifacio
             faltasDAO = new FaltasDAO();
             TpoFalta = new TpoFaltaDAO();
             Forn = new FornecedorDao();
-            // CarregaGrid();
             MostraTipos();
             if (iUser.Length == 0)
             {
@@ -601,12 +600,12 @@ namespace TeleBonifacio
             if (glo.ODBC)
             {
                 glo.CarregarComboBox<tb.TpoFalta>(cmbTipos, TpoFalta, "ESCOLHA");
-                glo.CarregarComboBox<tb.Fornecedor>(cmbForn, Forn, "ESCOLHA");
+                glo.CarregarComboBox<tb.Fornecedor>(cmbForn, Forn, "ESCOLHA", filtro:"EhForn = 1 ");
             }
             else
             {
                 glo.CarregarComboBox<tb.TpoFalta>(cmbTipos, TpoFalta, "ESCOLHA", ItemFinal: "ADICIONE", ItemFinal2: "EDIÇÃO");
-                glo.CarregarComboBox<tb.Fornecedor>(cmbForn, Forn, "ESCOLHA", ItemFinal: "ADICIONE", ItemFinal2: "EDIÇÃO");
+                glo.CarregarComboBox<tb.Fornecedor>(cmbForn, Forn, "ESCOLHA", ItemFinal: "ADICIONE", ItemFinal2: "EDIÇÃO", filtro: "EhForn = 1 ");
             }
         }
 

@@ -371,6 +371,14 @@ namespace TeleBonifacio
             }
         }
 
+        private void txtFilhoComDeficiencia_CheckedChanged(object sender, EventArgs e)
+        {
+            if (!Carregando)
+            {
+                base.cntrole1.EmEdicao = true;
+            }
+        }
+
         #endregion
 
         private void cntrole1_SolicitacaoImpressao(object sender, EventArgs e)

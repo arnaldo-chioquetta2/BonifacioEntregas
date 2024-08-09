@@ -2,9 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.OleDb;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using TeleBonifacio.tb;
 
@@ -16,10 +14,13 @@ namespace TeleBonifacio.dao
 
         public string Nome { get; set; }
 
+        public bool EhForn { get; set; }
+
+        public string email { get; set; }
 
         public void Adiciona(string descricao)
         {
-            string sql = $"INSERT INTO Fornecedores (Nome) VALUES ('{descricao}')";
+            string sql = $"INSERT INTO Fornecedores (Nome, EhForn) VALUES ('{descricao}', 1)";
             DB.ExecutarComandoSQL(sql);
         }
 
@@ -42,9 +43,13 @@ namespace TeleBonifacio.dao
 
         public override DataTable GetDadosOrdenados(string filtro = "", string ordem = "")
         {
-            string query = @"SELECT IdForn AS id, Nome  
+            if (filtro.Length > 0)
+            {
+                filtro = " and " + filtro;
+            }            
+            string query = $@"SELECT IdForn AS id, Nome  
                 FROM Fornecedores 
-                Where Nome > '' 
+                Where Nome > '' {filtro}
                 Order By Nome ";
             DataTable dt = DB.ExecutarConsulta(query);
             return dt;
@@ -55,7 +60,9 @@ namespace TeleBonifacio.dao
             return (tb.Fornecedor)new tb.Fornecedor
             {
                 Id = Id,
-                Nome = Nome
+                Nome = Nome,
+                EhForn = EhForn,
+                email = email
             };
         }
 
@@ -72,7 +79,9 @@ namespace TeleBonifacio.dao
             if (ret.Rows.Count>0)
             {
                 Nome = ret.Rows[0]["Nome"].ToString();
-            }            
+                EhForn = (ret.Rows[0]["EhForn"].ToString() == "1");
+                email = ret.Rows[0]["email"].ToString();
+            }
             return ret;
         }
 
@@ -83,6 +92,8 @@ namespace TeleBonifacio.dao
 
         private DataTable ExecutarConsulta(string query)
         {
+            DataTable dataTable = new DataTable();
+
             using (OleDbConnection connection = new OleDbConnection(glo.connectionString))
             {
                 try
@@ -90,19 +101,9 @@ namespace TeleBonifacio.dao
                     connection.Open();
                     using (OleDbCommand command = new OleDbCommand(query, connection))
                     {
-                        using (OleDbDataReader reader = command.ExecuteReader())
+                        using (OleDbDataAdapter adapter = new OleDbDataAdapter(command))
                         {
-                            DataTable dataTable = new DataTable();
-                            dataTable.Columns.Add("ID", typeof(int));
-                            dataTable.Columns.Add("Nome", typeof(string));
-                            while (reader.Read())
-                            {
-                                DataRow row = dataTable.NewRow();
-                                row["ID"] = reader["IdForn"];
-                                row["Nome"] = reader["Nome"];
-                                dataTable.Rows.Add(row);
-                            }
-                            return dataTable;
+                            adapter.Fill(dataTable); // Preenche o DataTable automaticamente
                         }
                     }
                 }
@@ -112,14 +113,19 @@ namespace TeleBonifacio.dao
                     return null;
                 }
             }
+
+            return dataTable;
         }
 
         private List<OleDbParameter> ConstruirParametro(FornecedorDao Fornecedor, bool inserindo)
         {
+            int EhForn = Fornecedor.EhForn ? 1 : 0;
             var parametros = new List<OleDbParameter>
             {
-                new OleDbParameter("@Nome", Fornecedor.Nome)
-            };
+                new OleDbParameter("@Nome", Fornecedor.Nome),
+                new OleDbParameter("@EhForn", EhForn),
+                new OleDbParameter("@email", Fornecedor.email)
+        };
             if (!inserindo)
             {
                 parametros.Add(new OleDbParameter("@ID", Fornecedor.Id));
@@ -134,12 +140,12 @@ namespace TeleBonifacio.dao
             List<OleDbParameter> parameters;
             if (Fornecedor.Adicao)
             {
-                query = "INSERT INTO Fornecedores (Nome) VALUES (?)";
+                query = "INSERT INTO Fornecedores (Nome, EhForn, email) VALUES (?, ?, ?)";
                 parameters = ConstruirParametro(Fornecedor, true);
             }
             else
             {
-                query = "UPDATE Fornecedores SET Nome = ? WHERE IdForn = ?";
+                query = "UPDATE Fornecedores SET Nome = ?, EhForn = ?, email = ? WHERE IdForn = ?";
                 parameters = ConstruirParametro(Fornecedor, false);
             }
 
@@ -182,6 +188,15 @@ namespace TeleBonifacio.dao
                             {
                                 Nome = reader["Nome"].ToString();
                                 Id = Convert.ToInt32(reader["IdForn"]);
+                                EhForn = (((int)reader["EhForn"]) == 1);
+                                if (reader["email"] != DBNull.Value)
+                                {
+                                    email = (string)reader["email"];
+                                }
+                                else
+                                {
+                                    email = "";
+                                }
                                 return (tb.Fornecedor)GetEsse();
                             }
                         }
