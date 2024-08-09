@@ -62,6 +62,8 @@ namespace TeleBonifacio
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.label14 = new System.Windows.Forms.Label();
             this.pictureBox14 = new System.Windows.Forms.PictureBox();
+            this.lbAnotacoes = new System.Windows.Forms.Label();
+            this.picAnotacoes = new System.Windows.Forms.PictureBox();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox13)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox12)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox11)).BeginInit();
@@ -76,6 +78,7 @@ namespace TeleBonifacio
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox14)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.picAnotacoes)).BeginInit();
             this.SuspendLayout();
             // 
             // label1
@@ -151,7 +154,7 @@ namespace TeleBonifacio
             // label8
             // 
             this.label8.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label8.Location = new System.Drawing.Point(326, 13);
+            this.label8.Location = new System.Drawing.Point(320, -7);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(106, 20);
             this.label8.TabIndex = 15;
@@ -408,11 +411,36 @@ namespace TeleBonifacio
             this.pictureBox14.TabStop = false;
             this.pictureBox14.Click += new System.EventHandler(this.pictureBox14_Click);
             // 
+            // lbAnotacoes
+            // 
+            this.lbAnotacoes.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbAnotacoes.Location = new System.Drawing.Point(321, 74);
+            this.lbAnotacoes.Name = "lbAnotacoes";
+            this.lbAnotacoes.Size = new System.Drawing.Size(100, 23);
+            this.lbAnotacoes.TabIndex = 31;
+            this.lbAnotacoes.Text = "Anotações";
+            this.lbAnotacoes.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.lbAnotacoes.Visible = false;
+            // 
+            // picAnotacoes
+            // 
+            this.picAnotacoes.Image = ((System.Drawing.Image)(resources.GetObject("picAnotacoes.Image")));
+            this.picAnotacoes.Location = new System.Drawing.Point(325, 99);
+            this.picAnotacoes.Name = "picAnotacoes";
+            this.picAnotacoes.Size = new System.Drawing.Size(100, 94);
+            this.picAnotacoes.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.picAnotacoes.TabIndex = 30;
+            this.picAnotacoes.TabStop = false;
+            this.picAnotacoes.Visible = false;
+            this.picAnotacoes.Click += new System.EventHandler(this.picAnotacoes_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(746, 266);
+            this.Controls.Add(this.lbAnotacoes);
+            this.Controls.Add(this.picAnotacoes);
             this.Controls.Add(this.label14);
             this.Controls.Add(this.pictureBox14);
             this.Controls.Add(this.label13);
@@ -466,6 +494,7 @@ namespace TeleBonifacio
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox14)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.picAnotacoes)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -503,6 +532,8 @@ namespace TeleBonifacio
         private System.Windows.Forms.PictureBox pictureBox13;
         private System.Windows.Forms.Label label14;
         private System.Windows.Forms.PictureBox pictureBox14;
+        private System.Windows.Forms.Label lbAnotacoes;
+        private System.Windows.Forms.PictureBox picAnotacoes;
     }
 }
 

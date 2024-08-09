@@ -266,7 +266,10 @@ namespace TeleBonifacio
                 this.iID = Convert.ToInt32(selectedRow.Cells["ID"].Value);
                 this.UID = Convert.ToString(selectedRow.Cells["UID"].Value);
                 dtpDataEmissao.Value = Convert.ToDateTime(selectedRow.Cells["DataEmissao"].Value);
-                btPDF.Enabled = btEmail.Enabled = true;
+
+                btPDF.Enabled = true;
+                // btPDF.Enabled = btEmail.Enabled = true;
+
                 if (selectedRow.Cells["idFornecedor"].Value != DBNull.Value)
                 {
                     cmbForn.SelectedValue = Convert.ToInt32(selectedRow.Cells["idFornecedor"].Value);

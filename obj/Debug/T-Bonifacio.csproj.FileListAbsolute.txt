@@ -53,3 +53,8 @@ C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug\Google.Apis.Gmail.v1.pdb
 C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug\Google.Apis.Gmail.v1.xml
 C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug\Newtonsoft.Json.xml
 C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug\System.CodeDom.xml
+C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug\ATCDll.dll
+C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug\ATCDll.pdb
+C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug\AtcCtrl.dll
+C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug\AtcCtrl.pdb
+C:\Prog\T-Bonifacio\T-Bonifacio\obj\Debug\TeleBonifacio.operAnota.resources

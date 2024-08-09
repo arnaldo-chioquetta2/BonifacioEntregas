@@ -180,7 +180,6 @@
       <DependentUpon>FormBase.cs</DependentUpon>
     </Compile>
     <Compile Include="gen\ADO.cs" />
-    <Compile Include="gen\Cripto.cs" />
     <Compile Include="gen\DB.cs" />
     <Compile Include="gen\Email.cs" />
     <Compile Include="gen\FTP.cs" />
@@ -190,6 +189,9 @@
     <Compile Include="gen\odbc.cs" />
     <Compile Include="gen\rt.cs" />
     <Compile Include="gen\ValorPorExtenso.cs" />
+    <Compile Include="operAnota.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="operAvanc.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -341,6 +343,9 @@
     <EmbeddedResource Include="FormBase.resx">
       <DependentUpon>FormBase.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="operAnota.resx">
+      <DependentUpon>operAnota.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="operAvanc.resx">
       <DependentUpon>operAvanc.cs</DependentUpon>
     </EmbeddedResource>
@@ -423,6 +428,14 @@
     <ProjectReference Include="..\..\OrCarro\ATCRecordNavigator\ATCRecordNavigator\ATCRecordNavigator\ATCRecordNavigator.csproj">
       <Project>{6da04d20-798d-46db-92b6-581aac550b31}</Project>
       <Name>ATCRecordNavigator</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\AtcCtrl\AtcCtrl\AtcCtrl.csproj">
+      <Project>{ecbf2fad-0a90-4815-bd7c-2c8d0d7b766c}</Project>
+      <Name>AtcCtrl</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ATCDll\ATCDll\ATCDll.csproj">
+      <Project>{854b7c9c-028d-40d5-97f3-1e0bce678e2a}</Project>
+      <Name>ATCDll</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

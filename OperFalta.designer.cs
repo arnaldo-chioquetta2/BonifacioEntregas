@@ -869,10 +869,10 @@ namespace TeleBonifacio
         private ToolStripButton tsVerde;
         private ToolStripButton tsLaranja;
         private ToolStripButton tsPreto;
-        private ToolStripButton tsCinza;
-        private RichTextBox rtfTexto;
+        private ToolStripButton tsCinza;        
         private ToolStripButton tsEncriptar;
         private ToolStripButton tsDescriptar;
+        private RichTextBox rtfTexto;
     }
 }
 
