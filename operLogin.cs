@@ -61,7 +61,11 @@ namespace TeleBonifacio
         {
             if (e.Button == MouseButtons.Middle)
             {
-                glo.Nivel = 2;
+
+                // glo.Nivel = 0;  // Balcão
+                // glo.Nivel = 1;  // Caixa
+                glo.Nivel = 2;  // Escritório
+
                 glo.iUsuario = 1;
                 Form1 Form = new Form1();
                 Form.Show();

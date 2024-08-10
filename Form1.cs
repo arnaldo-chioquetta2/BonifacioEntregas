@@ -474,18 +474,14 @@ namespace TeleBonifacio
                         pictureBox10.Visible = false;
                         pictureBox11.Visible = false;
                         pictureBox13.Visible = false;
-
                         pictureBox12.Left = label12.Left = 55;
                         lbAnotacoes.Left = picAnotacoes.Left = pictureBox12.Left + 120;
                         lbAnotacoes.Top = label1.Top;
                         lbAnotacoes.Visible = true;
                         picAnotacoes.Top=pictureBox1.Top;
                         picAnotacoes.Visible = true;
-
                         this.Width = 350;
                         this.Height = 200;
-                        // int posL = (this.Width - pictureBox12.Width) / 2;
-                        // pictureBox12.Left = label12.Left = posL;
                         break;
                     case 1: // Caixa
                         label1.Visible = false;
@@ -518,15 +514,6 @@ namespace TeleBonifacio
                         label11.Visible = true;
                         pictureBox11.Visible = true;                        
                         this.Height = 200;
-
-                        // this.Width = 300;
-                        // pictureBox10.Top = 50;
-                        // pictureBox11.Top = 50;
-                        // label10.Top = label11.Top = 30;
-                        //int posL2 = 50;
-                        //pictureBox10.Left = label10.Left = posL2;
-                        //pictureBox11.Left = label11.Left = posL2 + pictureBox10.Width;
-
                         this.Width = 350;
                         label10.Top = label11.Top = 10;
                         int posL2 = 10;
@@ -537,7 +524,6 @@ namespace TeleBonifacio
                         lbAnotacoes.Visible = true;
                         picAnotacoes.Top = pictureBox10.Top = pictureBox11.Top = pictureBox1.Top;
                         picAnotacoes.Visible = true;
-
                         break;
                     case 2:
                         // Escritório Vê tudo

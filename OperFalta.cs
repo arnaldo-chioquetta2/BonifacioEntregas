@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Drawing;
 using System.IO;
+using System.Linq;
 using System.Windows.Forms;
 using TeleBonifacio.dao;
 using TeleBonifacio.gen;
@@ -74,8 +75,13 @@ namespace TeleBonifacio
             if (glo.Nivel==2)
             {
                 lbVlor.Visible = true;
-                txValor.Visible = true;                
-            } else
+                txValor.Visible = true;
+                ConfigureDataGridView(this.dataGrid2);
+                ConfigureDataGridView(this.dataGrid3);
+                ConfigureDataGridView(this.dataGrid4);
+                PreparaAbasUsers(Vendedor);
+            }
+            else
             {
                 tbFaltas.TabPages.Remove(tabPage2);
                 tbFaltas.TabPages.Remove(tabPage3);
@@ -84,11 +90,37 @@ namespace TeleBonifacio
             }
             carregando = false;
             CarregaGrid();
-            ConfigureDataGridView(this.dataGrid1);
-            ConfigureDataGridView(this.dataGrid2);
-            ConfigureDataGridView(this.dataGrid3);
-            ConfigureDataGridView(this.dataGrid4);
-            rt.AdjustFormComponents(this);
+            ConfigureDataGridView(this.dataGrid1);          
+            rt.AdjustFormComponents(this);           
+        }
+
+        private void PreparaAbasUsers(VendedoresDAO vendedor)
+        {
+            string pastaDoPrograma = AppDomain.CurrentDomain.BaseDirectory;
+            string padraoDeBusca = "Anotacoes*.rtf";
+            string[] arquivosEncontrados = Directory.GetFiles(pastaDoPrograma, padraoDeBusca)
+                                                        .Select(Path.GetFileName)
+                                                        .Where(nome => !string.Equals(nome, "anotacoes.rtf", StringComparison.OrdinalIgnoreCase))
+                                                        .ToArray();
+            if (arquivosEncontrados.Length > 0)
+            {
+                foreach (string arquivo in arquivosEncontrados)
+                {
+                    string numeroString = new string(arquivo.SkipWhile(c => !char.IsDigit(c))
+                                                .TakeWhile(char.IsDigit)
+                                                .ToArray());
+                    tb.Vendedor reg = (tb.Vendedor)vendedor.GetPeloID(numeroString);
+                    if (reg != null)
+                    {
+                        TabPage novaAba = new TabPage(reg.Nome);
+                        AtcCtrl.ATCRTF atcRtf = new AtcCtrl.ATCRTF();
+                        atcRtf.Dock = DockStyle.Fill;
+                        atcRtf.caminhoDoArquivo = Path.Combine(pastaDoPrograma, arquivo);
+                        novaAba.Controls.Add(atcRtf);
+                        tbFaltas.TabPages.Add(novaAba);
+                    }
+                }
+            }
         }
 
         private void ConfigureDataGridView(DataGridView grid)
@@ -1254,27 +1286,29 @@ namespace TeleBonifacio
                         txValor.Visible = false;
                         if (rtfTexto.Text.Length == 0)
                         {
-                            int padding = 5;
-                            int toolbarHeight = toolStrip1.Height;
-                            carregando = true;
-                            rtfTexto.Location = new Point(0, toolbarHeight + padding);
-                            rtfTexto.Size = new Size(tabPage5.Width, tabPage5.Height - toolbarHeight - padding);
                             caminhoDoArquivo = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "anotacoes.rtf");
-                            try
+                            rtfTexto.caminhoDoArquivo = caminhoDoArquivo;
+                            rtfTexto.Criptografia = true;
+                            rtfTexto.Carrega();
+                        }
+                        break;
+
+                    default: // Novas abas criadas dinamicamente
+                        groupBox1.Enabled = false;
+                        cmbTipos.Enabled = false;
+                        btComprei.Visible = false;
+                        ckEmFalta.Visible = false;
+                        lbVlor.Visible = false;
+                        txValor.Visible = false;
+                        timer1.Enabled = false;
+                        TabPage abaAtual = tbFaltas.SelectedTab;
+                        if (abaAtual.Controls.Count > 0 && abaAtual.Controls[0] is AtcCtrl.ATCRTF)
+                        {
+                            AtcCtrl.ATCRTF atcRtf = (AtcCtrl.ATCRTF)abaAtual.Controls[0];
+                            if (string.IsNullOrEmpty(atcRtf.Text))
                             {
-                                string Orig = File.ReadAllText(caminhoDoArquivo);
-                                glo.Loga("Leu RTF criptografado, 10 primeiros caracteres" + Orig.Substring(0, 10));
-                                string Conteudo = Cripto.Decrypt(Orig);
-                                tsDescriptar.Visible = true;
-                                tsEncriptar.Visible = false;
-                                rtfTexto.Rtf = Conteudo;
-                                glo.Loga("Mostrou RTF, 10 primeiros caracteres" + Conteudo.Substring(0, 10));
+                                atcRtf.Carrega();
                             }
-                            catch (Exception)
-                            {
-                                // 
-                            }                            
-                            carregando = false;
                         }
                         break;
                 }
@@ -1706,168 +1740,6 @@ namespace TeleBonifacio
                 return texto;
             }
         }
-
-        #region Anotações
-
-        private void rtfTexto_TextChanged(object sender, EventArgs e)
-        {
-            if (!carregando)
-            {
-                if (!timer1.Enabled)
-                {
-                    timer1.Enabled = true;
-                }                
-            }            
-        }
-
-        private void timer1_Tick(object sender, EventArgs e)
-        {
-            timer1.Enabled = false;
-            SalvaRTF();
-            if (timer1.Interval>500)
-            {
-                timer1.Interval -= 100;
-            }
-        }
-
-        private void SalvaRTF()
-        {
-            string Orig = rtfTexto.Rtf;
-            glo.Loga("Gravar RTF, 10 primeiros caracteres" + Orig.Substring(0, 10));
-            string Conteudo = Cripto.Encrypt(Orig);
-            File.WriteAllText(caminhoDoArquivo, Conteudo);
-            glo.Loga("Gravou RTF, 10 primeiros caracteres" + Conteudo.Substring(0, 10));
-        }
-
-        private void toolStripButtonRedo_Click(object sender, EventArgs e)
-        {
-            if (rtfTexto.CanRedo)
-            {
-                rtfTexto.Redo();
-            }
-        }
-
-        private void toolStripButtonUndo_Click(object sender, EventArgs e)
-        {
-            if (rtfTexto.CanUndo)
-            {
-                rtfTexto.Undo();
-            }
-        }
-
-        private void toolStripButtonDecreaseFont_Click(object sender, EventArgs e)
-        {
-            float newSize = this.rtfTexto.SelectionFont.Size - 1;
-            this.rtfTexto.SelectionFont = new Font(this.rtfTexto.SelectionFont.FontFamily, Math.Max(newSize, 1), this.rtfTexto.SelectionFont.Style); // Garante que o tamanho mínimo seja 1
-        }
-
-        private void toolStripButtonIncreaseFont_Click(object sender, EventArgs e)
-        {
-            float newSize = this.rtfTexto.SelectionFont.Size + 1;
-            this.rtfTexto.SelectionFont = new Font(this.rtfTexto.SelectionFont.FontFamily, newSize, this.rtfTexto.SelectionFont.Style);
-        }
-
-        private void toolStripButtonUnderline_Click(object sender, EventArgs e)
-        {
-            if (rtfTexto.SelectionFont != null)
-            {
-                FontStyle currentStyle = rtfTexto.SelectionFont.Style;
-                FontStyle newStyle;
-                if (rtfTexto.SelectionFont.Underline)
-                {
-                    newStyle = currentStyle & ~FontStyle.Underline;
-                }
-                else
-                {
-                    newStyle = currentStyle | FontStyle.Underline;
-                }
-                rtfTexto.SelectionFont = new Font(rtfTexto.SelectionFont.FontFamily, rtfTexto.SelectionFont.Size, newStyle);
-            }
-        }
-
-        private void toolStripButtonItalic_Click(object sender, EventArgs e)
-        {
-            if (rtfTexto.SelectionFont != null)
-            {
-                FontStyle currentStyle = rtfTexto.SelectionFont.Style;
-                FontStyle newStyle;
-                if (rtfTexto.SelectionFont.Italic)
-                {
-                    newStyle = currentStyle & ~FontStyle.Italic;
-                }
-                else
-                {
-                    newStyle = currentStyle | FontStyle.Italic;
-                }
-                rtfTexto.SelectionFont = new Font(rtfTexto.SelectionFont.FontFamily, rtfTexto.SelectionFont.Size, newStyle);
-            }
-        }
-
-        private void toolStripButtonBold_Click(object sender, EventArgs e)
-        {
-            if (rtfTexto.SelectionFont != null)
-            {
-                FontStyle currentStyle = rtfTexto.SelectionFont.Style;
-                FontStyle newStyle;
-                if (rtfTexto.SelectionFont.Bold)
-                {
-                    newStyle = currentStyle & ~FontStyle.Bold;
-                }
-                else
-                {
-                    newStyle = currentStyle | FontStyle.Bold;
-                }
-                rtfTexto.SelectionFont = new Font(rtfTexto.SelectionFont.FontFamily, rtfTexto.SelectionFont.Size, newStyle);
-            }
-        }
-
-        private void tsVermelho_Click(object sender, EventArgs e)
-        {
-            rtfTexto.SelectionColor = Color.Red;
-        }
-
-        private void tsAzul_Click(object sender, EventArgs e)
-        {
-            rtfTexto.SelectionColor = Color.Blue;
-        }
-
-        private void tsVerde_Click(object sender, EventArgs e)
-        {
-            rtfTexto.SelectionColor = Color.Green;
-        }
-
-        private void tsLaranja_Click(object sender, EventArgs e)
-        {
-            rtfTexto.SelectionColor = Color.Orange;
-        }
-
-        private void tsPreto_Click(object sender, EventArgs e)
-        {
-            rtfTexto.SelectionColor = Color.Black;
-        }
-
-        private void tsCinza_Click(object sender, EventArgs e)
-        {
-            rtfTexto.SelectionColor = Color.Gray;
-        }
-
-        private void toolStripButtonEncrypt_Click(object sender, EventArgs e)
-        {
-            //tsDescriptar.Visible = true;
-            //tsEncriptar.Visible = false;
-            //Criptografia = true;
-            //SalvaRTF();
-        }
-
-        private void tsDescriptar_Click(object sender, EventArgs e)
-        {
-            //tsDescriptar.Visible = false;
-            //tsEncriptar.Visible = true;
-            //Criptografia = false;
-            //SalvaRTF();
-        }
-
-        #endregion
 
     }
 }
