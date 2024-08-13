@@ -621,8 +621,9 @@ namespace TeleBonifacio
 
         private void btEmail_Click(object sender, EventArgs e)
         {
-            // 
             pesEmails OForm = new pesEmails();
+            string Arquivo = dataGrid1.SelectedRows[0].Cells["Arquivo"].Value.ToString();
+            OForm.Arquivo = Arquivo;
             OForm.Show();
         }
     }

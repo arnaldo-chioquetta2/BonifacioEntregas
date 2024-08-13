@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.IO;
+using System.Linq;
 using System.Windows.Forms;
 using TeleBonifacio.dao;
+using TeleBonifacio.gen;
 
 namespace TeleBonifacio
 {
@@ -10,6 +13,10 @@ namespace TeleBonifacio
     {
         private bool carregando = true;
         private FornecedorDao forn;
+        private INI cINI;
+
+        public string Arquivo = "";
+        private string ArquivoEmail = "";
 
         public pesEmails()
         {
@@ -19,8 +26,72 @@ namespace TeleBonifacio
         private void pesEmails_Load(object sender, System.EventArgs e)
         {
             forn = new FornecedorDao();
+            cINI = new INI();
+            txTitulo.Text = cINI.ReadString("Email", "Titulo", "");
+            ArquivoEmail = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "email.txt");
+            try
+            {
+                string Texto = File.ReadAllText(ArquivoEmail);
+                txTexto.Text = Texto;
+            }
+            catch (Exception)
+            {
+                // throw;
+            }
             CarregarComboBox();
             carregando = false;
+        }
+
+        private async void btOK_Click(object sender, EventArgs e)
+        {
+            string Texto = txTexto.Text;
+            if (Texto.Length == 0)
+            {
+                MessageBox.Show("É necessário um conteúdo no email", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+            else
+            {
+                try
+                {
+                    Cursor = Cursors.WaitCursor; // Define o cursor como ampulheta
+                    this.Text = "Enviando Email";
+                    File.WriteAllText(ArquivoEmail, Texto);                    
+                    cINI.WriteString("Email", "Titulo", txTitulo.Text);
+                    Email cEmail = new Email();
+                    string Remetente = cINI.ReadString("Email", "Remetente", "");
+
+                    // AJUSTAR A CRIPTOGRAFIA
+                    // SENHA ORIGINAL   "uhkikktxafjvpwem"
+                    // SENHA RESULTANTE "uhkikktxafjvp2em"
+                    // string senhaCri = cINI.ReadString("Email", "senha", "");
+                    // string senha = Cripto.Decrypt(senhaCri);
+                    string senha = "uhkikktxafjvpwem";
+                    
+                    bool enviado = cEmail.EnviarEmail(
+                    Remetente,
+                        Remetente,
+                        senha,
+                        lbEmail.Text,
+                        Arquivo,
+                        txTitulo.Text,
+                        Texto
+                    );
+
+                    if (enviado)
+                    {
+                        Cursor = Cursors.Default;
+                        this.Close();
+                    }
+                    else
+                    {
+                        this.Text = "Email não foi enviado";
+                    }
+                }
+                finally
+                {
+                    Cursor = Cursors.Default; // Restaura o cursor padrão
+                }
+            }
         }
 
         private void CarregarComboBox()
@@ -51,22 +122,49 @@ namespace TeleBonifacio
         {
             if (!carregando)
             {
-                int x = 0;
+                MostraEmail();
             }
         }
 
-        private void cmbEmails_TextChanged(object sender, EventArgs e)
+        private void MostraEmail()
         {
-            if (!carregando)
+            string emailSelecionado = null;
+            var selectedItem = cmbEmails.SelectedItem as tb.ComboBoxItem;
+            if (selectedItem != null)
             {
-                var selectedItem = cmbEmails.SelectedItem as tb.ComboBoxItem;
-                if (selectedItem != null)
+                emailSelecionado = selectedItem.Email;
+            }
+            else if (!string.IsNullOrEmpty(cmbEmails.Text))
+            {
+                var item = cmbEmails.Items.Cast<tb.ComboBoxItem>()
+                                     .FirstOrDefault(i => i.Nome.Equals(cmbEmails.Text, StringComparison.OrdinalIgnoreCase));
+
+                if (item != null)
                 {
-                    lbEmail.Text = selectedItem.Email;
+                    emailSelecionado = item.Email;
                 }
             }
+            lbEmail.Text = emailSelecionado ?? string.Empty;
+            VeSeHab();
         }
 
+        private void VeSeHab()
+        {
+            bool ok = true;
+            if (cmbEmails.SelectedIndex == -1) ok = false;
+            if (txTitulo.Text.Length==0) ok = false;
+            btOK.Enabled = ok;
+        }
+
+        private void txTelefone_TextChanged(object sender, EventArgs e)
+        {
+            VeSeHab();
+        }
+
+        private void cmbEmails_KeyUp(object sender, KeyEventArgs e)
+        {
+            MostraEmail();
+        }
     }
 
 }

@@ -32,12 +32,12 @@ namespace TeleBonifacio
             this.cmbEmails = new System.Windows.Forms.ComboBox();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
-            this.txTelefone = new System.Windows.Forms.TextBox();
-            this.txDescr = new System.Windows.Forms.TextBox();
+            this.txTitulo = new System.Windows.Forms.TextBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.btFechar = new System.Windows.Forms.Button();
             this.btOK = new System.Windows.Forms.Button();
             this.lbEmail = new System.Windows.Forms.Label();
+            this.txTexto = new System.Windows.Forms.TextBox();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -53,7 +53,7 @@ namespace TeleBonifacio
             this.cmbEmails.Sorted = true;
             this.cmbEmails.TabIndex = 36;
             this.cmbEmails.SelectedIndexChanged += new System.EventHandler(this.cmbEmails_SelectedIndexChanged);
-            this.cmbEmails.TextChanged += new System.EventHandler(this.cmbEmails_TextChanged);
+            this.cmbEmails.KeyUp += new System.Windows.Forms.KeyEventHandler(this.cmbEmails_KeyUp);
             // 
             // label1
             // 
@@ -61,9 +61,9 @@ namespace TeleBonifacio
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label1.Location = new System.Drawing.Point(2, 9);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(89, 20);
+            this.label1.Size = new System.Drawing.Size(95, 20);
             this.label1.TabIndex = 37;
-            this.label1.Text = "Remetente";
+            this.label1.Text = "Destinatário";
             // 
             // label2
             // 
@@ -75,30 +75,23 @@ namespace TeleBonifacio
             this.label2.TabIndex = 38;
             this.label2.Text = "Título";
             // 
-            // txTelefone
+            // txTitulo
             // 
-            this.txTelefone.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txTelefone.Location = new System.Drawing.Point(97, 72);
-            this.txTelefone.Name = "txTelefone";
-            this.txTelefone.Size = new System.Drawing.Size(287, 26);
-            this.txTelefone.TabIndex = 39;
-            // 
-            // txDescr
-            // 
-            this.txDescr.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txDescr.Location = new System.Drawing.Point(6, 22);
-            this.txDescr.Multiline = true;
-            this.txDescr.Name = "txDescr";
-            this.txDescr.Size = new System.Drawing.Size(366, 61);
-            this.txDescr.TabIndex = 40;
+            this.txTitulo.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txTitulo.Location = new System.Drawing.Point(97, 72);
+            this.txTitulo.Name = "txTitulo";
+            this.txTitulo.Size = new System.Drawing.Size(287, 26);
+            this.txTitulo.TabIndex = 39;
+            this.txTitulo.TextChanged += new System.EventHandler(this.txTelefone_TextChanged);
             // 
             // groupBox1
             // 
-            this.groupBox1.Controls.Add(this.txDescr);
+            this.groupBox1.Controls.Add(this.txTexto);
+            this.groupBox1.Controls.Add(this.btFechar);
             this.groupBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.groupBox1.Location = new System.Drawing.Point(6, 104);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(378, 100);
+            this.groupBox1.Size = new System.Drawing.Size(378, 253);
             this.groupBox1.TabIndex = 41;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Assunto";
@@ -107,7 +100,7 @@ namespace TeleBonifacio
             // 
             this.btFechar.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.btFechar.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btFechar.Location = new System.Drawing.Point(280, 210);
+            this.btFechar.Location = new System.Drawing.Point(273, 199);
             this.btFechar.Name = "btFechar";
             this.btFechar.Size = new System.Drawing.Size(105, 39);
             this.btFechar.TabIndex = 49;
@@ -119,12 +112,13 @@ namespace TeleBonifacio
             // 
             this.btOK.Enabled = false;
             this.btOK.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btOK.Location = new System.Drawing.Point(12, 210);
+            this.btOK.Location = new System.Drawing.Point(12, 303);
             this.btOK.Name = "btOK";
             this.btOK.Size = new System.Drawing.Size(105, 39);
             this.btOK.TabIndex = 48;
             this.btOK.Text = "OK";
             this.btOK.UseVisualStyleBackColor = true;
+            this.btOK.Click += new System.EventHandler(this.btOK_Click);
             // 
             // lbEmail
             // 
@@ -135,17 +129,25 @@ namespace TeleBonifacio
             this.lbEmail.TabIndex = 50;
             this.lbEmail.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
+            // txTexto
+            // 
+            this.txTexto.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txTexto.Location = new System.Drawing.Point(6, 22);
+            this.txTexto.Multiline = true;
+            this.txTexto.Name = "txTexto";
+            this.txTexto.Size = new System.Drawing.Size(372, 171);
+            this.txTexto.TabIndex = 50;
+            // 
             // pesEmails
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btFechar;
-            this.ClientSize = new System.Drawing.Size(397, 258);
+            this.ClientSize = new System.Drawing.Size(395, 352);
             this.Controls.Add(this.lbEmail);
-            this.Controls.Add(this.btFechar);
             this.Controls.Add(this.btOK);
             this.Controls.Add(this.groupBox1);
-            this.Controls.Add(this.txTelefone);
+            this.Controls.Add(this.txTitulo);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.cmbEmails);
             this.Controls.Add(this.label1);
@@ -165,12 +167,12 @@ namespace TeleBonifacio
         private System.Windows.Forms.ComboBox cmbEmails;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.TextBox txTelefone;
-        private System.Windows.Forms.TextBox txDescr;
+        private System.Windows.Forms.TextBox txTitulo;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.Button btFechar;
         private System.Windows.Forms.Button btOK;
         private System.Windows.Forms.Label lbEmail;
+        private System.Windows.Forms.TextBox txTexto;
     }
 }
 
