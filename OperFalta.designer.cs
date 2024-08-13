@@ -652,6 +652,7 @@ namespace TeleBonifacio
         private TextBox txValor;
         private Label lbVlor;
         private AtcCtrl.ATCRTF rtfTexto;
+        //private AtcCtrl.ATCRTF rtfTexto;
     }
 }
 

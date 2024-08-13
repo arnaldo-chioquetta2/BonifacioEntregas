@@ -270,6 +270,12 @@
     <Compile Include="pesCliente.designer.cs">
       <DependentUpon>pesCliente.cs</DependentUpon>
     </Compile>
+    <Compile Include="pesEmails.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="pesEmails.designer.cs">
+      <DependentUpon>pesEmails.cs</DependentUpon>
+    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\CadVendedores.cs">
       <SubType>Form</SubType>
@@ -385,6 +391,9 @@
     <EmbeddedResource Include="pesCliente.resx">
       <DependentUpon>pesCliente.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="pesEmails.resx">
+      <DependentUpon>pesEmails.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\CadVendedores.resx">
       <DependentUpon>CadVendedores.cs</DependentUpon>
     </EmbeddedResource>
@@ -430,7 +439,7 @@
       <Name>ATCRecordNavigator</Name>
     </ProjectReference>
     <ProjectReference Include="..\AtcCtrl\AtcCtrl\AtcCtrl.csproj">
-      <Project>{ecbf2fad-0a90-4815-bd7c-2c8d0d7b766c}</Project>
+      <Project>{74547907-32b4-40ec-807b-e5bdaf90f61b}</Project>
       <Name>AtcCtrl</Name>
     </ProjectReference>
     <ProjectReference Include="..\ATCDll\ATCDll\ATCDll.csproj">

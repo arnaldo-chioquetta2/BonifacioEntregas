@@ -67,6 +67,7 @@ namespace TeleBonifacio
                 glo.Nivel = 2;  // Escritório
 
                 glo.iUsuario = 1;
+
                 Form1 Form = new Form1();
                 Form.Show();
                 this.Visible = false;

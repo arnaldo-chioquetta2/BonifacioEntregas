@@ -1,1 +1,1 @@
-2.5.4|CAMPO DE EMAIL NO FORNECEDOR|ALTER TABLE Fornecedores ADD COLUMN EhForn INTEGER|ALTER TABLE Fornecedores ADD COLUMN email TEXT(30)|UPDATE Fornecedores Set EhForn = 1
+2.5.8|Ajusta na mostragem das anotações

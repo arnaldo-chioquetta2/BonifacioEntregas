@@ -11,7 +11,7 @@ namespace TeleBonifacio
     public partial class operAnota : Form
     {
         private LancamentoStatus lancamentoStatus;
-        private AtcCtrl.ATCRTF atcrtf1;
+        //private AtcCtrl.ATCRTF atcrtf1;
         private DateTime currentTime;
 
         public operAnota()
@@ -21,22 +21,22 @@ namespace TeleBonifacio
 
         private void InitializeComponent()
         {
-            this.atcrtf1 = new AtcCtrl.ATCRTF();
+            //this.atcrtf1 = new AtcCtrl.ATCRTF();
             this.SuspendLayout();
             // 
             // atcrtf1
             // 
-            this.atcrtf1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.atcrtf1.Location = new System.Drawing.Point(0, 0);
-            this.atcrtf1.Name = "atcrtf1";
-            this.atcrtf1.Size = new System.Drawing.Size(876, 380);
-            this.atcrtf1.TabIndex = 0;
-            this.atcrtf1.Load += new System.EventHandler(this.atcrtf1_Load);
+            //this.atcrtf1.Dock = System.Windows.Forms.DockStyle.Fill;
+            //this.atcrtf1.Location = new System.Drawing.Point(0, 0);
+            //this.atcrtf1.Name = "atcrtf1";
+            //this.atcrtf1.Size = new System.Drawing.Size(876, 380);
+            //this.atcrtf1.TabIndex = 0;
+            //this.atcrtf1.Load += new System.EventHandler(this.atcrtf1_Load);
             // 
             // operAnota
             // 
             this.ClientSize = new System.Drawing.Size(876, 380);
-            this.Controls.Add(this.atcrtf1);
+            //this.Controls.Add(this.atcrtf1);
             this.Name = "operAnota";
             this.Text = "Anotações";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.operAnota_FormClosing);
@@ -47,10 +47,9 @@ namespace TeleBonifacio
 
         private void atcrtf1_Load(object sender, EventArgs e)
         {
-            glo.iUsuario = 2;
             string nmArquivo = "Anotacoes" + glo.iUsuario.ToString() + ".rtf";
-            atcrtf1.caminhoDoArquivo = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, nmArquivo);
-            atcrtf1.Carrega();
+            //atcrtf1.caminhoDoArquivo = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, nmArquivo);
+            //atcrtf1.Carrega();
         }
 
         private void operAnota_Load(object sender, EventArgs e)

@@ -267,8 +267,8 @@ namespace TeleBonifacio
                 this.UID = Convert.ToString(selectedRow.Cells["UID"].Value);
                 dtpDataEmissao.Value = Convert.ToDateTime(selectedRow.Cells["DataEmissao"].Value);
 
-                btPDF.Enabled = true;
-                // btPDF.Enabled = btEmail.Enabled = true;
+                // btPDF.Enabled = true;
+                btPDF.Enabled = btEmail.Enabled = true;
 
                 if (selectedRow.Cells["idFornecedor"].Value != DBNull.Value)
                 {
@@ -621,22 +621,9 @@ namespace TeleBonifacio
 
         private void btEmail_Click(object sender, EventArgs e)
         {
-            Email cEmail = new Email();
-            string senha = "uhkikktxafjvpwem";
-            bool enviado = cEmail.EnviarEmail(
-                "xeviousbr@gmail.com",
-                "xeviousbr@gmail.com",
-                senha,
-                "bonifaciofinanceiro639@gmail.com",
-                @"C:\Temp\Teste.pdf",
-                "Email enviado pelo Sistema",
-                "Este foi um teste feito pelo programa."
-            );
-
-            if (enviado)
-            {
-                // Ação adicional em caso de sucesso, se necessário
-            }
+            // 
+            pesEmails OForm = new pesEmails();
+            OForm.Show();
         }
     }
 }

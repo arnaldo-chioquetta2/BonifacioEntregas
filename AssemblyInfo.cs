@@ -11,8 +11,12 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyCulture("")]
 [assembly: ComVisible(false)]
 [assembly: Guid("308c57af-e663-456d-8a2c-188bbd61423d")]
-[assembly: AssemblyVersion("2.5.5.0")]
-[assembly: AssemblyFileVersion("2.5.5.0")]
+[assembly: AssemblyVersion("2.5.9.0")]
+[assembly: AssemblyFileVersion("2.5.9.0")]
+// 2.5.9 Adaptação para controle refeito
+// 2.5.8 Ajusta na mostragem das anotações
+// 2.5.7 Retirada do teste que gravava no ID 2
+// 2.5.6 Visualização das anotações dos funcionários
 // 2.5.5 Anotações dos funcionários
 // 2.5.4 Campo de email no fornecedor
 // 2.5.3 Impressão do texto do checkbox na impressão da tela

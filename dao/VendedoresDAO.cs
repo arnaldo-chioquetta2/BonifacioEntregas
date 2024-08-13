@@ -6,6 +6,7 @@ using System.Data.OleDb;
 using System.Text;
 using System.Windows.Forms;
 using TeleBonifacio.gen;
+using TeleBonifacio.tb;
 
 namespace TeleBonifacio.dao
 {
@@ -138,6 +139,12 @@ namespace TeleBonifacio.dao
                 string x = ex.ToString();
                 MessageBox.Show(x, "Erro na operação do banco de dados", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
+        }
+
+        internal Vendedor GetPeloNr(string numeroString)
+        {
+            string query = $"SELECT * FROM Vendedores Where Nro = '{numeroString}' ";
+            return ExecutarConsultaVendedor2(query);
         }
 
         public string GetDataSqlPart(DateTime? data, string fieldName)

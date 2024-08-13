@@ -210,6 +210,16 @@ namespace TeleBonifacio.dao
             return null;
         }
 
+        internal DataTable getEmails()
+        {
+            string query = $@"SELECT IdForn AS id, Nome, email   
+                FROM Fornecedores 
+                Where email > '' 
+                Order By Nome ";
+            DataTable dt = DB.ExecutarConsulta(query);
+            return dt;
+        }
+
         public override string VeSeJaTem(object obj)
         {
             FornecedorDao Fornecedor = (FornecedorDao)obj;

@@ -119,14 +119,12 @@ namespace TeleBonifacio
                 {
                     Cliente = new ClienteDAO();
                     this.Cursor = Cursors.WaitCursor;
-                    glo.Loga("CarregarComboBox<tb.Cliente>(cmbCliente) em pesCliente");
                     CarregarComboBox<tb.Cliente>(cmbCliente);
                     dateTimePicker1.Value = DateTime.Now.AddDays(7);
                 }
             }
             this.Cursor = Cursors.Default;
             carregando = false;
-
         }
 
         public string getcodigo()
