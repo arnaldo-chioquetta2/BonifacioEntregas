@@ -11,8 +11,10 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyCulture("")]
 [assembly: ComVisible(false)]
 [assembly: Guid("308c57af-e663-456d-8a2c-188bbd61423d")]
-[assembly: AssemblyVersion("2.5.9.0")]
-[assembly: AssemblyFileVersion("2.5.9.0")]
+[assembly: AssemblyVersion("2.6.4.0")]
+[assembly: AssemblyFileVersion("2.6.4.0")]
+// 2.6.4 Revisao na operação de envio de email
+// 2.6.0 Finalização do envio de email
 // 2.5.9 Adaptação para controle refeito
 // 2.5.8 Ajusta na mostragem das anotações
 // 2.5.7 Retirada do teste que gravava no ID 2
@@ -23,13 +25,3 @@ using System.Runtime.InteropServices;
 // 2.5.2 Mais campos de horários nos funcionários e Correção da navegação de vendedores
 // 2.5.1 Correção para o caso da Giulia
 // 2.5.0 Gravação das horas e impressão correta da data de demissão
-// 2.4.9 Finalização do relatório do RH com Grids
-// 2.4.8 Impressão da ficha do funcionário - Domingo no Relatório
-// 2.4.7 Tratamento de erro de data vazia na tela de funcionários
-// 2.4.6 Campos a mais de funcionários - finalização
-// 2.4.5 Gravação dos funcionários
-// 2.4.4 Previsão para horas vazias no carregamento de combo dos clientes
-// 2.4.3 Mais campos para a tela de funcionários
-// 2.4.2 AutoAjuste trabalho nas telas de RH Faltas Entregas e Caixa 
-// 2.4.1 AutoAjuste inicio
-// 2.4.0 Ajuste na gravação do cliente novo na encomenda

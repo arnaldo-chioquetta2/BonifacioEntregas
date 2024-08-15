@@ -44,6 +44,7 @@ namespace TeleBonifacio
 
         private async void btOK_Click(object sender, EventArgs e)
         {
+            glo.Loga("btOK_Click na tela de emails");
             string Texto = txTexto.Text;
             if (Texto.Length == 0)
             {
@@ -59,14 +60,20 @@ namespace TeleBonifacio
                     cINI.WriteString("Email", "Titulo", txTitulo.Text);
                     Email cEmail = new Email();
                     string Remetente = cINI.ReadString("Email", "Remetente", "");
+                    glo.Loga("Remetente = " + Remetente);
 
                     // AJUSTAR A CRIPTOGRAFIA
                     // SENHA ORIGINAL   "uhkikktxafjvpwem"
                     // SENHA RESULTANTE "uhkikktxafjvp2em"
                     // string senhaCri = cINI.ReadString("Email", "senha", "");
                     // string senha = Cripto.Decrypt(senhaCri);
-                    string senha = "uhkikktxafjvpwem";
-                    
+
+                    // Minha
+                    // string senha = "uhkikktxafjvpwem";
+
+                    // Denis
+                    string senha = "vxytmxwmbbipbwcg";
+
                     bool enviado = cEmail.EnviarEmail(
                     Remetente,
                         Remetente,
