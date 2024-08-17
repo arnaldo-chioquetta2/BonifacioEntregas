@@ -60,19 +60,20 @@ namespace TeleBonifacio
                     cINI.WriteString("Email", "Titulo", txTitulo.Text);
                     Email cEmail = new Email();
                     string Remetente = cINI.ReadString("Email", "Remetente", "");
-                    glo.Loga("Remetente = " + Remetente);
 
-                    // AJUSTAR A CRIPTOGRAFIA
-                    // SENHA ORIGINAL   "uhkikktxafjvpwem"
-                    // SENHA RESULTANTE "uhkikktxafjvp2em"
-                    // string senhaCri = cINI.ReadString("Email", "senha", "");
-                    // string senha = Cripto.Decrypt(senhaCri);
+                    string senha = "";
+                    string senhaCri = cINI.ReadString("Email", "senha", "");
+                    if (senhaCri.Length>0)
+                    {
+                        senha = Cripto.Decrypt(senhaCri);
+                    } else
+                    {
+                        // Minha
+                        // senha = "uhkikktxafjvpwem";
 
-                    // Minha
-                    // string senha = "uhkikktxafjvpwem";
-
-                    // Denis
-                    string senha = "vxytmxwmbbipbwcg";
+                        // Denis
+                        senha = "vxytmxwmbbipbwcg";
+                    }
 
                     bool enviado = cEmail.EnviarEmail(
                     Remetente,

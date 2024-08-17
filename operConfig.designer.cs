@@ -49,12 +49,13 @@ namespace TeleBonifacio
             this.label4 = new System.Windows.Forms.Label();
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
             this.ckAdaptar = new System.Windows.Forms.CheckBox();
+            this.button5 = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // lblNome
             // 
             this.lblNome.AutoSize = true;
-            this.lblNome.Location = new System.Drawing.Point(50, 21);
+            this.lblNome.Location = new System.Drawing.Point(83, 19);
             this.lblNome.Name = "lblNome";
             this.lblNome.Size = new System.Drawing.Size(109, 13);
             this.lblNome.TabIndex = 5;
@@ -63,14 +64,14 @@ namespace TeleBonifacio
             // 
             // textBox1
             // 
-            this.textBox1.Location = new System.Drawing.Point(165, 14);
+            this.textBox1.Location = new System.Drawing.Point(198, 12);
             this.textBox1.Name = "textBox1";
             this.textBox1.Size = new System.Drawing.Size(303, 20);
             this.textBox1.TabIndex = 0;
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(474, 12);
+            this.button1.Location = new System.Drawing.Point(507, 10);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(75, 23);
             this.button1.TabIndex = 1;
@@ -81,7 +82,7 @@ namespace TeleBonifacio
             // button2
             // 
             this.button2.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.button2.Location = new System.Drawing.Point(473, 155);
+            this.button2.Location = new System.Drawing.Point(554, 155);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(75, 23);
             this.button2.TabIndex = 11;
@@ -92,7 +93,7 @@ namespace TeleBonifacio
             // button3
             // 
             this.button3.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.button3.Location = new System.Drawing.Point(393, 155);
+            this.button3.Location = new System.Drawing.Point(474, 155);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(75, 23);
             this.button3.TabIndex = 10;
@@ -107,7 +108,7 @@ namespace TeleBonifacio
             // 
             // txNome
             // 
-            this.txNome.Location = new System.Drawing.Point(165, 66);
+            this.txNome.Location = new System.Drawing.Point(198, 64);
             this.txNome.Name = "txNome";
             this.txNome.Size = new System.Drawing.Size(303, 20);
             this.txNome.TabIndex = 4;
@@ -115,7 +116,7 @@ namespace TeleBonifacio
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(121, 69);
+            this.label1.Location = new System.Drawing.Point(154, 67);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(38, 13);
             this.label1.TabIndex = 10;
@@ -124,7 +125,7 @@ namespace TeleBonifacio
             // 
             // txEndereco
             // 
-            this.txEndereco.Location = new System.Drawing.Point(165, 92);
+            this.txEndereco.Location = new System.Drawing.Point(198, 90);
             this.txEndereco.Name = "txEndereco";
             this.txEndereco.Size = new System.Drawing.Size(303, 20);
             this.txEndereco.TabIndex = 5;
@@ -132,7 +133,7 @@ namespace TeleBonifacio
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(103, 95);
+            this.label2.Location = new System.Drawing.Point(136, 93);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(56, 13);
             this.label2.TabIndex = 12;
@@ -140,7 +141,7 @@ namespace TeleBonifacio
             // 
             // txFone
             // 
-            this.txFone.Location = new System.Drawing.Point(165, 118);
+            this.txFone.Location = new System.Drawing.Point(198, 116);
             this.txFone.Name = "txFone";
             this.txFone.Size = new System.Drawing.Size(303, 20);
             this.txFone.TabIndex = 6;
@@ -148,7 +149,7 @@ namespace TeleBonifacio
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(125, 117);
+            this.label3.Location = new System.Drawing.Point(158, 115);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(34, 13);
             this.label3.TabIndex = 14;
@@ -188,7 +189,7 @@ namespace TeleBonifacio
             // 
             // button4
             // 
-            this.button4.Location = new System.Drawing.Point(474, 38);
+            this.button4.Location = new System.Drawing.Point(507, 36);
             this.button4.Name = "button4";
             this.button4.Size = new System.Drawing.Size(75, 23);
             this.button4.TabIndex = 3;
@@ -198,7 +199,7 @@ namespace TeleBonifacio
             // 
             // txDocs
             // 
-            this.txDocs.Location = new System.Drawing.Point(165, 40);
+            this.txDocs.Location = new System.Drawing.Point(198, 38);
             this.txDocs.Name = "txDocs";
             this.txDocs.Size = new System.Drawing.Size(303, 20);
             this.txDocs.TabIndex = 2;
@@ -206,7 +207,7 @@ namespace TeleBonifacio
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(12, 43);
+            this.label4.Location = new System.Drawing.Point(45, 41);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(147, 13);
             this.label4.TabIndex = 19;
@@ -222,11 +223,23 @@ namespace TeleBonifacio
             this.ckAdaptar.Text = "Adaptar a tela";
             this.ckAdaptar.UseVisualStyleBackColor = true;
             // 
+            // button5
+            // 
+            this.button5.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.button5.Location = new System.Drawing.Point(393, 155);
+            this.button5.Name = "button5";
+            this.button5.Size = new System.Drawing.Size(75, 23);
+            this.button5.TabIndex = 21;
+            this.button5.Text = "Percentuais";
+            this.button5.UseVisualStyleBackColor = true;
+            this.button5.Click += new System.EventHandler(this.button5_Click);
+            // 
             // oprConfig
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(556, 194);
+            this.ClientSize = new System.Drawing.Size(636, 186);
+            this.Controls.Add(this.button5);
             this.Controls.Add(this.ckAdaptar);
             this.Controls.Add(this.button4);
             this.Controls.Add(this.txDocs);
@@ -277,5 +290,6 @@ namespace TeleBonifacio
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.FolderBrowserDialog folderBrowserDialog1;
         private System.Windows.Forms.CheckBox ckAdaptar;
+        private System.Windows.Forms.Button button5;
     }
 }

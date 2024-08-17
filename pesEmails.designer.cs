@@ -34,10 +34,10 @@ namespace TeleBonifacio
             this.label2 = new System.Windows.Forms.Label();
             this.txTitulo = new System.Windows.Forms.TextBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.txTexto = new System.Windows.Forms.TextBox();
             this.btFechar = new System.Windows.Forms.Button();
             this.btOK = new System.Windows.Forms.Button();
             this.lbEmail = new System.Windows.Forms.Label();
-            this.txTexto = new System.Windows.Forms.TextBox();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -96,6 +96,15 @@ namespace TeleBonifacio
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Assunto";
             // 
+            // txTexto
+            // 
+            this.txTexto.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txTexto.Location = new System.Drawing.Point(6, 22);
+            this.txTexto.Multiline = true;
+            this.txTexto.Name = "txTexto";
+            this.txTexto.Size = new System.Drawing.Size(372, 171);
+            this.txTexto.TabIndex = 50;
+            // 
             // btFechar
             // 
             this.btFechar.DialogResult = System.Windows.Forms.DialogResult.Cancel;
@@ -116,7 +125,7 @@ namespace TeleBonifacio
             this.btOK.Name = "btOK";
             this.btOK.Size = new System.Drawing.Size(105, 39);
             this.btOK.TabIndex = 48;
-            this.btOK.Text = "OK";
+            this.btOK.Text = "Enviar";
             this.btOK.UseVisualStyleBackColor = true;
             this.btOK.Click += new System.EventHandler(this.btOK_Click);
             // 
@@ -128,15 +137,6 @@ namespace TeleBonifacio
             this.lbEmail.Size = new System.Drawing.Size(376, 20);
             this.lbEmail.TabIndex = 50;
             this.lbEmail.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // txTexto
-            // 
-            this.txTexto.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txTexto.Location = new System.Drawing.Point(6, 22);
-            this.txTexto.Multiline = true;
-            this.txTexto.Name = "txTexto";
-            this.txTexto.Size = new System.Drawing.Size(372, 171);
-            this.txTexto.TabIndex = 50;
             // 
             // pesEmails
             // 

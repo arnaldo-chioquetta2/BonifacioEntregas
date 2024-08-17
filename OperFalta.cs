@@ -462,7 +462,7 @@ namespace TeleBonifacio
             dataGrid1.Columns[6].Width = 50;        // Quantidade
             dataGrid1.Columns[6].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
             dataGrid1.Columns[7].Width = 80;        // Marca
-            dataGrid1.Columns[8].Width = 160;       // Descrição
+            dataGrid1.Columns[8].Width = 240; //  160;       // Descrição
             dataGrid1.Columns[9].Width = 130;       // Balconista
             dataGrid1.Columns[10].Visible = false;  // UID
             dataGrid1.Columns[11].Width = 110;  //  130;      // Tipo - colocado o texto
@@ -1169,7 +1169,7 @@ namespace TeleBonifacio
             dataGrid2.Columns[6].Width = 50;        // Quantidade
             dataGrid2.Columns[6].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
             dataGrid2.Columns[7].Width = 80;        // Marca
-            dataGrid2.Columns[8].Width = 150;       // Descrição
+            dataGrid2.Columns[8].Width = 230; // 240; //  150;       // Descrição
             dataGrid2.Columns[9].Visible = false;  // UID
             dataGrid2.Columns[10].Width = 130;      // Tipo - colocado o texto
             dataGrid2.Columns[11].Visible = false;  // Tipo valor original
@@ -1647,7 +1647,7 @@ namespace TeleBonifacio
             dataGrid3.Columns[5].Width = 40;        // Quant
             dataGrid3.Columns[6].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
             dataGrid3.Columns[6].Width = 60;        // Marca
-            dataGrid3.Columns[7].Width = 190;       // Descrição
+            dataGrid3.Columns[7].Width = 280; // 270; // 250; // 190;       // Descrição
             dataGrid3.Columns[8].Visible = false;   // UID
             dataGrid3.Columns[9].Width = 100;       // Tipo
             dataGrid3.Columns[10].Width = 80; // 130;      // Compra

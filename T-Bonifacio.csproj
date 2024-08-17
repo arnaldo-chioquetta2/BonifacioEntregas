@@ -133,6 +133,12 @@
     <Compile Include="CadFornec.Designer.cs">
       <DependentUpon>CadFornec.cs</DependentUpon>
     </Compile>
+    <Compile Include="CadPercs.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="CadPercs.designer.cs">
+      <DependentUpon>CadPercs.cs</DependentUpon>
+    </Compile>
     <Compile Include="CadTipos.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -156,6 +162,7 @@
     <Compile Include="dao\FaltasDAO.cs" />
     <Compile Include="dao\FornecedorDao.cs" />
     <Compile Include="dao\GarantiasDao.cs" />
+    <Compile Include="dao\PercentsDAO.cs" />
     <Compile Include="dao\ProdutosDao.cs" />
     <Compile Include="dao\ReciboDAO.cs" />
     <Compile Include="dao\RHDAO.cs" />
@@ -319,6 +326,7 @@
     <Compile Include="tb\Fornecedor.cs" />
     <Compile Include="tb\Garantias.cs" />
     <Compile Include="tb\IDataEntity.cs" />
+    <Compile Include="tb\Percents.cs" />
     <Compile Include="tb\Produtos.cs" />
     <Compile Include="tb\Recibo.cs" />
     <Compile Include="tb\TpoFalta .cs" />
@@ -333,6 +341,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="CadFornec.resx">
       <DependentUpon>CadFornec.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="CadPercs.resx">
+      <DependentUpon>CadPercs.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="CadTipos.resx">
       <DependentUpon>CadTipos.cs</DependentUpon>

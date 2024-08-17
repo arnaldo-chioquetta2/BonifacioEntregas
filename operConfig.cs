@@ -173,5 +173,11 @@ namespace TeleBonifacio
                 txDocs.Text = folderBrowserDialog1.SelectedPath;
             }            
         }
+
+        private void button5_Click(object sender, EventArgs e)
+        {
+            CadPercs fCad = new CadPercs();
+            fCad.Show();
+        }
     }    
 }
