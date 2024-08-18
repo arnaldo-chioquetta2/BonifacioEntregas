@@ -1,6 +1,5 @@
 ﻿using TeleBonifacio.dao;
 using System;
-using System.Collections.Generic;
 using System.Data;
 using System.Windows.Forms;
 using TeleBonifacio.tb;
@@ -42,7 +41,7 @@ namespace TeleBonifacio
             dataGrid1.Columns[2].Width = 110;
             dataGrid1.Columns[3].Width = 70;    // Valor
             dataGrid1.Columns[4].Width = 70;    // Desconto
-            dataGrid1.Columns[5].Width = 70;    // Compra
+            dataGrid1.Columns[5].Width = 80; // 70;    // Compra
             dataGrid1.Columns[6].Width = 60;    
             dataGrid1.Columns[7].Width = 170;   // Cliente
             dataGrid1.Columns[8].Width = 170;   // Vendedor
@@ -79,9 +78,39 @@ namespace TeleBonifacio
             entregasDAO = new EntregasDAO();
             DateTime DT2 = dtpData.Value.AddDays(-1);
             DataTable dados = entregasDAO.getDados(DT2, dtpData.Value);
+            if (dados.Rows.Count > 0)
+            {
+                decimal totalValor = 0;
+                decimal totalCompra = 0;
+
+                foreach (DataRow row in dados.Rows)
+                {
+                    if (decimal.TryParse(row["Valor"].ToString(), out decimal valor))
+                    {
+                        totalValor += valor;
+                    }
+
+                    if (decimal.TryParse(row["Compra"].ToString(), out decimal compra))
+                    {
+                        totalCompra += compra;
+                    }
+                }
+
+                // Adiciona a linha de total ao DataTable
+                DataRow totalRow = dados.NewRow();
+                totalRow["MotoBoy"] = "Total"; // Você pode personalizar essa célula para indicar que é uma linha de total
+                totalRow["Valor"] = totalValor.ToString("C"); // Formata como moeda
+                totalRow["Compra"] = totalCompra.ToString("C"); // Formata como moeda
+                dados.Rows.Add(totalRow);
+
+
+            }
+
             DevAge.ComponentModel.BoundDataView boundDataView = new DevAge.ComponentModel.BoundDataView(dados.DefaultView);
             dataGrid1.DataSource = boundDataView;
+
         }
+
 
         private void btnAdicionar_Click(object sender, EventArgs e)
         {

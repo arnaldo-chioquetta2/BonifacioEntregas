@@ -85,13 +85,13 @@ namespace TeleBonifacio
             this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(883, 129);
+            this.panel1.Size = new System.Drawing.Size(920, 129);
             this.panel1.TabIndex = 11;
             // 
             // btRelat
             // 
             this.btRelat.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btRelat.Location = new System.Drawing.Point(780, 11);
+            this.btRelat.Location = new System.Drawing.Point(817, 11);
             this.btRelat.Name = "btRelat";
             this.btRelat.Size = new System.Drawing.Size(91, 23);
             this.btRelat.TabIndex = 35;
@@ -121,7 +121,7 @@ namespace TeleBonifacio
             // 
             this.label6.AutoSize = true;
             this.label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label6.Location = new System.Drawing.Point(540, 71);
+            this.label6.Location = new System.Drawing.Point(575, 70);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(66, 16);
             this.label6.TabIndex = 32;
@@ -129,7 +129,7 @@ namespace TeleBonifacio
             // 
             // txDesc
             // 
-            this.txDesc.Location = new System.Drawing.Point(612, 66);
+            this.txDesc.Location = new System.Drawing.Point(647, 66);
             this.txDesc.Name = "txDesc";
             this.txDesc.Size = new System.Drawing.Size(56, 20);
             this.txDesc.TabIndex = 31;
@@ -141,7 +141,7 @@ namespace TeleBonifacio
             // lbTotal
             // 
             this.lbTotal.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbTotal.Location = new System.Drawing.Point(674, 68);
+            this.lbTotal.Location = new System.Drawing.Point(709, 68);
             this.lbTotal.Name = "lbTotal";
             this.lbTotal.Size = new System.Drawing.Size(83, 23);
             this.lbTotal.TabIndex = 30;
@@ -151,7 +151,7 @@ namespace TeleBonifacio
             // 
             this.dtpData.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
             this.dtpData.Format = System.Windows.Forms.DateTimePickerFormat.Short;
-            this.dtpData.Location = new System.Drawing.Point(671, 99);
+            this.dtpData.Location = new System.Drawing.Point(721, 99);
             this.dtpData.Name = "dtpData";
             this.dtpData.Size = new System.Drawing.Size(90, 23);
             this.dtpData.TabIndex = 29;
@@ -161,7 +161,7 @@ namespace TeleBonifacio
             // 
             this.txObs.Location = new System.Drawing.Point(222, 101);
             this.txObs.Name = "txObs";
-            this.txObs.Size = new System.Drawing.Size(443, 20);
+            this.txObs.Size = new System.Drawing.Size(493, 20);
             this.txObs.TabIndex = 28;
             // 
             // label5
@@ -176,7 +176,7 @@ namespace TeleBonifacio
             // 
             // txCompra
             // 
-            this.txCompra.Location = new System.Drawing.Point(612, 38);
+            this.txCompra.Location = new System.Drawing.Point(647, 38);
             this.txCompra.Name = "txCompra";
             this.txCompra.Size = new System.Drawing.Size(56, 20);
             this.txCompra.TabIndex = 15;
@@ -189,7 +189,7 @@ namespace TeleBonifacio
             // 
             this.label4.AutoSize = true;
             this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label4.Location = new System.Drawing.Point(550, 42);
+            this.label4.Location = new System.Drawing.Point(585, 41);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(56, 16);
             this.label4.TabIndex = 25;
@@ -219,7 +219,7 @@ namespace TeleBonifacio
             // 
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(566, 16);
+            this.label2.Location = new System.Drawing.Point(601, 12);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(40, 16);
             this.label2.TabIndex = 22;
@@ -229,7 +229,7 @@ namespace TeleBonifacio
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(324, 14);
+            this.label1.Location = new System.Drawing.Point(345, 14);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(139, 16);
             this.label1.TabIndex = 21;
@@ -264,15 +264,15 @@ namespace TeleBonifacio
             "Dinheiro",
             "Pix",
             "Troca"});
-            this.cmbFormaPagamento.Location = new System.Drawing.Point(469, 10);
+            this.cmbFormaPagamento.Location = new System.Drawing.Point(490, 10);
             this.cmbFormaPagamento.Name = "cmbFormaPagamento";
-            this.cmbFormaPagamento.Size = new System.Drawing.Size(78, 21);
+            this.cmbFormaPagamento.Size = new System.Drawing.Size(95, 21);
             this.cmbFormaPagamento.TabIndex = 13;
             this.cmbFormaPagamento.SelectedIndexChanged += new System.EventHandler(this.cmbFormaPagamento_SelectedIndexChanged);
             // 
             // txtValor
             // 
-            this.txtValor.Location = new System.Drawing.Point(612, 11);
+            this.txtValor.Location = new System.Drawing.Point(647, 11);
             this.txtValor.Name = "txtValor";
             this.txtValor.Size = new System.Drawing.Size(56, 20);
             this.txtValor.TabIndex = 14;
@@ -284,7 +284,7 @@ namespace TeleBonifacio
             // btnLimpar
             // 
             this.btnLimpar.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnLimpar.Location = new System.Drawing.Point(780, 38);
+            this.btnLimpar.Location = new System.Drawing.Point(817, 38);
             this.btnLimpar.Name = "btnLimpar";
             this.btnLimpar.Size = new System.Drawing.Size(91, 23);
             this.btnLimpar.TabIndex = 16;
@@ -295,7 +295,7 @@ namespace TeleBonifacio
             // 
             this.btnAdicionar.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnAdicionar.Enabled = false;
-            this.btnAdicionar.Location = new System.Drawing.Point(780, 68);
+            this.btnAdicionar.Location = new System.Drawing.Point(817, 68);
             this.btnAdicionar.Name = "btnAdicionar";
             this.btnAdicionar.Size = new System.Drawing.Size(91, 23);
             this.btnAdicionar.TabIndex = 17;
@@ -305,7 +305,7 @@ namespace TeleBonifacio
             // btnFiltrar
             // 
             this.btnFiltrar.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnFiltrar.Location = new System.Drawing.Point(780, 97);
+            this.btnFiltrar.Location = new System.Drawing.Point(817, 97);
             this.btnFiltrar.Name = "btnFiltrar";
             this.btnFiltrar.Size = new System.Drawing.Size(91, 23);
             this.btnFiltrar.TabIndex = 18;
@@ -330,7 +330,7 @@ namespace TeleBonifacio
             this.dataGrid1.Location = new System.Drawing.Point(0, 129);
             this.dataGrid1.Name = "dataGrid1";
             this.dataGrid1.SelectionMode = SourceGrid.GridSelectionMode.Row;
-            this.dataGrid1.Size = new System.Drawing.Size(883, 432);
+            this.dataGrid1.Size = new System.Drawing.Size(920, 432);
             this.dataGrid1.TabIndex = 12;
             this.dataGrid1.TabStop = true;
             this.dataGrid1.ToolTipText = "";
@@ -340,7 +340,7 @@ namespace TeleBonifacio
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(883, 561);
+            this.ClientSize = new System.Drawing.Size(920, 561);
             this.Controls.Add(this.dataGrid1);
             this.Controls.Add(this.panel1);
             this.MaximizeBox = false;
