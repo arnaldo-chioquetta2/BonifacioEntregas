@@ -11,9 +11,9 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyCulture("")]
 [assembly: ComVisible(false)]
 [assembly: Guid("308c57af-e663-456d-8a2c-188bbd61423d")]
-[assembly: AssemblyVersion("2.6.5.0")]
-[assembly: AssemblyFileVersion("2.6.5.0")]
-// 2.6.6 Totais na grid da tela de lançamentos
+[assembly: AssemblyVersion("2.6.6.0")]
+[assembly: AssemblyFileVersion("2.6.6.0")]
+// 2.6.6 Percentuais variaveis na comissão e Totais na grid da tela de lançamentos
 // 2.6.5 Aumento nos campos de descrição da tela de faltas
 // 2.6.4 Revisao na operação de envio de email
 // 2.6.0 Finalização do envio de email

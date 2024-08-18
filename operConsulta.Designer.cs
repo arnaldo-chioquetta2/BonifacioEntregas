@@ -129,6 +129,7 @@ namespace TeleBonifacio
             // 
             this.txPerc.Location = new System.Drawing.Point(195, 12);
             this.txPerc.Name = "txPerc";
+            this.txPerc.ReadOnly = true;
             this.txPerc.Size = new System.Drawing.Size(40, 20);
             this.txPerc.TabIndex = 7;
             this.txPerc.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
