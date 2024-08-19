@@ -31,6 +31,7 @@ namespace TeleBonifacio
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(opRecibos));
             this.panel1 = new System.Windows.Forms.Panel();
+            this.btAtu = new System.Windows.Forms.Button();
             this.dtnDtFim = new System.Windows.Forms.DateTimePicker();
             this.dtpDataIN = new System.Windows.Forms.DateTimePicker();
             this.ltVlr = new System.Windows.Forms.Label();
@@ -39,7 +40,6 @@ namespace TeleBonifacio
             this.cmbVendedor = new System.Windows.Forms.ComboBox();
             this.label1 = new System.Windows.Forms.Label();
             this.dataGrid1 = new SourceGrid.DataGrid();
-            this.btAtu = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -58,6 +58,16 @@ namespace TeleBonifacio
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(833, 67);
             this.panel1.TabIndex = 0;
+            // 
+            // btAtu
+            // 
+            this.btAtu.Location = new System.Drawing.Point(516, 17);
+            this.btAtu.Name = "btAtu";
+            this.btAtu.Size = new System.Drawing.Size(73, 23);
+            this.btAtu.TabIndex = 46;
+            this.btAtu.Text = "Atualizar";
+            this.btAtu.UseVisualStyleBackColor = true;
+            this.btAtu.Click += new System.EventHandler(this.btAtu_Click);
             // 
             // dtnDtFim
             // 
@@ -139,27 +149,17 @@ namespace TeleBonifacio
             this.dataGrid1.Location = new System.Drawing.Point(0, 67);
             this.dataGrid1.Name = "dataGrid1";
             this.dataGrid1.SelectionMode = SourceGrid.GridSelectionMode.Column;
-            this.dataGrid1.Size = new System.Drawing.Size(833, 74);
+            this.dataGrid1.Size = new System.Drawing.Size(833, 96);
             this.dataGrid1.TabIndex = 2;
             this.dataGrid1.TabStop = true;
             this.dataGrid1.ToolTipText = "";
             this.dataGrid1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.dataGrid1_MouseDown);
             // 
-            // btAtu
-            // 
-            this.btAtu.Location = new System.Drawing.Point(516, 17);
-            this.btAtu.Name = "btAtu";
-            this.btAtu.Size = new System.Drawing.Size(73, 23);
-            this.btAtu.TabIndex = 46;
-            this.btAtu.Text = "Atualizar";
-            this.btAtu.UseVisualStyleBackColor = true;
-            this.btAtu.Click += new System.EventHandler(this.btAtu_Click);
-            // 
             // opRecibos
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(833, 141);
+            this.ClientSize = new System.Drawing.Size(833, 163);
             this.Controls.Add(this.dataGrid1);
             this.Controls.Add(this.panel1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
