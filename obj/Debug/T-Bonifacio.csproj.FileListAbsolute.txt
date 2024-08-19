@@ -60,3 +60,4 @@ C:\Prog\T-Bonifacio\T-Bonifacio\obj\Debug\TeleBonifacio.pesEmails.resources
 C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug\AtcCtrl.dll
 C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug\AtcCtrl.pdb
 C:\Prog\T-Bonifacio\T-Bonifacio\obj\Debug\TeleBonifacio.CadPercs.resources
+C:\Prog\T-Bonifacio\T-Bonifacio\obj\Debug\T-Bonifacio.csproj.CopyComplete
