@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Data.OleDb;
 using System.Linq;
 using System.Windows.Forms;
 using TeleBonifacio.dao;
@@ -17,7 +16,7 @@ namespace TeleBonifacio
         public Consultas()
         {
             InitializeComponent();
-            
+
         }
 
         private void operConsulta_Load(object sender, EventArgs e)
@@ -25,7 +24,7 @@ namespace TeleBonifacio
             DateTime Agora = DateTime.Now;
             int Ano = Agora.Year;
             int Mes = Agora.Month;
-            int Dia = Agora.Day+1;
+            int Dia = Agora.Day + 1;
             DateTime DT1 = new DateTime(Ano, 1, 1);
             DateTime DT2 = DateTime.Now;
             if (glo.IsDateTimeValid(Ano, Mes, Dia))
@@ -40,7 +39,7 @@ namespace TeleBonifacio
                     Ano++;
                     Mes = 1;
                     DT2 = new DateTime(Ano, Mes, 1);
-                }                     
+                }
             }
             dtpDataIniicio.Value = DT1;
             dtpDataFim.Value = DT2;
@@ -56,7 +55,8 @@ namespace TeleBonifacio
             if (DadosTemp.Rows.Count == 0)
             {
                 dataGrid1.DataSource = null;
-            } else
+            }
+            else
             {
                 Dados = OrganizarDadosEmDataTable(DadosTemp);
                 DevAge.ComponentModel.BoundDataView boundDataView = new DevAge.ComponentModel.BoundDataView(Dados.DefaultView);
@@ -81,7 +81,7 @@ namespace TeleBonifacio
             }
         }
 
-#region Grid
+        #region Grid
 
         private DataTable OrganizarDadosEmDataTable(DataTable dados)
         {
@@ -175,40 +175,9 @@ namespace TeleBonifacio
         {
             totalGeral = totaisEntregadores.Values.Sum();
             txtValor.Text = totalGeral.ToString("N2");
-            decimal perc = ObterPercentualVariavel(totalGeral);
+            ConfigDAO config = new ConfigDAO();
+            decimal perc = config.getPercentual();
             AtualizaValores(perc);
-        }
-        private decimal ObterPercentualVariavel(decimal valorTotal)
-        {
-            using (OleDbConnection connection = new OleDbConnection(glo.connectionString))
-            {
-                connection.Open();
-                string query = "SELECT TOP 1 Perc FROM Percents WHERE Valor > @valorTotal ORDER BY Valor ASC";
-                using (OleDbCommand command = new OleDbCommand(query, connection))
-                {
-                    command.Parameters.AddWithValue("@valorTotal", valorTotal);
-                    object result = command.ExecuteScalar();
-                    if (result != null)
-                    {
-                        return Convert.ToDecimal(result);
-                    }
-                    else
-                    {
-                        // Se nenhum valor maior for encontrado, retorna o percentual com valor nulo (acima disso)
-                        query = "SELECT TOP 1 Perc FROM Percents WHERE Valor IS NULL";
-                        command.CommandText = query;
-                        result = command.ExecuteScalar();
-                        if (result != null)
-                        {
-                            return Convert.ToDecimal(result);
-                        }
-                        else
-                        {
-                            throw new Exception("Nenhum percentual configurado encontrado.");
-                        }
-                    }
-                }
-            }
         }
 
         #endregion
@@ -223,7 +192,7 @@ namespace TeleBonifacio
         private void button1_Click(object sender, EventArgs e)
         {
             dataGrid1.DataSource = null;
-            dataGrid1.Columns.Clear();            
+            dataGrid1.Columns.Clear();
             CarregaGrid(dtpDataIniicio.Value, dtpDataFim.Value);
             ConfigurarGrid();
         }
@@ -240,7 +209,7 @@ namespace TeleBonifacio
 
         private void button2_Click(object sender, EventArgs e)
         {
-            
+
         }
     }
 }

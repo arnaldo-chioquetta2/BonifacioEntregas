@@ -326,5 +326,39 @@ namespace TeleBonifacio
 
         #endregion
 
+        public static decimal ObterPercentualVariavel(decimal valorTotal)
+        {
+            using (OleDbConnection connection = new OleDbConnection(glo.connectionString))
+            {
+                connection.Open();
+                string vVlr = glo.sv(valorTotal);
+                string query = $@"SELECT TOP 1 Perc FROM Percents WHERE Valor > {vVlr} ORDER BY Valor ASC";
+                using (OleDbCommand command = new OleDbCommand(query, connection))
+                {
+                    command.Parameters.AddWithValue("@valorTotal", valorTotal);
+                    object result = command.ExecuteScalar();
+                    if (result != null)
+                    {
+                        return Convert.ToDecimal(result);
+                    }
+                    else
+                    {
+                        // Se nenhum valor maior for encontrado, retorna o percentual com valor nulo (acima disso)
+                        query = "SELECT TOP 1 Perc FROM Percents WHERE Valor IS NULL";
+                        command.CommandText = query;
+                        result = command.ExecuteScalar();
+                        if (result != null)
+                        {
+                            return Convert.ToDecimal(result);
+                        }
+                        else
+                        {
+                            throw new Exception("Nenhum percentual configurado encontrado.");
+                        }
+                    }
+                }
+            }
+        }
+
     }
 }

@@ -5,7 +5,6 @@ using System.Drawing;
 using System.Windows.Forms;
 using TeleBonifacio.dao;
 using TeleBonifacio.tb;
-using System.Linq;
 
 namespace TeleBonifacio
 {
@@ -15,6 +14,7 @@ namespace TeleBonifacio
         private ReciboDAO Recibo;
         private VendedoresDAO Vendedor;
         private DataTable dataTableInvertido;
+        private decimal VlrComiss = 0;
 
         public opRecibos()
         {
@@ -52,6 +52,7 @@ namespace TeleBonifacio
         }
 
         #region Grid
+
         private void CarregaGrid()
         {
             DateTime DT1 = dtpDataIN.Value.Date;
@@ -64,44 +65,51 @@ namespace TeleBonifacio
             }
             else
             {
-                dataGrid1.Rows.SetHeight(0, 0);
-                DataTable DadosInvertidos = InverteLinhasColunas(Dados);
-                DadosInvertidos = InverteLinhasColunas(Dados);
-                for (int i = 0; i < DadosInvertidos.Columns.Count; i++)
+                DataTable DadosFormatados = new DataTable();
+
+                // Adicionar colunas
+                DadosFormatados.Columns.Add("Descrição");
+                foreach (DataRow row in Dados.Rows)
                 {
-                    string info = (string)DadosInvertidos.Rows[1][i];
-                    double vlr = Convert.ToDouble(info);
-                    DadosInvertidos.Rows[1][i] = vlr.ToString("0.00");
+                    DadosFormatados.Columns.Add(row["Nome"].ToString());
                 }
-                DevAge.ComponentModel.BoundDataView boundDataView = new DevAge.ComponentModel.BoundDataView(DadosInvertidos.DefaultView);
-                dataGrid1.DataSource = boundDataView;
+
+                // Adicionar linhas
+                DataRow vendasRow = DadosFormatados.NewRow();
+                vendasRow[0] = "vendas";
+                DataRow comissoesRow = DadosFormatados.NewRow();
+                comissoesRow[0] = "comissões";
+
+                for (int i = 0; i < Dados.Rows.Count; i++)
+                {
+                    vendasRow[i + 1] = Convert.ToDouble(Dados.Rows[i]["TotalVendas"]).ToString("0.00");
+                    comissoesRow[i + 1] = Convert.ToDouble(Dados.Rows[i]["Valor"]).ToString("0.00");
+                }
+
+                DadosFormatados.Rows.Add(vendasRow);
+                DadosFormatados.Rows.Add(comissoesRow);
+
+                dataGrid1.DataSource = new DevAge.ComponentModel.BoundDataView(DadosFormatados.DefaultView);
+
+                // Configurar a aparência da grid
+                ConfigurarGrid();
+
+                // Ajustar o alinhamento
                 for (int i = 0; i < dataGrid1.Columns.Count; i++)
                 {
-                    if (dataGrid1.GetCell(1, i) != null)
+                    for (int j = 0; j < dataGrid1.Rows.Count; j++)
                     {
-                        dataGrid1.GetCell(1, i).View.TextAlignment = DevAge.Drawing.ContentAlignment.MiddleRight;
+                        if (i == 0) // Primeira coluna (descrições)
+                        {
+                            dataGrid1.GetCell(j, i).View.TextAlignment = DevAge.Drawing.ContentAlignment.MiddleLeft;
+                        }
+                        else // Colunas de dados
+                        {
+                            dataGrid1.GetCell(j, i).View.TextAlignment = DevAge.Drawing.ContentAlignment.MiddleRight;
+                        }
                     }
                 }
             }
-        }
-
-        private DataTable InverteLinhasColunas(DataTable dataTableOriginal)
-        {
-            dataTableInvertido = new DataTable();
-            foreach (DataRow row in dataTableOriginal.Rows)
-            {
-                dataTableInvertido.Columns.Add(row[0].ToString());
-            }
-            for (int i = 1; i < dataTableOriginal.Columns.Count; i++)
-            {
-                DataRow novaLinha = dataTableInvertido.NewRow();
-                for (int j = 0; j < dataTableOriginal.Rows.Count; j++)
-                {
-                    novaLinha[j] = dataTableOriginal.Rows[j][i];
-                }
-                dataTableInvertido.Rows.Add(novaLinha);
-            }
-            return dataTableInvertido;
         }
 
         private void ConfigurarGrid()
@@ -161,9 +169,11 @@ namespace TeleBonifacio
                 {
                     DateTime DT1 = dtpDataIN.Value.Date;
                     DateTime DT2 = dtnDtFim.Value.Date;
-                    decimal ret = Recibo.VlrPend(id, DT1, DT2); 
-                    ltVlr.Text = ret.ToString("C");
-                    btPagar.Enabled = (ret > 0);
+                    decimal ret = Recibo.VlrPend(id, DT1, DT2);
+                    ; ;  decimal roundedRet = Math.Round(ret, 0);
+                    this.VlrComiss = Math.Round(ret, 0);
+                    ltVlr.Text = this.VlrComiss.ToString("C");
+                    btPagar.Enabled = (roundedRet > 0);
                     btExtrato.Enabled = true;
                 }
             }
@@ -176,7 +186,6 @@ namespace TeleBonifacio
         private void button1_Click(object sender, EventArgs e)
         {
             int id = Convert.ToInt32(cmbVendedor.SelectedValue);
-            // DateTime DataIni = Recibo.DtInicial(id);
             DateTime DataIni = dtpDataIN.Value;
             string dataPagamento = "";
             if (DataIni.Date == DateTime.Now.Date)
@@ -188,6 +197,7 @@ namespace TeleBonifacio
                 dataPagamento = "de " + DataIni.ToString("dd/MM/yyyy") + " a " + DateTime.Now.ToString("dd/MM/yyyy");
             }
             Recibo.Pagar(id, ltVlr.Text, dataPagamento, dtpDataIN.Value, dtnDtFim.Value);
+            // , this.VlrComiss
             INI MeuIni = new INI();
             using (var receipt = new rel.Receipt())
             {
