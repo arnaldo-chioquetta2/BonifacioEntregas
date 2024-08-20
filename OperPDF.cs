@@ -654,7 +654,7 @@ namespace TeleBonifacio
         private void InicializaIconesView()
         {
             // Define o ImageList para o TreeView
-            treeView1.ImageList = imageList1; // Referencia o ImageList configurado no designer
+            treeView1.ImageList = imageList2; // Referencia o ImageList configurado no designer
 
             // Suponha que você tenha os IDs das pastas "Permanentes" e "Temporários"
             int permanentesFolderId = 1;
@@ -663,15 +663,15 @@ namespace TeleBonifacio
             // Adicionar pastas ao TreeView
             TreeNode permanentesNode = new TreeNode("Permanentes")
             {
-                ImageKey = "FolderFechado64",     // Nome da imagem de pasta fechada no ImageList
-                SelectedImageKey = "FolderAberto64", // Nome da imagem de pasta aberta no ImageList
+                ImageKey = "generico", // "FolderFechado64",     // Nome da imagem de pasta fechada no ImageList
+                SelectedImageKey = "generico", // "FolderAberto64", // Nome da imagem de pasta aberta no ImageList
                 Tag = permanentesFolderId          // Armazena o FolderID no Tag
             };
 
             TreeNode temporariosNode = new TreeNode("Temporários")
             {
-                ImageKey = "FolderFechado64",
-                SelectedImageKey = "FolderAberto64",
+                ImageKey = "generico", // "FolderFechado64",
+                SelectedImageKey = "generico", // "FolderAberto64",
                 Tag = temporariosFolderId          // Armazena o FolderID no Tag
             };
 
@@ -689,12 +689,12 @@ namespace TeleBonifacio
             // Evento de expansão para trocar ícones ao abrir/fechar a pasta
             treeView1.BeforeExpand += (sender, e) =>
             {
-                e.Node.ImageKey = "FolderAberto64"; // Ícone de pasta aberta quando expandida
+                e.Node.ImageKey = "generico"; //  "FolderAberto64"; // Ícone de pasta aberta quando expandida
             };
 
             treeView1.BeforeCollapse += (sender, e) =>
             {
-                e.Node.ImageKey = "FolderFechado64"; // Ícone de pasta fechada quando colapsada
+                e.Node.ImageKey = "generico";  //"FolderFechado64"; // Ícone de pasta fechada quando colapsada
             };
         }
 

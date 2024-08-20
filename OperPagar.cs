@@ -635,5 +635,12 @@ namespace TeleBonifacio
             OForm.Show();
             AdicionarAoArquivoINI(sourceFilePath);
         }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            OperPDF fPagar = new OperPDF();
+            fPagar.Show();
+            Close();
+        }
     }
 }

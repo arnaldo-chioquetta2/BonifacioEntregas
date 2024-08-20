@@ -55,6 +55,7 @@ namespace TeleBonifacio
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.treeView1 = new System.Windows.Forms.TreeView();
             this.imageList1 = new System.Windows.Forms.ImageList(this.components);
+            this.imageList2 = new System.Windows.Forms.ImageList(this.components);
             this.groupBox3.SuspendLayout();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
@@ -421,6 +422,13 @@ namespace TeleBonifacio
             this.imageList1.Images.SetKeyName(3, "imagens64.png");
             this.imageList1.Images.SetKeyName(4, "word64.png");
             this.imageList1.Images.SetKeyName(5, "arquivo64.png");
+            this.imageList1.Images.SetKeyName(6, "generico.png");
+            // 
+            // imageList2
+            // 
+            this.imageList2.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imageList2.ImageStream")));
+            this.imageList2.TransparentColor = System.Drawing.Color.Transparent;
+            this.imageList2.Images.SetKeyName(0, "generico.png");
             // 
             // OperPDF
             // 
@@ -473,5 +481,6 @@ namespace TeleBonifacio
         private Button button1;
         private TreeView treeView1;
         private ImageList imageList1;
+        private ImageList imageList2;
     }
 }

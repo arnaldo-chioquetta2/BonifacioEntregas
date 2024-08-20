@@ -23,6 +23,7 @@ namespace TeleBonifacio
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(OperPagar));
             this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.btEmail = new System.Windows.Forms.Button();
             this.btMudar = new System.Windows.Forms.Button();
             this.btObter = new System.Windows.Forms.Button();
             this.btPDF = new System.Windows.Forms.Button();
@@ -55,7 +56,7 @@ namespace TeleBonifacio
             this.dataGrid1 = new System.Windows.Forms.DataGridView();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.dataGrid2 = new System.Windows.Forms.DataGridView();
-            this.btEmail = new System.Windows.Forms.Button();
+            this.button1 = new System.Windows.Forms.Button();
             this.groupBox3.SuspendLayout();
             this.panel1.SuspendLayout();
             this.tabControl1.SuspendLayout();
@@ -67,6 +68,7 @@ namespace TeleBonifacio
             // 
             // groupBox3
             // 
+            this.groupBox3.Controls.Add(this.button1);
             this.groupBox3.Controls.Add(this.btEmail);
             this.groupBox3.Controls.Add(this.btMudar);
             this.groupBox3.Controls.Add(this.btObter);
@@ -99,6 +101,19 @@ namespace TeleBonifacio
             this.groupBox3.Size = new System.Drawing.Size(946, 166);
             this.groupBox3.TabIndex = 41;
             this.groupBox3.TabStop = false;
+            // 
+            // btEmail
+            // 
+            this.btEmail.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.btEmail.Enabled = false;
+            this.btEmail.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F);
+            this.btEmail.Location = new System.Drawing.Point(619, 143);
+            this.btEmail.Name = "btEmail";
+            this.btEmail.Size = new System.Drawing.Size(75, 23);
+            this.btEmail.TabIndex = 54;
+            this.btEmail.Text = "Email";
+            this.btEmail.UseVisualStyleBackColor = true;
+            this.btEmail.Click += new System.EventHandler(this.btEmail_Click);
             // 
             // btMudar
             // 
@@ -442,18 +457,18 @@ namespace TeleBonifacio
             this.dataGrid2.TabIndex = 55;
             this.dataGrid2.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGrid1_CellClick);
             // 
-            // btEmail
+            // button1
             // 
-            this.btEmail.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.btEmail.Enabled = false;
-            this.btEmail.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F);
-            this.btEmail.Location = new System.Drawing.Point(619, 143);
-            this.btEmail.Name = "btEmail";
-            this.btEmail.Size = new System.Drawing.Size(75, 23);
-            this.btEmail.TabIndex = 54;
-            this.btEmail.Text = "Email";
-            this.btEmail.UseVisualStyleBackColor = true;
-            this.btEmail.Click += new System.EventHandler(this.btEmail_Click);
+            this.button1.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.button1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
+            this.button1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F);
+            this.button1.Location = new System.Drawing.Point(12, 12);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(102, 23);
+            this.button1.TabIndex = 56;
+            this.button1.Text = "Versão Nova";
+            this.button1.UseVisualStyleBackColor = false;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // OperPagar
             // 
@@ -513,5 +528,6 @@ namespace TeleBonifacio
         private DataGridView dataGrid1;
         private Button btMudar;
         private Button btEmail;
+        private Button button1;
     }
 }

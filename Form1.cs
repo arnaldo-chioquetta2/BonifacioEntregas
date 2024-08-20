@@ -128,9 +128,8 @@ namespace TeleBonifacio
 
         private void pictureBox14_Click(object sender, EventArgs e)
         {
-            //OperPDF oPDF = new OperPDF();
-            //oPDF.Show();
-            AbrirOuFocarFormulario<OperPDF>(); 
+            AbrirOuFocarFormulario<OperPagar>();
+            // AbrirOuFocarFormulario<OperPDF>();
         }
 
         private void picAnotacoes_Click(object sender, EventArgs e)
