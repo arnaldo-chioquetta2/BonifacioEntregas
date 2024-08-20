@@ -160,6 +160,7 @@
     <Compile Include="dao\EntregadorDAO.cs" />
     <Compile Include="dao\EntregasDAO.cs" />
     <Compile Include="dao\FaltasDAO.cs" />
+    <Compile Include="dao\FoldersDao.cs" />
     <Compile Include="dao\FornecedorDao.cs" />
     <Compile Include="dao\GarantiasDao.cs" />
     <Compile Include="dao\PercentsDAO.cs" />
@@ -253,6 +254,12 @@
     <Compile Include="OperPagar.designer.cs">
       <DependentUpon>OperPagar.cs</DependentUpon>
     </Compile>
+    <Compile Include="OperPDF.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="OperPDF.designer.cs">
+      <DependentUpon>OperPDF.cs</DependentUpon>
+    </Compile>
     <Compile Include="OperRH.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -319,10 +326,12 @@
     <Compile Include="tb\Cliente.cs" />
     <Compile Include="tb\ComboBoxItem.cs" />
     <Compile Include="tb\ContasAPagar.cs" />
+    <Compile Include="tb\Document.cs" />
     <Compile Include="tb\Encomendas.cs" />
     <Compile Include="tb\Entregador.cs" />
     <Compile Include="tb\Entregas.cs" />
     <Compile Include="tb\Falta .cs" />
+    <Compile Include="tb\Folder.cs" />
     <Compile Include="tb\Fornecedor.cs" />
     <Compile Include="tb\Garantias.cs" />
     <Compile Include="tb\IDataEntity.cs" />
@@ -389,6 +398,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="OperPagar.resx">
       <DependentUpon>OperPagar.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="OperPDF.resx">
+      <DependentUpon>OperPDF.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="OperRH.resx">
       <DependentUpon>OperRH.cs</DependentUpon>
