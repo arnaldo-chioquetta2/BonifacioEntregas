@@ -717,36 +717,15 @@ namespace TeleBonifacio
 
                 parentNode.Nodes.Add(docNode);
             }
-        }        
+        }
 
         private Icon GetIconByExtension(string extension)
         {
-            if (extension == null) // Pasta
+            if (string.IsNullOrEmpty(extension)) // Se for pasta (não tem extensão)
             {
                 return GetFolderIcon();
             }
-
-            switch (extension.ToLower())
-            {
-                case ".pdf":
-                    return GetFileIcon(".pdf");
-                case ".jpg":
-                case ".jpeg":
-                case ".png":
-                case ".bmp":
-                case ".gif":
-                    return GetFileIcon(".png");
-                case ".doc":
-                case ".docx":
-                    return GetFileIcon(".docx");
-                case ".txt":
-                case ".csv":
-                case ".log":
-                    return GetFileIcon(".txt");
-                default:
-                    return GetFileIcon(extension);
-            }
-            return GetFileIcon(".txt");
+            return GetFileIcon(extension);
         }
 
         private Icon GetFileIcon(string extension)
