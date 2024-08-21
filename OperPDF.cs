@@ -652,6 +652,8 @@ namespace TeleBonifacio
 
         #region TreeView
 
+        private bool primeiroTV = true;
+
         private void InicializaIconesView()
         {
             // Remova a referência ao ImageList
@@ -686,6 +688,7 @@ namespace TeleBonifacio
             AddDocumentNodes(temporariosNode, temporariosDocuments);
 
             // Não é mais necessário definir eventos BeforeExpand e BeforeCollapse para trocar ícones
+            treeView1.ImageList.Images.Add(GetFolderIcon());
         }
 
         private void AddDocumentNodes(TreeNode parentNode, List<tb.Document> documents)
@@ -714,10 +717,17 @@ namespace TeleBonifacio
 
                 parentNode.Nodes.Add(docNode);
             }
-        }
+        }        
 
         private Icon GetIconByExtension(string extension)
         {
+
+            if (primeiroTV)
+            {
+                primeiroTV = false;
+                return GetFolderIcon();
+            }
+
             if (extension == null) // Pasta
             {
                 return GetFolderIcon();
@@ -743,6 +753,7 @@ namespace TeleBonifacio
                 default:
                     return GetFileIcon(extension);
             }
+            return GetFileIcon(".txt");
         }
 
         private Icon GetFileIcon(string extension)
@@ -777,26 +788,17 @@ namespace TeleBonifacio
                 treeView1.Nodes.Add(rootNode);
             }
         }
+
         private void LoadSubFoldersAndDocuments(TreeNode parentNode, int folderId)
         {
             var subFolders = FDao.GetSubFolders(folderId);
             foreach (var subFolder in subFolders)
             {
-                var childNode = new TreeNode(subFolder.FolderName)
+                // Criar um nó de pasta personalizado
+                var childNode = new FolderNode(subFolder.FolderName)
                 {
                     Tag = subFolder.FolderID
                 };
-
-                // Usar explicitamente GetFolderIcon para pastas
-                using (Icon folderIcon = GetFolderIcon())
-                {
-                    using (Bitmap bmp = folderIcon.ToBitmap())
-                    {
-                        int imageIndex = treeView1.ImageList.Images.Add(bmp, Color.Transparent);
-                        childNode.ImageIndex = imageIndex;
-                        childNode.SelectedImageIndex = imageIndex;
-                    }
-                }
 
                 LoadSubFoldersAndDocuments(childNode, subFolder.FolderID);
                 parentNode.Nodes.Add(childNode);
@@ -874,6 +876,16 @@ namespace TeleBonifacio
 
             [DllImport("user32.dll")]
             public static extern bool DestroyIcon(IntPtr hIcon);
+        }
+
+        public class FolderNode : TreeNode
+        {
+            public FolderNode(string name) : base(name)
+            {
+                // Definir o ícone de pasta para o nó
+                ImageIndex = 0;
+                SelectedImageIndex = 0;
+            }
         }
 
         #endregion
