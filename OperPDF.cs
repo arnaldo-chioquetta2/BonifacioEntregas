@@ -777,7 +777,6 @@ namespace TeleBonifacio
                 treeView1.Nodes.Add(rootNode);
             }
         }
-
         private void LoadSubFoldersAndDocuments(TreeNode parentNode, int folderId)
         {
             var subFolders = FDao.GetSubFolders(folderId);
@@ -836,7 +835,8 @@ namespace TeleBonifacio
 
             if (shinfo.hIcon == IntPtr.Zero)
             {
-                return System.Drawing.SystemIcons.Application;
+                // Use o ícone de diretório padrão se falhar
+                return Icon.ExtractAssociatedIcon(Environment.GetFolderPath(Environment.SpecialFolder.Windows));
             }
 
             Icon icon = Icon.FromHandle(shinfo.hIcon);
