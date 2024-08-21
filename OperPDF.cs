@@ -652,7 +652,7 @@ namespace TeleBonifacio
 
         #region TreeView
 
-        private bool primeiroTV = true;
+        // private bool primeiroTV = true;
 
         private void InicializaIconesView()
         {
@@ -721,13 +721,6 @@ namespace TeleBonifacio
 
         private Icon GetIconByExtension(string extension)
         {
-
-            if (primeiroTV)
-            {
-                primeiroTV = false;
-                return GetFolderIcon();
-            }
-
             if (extension == null) // Pasta
             {
                 return GetFolderIcon();
@@ -853,7 +846,6 @@ namespace TeleBonifacio
                 Win32.DestroyIcon(shinfo.hIcon);
             }
         }
-
 
         [StructLayout(LayoutKind.Sequential)]
         public struct SHFILEINFO
