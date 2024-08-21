@@ -831,14 +831,16 @@ namespace TeleBonifacio
         {
             SHFILEINFO shinfo = new SHFILEINFO();
             IntPtr hImgLarge = Win32.SHGetFileInfo(
-                Environment.GetFolderPath(Environment.SpecialFolder.Desktop),
-                0, ref shinfo, (uint)Marshal.SizeOf(shinfo),
-                Win32.SHGFI_ICON | Win32.SHGFI_LARGEICON);
+                Environment.GetFolderPath(Environment.SpecialFolder.System),
+                Win32.FILE_ATTRIBUTE_DIRECTORY,
+                ref shinfo,
+                (uint)Marshal.SizeOf(shinfo),
+                Win32.SHGFI_ICON | Win32.SHGFI_LARGEICON | Win32.SHGFI_USEFILEATTRIBUTES);
 
             if (shinfo.hIcon == IntPtr.Zero)
             {
-                // Use o ícone de diretório padrão se falhar
-                return Icon.ExtractAssociatedIcon(Environment.GetFolderPath(Environment.SpecialFolder.Windows));
+                // Caso falhe, use um ícone de diretório padrão
+                return Icon.ExtractAssociatedIcon(Environment.GetFolderPath(Environment.SpecialFolder.System));
             }
 
             Icon icon = Icon.FromHandle(shinfo.hIcon);
@@ -851,6 +853,7 @@ namespace TeleBonifacio
                 Win32.DestroyIcon(shinfo.hIcon);
             }
         }
+
 
         [StructLayout(LayoutKind.Sequential)]
         public struct SHFILEINFO
@@ -866,10 +869,13 @@ namespace TeleBonifacio
 
         static class Win32
         {
-            public const uint SHGFI_ICON = 0x100;
-            public const uint SHGFI_SMALLICON = 0x1;
-            public const uint SHGFI_LARGEICON = 0x0;
-            public const uint SHGFI_USEFILEATTRIBUTES = 0x10;
+            public const uint SHGFI_ICON = 0x000000100;
+            public const uint SHGFI_LARGEICON = 0x000000000;
+            public const uint SHGFI_SMALLICON = 0x000000001;
+            public const uint SHGFI_SYSICONINDEX = 0x000004000;
+            public const uint SHGFI_USEFILEATTRIBUTES = 0x000000010;
+
+            public const uint FILE_ATTRIBUTE_DIRECTORY = 0x00000010;
 
             [DllImport("shell32.dll")]
             public static extern IntPtr SHGetFileInfo(string pszPath, uint dwFileAttributes, ref SHFILEINFO psfi, uint cbSizeFileInfo, uint uFlags);
@@ -877,6 +883,7 @@ namespace TeleBonifacio
             [DllImport("user32.dll")]
             public static extern bool DestroyIcon(IntPtr hIcon);
         }
+
 
         public class FolderNode : TreeNode
         {
