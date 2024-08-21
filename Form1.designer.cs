@@ -397,7 +397,7 @@ namespace TeleBonifacio
             this.label14.Name = "label14";
             this.label14.Size = new System.Drawing.Size(106, 20);
             this.label14.TabIndex = 29;
-            this.label14.Text = "Pagar";
+            this.label14.Text = "Documentos";
             this.label14.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // pictureBox14

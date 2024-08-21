@@ -46,7 +46,7 @@ namespace TeleBonifacio.dao
         public List<tb.Folder> GetSubFolders(int parentFolderId)
         {
             List<tb.Folder> subFolders = new List<tb.Folder>();
-            string query = "SELECT FolderID, FolderName FROM Folders WHERE ParentFolderID = @ParentFolderID";
+            string query = "SELECT FolderID, FolderName FROM Folders WHERE ParentFolderID = " + parentFolderId.ToString();
 
             using (OleDbConnection connection = new OleDbConnection(glo.connectionString))
             {

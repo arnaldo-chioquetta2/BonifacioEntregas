@@ -21,7 +21,6 @@ namespace TeleBonifacio
 
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(OperPDF));
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.button1 = new System.Windows.Forms.Button();
@@ -54,8 +53,6 @@ namespace TeleBonifacio
             this.panel1 = new System.Windows.Forms.Panel();
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.treeView1 = new System.Windows.Forms.TreeView();
-            this.imageList1 = new System.Windows.Forms.ImageList(this.components);
-            this.imageList2 = new System.Windows.Forms.ImageList(this.components);
             this.groupBox3.SuspendLayout();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
@@ -412,24 +409,6 @@ namespace TeleBonifacio
             this.treeView1.Size = new System.Drawing.Size(946, 251);
             this.treeView1.TabIndex = 14;
             // 
-            // imageList1
-            // 
-            this.imageList1.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imageList1.ImageStream")));
-            this.imageList1.TransparentColor = System.Drawing.Color.Transparent;
-            this.imageList1.Images.SetKeyName(0, "FolderFechado64.png");
-            this.imageList1.Images.SetKeyName(1, "FolderAberto64.png");
-            this.imageList1.Images.SetKeyName(2, "pdf64.png");
-            this.imageList1.Images.SetKeyName(3, "imagens64.png");
-            this.imageList1.Images.SetKeyName(4, "word64.png");
-            this.imageList1.Images.SetKeyName(5, "arquivo64.png");
-            this.imageList1.Images.SetKeyName(6, "generico.png");
-            // 
-            // imageList2
-            // 
-            this.imageList2.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imageList2.ImageStream")));
-            this.imageList2.TransparentColor = System.Drawing.Color.Transparent;
-            this.imageList2.Images.SetKeyName(0, "generico.png");
-            // 
             // OperPDF
             // 
             this.ClientSize = new System.Drawing.Size(946, 432);
@@ -480,7 +459,5 @@ namespace TeleBonifacio
         private Button btEmail;
         private Button button1;
         private TreeView treeView1;
-        private ImageList imageList1;
-        private ImageList imageList2;
     }
 }

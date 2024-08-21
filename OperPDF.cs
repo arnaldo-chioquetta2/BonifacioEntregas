@@ -5,6 +5,7 @@ using System.Data.OleDb;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
+using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using TeleBonifacio.dao;
 
@@ -653,49 +654,38 @@ namespace TeleBonifacio
 
         private void InicializaIconesView()
         {
-            // Define o ImageList para o TreeView
-            treeView1.ImageList = imageList2; // Referencia o ImageList configurado no designer
+            // Remova a referência ao ImageList
+            // treeView1.ImageList = null;
+            if (treeView1.ImageList == null)
+            {
+                treeView1.ImageList = new ImageList();
+                treeView1.ImageList.ColorDepth = ColorDepth.Depth32Bit;
+                treeView1.ImageList.ImageSize = new Size(32, 32);
+            }
 
-            // Suponha que você tenha os IDs das pastas "Permanentes" e "Temporários"
             int permanentesFolderId = 1;
             int temporariosFolderId = 2;
 
-            // Adicionar pastas ao TreeView
             TreeNode permanentesNode = new TreeNode("Permanentes")
             {
-                ImageKey = "generico", // "FolderFechado64",     // Nome da imagem de pasta fechada no ImageList
-                SelectedImageKey = "generico", // "FolderAberto64", // Nome da imagem de pasta aberta no ImageList
-                Tag = permanentesFolderId          // Armazena o FolderID no Tag
+                Tag = permanentesFolderId
             };
 
             TreeNode temporariosNode = new TreeNode("Temporários")
             {
-                ImageKey = "generico", // "FolderFechado64",
-                SelectedImageKey = "generico", // "FolderAberto64",
-                Tag = temporariosFolderId          // Armazena o FolderID no Tag
+                Tag = temporariosFolderId
             };
 
-            // Adicionar os nós ao TreeView
             treeView1.Nodes.Add(permanentesNode);
             treeView1.Nodes.Add(temporariosNode);
 
-            // Carregar documentos para cada pasta
             List<tb.Document> permanentesDocuments = FDao.GetDocuments((int)permanentesNode.Tag);
             AddDocumentNodes(permanentesNode, permanentesDocuments);
 
             List<tb.Document> temporariosDocuments = FDao.GetDocuments((int)temporariosNode.Tag);
             AddDocumentNodes(temporariosNode, temporariosDocuments);
 
-            // Evento de expansão para trocar ícones ao abrir/fechar a pasta
-            treeView1.BeforeExpand += (sender, e) =>
-            {
-                e.Node.ImageKey = "generico"; //  "FolderAberto64"; // Ícone de pasta aberta quando expandida
-            };
-
-            treeView1.BeforeCollapse += (sender, e) =>
-            {
-                e.Node.ImageKey = "generico";  //"FolderFechado64"; // Ícone de pasta fechada quando colapsada
-            };
+            // Não é mais necessário definir eventos BeforeExpand e BeforeCollapse para trocar ícones
         }
 
         private void AddDocumentNodes(TreeNode parentNode, List<tb.Document> documents)
@@ -703,42 +693,78 @@ namespace TeleBonifacio
             foreach (var doc in documents)
             {
                 string extension = Path.GetExtension(doc.DocumentName);
-                string iconKey = GetIconKeyByExtension(extension);
+                Icon icon = GetIconByExtension(extension);
 
                 TreeNode docNode = new TreeNode(doc.DocumentName)
                 {
-                    ImageIndex = imageList1.Images.IndexOfKey(iconKey),
-                    SelectedImageIndex = imageList1.Images.IndexOfKey(iconKey),
-                    StateImageIndex = imageList1.Images.IndexOfKey(iconKey),
                     Tag = doc.DocumentID
                 };
+
+                if (icon != null)
+                {
+                    // Converter o Icon para Bitmap
+                    using (Bitmap bmp = icon.ToBitmap())
+                    {
+                        // Adicionar o Bitmap ao ImageList
+                        int imageIndex = treeView1.ImageList.Images.Add(bmp, Color.Transparent);
+                        docNode.ImageIndex = imageIndex;
+                        docNode.SelectedImageIndex = imageIndex;
+                    }
+                }
+
                 parentNode.Nodes.Add(docNode);
             }
-        }        
+        }
 
-        private string GetIconKeyByExtension(string extension)
+        private Icon GetIconByExtension(string extension)
         {
+            if (extension == null) // Pasta
+            {
+                return GetFolderIcon();
+            }
+
             switch (extension.ToLower())
             {
                 case ".pdf":
-                    return "pdf64";
+                    return GetFileIcon(".pdf");
                 case ".jpg":
                 case ".jpeg":
                 case ".png":
                 case ".bmp":
                 case ".gif":
-                    return "imagens64";
+                    return GetFileIcon(".png");
                 case ".doc":
                 case ".docx":
-                    return "word64";
+                    return GetFileIcon(".docx");
                 case ".txt":
                 case ".csv":
                 case ".log":
-                    return "arquivo64";
+                    return GetFileIcon(".txt");
                 default:
-                    return "arquivo64"; // Usar o ícone genérico para outros tipos de arquivo
+                    return GetFileIcon(extension);
             }
-        }        
+        }
+
+        private Icon GetFileIcon(string extension)
+        {
+            SHFILEINFO shinfo = new SHFILEINFO();
+            IntPtr hImgLarge = Win32.SHGetFileInfo(extension, 0, ref shinfo, (uint)Marshal.SizeOf(shinfo), Win32.SHGFI_ICON | Win32.SHGFI_USEFILEATTRIBUTES | Win32.SHGFI_LARGEICON);
+
+            if (shinfo.hIcon == IntPtr.Zero)
+            {
+                return System.Drawing.SystemIcons.Application;
+            }
+
+            Icon icon = Icon.FromHandle(shinfo.hIcon);
+            try
+            {
+                return (Icon)icon.Clone();
+            }
+            finally
+            {
+                Win32.DestroyIcon(shinfo.hIcon);
+            }
+        }
 
         private void LoadTreeView()
         {
@@ -759,10 +785,20 @@ namespace TeleBonifacio
             {
                 var childNode = new TreeNode(subFolder.FolderName)
                 {
-                    Tag = subFolder.FolderID,
-                    ImageIndex = imageList1.Images.IndexOfKey("FolderFechado64"),
-                    SelectedImageIndex = imageList1.Images.IndexOfKey("FolderAberto64")
+                    Tag = subFolder.FolderID
                 };
+
+                // Usar explicitamente GetFolderIcon para pastas
+                using (Icon folderIcon = GetFolderIcon())
+                {
+                    using (Bitmap bmp = folderIcon.ToBitmap())
+                    {
+                        int imageIndex = treeView1.ImageList.Images.Add(bmp, Color.Transparent);
+                        childNode.ImageIndex = imageIndex;
+                        childNode.SelectedImageIndex = imageIndex;
+                    }
+                }
+
                 LoadSubFoldersAndDocuments(childNode, subFolder.FolderID);
                 parentNode.Nodes.Add(childNode);
             }
@@ -771,16 +807,74 @@ namespace TeleBonifacio
             foreach (var doc in documents)
             {
                 string extension = Path.GetExtension(doc.DocumentName);
-                string iconKey = GetIconKeyByExtension(extension);
-                var docNode = new TreeNode(doc.DocumentName)
+                using (Icon icon = GetIconByExtension(extension))
                 {
-                    Tag = doc.DocumentID,
-                    ImageIndex = imageList1.Images.IndexOfKey(iconKey),
-                    SelectedImageIndex = imageList1.Images.IndexOfKey(iconKey)
-                };
-                parentNode.Nodes.Add(docNode);
+                    var docNode = new TreeNode(doc.DocumentName)
+                    {
+                        Tag = doc.DocumentID
+                    };
+
+                    using (Bitmap bmp = icon.ToBitmap())
+                    {
+                        int imageIndex = treeView1.ImageList.Images.Add(bmp, Color.Transparent);
+                        docNode.ImageIndex = imageIndex;
+                        docNode.SelectedImageIndex = imageIndex;
+                    }
+
+                    parentNode.Nodes.Add(docNode);
+                }
             }
-        }        
+        }
+
+        private Icon GetFolderIcon()
+        {
+            SHFILEINFO shinfo = new SHFILEINFO();
+            IntPtr hImgLarge = Win32.SHGetFileInfo(
+                Environment.GetFolderPath(Environment.SpecialFolder.Desktop),
+                0, ref shinfo, (uint)Marshal.SizeOf(shinfo),
+                Win32.SHGFI_ICON | Win32.SHGFI_LARGEICON);
+
+            if (shinfo.hIcon == IntPtr.Zero)
+            {
+                return System.Drawing.SystemIcons.Application;
+            }
+
+            Icon icon = Icon.FromHandle(shinfo.hIcon);
+            try
+            {
+                return (Icon)icon.Clone();
+            }
+            finally
+            {
+                Win32.DestroyIcon(shinfo.hIcon);
+            }
+        }
+
+        [StructLayout(LayoutKind.Sequential)]
+        public struct SHFILEINFO
+        {
+            public IntPtr hIcon;
+            public int iIcon;
+            public uint dwAttributes;
+            [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 260)]
+            public string szDisplayName;
+            [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 80)]
+            public string szTypeName;
+        }
+
+        static class Win32
+        {
+            public const uint SHGFI_ICON = 0x100;
+            public const uint SHGFI_SMALLICON = 0x1;
+            public const uint SHGFI_LARGEICON = 0x0;
+            public const uint SHGFI_USEFILEATTRIBUTES = 0x10;
+
+            [DllImport("shell32.dll")]
+            public static extern IntPtr SHGetFileInfo(string pszPath, uint dwFileAttributes, ref SHFILEINFO psfi, uint cbSizeFileInfo, uint uFlags);
+
+            [DllImport("user32.dll")]
+            public static extern bool DestroyIcon(IntPtr hIcon);
+        }
 
         #endregion
 

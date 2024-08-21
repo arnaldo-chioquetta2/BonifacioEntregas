@@ -11,8 +11,9 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyCulture("")]
 [assembly: ComVisible(false)]
 [assembly: Guid("308c57af-e663-456d-8a2c-188bbd61423d")]
-[assembly: AssemblyVersion("2.6.8.0")]
-[assembly: AssemblyFileVersion("2.6.8.0")]
+[assembly: AssemblyVersion("2.6.9.0")]
+[assembly: AssemblyFileVersion("2.6.9.0")]
+// 2.6.9 Inicio do TreeView dos documentos
 // 2.6.8 Retorno das anotações de balconístas
 // 2.6.7 Percentuais variáveis no recibo
 // 2.6.6 Percentuais variaveis na comissão e Totais na grid da tela de lançamentos
