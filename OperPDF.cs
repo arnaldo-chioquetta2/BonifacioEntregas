@@ -732,13 +732,6 @@ namespace TeleBonifacio
             treeView1.ImageList.Images.Add(GetFolderIcon());
         }
 
-        //private void AddDocumentNodes(TreeNode parentNode, List<tb.Document> documents)
-        //{
-        //    foreach (var doc in documents)
-        //    {
-        //        AddNodeWithIcon(parentNode, doc.DocumentName, doc.DocumentID.ToString());
-        //    }
-        //}
         private void AddDocumentNodes(TreeNode parentNode, List<tb.Document> documents)
         {
             foreach (var doc in documents)
@@ -759,6 +752,7 @@ namespace TeleBonifacio
 
             if (isBold)
             {
+                newNode.Text = nodeName + "  "; // Add a space at the end
                 newNode.NodeFont = new Font(treeView1.Font, FontStyle.Bold);
             }
 
@@ -782,31 +776,7 @@ namespace TeleBonifacio
             {
                 parentNode.Nodes.Add(newNode); // Adiciona como o último nó
             }
-        }
-        //private void AddNodeWithIcon(TreeNode parentNode, string nodeName, string filePath, object tag = null)
-        //{
-        //    string extension = Path.GetExtension(nodeName);
-        //    Icon icon = GetIconByExtension(extension);
-
-        //    TreeNode newNode = new TreeNode(nodeName)
-        //    {
-        //        Tag = tag
-        //    };
-
-        //    if (icon != null)
-        //    {
-        //        // Converter o Icon para Bitmap
-        //        using (Bitmap bmp = icon.ToBitmap())
-        //        {
-        //            // Adicionar o Bitmap ao ImageList
-        //            int imageIndex = treeView1.ImageList.Images.Add(bmp, Color.Transparent);
-        //            newNode.ImageIndex = imageIndex;
-        //            newNode.SelectedImageIndex = imageIndex;
-        //        }
-        //    }
-
-        //    parentNode.Nodes.Add(newNode);
-        //}
+        }        
 
         private Icon GetIconByExtension(string extension)
         {
@@ -980,7 +950,6 @@ namespace TeleBonifacio
 
         private void btObter_Click(TreeNode selectedNode)
         {
-            //btObter.Enabled = false;
 
             try
             {
@@ -989,7 +958,7 @@ namespace TeleBonifacio
                     MessageBox.Show("A pasta não existe ou não é acessível no momento.");
                     return;
                 }
-
+                int c = 0;
                 // Processar os documentos na pasta monitorada
                 foreach (string filePath in Directory.GetFiles(sourceDirectory))
                 {
@@ -1007,9 +976,8 @@ namespace TeleBonifacio
                         string destinationFilePath = Path.Combine(CaminhoBasePDF, destinationFileName);
                         File.Move(filePath, destinationFilePath);
 
-                        // Usar o método auxiliar para adicionar o nó com o ícone correto
-                        // AddNodeWithIcon(selectedNode, fileName, destinationFilePath, idAdic);
                         AddNodeWithIcon(selectedNode, fileName, destinationFilePath, idAdic, true, true);
+
                     }
                     catch (Exception ex)
                     {
@@ -1026,7 +994,7 @@ namespace TeleBonifacio
             }
             finally
             {
-                //btObter.Enabled = true;
+                
             }
         }        
 
