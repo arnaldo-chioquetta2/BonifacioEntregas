@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Data.OleDb;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace TeleBonifacio.dao
 {
@@ -74,7 +70,7 @@ namespace TeleBonifacio.dao
         public List<tb.Document> GetDocuments(int folderId)
         {
             List<tb.Document> documents = new List<tb.Document>();
-            string query = "SELECT ID, CaminhoPDF FROM ContasAPagar WHERE FolderID = @FolderID";
+            string query = "SELECT ID, CaminhoPDF, idArquivo FROM ContasAPagar WHERE FolderID = @FolderID";
 
             using (OleDbConnection connection = new OleDbConnection(glo.connectionString))
             {

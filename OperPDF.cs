@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
-using System.Data.OleDb;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
@@ -200,16 +198,7 @@ namespace TeleBonifacio
 
         private void btPDF_Click(object sender, EventArgs e)
         {
-            //DataGridView targetGrid = tabControl1.SelectedIndex == 0 ? dataGrid1 : dataGrid2;
-            //foreach (DataGridViewRow row in targetGrid.SelectedRows)
-            //{
-            //    int idArquivo = (int)row.Cells["ID"].Value;
-            //    string ArquivoOrig = (string)row.Cells["Arquivo"].Value; 
-            //    AbreArquivo(idArquivo, ArquivoOrig);
-            //    contasAPagarDao.Imprimiu(idArquivo);
-            //    row.DefaultCellStyle.BackColor = Color.LightGreen;
-            //}
-            //targetGrid.Refresh();
+
         }
 
         private void AbreArquivo(int Nro, string ArquivoOrig)
@@ -600,7 +589,15 @@ namespace TeleBonifacio
             foreach (var doc in documents)
             {
                 // Aplicar a cor verde claro aos documentos já existentes
-                AddNodeWithIcon(parentNode, doc.DocumentName, doc.DocumentID.ToString(), isBold: false, addAsFirstNode: false, backColor: Verde);
+
+                //Color? EssaCor = null;            
+                //if (doc.idArquivo==1)
+                //{
+                //    EssaCor = Verde;
+                //}
+                Color? EssaCor = Verde;
+                // AddNodeWithIcon(parentNode, doc.DocumentName, doc.DocumentID.ToString(), backColor: EssaCor);
+                AddNodeWithIcon(parentNode, doc.DocumentName, doc.DocumentID.ToString());
             }
         }
         //private void AddDocumentNodes(TreeNode parentNode, List<tb.Document> documents)

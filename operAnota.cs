@@ -1,10 +1,8 @@
 ﻿using Microsoft.Win32;
 using System;
-using System.Data.OleDb;
 using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
-using TeleBonifacio;
 
 namespace TeleBonifacio
 {

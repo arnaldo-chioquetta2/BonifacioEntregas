@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace TeleBonifacio.tb
+﻿namespace TeleBonifacio.tb
 {
     public class Percents : IDataEntity
     {

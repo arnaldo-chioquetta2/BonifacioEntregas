@@ -1,13 +1,10 @@
-﻿using TeleBonifacio.tb;
-using System;
-using System.Data.OleDb;
-using System.Windows.Forms;
+﻿using System;
 using System.Collections.Generic;
-using System.Reflection;
+using System.Data.OleDb;
 using System.Linq;
-using System.Text;
-using System.Drawing.Printing;
-using System.Drawing;
+using System.Reflection;
+using System.Windows.Forms;
+using TeleBonifacio.tb;
 
 namespace TeleBonifacio
 {

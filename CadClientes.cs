@@ -1,10 +1,5 @@
-﻿using TeleBonifacio.tb;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Windows.Forms;
-using SourceGrid;
-using System.Data;
-using System.Linq;
 
 namespace TeleBonifacio
 {

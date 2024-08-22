@@ -1,6 +1,7 @@
 C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug\TeleBonifacio.exe.config
 C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug\TeleBonifacio.exe
 C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug\TeleBonifacio.pdb
+C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug\AtcCtrl.dll
 C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug\ATCDll.dll
 C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug\ATCRecordNavigator.dll
 C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug\Google.Apis.Auth.dll
@@ -11,6 +12,7 @@ C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug\Newtonsoft.Json.dll
 C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug\SourceGrid.dll
 C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug\System.CodeDom.dll
 C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug\ATCRecordNavigator.pdb
+C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug\AtcCtrl.pdb
 C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug\ATCDll.pdb
 C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug\Google.Apis.pdb
 C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug\Google.Apis.xml
@@ -27,6 +29,7 @@ C:\Prog\T-Bonifacio\T-Bonifacio\obj\Debug\T-Bonifacio.csproj.AssemblyReference.c
 C:\Prog\T-Bonifacio\T-Bonifacio\obj\Debug\TeleBonifacio.fCadClientes.resources
 C:\Prog\T-Bonifacio\T-Bonifacio\obj\Debug\TeleBonifacio.fCadEntregadores.resources
 C:\Prog\T-Bonifacio\T-Bonifacio\obj\Debug\TeleBonifacio.CadFornec.resources
+C:\Prog\T-Bonifacio\T-Bonifacio\obj\Debug\TeleBonifacio.CadPercs.resources
 C:\Prog\T-Bonifacio\T-Bonifacio\obj\Debug\TeleBonifacio.fCadTiposFaltas.resources
 C:\Prog\T-Bonifacio\T-Bonifacio\obj\Debug\TeleBonifacio.CadVendedores2.resources
 C:\Prog\T-Bonifacio\T-Bonifacio\obj\Debug\TeleBonifacio.Dashboard.resources
@@ -42,10 +45,12 @@ C:\Prog\T-Bonifacio\T-Bonifacio\obj\Debug\TeleBonifacio.operGarantia.resources
 C:\Prog\T-Bonifacio\T-Bonifacio\obj\Debug\TeleBonifacio.operLancamento.resources
 C:\Prog\T-Bonifacio\T-Bonifacio\obj\Debug\TeleBonifacio.operLogin.resources
 C:\Prog\T-Bonifacio\T-Bonifacio\obj\Debug\TeleBonifacio.OperPagar.resources
+C:\Prog\T-Bonifacio\T-Bonifacio\obj\Debug\TeleBonifacio.OperPDF.resources
 C:\Prog\T-Bonifacio\T-Bonifacio\obj\Debug\TeleBonifacio.OperRH.resources
 C:\Prog\T-Bonifacio\T-Bonifacio\obj\Debug\TeleBonifacio.operSQL.resources
 C:\Prog\T-Bonifacio\T-Bonifacio\obj\Debug\TeleBonifacio.opRecibos.resources
 C:\Prog\T-Bonifacio\T-Bonifacio\obj\Debug\TeleBonifacio.pesCliente.resources
+C:\Prog\T-Bonifacio\T-Bonifacio\obj\Debug\TeleBonifacio.pesEmails.resources
 C:\Prog\T-Bonifacio\T-Bonifacio\obj\Debug\TeleBonifacio.CadVendedores.resources
 C:\Prog\T-Bonifacio\T-Bonifacio\obj\Debug\TeleBonifacio.Properties.Resources.resources
 C:\Prog\T-Bonifacio\T-Bonifacio\obj\Debug\TeleBonifacio.rel.Caixa.resources
@@ -54,10 +59,6 @@ C:\Prog\T-Bonifacio\T-Bonifacio\obj\Debug\TeleBonifacio.rel.RelEntegas.resources
 C:\Prog\T-Bonifacio\T-Bonifacio\obj\Debug\TeleBonifacio.rel.RH.resources
 C:\Prog\T-Bonifacio\T-Bonifacio\obj\Debug\T-Bonifacio.csproj.GenerateResource.cache
 C:\Prog\T-Bonifacio\T-Bonifacio\obj\Debug\T-Bonifacio.csproj.CoreCompileInputs.cache
+C:\Prog\T-Bonifacio\T-Bonifacio\obj\Debug\T-Bonifacio.csproj.CopyComplete
 C:\Prog\T-Bonifacio\T-Bonifacio\obj\Debug\TeleBonifacio.exe
 C:\Prog\T-Bonifacio\T-Bonifacio\obj\Debug\TeleBonifacio.pdb
-C:\Prog\T-Bonifacio\T-Bonifacio\obj\Debug\TeleBonifacio.pesEmails.resources
-C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug\AtcCtrl.dll
-C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug\AtcCtrl.pdb
-C:\Prog\T-Bonifacio\T-Bonifacio\obj\Debug\TeleBonifacio.CadPercs.resources
-C:\Prog\T-Bonifacio\T-Bonifacio\obj\Debug\TeleBonifacio.OperPDF.resources
