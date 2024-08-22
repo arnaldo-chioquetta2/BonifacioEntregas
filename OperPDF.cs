@@ -22,7 +22,22 @@ namespace TeleBonifacio
         private string CaminhoPDF = "";
         
         private string sourceDirectory = "";
-        private string CaminhoBasePDF = "";
+
+        private string caminhoBasePDF = "";
+
+        public string CaminhoBasePDF
+        {
+            get { return caminhoBasePDF; }
+            set
+            {
+                // Verifica se a pasta existe, se não, cria a pasta
+                if (!Directory.Exists(value))
+                {
+                    Directory.CreateDirectory(value);
+                }
+                caminhoBasePDF = value;
+            }
+        }
 
         private int iIDe = 0;
         private int iID
@@ -61,12 +76,11 @@ namespace TeleBonifacio
             FDao = new FoldersDao();
             InicializaIconesView();
             LoadTreeView();
-            //CarregaGridGenerico(dataGrid1, 0, false);
-            //CaminhoBasePDF = Path.GetDirectoryName(glo.CaminhoBase) + "\\Docs";
-            //cINI = new INI();
-            //sourceDirectory = cINI.ReadString("Config", "Docs", "");
-            //rt.AdjustFormComponents(this);
-            //carregando = false;            
+            CaminhoBasePDF = Path.GetDirectoryName(glo.CaminhoBase) + "\\Docs";
+            cINI = new INI();
+            sourceDirectory = cINI.ReadString("Config", "Docs", "");
+            rt.AdjustFormComponents(this);
+            carregando = false;            
         }
 
         #endregion
@@ -324,8 +338,6 @@ namespace TeleBonifacio
             //}           
         }
 
-        #endregion
-
         private void CarregaGridGenerico(DataGridView dataGrid, int filter, bool Perm)
         {
             int idForne = 0;
@@ -347,7 +359,7 @@ namespace TeleBonifacio
             {
                 if (!row.Cells["idArquivo"].Value.Equals(DBNull.Value))
                 {
-                    if (row.Cells["idArquivo"].Value.ToString()=="1")
+                    if (row.Cells["idArquivo"].Value.ToString() == "1")
                     {
                         row.DefaultCellStyle.BackColor = Color.LightGreen;
                     }
@@ -356,8 +368,10 @@ namespace TeleBonifacio
             if (dados != null)
             {
                 ConfigurarGrid(ref dataGrid);
-            }            
+            }
         }
+
+        #endregion        
 
         #region Filtro
 
@@ -367,50 +381,6 @@ namespace TeleBonifacio
         }
 
         #endregion
-        private void cmbForn_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if (!carregando)
-            {
-                if (cmbForn.SelectedItem != null)
-                {
-                    string ItemCombo = cmbForn.SelectedItem.ToString();
-                    if (ItemCombo != "ESCOLHA")
-                    {
-                        if (ItemCombo == "ADICIONE")
-                        {
-                            txNvForn.Visible = true;
-                            cmbForn.Visible = false;
-                            btnAdicionar.Enabled = true;
-                            txNvForn.Focus();
-                        }
-                        else
-                        {
-                            if (ItemCombo == "EDIÇÃO")
-                            {
-                                fCadTiposFaltas novoForm = new fCadTiposFaltas();
-                                novoForm.ShowDialog();
-                                glo.CarregarComboBox<tb.Fornecedor>(cmbForn, Forn, "ESCOLHA", ItemFinal: "ADICIONE", ItemFinal2: "EDIÇÃO");
-                            }
-                            else
-                            {
-                                cmbForn.Tag = "M";
-                                btLimparFiltro.Enabled = true;
-                                btFiltrar.Enabled = true;
-                                btnAdicionar.Enabled = true;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        private void btLimparFiltro_Click(object sender, EventArgs e)
-        {
-            Limpar();
-            cmbForn.SelectedIndex = 0;
-            btLimparFiltro.Enabled = false;
-            btnAdicionar.Enabled = false;
-        }
 
         #region Eventos de Teclado
 
@@ -552,46 +522,117 @@ namespace TeleBonifacio
 
         #endregion
 
-        private void btObter_Click(object sender, EventArgs e)
+        #region Eventos
+
+        private void cmbForn_SelectedIndexChanged(object sender, EventArgs e)
         {
-            btObter.Enabled = false;
-            if (!Directory.Exists(sourceDirectory))
+            if (!carregando)
             {
-                MessageBox.Show("A pasta não existe ou não é acessível no momento.");
-            } else
-            {
-                bool Perm = false;
-                //if (tabControl1.SelectedIndex == 0)
-                //{
-                //    tabPage1.Tag = "A";
-                //}
-                //else
-                //{
-                //    tabPage2.Tag = "A";
-                //    Perm = true;
-                //}
-                foreach (string filePath in Directory.GetFiles(sourceDirectory))
+                if (cmbForn.SelectedItem != null)
                 {
-                    try
+                    string ItemCombo = cmbForn.SelectedItem.ToString();
+                    if (ItemCombo != "ESCOLHA")
                     {
-                        string UID = glo.GenerateUID();
-                        string fileName = Path.GetFileName(filePath);
-                        DateTime dataEmissao = DateTime.Now;
-                        int idAdic = contasAPagarDao.AdicObter(Perm, DateTime.Now, fileName, UID);
-                        string fileExtension = Path.GetExtension(fileName).TrimStart('.');
-                        string destinationFileName = $"Doc{idAdic}.{fileExtension}";
-                        string destinationFilePath = Path.Combine(CaminhoBasePDF, destinationFileName);
-                        File.Move(filePath, destinationFilePath);
-                    }
-                    catch (Exception ex)
-                    {
-                        MessageBox.Show($"Erro ao processar o arquivo {filePath}: {ex.Message}");
+                        if (ItemCombo == "ADICIONE")
+                        {
+                            txNvForn.Visible = true;
+                            cmbForn.Visible = false;
+                            btnAdicionar.Enabled = true;
+                            txNvForn.Focus();
+                        }
+                        else
+                        {
+                            if (ItemCombo == "EDIÇÃO")
+                            {
+                                fCadTiposFaltas novoForm = new fCadTiposFaltas();
+                                novoForm.ShowDialog();
+                                glo.CarregarComboBox<tb.Fornecedor>(cmbForn, Forn, "ESCOLHA", ItemFinal: "ADICIONE", ItemFinal2: "EDIÇÃO");
+                            }
+                            else
+                            {
+                                cmbForn.Tag = "M";
+                                btLimparFiltro.Enabled = true;
+                                btFiltrar.Enabled = true;
+                                btnAdicionar.Enabled = true;
+                            }
+                        }
                     }
                 }
-                AtualizaGrids();
             }
-            btObter.Enabled = true;
         }
+
+        private void btLimparFiltro_Click(object sender, EventArgs e)
+        {
+            Limpar();
+            cmbForn.SelectedIndex = 0;
+            btLimparFiltro.Enabled = false;
+            btnAdicionar.Enabled = false;
+        }
+
+        //private void btObter_Click(object sender, EventArgs e)
+        //{
+        //    btStripObter.Enabled = false;
+
+        //    try
+        //    {
+        //        if (!Directory.Exists(sourceDirectory))
+        //        {
+        //            MessageBox.Show("A pasta não existe ou não é acessível no momento.");
+        //            return;
+        //        }
+
+        //        // Verificar se existe uma pasta chamada "Nova" na TreeView
+        //        TreeNode novaNode = null;
+        //        foreach (TreeNode node in treeView1.Nodes)
+        //        {
+        //            if (node.Text == "Nova")
+        //            {
+        //                novaNode = node;
+        //                break;
+        //            }
+        //        }
+
+        //        // Se a pasta "Nova" não existir, criar e adicioná-la como a primeira
+        //        if (novaNode == null)
+        //        {
+        //            novaNode = new TreeNode("Nova");
+        //            treeView1.Nodes.Insert(0, novaNode); // Insere na primeira posição
+        //        }
+
+        //        // Processar os documentos na pasta monitorada
+        //        foreach (string filePath in Directory.GetFiles(sourceDirectory))
+        //        {
+        //            try
+        //            {
+        //                string UID = glo.GenerateUID();
+        //                string fileName = Path.GetFileName(filePath);
+        //                DateTime dataEmissao = DateTime.Now;
+        //                int idAdic = contasAPagarDao.AdicObter(false, DateTime.Now, fileName, UID);
+        //                string fileExtension = Path.GetExtension(fileName).TrimStart('.');
+        //                string destinationFileName = $"Doc{idAdic}.{fileExtension}";
+        //                string destinationFilePath = Path.Combine(CaminhoBasePDF, destinationFileName);
+        //                File.Move(filePath, destinationFilePath);
+        //                TreeNode docNode = new TreeNode(destinationFileName);
+        //                novaNode.Nodes.Add(docNode);
+        //            }
+        //            catch (Exception ex)
+        //            {
+        //                MessageBox.Show($"Erro ao processar o arquivo {filePath}: {ex.Message}");
+        //            }
+        //        }
+
+        //        // Expandir a pasta "Nova" para mostrar os novos documentos
+        //        novaNode.Expand();
+        //        treeView1.SelectedNode = novaNode; // Selecionar o nó "Nova"
+
+        //        // Atualizar a TreeView
+        //        treeView1.Refresh();
+        //    }
+        //    finally
+        //    {
+        //        btStripObter.Enabled = true;
+        //    }
+        //}
 
         private void tabControl1_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -650,9 +691,9 @@ namespace TeleBonifacio
             Close();
         }
 
-        #region TreeView
+        #endregion
 
-        // private bool primeiroTV = true;
+        #region TreeView
 
         private void InicializaIconesView()
         {
@@ -691,33 +732,81 @@ namespace TeleBonifacio
             treeView1.ImageList.Images.Add(GetFolderIcon());
         }
 
+        //private void AddDocumentNodes(TreeNode parentNode, List<tb.Document> documents)
+        //{
+        //    foreach (var doc in documents)
+        //    {
+        //        AddNodeWithIcon(parentNode, doc.DocumentName, doc.DocumentID.ToString());
+        //    }
+        //}
         private void AddDocumentNodes(TreeNode parentNode, List<tb.Document> documents)
         {
             foreach (var doc in documents)
             {
-                string extension = Path.GetExtension(doc.DocumentName);
-                Icon icon = GetIconByExtension(extension);
-
-                TreeNode docNode = new TreeNode(doc.DocumentName)
-                {
-                    Tag = doc.DocumentID
-                };
-
-                if (icon != null)
-                {
-                    // Converter o Icon para Bitmap
-                    using (Bitmap bmp = icon.ToBitmap())
-                    {
-                        // Adicionar o Bitmap ao ImageList
-                        int imageIndex = treeView1.ImageList.Images.Add(bmp, Color.Transparent);
-                        docNode.ImageIndex = imageIndex;
-                        docNode.SelectedImageIndex = imageIndex;
-                    }
-                }
-
-                parentNode.Nodes.Add(docNode);
+                AddNodeWithIcon(parentNode, doc.DocumentName, doc.DocumentID.ToString(), isBold: false, addAsFirstNode: false);
             }
         }
+
+        private void AddNodeWithIcon(TreeNode parentNode, string nodeName, string filePath, object tag = null, bool isBold = false, bool addAsFirstNode = false)
+        {
+            string extension = Path.GetExtension(nodeName);
+            Icon icon = GetIconByExtension(extension);
+
+            TreeNode newNode = new TreeNode(nodeName)
+            {
+                Tag = tag
+            };
+
+            if (isBold)
+            {
+                newNode.NodeFont = new Font(treeView1.Font, FontStyle.Bold);
+            }
+
+            if (icon != null)
+            {
+                // Converter o Icon para Bitmap
+                using (Bitmap bmp = icon.ToBitmap())
+                {
+                    // Adicionar o Bitmap ao ImageList
+                    int imageIndex = treeView1.ImageList.Images.Add(bmp, Color.Transparent);
+                    newNode.ImageIndex = imageIndex;
+                    newNode.SelectedImageIndex = imageIndex;
+                }
+            }
+
+            if (addAsFirstNode)
+            {
+                parentNode.Nodes.Insert(0, newNode); // Adiciona como o primeiro nó
+            }
+            else
+            {
+                parentNode.Nodes.Add(newNode); // Adiciona como o último nó
+            }
+        }
+        //private void AddNodeWithIcon(TreeNode parentNode, string nodeName, string filePath, object tag = null)
+        //{
+        //    string extension = Path.GetExtension(nodeName);
+        //    Icon icon = GetIconByExtension(extension);
+
+        //    TreeNode newNode = new TreeNode(nodeName)
+        //    {
+        //        Tag = tag
+        //    };
+
+        //    if (icon != null)
+        //    {
+        //        // Converter o Icon para Bitmap
+        //        using (Bitmap bmp = icon.ToBitmap())
+        //        {
+        //            // Adicionar o Bitmap ao ImageList
+        //            int imageIndex = treeView1.ImageList.Images.Add(bmp, Color.Transparent);
+        //            newNode.ImageIndex = imageIndex;
+        //            newNode.SelectedImageIndex = imageIndex;
+        //        }
+        //    }
+
+        //    parentNode.Nodes.Add(newNode);
+        //}
 
         private Icon GetIconByExtension(string extension)
         {
@@ -855,7 +944,6 @@ namespace TeleBonifacio
             public static extern bool DestroyIcon(IntPtr hIcon);
         }
 
-
         public class FolderNode : TreeNode
         {
             public FolderNode(string name) : base(name)
@@ -865,6 +953,82 @@ namespace TeleBonifacio
                 SelectedImageIndex = 0;
             }
         }
+
+        #endregion
+
+        #region Obtenção        
+
+        private void treeView1_NodeMouseClick(object sender, TreeNodeMouseClickEventArgs e)
+        {
+            if (e.Button == MouseButtons.Right)
+            {
+                treeView1.SelectedNode = e.Node;
+            }
+        }
+
+        private void btStripObter_Click(object sender, EventArgs e)
+        {
+            if (treeView1.SelectedNode != null)
+            {
+                // Obtém o nó selecionado na TreeView
+                TreeNode selectedNode = treeView1.SelectedNode;
+
+                // Chama o método para processar a obtenção dos arquivos
+                btObter_Click(selectedNode);
+            }
+        }
+
+        private void btObter_Click(TreeNode selectedNode)
+        {
+            //btObter.Enabled = false;
+
+            try
+            {
+                if (!Directory.Exists(sourceDirectory))
+                {
+                    MessageBox.Show("A pasta não existe ou não é acessível no momento.");
+                    return;
+                }
+
+                // Processar os documentos na pasta monitorada
+                foreach (string filePath in Directory.GetFiles(sourceDirectory))
+                {
+                    try
+                    {
+                        string UID = glo.GenerateUID();
+                        string fileName = Path.GetFileName(filePath);
+                        DateTime dataEmissao = DateTime.Now;
+
+                        // Inserir na base de dados associando à pasta correta
+                        int idAdic = contasAPagarDao.AdicObterComPasta(dataEmissao, fileName, UID, selectedNode.Tag);
+
+                        string fileExtension = Path.GetExtension(fileName).TrimStart('.');
+                        string destinationFileName = $"Doc{idAdic}.{fileExtension}";
+                        string destinationFilePath = Path.Combine(CaminhoBasePDF, destinationFileName);
+                        File.Move(filePath, destinationFilePath);
+
+                        // Usar o método auxiliar para adicionar o nó com o ícone correto
+                        // AddNodeWithIcon(selectedNode, fileName, destinationFilePath, idAdic);
+                        AddNodeWithIcon(selectedNode, fileName, destinationFilePath, idAdic, true, true);
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show($"Erro ao processar o arquivo {filePath}: {ex.Message}");
+                    }
+                }
+
+                // Expandir a pasta selecionada para mostrar os novos documentos
+                selectedNode.Expand();
+                treeView1.SelectedNode = selectedNode; // Selecionar o nó da pasta
+
+                // Atualizar a TreeView
+                treeView1.Refresh();
+            }
+            finally
+            {
+                //btObter.Enabled = true;
+            }
+        }        
 
         #endregion
 

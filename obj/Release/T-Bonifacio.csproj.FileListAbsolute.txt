@@ -61,5 +61,4 @@ C:\Prog\T-Bonifacio\T-Bonifacio\bin\Release\ATCDll.pdb
 C:\Prog\T-Bonifacio\T-Bonifacio\obj\Release\TeleBonifacio.operAnota.resources
 C:\Prog\T-Bonifacio\T-Bonifacio\obj\Release\TeleBonifacio.pesEmails.resources
 C:\Prog\T-Bonifacio\T-Bonifacio\obj\Release\TeleBonifacio.CadPercs.resources
-C:\Prog\T-Bonifacio\T-Bonifacio\obj\Release\T-Bonifacio.csproj.CopyComplete
 C:\Prog\T-Bonifacio\T-Bonifacio\obj\Release\TeleBonifacio.OperPDF.resources

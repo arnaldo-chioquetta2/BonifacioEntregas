@@ -113,5 +113,18 @@ namespace TeleBonifacio.dao
             string sql = $@"UPDATE ContasAPagar SET idArquivo = 1 WHERE ID = {iID} ";
             DB.ExecutarComandoSQL(sql);
         }
+
+        public int AdicObterComPasta(DateTime dataEmissao, string NmArq, string UID, object pastaId)
+        {
+            string sql = $@"INSERT INTO ContasAPagar (DataEmissao, CaminhoPDF, UID, FolderID) VALUES (
+                '{dataEmissao.ToString("yyyy-MM-dd HH:mm:ss")}', 
+                '{NmArq}',
+                '{UID}',
+                {pastaId})";
+            DB.ExecutarComandoSQL(sql);
+            string queryNome = $"SELECT Max(ID) FROM ContasAPagar";
+            return DB.ExecutarConsultaCount(queryNome);
+        }
+
     }
 }
