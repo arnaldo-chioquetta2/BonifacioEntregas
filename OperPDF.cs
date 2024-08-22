@@ -20,6 +20,7 @@ namespace TeleBonifacio
         private string UID = "";
         private bool carregando = true;
         private string CaminhoPDF = "";
+        private Color Verde = Color.FromArgb(215, 255, 215);
         
         private string sourceDirectory = "";
 
@@ -235,149 +236,11 @@ namespace TeleBonifacio
 
         #endregion
 
-        #region Grid 
-
-        private void ConfigurarGrid(ref DataGridView Grid)
-        {            
-            Grid.Columns[0].Width = 200;            // Arquivo
-            Grid.Columns[1].Visible = false;        // ID
-            Grid.Columns[2].Visible = false;
-            Grid.Columns[3].Width = 120;           // Forn
-            Grid.Columns[4].Width = 75;
-            Grid.Columns[5].Width = 75;
-
-            Grid.Columns[6].Width = 75;            // Valor tota
-            Grid.Columns[6].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
-
-            Grid.Columns[7].Visible = false;       // chave
-            Grid.Columns[8].Width = 150;
-            Grid.Columns[9].Visible = false;       // PDF
-            Grid.Columns[10].Visible = false;       // Flag Pago
-            Grid.Columns[11].Width = 75;           // Data Pagamento
-            Grid.Columns[12].Width = 100;          // Obs
-            Grid.Columns[13].Visible = false;      // Perm
-            Grid.Columns[14].Visible = false;      // ContasAPagar
-            Grid.Columns[15].Visible = false;      // idArquivo
-            if (rt.IsLargeScreen())
-            {
-                for (int i = 0; i < 12; i++)
-                {
-                    Grid.Columns[i].Width = (int)(Grid.Columns[i].Width * rt.scaleFactor);
-                }
-            }
-            Grid.Invalidate();
-        }
-
-        private void dataGrid1_CellClick(object sender, DataGridViewCellEventArgs e)
-        {
-            DataGridView grid = (DataGridView)sender;
-            Mostra(ref grid, ref e);
-            btnAdicionar.Enabled = true;
-            btLimparFiltro.Enabled = true;
-            btExcluir.Enabled = true;
-            btMudar.Enabled = true;            
-        }
-
-        private void Mostra(ref DataGridView grid, ref DataGridViewCellEventArgs e)
-        {
-            if (grid != null && e.RowIndex >= 0 && e.RowIndex < grid.Rows.Count)
-            {
-                carregando = true;
-                DataGridViewRow selectedRow = grid.Rows[e.RowIndex];
-                this.iID = Convert.ToInt32(selectedRow.Cells["ID"].Value);
-                this.UID = Convert.ToString(selectedRow.Cells["UID"].Value);
-                dtpDataEmissao.Value = Convert.ToDateTime(selectedRow.Cells["DataEmissao"].Value);
-
-                // btPDF.Enabled = true;
-                btPDF.Enabled = btEmail.Enabled = true;
-
-                if (selectedRow.Cells["idFornecedor"].Value != DBNull.Value)
-                {
-                    cmbForn.SelectedValue = Convert.ToInt32(selectedRow.Cells["idFornecedor"].Value);
-                }
-                if (selectedRow.Cells["DataVencimento"].Value != DBNull.Value)
-                {
-                    dtpDataVencimento.Value = Convert.ToDateTime(selectedRow.Cells["DataVencimento"].Value);
-                }
-                txValorTotal.Text = Convert.ToString(selectedRow.Cells["ValorTotal"].Value);
-                txChaveNotaFiscal.Text = Convert.ToString(selectedRow.Cells["ChaveNotaFiscal"].Value);
-                txDescricao.Text = Convert.ToString(selectedRow.Cells["Descricao"].Value);
-                ckPago.Checked = Convert.ToBoolean(selectedRow.Cells["Pago"].Value);
-                if (ckPago.Checked)
-                {
-                    dtpDataPagamento.Enabled = true;
-                    dtpDataPagamento.Value = Convert.ToDateTime(selectedRow.Cells["DataPagamento"].Value);
-                }
-                else
-                {
-                    dtpDataPagamento.Enabled = false;
-                }
-                this.CaminhoPDF = Convert.ToString(selectedRow.Cells["CaminhoPDF"].Value);
-                txObservacoes.Text = Convert.ToString(selectedRow.Cells["Observacoes"].Value);
-                carregando = false;
-            }
-        }
-
-        private void AtualizaGrids()
-        {
-            //if (tabControl1.SelectedIndex == 0)
-            //{
-            //    if (tabPage1.Tag == "A")
-            //    {
-            //        CarregaGridGenerico(dataGrid1, 0, false);
-            //        tabPage1.Tag = "";
-            //    }
-            //}
-            //else
-            //{
-            //    if (tabPage2.Tag == "A")
-            //    {
-            //        CarregaGridGenerico(dataGrid2, 0, true);
-            //        tabPage2.Tag = "";
-            //    }
-            //}           
-        }
-
-        private void CarregaGridGenerico(DataGridView dataGrid, int filter, bool Perm)
-        {
-            int idForne = 0;
-            if (cmbForn.Tag == "M")
-            {
-                int iForn = cmbForn.SelectedIndex;
-                idForne = ((tb.ComboBoxItem)cmbForn.Items[iForn]).Id;
-            }
-            DateTime? dataPagamento = dtpDataPagamento.Tag?.ToString() == "M" && dtpDataPagamento.Checked ? (DateTime?)dtpDataPagamento.Value : null;
-            DateTime? dataVencimento = dtpDataVencimento.Tag?.ToString() == "M" && dtpDataVencimento.Checked ? (DateTime?)dtpDataVencimento.Value : null;
-            DateTime? dataEmissao = dtpDataEmissao.Tag?.ToString() == "M" && dtpDataEmissao.Checked ? (DateTime?)dtpDataEmissao.Value : null;
-            string valorTotal = txValorTotal.Tag?.ToString() == "M" && !string.IsNullOrWhiteSpace(txValorTotal.Text) ? txValorTotal.Text : null;
-            string descricao = txDescricao.Tag?.ToString() == "M" && !string.IsNullOrWhiteSpace(txDescricao.Text) ? txDescricao.Text : null;
-            string observacoes = txObservacoes.Tag?.ToString() == "M" && !string.IsNullOrWhiteSpace(txObservacoes.Text) ? txObservacoes.Text : null;
-            bool? pago = ckPago.Tag?.ToString() == "M" && ckPago.CheckState != CheckState.Indeterminate ? (bool?)ckPago.Checked : null;
-            DataTable dados = contasAPagarDao.GetDados(Perm, idForne, dataPagamento, dataVencimento, dataEmissao, valorTotal, descricao, observacoes, pago);
-            dataGrid.DataSource = dados;
-            foreach (DataGridViewRow row in dataGrid.Rows)
-            {
-                if (!row.Cells["idArquivo"].Value.Equals(DBNull.Value))
-                {
-                    if (row.Cells["idArquivo"].Value.ToString() == "1")
-                    {
-                        row.DefaultCellStyle.BackColor = Color.LightGreen;
-                    }
-                }
-            }
-            if (dados != null)
-            {
-                ConfigurarGrid(ref dataGrid);
-            }
-        }
-
-        #endregion        
-
         #region Filtro
 
         private void btFiltrar_Click(object sender, EventArgs e)
         {
-            AtualizaGrids();
+            // AtualizaGrids();
         }
 
         #endregion
@@ -458,25 +321,25 @@ namespace TeleBonifacio
 
         private void ExcluirRegistros(DataGridView dataGridView, int tabIndex)
         {
-            if (dataGridView.SelectedRows.Count == 1)
-            {
-                this.iID = Convert.ToInt32(dataGridView.SelectedRows[0].Cells["ID"].Value);
-                string arquivo = Convert.ToString(dataGridView.SelectedRows[0].Cells["Arquivo"].Value);
-                ApagaRegistro();  
-                ApagarArquivo(this.iID, arquivo);
-            }
-            else
-            {
-                foreach (DataGridViewRow row in dataGridView.SelectedRows)
-                {
-                    this.iID = Convert.ToInt32(row.Cells["ID"].Value);
-                    this.UID = Convert.ToString(row.Cells["UID"].Value);
-                    string arquivo = Convert.ToString(row.Cells["Arquivo"].Value);
-                    ApagaRegistro();
-                    ApagarArquivo(this.iID, arquivo);
-                }
-            }
-            CarregaGridGenerico(dataGridView, -1, tabIndex == 1);
+            //if (dataGridView.SelectedRows.Count == 1)
+            //{
+            //    this.iID = Convert.ToInt32(dataGridView.SelectedRows[0].Cells["ID"].Value);
+            //    string arquivo = Convert.ToString(dataGridView.SelectedRows[0].Cells["Arquivo"].Value);
+            //    ApagaRegistro();  
+            //    ApagarArquivo(this.iID, arquivo);
+            //}
+            //else
+            //{
+            //    foreach (DataGridViewRow row in dataGridView.SelectedRows)
+            //    {
+            //        this.iID = Convert.ToInt32(row.Cells["ID"].Value);
+            //        this.UID = Convert.ToString(row.Cells["UID"].Value);
+            //        string arquivo = Convert.ToString(row.Cells["Arquivo"].Value);
+            //        ApagaRegistro();
+            //        ApagarArquivo(this.iID, arquivo);
+            //    }
+            //}
+            //CarregaGridGenerico(dataGridView, -1, tabIndex == 1);
         }
 
 
@@ -736,23 +599,31 @@ namespace TeleBonifacio
         {
             foreach (var doc in documents)
             {
-                AddNodeWithIcon(parentNode, doc.DocumentName, doc.DocumentID.ToString(), isBold: false, addAsFirstNode: false);
+                // Aplicar a cor verde claro aos documentos já existentes
+                AddNodeWithIcon(parentNode, doc.DocumentName, doc.DocumentID.ToString(), isBold: false, addAsFirstNode: false, backColor: Verde);
             }
         }
+        //private void AddDocumentNodes(TreeNode parentNode, List<tb.Document> documents)
+        //{
+        //    foreach (var doc in documents)
+        //    {
+        //        AddNodeWithIcon(parentNode, doc.DocumentName, doc.DocumentID.ToString(), isBold: false, addAsFirstNode: false);
+        //    }
+        //}
 
-        private void AddNodeWithIcon(TreeNode parentNode, string nodeName, string filePath, object tag = null, bool isBold = false, bool addAsFirstNode = false)
+        private void AddNodeWithIcon(TreeNode parentNode, string nodeName, string filePath, object tag = null, bool isBold = false, bool addAsFirstNode = false, Color? backColor = null)
         {
             string extension = Path.GetExtension(nodeName);
             Icon icon = GetIconByExtension(extension);
 
             TreeNode newNode = new TreeNode(nodeName)
             {
-                Tag = tag
+                Tag = tag,
+                BackColor = backColor ?? Color.Transparent // Aplica a cor de fundo, se fornecida
             };
 
             if (isBold)
             {
-                newNode.Text = nodeName + "  "; // Add a space at the end
                 newNode.NodeFont = new Font(treeView1.Font, FontStyle.Bold);
             }
 
@@ -776,7 +647,44 @@ namespace TeleBonifacio
             {
                 parentNode.Nodes.Add(newNode); // Adiciona como o último nó
             }
-        }        
+        }
+        //private void AddNodeWithIcon(TreeNode parentNode, string nodeName, string filePath, object tag = null, bool isBold = false, bool addAsFirstNode = false)
+        //{
+        //    string extension = Path.GetExtension(nodeName);
+        //    Icon icon = GetIconByExtension(extension);
+
+        //    TreeNode newNode = new TreeNode(nodeName)
+        //    {
+        //        Tag = tag
+        //    };
+
+        //    if (isBold)
+        //    {
+        //        newNode.Text = nodeName + "  "; // Add a space at the end
+        //        newNode.NodeFont = new Font(treeView1.Font, FontStyle.Bold);
+        //    }
+
+        //    if (icon != null)
+        //    {
+        //        // Converter o Icon para Bitmap
+        //        using (Bitmap bmp = icon.ToBitmap())
+        //        {
+        //            // Adicionar o Bitmap ao ImageList
+        //            int imageIndex = treeView1.ImageList.Images.Add(bmp, Color.Transparent);
+        //            newNode.ImageIndex = imageIndex;
+        //            newNode.SelectedImageIndex = imageIndex;
+        //        }
+        //    }
+
+        //    if (addAsFirstNode)
+        //    {
+        //        parentNode.Nodes.Insert(0, newNode); // Adiciona como o primeiro nó
+        //    }
+        //    else
+        //    {
+        //        parentNode.Nodes.Add(newNode); // Adiciona como o último nó
+        //    }
+        //}        
 
         private Icon GetIconByExtension(string extension)
         {
@@ -996,10 +904,22 @@ namespace TeleBonifacio
             {
                 
             }
-        }        
+        }
 
         #endregion
 
+        private void treeView1_NodeMouseDoubleClick(object sender, TreeNodeMouseClickEventArgs e)
+        {            
+            TreeNode selectedNode = e.Node;
+            if (selectedNode != null && selectedNode.Tag is int idArquivo)
+            {
+                string fileName = selectedNode.Text;
+                AbreArquivo(idArquivo, fileName);
+                selectedNode.BackColor = Verde;
+                selectedNode.NodeFont = new Font(treeView1.Font, FontStyle.Regular);
+                contasAPagarDao.Imprimiu(idArquivo);
+            }           
+        }
     }
 
 }
