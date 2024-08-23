@@ -1,4 +1,7 @@
 ﻿
+using System.Drawing;
+using System.Windows.Forms;
+
 namespace TeleBonifacio
 {
     partial class opRecibos
@@ -39,8 +42,9 @@ namespace TeleBonifacio
             this.btPagar = new System.Windows.Forms.Button();
             this.cmbVendedor = new System.Windows.Forms.ComboBox();
             this.label1 = new System.Windows.Forms.Label();
-            this.dataGrid1 = new SourceGrid.DataGrid();
+            this.dataGrid1 = new System.Windows.Forms.DataGridView();
             this.panel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGrid1)).BeginInit();
             this.SuspendLayout();
             // 
             // panel1
@@ -142,18 +146,16 @@ namespace TeleBonifacio
             // 
             // dataGrid1
             // 
-            this.dataGrid1.DeleteQuestionMessage = "Are you sure to delete all the selected rows?";
+            this.dataGrid1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGrid1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dataGrid1.EnableSort = false;
-            this.dataGrid1.FixedRows = 1;
             this.dataGrid1.Location = new System.Drawing.Point(0, 67);
             this.dataGrid1.Name = "dataGrid1";
-            this.dataGrid1.SelectionMode = SourceGrid.GridSelectionMode.Column;
             this.dataGrid1.Size = new System.Drawing.Size(833, 96);
-            this.dataGrid1.TabIndex = 2;
-            this.dataGrid1.TabStop = true;
-            this.dataGrid1.ToolTipText = "";
+            this.dataGrid1.TabIndex = 1;
             this.dataGrid1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.dataGrid1_MouseDown);
+            this.dataGrid1.CellPainting += dataGrid1_CellPainting;
+            this.dataGrid1.EnableHeadersVisualStyles = false;
+            this.dataGrid1.ColumnHeadersDefaultCellStyle.SelectionBackColor = Color.LightBlue;
             // 
             // opRecibos
             // 
@@ -169,6 +171,7 @@ namespace TeleBonifacio
             this.Load += new System.EventHandler(this.opRecibos_Load);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGrid1)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -177,7 +180,6 @@ namespace TeleBonifacio
 
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Label label1;
-        private SourceGrid.DataGrid dataGrid1;
         private System.Windows.Forms.ComboBox cmbVendedor;
         private System.Windows.Forms.Label ltVlr;
         private System.Windows.Forms.Button btExtrato;
@@ -185,5 +187,6 @@ namespace TeleBonifacio
         private System.Windows.Forms.DateTimePicker dtnDtFim;
         private System.Windows.Forms.DateTimePicker dtpDataIN;
         private System.Windows.Forms.Button btAtu;
+        private System.Windows.Forms.DataGridView dataGrid1;
     }
 }

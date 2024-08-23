@@ -13,7 +13,6 @@ namespace TeleBonifacio
 
         private ReciboDAO Recibo;
         private VendedoresDAO Vendedor;
-        private DataTable dataTableInvertido;
         private decimal VlrComiss = 0;
 
         public opRecibos()
@@ -32,26 +31,7 @@ namespace TeleBonifacio
             rt.AdjustFormComponents(this);
         }
 
-        private void PopulaVendedores()
-        {
-            Vendedor = new VendedoresDAO();
-            DataTable dados = Vendedor.GetDadosOrdenados();
-            List<ComboBoxItem> lista = new List<ComboBoxItem>();
-            ComboBoxItem item0 = new ComboBoxItem(0, "SELECIONE");
-            lista.Add(item0);
-            foreach (DataRow row in dados.Rows)
-            {
-                int id = Convert.ToInt32(row["id"]);
-                string nome = row["Nome"].ToString();
-                ComboBoxItem item = new ComboBoxItem(id, nome);
-                lista.Add(item);
-            }
-            cmbVendedor.DataSource = lista;
-            cmbVendedor.DisplayMember = "Nome";
-            cmbVendedor.ValueMember = "Id";
-        }
-
-        #region Grid
+        #region Carregamento       
 
         private void CarregaGrid()
         {
@@ -76,11 +56,10 @@ namespace TeleBonifacio
                     string Nome = row["Nome"].ToString();
                     DadosFormatados.Columns.Add(Nome);
                     c++;
-                    if (Nome== cmbVendedor.Text)
+                    if (Nome == cmbVendedor.Text)
                     {
                         NrDoItemNoCombo = c;
                     }
-                    
                 }
 
                 // Adicionar linhas
@@ -102,17 +81,38 @@ namespace TeleBonifacio
                     percentualRow[i + 1] = percentual.ToString("0.00") + "%";
                     comissoesRow[i + 1] = comissao.ToString("0.00");
                     c++;
-                    if (c== NrDoItemNoCombo)
+                    if (c == NrDoItemNoCombo)
                     {
                         ltVlr.Text = comissoesRow[i + 1].ToString();
-                    }                    
+                    }
                 }
 
                 DadosFormatados.Rows.Add(vendasRow);
                 DadosFormatados.Rows.Add(percentualRow);
                 DadosFormatados.Rows.Add(comissoesRow);
 
-                dataGrid1.DataSource = new DevAge.ComponentModel.BoundDataView(DadosFormatados.DefaultView);
+                // Desabilitar a ordenação automática antes de definir o DataSource
+                dataGrid1.AutoGenerateColumns = false;
+
+                // Limpar as colunas existentes
+                dataGrid1.Columns.Clear();
+
+                // Criar colunas manualmente com SortMode NotSortable
+                foreach (DataColumn column in DadosFormatados.Columns)
+                {
+                    DataGridViewTextBoxColumn dgvColumn = new DataGridViewTextBoxColumn();
+                    dgvColumn.Name = column.ColumnName;
+                    dgvColumn.HeaderText = column.ColumnName;
+                    dgvColumn.DataPropertyName = column.ColumnName;
+                    dgvColumn.SortMode = DataGridViewColumnSortMode.NotSortable;
+                    dataGrid1.Columns.Add(dgvColumn);
+                }
+
+                // Definir o DataSource
+                dataGrid1.DataSource = DadosFormatados;
+
+                // Configurar o SelectionMode
+                dataGrid1.SelectionMode = DataGridViewSelectionMode.FullColumnSelect;
 
                 // Configurar a aparência da grid
                 ConfigurarGrid();
@@ -124,47 +124,90 @@ namespace TeleBonifacio
                     {
                         if (i == 0) // Primeira coluna (descrições)
                         {
-                            dataGrid1.GetCell(j, i).View.TextAlignment = DevAge.Drawing.ContentAlignment.MiddleLeft;
+                            dataGrid1.Rows[j].Cells[i].Style.Alignment = DataGridViewContentAlignment.MiddleLeft;
                         }
                         else // Colunas de dados
                         {
-                            dataGrid1.GetCell(j, i).View.TextAlignment = DevAge.Drawing.ContentAlignment.MiddleRight;
+                            dataGrid1.Rows[j].Cells[i].Style.Alignment = DataGridViewContentAlignment.MiddleRight;
                         }
                     }
                 }
+
+                Console.WriteLine($"Número de linhas em DadosFormatados: {DadosFormatados.Rows.Count}");
+                Console.WriteLine($"Número de colunas em DadosFormatados: {DadosFormatados.Columns.Count}");
             }
         }
 
         private void ConfigurarGrid()
         {
-            SourceGrid.Cells.Views.Cell fonte = new SourceGrid.Cells.Views.Cell();
-            fonte.Font = new Font("Arial", 12, FontStyle.Regular);
+            if (dataGrid1.Columns.Count == 0) return;
+
+            // Definir a fonte para as células
+            Font fonte = new Font("Arial", 12, FontStyle.Regular);
+
+            // Configurar a largura das colunas e o alinhamento
             for (int i = 0; i < dataGrid1.Columns.Count; i++)
             {
-                dataGrid1.Columns[i].Width = 160;
-            }
-            for (int i = 0; i < dataGrid1.Columns.Count; i++)
-            {
-                for (int j = 0; j < dataGrid1.Rows.Count; j++)
+                DataGridViewColumn column = dataGrid1.Columns[i];
+                column.Width = 160;
+                column.DefaultCellStyle.Font = fonte;
+
+                if (i == 0) // Primeira coluna (descrições)
                 {
-                    dataGrid1.GetCell(j, i).View = fonte;
-                    dataGrid1.GetCell(j, i).View.TextAlignment = DevAge.Drawing.ContentAlignment.MiddleRight;
+                    column.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleLeft;
+                }
+                else // Colunas de dados
+                {
+                    column.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
                 }
             }
-            dataGrid1.Invalidate();
-        }       
+
+            // Atualizar o DataGridView para refletir as mudanças
+            dataGrid1.Refresh();
+        }
+
+        #endregion
+
+        private void PopulaVendedores()
+        {
+            Vendedor = new VendedoresDAO();
+            DataTable dados = Vendedor.GetDadosOrdenados();
+            List<ComboBoxItem> lista = new List<ComboBoxItem>();
+            ComboBoxItem item0 = new ComboBoxItem(0, "SELECIONE");
+            lista.Add(item0);
+            foreach (DataRow row in dados.Rows)
+            {
+                int id = Convert.ToInt32(row["id"]);
+                string nome = row["Nome"].ToString();
+                ComboBoxItem item = new ComboBoxItem(id, nome);
+                lista.Add(item);
+            }
+            cmbVendedor.DataSource = lista;
+            cmbVendedor.DisplayMember = "Nome";
+            cmbVendedor.ValueMember = "Id";
+        }
+
+        #region Grid               
 
         private void dataGrid1_MouseDown(object sender, MouseEventArgs e)
         {
-            SourceGrid.DataGrid grid = (SourceGrid.DataGrid)sender;
-            SourceGrid.Position position = grid.PositionAtPoint(new System.Drawing.Point(e.X, e.Y));
-            try
+            DataGridView grid = (DataGridView)sender;
+            DataGridView.HitTestInfo hitTest = grid.HitTest(e.X, e.Y);
+
+            if (hitTest.Type == DataGridViewHitTestType.ColumnHeader)
             {
-                SourceGrid.Cells.ICellVirtual cell = grid.GetCell(position.Row, position.Column);
-                int colunaClicada = position.Column;
-                if (cell != null)
+                int colunaClicada = hitTest.ColumnIndex;
+
+                if (colunaClicada >= 0 && colunaClicada < grid.Columns.Count)
                 {
-                    string nome = dataTableInvertido.Rows[0][colunaClicada].ToString();
+                    // Seleciona a coluna clicada
+                    grid.ClearSelection();
+                    grid.Columns[colunaClicada].Selected = true;
+
+                    // Obtém o nome do vendedor da coluna clicada
+                    string nome = grid.Columns[colunaClicada].HeaderText;
+
+                    // Atualiza o ComboBox
                     foreach (var item in cmbVendedor.Items)
                     {
                         if (item.ToString() == nome)
@@ -173,11 +216,23 @@ namespace TeleBonifacio
                             break;
                         }
                     }
+
+                    // Atualiza o valor na label ltVlr
+                    if (grid.Rows.Count >= 3) // Assumindo que a terceira linha contém as comissões
+                    {
+                        ltVlr.Text = grid.Rows[2].Cells[colunaClicada].Value.ToString();
+                    }
                 }
             }
-            catch (Exception)
+        }
+
+        private void dataGrid1_CellPainting(object sender, DataGridViewCellPaintingEventArgs e)
+        {
+            if (e.ColumnIndex >= 0 && dataGrid1.Columns[e.ColumnIndex].Selected)
             {
-                // throw;
+                e.Graphics.FillRectangle(new SolidBrush(Color.LightBlue), e.CellBounds);
+                e.PaintContent(e.ClipBounds);
+                e.Handled = true;
             }
         }
 
@@ -248,5 +303,7 @@ namespace TeleBonifacio
         {
             CarregaGrid();
         }
+
+
     }
 }
