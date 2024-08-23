@@ -59,6 +59,5 @@ C:\Prog\T-Bonifacio\T-Bonifacio\obj\Debug\TeleBonifacio.rel.RelEntegas.resources
 C:\Prog\T-Bonifacio\T-Bonifacio\obj\Debug\TeleBonifacio.rel.RH.resources
 C:\Prog\T-Bonifacio\T-Bonifacio\obj\Debug\T-Bonifacio.csproj.GenerateResource.cache
 C:\Prog\T-Bonifacio\T-Bonifacio\obj\Debug\T-Bonifacio.csproj.CoreCompileInputs.cache
-C:\Prog\T-Bonifacio\T-Bonifacio\obj\Debug\T-Bonifacio.csproj.CopyComplete
 C:\Prog\T-Bonifacio\T-Bonifacio\obj\Debug\TeleBonifacio.exe
 C:\Prog\T-Bonifacio\T-Bonifacio\obj\Debug\TeleBonifacio.pdb

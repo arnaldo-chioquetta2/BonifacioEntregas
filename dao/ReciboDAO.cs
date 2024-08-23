@@ -77,6 +77,7 @@ namespace TeleBonifacio.dao
 
         public void Pagar(int id, string Valor, string dataPagamento, DateTime DT1, DateTime DT2)
         {
+            glo.Loga($"Pagar {id}, {Valor}, {dataPagamento}, {DT1}, {DT2}");
             // Inserção na tabela Vales permanece a mesma
             string query = "INSERT INTO Vales (IdOperador, Data, Valor, Pago, Tipo, Periodo) " +
                            "VALUES ('" +
@@ -88,13 +89,13 @@ namespace TeleBonifacio.dao
             DB.ExecutarComandoSQL(query);
 
             int idRecibo = VeUltReg();
-
+            glo.Loga("idRecibo = "+ idRecibo.ToString());
             DateTime dataInicio = DT1.Date;
             DateTime dataFim = DT2.Date;
             string dataInicioStr = dataInicio.ToString("MM/dd/yyyy HH:mm:ss");
             string dataFimStr = dataFim.ToString("MM/dd/yyyy 23:59:59");
 
-            // Obter o total de vendas para calcular o percentual
+            glo.Loga($"{dataInicioStr}# AND #{dataFimStr} ");
             string queryTotal = $@"SELECT SUM(VlNota) FROM Entregas 
                            WHERE Pago IS NULL AND idVend = {id} 
                            AND Data BETWEEN #{dataInicioStr}# AND #{dataFimStr}#";
@@ -107,55 +108,21 @@ namespace TeleBonifacio.dao
             if (result.Rows.Count > 0 && result.Rows[0][0] != DBNull.Value)
             {
                 totalVendas = Convert.ToDecimal(result.Rows[0][0]);
+                glo.Loga($"{totalVendas}");
             }
 
             // Calcular o percentual
             decimal percentual = glo.ObterPercentualVariavel(totalVendas)/100;
             string sPerc = glo.sv(percentual);
+            glo.Loga($"{sPerc}");
+            glo.Loga($"{totalVendas * percentual}");
             // Atualizar as entregas com o novo cálculo de comissão
             StringBuilder queryUpd = new StringBuilder();
             queryUpd.Append($@"UPDATE Entregas SET Pago = VlNota * {sPerc}, idPagto = {idRecibo}");
             queryUpd.Append($" WHERE Pago IS NULL AND idVend = {id}");
             queryUpd.AppendFormat(" AND Data BETWEEN #{0}# AND #{1}#", dataInicioStr, dataFimStr);
             DB.ExecutarComandoSQL(queryUpd.ToString(), null);
-        }
-
-        //public void Pagar(int id, string Valor, string dataPagamento, DateTime DT1, DateTime DT2)
-        //{
-        //    // , decimal VlrComiss
-        //    // Inserção na tabela Vales permanece a mesma
-        //    string query = "INSERT INTO Vales (IdOperador, Data, Valor, Pago, Tipo, Periodo) " +
-        //                   "VALUES ('" +
-        //                   id.ToString() + "', '" +
-        //                   DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "', '" +
-        //                   Valor + "', '" +
-        //                   DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "', 1, '" +
-        //                   dataPagamento + "')";
-        //    DB.ExecutarComandoSQL(query);
-
-        //    int idRecibo = VeUltReg();
-
-        //    DateTime dataInicio = DT1.Date;
-        //    DateTime dataFim = DT2.Date;
-        //    string dataInicioStr = dataInicio.ToString("MM/dd/yyyy HH:mm:ss");
-        //    string dataFimStr = dataFim.ToString("MM/dd/yyyy 23:59:59");
-
-        //    // Obter o total de vendas para calcular o percentual
-        //    string queryTotal = $@"SELECT SUM(VlNota) FROM Entregas 
-        //                   WHERE Pago IS NULL AND idVend = {id} 
-        //                   AND Data BETWEEN #{dataInicioStr}# AND #{dataFimStr}#";
-        //    decimal totalVendas = Convert.ToDecimal(DB.ExecutarConsulta(queryTotal));
-
-        //    // Calcular o percentual
-        //    decimal percentual = glo.ObterPercentualVariavel(totalVendas);
-
-        //    // Atualizar as entregas com o novo cálculo de comissão
-        //    StringBuilder queryUpd = new StringBuilder();
-        //    queryUpd.Append($@"UPDATE Entregas SET Pago = VlNota * {percentual / 100m}, idPagto = {idRecibo}");
-        //    queryUpd.Append($" WHERE Pago IS NULL AND idVend = {id}");
-        //    queryUpd.AppendFormat(" AND Data BETWEEN #{0}# AND #{1}#", dataInicioStr, dataFimStr);
-        //    DB.ExecutarComandoSQL(queryUpd.ToString(), null);
-        //}
+        } 
 
         private int VeUltReg()
         {

@@ -29,6 +29,7 @@ namespace TeleBonifacio
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(operLogin));
             this.lblNome = new System.Windows.Forms.Label();
             this.txYser = new System.Windows.Forms.TextBox();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
@@ -102,6 +103,7 @@ namespace TeleBonifacio
             this.Controls.Add(this.label1);
             this.Controls.Add(this.txYser);
             this.Controls.Add(this.lblNome);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.KeyPreview = true;
             this.MaximizeBox = false;
             this.MinimizeBox = false;

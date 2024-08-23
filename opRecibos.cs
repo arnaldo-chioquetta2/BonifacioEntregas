@@ -69,9 +69,18 @@ namespace TeleBonifacio
 
                 // Adicionar colunas
                 DadosFormatados.Columns.Add("Descrição");
+                int c = 0;
+                int NrDoItemNoCombo = 0;
                 foreach (DataRow row in Dados.Rows)
                 {
-                    DadosFormatados.Columns.Add(row["Nome"].ToString());
+                    string Nome = row["Nome"].ToString();
+                    DadosFormatados.Columns.Add(Nome);
+                    c++;
+                    if (Nome== cmbVendedor.Text)
+                    {
+                        NrDoItemNoCombo = c;
+                    }
+                    
                 }
 
                 // Adicionar linhas
@@ -82,6 +91,7 @@ namespace TeleBonifacio
                 DataRow comissoesRow = DadosFormatados.NewRow();
                 comissoesRow[0] = "Comissões";
 
+                c = 0;
                 for (int i = 0; i < Dados.Rows.Count; i++)
                 {
                     decimal totalVendas = Convert.ToDecimal(Dados.Rows[i]["TotalVendas"]);
@@ -91,6 +101,11 @@ namespace TeleBonifacio
                     vendasRow[i + 1] = totalVendas.ToString("0.00");
                     percentualRow[i + 1] = percentual.ToString("0.00") + "%";
                     comissoesRow[i + 1] = comissao.ToString("0.00");
+                    c++;
+                    if (c== NrDoItemNoCombo)
+                    {
+                        ltVlr.Text = comissoesRow[i + 1].ToString();
+                    }                    
                 }
 
                 DadosFormatados.Rows.Add(vendasRow);
@@ -137,86 +152,7 @@ namespace TeleBonifacio
                 }
             }
             dataGrid1.Invalidate();
-        }
-
-
-        //private void CarregaGrid()
-        //{
-        //    DateTime DT1 = dtpDataIN.Value.Date;
-        //    DateTime DT2 = dtnDtFim.Value.Date;
-        //    Recibo = new ReciboDAO();
-        //    DataTable Dados = Recibo.ValoresAPagar(DT1, DT2);
-        //    if (Dados.Rows.Count == 0)
-        //    {
-        //        dataGrid1.DataSource = null;
-        //    }
-        //    else
-        //    {
-        //        DataTable DadosFormatados = new DataTable();
-
-        //        // Adicionar colunas
-        //        DadosFormatados.Columns.Add("Descrição");
-        //        foreach (DataRow row in Dados.Rows)
-        //        {
-        //            DadosFormatados.Columns.Add(row["Nome"].ToString());
-        //        }
-
-        //        // Adicionar linhas
-        //        DataRow vendasRow = DadosFormatados.NewRow();
-        //        vendasRow[0] = "vendas";
-        //        DataRow comissoesRow = DadosFormatados.NewRow();
-        //        comissoesRow[0] = "comissões";
-
-        //        for (int i = 0; i < Dados.Rows.Count; i++)
-        //        {
-        //            vendasRow[i + 1] = Convert.ToDouble(Dados.Rows[i]["TotalVendas"]).ToString("0.00");
-        //            comissoesRow[i + 1] = Convert.ToDouble(Dados.Rows[i]["Valor"]).ToString("0.00");
-        //        }
-
-        //        DadosFormatados.Rows.Add(vendasRow);
-        //        DadosFormatados.Rows.Add(comissoesRow);
-
-        //        dataGrid1.DataSource = new DevAge.ComponentModel.BoundDataView(DadosFormatados.DefaultView);
-
-        //        // Configurar a aparência da grid
-        //        ConfigurarGrid();
-
-        //        // Ajustar o alinhamento
-        //        for (int i = 0; i < dataGrid1.Columns.Count; i++)
-        //        {
-        //            for (int j = 0; j < dataGrid1.Rows.Count; j++)
-        //            {
-        //                if (i == 0) // Primeira coluna (descrições)
-        //                {
-        //                    dataGrid1.GetCell(j, i).View.TextAlignment = DevAge.Drawing.ContentAlignment.MiddleLeft;
-        //                }
-        //                else // Colunas de dados
-        //                {
-        //                    dataGrid1.GetCell(j, i).View.TextAlignment = DevAge.Drawing.ContentAlignment.MiddleRight;
-        //                }
-        //            }
-        //        }
-        //    }
-        //}
-
-        //private void ConfigurarGrid()
-        //{
-        //    SourceGrid.Cells.Views.Cell fonte = new SourceGrid.Cells.Views.Cell();
-        //    fonte.Font = new Font("Arial", 12, FontStyle.Regular);
-        //    for (int i = 0; i < dataGrid1.Columns.Count; i++)
-        //    {
-        //        dataGrid1.Columns[i].Width = 160;
-        //    }
-        //    for (int i = 0; i < dataGrid1.Columns.Count; i++)
-        //    {
-        //        for (int j = 0; j < dataGrid1.Rows.Count; j++)
-        //        {
-        //            dataGrid1.GetCell(j, i).View = fonte;
-        //            dataGrid1.GetCell(j, i).View.TextAlignment = DevAge.Drawing.ContentAlignment.MiddleRight;
-        //        }
-        //    }
-        //    dataGrid1.Invalidate();
-        //}
+        }       
 
         private void dataGrid1_MouseDown(object sender, MouseEventArgs e)
         {
@@ -273,18 +209,20 @@ namespace TeleBonifacio
         private void button1_Click(object sender, EventArgs e)
         {
             int id = Convert.ToInt32(cmbVendedor.SelectedValue);
+            glo.Loga("Acionado pagamento de comissões ID do vendedor = "+ id.ToString());
             DateTime DataIni = dtpDataIN.Value;
             string dataPagamento = "";
+            string dtFinal = dtnDtFim.Value.ToString("dd/MM/yyyy");
             if (DataIni.Date == DateTime.Now.Date)
             {
                 dataPagamento = "do dia " + DateTime.Now.ToString("dd/MM/yyyy");
             }
             else
             {
-                dataPagamento = "de " + DataIni.ToString("dd/MM/yyyy") + " a " + DateTime.Now.ToString("dd/MM/yyyy");
+                dataPagamento = "de " + DataIni.ToString("dd/MM/yyyy") + " a " + dtFinal;
             }
+            glo.Loga("dataPagamento = " + dataPagamento);
             Recibo.Pagar(id, ltVlr.Text, dataPagamento, dtpDataIN.Value, dtnDtFim.Value);
-            // , this.VlrComiss
             INI MeuIni = new INI();
             using (var receipt = new rel.Receipt())
             {

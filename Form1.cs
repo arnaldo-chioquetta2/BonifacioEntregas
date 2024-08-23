@@ -297,7 +297,8 @@ namespace TeleBonifacio
             else
             {
                 FileInfo fileInfo = new FileInfo(logFilePath);
-                DateTime logCreationDate = fileInfo.CreationTime.Date;
+                DateTime logCreationDate = fileInfo.LastWriteTime;
+                    //.CreationTime.Date;
                 if (logCreationDate < DateTime.Today)
                 {
                     string backupName = $"{DateTime.Now:yyyyMMdd}_{logFileName}";

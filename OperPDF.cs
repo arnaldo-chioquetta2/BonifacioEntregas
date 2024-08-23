@@ -644,44 +644,7 @@ namespace TeleBonifacio
             {
                 parentNode.Nodes.Add(newNode); // Adiciona como o último nó
             }
-        }
-        //private void AddNodeWithIcon(TreeNode parentNode, string nodeName, string filePath, object tag = null, bool isBold = false, bool addAsFirstNode = false)
-        //{
-        //    string extension = Path.GetExtension(nodeName);
-        //    Icon icon = GetIconByExtension(extension);
-
-        //    TreeNode newNode = new TreeNode(nodeName)
-        //    {
-        //        Tag = tag
-        //    };
-
-        //    if (isBold)
-        //    {
-        //        newNode.Text = nodeName + "  "; // Add a space at the end
-        //        newNode.NodeFont = new Font(treeView1.Font, FontStyle.Bold);
-        //    }
-
-        //    if (icon != null)
-        //    {
-        //        // Converter o Icon para Bitmap
-        //        using (Bitmap bmp = icon.ToBitmap())
-        //        {
-        //            // Adicionar o Bitmap ao ImageList
-        //            int imageIndex = treeView1.ImageList.Images.Add(bmp, Color.Transparent);
-        //            newNode.ImageIndex = imageIndex;
-        //            newNode.SelectedImageIndex = imageIndex;
-        //        }
-        //    }
-
-        //    if (addAsFirstNode)
-        //    {
-        //        parentNode.Nodes.Insert(0, newNode); // Adiciona como o primeiro nó
-        //    }
-        //    else
-        //    {
-        //        parentNode.Nodes.Add(newNode); // Adiciona como o último nó
-        //    }
-        //}        
+        }        
 
         private Icon GetIconByExtension(string extension)
         {
