@@ -33,110 +33,222 @@ namespace TeleBonifacio
 
         #region Carregamento       
 
+        // CarregaGrid:Refatorado em 23/08/24 Original 25 linhas, resultado 72 linhas
         private void CarregaGrid()
         {
             DateTime DT1 = dtpDataIN.Value.Date;
             DateTime DT2 = dtnDtFim.Value.Date;
             Recibo = new ReciboDAO();
             DataTable Dados = Recibo.ValoresAPagar(DT1, DT2);
+
             if (Dados.Rows.Count == 0)
             {
                 dataGrid1.DataSource = null;
             }
             else
             {
-                DataTable DadosFormatados = new DataTable();
-
-                // Adicionar colunas
-                DadosFormatados.Columns.Add("Descrição");
-                int c = 0;
-                int NrDoItemNoCombo = 0;
-                foreach (DataRow row in Dados.Rows)
-                {
-                    string Nome = row["Nome"].ToString();
-                    DadosFormatados.Columns.Add(Nome);
-                    c++;
-                    if (Nome == cmbVendedor.Text)
-                    {
-                        NrDoItemNoCombo = c;
-                    }
-                }
-
-                // Adicionar linhas
-                DataRow vendasRow = DadosFormatados.NewRow();
-                vendasRow[0] = "Vendas";
-                DataRow percentualRow = DadosFormatados.NewRow();
-                percentualRow[0] = "Percentual";
-                DataRow comissoesRow = DadosFormatados.NewRow();
-                comissoesRow[0] = "Comissões";
-
-                c = 0;
-                for (int i = 0; i < Dados.Rows.Count; i++)
-                {
-                    decimal totalVendas = Convert.ToDecimal(Dados.Rows[i]["TotalVendas"]);
-                    decimal percentual = glo.ObterPercentualVariavel(totalVendas);
-                    decimal comissao = Convert.ToDecimal(Dados.Rows[i]["Valor"]);
-
-                    vendasRow[i + 1] = totalVendas.ToString("0.00");
-                    percentualRow[i + 1] = percentual.ToString("0.00") + "%";
-                    comissoesRow[i + 1] = comissao.ToString("0.00");
-                    c++;
-                    if (c == NrDoItemNoCombo)
-                    {
-                        ltVlr.Text = comissoesRow[i + 1].ToString();
-                    }
-                }
-
-                DadosFormatados.Rows.Add(vendasRow);
-                DadosFormatados.Rows.Add(percentualRow);
-                DadosFormatados.Rows.Add(comissoesRow);
-
-                // Desabilitar a ordenação automática antes de definir o DataSource
+                DataTable DadosFormatados = FormatarDados(Dados);
                 dataGrid1.AutoGenerateColumns = false;
-
-                // Limpar as colunas existentes
                 dataGrid1.Columns.Clear();
-
-                // Criar colunas manualmente com SortMode NotSortable
-                foreach (DataColumn column in DadosFormatados.Columns)
-                {
-                    DataGridViewTextBoxColumn dgvColumn = new DataGridViewTextBoxColumn();
-                    dgvColumn.Name = column.ColumnName;
-                    dgvColumn.HeaderText = column.ColumnName;
-                    dgvColumn.DataPropertyName = column.ColumnName;
-                    dgvColumn.SortMode = DataGridViewColumnSortMode.NotSortable;
-                    dataGrid1.Columns.Add(dgvColumn);
-                }
-
-                // Definir o DataSource
+                ConfigurarColunas(DadosFormatados);
                 dataGrid1.DataSource = DadosFormatados;
-
-                // Configurar o SelectionMode
                 dataGrid1.SelectionMode = DataGridViewSelectionMode.FullColumnSelect;
-
-                // Configurar a aparência da grid
                 ConfigurarGrid();
-
-                // Ajustar o alinhamento
-                for (int i = 0; i < dataGrid1.Columns.Count; i++)
-                {
-                    for (int j = 0; j < dataGrid1.Rows.Count; j++)
-                    {
-                        if (i == 0) // Primeira coluna (descrições)
-                        {
-                            dataGrid1.Rows[j].Cells[i].Style.Alignment = DataGridViewContentAlignment.MiddleLeft;
-                        }
-                        else // Colunas de dados
-                        {
-                            dataGrid1.Rows[j].Cells[i].Style.Alignment = DataGridViewContentAlignment.MiddleRight;
-                        }
-                    }
-                }
-
+                AjustarAlinhamento();
                 Console.WriteLine($"Número de linhas em DadosFormatados: {DadosFormatados.Rows.Count}");
                 Console.WriteLine($"Número de colunas em DadosFormatados: {DadosFormatados.Columns.Count}");
             }
         }
+
+        private DataTable FormatarDados(DataTable Dados)
+        {
+            DataTable DadosFormatados = new DataTable();
+            DadosFormatados.Columns.Add("Descrição");
+            int NrDoItemNoCombo = AdicionarColunas(Dados, DadosFormatados);
+
+            DataRow vendasRow = DadosFormatados.NewRow();
+            vendasRow[0] = "Vendas";
+            DataRow percentualRow = DadosFormatados.NewRow();
+            percentualRow[0] = "Percentual";
+            DataRow comissoesRow = DadosFormatados.NewRow();
+            comissoesRow[0] = "Comissões";
+
+            PreencherLinhas(Dados, vendasRow, percentualRow, comissoesRow, NrDoItemNoCombo);
+            DadosFormatados.Rows.Add(vendasRow);
+            DadosFormatados.Rows.Add(percentualRow);
+            DadosFormatados.Rows.Add(comissoesRow);
+
+            return DadosFormatados;
+        }
+
+        private int AdicionarColunas(DataTable Dados, DataTable DadosFormatados)
+        {
+            int NrDoItemNoCombo = 0;
+            int c = 0;
+            foreach (DataRow row in Dados.Rows)
+            {
+                string Nome = row["Nome"].ToString();
+                DadosFormatados.Columns.Add(Nome);
+                c++;
+                if (Nome == cmbVendedor.Text)
+                {
+                    NrDoItemNoCombo = c;
+                }
+            }
+            return NrDoItemNoCombo;
+        }
+
+        private void PreencherLinhas(DataTable Dados, DataRow vendasRow, DataRow percentualRow, DataRow comissoesRow, int NrDoItemNoCombo)
+        {
+            for (int i = 0; i < Dados.Rows.Count; i++)
+            {
+                decimal totalVendas = Convert.ToDecimal(Dados.Rows[i]["TotalVendas"]);
+                decimal percentual = glo.ObterPercentualVariavel(totalVendas);
+                decimal comissao = Convert.ToDecimal(Dados.Rows[i]["Valor"]);
+
+                vendasRow[i + 1] = totalVendas.ToString("0.00");
+                percentualRow[i + 1] = percentual.ToString("0.00") + "%";
+                comissoesRow[i + 1] = comissao.ToString("0.00");
+
+                if (i + 1 == NrDoItemNoCombo)
+                {
+                    ltVlr.Text = comissoesRow[i + 1].ToString();
+                }
+            }
+        }
+
+        private void ConfigurarColunas(DataTable DadosFormatados)
+        {
+            foreach (DataColumn column in DadosFormatados.Columns)
+            {
+                DataGridViewTextBoxColumn dgvColumn = new DataGridViewTextBoxColumn
+                {
+                    Name = column.ColumnName,
+                    HeaderText = column.ColumnName,
+                    DataPropertyName = column.ColumnName,
+                    SortMode = DataGridViewColumnSortMode.NotSortable
+                };
+                dataGrid1.Columns.Add(dgvColumn);
+            }
+        }
+
+        private void AjustarAlinhamento()
+        {
+            for (int i = 0; i < dataGrid1.Columns.Count; i++)
+            {
+                for (int j = 0; j < dataGrid1.Rows.Count; j++)
+                {
+                    dataGrid1.Rows[j].Cells[i].Style.Alignment = (i == 0)
+                        ? DataGridViewContentAlignment.MiddleLeft
+                        : DataGridViewContentAlignment.MiddleRight;
+                }
+            }
+        }
+
+        //private void CarregaGrid()
+        //{
+        //    DateTime DT1 = dtpDataIN.Value.Date;
+        //    DateTime DT2 = dtnDtFim.Value.Date;
+        //    Recibo = new ReciboDAO();
+        //    DataTable Dados = Recibo.ValoresAPagar(DT1, DT2);
+        //    if (Dados.Rows.Count == 0)
+        //    {
+        //        dataGrid1.DataSource = null;
+        //    }
+        //    else
+        //    {
+        //        DataTable DadosFormatados = new DataTable();
+
+        //        // Adicionar colunas
+        //        DadosFormatados.Columns.Add("Descrição");
+        //        int c = 0;
+        //        int NrDoItemNoCombo = 0;
+        //        foreach (DataRow row in Dados.Rows)
+        //        {
+        //            string Nome = row["Nome"].ToString();
+        //            DadosFormatados.Columns.Add(Nome);
+        //            c++;
+        //            if (Nome == cmbVendedor.Text)
+        //            {
+        //                NrDoItemNoCombo = c;
+        //            }
+        //        }
+
+        //        // Adicionar linhas
+        //        DataRow vendasRow = DadosFormatados.NewRow();
+        //        vendasRow[0] = "Vendas";
+        //        DataRow percentualRow = DadosFormatados.NewRow();
+        //        percentualRow[0] = "Percentual";
+        //        DataRow comissoesRow = DadosFormatados.NewRow();
+        //        comissoesRow[0] = "Comissões";
+
+        //        c = 0;
+        //        for (int i = 0; i < Dados.Rows.Count; i++)
+        //        {
+        //            decimal totalVendas = Convert.ToDecimal(Dados.Rows[i]["TotalVendas"]);
+        //            decimal percentual = glo.ObterPercentualVariavel(totalVendas);
+        //            decimal comissao = Convert.ToDecimal(Dados.Rows[i]["Valor"]);
+
+        //            vendasRow[i + 1] = totalVendas.ToString("0.00");
+        //            percentualRow[i + 1] = percentual.ToString("0.00") + "%";
+        //            comissoesRow[i + 1] = comissao.ToString("0.00");
+        //            c++;
+        //            if (c == NrDoItemNoCombo)
+        //            {
+        //                ltVlr.Text = comissoesRow[i + 1].ToString();
+        //            }
+        //        }
+
+        //        DadosFormatados.Rows.Add(vendasRow);
+        //        DadosFormatados.Rows.Add(percentualRow);
+        //        DadosFormatados.Rows.Add(comissoesRow);
+
+        //        // Desabilitar a ordenação automática antes de definir o DataSource
+        //        dataGrid1.AutoGenerateColumns = false;
+
+        //        // Limpar as colunas existentes
+        //        dataGrid1.Columns.Clear();
+
+        //        // Criar colunas manualmente com SortMode NotSortable
+        //        foreach (DataColumn column in DadosFormatados.Columns)
+        //        {
+        //            DataGridViewTextBoxColumn dgvColumn = new DataGridViewTextBoxColumn();
+        //            dgvColumn.Name = column.ColumnName;
+        //            dgvColumn.HeaderText = column.ColumnName;
+        //            dgvColumn.DataPropertyName = column.ColumnName;
+        //            dgvColumn.SortMode = DataGridViewColumnSortMode.NotSortable;
+        //            dataGrid1.Columns.Add(dgvColumn);
+        //        }
+
+        //        // Definir o DataSource
+        //        dataGrid1.DataSource = DadosFormatados;
+
+        //        // Configurar o SelectionMode
+        //        dataGrid1.SelectionMode = DataGridViewSelectionMode.FullColumnSelect;
+
+        //        // Configurar a aparência da grid
+        //        ConfigurarGrid();
+
+        //        // Ajustar o alinhamento
+        //        for (int i = 0; i < dataGrid1.Columns.Count; i++)
+        //        {
+        //            for (int j = 0; j < dataGrid1.Rows.Count; j++)
+        //            {
+        //                if (i == 0) // Primeira coluna (descrições)
+        //                {
+        //                    dataGrid1.Rows[j].Cells[i].Style.Alignment = DataGridViewContentAlignment.MiddleLeft;
+        //                }
+        //                else // Colunas de dados
+        //                {
+        //                    dataGrid1.Rows[j].Cells[i].Style.Alignment = DataGridViewContentAlignment.MiddleRight;
+        //                }
+        //            }
+        //        }
+
+        //        Console.WriteLine($"Número de linhas em DadosFormatados: {DadosFormatados.Rows.Count}");
+        //        Console.WriteLine($"Número de colunas em DadosFormatados: {DadosFormatados.Columns.Count}");
+        //    }
+        //}
 
         private void ConfigurarGrid()
         {
@@ -239,50 +351,7 @@ namespace TeleBonifacio
                     }
                 }
             }
-        }
-
-        //private void dataGrid1_MouseDown(object sender, MouseEventArgs e)
-        //{
-        //    DataGridView grid = (DataGridView)sender;
-        //    DataGridView.HitTestInfo hitTest = grid.HitTest(e.X, e.Y);
-
-        //    if (hitTest.Type == DataGridViewHitTestType.ColumnHeader)
-        //    {
-        //        int colunaClicada = hitTest.ColumnIndex;
-
-        //        if (colunaClicada >= 0 && colunaClicada < grid.Columns.Count)
-        //        {
-        //            // Seleciona a coluna clicada
-        //            grid.ClearSelection();
-        //            grid.Columns[colunaClicada].Selected = true;
-
-        //            // Define a cor de fundo para a coluna selecionada
-        //            foreach (DataGridViewRow row in grid.Rows)
-        //            {
-        //                row.Cells[colunaClicada].Style.BackColor = grid.DefaultCellStyle.SelectionBackColor;
-        //            }
-
-        //            // Obtém o nome do vendedor da coluna clicada
-        //            string nome = grid.Columns[colunaClicada].HeaderText;
-
-        //            // Atualiza o ComboBox
-        //            foreach (var item in cmbVendedor.Items)
-        //            {
-        //                if (item.ToString() == nome)
-        //                {
-        //                    cmbVendedor.SelectedItem = item;
-        //                    break;
-        //                }
-        //            }
-
-        //            // Atualiza o valor na label ltVlr
-        //            if (grid.Rows.Count >= 3) // Assumindo que a terceira linha contém as comissões
-        //            {
-        //                ltVlr.Text = grid.Rows[2].Cells[colunaClicada].Value.ToString();
-        //            }
-        //        }
-        //    }
-        //}
+        }        
 
         private void dataGrid1_CellPainting(object sender, DataGridViewCellPaintingEventArgs e)
         {
@@ -292,9 +361,11 @@ namespace TeleBonifacio
                 e.PaintContent(e.ClipBounds);
                 e.Handled = true;
             }
-        }        
+        }
 
         #endregion
+
+        #region Eventos        
 
         private void cmbVendedor_SelectedIndexChanged_1(object sender, EventArgs e)
         {
@@ -362,6 +433,7 @@ namespace TeleBonifacio
             CarregaGrid();
         }
 
+        #endregion
 
     }
 }
