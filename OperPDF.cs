@@ -600,13 +600,6 @@ namespace TeleBonifacio
                 AddNodeWithIcon(parentNode, doc.DocumentName, doc.DocumentID.ToString());
             }
         }
-        //private void AddDocumentNodes(TreeNode parentNode, List<tb.Document> documents)
-        //{
-        //    foreach (var doc in documents)
-        //    {
-        //        AddNodeWithIcon(parentNode, doc.DocumentName, doc.DocumentID.ToString(), isBold: false, addAsFirstNode: false);
-        //    }
-        //}
 
         private void AddNodeWithIcon(TreeNode parentNode, string nodeName, string filePath, object tag = null, bool isBold = false, bool addAsFirstNode = false, Color? backColor = null)
         {
@@ -615,14 +608,16 @@ namespace TeleBonifacio
 
             TreeNode newNode = new TreeNode(nodeName)
             {
-                Tag = tag,
-                BackColor = backColor ?? Color.Transparent // Aplica a cor de fundo, se fornecida
+                Tag = tag
             };
 
             if (isBold)
             {
                 newNode.NodeFont = new Font(treeView1.Font, FontStyle.Bold);
             }
+
+            newNode.BackColor = Color.FromArgb(215, 255, 215);
+            // newNode.BackColor = Verde;
 
             if (icon != null)
             {
@@ -879,6 +874,18 @@ namespace TeleBonifacio
                 selectedNode.NodeFont = new Font(treeView1.Font, FontStyle.Regular);
                 contasAPagarDao.Imprimiu(idArquivo);
             }           
+        }
+
+        private void btObter_Click_1(object sender, EventArgs e)
+        {
+            if (treeView1.SelectedNode != null)
+            {
+                // Obtém o nó selecionado na TreeView
+                TreeNode selectedNode = treeView1.SelectedNode;
+
+                // Chama o método para processar a obtenção dos arquivos
+                btObter_Click(selectedNode);
+            }
         }
     }
 

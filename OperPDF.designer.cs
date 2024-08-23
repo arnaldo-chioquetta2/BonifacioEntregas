@@ -55,6 +55,7 @@ namespace TeleBonifacio
             this.treeView1 = new System.Windows.Forms.TreeView();
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.btStripObter = new System.Windows.Forms.ToolStripMenuItem();
+            this.btObter = new System.Windows.Forms.Button();
             this.groupBox3.SuspendLayout();
             this.panel1.SuspendLayout();
             this.contextMenuStrip1.SuspendLayout();
@@ -62,6 +63,7 @@ namespace TeleBonifacio
             // 
             // groupBox3
             // 
+            this.groupBox3.Controls.Add(this.btObter);
             this.groupBox3.Controls.Add(this.button1);
             this.groupBox3.Controls.Add(this.btEmail);
             this.groupBox3.Controls.Add(this.btMudar);
@@ -111,7 +113,7 @@ namespace TeleBonifacio
             this.btEmail.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.btEmail.Enabled = false;
             this.btEmail.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F);
-            this.btEmail.Location = new System.Drawing.Point(512, 143);
+            this.btEmail.Location = new System.Drawing.Point(550, 143);
             this.btEmail.Name = "btEmail";
             this.btEmail.Size = new System.Drawing.Size(75, 23);
             this.btEmail.TabIndex = 54;
@@ -124,7 +126,7 @@ namespace TeleBonifacio
             this.btMudar.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.btMudar.Enabled = false;
             this.btMudar.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F);
-            this.btMudar.Location = new System.Drawing.Point(185, 143);
+            this.btMudar.Location = new System.Drawing.Point(223, 143);
             this.btMudar.Name = "btMudar";
             this.btMudar.Size = new System.Drawing.Size(75, 23);
             this.btMudar.TabIndex = 53;
@@ -137,7 +139,7 @@ namespace TeleBonifacio
             this.btPDF.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.btPDF.Enabled = false;
             this.btPDF.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F);
-            this.btPDF.Location = new System.Drawing.Point(431, 143);
+            this.btPDF.Location = new System.Drawing.Point(469, 143);
             this.btPDF.Name = "btPDF";
             this.btPDF.Size = new System.Drawing.Size(75, 23);
             this.btPDF.TabIndex = 49;
@@ -161,7 +163,7 @@ namespace TeleBonifacio
             // 
             this.btFiltrar.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.btFiltrar.Enabled = false;
-            this.btFiltrar.Location = new System.Drawing.Point(269, 143);
+            this.btFiltrar.Location = new System.Drawing.Point(307, 143);
             this.btFiltrar.Name = "btFiltrar";
             this.btFiltrar.Size = new System.Drawing.Size(75, 23);
             this.btFiltrar.TabIndex = 10;
@@ -207,7 +209,7 @@ namespace TeleBonifacio
             // 
             this.btnAdicionar.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.btnAdicionar.Enabled = false;
-            this.btnAdicionar.Location = new System.Drawing.Point(104, 142);
+            this.btnAdicionar.Location = new System.Drawing.Point(142, 142);
             this.btnAdicionar.Name = "btnAdicionar";
             this.btnAdicionar.Size = new System.Drawing.Size(75, 23);
             this.btnAdicionar.TabIndex = 9;
@@ -220,7 +222,7 @@ namespace TeleBonifacio
             this.btExcluir.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.btExcluir.Enabled = false;
             this.btExcluir.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F);
-            this.btExcluir.Location = new System.Drawing.Point(593, 143);
+            this.btExcluir.Location = new System.Drawing.Point(631, 143);
             this.btExcluir.Name = "btExcluir";
             this.btExcluir.Size = new System.Drawing.Size(75, 23);
             this.btExcluir.TabIndex = 12;
@@ -232,7 +234,7 @@ namespace TeleBonifacio
             // 
             this.btLimparFiltro.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.btLimparFiltro.Enabled = false;
-            this.btLimparFiltro.Location = new System.Drawing.Point(350, 143);
+            this.btLimparFiltro.Location = new System.Drawing.Point(388, 143);
             this.btLimparFiltro.Name = "btLimparFiltro";
             this.btLimparFiltro.Size = new System.Drawing.Size(75, 23);
             this.btLimparFiltro.TabIndex = 11;
@@ -416,6 +418,17 @@ namespace TeleBonifacio
             this.btStripObter.Text = "Obter";
             this.btStripObter.Click += new System.EventHandler(this.btStripObter_Click);
             // 
+            // btObter
+            // 
+            this.btObter.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.btObter.Location = new System.Drawing.Point(61, 142);
+            this.btObter.Name = "btObter";
+            this.btObter.Size = new System.Drawing.Size(75, 23);
+            this.btObter.TabIndex = 56;
+            this.btObter.Text = "Obter";
+            this.btObter.UseVisualStyleBackColor = true;
+            this.btObter.Click += new System.EventHandler(this.btObter_Click_1);
+            // 
             // OperPDF
             // 
             this.ClientSize = new System.Drawing.Size(782, 432);
@@ -468,5 +481,6 @@ namespace TeleBonifacio
         private TreeView treeView1;
         private ContextMenuStrip contextMenuStrip1;
         private ToolStripMenuItem btStripObter;
+        private Button btObter;
     }
 }
