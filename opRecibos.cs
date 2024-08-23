@@ -200,6 +200,15 @@ namespace TeleBonifacio
 
                 if (colunaClicada >= 0 && colunaClicada < grid.Columns.Count)
                 {
+                    // Restaurar a cor de fundo das colunas anteriormente selecionadas
+                    foreach (DataGridViewColumn column in grid.Columns)
+                    {
+                        foreach (DataGridViewRow row in grid.Rows)
+                        {
+                            row.Cells[column.Index].Style.BackColor = grid.DefaultCellStyle.BackColor;
+                        }
+                    }
+
                     // Seleciona a coluna clicada
                     grid.ClearSelection();
                     grid.Columns[colunaClicada].Selected = true;
@@ -231,6 +240,49 @@ namespace TeleBonifacio
                 }
             }
         }
+
+        //private void dataGrid1_MouseDown(object sender, MouseEventArgs e)
+        //{
+        //    DataGridView grid = (DataGridView)sender;
+        //    DataGridView.HitTestInfo hitTest = grid.HitTest(e.X, e.Y);
+
+        //    if (hitTest.Type == DataGridViewHitTestType.ColumnHeader)
+        //    {
+        //        int colunaClicada = hitTest.ColumnIndex;
+
+        //        if (colunaClicada >= 0 && colunaClicada < grid.Columns.Count)
+        //        {
+        //            // Seleciona a coluna clicada
+        //            grid.ClearSelection();
+        //            grid.Columns[colunaClicada].Selected = true;
+
+        //            // Define a cor de fundo para a coluna selecionada
+        //            foreach (DataGridViewRow row in grid.Rows)
+        //            {
+        //                row.Cells[colunaClicada].Style.BackColor = grid.DefaultCellStyle.SelectionBackColor;
+        //            }
+
+        //            // Obtém o nome do vendedor da coluna clicada
+        //            string nome = grid.Columns[colunaClicada].HeaderText;
+
+        //            // Atualiza o ComboBox
+        //            foreach (var item in cmbVendedor.Items)
+        //            {
+        //                if (item.ToString() == nome)
+        //                {
+        //                    cmbVendedor.SelectedItem = item;
+        //                    break;
+        //                }
+        //            }
+
+        //            // Atualiza o valor na label ltVlr
+        //            if (grid.Rows.Count >= 3) // Assumindo que a terceira linha contém as comissões
+        //            {
+        //                ltVlr.Text = grid.Rows[2].Cells[colunaClicada].Value.ToString();
+        //            }
+        //        }
+        //    }
+        //}
 
         private void dataGrid1_CellPainting(object sender, DataGridViewCellPaintingEventArgs e)
         {
