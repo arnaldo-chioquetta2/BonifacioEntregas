@@ -204,6 +204,12 @@ namespace TeleBonifacio
                     grid.ClearSelection();
                     grid.Columns[colunaClicada].Selected = true;
 
+                    // Define a cor de fundo para a coluna selecionada
+                    foreach (DataGridViewRow row in grid.Rows)
+                    {
+                        row.Cells[colunaClicada].Style.BackColor = grid.DefaultCellStyle.SelectionBackColor;
+                    }
+
                     // Obtém o nome do vendedor da coluna clicada
                     string nome = grid.Columns[colunaClicada].HeaderText;
 
@@ -230,11 +236,11 @@ namespace TeleBonifacio
         {
             if (e.ColumnIndex >= 0 && dataGrid1.Columns[e.ColumnIndex].Selected)
             {
-                e.Graphics.FillRectangle(new SolidBrush(Color.LightBlue), e.CellBounds);
+                e.Graphics.FillRectangle(new SolidBrush(dataGrid1.DefaultCellStyle.SelectionBackColor), e.CellBounds);
                 e.PaintContent(e.ClipBounds);
                 e.Handled = true;
             }
-        }
+        }        
 
         #endregion
 
