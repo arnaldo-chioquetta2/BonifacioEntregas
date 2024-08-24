@@ -67,7 +67,7 @@ namespace TeleBonifacio
             this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(608, 82);
+            this.panel1.Size = new System.Drawing.Size(620, 82);
             this.panel1.TabIndex = 0;
             // 
             // groupBox1
@@ -125,8 +125,9 @@ namespace TeleBonifacio
             this.lbFim.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lbFim.Location = new System.Drawing.Point(435, 45);
             this.lbFim.Name = "lbFim";
-            this.lbFim.Size = new System.Drawing.Size(74, 22);
+            this.lbFim.Size = new System.Drawing.Size(92, 22);
             this.lbFim.TabIndex = 47;
+            this.lbFim.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // btAtu
             // 
@@ -155,14 +156,14 @@ namespace TeleBonifacio
             this.ltVlr.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.ltVlr.Location = new System.Drawing.Point(435, 9);
             this.ltVlr.Name = "ltVlr";
-            this.ltVlr.Size = new System.Drawing.Size(74, 25);
+            this.ltVlr.Size = new System.Drawing.Size(92, 25);
             this.ltVlr.TabIndex = 16;
             // 
             // btExtrato
             // 
             this.btExtrato.Enabled = false;
             this.btExtrato.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btExtrato.Location = new System.Drawing.Point(515, 43);
+            this.btExtrato.Location = new System.Drawing.Point(533, 45);
             this.btExtrato.Name = "btExtrato";
             this.btExtrato.Size = new System.Drawing.Size(84, 33);
             this.btExtrato.TabIndex = 15;
@@ -174,7 +175,7 @@ namespace TeleBonifacio
             // 
             this.btPagar.Enabled = false;
             this.btPagar.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btPagar.Location = new System.Drawing.Point(515, 3);
+            this.btPagar.Location = new System.Drawing.Point(533, 5);
             this.btPagar.Name = "btPagar";
             this.btPagar.Size = new System.Drawing.Size(84, 34);
             this.btPagar.TabIndex = 14;
@@ -219,7 +220,7 @@ namespace TeleBonifacio
             this.dataGrid1.EnableHeadersVisualStyles = false;
             this.dataGrid1.Location = new System.Drawing.Point(0, 82);
             this.dataGrid1.Name = "dataGrid1";
-            this.dataGrid1.Size = new System.Drawing.Size(608, 120);
+            this.dataGrid1.Size = new System.Drawing.Size(620, 120);
             this.dataGrid1.TabIndex = 1;
             this.dataGrid1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.dataGrid1_MouseDown);
             // 
@@ -227,7 +228,7 @@ namespace TeleBonifacio
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(608, 202);
+            this.ClientSize = new System.Drawing.Size(620, 202);
             this.Controls.Add(this.dataGrid1);
             this.Controls.Add(this.panel1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));

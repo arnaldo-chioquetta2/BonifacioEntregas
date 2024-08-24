@@ -378,6 +378,7 @@ namespace TeleBonifacio
             fExtr.SetNome(cmbVendedor.Text);
             int id = Convert.ToInt32(cmbVendedor.SelectedValue);
             fExtr.SetId(id);
+            fExtr.SetDatas(dtpDataIN.Value.Date, dtFim);
             fExtr.Show();
         }
 

@@ -227,8 +227,14 @@ namespace TeleBonifacio.rel
             public string FormaPagamento { get; set; }
         }
 
-        #endregion
+        internal void SetDatas(DateTime dateIN, DateTime dtFim)
+        {
+            DataInicio = dateIN;
+            DataFim = dtFim;
+        }
 
-    }
+    #endregion
+
+}
 
 }
