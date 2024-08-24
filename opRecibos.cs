@@ -101,8 +101,6 @@ namespace TeleBonifacio
                 dataGrid1.SelectionMode = DataGridViewSelectionMode.CellSelect;
                 ConfigurarGrid();
                 AjustarAlinhamento();
-                Console.WriteLine($"Número de linhas em DadosFormatados: {DadosFormatados.Rows.Count}");
-                Console.WriteLine($"Número de colunas em DadosFormatados: {DadosFormatados.Columns.Count}");
             }
             dataGrid1.ClearSelection();
             dataGrid1.CurrentCell = null;
@@ -176,6 +174,19 @@ namespace TeleBonifacio
                     DataPropertyName = column.ColumnName,
                     SortMode = DataGridViewColumnSortMode.NotSortable
                 };
+
+                dgvColumn.HeaderCell.Style.Alignment = DataGridViewContentAlignment.MiddleCenter;
+
+                if (column.Ordinal == 0)
+                {
+                    dgvColumn.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleLeft;
+                }
+                else
+                {
+                    // Para as outras colunas (vendedores), mantenha o alinhamento à direita para os dados
+                    dgvColumn.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+                }
+
                 dataGrid1.Columns.Add(dgvColumn);
             }
         }

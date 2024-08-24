@@ -13,6 +13,7 @@ using System.Runtime.InteropServices;
 [assembly: Guid("308c57af-e663-456d-8a2c-188bbd61423d")]
 [assembly: AssemblyVersion("2.7.2.0")]
 [assembly: AssemblyFileVersion("2.7.2.0")]
+// 2.7.3 Calculo das comissões variavel por periodicidade
 // 2.7.2 Ajuste na operação do recibo
 // 2.7.1 Operação de Obtenção de Arquivos
 // 2.7.0 TreeView com icones certos
