@@ -24,6 +24,7 @@ namespace TeleBonifacio
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(OperPDF));
             this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.btObter = new System.Windows.Forms.Button();
             this.button1 = new System.Windows.Forms.Button();
             this.btEmail = new System.Windows.Forms.Button();
             this.btMudar = new System.Windows.Forms.Button();
@@ -55,7 +56,6 @@ namespace TeleBonifacio
             this.treeView1 = new System.Windows.Forms.TreeView();
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.btStripObter = new System.Windows.Forms.ToolStripMenuItem();
-            this.btObter = new System.Windows.Forms.Button();
             this.groupBox3.SuspendLayout();
             this.panel1.SuspendLayout();
             this.contextMenuStrip1.SuspendLayout();
@@ -96,6 +96,17 @@ namespace TeleBonifacio
             this.groupBox3.Size = new System.Drawing.Size(782, 166);
             this.groupBox3.TabIndex = 41;
             this.groupBox3.TabStop = false;
+            // 
+            // btObter
+            // 
+            this.btObter.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.btObter.Location = new System.Drawing.Point(61, 142);
+            this.btObter.Name = "btObter";
+            this.btObter.Size = new System.Drawing.Size(75, 23);
+            this.btObter.TabIndex = 56;
+            this.btObter.Text = "Obter";
+            this.btObter.UseVisualStyleBackColor = true;
+            this.btObter.Click += new System.EventHandler(this.btObter_Click_1);
             // 
             // button1
             // 
@@ -401,6 +412,7 @@ namespace TeleBonifacio
             this.treeView1.Name = "treeView1";
             this.treeView1.Size = new System.Drawing.Size(782, 251);
             this.treeView1.TabIndex = 14;
+            this.treeView1.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.TreeView1_AfterSelect);
             this.treeView1.NodeMouseClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.treeView1_NodeMouseClick);
             this.treeView1.NodeMouseDoubleClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.treeView1_NodeMouseDoubleClick);
             // 
@@ -417,17 +429,6 @@ namespace TeleBonifacio
             this.btStripObter.Size = new System.Drawing.Size(104, 22);
             this.btStripObter.Text = "Obter";
             this.btStripObter.Click += new System.EventHandler(this.btStripObter_Click);
-            // 
-            // btObter
-            // 
-            this.btObter.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.btObter.Location = new System.Drawing.Point(61, 142);
-            this.btObter.Name = "btObter";
-            this.btObter.Size = new System.Drawing.Size(75, 23);
-            this.btObter.TabIndex = 56;
-            this.btObter.Text = "Obter";
-            this.btObter.UseVisualStyleBackColor = true;
-            this.btObter.Click += new System.EventHandler(this.btObter_Click_1);
             // 
             // OperPDF
             // 

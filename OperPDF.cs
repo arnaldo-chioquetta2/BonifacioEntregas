@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
@@ -166,30 +167,16 @@ namespace TeleBonifacio
                     dataPagamento = dtpDataPagamento.Value;
                 }
                 string observacoes = txObservacoes.Text;
-                //DataGridView targetGrid = tabControl1.SelectedIndex == 0 ? dataGrid1 : dataGrid2;
-                //EditarRegistro(targetGrid, idFornecedor, dataEmissao, dataVencimento, valorTotal, chaveNotaFiscal, descricao, pago, dataPagamento, observacoes);
-                //CarregaGridGenerico(targetGrid, 0, (tabControl1.SelectedIndex == 1));
+                EditarRegistro(idFornecedor, dataEmissao, dataVencimento, valorTotal, chaveNotaFiscal, descricao, pago, dataPagamento, observacoes);
             }
         }
 
-        private void EditarRegistro(DataGridView dataGridView, int idFornecedor, DateTime dataEmissao, DateTime dataVencimento, float valorTotal, string chaveNotaFiscal, string descricao, bool pago, DateTime? dataPagamento, string observacoes)
+        private void EditarRegistro(int idFornecedor, DateTime dataEmissao, DateTime dataVencimento, float valorTotal, string chaveNotaFiscal, string descricao, bool pago, DateTime? dataPagamento, string observacoes)
         {
-            int selectedId = Convert.ToInt32(dataGridView.CurrentRow.Cells["ID"].Value);
-            int scrollPosition = dataGridView.FirstDisplayedScrollingRowIndex;
+            int selectedId = this.iID;
             glo.Loga($@"PE,{idFornecedor}, {dataEmissao:yyyy-MM-dd}, {dataVencimento:yyyy-MM-dd}, {valorTotal}, {chaveNotaFiscal}, {descricao}, {pago}, {dataPagamento:yyyy-MM-dd}, {observacoes}, {UID}");
             contasAPagarDao.Edita(this.iID, idFornecedor, dataEmissao, dataVencimento, valorTotal, chaveNotaFiscal, descricao, pago, dataPagamento, observacoes);
             Limpar();
-            foreach (DataGridViewRow row in dataGridView.Rows)
-            {
-                if (Convert.ToInt32(row.Cells["ID"].Value) == selectedId)
-                {
-                    dataGridView.CurrentCell = row.Cells[0];
-                    row.Selected = true;
-                    break;
-                }
-            }
-            if (scrollPosition > -1 && scrollPosition < dataGridView.RowCount)
-                dataGridView.FirstDisplayedScrollingRowIndex = scrollPosition;
         }
 
         #endregion
@@ -198,7 +185,10 @@ namespace TeleBonifacio
 
         private void btPDF_Click(object sender, EventArgs e)
         {
-
+            //string ArquivoOrig = selectedNode.Name;
+            //AbreArquivo(this.iID, ArquivoOrig);
+            //contasAPagarDao.Imprimiu(this.iID);
+            //row.DefaultCellStyle.BackColor = Color.LightGreen;
         }
 
         private void AbreArquivo(int Nro, string ArquivoOrig)
@@ -886,6 +876,70 @@ namespace TeleBonifacio
                 // Chama o método para processar a obtenção dos arquivos
                 btObter_Click(selectedNode);
             }
+        }
+
+        private void TreeView1_AfterSelect(object sender, TreeViewEventArgs e)
+        {
+            // Verificar se o nó selecionado é um documento (por exemplo, verificar a tag ou extensão)
+            TreeNode selectedNode = e.Node;
+
+            if (selectedNode != null && selectedNode.Tag is int documentID)
+            {
+                this.iID = documentID;
+                Mostra();
+            }
+        }
+
+        private void Mostra()
+        {
+            carregando = true;
+            DataTable dados = contasAPagarDao.getPeloID(this.iID);
+
+            if (dados != null && dados.Rows.Count > 0)
+            {
+                DataRow row = dados.Rows[0];
+
+                this.UID = Convert.ToString(row["UID"]);
+                dtpDataEmissao.Value = Convert.ToDateTime(row["DataEmissao"]);
+
+                // btPDF.Enabled = btEmail.Enabled = true;
+
+                if (row["idFornecedor"] != DBNull.Value)
+                {
+                    cmbForn.SelectedValue = Convert.ToInt32(row["idFornecedor"]);
+                }
+
+                if (row["DataVencimento"] != DBNull.Value)
+                {
+                    dtpDataVencimento.Value = Convert.ToDateTime(row["DataVencimento"]);
+                }
+
+                txValorTotal.Text = Convert.ToString(row["ValorTotal"]);
+                txChaveNotaFiscal.Text = Convert.ToString(row["ChaveNotaFiscal"]);
+                txDescricao.Text = Convert.ToString(row["Descricao"]);
+                ckPago.Checked = Convert.ToBoolean(row["Pago"]);
+
+                if (ckPago.Checked)
+                {
+                    dtpDataPagamento.Enabled = true;
+                    dtpDataPagamento.Value = Convert.ToDateTime(row["DataPagamento"]);
+                }
+                else
+                {
+                    dtpDataPagamento.Enabled = false;
+                }
+
+                this.CaminhoPDF = Convert.ToString(row["CaminhoPDF"]);
+                txObservacoes.Text = Convert.ToString(row["Observacoes"]);
+            }
+            else
+            {
+                // Tratar o caso em que não há dados retornados
+                MessageBox.Show("Nenhum dado encontrado para o ID especificado.", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                // Limpar os campos ou realizar outras ações necessárias
+            }
+
+            carregando = false;
         }
     }
 

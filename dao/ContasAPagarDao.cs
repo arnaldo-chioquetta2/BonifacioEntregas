@@ -98,7 +98,6 @@ namespace TeleBonifacio.dao
                     {sWhe} 
                     ORDER BY ContasAPagar.ID DESC";
             DataTable dt = DB.ExecutarConsulta(sql);
-            Console.WriteLine("Trouxe dados da tabela de PDFs");
             return dt;
         }
 
@@ -124,6 +123,13 @@ namespace TeleBonifacio.dao
             DB.ExecutarComandoSQL(sql);
             string queryNome = $"SELECT Max(ID) FROM ContasAPagar";
             return DB.ExecutarConsultaCount(queryNome);
+        }
+
+        public DataTable getPeloID(int ID)
+        {
+            string SQL = $"Select * From ContasAPagar Where ID = {ID} ";
+            DataTable dt = DB.ExecutarConsulta(SQL);
+            return dt;
         }
 
     }
