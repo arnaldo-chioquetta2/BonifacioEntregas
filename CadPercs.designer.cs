@@ -30,19 +30,25 @@ namespace TeleBonifacio
         private void InitializeComponent()
         {
             this.panel1 = new System.Windows.Forms.Panel();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.rdSemanal = new System.Windows.Forms.RadioButton();
+            this.rdQuinzenal = new System.Windows.Forms.RadioButton();
+            this.rdMensal = new System.Windows.Forms.RadioButton();
+            this.btnExcluir = new System.Windows.Forms.Button();
+            this.btAdic = new System.Windows.Forms.Button();
             this.txValor = new System.Windows.Forms.TextBox();
             this.txPerc = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
-            this.btAdic = new System.Windows.Forms.Button();
-            this.btnExcluir = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
+            this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.SuspendLayout();
             // 
             // panel1
             // 
+            this.panel1.Controls.Add(this.groupBox1);
             this.panel1.Controls.Add(this.btnExcluir);
             this.panel1.Controls.Add(this.btAdic);
             this.panel1.Controls.Add(this.txValor);
@@ -52,8 +58,79 @@ namespace TeleBonifacio
             this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(330, 92);
+            this.panel1.Size = new System.Drawing.Size(330, 121);
             this.panel1.TabIndex = 4;
+            // 
+            // groupBox1
+            // 
+            this.groupBox1.Controls.Add(this.rdSemanal);
+            this.groupBox1.Controls.Add(this.rdQuinzenal);
+            this.groupBox1.Controls.Add(this.rdMensal);
+            this.groupBox1.Location = new System.Drawing.Point(3, 82);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(324, 38);
+            this.groupBox1.TabIndex = 10;
+            this.groupBox1.TabStop = false;
+            // 
+            // rdSemanal
+            // 
+            this.rdSemanal.AutoSize = true;
+            this.rdSemanal.Location = new System.Drawing.Point(234, 10);
+            this.rdSemanal.Name = "rdSemanal";
+            this.rdSemanal.Size = new System.Drawing.Size(66, 17);
+            this.rdSemanal.TabIndex = 2;
+            this.rdSemanal.TabStop = true;
+            this.rdSemanal.Text = "Semanal";
+            this.rdSemanal.UseVisualStyleBackColor = true;
+            this.rdSemanal.Click += new System.EventHandler(this.rdSemanal_Click);
+            // 
+            // rdQuinzenal
+            // 
+            this.rdQuinzenal.AutoSize = true;
+            this.rdQuinzenal.Location = new System.Drawing.Point(125, 10);
+            this.rdQuinzenal.Name = "rdQuinzenal";
+            this.rdQuinzenal.Size = new System.Drawing.Size(72, 17);
+            this.rdQuinzenal.TabIndex = 1;
+            this.rdQuinzenal.TabStop = true;
+            this.rdQuinzenal.Text = "Quinzenal";
+            this.rdQuinzenal.UseVisualStyleBackColor = true;
+            this.rdQuinzenal.Click += new System.EventHandler(this.rdQuinzenal_Click);
+            // 
+            // rdMensal
+            // 
+            this.rdMensal.AutoSize = true;
+            this.rdMensal.Location = new System.Drawing.Point(11, 10);
+            this.rdMensal.Name = "rdMensal";
+            this.rdMensal.Size = new System.Drawing.Size(59, 17);
+            this.rdMensal.TabIndex = 0;
+            this.rdMensal.TabStop = true;
+            this.rdMensal.Text = "Mensal";
+            this.rdMensal.UseVisualStyleBackColor = true;
+            this.rdMensal.Click += new System.EventHandler(this.rdMensal_Click);
+            // 
+            // btnExcluir
+            // 
+            this.btnExcluir.Enabled = false;
+            this.btnExcluir.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnExcluir.Location = new System.Drawing.Point(218, 50);
+            this.btnExcluir.Name = "btnExcluir";
+            this.btnExcluir.Size = new System.Drawing.Size(100, 26);
+            this.btnExcluir.TabIndex = 9;
+            this.btnExcluir.Text = "Deletar";
+            this.btnExcluir.UseVisualStyleBackColor = true;
+            this.btnExcluir.Click += new System.EventHandler(this.btnExcluir_Click);
+            // 
+            // btAdic
+            // 
+            this.btAdic.Enabled = false;
+            this.btAdic.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btAdic.Location = new System.Drawing.Point(17, 50);
+            this.btAdic.Name = "btAdic";
+            this.btAdic.Size = new System.Drawing.Size(100, 26);
+            this.btAdic.TabIndex = 8;
+            this.btAdic.Text = "Adicionar";
+            this.btAdic.UseVisualStyleBackColor = true;
+            this.btAdic.Click += new System.EventHandler(this.btAdic_Click);
             // 
             // txValor
             // 
@@ -97,43 +174,19 @@ namespace TeleBonifacio
             // 
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridView1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dataGridView1.Location = new System.Drawing.Point(0, 92);
+            this.dataGridView1.Location = new System.Drawing.Point(0, 121);
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.ReadOnly = true;
             this.dataGridView1.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dataGridView1.Size = new System.Drawing.Size(330, 201);
+            this.dataGridView1.Size = new System.Drawing.Size(330, 241);
             this.dataGridView1.TabIndex = 5;
             this.dataGridView1.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellContentClick);
-            // 
-            // btAdic
-            // 
-            this.btAdic.Enabled = false;
-            this.btAdic.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btAdic.Location = new System.Drawing.Point(17, 50);
-            this.btAdic.Name = "btAdic";
-            this.btAdic.Size = new System.Drawing.Size(100, 26);
-            this.btAdic.TabIndex = 8;
-            this.btAdic.Text = "Adicionar";
-            this.btAdic.UseVisualStyleBackColor = true;
-            this.btAdic.Click += new System.EventHandler(this.btAdic_Click);
-            // 
-            // btnExcluir
-            // 
-            this.btnExcluir.Enabled = false;
-            this.btnExcluir.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnExcluir.Location = new System.Drawing.Point(218, 50);
-            this.btnExcluir.Name = "btnExcluir";
-            this.btnExcluir.Size = new System.Drawing.Size(100, 26);
-            this.btnExcluir.TabIndex = 9;
-            this.btnExcluir.Text = "Deletar";
-            this.btnExcluir.UseVisualStyleBackColor = true;
-            this.btnExcluir.Click += new System.EventHandler(this.btnExcluir_Click);
             // 
             // CadPercs
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(330, 293);
+            this.ClientSize = new System.Drawing.Size(330, 362);
             this.Controls.Add(this.dataGridView1);
             this.Controls.Add(this.panel1);
             this.MaximizeBox = false;
@@ -142,6 +195,8 @@ namespace TeleBonifacio
             this.Load += new System.EventHandler(this.CadPercs_Load);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
+            this.groupBox1.ResumeLayout(false);
+            this.groupBox1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.ResumeLayout(false);
 
@@ -157,6 +212,10 @@ namespace TeleBonifacio
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.DataGridView dataGridView1;
+        private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.RadioButton rdSemanal;
+        private System.Windows.Forms.RadioButton rdQuinzenal;
+        private System.Windows.Forms.RadioButton rdMensal;
     }
 }
 

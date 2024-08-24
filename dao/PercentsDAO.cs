@@ -6,13 +6,13 @@ namespace TeleBonifacio.dao
 {
     public class PercentsDAO
     {
-        // Método para obter todos os registros da tabela Percents
-        private DataTable GetPercents()
-        {
-            string query = "SELECT * FROM Percents";
-            DataTable dt = ExecutarConsulta(query);
-            return dt;
-        }
+        //// Método para obter todos os registros da tabela Percents
+        //private DataTable GetPercents()
+        //{
+        //    string query = "SELECT * FROM Percents";
+        //    DataTable dt = ExecutarConsulta(query);
+        //    return dt;
+        //}
 
         // Método para executar consultas e preencher um DataTable
         private DataTable ExecutarConsulta(string query)
@@ -36,9 +36,10 @@ namespace TeleBonifacio.dao
             return dataTable;
         }
 
-        internal DataTable getDados()
+        internal DataTable getDados(float fator)
         {
-            string sql = "SELECT ID, Perc, 'até', Valor FROM Percents ORDER BY Perc ";
+            string vP = glo.sv(fator);
+            string sql = $"SELECT ID, Perc, 'até', (Valor * {vP} ) as Valor FROM Percents ORDER BY Perc ";
             DataTable dt = DB.ExecutarConsulta(sql);
             return dt;
         }

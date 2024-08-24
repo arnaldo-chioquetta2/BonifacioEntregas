@@ -10,6 +10,9 @@ namespace TeleBonifacio
 
         private int iID = 0;
         private PercentsDAO Percen;
+        private INI cINI;
+        private bool carregando = true;
+        private float fator;
 
         public CadPercs()
         {
@@ -18,17 +21,43 @@ namespace TeleBonifacio
 
         private void CadPercs_Load(object sender, EventArgs e)
         {
+            cINI = new INI();
+            int OpcPerc = cINI.ReadInt("Config", "OptPerc", 0);
+            switch (OpcPerc)
+            {
+                case 0:
+                    rdMensal.Checked = true;
+                    rdQuinzenal.Checked = false;
+                    rdSemanal.Checked = false;
+                    fator = 1f;
+                    break;
+                case 1:
+                    rdQuinzenal.Checked = true;
+                    rdMensal.Checked = false; 
+                    rdSemanal.Checked = false;
+                    fator = 1f / 2f;
+                    break;
+                case 2:
+                    rdSemanal.Checked = true;
+                    rdMensal.Checked = false; 
+                    rdQuinzenal.Checked = false;
+                    fator = 12f / 52f;
+                    break;
+                default:
+                    throw new ArgumentException("Invalid option selected");
+            }
             dataGridView1.Font = new System.Drawing.Font("Segoe UI", 12);
             dataGridView1.ColumnHeadersDefaultCellStyle.Font = new System.Drawing.Font("Segoe UI", 12, System.Drawing.FontStyle.Regular);
             dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.EnableResizing;
             dataGridView1.ColumnHeadersHeight = 30;
             Percen = new PercentsDAO();
             AtualizaGrid();
+            carregando = false;
         }
 
         private void AtualizaGrid()
         {
-            DataTable dados = Percen.getDados();
+            DataTable dados = Percen.getDados(fator);
 
             // Verifica se há linhas no DataTable
             if (dados.Rows.Count > 0)
@@ -98,6 +127,7 @@ namespace TeleBonifacio
         {
             float perc = glo.LeValor(txPerc.Text);
             float valor = glo.LeValor(txValor.Text);
+            valor = valor / fator;
             if (btAdic.Text == "Salvar")
             {
                 Percen.Edita(this.iID, perc, valor);
@@ -130,6 +160,36 @@ namespace TeleBonifacio
                 Percen.DeletePercentById(this.iID);
                 AtualizaGrid();
             }                            
+        }
+
+        private void rdSemanal_Click(object sender, EventArgs e)
+        {
+            if (!carregando)
+            {
+                cINI.WriteInt("Config", "OptPerc", 2);
+                fator = 12f / 52f; 
+                AtualizaGrid();
+            }
+        }
+
+        private void rdQuinzenal_Click(object sender, EventArgs e)
+        {
+            if (!carregando)
+            {
+                cINI.WriteInt("Config", "OptPerc", 1);
+                fator = 1f / 2f;
+                AtualizaGrid();
+            }
+        }
+
+        private void rdMensal_Click(object sender, EventArgs e)
+        {
+            if (!carregando)
+            {
+                cINI.WriteInt("Config", "OptPerc", 0);
+                fator = 1f;
+                AtualizaGrid();
+            }
         }
     }
 
