@@ -162,17 +162,17 @@ namespace TeleBonifacio
             }                            
         }
 
-        private void rdSemanal_Click(object sender, EventArgs e)
+        private void rdMensal_CheckedChanged(object sender, EventArgs e)
         {
             if (!carregando)
             {
-                cINI.WriteInt("Config", "OptPerc", 2);
-                fator = 12f / 52f; 
+                cINI.WriteInt("Config", "OptPerc", 0);
+                fator = 1f;
                 AtualizaGrid();
             }
         }
 
-        private void rdQuinzenal_Click(object sender, EventArgs e)
+        private void rdQuinzenal_CheckedChanged(object sender, EventArgs e)
         {
             if (!carregando)
             {
@@ -182,12 +182,12 @@ namespace TeleBonifacio
             }
         }
 
-        private void rdMensal_Click(object sender, EventArgs e)
+        private void rdSemanal_CheckedChanged(object sender, EventArgs e)
         {
             if (!carregando)
             {
-                cINI.WriteInt("Config", "OptPerc", 0);
-                fator = 1f;
+                cINI.WriteInt("Config", "OptPerc", 2);
+                fator = 12f / 52f;
                 AtualizaGrid();
             }
         }

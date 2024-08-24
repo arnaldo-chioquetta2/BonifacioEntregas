@@ -14,6 +14,10 @@ namespace TeleBonifacio
         private ReciboDAO Recibo;
         private VendedoresDAO Vendedor;
         private decimal VlrComiss = 0;
+        private float fator;
+        private INI cINI;
+        private bool carregando = true;
+        private DateTime dtFim;
 
         public opRecibos()
         {
@@ -24,11 +28,48 @@ namespace TeleBonifacio
         {
             PopulaVendedores();
             Recibo = new ReciboDAO();
-            dtnDtFim.Value = DateTime.Today;
-            dtpDataIN.Value = dtnDtFim.Value.AddDays(-7);
+            cINI = new INI();
+            int OpcPerc = cINI.ReadInt("Config", "OptPerc", 0);
+            int DiasAtras = 30;
+            switch (OpcPerc)
+            {
+                case 0: // Mensal
+                    rdMensal.Checked = true;
+                    rdQuinzenal.Checked = false;
+                    rdSemanal.Checked = false;
+                    fator = 1f;
+                    DiasAtras = 30;
+                    break;
+                case 1: // Quinzenal
+                    rdQuinzenal.Checked = true;
+                    rdMensal.Checked = false;
+                    rdSemanal.Checked = false;
+                    fator = 1f / 2f;
+                    DiasAtras = 15;
+                    break;
+                case 2: // Semanal
+                    rdSemanal.Checked = true;
+                    rdMensal.Checked = false;
+                    rdQuinzenal.Checked = false;
+                    fator = 12f / 52f;
+                    DiasAtras = 7;
+                    break;
+                default:
+                    throw new ArgumentException("Invalid option selected");
+            }
+            FazCarregamento(DiasAtras);
+            rt.AdjustFormComponents(this);
+            carregando = false;
+        }
+
+        private void FazCarregamento(int DiasAtras)
+        {
+            dtFim = DateTime.Today;
+            lbFim.Text = dtFim.ToShortDateString();
+            DateTime dtIN = dtFim.AddDays(-DiasAtras);
+            dtpDataIN.Value = dtIN;
             CarregaGrid();
             ConfigurarGrid();
-            rt.AdjustFormComponents(this);
         }
 
         #region Carregamento       
@@ -37,9 +78,9 @@ namespace TeleBonifacio
         private void CarregaGrid()
         {
             DateTime DT1 = dtpDataIN.Value.Date;
-            DateTime DT2 = dtnDtFim.Value.Date;
+            DateTime DT2 = dtFim;
             Recibo = new ReciboDAO();
-            DataTable Dados = Recibo.ValoresAPagar(DT1, DT2);
+            DataTable Dados = Recibo.ValoresAPagar(DT1, DT2, fator);
 
             if (Dados.Rows.Count == 0)
             {
@@ -103,7 +144,7 @@ namespace TeleBonifacio
             for (int i = 0; i < Dados.Rows.Count; i++)
             {
                 decimal totalVendas = Convert.ToDecimal(Dados.Rows[i]["TotalVendas"]);
-                decimal percentual = glo.ObterPercentualVariavel(totalVendas);
+                decimal percentual = glo.ObterPercentualVariavel(totalVendas, fator);
                 decimal comissao = Convert.ToDecimal(Dados.Rows[i]["Valor"]);
 
                 vendasRow[i + 1] = totalVendas.ToString("0.00");
@@ -270,8 +311,8 @@ namespace TeleBonifacio
                 if (Recibo != null)
                 {
                     DateTime DT1 = dtpDataIN.Value.Date;
-                    DateTime DT2 = dtnDtFim.Value.Date;
-                    decimal ret = Recibo.VlrPend(id, DT1, DT2);
+                    DateTime DT2 = dtFim;
+                    decimal ret = Recibo.VlrPend(id, DT1, DT2, fator);
                     ; ;  decimal roundedRet = Math.Round(ret, 0);
                     this.VlrComiss = Math.Round(ret, 0);
                     ltVlr.Text = this.VlrComiss.ToString("C");
@@ -291,7 +332,7 @@ namespace TeleBonifacio
             glo.Loga("Acionado pagamento de comissões ID do vendedor = "+ id.ToString());
             DateTime DataIni = dtpDataIN.Value;
             string dataPagamento = "";
-            string dtFinal = dtnDtFim.Value.ToString("dd/MM/yyyy");
+            string dtFinal = dtFim.ToString("dd/MM/yyyy");
             if (DataIni.Date == DateTime.Now.Date)
             {
                 dataPagamento = "do dia " + DateTime.Now.ToString("dd/MM/yyyy");
@@ -301,7 +342,7 @@ namespace TeleBonifacio
                 dataPagamento = "de " + DataIni.ToString("dd/MM/yyyy") + " a " + dtFinal;
             }
             glo.Loga("dataPagamento = " + dataPagamento);
-            Recibo.Pagar(id, ltVlr.Text, dataPagamento, dtpDataIN.Value, dtnDtFim.Value);
+            Recibo.Pagar(id, ltVlr.Text, dataPagamento, dtpDataIN.Value, dtFim, fator);
             INI MeuIni = new INI();
             using (var receipt = new rel.Receipt())
             {
@@ -330,5 +371,35 @@ namespace TeleBonifacio
 
         #endregion
 
+        private void rdMensal_CheckedChanged(object sender, EventArgs e)
+        {
+            if (!carregando)
+            {
+                cINI.WriteInt("Config", "OptPerc", 0);
+                fator = 1f;
+                FazCarregamento(30);
+            }
+        }
+
+        private void rdQuinzenal_CheckedChanged(object sender, EventArgs e)
+        {
+            if (!carregando)
+            {
+                cINI.WriteInt("Config", "OptPerc", 1);
+                fator = 1f / 2f;
+                FazCarregamento(15);
+                CarregaGrid();
+            }
+        }
+
+        private void rdSemanal_CheckedChanged(object sender, EventArgs e)
+        {
+            if (!carregando)
+            {
+                cINI.WriteInt("Config", "OptPerc", 2);
+                fator = 12f / 52f;
+                FazCarregamento(7);
+            }
+        }
     }
 }

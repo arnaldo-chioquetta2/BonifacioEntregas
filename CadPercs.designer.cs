@@ -82,7 +82,7 @@ namespace TeleBonifacio
             this.rdSemanal.TabStop = true;
             this.rdSemanal.Text = "Semanal";
             this.rdSemanal.UseVisualStyleBackColor = true;
-            this.rdSemanal.Click += new System.EventHandler(this.rdSemanal_Click);
+            this.rdSemanal.CheckedChanged += new System.EventHandler(this.rdSemanal_CheckedChanged);
             // 
             // rdQuinzenal
             // 
@@ -94,7 +94,7 @@ namespace TeleBonifacio
             this.rdQuinzenal.TabStop = true;
             this.rdQuinzenal.Text = "Quinzenal";
             this.rdQuinzenal.UseVisualStyleBackColor = true;
-            this.rdQuinzenal.Click += new System.EventHandler(this.rdQuinzenal_Click);
+            this.rdQuinzenal.CheckedChanged += new System.EventHandler(this.rdQuinzenal_CheckedChanged);
             // 
             // rdMensal
             // 
@@ -106,7 +106,7 @@ namespace TeleBonifacio
             this.rdMensal.TabStop = true;
             this.rdMensal.Text = "Mensal";
             this.rdMensal.UseVisualStyleBackColor = true;
-            this.rdMensal.Click += new System.EventHandler(this.rdMensal_Click);
+            this.rdMensal.CheckedChanged += new System.EventHandler(this.rdMensal_CheckedChanged);
             // 
             // btnExcluir
             // 

@@ -326,12 +326,13 @@ namespace TeleBonifacio
 
         #endregion
 
-        public static decimal ObterPercentualVariavel(decimal valorTotal)
+        public static decimal ObterPercentualVariavel(decimal valorTotal, float fator)
         {
             using (OleDbConnection connection = new OleDbConnection(glo.connectionString))
             {
                 connection.Open();
-                string vVlr = glo.sv(valorTotal);
+                float VlrFatorado = (float)(valorTotal / Convert.ToDecimal(fator));
+                string vVlr = glo.sv(VlrFatorado);
                 string query = $@"SELECT TOP 1 Perc FROM Percents WHERE Valor > {vVlr} ORDER BY Valor ASC";
                 using (OleDbCommand command = new OleDbCommand(query, connection))
                 {

@@ -7,7 +7,7 @@ namespace TeleBonifacio.dao
     public class ReciboDAO
     {
 
-        public DataTable ValoresAPagar(DateTime? DT1, DateTime? DT2)
+        public DataTable ValoresAPagar(DateTime? DT1, DateTime? DT2, float fator)
         {
             StringBuilder query = new StringBuilder();
             query.Append(@"SELECT Entregas.idVend, Vendedores.Nome, SUM(Entregas.VlNota) as TotalVendas, 0 as Valor 
@@ -29,7 +29,7 @@ namespace TeleBonifacio.dao
             foreach (DataRow row in dataTable.Rows)
             {
                 decimal totalVendas = Convert.ToDecimal(row["TotalVendas"]);
-                decimal percentual = glo.ObterPercentualVariavel(totalVendas);
+                decimal percentual = glo.ObterPercentualVariavel(totalVendas, fator);
 
                 decimal valorComissao = Math.Round(totalVendas * (percentual / 100m), 2);
                 row["Valor"] = valorComissao;
@@ -40,7 +40,7 @@ namespace TeleBonifacio.dao
         }
 
 
-        public decimal VlrPend(int id, DateTime DT1, DateTime DT2)
+        public decimal VlrPend(int id, DateTime DT1, DateTime DT2, float fator)
         {
             DateTime dataInicio = DT1.Date;
             DateTime dataFim = DT2.Date;
@@ -62,7 +62,7 @@ namespace TeleBonifacio.dao
                 if (dataTable.Rows.Count > 0 && dataTable.Rows[0]["TotalVendas"] != DBNull.Value)
                 {
                     decimal totalVendas = Convert.ToDecimal(dataTable.Rows[0]["TotalVendas"]);
-                    decimal percentual = glo.ObterPercentualVariavel(totalVendas);
+                    decimal percentual = glo.ObterPercentualVariavel(totalVendas, fator);
                     ret = totalVendas * (percentual / 100m);
                 }
             }
@@ -75,7 +75,7 @@ namespace TeleBonifacio.dao
             return ret;
         }
 
-        public void Pagar(int id, string Valor, string dataPagamento, DateTime DT1, DateTime DT2)
+        public void Pagar(int id, string Valor, string dataPagamento, DateTime DT1, DateTime DT2, float fator)
         {
             glo.Loga($"Pagar {id}, {Valor}, {dataPagamento}, {DT1}, {DT2}");
             // Inserção na tabela Vales permanece a mesma
@@ -112,7 +112,7 @@ namespace TeleBonifacio.dao
             }
 
             // Calcular o percentual
-            decimal percentual = glo.ObterPercentualVariavel(totalVendas)/100;
+            decimal percentual = glo.ObterPercentualVariavel(totalVendas, fator)/100;
             string sPerc = glo.sv(percentual);
             glo.Loga($"{sPerc}");
             glo.Loga($"{totalVendas * percentual}");
