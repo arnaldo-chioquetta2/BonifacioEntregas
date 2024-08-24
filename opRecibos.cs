@@ -18,6 +18,8 @@ namespace TeleBonifacio
         private INI cINI;
         private bool carregando = true;
         private DateTime dtFim;
+        private int OpcPerc = 0;
+        private int DiasAtras = 30;
 
         public opRecibos()
         {
@@ -29,8 +31,7 @@ namespace TeleBonifacio
             PopulaVendedores();
             Recibo = new ReciboDAO();
             cINI = new INI();
-            int OpcPerc = cINI.ReadInt("Config", "OptPerc", 0);
-            int DiasAtras = 30;
+            OpcPerc = cINI.ReadInt("Config", "OptPerc", 0);            
             switch (OpcPerc)
             {
                 case 0: // Mensal
@@ -57,24 +58,28 @@ namespace TeleBonifacio
                 default:
                     throw new ArgumentException("Invalid option selected");
             }
-            FazCarregamento(DiasAtras);
+            dtFim = DateTime.Today;
+            FazCarregamento();
             rt.AdjustFormComponents(this);
             carregando = false;
         }
 
-        private void FazCarregamento(int DiasAtras)
+        #region Carregamento       
+
+        private void FazCarregamento()
         {
-            dtFim = DateTime.Today;
             lbFim.Text = dtFim.ToShortDateString();
             DateTime dtIN = dtFim.AddDays(-DiasAtras);
             dtpDataIN.Value = dtIN;
+            btAtu.Enabled = false;
+            Cursor.Current = Cursors.WaitCursor;
             CarregaGrid();
             ConfigurarGrid();
+            Cursor.Current = Cursors.Default;
+            btAtu.Enabled = true;
         }
 
-        #region Carregamento       
-
-        // CarregaGrid:Refatorado em 23/08/24 Original 25 linhas, resultado 72 linhas
+        // CarregaGrid:Refatorado em 23/08/24 Original 72 linhas, resultado 25 linhas
         private void CarregaGrid()
         {
             DateTime DT1 = dtpDataIN.Value.Date;
@@ -93,12 +98,14 @@ namespace TeleBonifacio
                 dataGrid1.Columns.Clear();
                 ConfigurarColunas(DadosFormatados);
                 dataGrid1.DataSource = DadosFormatados;
-                dataGrid1.SelectionMode = DataGridViewSelectionMode.FullColumnSelect;
+                dataGrid1.SelectionMode = DataGridViewSelectionMode.CellSelect;
                 ConfigurarGrid();
                 AjustarAlinhamento();
                 Console.WriteLine($"Número de linhas em DadosFormatados: {DadosFormatados.Rows.Count}");
                 Console.WriteLine($"Número de colunas em DadosFormatados: {DadosFormatados.Columns.Count}");
             }
+            dataGrid1.ClearSelection();
+            dataGrid1.CurrentCell = null;
         }
 
         private DataTable FormatarDados(DataTable Dados)
@@ -197,9 +204,8 @@ namespace TeleBonifacio
             for (int i = 0; i < dataGrid1.Columns.Count; i++)
             {
                 DataGridViewColumn column = dataGrid1.Columns[i];
-                column.Width = 160;
+                column.Width = 90;
                 column.DefaultCellStyle.Font = fonte;
-
                 if (i == 0) // Primeira coluna (descrições)
                 {
                     column.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleLeft;
@@ -367,9 +373,7 @@ namespace TeleBonifacio
         private void btAtu_Click(object sender, EventArgs e)
         {
             CarregaGrid();
-        }
-
-        #endregion
+        }        
 
         private void rdMensal_CheckedChanged(object sender, EventArgs e)
         {
@@ -377,7 +381,9 @@ namespace TeleBonifacio
             {
                 cINI.WriteInt("Config", "OptPerc", 0);
                 fator = 1f;
-                FazCarregamento(30);
+                OpcPerc = 0;
+                DiasAtras = 30;
+                FazCarregamento();                
             }
         }
 
@@ -387,8 +393,9 @@ namespace TeleBonifacio
             {
                 cINI.WriteInt("Config", "OptPerc", 1);
                 fator = 1f / 2f;
-                FazCarregamento(15);
-                CarregaGrid();
+                OpcPerc = 1;
+                DiasAtras = 15;
+                FazCarregamento(); 
             }
         }
 
@@ -398,8 +405,22 @@ namespace TeleBonifacio
             {
                 cINI.WriteInt("Config", "OptPerc", 2);
                 fator = 12f / 52f;
-                FazCarregamento(7);
+                OpcPerc = 2;
+                DiasAtras=7;
+                FazCarregamento();
             }
         }
+
+        private void dtpDataIN_ValueChanged(object sender, EventArgs e)
+        {
+            if (!carregando)
+            {
+                DateTime Data = dtpDataIN.Value;
+                dtFim = Data.AddDays(DiasAtras);
+                FazCarregamento();
+            }
+        }
+
+        #endregion
     }
 }

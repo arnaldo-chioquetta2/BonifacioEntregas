@@ -67,7 +67,7 @@ namespace TeleBonifacio
             this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(691, 82);
+            this.panel1.Size = new System.Drawing.Size(608, 82);
             this.panel1.TabIndex = 0;
             // 
             // groupBox1
@@ -144,6 +144,7 @@ namespace TeleBonifacio
             this.dtpDataIN.Size = new System.Drawing.Size(90, 23);
             this.dtpDataIN.TabIndex = 44;
             this.dtpDataIN.Tag = "H";
+            this.dtpDataIN.ValueChanged += new System.EventHandler(this.dtpDataIN_ValueChanged);
             // 
             // ltVlr
             // 
@@ -156,7 +157,7 @@ namespace TeleBonifacio
             // btExtrato
             // 
             this.btExtrato.Enabled = false;
-            this.btExtrato.Location = new System.Drawing.Point(606, 46);
+            this.btExtrato.Location = new System.Drawing.Point(526, 43);
             this.btExtrato.Name = "btExtrato";
             this.btExtrato.Size = new System.Drawing.Size(73, 23);
             this.btExtrato.TabIndex = 15;
@@ -167,7 +168,7 @@ namespace TeleBonifacio
             // btPagar
             // 
             this.btPagar.Enabled = false;
-            this.btPagar.Location = new System.Drawing.Point(527, 46);
+            this.btPagar.Location = new System.Drawing.Point(526, 14);
             this.btPagar.Name = "btPagar";
             this.btPagar.Size = new System.Drawing.Size(73, 23);
             this.btPagar.TabIndex = 14;
@@ -211,7 +212,7 @@ namespace TeleBonifacio
             this.dataGrid1.EnableHeadersVisualStyles = false;
             this.dataGrid1.Location = new System.Drawing.Point(0, 82);
             this.dataGrid1.Name = "dataGrid1";
-            this.dataGrid1.Size = new System.Drawing.Size(691, 120);
+            this.dataGrid1.Size = new System.Drawing.Size(608, 120);
             this.dataGrid1.TabIndex = 1;
             this.dataGrid1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.dataGrid1_MouseDown);
             // 
@@ -219,7 +220,7 @@ namespace TeleBonifacio
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(691, 202);
+            this.ClientSize = new System.Drawing.Size(608, 202);
             this.Controls.Add(this.dataGrid1);
             this.Controls.Add(this.panel1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
