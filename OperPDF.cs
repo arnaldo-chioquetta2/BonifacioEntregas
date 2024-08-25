@@ -19,6 +19,7 @@ namespace TeleBonifacio
         private string UID = "";
         private bool carregando = true;
         private string CaminhoPDF = "";
+        private string nmNo = "";
         private Color Verde = Color.FromArgb(215, 255, 215);
         
         private string sourceDirectory = "";
@@ -50,7 +51,7 @@ namespace TeleBonifacio
             {
                 iIDe = value;
             }
-        }
+        }        
 
         #region Inicializacao
 
@@ -185,17 +186,42 @@ namespace TeleBonifacio
 
         private void btPDF_Click(object sender, EventArgs e)
         {
-            //string ArquivoOrig = selectedNode.Name;
-            //AbreArquivo(this.iID, ArquivoOrig);
-            //contasAPagarDao.Imprimiu(this.iID);
-            //row.DefaultCellStyle.BackColor = Color.LightGreen;
+            AbreArquivo();
+            contasAPagarDao.Imprimiu(this.iID);
+
+            // Procurar nó baseado no texto
+            TreeNode nodeToColor = FindNodeByText(treeView1.Nodes, this.nmNo);
+            if (nodeToColor != null)
+            {
+                nodeToColor.BackColor = Verde;
+                nodeToColor.NodeFont = new Font(treeView1.Font, FontStyle.Regular);
+            }
         }
 
-        private void AbreArquivo(int Nro, string ArquivoOrig)
+        // Método para encontrar um nó por seu texto
+        private TreeNode FindNodeByText(TreeNodeCollection nodes, string searchText)
+        {
+            foreach (TreeNode node in nodes)
+            {
+                if (node.Text == searchText)
+                {
+                    return node;
+                }
+                TreeNode foundNode = FindNodeByText(node.Nodes, searchText);
+                if (foundNode != null)
+                {
+                    return foundNode;
+                }
+            }
+            return null;
+        }
+
+
+        private void AbreArquivo()
         {
             string fileNamePrefix = "Doc";
-            string fileExtension = Path.GetExtension(ArquivoOrig).TrimStart('.');
-            string sourceFilePath = Path.Combine(CaminhoBasePDF, $"{fileNamePrefix}{Nro}.{fileExtension}");
+            string fileExtension = Path.GetExtension(this.nmNo).TrimStart('.');
+            string sourceFilePath = Path.Combine(CaminhoBasePDF, $"{fileNamePrefix}{this.iID}.{fileExtension}");
             try
             {
                 if (File.Exists(sourceFilePath))
@@ -858,11 +884,12 @@ namespace TeleBonifacio
             TreeNode selectedNode = e.Node;
             if (selectedNode != null && selectedNode.Tag is int idArquivo)
             {
-                string fileName = selectedNode.Text;
-                AbreArquivo(idArquivo, fileName);
+                this.iID = idArquivo;
+                this.nmNo = selectedNode.Text;
+                AbreArquivo();
+                contasAPagarDao.Imprimiu(this.iID);
                 selectedNode.BackColor = Verde;
                 selectedNode.NodeFont = new Font(treeView1.Font, FontStyle.Regular);
-                contasAPagarDao.Imprimiu(idArquivo);
             }           
         }
 
@@ -886,6 +913,7 @@ namespace TeleBonifacio
             if (selectedNode != null && selectedNode.Tag is int documentID)
             {
                 this.iID = documentID;
+                this.nmNo = selectedNode.Text;
                 Mostra();
             }
         }
@@ -902,7 +930,7 @@ namespace TeleBonifacio
                 this.UID = Convert.ToString(row["UID"]);
                 dtpDataEmissao.Value = Convert.ToDateTime(row["DataEmissao"]);
 
-                // btPDF.Enabled = btEmail.Enabled = true;
+                btPDF.Enabled = btEmail.Enabled = true;
 
                 if (row["idFornecedor"] != DBNull.Value)
                 {
