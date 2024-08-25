@@ -138,14 +138,18 @@ namespace TeleBonifacio.dao
             DB.ExecutarComandoSQL(sql);
         }
 
-        public int CriarNovaPasta(string nome, int parentFolderId)
+        public int CriarNovaPasta(string nome, int? parentFolderId)
         {
-            string sql = $@"INSERT INTO Folders (FolderName, ParentFolderID) 
-                   VALUES ('{nome}', {parentFolderId} )";
+            string sql = parentFolderId.HasValue
+                ? $@"INSERT INTO Folders (FolderName, ParentFolderID) VALUES ('{nome}', {parentFolderId.Value})"
+                : $@"INSERT INTO Folders (FolderName, ParentFolderID) VALUES ('{nome}', NULL)";
+
             DB.ExecutarComandoSQL(sql);
-            string queryNome = $"SELECT Max(ID) FROM ContasAPagar";
+
+            string queryNome = "SELECT @@IDENTITY";
             return DB.ExecutarConsultaCount(queryNome);
         }
+
 
         public void RenomearPasta(int folderID, string newName)
         {

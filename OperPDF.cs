@@ -877,6 +877,43 @@ namespace TeleBonifacio
                 return;
             }
 
+            // Verificar se o nó está no primeiro nível
+            bool isFirstLevel = selectedNode.Parent == null;
+
+            // Se for o primeiro nível, perguntar se a nova pasta deve ser criada no mesmo nível ou como subpasta
+            if (isFirstLevel)
+            {
+                DialogResult result = MessageBox.Show("Deseja criar a nova pasta no mesmo nível ou como subpasta?",
+                                                      "Criar Nova Pasta",
+                                                      MessageBoxButtons.YesNoCancel,
+                                                      MessageBoxIcon.Question,
+                                                      MessageBoxDefaultButton.Button3);
+
+                if (result == DialogResult.Cancel)
+                {
+                    return;
+                }
+
+                if (result == DialogResult.Yes)
+                {
+                    // Criar a pasta no mesmo nível (como irmã)
+                    CriarPastaNoMesmoNivel(selectedNode);
+                }
+                else if (result == DialogResult.No)
+                {
+                    // Criar a pasta como subpasta (comportamento atual)
+                    CriarSubPasta(selectedNode);
+                }
+            }
+            else
+            {
+                // Para outros níveis, criar como subpasta (comportamento atual)
+                CriarSubPasta(selectedNode);
+            }
+        }
+
+        private void CriarPastaNoMesmoNivel(TreeNode selectedNode)
+        {
             // Pedir o nome da nova pasta
             string novaPastaNome = glo.ShowDialog("Informe o nome da nova pasta:", "Nova Pasta");
 
@@ -886,11 +923,47 @@ namespace TeleBonifacio
                 return;
             }
 
+            // Se o nó selecionado não tem pai, então está no nível raiz
+            int? parentFolderId = selectedNode.Parent != null ? (int?)selectedNode.Parent.Tag : null;
+
             // Criar a nova pasta no banco de dados
+            int novaPastaId = contasAPagarDao.CriarNovaPasta(novaPastaNome, parentFolderId);
+
+            // Criar o nó na TreeView no mesmo nível
+            TreeNode novaPastaNode = new TreeNode(novaPastaNome)
+            {
+                Tag = novaPastaId,
+                ImageIndex = 0,  // Ícone de pasta
+                SelectedImageIndex = 0
+            };
+
+            if (selectedNode.Parent != null)
+            {
+                selectedNode.Parent.Nodes.Add(novaPastaNode);
+                selectedNode.Parent.Expand();
+            }
+            else
+            {
+                treeView1.Nodes.Add(novaPastaNode);
+            }
+        }
+
+        private void CriarSubPasta(TreeNode selectedNode)
+        {
+            // Pedir o nome da nova subpasta
+            string novaPastaNome = glo.ShowDialog("Informe o nome da nova subpasta:", "Nova Subpasta");
+
+            if (string.IsNullOrWhiteSpace(novaPastaNome))
+            {
+                MessageBox.Show("Nome da pasta não pode ser vazio.");
+                return;
+            }
+
+            // Criar a nova subpasta no banco de dados
             int parentFolderId = (int)selectedNode.Tag;
             int novaPastaId = contasAPagarDao.CriarNovaPasta(novaPastaNome, parentFolderId);
 
-            // Criar o nó na TreeView
+            // Criar o nó na TreeView como subpasta
             TreeNode novaPastaNode = new TreeNode(novaPastaNome)
             {
                 Tag = novaPastaId,
@@ -900,8 +973,8 @@ namespace TeleBonifacio
 
             selectedNode.Nodes.Add(novaPastaNode);
             selectedNode.Expand();
-            
         }
+
 
         private void btObter_Click(TreeNode selectedNode)
         {
@@ -1005,8 +1078,9 @@ namespace TeleBonifacio
                 }
                 else
                 {
-                    MessageBox.Show("Nenhum dado encontrado para o ID especificado.");
+                    // MessageBox.Show("Nenhum dado encontrado para o ID especificado.");
                 }
+                btMudar.Enabled = true;
             }
         }
 
@@ -1056,7 +1130,7 @@ namespace TeleBonifacio
             else
             {
                 // Tratar o caso em que não há dados retornados
-                MessageBox.Show("Nenhum dado encontrado para o ID especificado.", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                // MessageBox.Show("Nenhum dado encontrado para o ID especificado.", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 // Limpar os campos ou realizar outras ações necessárias
             }
 
