@@ -533,14 +533,18 @@ namespace TeleBonifacio
             panel2.Visible = true;
             selectedNodeToMove = treeView1.SelectedNode;
 
+            if (selectedNodeToMove == null)
+            {
+                MessageBox.Show("Por favor, selecione um nó para mover.");
+                return;
+            }
+
             // Limpa o TreeView2 antes de preenchê-lo
             treeView2.Nodes.Clear();
 
             // Define o tamanho do ícone como metade do tamanho dos ícones no TreeView principal
             float iz = treeView1.ImageList.ImageSize.Width * 2 / 3;
-
             int iconSize = Convert.ToInt32(iz);
-            // int iconSize = treeView1.ImageList.ImageSize.Width / 2;
 
             treeView2.ImageList = new ImageList();
             treeView2.ImageList.ImageSize = new Size(iconSize, iconSize);
@@ -554,7 +558,7 @@ namespace TeleBonifacio
             }
 
             // Carregar apenas as pastas do TreeView1 no TreeView2
-            TreeNode currentParentNode = treeView1.SelectedNode?.Parent;
+            TreeNode currentParentNode = selectedNodeToMove.Parent;
             foreach (TreeNode node in treeView1.Nodes)
             {
                 if (IsFolderNode(node) && node != currentParentNode) // Verifica se o nó é uma pasta
@@ -571,24 +575,40 @@ namespace TeleBonifacio
             }
         }
 
-        private void CopySubFolders(TreeNode sourceNode, TreeNode targetNode)
+        private TreeNode FindNodeByTag(TreeNodeCollection nodes, int tag)
+        {
+            foreach (TreeNode node in nodes)
+            {
+                if ((int)node.Tag == tag)
+                {
+                    return node;
+                }
+                TreeNode foundNode = FindNodeByTag(node.Nodes, tag);
+                if (foundNode != null)
+                {
+                    return foundNode;
+                }
+            }
+            return null;
+        }
+
+        private void CopySubFolders(TreeNode sourceNode, TreeNode destNode)
         {
             foreach (TreeNode subNode in sourceNode.Nodes)
             {
-                if (IsFolderNode(subNode)) // Verifica se o subnó é uma pasta
+                if (IsFolderNode(subNode))
                 {
-                    TreeNode newSubFolderNode = new TreeNode(subNode.Text)
+                    TreeNode newSubNode = new TreeNode(subNode.Text)
                     {
                         Tag = subNode.Tag,
                         ImageIndex = 0, // Usar o índice do ícone de pasta no ImageList
                         SelectedImageIndex = 0
                     };
-                    targetNode.Nodes.Add(newSubFolderNode);
-                    CopySubFolders(subNode, newSubFolderNode);
+                    destNode.Nodes.Add(newSubNode);
+                    CopySubFolders(subNode, newSubNode);
                 }
             }
         }
-
         // Método para determinar se o nó é uma pasta
         private bool IsFolderNode(TreeNode node)
         {
@@ -1142,6 +1162,7 @@ namespace TeleBonifacio
             panel2.Visible = false;
         }
 
+
         private void button2_Click(object sender, EventArgs e)
         {
             if (selectedNodeToMove == null)
@@ -1155,7 +1176,7 @@ namespace TeleBonifacio
 
             if (targetFolderNode == null)
             {
-                MessageBox.Show("Nenhum nó foi selecionado na TreeView2.");
+                MessageBox.Show("Por favor, selecione uma pasta de destino.");
                 return;
             }
 
@@ -1169,19 +1190,27 @@ namespace TeleBonifacio
             contasAPagarDao.MudaNo(newFolderID, documentID);
 
             // Remover o nó da localização atual
+            TreeNode movedNode = (TreeNode)selectedNodeToMove.Clone();
             selectedNodeToMove.Remove();
 
-            // Recarregar a pasta de destino para garantir que o nó seja exibido
-            ReloadFolder(targetFolderNode);
-
-            // Expandir a pasta de destino para mostrar o nó movido
-            targetFolderNode.Expand();
+            // Adicionar o nó ao novo local na TreeView principal
+            TreeNode targetNodeInMainTreeView = FindNodeByTag(treeView1.Nodes, newFolderID);
+            if (targetNodeInMainTreeView != null)
+            {
+                targetNodeInMainTreeView.Nodes.Add(movedNode);
+                targetNodeInMainTreeView.Expand();
+            }
+            else
+            {
+                MessageBox.Show("Não foi possível encontrar a pasta de destino na TreeView principal.");
+            }
 
             // Fechar o painel de movimentação
             panel2.Visible = false;
 
             // Limpar a variável para a próxima operação
             selectedNodeToMove = null;
+
         }
 
         private void ReloadFolder(TreeNode folderNode)
