@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.OleDb;
+using System.Drawing;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -363,16 +364,44 @@ namespace TeleBonifacio
 
         public static string ShowDialog(string text, string caption)
         {
+            // Defina a fonte padrão para todo o formulário
+            Font font = new Font("Arial", 12);
+
             Form prompt = new Form()
             {
-                Width = 300,
-                Height = 150,
-                Text = caption
+                Width = 350,
+                Height = 180,
+                Text = caption,
+                Font = font,
+                StartPosition = FormStartPosition.CenterScreen // Centraliza a janela na tela
             };
 
-            Label textLabel = new Label() { Left = 50, Top = 20, Text = text };
-            TextBox textBox = new TextBox() { Left = 50, Top = 50, Width = 200 };
-            Button confirmation = new Button() { Text = "Ok", Left = 150, Width = 100, Top = 70 };
+            Label textLabel = new Label()
+            {
+                Left = 20,
+                Top = 20,
+                Width = 300,
+                Text = text,
+                Font = font
+            };
+
+            TextBox textBox = new TextBox()
+            {
+                Left = 20,
+                Top = 60,
+                Width = 300,
+                Font = font
+            };
+
+            Button confirmation = new Button()
+            {
+                Text = "Ok",
+                Left = 220,
+                Width = 100,
+                Top = 100,
+                Font = font
+            };
+
             confirmation.Click += (sender, e) => { prompt.Close(); };
 
             prompt.Controls.Add(textBox);
@@ -383,6 +412,7 @@ namespace TeleBonifacio
             prompt.ShowDialog();
             return textBox.Text;
         }
+
 
     }
 }

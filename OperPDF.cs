@@ -282,62 +282,54 @@ namespace TeleBonifacio
             }
         }
 
+        // Refatorado em 25/08/24 Original 60 linhas, resultado 8 linhas
         private void LoadFilteredSubFoldersAndDocuments(TreeNode parentNode, int folderId, int idForne, DateTime? dataPagamento, DateTime? dataVencimento, DateTime? dataEmissao, string valorTotal, string descricao, string observacoes, bool? pago)
         {
             var subFolders = FDao.GetSubFolders(folderId);
-            bool folderHasDocuments = false;
+            bool folderHasDocuments = ProcessSubFolders(subFolders, parentNode, idForne, dataPagamento, dataVencimento, dataEmissao, valorTotal, descricao, observacoes, pago);
+            var documents = FDao.GetFilteredDocuments(folderId, idForne, dataPagamento, dataVencimento, dataEmissao, valorTotal, descricao, observacoes, pago);
+            folderHasDocuments |= ProcessDocuments(documents, parentNode);
+            if (folderHasDocuments) parentNode.Expand();
+        }
 
+        private bool ProcessSubFolders(IEnumerable<tb.Folder> subFolders, TreeNode parentNode, int idForne, DateTime? dataPagamento, DateTime? dataVencimento, DateTime? dataEmissao, string valorTotal, string descricao, string observacoes, bool? pago)
+        {
+            bool folderHasDocuments = false;
             foreach (var subFolder in subFolders)
             {
-                var childNode = new FolderNode(subFolder.FolderName)
-                {
-                    Tag = subFolder.FolderID
-                };
-
+                var childNode = new FolderNode(subFolder.FolderName) { Tag = subFolder.FolderID };
                 LoadFilteredSubFoldersAndDocuments(childNode, subFolder.FolderID, idForne, dataPagamento, dataVencimento, dataEmissao, valorTotal, descricao, observacoes, pago);
-
-                // Só adicionar o nó se ele tiver documentos ou subpastas com documentos
                 if (childNode.Nodes.Count > 0)
                 {
                     parentNode.Nodes.Add(childNode);
                     folderHasDocuments = true;
                 }
             }
+            return folderHasDocuments;
+        }
 
-            var documents = FDao.GetFilteredDocuments(folderId, idForne, dataPagamento, dataVencimento, dataEmissao, valorTotal, descricao, observacoes, pago);
+        private bool ProcessDocuments(IEnumerable<tb.Document> documents, TreeNode parentNode)
+        {
+            bool folderHasDocuments = false;
             foreach (var doc in documents)
             {
-                string extension = Path.GetExtension(doc.DocumentName);
-                using (Icon icon = GetIconByExtension(extension))
+                using (Icon icon = GetIconByExtension(Path.GetExtension(doc.DocumentName)))
                 {
-                    var docNode = new TreeNode(doc.DocumentName)
-                    {
-                        Tag = doc.DocumentID
-                    };
-
-                    if (doc.idArquivo == 1)
-                    {
-                        docNode.BackColor = Verde;
-                    }
-
+                    var docNode = new TreeNode(doc.DocumentName) { Tag = doc.DocumentID };
+                    if (doc.idArquivo == 1) docNode.BackColor = Verde;
                     using (Bitmap bmp = icon.ToBitmap())
                     {
                         int imageIndex = treeView1.ImageList.Images.Add(bmp, Color.Transparent);
                         docNode.ImageIndex = imageIndex;
                         docNode.SelectedImageIndex = imageIndex;
                     }
-
                     parentNode.Nodes.Add(docNode);
                     folderHasDocuments = true;
                 }
             }
+            return folderHasDocuments;
+        }
 
-            // Expandir o nó se tiver documentos
-            if (folderHasDocuments)
-            {
-                parentNode.Expand();
-            }
-        }        
 
         #endregion
 
@@ -939,7 +931,7 @@ namespace TeleBonifacio
 
             if (string.IsNullOrWhiteSpace(novaPastaNome))
             {
-                MessageBox.Show("Nome da pasta não pode ser vazio.");
+                // MessageBox.Show("Nome da pasta não pode ser vazio.");
                 return;
             }
 
@@ -1211,24 +1203,6 @@ namespace TeleBonifacio
             // Limpar a variável para a próxima operação
             selectedNodeToMove = null;
 
-        }
-
-        private void ReloadFolder(TreeNode folderNode)
-        {
-            // Limpa os nós existentes
-            folderNode.Nodes.Clear();
-
-            // Recarrega os documentos e subpastas da pasta
-            List<tb.Document> documents = FDao.GetDocuments((int)folderNode.Tag);
-            AddDocumentNodes(folderNode, documents);
-            // Se houver subpastas, recarregue-as também
-            List<tb.Folder> subFolders = FDao.GetSubFolders((int)folderNode.Tag);
-            foreach (var subFolder in subFolders)
-            {
-                TreeNode subFolderNode = new TreeNode(subFolder.FolderName) { Tag = subFolder.FolderID };
-                folderNode.Nodes.Add(subFolderNode);
-                LoadSubFoldersAndDocuments(subFolderNode, subFolder.FolderID);
-            }
         }
 
         private void treeView1_MouseUp(object sender, MouseEventArgs e)
