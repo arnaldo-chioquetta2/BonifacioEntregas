@@ -132,5 +132,10 @@ namespace TeleBonifacio.dao
             return dt;
         }
 
+        internal void MudaNo(int newFolderID, int documentID)
+        {
+            string sql = $@"UPDATE ContasAPagar SET FolderID = {newFolderID} WHERE ID = {documentID}";
+            DB.ExecutarComandoSQL(sql);
+        }
     }
 }

@@ -20,6 +20,7 @@ namespace TeleBonifacio
         private bool carregando = true;
         private string CaminhoPDF = "";
         private string nmNo = "";
+        private TreeNode selectedNodeToMove;
         private Color Verde = Color.FromArgb(215, 255, 215);
         
         private string sourceDirectory = "";
@@ -279,16 +280,6 @@ namespace TeleBonifacio
                     rootNode.Expand(); // Expandir a raiz se tiver documentos
                 }
             }
-            //treeView1.Nodes.Clear();
-
-            //// Recarregar a TreeView com base nos critérios de filtro
-            //var rootFolders = FDao.GetRootFolders(); // Método para obter pastas raiz
-            //foreach (var folder in rootFolders)
-            //{
-            //    var rootNode = new TreeNode(folder.FolderName) { Tag = folder.FolderID };
-            //    LoadFilteredSubFoldersAndDocuments(rootNode, folder.FolderID, idForne, dataPagamento, dataVencimento, dataEmissao, valorTotal, descricao, observacoes, pago);
-            //    treeView1.Nodes.Add(rootNode);
-            //}
         }
 
         private void LoadFilteredSubFoldersAndDocuments(TreeNode parentNode, int folderId, int idForne, DateTime? dataPagamento, DateTime? dataVencimento, DateTime? dataEmissao, string valorTotal, string descricao, string observacoes, bool? pago)
@@ -346,50 +337,7 @@ namespace TeleBonifacio
             {
                 parentNode.Expand();
             }
-        }
-
-        //private void LoadFilteredSubFoldersAndDocuments(TreeNode parentNode, int folderId, int idForne, DateTime? dataPagamento, DateTime? dataVencimento, DateTime? dataEmissao, string valorTotal, string descricao, string observacoes, bool? pago)
-        //{
-        //    var subFolders = FDao.GetSubFolders(folderId);
-        //    foreach (var subFolder in subFolders)
-        //    {
-        //        var childNode = new FolderNode(subFolder.FolderName)
-        //        {
-        //            Tag = subFolder.FolderID
-        //        };
-
-        //        LoadFilteredSubFoldersAndDocuments(childNode, subFolder.FolderID, idForne, dataPagamento, dataVencimento, dataEmissao, valorTotal, descricao, observacoes, pago);
-        //        parentNode.Nodes.Add(childNode);
-        //    }
-
-        //    var documents = FDao.GetFilteredDocuments(folderId, idForne, dataPagamento, dataVencimento, dataEmissao, valorTotal, descricao, observacoes, pago);
-        //    foreach (var doc in documents)
-        //    {
-        //        string extension = Path.GetExtension(doc.DocumentName);
-        //        using (Icon icon = GetIconByExtension(extension))
-        //        {
-        //            var docNode = new TreeNode(doc.DocumentName)
-        //            {
-        //                Tag = doc.DocumentID
-        //            };
-
-        //            if (doc.idArquivo == 1)
-        //            {
-        //                docNode.BackColor = Verde;
-        //            }
-
-        //            using (Bitmap bmp = icon.ToBitmap())
-        //            {
-        //                int imageIndex = treeView1.ImageList.Images.Add(bmp, Color.Transparent);
-        //                docNode.ImageIndex = imageIndex;
-        //                docNode.SelectedImageIndex = imageIndex;
-        //            }
-
-        //            parentNode.Nodes.Add(docNode);
-        //        }
-        //    }
-        //}
-
+        }        
 
         #endregion
 
@@ -581,17 +529,72 @@ namespace TeleBonifacio
 
         private void btMudar_Click(object sender, EventArgs e)
         {
-            //contasAPagarDao.Muda(this.iID, (tabControl1.SelectedIndex == 0));            
-            //CarregaGridGenerico((tabControl1.SelectedIndex == 0 ? dataGrid1 : dataGrid2), 0, (tabControl1.SelectedIndex==1));
-            //Limpar();
-            //if (tabControl1.SelectedIndex==0)
-            //{
-            //    tabPage2.Tag = "A";
-            //} else
-            //{
-            //    tabPage1.Tag = "A";
-            //}
+            // Torna o painel visível
+            panel2.Visible = true;
+            selectedNodeToMove = treeView1.SelectedNode;
+
+            // Limpa o TreeView2 antes de preenchê-lo
+            treeView2.Nodes.Clear();
+
+            // Define o tamanho do ícone como metade do tamanho dos ícones no TreeView principal
+            float iz = treeView1.ImageList.ImageSize.Width * 2 / 3;
+
+            int iconSize = Convert.ToInt32(iz);
+            // int iconSize = treeView1.ImageList.ImageSize.Width / 2;
+
+            treeView2.ImageList = new ImageList();
+            treeView2.ImageList.ImageSize = new Size(iconSize, iconSize);
+            treeView2.ImageList.ColorDepth = ColorDepth.Depth32Bit;
+
+            // Adicionar o ícone de pasta ao ImageList
+            Icon folderIcon = GetFolderIcon();
+            using (Bitmap bmp = folderIcon.ToBitmap())
+            {
+                treeView2.ImageList.Images.Add(bmp);
+            }
+
+            // Carregar apenas as pastas do TreeView1 no TreeView2
+            TreeNode currentParentNode = treeView1.SelectedNode?.Parent;
+            foreach (TreeNode node in treeView1.Nodes)
+            {
+                if (IsFolderNode(node) && node != currentParentNode) // Verifica se o nó é uma pasta
+                {
+                    TreeNode newFolderNode = new TreeNode(node.Text)
+                    {
+                        Tag = node.Tag,
+                        ImageIndex = 0, // Usar o índice do ícone de pasta no ImageList
+                        SelectedImageIndex = 0
+                    };
+                    treeView2.Nodes.Add(newFolderNode);
+                    CopySubFolders(node, newFolderNode);
+                }
+            }
         }
+
+        private void CopySubFolders(TreeNode sourceNode, TreeNode targetNode)
+        {
+            foreach (TreeNode subNode in sourceNode.Nodes)
+            {
+                if (IsFolderNode(subNode)) // Verifica se o subnó é uma pasta
+                {
+                    TreeNode newSubFolderNode = new TreeNode(subNode.Text)
+                    {
+                        Tag = subNode.Tag,
+                        ImageIndex = 0, // Usar o índice do ícone de pasta no ImageList
+                        SelectedImageIndex = 0
+                    };
+                    targetNode.Nodes.Add(newSubFolderNode);
+                    CopySubFolders(subNode, newSubFolderNode);
+                }
+            }
+        }
+
+        // Método para determinar se o nó é uma pasta
+        private bool IsFolderNode(TreeNode node)
+        {
+            return node.Nodes.Count > 0; // Se o nó tem subnós, consideramos que é uma pasta
+        }
+
 
         private void btEmail_Click(object sender, EventArgs e)
         {
@@ -1017,6 +1020,73 @@ namespace TeleBonifacio
 
             carregando = false;
         }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            panel2.Visible = false;
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            if (selectedNodeToMove == null)
+            {
+                MessageBox.Show("Nenhum nó foi selecionado para mover.");
+                return;
+            }
+
+            // Verifica se uma pasta foi selecionada no TreeView2 (destino)
+            TreeNode targetFolderNode = treeView2.SelectedNode;
+
+            if (targetFolderNode == null)
+            {
+                MessageBox.Show("Nenhum nó foi selecionado na TreeView2.");
+                return;
+            }
+
+            // Obter o ID do documento a ser movido
+            int documentID = (int)selectedNodeToMove.Tag;
+
+            // Obter o ID da nova pasta (pasta de destino)
+            int newFolderID = (int)targetFolderNode.Tag;
+
+            // Realizar o UPDATE na base de dados
+            contasAPagarDao.MudaNo(newFolderID, documentID);
+
+            // Remover o nó da localização atual
+            selectedNodeToMove.Remove();
+
+            // Recarregar a pasta de destino para garantir que o nó seja exibido
+            ReloadFolder(targetFolderNode);
+
+            // Expandir a pasta de destino para mostrar o nó movido
+            targetFolderNode.Expand();
+
+            // Fechar o painel de movimentação
+            panel2.Visible = false;
+
+            // Limpar a variável para a próxima operação
+            selectedNodeToMove = null;
+        }
+
+        private void ReloadFolder(TreeNode folderNode)
+        {
+            // Limpa os nós existentes
+            folderNode.Nodes.Clear();
+
+            // Recarrega os documentos e subpastas da pasta
+            List<tb.Document> documents = FDao.GetDocuments((int)folderNode.Tag);
+            AddDocumentNodes(folderNode, documents);
+            // Se houver subpastas, recarregue-as também
+            List<tb.Folder> subFolders = FDao.GetSubFolders((int)folderNode.Tag);
+            foreach (var subFolder in subFolders)
+            {
+                TreeNode subFolderNode = new TreeNode(subFolder.FolderName) { Tag = subFolder.FolderID };
+                folderNode.Nodes.Add(subFolderNode);
+                LoadSubFoldersAndDocuments(subFolderNode, subFolder.FolderID);
+            }
+        }
+
+
     }
 
 }
