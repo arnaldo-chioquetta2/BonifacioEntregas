@@ -624,13 +624,9 @@ namespace TeleBonifacio
             pesEmails OForm = new pesEmails();                      
             int idArquivo = Convert.ToInt32(dataGrid1.SelectedRows[0].Cells["ID"].Value.ToString());
             string ArquivoOrig = dataGrid1.SelectedRows[0].Cells["Arquivo"].Value.ToString();
-
-            // AbreArquivo(idArquivo, ArquivoOrig);
             string fileNamePrefix = "Doc";
             string fileExtension = Path.GetExtension(ArquivoOrig).TrimStart('.');
             string sourceFilePath = Path.Combine(CaminhoBasePDF, $"{fileNamePrefix}{idArquivo}.{fileExtension}");
-
-            // OForm.Arquivo = Arquivo;
             OForm.Arquivo = sourceFilePath;
             OForm.Show();
             AdicionarAoArquivoINI(sourceFilePath);

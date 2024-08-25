@@ -537,19 +537,13 @@ namespace TeleBonifacio
 
         private void btEmail_Click(object sender, EventArgs e)
         {
-            pesEmails OForm = new pesEmails();                      
-            //int idArquivo = Convert.ToInt32(dataGrid1.SelectedRows[0].Cells["ID"].Value.ToString());
-            //string ArquivoOrig = dataGrid1.SelectedRows[0].Cells["Arquivo"].Value.ToString();
-
-            //// AbreArquivo(idArquivo, ArquivoOrig);
-            //string fileNamePrefix = "Doc";
-            //string fileExtension = Path.GetExtension(ArquivoOrig).TrimStart('.');
-            //string sourceFilePath = Path.Combine(CaminhoBasePDF, $"{fileNamePrefix}{idArquivo}.{fileExtension}");
-
-            //// OForm.Arquivo = Arquivo;
-            //OForm.Arquivo = sourceFilePath;
-            //OForm.Show();
-            //AdicionarAoArquivoINI(sourceFilePath);
+            pesEmails OForm = new pesEmails();
+            string fileNamePrefix = "Doc";
+            string fileExtension = Path.GetExtension(this.nmNo.TrimStart('.'));
+            string sourceFilePath = Path.Combine(CaminhoBasePDF, $"{fileNamePrefix}{this.iID}.{fileExtension}");
+            OForm.Arquivo = sourceFilePath;
+            OForm.Show();
+            AdicionarAoArquivoINI(sourceFilePath);
         }
 
         private void button1_Click(object sender, EventArgs e)
