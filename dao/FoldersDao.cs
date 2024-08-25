@@ -70,8 +70,7 @@ namespace TeleBonifacio.dao
         public List<tb.Document> GetDocuments(int folderId)
         {
             List<tb.Document> documents = new List<tb.Document>();
-            string query = "SELECT ID, CaminhoPDF, idArquivo FROM ContasAPagar WHERE FolderID = @FolderID";
-
+            string query = "SELECT ID, CaminhoPDF, FolderID, idArquivo FROM ContasAPagar WHERE FolderID = @FolderID";
             using (OleDbConnection connection = new OleDbConnection(glo.connectionString))
             {
                 connection.Open();
@@ -82,16 +81,23 @@ namespace TeleBonifacio.dao
                     {
                         while (reader.Read())
                         {
-                            documents.Add(new tb.Document
+                            tb.Document Doc = new tb.Document();
+                            Doc.DocumentID = reader.GetInt32(0);
+                            Doc.DocumentName = reader.GetString(1);
+                            Doc.FolderID = reader.GetInt32(2);
+                            if (!reader.IsDBNull(3))
                             {
-                                DocumentID = reader.GetInt32(0),
-                                DocumentName = reader.GetString(1)
-                            });
+                                Doc.idArquivo = reader.GetInt32(3); 
+                            }
+                            else
+                            {
+                                Doc.idArquivo = 0; 
+                            }
+                            documents.Add(Doc);
                         }                        
                     }
                 }
             }
-
             return documents;
         }
 

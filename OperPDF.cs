@@ -324,30 +324,6 @@ namespace TeleBonifacio
             contasAPagarDao.Exclui(this.iID.ToString(), this.CaminhoPDF);
         }
 
-        private void ExcluirRegistros(DataGridView dataGridView, int tabIndex)
-        {
-            //if (dataGridView.SelectedRows.Count == 1)
-            //{
-            //    this.iID = Convert.ToInt32(dataGridView.SelectedRows[0].Cells["ID"].Value);
-            //    string arquivo = Convert.ToString(dataGridView.SelectedRows[0].Cells["Arquivo"].Value);
-            //    ApagaRegistro();  
-            //    ApagarArquivo(this.iID, arquivo);
-            //}
-            //else
-            //{
-            //    foreach (DataGridViewRow row in dataGridView.SelectedRows)
-            //    {
-            //        this.iID = Convert.ToInt32(row.Cells["ID"].Value);
-            //        this.UID = Convert.ToString(row.Cells["UID"].Value);
-            //        string arquivo = Convert.ToString(row.Cells["Arquivo"].Value);
-            //        ApagaRegistro();
-            //        ApagarArquivo(this.iID, arquivo);
-            //    }
-            //}
-            //CarregaGridGenerico(dataGridView, -1, tabIndex == 1);
-        }
-
-
         private void btnExcluir_Click(object sender, EventArgs e)
         {
             DialogResult result = MessageBox.Show("Tem certeza que deseja excluir os registros selecionados?",
@@ -356,12 +332,15 @@ namespace TeleBonifacio
                                                   MessageBoxIcon.Question);
             if (result == DialogResult.Yes)
             {
-                //DataGridView targetGrid = tabControl1.SelectedIndex == 0 ? dataGrid1 : dataGrid2;
-                //ExcluirRegistros(targetGrid, tabControl1.SelectedIndex);
-                //CarregaGridGenerico(dataGrid1, -1, (tabControl1.SelectedIndex == 1));
-                //Limpar();
-                //btLimparFiltro.Enabled = false;
-                //cmbForn.SelectedIndex = 0;
+                ApagaRegistro();
+                ApagarArquivo(this.iID, this.nmNo);
+                Limpar();
+                btLimparFiltro.Enabled = false;
+                cmbForn.SelectedIndex = 0;
+                if (treeView1.SelectedNode != null)
+                {
+                    treeView1.SelectedNode.Remove();
+                }
             }
         }
 
@@ -435,72 +414,7 @@ namespace TeleBonifacio
             cmbForn.SelectedIndex = 0;
             btLimparFiltro.Enabled = false;
             btnAdicionar.Enabled = false;
-        }
-
-        //private void btObter_Click(object sender, EventArgs e)
-        //{
-        //    btStripObter.Enabled = false;
-
-        //    try
-        //    {
-        //        if (!Directory.Exists(sourceDirectory))
-        //        {
-        //            MessageBox.Show("A pasta não existe ou não é acessível no momento.");
-        //            return;
-        //        }
-
-        //        // Verificar se existe uma pasta chamada "Nova" na TreeView
-        //        TreeNode novaNode = null;
-        //        foreach (TreeNode node in treeView1.Nodes)
-        //        {
-        //            if (node.Text == "Nova")
-        //            {
-        //                novaNode = node;
-        //                break;
-        //            }
-        //        }
-
-        //        // Se a pasta "Nova" não existir, criar e adicioná-la como a primeira
-        //        if (novaNode == null)
-        //        {
-        //            novaNode = new TreeNode("Nova");
-        //            treeView1.Nodes.Insert(0, novaNode); // Insere na primeira posição
-        //        }
-
-        //        // Processar os documentos na pasta monitorada
-        //        foreach (string filePath in Directory.GetFiles(sourceDirectory))
-        //        {
-        //            try
-        //            {
-        //                string UID = glo.GenerateUID();
-        //                string fileName = Path.GetFileName(filePath);
-        //                DateTime dataEmissao = DateTime.Now;
-        //                int idAdic = contasAPagarDao.AdicObter(false, DateTime.Now, fileName, UID);
-        //                string fileExtension = Path.GetExtension(fileName).TrimStart('.');
-        //                string destinationFileName = $"Doc{idAdic}.{fileExtension}";
-        //                string destinationFilePath = Path.Combine(CaminhoBasePDF, destinationFileName);
-        //                File.Move(filePath, destinationFilePath);
-        //                TreeNode docNode = new TreeNode(destinationFileName);
-        //                novaNode.Nodes.Add(docNode);
-        //            }
-        //            catch (Exception ex)
-        //            {
-        //                MessageBox.Show($"Erro ao processar o arquivo {filePath}: {ex.Message}");
-        //            }
-        //        }
-
-        //        // Expandir a pasta "Nova" para mostrar os novos documentos
-        //        novaNode.Expand();
-        //        treeView1.SelectedNode = novaNode; // Selecionar o nó "Nova"
-
-        //        // Atualizar a TreeView
-        //        treeView1.Refresh();
-        //    }
-        //    finally
-        //    {
-        //        btStripObter.Enabled = true;
-        //    }
-        //}
+        }        
 
         private void tabControl1_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -718,6 +632,12 @@ namespace TeleBonifacio
                     {
                         Tag = doc.DocumentID
                     };
+
+                    if (doc.idArquivo == 1)
+                    {
+                        // Definir a cor de fundo como verde se idArquivo for 1
+                        docNode.BackColor = Verde;
+                    }
 
                     using (Bitmap bmp = icon.ToBitmap())
                     {
@@ -953,6 +873,7 @@ namespace TeleBonifacio
 
                 this.CaminhoPDF = Convert.ToString(row["CaminhoPDF"]);
                 txObservacoes.Text = Convert.ToString(row["Observacoes"]);
+                btExcluir.Enabled = true;
             }
             else
             {
