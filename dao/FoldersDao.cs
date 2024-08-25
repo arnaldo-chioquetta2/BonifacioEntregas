@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data.OleDb;
 
 namespace TeleBonifacio.dao
@@ -161,6 +162,58 @@ namespace TeleBonifacio.dao
 
             return folderId;
         }
+
+        public List<tb.Document> GetFilteredDocuments(int folderId, int idForne, DateTime? dataPagamento, DateTime? dataVencimento, DateTime? dataEmissao, string valorTotal, string descricao, string observacoes, bool? pago)
+        {
+            List<tb.Document> documents = new List<tb.Document>();
+            // Construindo a consulta SQL
+            string query = "SELECT ID, CaminhoPDF, FolderID, idArquivo FROM ContasAPagar WHERE FolderID = @FolderID";
+
+            // Adicionar condições conforme os parâmetros não forem nulos
+            if (!string.IsNullOrWhiteSpace(descricao))
+            {
+                query += " AND Descricao LIKE @Descricao";
+            }
+
+            using (OleDbConnection connection = new OleDbConnection(glo.connectionString))
+            {
+                connection.Open();
+                using (OleDbCommand command = new OleDbCommand(query, connection))
+                {
+                    command.Parameters.AddWithValue("@FolderID", folderId);
+
+                    if (!string.IsNullOrWhiteSpace(descricao))
+                    {
+                        command.Parameters.AddWithValue("@Descricao", "%" + descricao + "%");
+                    }
+
+                    using (OleDbDataReader reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            tb.Document doc = new tb.Document();
+                            doc.DocumentID = reader.GetInt32(0);
+                            doc.DocumentName = reader.GetString(1);
+                            doc.FolderID = reader.GetInt32(2);
+
+                            if (!reader.IsDBNull(3))
+                            {
+                                doc.idArquivo = reader.GetInt32(3);
+                            }
+                            else
+                            {
+                                doc.idArquivo = 0;
+                            }
+
+                            documents.Add(doc);
+                        }
+                    }
+                }
+            }
+            return documents;
+        }
+
+
 
         #endregion
 

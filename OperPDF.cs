@@ -131,6 +131,7 @@ namespace TeleBonifacio
             btnAdicionar.Enabled = ok;
             btPDF.Enabled = btEmail.Enabled = false;            
             btLimparFiltro.Enabled = ok;
+            btFiltrar.Enabled = true;
         }
 
         private void btnAdicionar_Click_1(object sender, EventArgs e)
@@ -245,8 +246,150 @@ namespace TeleBonifacio
 
         private void btFiltrar_Click(object sender, EventArgs e)
         {
-            // AtualizaGrids();
+            // Parâmetros de filtragem
+            int idForne = 0;
+            if (cmbForn.Tag == "M")
+            {
+                int iForn = cmbForn.SelectedIndex;
+                idForne = ((tb.ComboBoxItem)cmbForn.Items[iForn]).Id;
+            }
+
+            DateTime? dataPagamento = dtpDataPagamento.Tag?.ToString() == "M" && dtpDataPagamento.Checked ? (DateTime?)dtpDataPagamento.Value : null;
+            DateTime? dataVencimento = dtpDataVencimento.Tag?.ToString() == "M" && dtpDataVencimento.Checked ? (DateTime?)dtpDataVencimento.Value : null;
+            DateTime? dataEmissao = dtpDataEmissao.Tag?.ToString() == "M" && dtpDataEmissao.Checked ? (DateTime?)dtpDataEmissao.Value : null;
+            string valorTotal = txValorTotal.Tag?.ToString() == "M" && !string.IsNullOrWhiteSpace(txValorTotal.Text) ? txValorTotal.Text : null;
+            string descricao = txDescricao.Tag?.ToString() == "M" && !string.IsNullOrWhiteSpace(txDescricao.Text) ? txDescricao.Text : null;
+            string observacoes = txObservacoes.Tag?.ToString() == "M" && !string.IsNullOrWhiteSpace(txObservacoes.Text) ? txObservacoes.Text : null;
+            bool? pago = ckPago.Tag?.ToString() == "M" && ckPago.CheckState != CheckState.Indeterminate ? (bool?)ckPago.Checked : null;
+
+            // Limpar a TreeView antes de aplicar o filtro
+            treeView1.Nodes.Clear();
+
+            // Recarregar a TreeView com base nos critérios de filtro
+            var rootFolders = FDao.GetRootFolders(); // Método para obter pastas raiz
+            foreach (var folder in rootFolders)
+            {
+                var rootNode = new TreeNode(folder.FolderName) { Tag = folder.FolderID };
+                LoadFilteredSubFoldersAndDocuments(rootNode, folder.FolderID, idForne, dataPagamento, dataVencimento, dataEmissao, valorTotal, descricao, observacoes, pago);
+
+                // Adicionar o nó raiz apenas se ele tiver subnós (documentos ou pastas)
+                if (rootNode.Nodes.Count > 0)
+                {
+                    treeView1.Nodes.Add(rootNode);
+                    rootNode.Expand(); // Expandir a raiz se tiver documentos
+                }
+            }
+            //treeView1.Nodes.Clear();
+
+            //// Recarregar a TreeView com base nos critérios de filtro
+            //var rootFolders = FDao.GetRootFolders(); // Método para obter pastas raiz
+            //foreach (var folder in rootFolders)
+            //{
+            //    var rootNode = new TreeNode(folder.FolderName) { Tag = folder.FolderID };
+            //    LoadFilteredSubFoldersAndDocuments(rootNode, folder.FolderID, idForne, dataPagamento, dataVencimento, dataEmissao, valorTotal, descricao, observacoes, pago);
+            //    treeView1.Nodes.Add(rootNode);
+            //}
         }
+
+        private void LoadFilteredSubFoldersAndDocuments(TreeNode parentNode, int folderId, int idForne, DateTime? dataPagamento, DateTime? dataVencimento, DateTime? dataEmissao, string valorTotal, string descricao, string observacoes, bool? pago)
+        {
+            var subFolders = FDao.GetSubFolders(folderId);
+            bool folderHasDocuments = false;
+
+            foreach (var subFolder in subFolders)
+            {
+                var childNode = new FolderNode(subFolder.FolderName)
+                {
+                    Tag = subFolder.FolderID
+                };
+
+                LoadFilteredSubFoldersAndDocuments(childNode, subFolder.FolderID, idForne, dataPagamento, dataVencimento, dataEmissao, valorTotal, descricao, observacoes, pago);
+
+                // Só adicionar o nó se ele tiver documentos ou subpastas com documentos
+                if (childNode.Nodes.Count > 0)
+                {
+                    parentNode.Nodes.Add(childNode);
+                    folderHasDocuments = true;
+                }
+            }
+
+            var documents = FDao.GetFilteredDocuments(folderId, idForne, dataPagamento, dataVencimento, dataEmissao, valorTotal, descricao, observacoes, pago);
+            foreach (var doc in documents)
+            {
+                string extension = Path.GetExtension(doc.DocumentName);
+                using (Icon icon = GetIconByExtension(extension))
+                {
+                    var docNode = new TreeNode(doc.DocumentName)
+                    {
+                        Tag = doc.DocumentID
+                    };
+
+                    if (doc.idArquivo == 1)
+                    {
+                        docNode.BackColor = Verde;
+                    }
+
+                    using (Bitmap bmp = icon.ToBitmap())
+                    {
+                        int imageIndex = treeView1.ImageList.Images.Add(bmp, Color.Transparent);
+                        docNode.ImageIndex = imageIndex;
+                        docNode.SelectedImageIndex = imageIndex;
+                    }
+
+                    parentNode.Nodes.Add(docNode);
+                    folderHasDocuments = true;
+                }
+            }
+
+            // Expandir o nó se tiver documentos
+            if (folderHasDocuments)
+            {
+                parentNode.Expand();
+            }
+        }
+
+        //private void LoadFilteredSubFoldersAndDocuments(TreeNode parentNode, int folderId, int idForne, DateTime? dataPagamento, DateTime? dataVencimento, DateTime? dataEmissao, string valorTotal, string descricao, string observacoes, bool? pago)
+        //{
+        //    var subFolders = FDao.GetSubFolders(folderId);
+        //    foreach (var subFolder in subFolders)
+        //    {
+        //        var childNode = new FolderNode(subFolder.FolderName)
+        //        {
+        //            Tag = subFolder.FolderID
+        //        };
+
+        //        LoadFilteredSubFoldersAndDocuments(childNode, subFolder.FolderID, idForne, dataPagamento, dataVencimento, dataEmissao, valorTotal, descricao, observacoes, pago);
+        //        parentNode.Nodes.Add(childNode);
+        //    }
+
+        //    var documents = FDao.GetFilteredDocuments(folderId, idForne, dataPagamento, dataVencimento, dataEmissao, valorTotal, descricao, observacoes, pago);
+        //    foreach (var doc in documents)
+        //    {
+        //        string extension = Path.GetExtension(doc.DocumentName);
+        //        using (Icon icon = GetIconByExtension(extension))
+        //        {
+        //            var docNode = new TreeNode(doc.DocumentName)
+        //            {
+        //                Tag = doc.DocumentID
+        //            };
+
+        //            if (doc.idArquivo == 1)
+        //            {
+        //                docNode.BackColor = Verde;
+        //            }
+
+        //            using (Bitmap bmp = icon.ToBitmap())
+        //            {
+        //                int imageIndex = treeView1.ImageList.Images.Add(bmp, Color.Transparent);
+        //                docNode.ImageIndex = imageIndex;
+        //                docNode.SelectedImageIndex = imageIndex;
+        //            }
+
+        //            parentNode.Nodes.Add(docNode);
+        //        }
+        //    }
+        //}
+
 
         #endregion
 
@@ -414,6 +557,7 @@ namespace TeleBonifacio
             cmbForn.SelectedIndex = 0;
             btLimparFiltro.Enabled = false;
             btnAdicionar.Enabled = false;
+            LoadTreeView();
         }        
 
         private void tabControl1_SelectedIndexChanged(object sender, EventArgs e)
@@ -512,15 +656,6 @@ namespace TeleBonifacio
         {
             foreach (var doc in documents)
             {
-                // Aplicar a cor verde claro aos documentos já existentes
-
-                //Color? EssaCor = null;            
-                //if (doc.idArquivo==1)
-                //{
-                //    EssaCor = Verde;
-                //}
-                Color? EssaCor = Verde;
-                // AddNodeWithIcon(parentNode, doc.DocumentName, doc.DocumentID.ToString(), backColor: EssaCor);
                 AddNodeWithIcon(parentNode, doc.DocumentName, doc.DocumentID.ToString());
             }
         }
@@ -539,10 +674,7 @@ namespace TeleBonifacio
             {
                 newNode.NodeFont = new Font(treeView1.Font, FontStyle.Bold);
             }
-
-            newNode.BackColor = Color.FromArgb(215, 255, 215);
-            // newNode.BackColor = Verde;
-
+            newNode.BackColor = Verde;
             if (icon != null)
             {
                 // Converter o Icon para Bitmap
@@ -829,6 +961,7 @@ namespace TeleBonifacio
                 this.iID = documentID;
                 this.nmNo = selectedNode.Text;
                 Mostra();
+                btMudar.Enabled = true;
             }
         }
 
