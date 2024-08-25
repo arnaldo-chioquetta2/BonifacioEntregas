@@ -11,8 +11,9 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyCulture("")]
 [assembly: ComVisible(false)]
 [assembly: Guid("308c57af-e663-456d-8a2c-188bbd61423d")]
-[assembly: AssemblyVersion("2.7.4.0")]
-[assembly: AssemblyFileVersion("2.7.4.0")]
+[assembly: AssemblyVersion("2.7.5.0")]
+[assembly: AssemblyFileVersion("2.7.5.0")]
+// 2.7.5 Restante das operações na tela dos PDFs
 // 2.7.4 Ajustes no campo valor do recibo e nas datas do extrato
 // 2.7.3 Calculo das comissões variavel por periodicidade
 // 2.7.2 Ajuste na operação do recibo

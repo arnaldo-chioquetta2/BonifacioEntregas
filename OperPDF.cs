@@ -412,7 +412,7 @@ namespace TeleBonifacio
         private void ApagaRegistro()
         {
             glo.Loga($@"PD,{this.iID}, {this.UID}");
-            contasAPagarDao.Exclui(this.iID.ToString(), this.CaminhoPDF);
+            contasAPagarDao.Exclui(this.iID.ToString());
         }
 
         private void btnExcluir_Click(object sender, EventArgs e)
@@ -592,7 +592,8 @@ namespace TeleBonifacio
         // Método para determinar se o nó é uma pasta
         private bool IsFolderNode(TreeNode node)
         {
-            return node.Nodes.Count > 0; // Se o nó tem subnós, consideramos que é uma pasta
+            return node.Nodes.Count > 0 || node.Tag is int;
+            // return node.Nodes.Count > 0; // Se o nó tem subnós, consideramos que é uma pasta
         }
 
 
@@ -677,7 +678,10 @@ namespace TeleBonifacio
             {
                 newNode.NodeFont = new Font(treeView1.Font, FontStyle.Bold);
             }
-            newNode.BackColor = Verde;
+            if (backColor!=null)
+            {
+                newNode.BackColor = Verde;
+            }            
             if (icon != null)
             {
                 // Converter o Icon para Bitmap
@@ -866,14 +870,37 @@ namespace TeleBonifacio
 
         private void btStripObter_Click(object sender, EventArgs e)
         {
-            if (treeView1.SelectedNode != null)
+            TreeNode selectedNode = treeView1.SelectedNode;
+            if (selectedNode == null)
             {
-                // Obtém o nó selecionado na TreeView
-                TreeNode selectedNode = treeView1.SelectedNode;
-
-                // Chama o método para processar a obtenção dos arquivos
-                btObter_Click(selectedNode);
+                MessageBox.Show("Por favor, selecione uma pasta onde a nova subpasta será criada.");
+                return;
             }
+
+            // Pedir o nome da nova pasta
+            string novaPastaNome = glo.ShowDialog("Informe o nome da nova pasta:", "Nova Pasta");
+
+            if (string.IsNullOrWhiteSpace(novaPastaNome))
+            {
+                MessageBox.Show("Nome da pasta não pode ser vazio.");
+                return;
+            }
+
+            // Criar a nova pasta no banco de dados
+            int parentFolderId = (int)selectedNode.Tag;
+            int novaPastaId = contasAPagarDao.CriarNovaPasta(novaPastaNome, parentFolderId);
+
+            // Criar o nó na TreeView
+            TreeNode novaPastaNode = new TreeNode(novaPastaNome)
+            {
+                Tag = novaPastaId,
+                ImageIndex = 0,  // Ícone de pasta
+                SelectedImageIndex = 0
+            };
+
+            selectedNode.Nodes.Add(novaPastaNode);
+            selectedNode.Expand();
+            
         }
 
         private void btObter_Click(TreeNode selectedNode)
@@ -956,15 +983,30 @@ namespace TeleBonifacio
 
         private void TreeView1_AfterSelect(object sender, TreeViewEventArgs e)
         {
-            // Verificar se o nó selecionado é um documento (por exemplo, verificar a tag ou extensão)
             TreeNode selectedNode = e.Node;
 
-            if (selectedNode != null && selectedNode.Tag is int documentID)
+            if (selectedNode != null)
             {
-                this.iID = documentID;
-                this.nmNo = selectedNode.Text;
-                Mostra();
-                btMudar.Enabled = true;
+                // Verifica se o nó é uma pasta
+                if (selectedNode.Nodes.Count > 0 || selectedNode.Tag is int == false)
+                {
+                    // Se o nó tem subnós ou a Tag não é um int, é uma pasta
+                    // Você pode expandir a pasta, se necessário, ou simplesmente sair da função
+                    selectedNode.Expand();
+                    return;
+                }
+
+                // Se chegar aqui, significa que é um documento
+                if (selectedNode.Tag is int documentID)
+                {
+                    this.iID = documentID;
+                    this.nmNo = selectedNode.Text;
+                    Mostra(); // Função que exibe os dados do documento
+                }
+                else
+                {
+                    MessageBox.Show("Nenhum dado encontrado para o ID especificado.");
+                }
             }
         }
 
@@ -1083,6 +1125,153 @@ namespace TeleBonifacio
                 TreeNode subFolderNode = new TreeNode(subFolder.FolderName) { Tag = subFolder.FolderID };
                 folderNode.Nodes.Add(subFolderNode);
                 LoadSubFoldersAndDocuments(subFolderNode, subFolder.FolderID);
+            }
+        }
+
+        private void treeView1_MouseUp(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Right)
+            {
+                // Obtém o nó que está sob o cursor do mouse
+                TreeNode clickedNode = treeView1.GetNodeAt(e.X, e.Y);
+
+                if (clickedNode != null)
+                {
+                    // Seleciona o nó clicado
+                    treeView1.SelectedNode = clickedNode;
+
+                    // Verifica se o nó tem uma extensão de 3 ou 4 caracteres
+                    string nodeName = clickedNode.Text;
+                    string extension = Path.GetExtension(nodeName).TrimStart('.');
+
+                    if (string.IsNullOrEmpty(extension) || (extension.Length != 3 && extension.Length != 4))
+                    {
+                        // Exibe o menu de contexto se não for uma extensão de 3 ou 4 caracteres
+                        contextMenuStrip1.Show(treeView1, e.Location);
+                    }
+                    else
+                    {
+                        // Não exibe o menu de contexto
+                        contextMenuStrip1.Hide();
+                    }
+                }
+                else
+                {
+                    // Oculta o menu de contexto se clicado fora de um nó
+                    contextMenuStrip1.Hide();
+                }
+            }
+        }
+
+        private void renomearToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            // Obter o nó selecionado
+            TreeNode selectedNode = treeView1.SelectedNode;
+
+            if (selectedNode == null || selectedNode.Tag == null)
+            {
+                MessageBox.Show("Nenhuma pasta foi selecionada para renomear.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            // Verifica se o nó é uma pasta
+            if (IsFolderNode(selectedNode))
+            {
+                // Mostrar o diálogo para o novo nome
+                string currentName = selectedNode.Text;
+                string newName = glo.ShowDialog("Renomear Pasta: Informe o novo nome para a pasta:", currentName);
+
+                if (!string.IsNullOrWhiteSpace(newName) && newName != currentName)
+                {
+                    // Obter o ID da pasta a ser renomeada
+                    int folderID = (int)selectedNode.Tag;
+
+                    // Atualizar o nome no banco de dados
+                    contasAPagarDao.RenomearPasta(folderID, newName);
+
+                    // Atualizar o texto do nó na TreeView
+                    selectedNode.Text = newName;
+                }
+                else if (newName == currentName)
+                {
+                    MessageBox.Show("O nome da pasta não foi alterado.", "Informação", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+                else
+                {
+                    MessageBox.Show("Nome inválido. Operação cancelada.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+            else
+            {
+                MessageBox.Show("Por favor, selecione uma pasta para renomear.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void apagarToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            // Definir o cursor para ampulheta
+            Cursor.Current = Cursors.WaitCursor;
+
+            try
+            {
+                // Obter o nó selecionado
+                TreeNode selectedNode = treeView1.SelectedNode;
+
+                if (selectedNode == null || selectedNode.Tag == null)
+                {
+                    MessageBox.Show("Nenhuma pasta foi selecionada para exclusão.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+
+                // Verifica se o nó é uma pasta
+                if (IsFolderNode(selectedNode))
+                {
+                    int folderID = (int)selectedNode.Tag;
+
+                    // Verificar se a pasta contém subpastas ou arquivos
+                    var subFolders = FDao.GetSubFolders(folderID);
+                    var documents = FDao.GetDocuments(folderID);
+
+                    // Construir mensagem de confirmação
+                    string message = $"Tem certeza que deseja excluir a pasta '{selectedNode.Text}'?";
+                    if (subFolders.Count > 0 || documents.Count > 0)
+                    {
+                        message += "\nEsta pasta contém subpastas e/ou arquivos que também serão excluídos.";
+                    }
+
+                    DialogResult result = MessageBox.Show(message, "Confirmar Exclusão", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+
+                    if (result == DialogResult.Yes)
+                    {
+                        // Excluir todos os arquivos e registros da pasta
+                        foreach (var doc in documents)
+                        {
+                            this.iID = doc.DocumentID;
+                            this.nmNo = doc.DocumentName;
+
+                            // Apagar registro no banco e arquivo fisicamente
+                            ApagaRegistro();
+                            ApagarArquivo(this.iID, this.nmNo);
+                        }
+
+                        // Excluir a pasta e todas as subpastas e seus conteúdos do banco de dados
+                        contasAPagarDao.ExcluiPastaEConteudos(folderID);
+
+                        // Remover o nó da TreeView
+                        selectedNode.Remove();
+
+                        MessageBox.Show("Pasta e seus conteúdos excluídos com sucesso.", "Sucesso", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("Por favor, selecione uma pasta para excluir.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+            finally
+            {
+                // Restaurar o cursor para o padrão
+                Cursor.Current = Cursors.Default;
             }
         }
 

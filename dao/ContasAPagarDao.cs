@@ -18,7 +18,7 @@ namespace TeleBonifacio.dao
             return DB.ExecutarConsultaCount(queryNome);
         }
 
-        public void Exclui(string id, string CaminhoPDF)
+        public void Exclui(string id)
         {
             string sql = $@"DELETE FROM ContasAPagar WHERE ID = {id} ";
             DB.ExecutarComandoSQL(sql);
@@ -137,5 +137,36 @@ namespace TeleBonifacio.dao
             string sql = $@"UPDATE ContasAPagar SET FolderID = {newFolderID} WHERE ID = {documentID}";
             DB.ExecutarComandoSQL(sql);
         }
+
+        public int CriarNovaPasta(string nome, int parentFolderId)
+        {
+            string sql = $@"INSERT INTO Folders (FolderName, ParentFolderID) 
+                   VALUES ('{nome}', {parentFolderId} )";
+            DB.ExecutarComandoSQL(sql);
+            string queryNome = $"SELECT Max(ID) FROM ContasAPagar";
+            return DB.ExecutarConsultaCount(queryNome);
+        }
+
+        public void RenomearPasta(int folderID, string newName)
+        {
+            string sql = $@"UPDATE Folders SET FolderName = '{newName}' WHERE FolderID = {folderID}";
+            DB.ExecutarComandoSQL(sql);
+        }
+
+        public void ExcluiPastaEConteudos(int folderID)
+        {
+            // Excluir todos os documentos da pasta
+            string sqlDeleteDocs = $@"DELETE FROM ContasAPagar WHERE FolderID = {folderID} ";
+            DB.ExecutarComandoSQL(sqlDeleteDocs);
+
+            // Excluir todas as subpastas
+            string sqlDeleteSubFolders = $@"DELETE FROM Folders WHERE ParentFolderID = {folderID}";
+            DB.ExecutarComandoSQL(sqlDeleteSubFolders);
+
+            // Excluir a própria pasta
+            string sqlDeleteFolder = $@"DELETE FROM Folders WHERE FolderID = {folderID}";
+            DB.ExecutarComandoSQL(sqlDeleteFolder);
+        }
+
     }
 }

@@ -476,7 +476,7 @@ namespace TeleBonifacio
         private void ApagaRegistro()
         {
             glo.Loga($@"PD,{this.iID}, {this.UID}");
-            contasAPagarDao.Exclui(this.iID.ToString(), this.CaminhoPDF);
+            contasAPagarDao.Exclui(this.iID.ToString());
         }
 
         private void ExcluirRegistros(DataGridView dataGridView, int tabIndex)

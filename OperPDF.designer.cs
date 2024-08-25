@@ -60,6 +60,8 @@ namespace TeleBonifacio
             this.button2 = new System.Windows.Forms.Button();
             this.button3 = new System.Windows.Forms.Button();
             this.treeView2 = new System.Windows.Forms.TreeView();
+            this.renomearToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.apagarToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.groupBox3.SuspendLayout();
             this.panel1.SuspendLayout();
             this.contextMenuStrip1.SuspendLayout();
@@ -420,19 +422,22 @@ namespace TeleBonifacio
             this.treeView1.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.TreeView1_AfterSelect);
             this.treeView1.NodeMouseClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.treeView1_NodeMouseClick);
             this.treeView1.NodeMouseDoubleClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.treeView1_NodeMouseDoubleClick);
+            this.treeView1.MouseUp += new System.Windows.Forms.MouseEventHandler(this.treeView1_MouseUp);
             // 
             // contextMenuStrip1
             // 
             this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.btStripObter});
+            this.btStripObter,
+            this.renomearToolStripMenuItem,
+            this.apagarToolStripMenuItem});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(105, 26);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(181, 92);
             // 
             // btStripObter
             // 
             this.btStripObter.Name = "btStripObter";
-            this.btStripObter.Size = new System.Drawing.Size(104, 22);
-            this.btStripObter.Text = "Obter";
+            this.btStripObter.Size = new System.Drawing.Size(180, 22);
+            this.btStripObter.Text = "Nova";
             this.btStripObter.Click += new System.EventHandler(this.btStripObter_Click);
             // 
             // panel2
@@ -472,6 +477,20 @@ namespace TeleBonifacio
             this.treeView2.Name = "treeView2";
             this.treeView2.Size = new System.Drawing.Size(237, 156);
             this.treeView2.TabIndex = 2;
+            // 
+            // renomearToolStripMenuItem
+            // 
+            this.renomearToolStripMenuItem.Name = "renomearToolStripMenuItem";
+            this.renomearToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.renomearToolStripMenuItem.Text = "Renomear";
+            this.renomearToolStripMenuItem.Click += new System.EventHandler(this.renomearToolStripMenuItem_Click);
+            // 
+            // apagarToolStripMenuItem
+            // 
+            this.apagarToolStripMenuItem.Name = "apagarToolStripMenuItem";
+            this.apagarToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.apagarToolStripMenuItem.Text = "Apagar";
+            this.apagarToolStripMenuItem.Click += new System.EventHandler(this.apagarToolStripMenuItem_Click);
             // 
             // OperPDF
             // 
@@ -532,5 +551,7 @@ namespace TeleBonifacio
         private TreeView treeView2;
         private Button button3;
         private Button button2;
+        private ToolStripMenuItem renomearToolStripMenuItem;
+        private ToolStripMenuItem apagarToolStripMenuItem;
     }
 }
