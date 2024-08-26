@@ -91,7 +91,7 @@ namespace TeleBonifacio
             }
             carregando = false;
             CarregaGrid();
-            ConfigureDataGridView(this.dataGrid1);          
+            ConfigureDataGridView(this.dataGrid1); 
             rt.AdjustFormComponents(this);           
         }
 
@@ -453,36 +453,41 @@ namespace TeleBonifacio
         #region Faltas
         private void ConfigurarGrid()
         {
-            dataGrid1.Columns[0].Width = 100;       // Compra
-            dataGrid1.Columns[1].Width = 130;       // Forn
-            dataGrid1.Columns[2].Visible = false;    // ID false;
-            dataGrid1.Columns[3].Visible = false;
-            dataGrid1.Columns[4].Width = 80;        // Data
-            dataGrid1.Columns[5].Width = 80;        // Código
-            dataGrid1.Columns[6].Width = 50;        // Quantidade
-            dataGrid1.Columns[6].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
-            dataGrid1.Columns[7].Width = 80;        // Marca
-            dataGrid1.Columns[8].Width = 240; //  160;       // Descrição
-            dataGrid1.Columns[9].Width = 130;       // Balconista
-            dataGrid1.Columns[10].Visible = false;  // UID
-            dataGrid1.Columns[11].Width = 110;  //  130;      // Tipo - colocado o texto
-            dataGrid1.Columns[12].Visible = false;  // Tipo valor original
-            dataGrid1.Columns[13].Visible = false;  // idForn
+            dataGrid1.Columns[0].Width = 50;       // Contador
+
+            dataGrid1.Columns[1].Width = 100;       // Compra
+            dataGrid1.Columns[2].Width = 130;       // Forn
+            dataGrid1.Columns[3].Visible = false;    // ID false;
+            dataGrid1.Columns[4].Visible = false;
+            dataGrid1.Columns[5].Width = 80;        // Data
+            dataGrid1.Columns[6].Width = 80;        // Código
+
+            dataGrid1.Columns[7].Width = 50;        // Quantidade
+            dataGrid1.Columns[7].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+
+            dataGrid1.Columns[8].Width = 80;        // Marca
+            dataGrid1.Columns[9].Width = 240; //  160;       // Descrição
+            dataGrid1.Columns[10].Width = 130;       // Balconista
+            dataGrid1.Columns[11].Visible = false;  // UID
+            dataGrid1.Columns[12].Width = 110;  //  130;      // Tipo - colocado o texto
+            dataGrid1.Columns[13].Visible = false;  // Tipo valor original
+            dataGrid1.Columns[14].Visible = false;  // idForn
 
             if (glo.Nivel == 2)
             {
-                dataGrid1.Columns[14].Visible = true;   // Valor
-                dataGrid1.Columns[14].Width = 50; 
-                dataGrid1.Columns[14].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+                dataGrid1.Columns[15].Visible = true;   // Valor
+                dataGrid1.Columns[15].Width = 50; 
+                dataGrid1.Columns[15].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
             }
             else
             {
-                dataGrid1.Columns[14].Visible = false;  // Valor
+                dataGrid1.Columns[15].Visible = false;  // Valor
             }            
-            dataGrid1.Columns[15].Width = 170;      // Obs
+            dataGrid1.Columns[16].Width = 170;      // Obs
+            dataGrid1.Columns[17].Visible = false;  // Prioridade
             if (rt.IsLargeScreen())
             {
-                for (int i = 0; i < 15; i++)
+                for (int i = 1; i < 16; i++)
                 {
                     dataGrid1.Columns[i].Width = (int)(dataGrid1.Columns[i].Width * rt.scaleFactor);
                 }
@@ -500,6 +505,7 @@ namespace TeleBonifacio
                 List<tb.TpoFalta> tipos = TpoFalta.getTipos();
                 List<tb.Fornecedor> Fornecs = Forn.getForns();
                 dataGrid1.DataSource = dados;
+                int c = 0;
                 foreach (DataGridViewRow row in dataGrid1.Rows)
                 {
                     if (!row.Cells["Tipo"].Value.Equals(DBNull.Value))
@@ -517,13 +523,21 @@ namespace TeleBonifacio
                             }
                         }
                     }
+
+                    int prioridade = Convert.ToInt32(row.Cells["Prioridade"].Value);
+                    if (prioridade > 0)
+                    {
+                        row.DefaultCellStyle.Font = new Font("Arial", 12, FontStyle.Bold);
+                    }
+                    else
+                    {
+                        row.DefaultCellStyle.Font = new Font("Arial", 12, FontStyle.Regular);
+                    }
+
                     AtualizarLinha(row, tipos, "Tipo", "Tipo");
                     AtualizarLinha(row, Fornecs, "idForn", "Forn");
-                    //if (row.Cells["Data"].Value != DBNull.Value)
-                    //{
-                    //    DateTime data = Convert.ToDateTime(row.Cells["Data"].Value);
-                    //    row.Cells["Data"].Value = data.ToString("dd/MM/yy");
-                    //}
+                    c++;
+                    row.Cells["Cont"].Value = c.ToString();
                 }
                 if (dados != null)
                 {
@@ -631,6 +645,44 @@ namespace TeleBonifacio
         private void ckEmFalta_Click(object sender, EventArgs e)
         {
             button2.Enabled = true;
+        }
+
+        private void dataGridView1_MouseDown(object sender, MouseEventArgs e)
+        {
+            // Verifica se o botão direito do mouse foi clicado
+            if (e.Button == MouseButtons.Right)
+            {
+                // Obtém a posição da célula no ponto clicado
+                DataGridView.HitTestInfo hit = this.dataGrid1.HitTest(e.X, e.Y);
+
+                // Verifica se o clique foi em uma célula válida (não cabeçalho ou fora da grade)
+                if (hit.Type == DataGridViewHitTestType.Cell)
+                {
+                    // Seleciona a linha onde o botão direito foi clicado
+                    this.dataGrid1.ClearSelection();
+                    this.dataGrid1.Rows[hit.RowIndex].Selected = true;
+                    this.dataGrid1.CurrentCell = this.dataGrid1.Rows[hit.RowIndex].Cells[hit.ColumnIndex];
+
+                    this.iID = (int)this.dataGrid1.Rows[hit.RowIndex].Cells["ID"].Value;
+                    int Prio = (int)this.dataGrid1.Rows[hit.RowIndex].Cells["Prioridade"].Value;
+                    DiminirPrio.Enabled = (Prio > 0);
+
+                    // Exibe o menu de contexto na posição do mouse
+                    contextMenuStrip1.Show(this.dataGrid1, new Point(e.X, e.Y));
+                }
+            }
+        }
+
+        private void Aumentar_Click(object sender, EventArgs e)
+        {
+            faltasDAO.Prio(this.iID, "+");
+            CarregaGrid();
+        }
+
+        private void DiminirPrio_Click(object sender, EventArgs e)
+        {
+            faltasDAO.Prio(this.iID, "-");
+            CarregaGrid();
         }
 
         #endregion
@@ -1688,7 +1740,7 @@ namespace TeleBonifacio
             if (scrollPosition > 0)
                 dataGrid3.FirstDisplayedScrollingRowIndex = scrollPosition;
             }
-            scrollPosition = dataGrid3.FirstDisplayedScrollingRowIndex;
+            //scrollPosition = dataGrid3.FirstDisplayedScrollingRowIndex;
         }
 
         private void dataGrid3_CellClick(object sender, DataGridViewCellEventArgs e)

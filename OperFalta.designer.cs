@@ -77,8 +77,11 @@ namespace TeleBonifacio
             this.tabPage4 = new System.Windows.Forms.TabPage();
             this.dataGrid4 = new System.Windows.Forms.DataGridView();
             this.tabPage5 = new System.Windows.Forms.TabPage();
-            this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.rtfTexto = new AtcCtrl.ATCRTF();
+            this.timer1 = new System.Windows.Forms.Timer(this.components);
+            this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.Aumentar = new System.Windows.Forms.ToolStripMenuItem();
+            this.DiminirPrio = new System.Windows.Forms.ToolStripMenuItem();
             this.panel1.SuspendLayout();
             this.groupBox3.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -92,6 +95,7 @@ namespace TeleBonifacio
             this.tabPage4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGrid4)).BeginInit();
             this.tabPage5.SuspendLayout();
+            this.contextMenuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // panel1
@@ -101,7 +105,7 @@ namespace TeleBonifacio
             this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(1299, 108);
+            this.panel1.Size = new System.Drawing.Size(1345, 108);
             this.panel1.TabIndex = 13;
             // 
             // groupBox3
@@ -123,7 +127,7 @@ namespace TeleBonifacio
             this.groupBox3.Dock = System.Windows.Forms.DockStyle.Top;
             this.groupBox3.Location = new System.Drawing.Point(0, 50);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(1299, 50);
+            this.groupBox3.Size = new System.Drawing.Size(1345, 50);
             this.groupBox3.TabIndex = 41;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Filtro";
@@ -151,7 +155,7 @@ namespace TeleBonifacio
             // ckEmFalta
             // 
             this.ckEmFalta.AutoSize = true;
-            this.ckEmFalta.Location = new System.Drawing.Point(1160, 28);
+            this.ckEmFalta.Location = new System.Drawing.Point(1180, 25);
             this.ckEmFalta.Name = "ckEmFalta";
             this.ckEmFalta.Size = new System.Drawing.Size(67, 17);
             this.ckEmFalta.TabIndex = 49;
@@ -294,7 +298,7 @@ namespace TeleBonifacio
             this.groupBox1.Dock = System.Windows.Forms.DockStyle.Top;
             this.groupBox1.Location = new System.Drawing.Point(0, 0);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(1299, 50);
+            this.groupBox1.Size = new System.Drawing.Size(1345, 50);
             this.groupBox1.TabIndex = 39;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Adição";
@@ -461,7 +465,7 @@ namespace TeleBonifacio
             this.tbFaltas.Location = new System.Drawing.Point(0, 108);
             this.tbFaltas.Name = "tbFaltas";
             this.tbFaltas.SelectedIndex = 0;
-            this.tbFaltas.Size = new System.Drawing.Size(1299, 324);
+            this.tbFaltas.Size = new System.Drawing.Size(1345, 324);
             this.tbFaltas.TabIndex = 14;
             this.tbFaltas.SelectedIndexChanged += new System.EventHandler(this.tbFaltas_SelectedIndexChanged);
             // 
@@ -471,7 +475,7 @@ namespace TeleBonifacio
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(1291, 298);
+            this.tabPage1.Size = new System.Drawing.Size(1337, 298);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Faltas";
             this.tabPage1.UseVisualStyleBackColor = true;
@@ -484,9 +488,10 @@ namespace TeleBonifacio
             this.dataGrid1.Name = "dataGrid1";
             this.dataGrid1.ReadOnly = true;
             this.dataGrid1.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dataGrid1.Size = new System.Drawing.Size(1285, 292);
+            this.dataGrid1.Size = new System.Drawing.Size(1331, 292);
             this.dataGrid1.TabIndex = 1;
             this.dataGrid1.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGrid1_CellClick_1);
+            this.dataGrid1.MouseUp += new System.Windows.Forms.MouseEventHandler(this.dataGridView1_MouseDown);
             // 
             // tabPage2
             // 
@@ -494,7 +499,7 @@ namespace TeleBonifacio
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(1233, 298);
+            this.tabPage2.Size = new System.Drawing.Size(1291, 298);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Produtos";
             this.tabPage2.UseVisualStyleBackColor = true;
@@ -507,7 +512,7 @@ namespace TeleBonifacio
             this.dataGrid2.Name = "dataGrid2";
             this.dataGrid2.ReadOnly = true;
             this.dataGrid2.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dataGrid2.Size = new System.Drawing.Size(1227, 292);
+            this.dataGrid2.Size = new System.Drawing.Size(1285, 292);
             this.dataGrid2.TabIndex = 16;
             this.dataGrid2.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGrid2_CellClick);
             // 
@@ -516,7 +521,7 @@ namespace TeleBonifacio
             this.tabPage3.Controls.Add(this.dataGrid3);
             this.tabPage3.Location = new System.Drawing.Point(4, 22);
             this.tabPage3.Name = "tabPage3";
-            this.tabPage3.Size = new System.Drawing.Size(1233, 298);
+            this.tabPage3.Size = new System.Drawing.Size(1291, 298);
             this.tabPage3.TabIndex = 2;
             this.tabPage3.Text = "Encomenda";
             this.tabPage3.UseVisualStyleBackColor = true;
@@ -529,7 +534,7 @@ namespace TeleBonifacio
             this.dataGrid3.Name = "dataGrid3";
             this.dataGrid3.ReadOnly = true;
             this.dataGrid3.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dataGrid3.Size = new System.Drawing.Size(1233, 298);
+            this.dataGrid3.Size = new System.Drawing.Size(1291, 298);
             this.dataGrid3.TabIndex = 17;
             this.dataGrid3.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGrid3_CellClick);
             this.dataGrid3.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGrid3_CellDoubleClick);
@@ -539,7 +544,7 @@ namespace TeleBonifacio
             this.tabPage4.Controls.Add(this.dataGrid4);
             this.tabPage4.Location = new System.Drawing.Point(4, 22);
             this.tabPage4.Name = "tabPage4";
-            this.tabPage4.Size = new System.Drawing.Size(1233, 298);
+            this.tabPage4.Size = new System.Drawing.Size(1291, 298);
             this.tabPage4.TabIndex = 3;
             this.tabPage4.Text = "Garantia";
             this.tabPage4.UseVisualStyleBackColor = true;
@@ -552,7 +557,7 @@ namespace TeleBonifacio
             this.dataGrid4.Name = "dataGrid4";
             this.dataGrid4.ReadOnly = true;
             this.dataGrid4.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dataGrid4.Size = new System.Drawing.Size(1233, 298);
+            this.dataGrid4.Size = new System.Drawing.Size(1291, 298);
             this.dataGrid4.TabIndex = 18;
             this.dataGrid4.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGrid4_CellClick);
             // 
@@ -561,7 +566,7 @@ namespace TeleBonifacio
             this.tabPage5.Controls.Add(this.rtfTexto);
             this.tabPage5.Location = new System.Drawing.Point(4, 22);
             this.tabPage5.Name = "tabPage5";
-            this.tabPage5.Size = new System.Drawing.Size(1233, 298);
+            this.tabPage5.Size = new System.Drawing.Size(1291, 298);
             this.tabPage5.TabIndex = 4;
             this.tabPage5.Text = "Anotações";
             this.tabPage5.UseVisualStyleBackColor = true;
@@ -571,12 +576,36 @@ namespace TeleBonifacio
             this.rtfTexto.Dock = System.Windows.Forms.DockStyle.Fill;
             this.rtfTexto.Location = new System.Drawing.Point(0, 0);
             this.rtfTexto.Name = "rtfTexto";
-            this.rtfTexto.Size = new System.Drawing.Size(1233, 298);
+            this.rtfTexto.Size = new System.Drawing.Size(1291, 298);
             this.rtfTexto.TabIndex = 0;
+            // 
+            // contextMenuStrip1
+            // 
+            this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.Aumentar,
+            this.DiminirPrio});
+            this.contextMenuStrip1.Name = "contextMenuStrip1";
+            this.contextMenuStrip1.Size = new System.Drawing.Size(235, 56);
+            // 
+            // Aumentar
+            // 
+            this.Aumentar.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Aumentar.Name = "Aumentar";
+            this.Aumentar.Size = new System.Drawing.Size(234, 26);
+            this.Aumentar.Text = "Aumentar a prioridade";
+            this.Aumentar.Click += new System.EventHandler(this.Aumentar_Click);
+            // 
+            // DiminirPrio
+            // 
+            this.DiminirPrio.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.DiminirPrio.Name = "DiminirPrio";
+            this.DiminirPrio.Size = new System.Drawing.Size(234, 26);
+            this.DiminirPrio.Text = "Diminuir a prioridade";
+            this.DiminirPrio.Click += new System.EventHandler(this.DiminirPrio_Click);
             // 
             // OperFalta
             // 
-            this.ClientSize = new System.Drawing.Size(1299, 432);
+            this.ClientSize = new System.Drawing.Size(1345, 432);
             this.Controls.Add(this.tbFaltas);
             this.Controls.Add(this.panel1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -600,6 +629,7 @@ namespace TeleBonifacio
             this.tabPage4.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dataGrid4)).EndInit();
             this.tabPage5.ResumeLayout(false);
+            this.contextMenuStrip1.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -649,6 +679,9 @@ namespace TeleBonifacio
         private TextBox txValor;
         private Label lbVlor;
         private AtcCtrl.ATCRTF rtfTexto;
+        private ContextMenuStrip contextMenuStrip1;
+        private ToolStripMenuItem Aumentar;
+        private ToolStripMenuItem DiminirPrio;
         //private AtcCtrl.ATCRTF rtfTexto;
     }
 }

@@ -8,7 +8,7 @@ namespace TeleBonifacio.dao
     {
         public void Adiciona(int idBalconista, string quantidade, string codigo, string Marca, string Descr, string Obs, int idForn, int idTipo, string UID)
         {
-            string sql = $@"INSERT INTO Faltas (IDBalconista, Quant, Codigo, Marca, Data, Descricao, Obs, Tipo, idForn, UID) VALUES (
+            string sql = $@"INSERT INTO Faltas (IDBalconista, Quant, Codigo, Marca, Data, Descricao, Obs, Tipo, idForn, UID, Prioridade) VALUES (
                 {idBalconista}, 
                 '{quantidade}', 
                 '{codigo}', 
@@ -18,15 +18,15 @@ namespace TeleBonifacio.dao
                 '{Obs}', 
                 '{idTipo}', 
                 {idForn}, 
-                '{UID}')";
+                '{UID}', 0)";
             DB.ExecutarComandoSQL(sql); 
         }
 
         public DataTable getDados(int tipo, int idForn, int Comprado, string codigo, string quantidade, string marca, string Obs, int idVendedor, int EmFalta, string Descr)
         {
             StringBuilder query = new StringBuilder();
-            query.Append(@"SELECT F.Compra, '' as Forn, F.ID, F.IDBalconista, FORMAT(F.Data, 'dd/MM/yy') as Data, F.Codigo, F.Quant, F.Marca, F.Descricao, 
-                    V.Nome AS Balconista, F.UID, F.Tipo, F.Tipo as TipoOrig, F.idForn, F.Valor, F.Obs 
+            query.Append(@"SELECT 0 as Cont, F.Compra, '' as Forn, F.ID, F.IDBalconista, FORMAT(F.Data, 'dd/MM/yy') as Data, F.Codigo, F.Quant, F.Marca, F.Descricao, 
+                    V.Nome AS Balconista, F.UID, F.Tipo, F.Tipo as TipoOrig, F.idForn, F.Valor, F.Obs, F.Prioridade  
                 FROM Faltas F
                 LEFT JOIN Vendedores V ON V.ID = F.IDBalconista ");
             StringBuilder alteracoes = new StringBuilder();
@@ -75,7 +75,7 @@ namespace TeleBonifacio.dao
                 alteracoes.Length -= 4; 
                 query.Append($@" WHERE {alteracoes} ");
             }
-            query.Append(" ORDER BY F.Data DESC, V.Nome");
+            query.Append(" ORDER BY F.Prioridade DESC, F.Data DESC, V.Nome");
             DataTable dt = DB.ExecutarConsulta(query.ToString());
             return dt;
         }
@@ -172,5 +172,10 @@ namespace TeleBonifacio.dao
             return ret;
         }
 
+        internal void Prio(int iID, string v)
+        {
+            string sql = $@"UPDATE Faltas SET Prioridade = Prioridade {v} 1 Where ID = {iID} ";
+            DB.ExecutarComandoSQL(sql);
+        }
     }
 }

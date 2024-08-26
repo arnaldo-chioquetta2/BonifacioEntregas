@@ -18,5 +18,7 @@ namespace TeleBonifacio.tb
         public int idForn { get; set; }
         public string Obs { get; set; }
 
+        public int Prioridade { get; set; }        
+
     }
 }
