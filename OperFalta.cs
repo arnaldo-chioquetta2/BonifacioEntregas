@@ -559,61 +559,7 @@ namespace TeleBonifacio
             {
                 row.DefaultCellStyle.Font = new Font("Arial", 12, FontStyle.Regular);
             }
-        }
-
-        //private void CarregaGrid()
-        //{
-        //    if (!carregando)
-        //    {
-        //        int scrollPosition = dataGrid1.FirstDisplayedScrollingRowIndex;
-        //        FaltasDAO faltasDAO = new FaltasDAO();
-        //        DataTable dados = faltasDAO.getDados(BakidTipo, BakidForn, bakComprado, Bakcodigo, Bakquantidade, Bakmarca, BakObs, BakidVendedor, bakEmFalta, BakDescr);
-        //        List<tb.TpoFalta> tipos = TpoFalta.getTipos();
-        //        List<tb.Fornecedor> Fornecs = Forn.getForns();
-        //        dataGrid1.DataSource = dados;
-        //        int c = 0;
-        //        foreach (DataGridViewRow row in dataGrid1.Rows)
-        //        {
-        //            if (!row.Cells["Tipo"].Value.Equals(DBNull.Value))
-        //            {
-        //                int tipoId = Convert.ToInt32(row.Cells["Tipo"].Value);
-        //                if (tipoId == 8)
-        //                {
-        //                    row.DefaultCellStyle.BackColor = Color.LightGreen;
-        //                }
-        //                else
-        //                {
-        //                    if (tipoId == 26)
-        //                    {
-        //                        row.DefaultCellStyle.BackColor = Color.Red;
-        //                    }
-        //                }
-        //            }
-
-        //            int prioridade = Convert.ToInt32(row.Cells["Prioridade"].Value);
-        //            if (prioridade > 0)
-        //            {
-        //                row.DefaultCellStyle.Font = new Font("Arial", 12, FontStyle.Bold);
-        //            }
-        //            else
-        //            {
-        //                row.DefaultCellStyle.Font = new Font("Arial", 12, FontStyle.Regular);
-        //            }
-
-        //            AtualizarLinha(row, tipos, "Tipo", "Tipo");
-        //            AtualizarLinha(row, Fornecs, "idForn", "Forn");
-        //            c++;
-        //            row.Cells["Cont"].Value = c.ToString();
-        //        }
-        //        if (dados != null)
-        //        {
-        //            ConfigurarGrid();
-        //            if (scrollPosition > 0)
-        //                dataGrid1.FirstDisplayedScrollingRowIndex = scrollPosition;
-        //        }
-
-        //    }
-        //}
+        }        
 
         private void dataGrid1_CellClick_1(object sender, DataGridViewCellEventArgs e)
         {
@@ -1064,9 +1010,9 @@ namespace TeleBonifacio
                 int scrollPosition = dataGrid1.FirstDisplayedScrollingRowIndex;
                 if (dataGrid1.SelectedRows.Count==1)
                 {
-                    string sID = dataGrid1.SelectedRows[0].Cells[2].Value.ToString();
+                    string sID = dataGrid1.SelectedRows[0].Cells["ID"].Value.ToString();
                     int gID = Convert.ToInt32(sID);
-                    string sVlr = dataGrid1.SelectedRows[0].Cells[14].Value.ToString();
+                    string sVlr = dataGrid1.SelectedRows[0].Cells["Valor"].Value.ToString();
                     if (sVlr.Length==0)
                     {
                         sVlr = "0";
