@@ -1224,7 +1224,8 @@ namespace TeleBonifacio
             if (glo.Nivel==2)
             {
                 dataGrid2.Columns[5].Visible = true;
-                dataGrid2.Columns[5].Width = 50;        // Valor
+                dataGrid2.Columns[5].Width = 80;
+                dataGrid2.Columns[5].DefaultCellStyle.Format = "F2";
                 dataGrid2.Columns[5].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
             } else
             {
