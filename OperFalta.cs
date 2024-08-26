@@ -495,6 +495,7 @@ namespace TeleBonifacio
             dataGrid1.Invalidate();
         }
 
+        // Refatorado em 26/08/24 Original 53 linhas, resultado 21 linhas
         private void CarregaGrid()
         {
             if (!carregando)
@@ -503,51 +504,116 @@ namespace TeleBonifacio
                 FaltasDAO faltasDAO = new FaltasDAO();
                 DataTable dados = faltasDAO.getDados(BakidTipo, BakidForn, bakComprado, Bakcodigo, Bakquantidade, Bakmarca, BakObs, BakidVendedor, bakEmFalta, BakDescr);
                 List<tb.TpoFalta> tipos = TpoFalta.getTipos();
-                List<tb.Fornecedor> Fornecs = Forn.getForns();
+                List<tb.Fornecedor> fornecs = Forn.getForns();
                 dataGrid1.DataSource = dados;
-                int c = 0;
-                foreach (DataGridViewRow row in dataGrid1.Rows)
-                {
-                    if (!row.Cells["Tipo"].Value.Equals(DBNull.Value))
-                    {
-                        int tipoId = Convert.ToInt32(row.Cells["Tipo"].Value);
-                        if (tipoId == 8)
-                        {
-                            row.DefaultCellStyle.BackColor = Color.LightGreen;
-                        }
-                        else
-                        {
-                            if (tipoId == 26)
-                            {
-                                row.DefaultCellStyle.BackColor = Color.Red;
-                            }
-                        }
-                    }
-
-                    int prioridade = Convert.ToInt32(row.Cells["Prioridade"].Value);
-                    if (prioridade > 0)
-                    {
-                        row.DefaultCellStyle.Font = new Font("Arial", 12, FontStyle.Bold);
-                    }
-                    else
-                    {
-                        row.DefaultCellStyle.Font = new Font("Arial", 12, FontStyle.Regular);
-                    }
-
-                    AtualizarLinha(row, tipos, "Tipo", "Tipo");
-                    AtualizarLinha(row, Fornecs, "idForn", "Forn");
-                    c++;
-                    row.Cells["Cont"].Value = c.ToString();
-                }
+                ProcessarLinhas(dataGrid1.Rows, tipos, fornecs);
                 if (dados != null)
                 {
                     ConfigurarGrid();
                     if (scrollPosition > 0)
+                    {
                         dataGrid1.FirstDisplayedScrollingRowIndex = scrollPosition;
+                    }
                 }
-
             }
         }
+
+        private void ProcessarLinhas(DataGridViewRowCollection linhas, List<tb.TpoFalta> tipos, List<tb.Fornecedor> fornecs)
+        {
+            int contador = 0;
+            foreach (DataGridViewRow row in linhas)
+            {
+                AplicarCorPorTipo(row);
+                AplicarFontePorPrioridade(row);
+                AtualizarLinha(row, tipos, "Tipo", "Tipo");
+                AtualizarLinha(row, fornecs, "idForn", "Forn");
+                contador++;
+                row.Cells["Cont"].Value = contador.ToString();
+            }
+        }
+
+        private void AplicarCorPorTipo(DataGridViewRow row)
+        {
+            if (!row.Cells["Tipo"].Value.Equals(DBNull.Value))
+            {
+                int tipoId = Convert.ToInt32(row.Cells["Tipo"].Value);
+                if (tipoId == 8)
+                {
+                    row.DefaultCellStyle.BackColor = Color.LightGreen;
+                }
+                else if (tipoId == 26)
+                {
+                    row.DefaultCellStyle.BackColor = Color.Red;
+                }
+            }
+        }
+
+        private void AplicarFontePorPrioridade(DataGridViewRow row)
+        {
+            int prioridade = Convert.ToInt32(row.Cells["Prioridade"].Value);
+            if (prioridade > 0)
+            {
+                row.DefaultCellStyle.Font = new Font("Arial", 12, FontStyle.Bold);
+            }
+            else
+            {
+                row.DefaultCellStyle.Font = new Font("Arial", 12, FontStyle.Regular);
+            }
+        }
+
+        //private void CarregaGrid()
+        //{
+        //    if (!carregando)
+        //    {
+        //        int scrollPosition = dataGrid1.FirstDisplayedScrollingRowIndex;
+        //        FaltasDAO faltasDAO = new FaltasDAO();
+        //        DataTable dados = faltasDAO.getDados(BakidTipo, BakidForn, bakComprado, Bakcodigo, Bakquantidade, Bakmarca, BakObs, BakidVendedor, bakEmFalta, BakDescr);
+        //        List<tb.TpoFalta> tipos = TpoFalta.getTipos();
+        //        List<tb.Fornecedor> Fornecs = Forn.getForns();
+        //        dataGrid1.DataSource = dados;
+        //        int c = 0;
+        //        foreach (DataGridViewRow row in dataGrid1.Rows)
+        //        {
+        //            if (!row.Cells["Tipo"].Value.Equals(DBNull.Value))
+        //            {
+        //                int tipoId = Convert.ToInt32(row.Cells["Tipo"].Value);
+        //                if (tipoId == 8)
+        //                {
+        //                    row.DefaultCellStyle.BackColor = Color.LightGreen;
+        //                }
+        //                else
+        //                {
+        //                    if (tipoId == 26)
+        //                    {
+        //                        row.DefaultCellStyle.BackColor = Color.Red;
+        //                    }
+        //                }
+        //            }
+
+        //            int prioridade = Convert.ToInt32(row.Cells["Prioridade"].Value);
+        //            if (prioridade > 0)
+        //            {
+        //                row.DefaultCellStyle.Font = new Font("Arial", 12, FontStyle.Bold);
+        //            }
+        //            else
+        //            {
+        //                row.DefaultCellStyle.Font = new Font("Arial", 12, FontStyle.Regular);
+        //            }
+
+        //            AtualizarLinha(row, tipos, "Tipo", "Tipo");
+        //            AtualizarLinha(row, Fornecs, "idForn", "Forn");
+        //            c++;
+        //            row.Cells["Cont"].Value = c.ToString();
+        //        }
+        //        if (dados != null)
+        //        {
+        //            ConfigurarGrid();
+        //            if (scrollPosition > 0)
+        //                dataGrid1.FirstDisplayedScrollingRowIndex = scrollPosition;
+        //        }
+
+        //    }
+        //}
 
         private void dataGrid1_CellClick_1(object sender, DataGridViewCellEventArgs e)
         {
