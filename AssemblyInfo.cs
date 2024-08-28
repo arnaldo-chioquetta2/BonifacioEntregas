@@ -11,8 +11,9 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyCulture("")]
 [assembly: ComVisible(false)]
 [assembly: Guid("308c57af-e663-456d-8a2c-188bbd61423d")]
-[assembly: AssemblyVersion("2.7.7.0")]
-[assembly: AssemblyFileVersion("2.7.7.0")]
+[assembly: AssemblyVersion("2.7.8.0")]
+[assembly: AssemblyFileVersion("2.7.8.0")]
+// 2.7.8 Ajuste no envio de email da versão nova dos arquivos
 // 2.7.7 Ajuste na compra depois da adição do nr de linha nas faltas
 // 2.7.6 Prioridades nas faltas
 // 2.7.5 Tela dos PDFs com TreeView

@@ -614,7 +614,7 @@ namespace TeleBonifacio
             pesEmails OForm = new pesEmails();
             string fileNamePrefix = "Doc";
             string fileExtension = Path.GetExtension(this.nmNo.TrimStart('.'));
-            string sourceFilePath = Path.Combine(CaminhoBasePDF, $"{fileNamePrefix}{this.iID}.{fileExtension}");
+            string sourceFilePath = Path.Combine(CaminhoBasePDF, $"{fileNamePrefix}{this.iID}{fileExtension}");
             OForm.Arquivo = sourceFilePath;
             OForm.Show();
             AdicionarAoArquivoINI(sourceFilePath);

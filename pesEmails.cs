@@ -69,10 +69,10 @@ namespace TeleBonifacio
                     } else
                     {
                         // Minha
-                        // senha = "uhkikktxafjvpwem";
+                        senha = "uhkikktxafjvpwem";
 
                         // Denis
-                        senha = "vxytmxwmbbipbwcg";
+                        // senha = "vxytmxwmbbipbwcg";
                     }
 
                     bool enviado = cEmail.EnviarEmail(
