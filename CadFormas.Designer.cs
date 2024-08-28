@@ -32,7 +32,7 @@ namespace TeleBonifacio
             this.lblNome = new System.Windows.Forms.Label();
             this.txtNome = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
-            this.comboBox1 = new System.Windows.Forms.ComboBox();
+            this.cmbTipo = new System.Windows.Forms.ComboBox();
             this.SuspendLayout();
             // 
             // cntrole1
@@ -70,35 +70,35 @@ namespace TeleBonifacio
             this.label1.TabIndex = 7;
             this.label1.Text = "Operação";
             // 
-            // comboBox1
+            // cmbTipo
             // 
-            this.comboBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Items.AddRange(new object[] {
+            this.cmbTipo.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cmbTipo.FormattingEnabled = true;
+            this.cmbTipo.Items.AddRange(new object[] {
             "Crédito",
             "Debito"});
-            this.comboBox1.Location = new System.Drawing.Point(176, 80);
-            this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(152, 28);
-            this.comboBox1.TabIndex = 8;
+            this.cmbTipo.Location = new System.Drawing.Point(176, 80);
+            this.cmbTipo.Name = "cmbTipo";
+            this.cmbTipo.Size = new System.Drawing.Size(152, 28);
+            this.cmbTipo.TabIndex = 8;
             // 
             // fCadFormas
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.ClientSize = new System.Drawing.Size(350, 125);
-            this.Controls.Add(this.comboBox1);
+            this.Controls.Add(this.cmbTipo);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.lblNome);
             this.Controls.Add(this.txtNome);
             this.Name = "fCadFormas";
-            this.Text = "Cadastro de Formas de Pagamento";
+            this.Text = "Cadastro de Formas";
             this.Activated += new System.EventHandler(this.fCadClientes_Activated);
             this.KeyUp += new System.Windows.Forms.KeyEventHandler(this.fCadClientes_KeyUp);
             this.Controls.SetChildIndex(this.cntrole1, 0);
             this.Controls.SetChildIndex(this.txtNome, 0);
             this.Controls.SetChildIndex(this.lblNome, 0);
             this.Controls.SetChildIndex(this.label1, 0);
-            this.Controls.SetChildIndex(this.comboBox1, 0);
+            this.Controls.SetChildIndex(this.cmbTipo, 0);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -109,6 +109,6 @@ namespace TeleBonifacio
         private System.Windows.Forms.Label lblNome;
         private System.Windows.Forms.TextBox txtNome;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.ComboBox comboBox1;
+        private System.Windows.Forms.ComboBox cmbTipo;
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data.OleDb;
 using System.Windows.Forms;
 using TeleBonifacio.tb;
@@ -8,7 +9,7 @@ namespace TeleBonifacio
     public partial class fCadFormas : TeleBonifacio.FormBase
     {
 
-        private tb.TpoFalta clienteEspecifico;
+        private tb.Forma clienteEspecifico;
 
         private bool Adicionando = false;
         private bool Carregando = true;
@@ -17,23 +18,29 @@ namespace TeleBonifacio
         public fCadFormas()
         {
             InitializeComponent();
-            base.DAO = new dao.TpoFaltaDAO();
-            clienteEspecifico = DAO.GetUltimo() as tb.TpoFalta;
+            base.DAO = new dao.FormasDAO();
+            clienteEspecifico = DAO.GetUltimo() as tb.Forma;
             base.reg = getUlt();
             ID = base.reg.Id;
             base.Mostra();
             base.LerTagsDosCamposDeTexto();
+            List<string> lista = new List<string>();
+            foreach (var item in cmbTipo.Items)
+            {
+                lista.Add(item.ToString());
+            }
+            base.setListCombo(lista);
             rt.AdjustFormComponents(this);
             Carregando = false;
         }
 
-        private tb.TpoFalta getUlt()
+        private tb.Forma getUlt()
         {
-            string query = "SELECT TOP 1 * FROM TpoFalta ORDER BY idFalta Desc";            
+            string query = "SELECT TOP 1 * FROM Formas ORDER BY ID Desc";            
             return ExecutarConsulta(query); ;
         }
 
-        private tb.TpoFalta ExecutarConsulta(string query)
+        private tb.Forma ExecutarConsulta(string query)
         {
             using (OleDbConnection connection = new OleDbConnection(glo.connectionString))
             {
@@ -44,11 +51,12 @@ namespace TeleBonifacio
                     {
                         using (OleDbDataReader reader = command.ExecuteReader())
                         {
-                            TpoFalta ret = new TpoFalta();
+                            Forma ret = new Forma();
                             while (reader.Read())
                             {
-                                ret.Id = (int)reader["IdFalta"];
+                                ret.Id = (int)reader["ID"];
                                 ret.Nome = (string)reader["Nome"];
+                                ret.Ativo = (int)reader["Ativo"];
                             }
                             return ret;
                         }
@@ -56,7 +64,7 @@ namespace TeleBonifacio
                 }
                 catch (Exception ex)
                 {
-                    // Aqui você pode decidir como lidar com a exceção
+                    string erro = ex.ToString();
                     throw;
                 }
 

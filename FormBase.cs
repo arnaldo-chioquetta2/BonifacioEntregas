@@ -763,10 +763,13 @@ namespace TeleBonifacio
                         grid.TableStyles.Add(new DataGridTableStyle());
                     }
                     DataGridTableStyle tableStyle = grid.TableStyles[0];
-                    tableStyle.GridColumnStyles[0].Width = 30;
-                    tableStyle.GridColumnStyles[1].Width = 100;
+                    //tableStyle.GridColumnStyles[0].Width = 30;
+                    //tableStyle.GridColumnStyles[1].Width = 100;
                     try
                     {
+                        tableStyle.GridColumnStyles[0].Width = 30;
+                        tableStyle.GridColumnStyles[1].Width = 100;
+
                         tableStyle.GridColumnStyles[2].Width = 100;
                     }
                     catch (Exception)

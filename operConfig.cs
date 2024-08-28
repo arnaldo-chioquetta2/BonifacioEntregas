@@ -178,5 +178,11 @@ namespace TeleBonifacio
             CadPercs fCad = new CadPercs();
             fCad.Show();
         }
+
+        private void btFormas_Click(object sender, EventArgs e)
+        {
+            fCadFormas fCad = new fCadFormas();
+            fCad.Show();
+        }
     }    
 }

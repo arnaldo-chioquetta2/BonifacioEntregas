@@ -50,6 +50,7 @@ namespace TeleBonifacio
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
             this.ckAdaptar = new System.Windows.Forms.CheckBox();
             this.button5 = new System.Windows.Forms.Button();
+            this.btFormas = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // lblNome
@@ -82,7 +83,7 @@ namespace TeleBonifacio
             // button2
             // 
             this.button2.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.button2.Location = new System.Drawing.Point(554, 155);
+            this.button2.Location = new System.Drawing.Point(507, 192);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(75, 23);
             this.button2.TabIndex = 11;
@@ -93,7 +94,7 @@ namespace TeleBonifacio
             // button3
             // 
             this.button3.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.button3.Location = new System.Drawing.Point(474, 155);
+            this.button3.Location = new System.Drawing.Point(29, 192);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(75, 23);
             this.button3.TabIndex = 10;
@@ -158,7 +159,7 @@ namespace TeleBonifacio
             // btAtu
             // 
             this.btAtu.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.btAtu.Location = new System.Drawing.Point(164, 155);
+            this.btAtu.Location = new System.Drawing.Point(145, 161);
             this.btAtu.Name = "btAtu";
             this.btAtu.Size = new System.Drawing.Size(121, 23);
             this.btAtu.TabIndex = 8;
@@ -179,7 +180,7 @@ namespace TeleBonifacio
             // btRetVersao
             // 
             this.btRetVersao.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.btRetVersao.Location = new System.Drawing.Point(290, 155);
+            this.btRetVersao.Location = new System.Drawing.Point(271, 161);
             this.btRetVersao.Name = "btRetVersao";
             this.btRetVersao.Size = new System.Drawing.Size(98, 23);
             this.btRetVersao.TabIndex = 9;
@@ -226,7 +227,7 @@ namespace TeleBonifacio
             // button5
             // 
             this.button5.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.button5.Location = new System.Drawing.Point(393, 155);
+            this.button5.Location = new System.Drawing.Point(374, 161);
             this.button5.Name = "button5";
             this.button5.Size = new System.Drawing.Size(75, 23);
             this.button5.TabIndex = 21;
@@ -234,11 +235,23 @@ namespace TeleBonifacio
             this.button5.UseVisualStyleBackColor = true;
             this.button5.Click += new System.EventHandler(this.button5_Click);
             // 
+            // btFormas
+            // 
+            this.btFormas.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.btFormas.Location = new System.Drawing.Point(455, 161);
+            this.btFormas.Name = "btFormas";
+            this.btFormas.Size = new System.Drawing.Size(75, 23);
+            this.btFormas.TabIndex = 22;
+            this.btFormas.Text = "Formas";
+            this.btFormas.UseVisualStyleBackColor = true;
+            this.btFormas.Click += new System.EventHandler(this.btFormas_Click);
+            // 
             // oprConfig
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(636, 186);
+            this.ClientSize = new System.Drawing.Size(593, 227);
+            this.Controls.Add(this.btFormas);
             this.Controls.Add(this.button5);
             this.Controls.Add(this.ckAdaptar);
             this.Controls.Add(this.button4);
@@ -291,5 +304,6 @@ namespace TeleBonifacio
         private System.Windows.Forms.FolderBrowserDialog folderBrowserDialog1;
         private System.Windows.Forms.CheckBox ckAdaptar;
         private System.Windows.Forms.Button button5;
+        private System.Windows.Forms.Button btFormas;
     }
 }
