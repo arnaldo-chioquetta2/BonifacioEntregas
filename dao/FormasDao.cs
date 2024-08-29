@@ -11,7 +11,7 @@ namespace TeleBonifacio.dao
     public class FormasDAO : BaseDAO
     {
         public int Id { get; set; }
-        //public string Descricao { get; set; }
+
         public int Tipo { get; set; }
 
         public int Ativo { get; set; }
@@ -19,7 +19,7 @@ namespace TeleBonifacio.dao
 
         public void Adiciona(string descricao, int tipo)
         {
-            string sql = $"INSERT INTO Formas (Descricao, Tipo) VALUES ('{descricao}', {tipo})";
+            string sql = $"INSERT INTO Formas (Nome, Tipo) VALUES ('{descricao}', {tipo})";
             DB.ExecutarComandoSQL(sql);
         }
 
@@ -36,16 +36,16 @@ namespace TeleBonifacio.dao
 
         public override DataTable getDados()
         {
-            string query = "SELECT * FROM Formas WHERE Descricao > ''";
+            string query = "SELECT * FROM Formas WHERE Nome > ''";
             return ExecutarConsulta(query);
         }
 
         public override DataTable GetDadosOrdenados(string filtro = "", string ordem = "")
         {
-            string query = @"SELECT ID, Descricao, Tipo, Ativo   
+            string query = @"SELECT ID, Nome, Tipo, Ativo   
                              FROM Formas 
-                             WHERE Descricao > '' 
-                             ORDER BY Descricao";
+                             WHERE Nome > '' 
+                             ORDER BY Nome";
             return DB.ExecutarConsulta(query);
         }
 
@@ -151,7 +151,7 @@ namespace TeleBonifacio.dao
         {
             var parametros = new List<OleDbParameter>
             {
-                new OleDbParameter("@Descricao", forma.Nome),
+                new OleDbParameter("@Nome", forma.Nome),
                 new OleDbParameter("@Tipo", forma.Tipo),
                 new OleDbParameter("@Ativo", forma.Ativo)
             };
@@ -222,7 +222,7 @@ namespace TeleBonifacio.dao
         public List<tb.Forma> getFormas()
         {
             StringBuilder query = new StringBuilder();
-            query.Append("SELECT ID, Descricao, Tipo FROM Formas");
+            query.Append("SELECT ID, Nome, Tipo FROM Formas");
             DataTable dt = DB.ExecutarConsulta(query.ToString());
             List<tb.Forma> formas = new List<tb.Forma>();
             foreach (DataRow row in dt.Rows)
