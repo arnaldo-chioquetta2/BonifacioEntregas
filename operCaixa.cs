@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Drawing;
 using System.Globalization;
@@ -26,20 +27,30 @@ namespace TeleBonifacio
             MostraTotal();
             VeSeHab();
         }
+
         private void VeSeHab()
         {
-            bool OK = true;
-            if ((txCompra.Text == "") && (txDesc.Text == ""))
-            {
-                OK = false;
-            }
+            bool OK = !string.IsNullOrEmpty(txCompra.Text) || !string.IsNullOrEmpty(txDesc.Text);
+
             btnLimpar.Enabled = OK;
-            btDespeza.Enabled = OK;
-            btPix.Enabled = OK;
-            btDinheiro.Enabled = OK;
-            btCartao.Enabled = OK;
-            btItau.Enabled = OK;
-            btSicred.Enabled = OK;
+
+            // Percorre os botões em grpCredito
+            foreach (Control control in grpCredito.Controls)
+            {
+                if (control is Button button)
+                {
+                    button.Enabled = OK;
+                }
+            }
+
+            // Percorre os botões em grpDebito
+            foreach (Control control in grpDebito.Controls)
+            {
+                if (control is Button button)
+                {
+                    button.Enabled = OK;
+                }
+            }
         }
 
         private void MostraTotal()
@@ -75,6 +86,58 @@ namespace TeleBonifacio
             dtpDataIN.Value = ontem;
             CarregaGrid();
             ConfigurarGrid();
+            CarregaFormas();
+        }
+
+        private void CarregaFormas()
+        {
+            FormasDAO cFormas = new FormasDAO();
+            CarregaForma(ref cFormas, 0, grpCredito);
+            CarregaForma(ref cFormas, 1, grpDebito);
+
+        }
+
+        public void CarregaForma(ref FormasDAO cForma, int tipoForma, GroupBox targetGroupBox)
+        {
+            List<tb.Forma> lstFormas = cForma.getFormas(tipoForma);
+            int buttonWidth = 75;
+            int buttonHeight = 23;
+            int margin = 15;
+            int availableWidth = targetGroupBox.Width - (2 * margin);
+            int totalButtons = lstFormas.Count;
+            if (totalButtons > 0)
+            {
+                int spacing = (availableWidth - (buttonWidth * totalButtons)) / (totalButtons - 1);
+                for (int i = 0; i < totalButtons; i++)
+                {
+                    Button btn = new Button();
+                    btn.Width = buttonWidth;
+                    btn.Height = buttonHeight;
+                    btn.Text = lstFormas[i].Nome;
+                    btn.Tag = lstFormas[i].Id;
+                    btn.Enabled = false;
+                    int xPosition = margin + (i * (buttonWidth + spacing));
+                    btn.Location = new Point(xPosition, (targetGroupBox.Height - buttonHeight) / 2);
+                    targetGroupBox.Controls.Add(btn);
+                    btn.Click += new EventHandler(Button_Click);
+                }
+            }
+        }
+
+        private void Button_Click(object sender, EventArgs e)
+        {
+            if (sender is Button clickedButton)
+            {
+                if (clickedButton.Tag != null && int.TryParse(clickedButton.Tag.ToString(), out int IdTag))
+                {
+                    IdTag--;
+                    Registra(IdTag);
+                }
+                else
+                {
+                    MessageBox.Show("Erro: Tag do botão inválida ou não encontrada.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
         }
 
         private void txDesc_KeyUp(object sender, KeyEventArgs e)
@@ -124,61 +187,26 @@ namespace TeleBonifacio
             BotoesNormais();
         }
 
-        #region Formas
-
-        private void btCartao_Click(object sender, EventArgs e)
-        {
-            Registra(1);
-        }
-
-        private void btPix_Click(object sender, EventArgs e)
-        {
-            Registra(3);
-        }
-
-        private void btTroco_Click(object sender, EventArgs e)
-        {
-            Registra(5);
-        }
-
-        private void btAnotado_Click(object sender, EventArgs e)
-        {
-            Registra(2);
-        }
-
-        private void btDinheiro_Click(object sender, EventArgs e)
-        {
-            Registra(0);
-        }
-
-        private void btItau_Click(object sender, EventArgs e)
-        {
-            Registra(6);
-        }
-
-        private void btSicred_Click(object sender, EventArgs e)
-        {
-            Registra(7);
-        }
-
-        #endregion
-
         #region Botões
 
         private void BotoesNormais()
         {
-            this.btDinheiro.Enabled = true;
-            this.btDespeza.Enabled = true;
-            this.btPix.Enabled = true;
-            this.btCartao.Enabled = true;
-            this.btItau.Enabled = true;
-            this.btSicred.Enabled = true;
-            this.btDinheiro.BackColor = SystemColors.Control;
-            this.btDespeza.BackColor = SystemColors.Control;
-            this.btPix.BackColor = SystemColors.Control;
-            this.btCartao.BackColor = SystemColors.Control;
-            this.btItau.BackColor = SystemColors.Control;
-            this.btSicred.BackColor = SystemColors.Control;
+            foreach (Control control in grpCredito.Controls)
+            {
+                if (control is Button button)
+                {
+                    button.Enabled = true;
+                    button.BackColor = SystemColors.Control;
+                }
+            }
+            foreach (Control control in grpDebito.Controls)
+            {
+                if (control is Button button)
+                {
+                    button.Enabled = true;
+                    button.BackColor = SystemColors.Control;
+                }
+            }
             btExcluir.Visible = false;
             btEditar.Visible = false;
         }
@@ -290,30 +318,27 @@ namespace TeleBonifacio
                 btnLimpar.Enabled = true;
                 BotoesNormais();
                 Color cor = Color.FromArgb(128, 255, 128);
-                switch (idForma)
-                {
-                    case 0:
-                        this.btDinheiro.BackColor = cor;
-                        break;
-                    case 1:
-                        this.btCartao.BackColor = cor;
-                        break;
-                    case 3:
-                        this.btPix.BackColor = cor;
-                        break;
-                    case 5:
-                        this.btDespeza.BackColor = cor;
-                        break;
-                    case 6:
-                        this.btItau.BackColor = cor;
-                        break;
-                    case 7:
-                        this.btSicred.BackColor = cor;
-                        break;
-
-                }
+                SetBotaoColor(idForma+1, cor);
                 btExcluir.Visible = true;
                 btEditar.Visible = true;
+            }
+        }
+
+        private void SetBotaoColor(int idForma, Color cor)
+        {
+            foreach (GroupBox grp in new[] { grpCredito, grpDebito })
+            {
+                foreach (Control control in grp.Controls)
+                {
+                    if (control is Button button && button.Tag != null)
+                    {
+                        if (int.TryParse(button.Tag.ToString(), out int buttonId) && buttonId == idForma)
+                        {
+                            button.BackColor = cor;
+                            return; // Sai do método após encontrar e colorir o botão correto
+                        }
+                    }
+                }
             }
         }
 

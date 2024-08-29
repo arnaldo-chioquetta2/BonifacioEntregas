@@ -117,7 +117,8 @@ namespace TeleBonifacio
             if (propertyInfo != null)
             {
                 string valor = propertyInfo.GetValue(reg, null)?.ToString() ?? string.Empty;
-                check.Checked = (valor == "True");
+                check.Checked = (valor == "True" || valor == "1");
+               //  check.Checked = (valor == "True");
             }
         }
 

@@ -219,10 +219,10 @@ namespace TeleBonifacio.dao
             return "";
         }
 
-        public List<tb.Forma> getFormas()
+        public List<tb.Forma> getFormas(int Tipo)
         {
             StringBuilder query = new StringBuilder();
-            query.Append("SELECT ID, Nome, Tipo FROM Formas");
+            query.Append($@"SELECT ID, Nome FROM Formas Where Ativo = 1 And Tipo = {Tipo} ");
             DataTable dt = DB.ExecutarConsulta(query.ToString());
             List<tb.Forma> formas = new List<tb.Forma>();
             foreach (DataRow row in dt.Rows)
@@ -230,8 +230,6 @@ namespace TeleBonifacio.dao
                 formas.Add(new tb.Forma { 
                     Id = Convert.ToInt32(row["ID"]), 
                     Nome = row["Nome"].ToString(), 
-                    Tipo = Convert.ToInt32(row["Tipo"]),
-                    Ativo = Convert.ToInt32(row["Ativo"])
                 });
             }
             return formas;

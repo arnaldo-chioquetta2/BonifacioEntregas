@@ -31,25 +31,17 @@ namespace TeleBonifacio.dao
                 DateTime dataFim = DT2.Date;
                 string dataInicioStr = dataInicio.ToString("MM/dd/yyyy HH:mm:ss");
                 string dataFimStr = dataFim.ToString("MM/dd/yyyy 23:59:59");
+
                 StringBuilder query = new StringBuilder();
-                query.Append($@"SELECT ca.ID, c.Nome AS Cliente, ca.Valor, ca.Desconto, ca.VlNota, 
-                    v.Nome AS Vendedor, ca.Data,
-                    SWITCH(
-                        ca.idForma = 0, 'Dinheiro',
-                        ca.idForma = 1, 'Cartão',
-                        ca.idForma = 2, 'Anotado',
-                        ca.idForma = 3, 'Pix',
-                        ca.idForma = 4, 'Troca',
-                        ca.idForma = 5, 'Despesa',
-                        ca.idForma = 6, 'Itau',
-                        ca.idForma = 7, 'Sicred' 
-                    ) AS Pagamento, ca.Obs,
+                query.Append(@"SELECT ca.ID, c.Nome AS Cliente, ca.Valor, ca.Desconto, ca.VlNota, 
+                    v.Nome AS Vendedor, ca.Data, f.Nome AS Pagamento, ca.Obs,
                     c.NrCli, ca.idVend, ca.idForma, ca.UID 
-                    FROM (Caixa ca
+                    FROM ((Caixa ca
                     LEFT JOIN Clientes c ON c.NrCli = ca.idCliente)
-                    INNER JOIN Vendedores v ON v.ID = ca.idVend"); 
+                    INNER JOIN Vendedores v ON v.ID = ca.idVend)
+                    LEFT JOIN Formas f ON f.ID = (ca.idForma + 1)");
                 query.AppendFormat(" WHERE ca.Data BETWEEN #{0}# AND #{1}#", dataInicioStr, dataFimStr);
-                query.Append(" Order By ca.ID desc ");
+                query.Append(" ORDER BY ca.ID DESC");
                 dt = DB.ExecutarConsulta(query.ToString());
                 if (dt.Rows.Count == 0)
                 {
