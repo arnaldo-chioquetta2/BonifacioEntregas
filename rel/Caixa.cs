@@ -4,8 +4,10 @@ using System.Data;
 using System.Data.OleDb;
 using System.Drawing;
 using System.Drawing.Printing;
+using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using TeleBonifacio.dao;
 
 namespace TeleBonifacio.rel
 {
@@ -22,6 +24,8 @@ namespace TeleBonifacio.rel
         {
             InitializeComponent();
             SetStartPosition();
+            FormasDAO cFormas = new FormasDAO();
+            glo.CarregarComboBox<tb.Forma>(cmbTipo, cFormas, " ");
             rt.AdjustFormComponents(this);
         }
 
@@ -35,19 +39,24 @@ namespace TeleBonifacio.rel
 
         private List<Lanctos> CarregaCaixa()
         {
-            DateTime? dataInicio = dtpDataIN.Value;
-            DateTime dataFim = dtnDtFim.Value;
-            int SelTipo = cmbTipo.SelectedIndex;
-            string sFiltro = "";
-            if (SelTipo>0)
+            DateTime dataInicio = this.DT1.Date;
+            DateTime dataFim = this.DT2.Date.AddDays(1).AddSeconds(-1);
+
+            string filtroForma = "";
+            if (cmbTipo.SelectedIndex > 0) // Se algum item foi selecionado (exceto o primeiro, que é provavelmente "Todos")
             {
-                sFiltro = " and C.idForma = " + retIdForma(cmbTipo.Text);
+                int idFormaSelecionada = ((tb.ComboBoxItem)cmbTipo.SelectedItem).Id;
+                filtroForma = $" AND C.idForma = {idFormaSelecionada - 1}"; // Ajuste para a diferença de indexação
             }
+
             string SQL = $@"SELECT C.ID, C.Data, C.Valor, C.Desconto, 
-                            C.idForma AS FormaPagto, Obs 
-                            FROM Caixa C
-                            Where Data Between #{ dataInicio:MM/dd/yyyy HH:ss}# and #{ dataFim:MM/dd/yyyy HH:ss}# {sFiltro} ";
+                C.idForma AS FormaPagto, C.Obs 
+                FROM Caixa C
+                WHERE C.Data BETWEEN #{dataInicio:yyyy-MM-dd HH:mm:ss}# AND #{dataFim:yyyy-MM-dd HH:mm:ss}#{filtroForma}";
+
             List<Lanctos> lancamentos = new List<Lanctos>();
+            Dictionary<int, int> mapaFormas = CriarMapaFormas();
+
             using (OleDbConnection connection = new OleDbConnection(glo.connectionString))
             {
                 try
@@ -59,24 +68,32 @@ namespace TeleBonifacio.rel
                         {
                             while (reader.Read())
                             {
-                                Lanctos lancamento = new Lanctos();
-                                lancamento.ID = (int)reader["ID"];
-                                lancamento.DataPagamento = (DateTime)reader["Data"];                                
-                                lancamento.Desconto = (decimal)reader["Desconto"];
-                                lancamento.idFormaPagto = (int)reader["FormaPagto"];
-                                if (lancamento.idFormaPagto == 5)
+
+                                int idFormaCaixa = Convert.ToInt32(reader["FormaPagto"]);
+                                int idFormaReal = mapaFormas.ContainsKey(idFormaCaixa) ? mapaFormas[idFormaCaixa] : idFormaCaixa + 1;
+
+                                Lanctos lancamento = new Lanctos
                                 {
-                                    lancamento.Entrada = 0;
-                                    lancamento.Saida = (decimal)reader["Valor"];
-                                }
-                                else
+                                    ID = Convert.ToInt32(reader["ID"]),
+                                    DataPagamento = Convert.ToDateTime(reader["Data"]),
+                                    Desconto = Convert.ToDecimal(reader["Desconto"]),
+                                    idFormaPagto = idFormaReal,
+                                    Entrada = 0,
+                                    Saida = 0,
+                                    Obs = reader["Obs"].ToString()
+                                };
+
+                                var valor = Convert.ToDecimal(reader["Valor"]);
+                                if (GetFormaTipo(idFormaReal) == 1) // Saída
                                 {
-                                    lancamento.Entrada = (decimal)reader["Valor"];
-                                    lancamento.Saida = 0;
+                                    lancamento.Saida = valor;
                                 }
-                                lancamento.Forma = retFormaId(lancamento.idFormaPagto);
+                                else // Entrada
+                                {
+                                    lancamento.Entrada = valor;
+                                }
+
                                 lancamento.Saldo = lancamento.Entrada - lancamento.Desconto - lancamento.Saida;
-                                lancamento.Obs = (string)reader["Obs"];
                                 lancamentos.Add(lancamento);
                             }
                         }
@@ -89,147 +106,156 @@ namespace TeleBonifacio.rel
                 }
             }
             return lancamentos;
-        }
+        }        
 
-        private int retIdForma(string Forma)
+        private int GetFormaTipo(int idForma)
         {
-            int ret = 5;
-            switch (Forma)
+            string SQL = "SELECT Tipo FROM Formas WHERE ID = @ID";
+            using (OleDbConnection connection = new OleDbConnection(glo.connectionString))
             {
-                case "Dinheiro":
-                    ret = 0;
-                    break;
-                case "Cartão":
-                    ret = 1;
-                    break;
-                case "Anotado":
-                    ret = 2;
-                    break;
-                case "Pix":
-                    ret = 3;
-                    break;
-                case "Despesa":
-                    ret = 5;
-                    break;
-                case "Itaú":
-                    ret = 6;
-                    break;
-                case "Sicred":
-                    ret = 7;
-                    break;
+                connection.Open();
+                using (OleDbCommand command = new OleDbCommand(SQL, connection))
+                {
+                    command.Parameters.AddWithValue("@ID", idForma);
+                    var result = command.ExecuteScalar();
+                    return result != null ? (int)result : 0;
+                }
             }
-            return ret;
-        }
-
-        private string retFormaId(int idForma)
-        {
-            string ret = "";
-            switch (idForma)
-            {
-                case 0:
-                    ret = "Dinheiro";
-                    break;
-                case 1:
-                    ret = "Cartão";
-                    break;
-                case 2:
-                    ret = "Anotado";
-                    break;
-                case 3:
-                    ret = "Pix";
-                    break;
-                case 5:
-                    ret = "Despesa";
-                    break;
-                case 6:
-                    ret = "Itau";
-                    break;
-                case 7:
-                    ret = "Sicred";
-                    break;
-            }
-            return ret;
-        }
+        }      
 
         public void GerarRelCaixa()
         {
-            relcaixa = CarregaCaixa();
+            var relcaixa = CarregaCaixa();
+            var formas = CarregaFormas();
+
             StringBuilder sb = new StringBuilder();
             sb.AppendLine("Extrato de Movimentação do Caixa");
             sb.AppendLine();
-            sb.AppendLine($"Período: {dtpDataIN.Value.ToString("dd/MM/yyyy")} a {dtpDataIN.Value.ToString("dd/MM/yyyy")}");
+            sb.AppendLine($"Período: {this.DT1:dd/MM/yyyy} a {this.DT2:dd/MM/yyyy}");
             sb.AppendLine();
             sb.AppendLine("ID       Data     |  Entrada | Desconto |  Saídas |  FormaPagto |  Saldo  | Observação");
-            decimal TDinheiro = 0;
-            decimal TCartao = 0;
-            decimal TPix = 0;
-            decimal TDespesa = 0;
-            decimal TItau = 0;
-            decimal TSicred = 0;
+
+            var totaisPorForma = formas.ToDictionary(f => f.Id, _ => 0m);
+
             foreach (var lancos in relcaixa)
             {
-                string ID = glo.ComplStr(lancos.ID.ToString(), 4, 2);
+                string ID = glo.ComplStr(lancos.ID.ToString(), 5, 2);
                 string Data = glo.ComplStr(lancos.DataPagamento.ToString("dd/MM/yyyy"), 10, 2);
                 string Entrada = glo.ComplStr(lancos.Entrada.ToString("N2"), 8, 3);
                 string Desconto = glo.ComplStr(lancos.Desconto.ToString("N2"), 8, 3);
                 string Saidas = glo.ComplStr(lancos.Saida.ToString("N2"), 7, 3);
-                string Forma = glo.ComplStr(lancos.Forma, 11, 2);
+                string Forma = glo.ComplStr(formas.FirstOrDefault(f => f.Id == lancos.idFormaPagto)?.Nome ?? "Desconhecido", 11, 2);
                 string Saldo = glo.ComplStr(lancos.Saldo.ToString("N2"), 7, 2);
                 string Obs = lancos.Obs.Substring(0, Math.Min(lancos.Obs.Length, 20));
+
                 sb.AppendLine($"{ID}   {Data}   {Entrada}   {Desconto}   {Saidas}   {Forma}   {Saldo} {Obs}");
-                switch (lancos.idFormaPagto)
+
+                var formaPagamento = formas.FirstOrDefault(f => f.Id == lancos.idFormaPagto);
+                if (formaPagamento != null)
                 {
-                    case 0:
-                        TDinheiro += lancos.Entrada - lancos.Desconto;
-                    break;
-                    case 1:
-                        TCartao += lancos.Entrada - lancos.Desconto;
-                    break;
-                    case 3:
-                        TPix += lancos.Entrada - lancos.Desconto;
-                    break;
-                    case 5:
-                        TDespesa += lancos.Saida;
-                    break;
-                    case 6:
-                        TItau += lancos.Entrada - lancos.Desconto;
-                        break;
-                    case 7:
-                        TSicred += lancos.Entrada - lancos.Desconto;
-                        break;
-                        
+                    if (formaPagamento.Tipo == 0) // Entrada
+                    {
+                        totaisPorForma[formaPagamento.Id] += lancos.Entrada - lancos.Desconto;
+                    }
+                    else if (formaPagamento.Tipo == 1) // Saída
+                    {
+                        totaisPorForma[formaPagamento.Id] += lancos.Saida;
+                    }
                 }
             }
+
             sb.AppendLine();
 
-            TotForma(ref sb, $"Dinheiro: ", TDinheiro);
-            TotForma(ref sb, $"Cartão:   ", TCartao);
-            TotForma(ref sb, $"Pix:      ", TPix);
-            TotForma(ref sb, $"Despesas: ", TDespesa);
-            TotForma(ref sb, $"Itau:     ", TItau);
-            TotForma(ref sb, $"Sicred:   ", TSicred);
-            decimal Entradas = TDinheiro + TCartao + TPix + TItau + TSicred;
+            GerarTotaisFormas(sb, totaisPorForma, formas);
+
+            decimal Entradas = totaisPorForma.Where(kvp => formas.First(f => f.Id == kvp.Key).Tipo == 0).Sum(kvp => kvp.Value);
+            decimal TDespesa = totaisPorForma.Where(kvp => formas.First(f => f.Id == kvp.Key).Tipo == 1).Sum(kvp => kvp.Value);
             decimal saldo = Entradas - TDespesa;
+
             sb.AppendLine("");
-            sb.AppendLine("Total de entradas:"+ glo.ComplStr(Entradas.ToString("N2"), 9, 2));
-            sb.AppendLine("Total de saídas  :" + glo.ComplStr(TDespesa.ToString("N2"), 9, 2));
-            sb.AppendLine("Saldo            :" + glo.ComplStr(saldo.ToString("N2"), 9, 2));
-            textBox1.Text = sb.ToString(); ;
+            sb.AppendLine("Total de entradas:" + glo.ComplStr(Entradas.ToString("N2"), 10, 2));
+            sb.AppendLine("Total de saídas  :" + glo.ComplStr(TDespesa.ToString("N2"), 10, 2));
+            sb.AppendLine("Saldo            :" + glo.ComplStr(saldo.ToString("N2"), 10, 2));
+
+            textBox1.Text = sb.ToString();
             textBox1.SelectionStart = textBox1.Text.Length;
             textBox1.ScrollToCaret();
         }
 
-        private void TotForma(ref StringBuilder sb,  string Forma, decimal valor)
+        private void GerarTotaisFormas(StringBuilder sb, Dictionary<int, decimal> totaisPorForma, List<tb.Forma> formas)
         {
-            if (valor==0)
+            int maxNomeLength = formas.Max(f => f.Nome.Length);
+
+            foreach (var forma in formas)
             {
-                if (cmbTipo.SelectedIndex != 0)
+                decimal total = totaisPorForma.ContainsKey(forma.Id) ? totaisPorForma[forma.Id] : 0m;
+                string nome = forma.Nome.PadRight(maxNomeLength);
+                string valorFormatado = total.ToString("N2").PadLeft(12);
+
+                sb.AppendLine($"{nome}: {valorFormatado}");
+            }
+        }
+
+        private Dictionary<int, int> CriarMapaFormas()
+        {
+            Dictionary<int, int> mapa = new Dictionary<int, int>();
+            string SQL = "SELECT ID FROM Formas ORDER BY ID";
+
+            using (OleDbConnection connection = new OleDbConnection(glo.connectionString))
+            {
+                connection.Open();
+                using (OleDbCommand command = new OleDbCommand(SQL, connection))
                 {
-                    return;
+                    using (OleDbDataReader reader = command.ExecuteReader())
+                    {
+                        int index = 0;
+                        while (reader.Read())
+                        {
+                            int id = Convert.ToInt32(reader["ID"]);
+                            mapa[index] = id;
+                            index++;
+                        }
+                    }
                 }
             }
-            sb.AppendLine(Forma + glo.ComplStr(valor.ToString("N2"), 9, 2));
+            return mapa;
         }
+
+        private List<tb.Forma> CarregaFormas()
+        {
+            string SQL = "SELECT ID, Nome, Tipo, Ativo FROM Formas WHERE Ativo = 1";
+            List<tb.Forma> formas = new List<tb.Forma>();
+
+            using (OleDbConnection connection = new OleDbConnection(glo.connectionString))
+            {
+                try
+                {
+                    connection.Open();
+                    using (OleDbCommand command = new OleDbCommand(SQL, connection))
+                    {
+                        using (OleDbDataReader reader = command.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                formas.Add(new tb.Forma
+                                {
+                                    Id = (int)reader["ID"],
+                                    Nome = (string)reader["Nome"],
+                                    Tipo = (int)reader["Tipo"],
+                                    Ativo = (int)reader["Ativo"]
+                                });
+                            }
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.ToString());
+                    return new List<tb.Forma>();
+                }
+            }
+            return formas;
+        }        
 
         private void Extrato_Activated(object sender, EventArgs e)
         {
