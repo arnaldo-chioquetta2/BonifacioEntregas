@@ -409,7 +409,8 @@ namespace TeleBonifacio.dao
 
         public override DataTable GetDadosOrdenados(string filtro="", string ordem ="")   
         {
-            string query = $"SELECT * FROM Vendedores {filtro} Order By Nome {ordem}";
+            string query = $"SELECT ID, usuario AS Nome FROM Vendedores {filtro} Order By usuario {ordem}";
+            // string query = $"SELECT * FROM Vendedores {filtro} Order By Nome {ordem}";
             return ExecutarConsultaVendedor(query);
         }
 
