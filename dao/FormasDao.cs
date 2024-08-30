@@ -44,7 +44,7 @@ namespace TeleBonifacio.dao
         {
             string query = @"SELECT ID, Nome, Tipo, Ativo   
                              FROM Formas 
-                             WHERE Nome > '' 
+                             WHERE Ativo = 1 
                              ORDER BY Nome";
             return DB.ExecutarConsulta(query);
         }

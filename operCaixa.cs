@@ -78,8 +78,8 @@ namespace TeleBonifacio
             Caixa = new CaixaDao();
             ClienteDAO Cliente = new ClienteDAO();
             VendedoresDAO Vendedor = new VendedoresDAO();
-            glo.CarregarComboBox<Cliente>(cmbCliente, Cliente, "NÃO IDENTIFICADO");
-            glo.CarregarComboBox<Vendedor>(cmbVendedor, Vendedor, "", " Where Vendedores.Atende = -1 or Vendedores.Atende = 1 ", " desc ");
+            glo.CarregarComboBox<tb.Cliente>(cmbCliente, Cliente, "NÃO IDENTIFICADO");
+            glo.CarregarComboBox<tb.Vendedor>(cmbVendedor, Vendedor, "", " Where Vendedores.Atende = -1 or Vendedores.Atende = 1 ", " desc ");
             cmbCliente.SelectedIndex = 0;
             cmbVendedor.SelectedIndex = 0;
             DateTime ontem = DateTime.Today.AddDays(-1);
@@ -94,7 +94,7 @@ namespace TeleBonifacio
             FormasDAO cFormas = new FormasDAO();
             CarregaForma(ref cFormas, 0, grpCredito);
             CarregaForma(ref cFormas, 1, grpDebito);
-
+            glo.CarregarComboBox<tb.Forma>(cbFormas, cFormas," ");
         }
 
         public void CarregaForma(ref FormasDAO cForma, int tipoForma, GroupBox targetGroupBox)
@@ -231,7 +231,16 @@ namespace TeleBonifacio
 
         private void btnFiltrar_Click(object sender, EventArgs e)
         {
-            CarregaGrid();
+            // Verifica se algum item foi selecionado no ComboBox
+            if (cbFormas.SelectedItem is tb.ComboBoxItem selectedForma)
+            {
+                int idForma = selectedForma.Id;
+                CarregaGrid(idForma);
+            }
+            else
+            {
+                CarregaGrid();
+            }
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -342,9 +351,9 @@ namespace TeleBonifacio
             }
         }
 
-        private void CarregaGrid()
-        {
-            DataTable dados = Caixa.getDados(dtpDataIN.Value, dtnDtFim.Value);
+        private void CarregaGrid(int idForma = 0)
+        {            
+            DataTable dados = Caixa.getDados(dtpDataIN.Value, dtnDtFim.Value, idForma);
             dataGrid1.DataSource = dados;
         }
 

@@ -21,7 +21,7 @@ namespace TeleBonifacio.dao
             DB.ExecutarComandoSQL(sql);
         }
 
-        public DataTable getDados(DateTime DT1, DateTime DT2)
+        public DataTable getDados(DateTime DT1, DateTime DT2, int idForma)
         {
             bool Sair = false;
             DataTable dt = null;
@@ -41,6 +41,10 @@ namespace TeleBonifacio.dao
                     INNER JOIN Vendedores v ON v.ID = ca.idVend)
                     LEFT JOIN Formas f ON f.ID = (ca.idForma + 1)");
                 query.AppendFormat(" WHERE ca.Data BETWEEN #{0}# AND #{1}#", dataInicioStr, dataFimStr);
+                if (idForma>0)
+                {
+                    query.AppendFormat(" AND ca.idForma = {0}", idForma-1);
+                }
                 query.Append(" ORDER BY ca.ID DESC");
                 dt = DB.ExecutarConsulta(query.ToString());
                 if (dt.Rows.Count == 0)
