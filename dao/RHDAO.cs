@@ -38,7 +38,7 @@ namespace TeleBonifacio.dao
         {
             StringBuilder query = new StringBuilder();
             query.Append($@"SELECT Horarios.ID, Horarios.uid, 
-                Horarios.Data, Vendedores.Nome, 
+                Horarios.Data, Vendedores.usuario as Nome, 
                 IIF(FORMAT(Horarios.txInMan, 'hh:mm') = '00:00', '', FORMAT(Horarios.txInMan, 'hh:mm')) AS InMan,
                 IIF(FORMAT(Horarios.txInCafeMan, 'hh:mm') = '00:00', '', FORMAT(Horarios.txInCafeMan, 'hh:mm')) AS InCafeMan,
                 IIF(FORMAT(Horarios.txFmCafeMan, 'hh:mm') = '00:00', '', FORMAT(Horarios.txFmCafeMan, 'hh:mm')) AS FmCafeMan,
