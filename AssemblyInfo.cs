@@ -11,8 +11,10 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyCulture("")]
 [assembly: ComVisible(false)]
 [assembly: Guid("308c57af-e663-456d-8a2c-188bbd61423d")]
-[assembly: AssemblyVersion("2.8.0.0")]
-[assembly: AssemblyFileVersion("2.8.0.0")]
+[assembly: AssemblyVersion("2.8.2.0")]
+[assembly: AssemblyFileVersion("2.8.2.0")]
+// 2.8.2 Abas de usuários nas faltas usando usuário em vez de nome
+// 2.8.1 Relatório de caixa adaptado a tabela formas
 // 2.8.0 Caixa com formas vindas da tabela
 // 2.7.9 Cadastro de formas de pagamentos
 // 2.7.8 Ajuste no envio de email da versão nova dos arquivos

@@ -104,7 +104,6 @@ namespace TeleBonifacio
                                                         .Select(Path.GetFileName)
                                                         .Where(nome => !string.Equals(nome, "anotacoes.rtf", StringComparison.OrdinalIgnoreCase))
                                                         .ToArray();
-            glo.Loga("arquivosEncontrados.Length = " + arquivosEncontrados.Length.ToString());
             if (arquivosEncontrados.Length > 0)
             {
                 foreach (string arquivo in arquivosEncontrados)
@@ -112,18 +111,15 @@ namespace TeleBonifacio
                     string numeroString = new string(arquivo.SkipWhile(c => !char.IsDigit(c))
                                                 .TakeWhile(char.IsDigit)
                                                 .ToArray());
-                    glo.Loga("numeroString = " + numeroString);
                     tb.Vendedor reg = (tb.Vendedor)vendedor.GetPeloNr(numeroString);
                     if (reg != null)
                     {
-                        glo.Loga("reg != null");
-                        TabPage novaAba = new TabPage(reg.Nome);
+                        TabPage novaAba = new TabPage(reg.Usuario);
                         AtcCtrl.ATCRTF atcRtf = new AtcCtrl.ATCRTF();
                         atcRtf.Dock = DockStyle.Fill;
                         atcRtf.caminhoDoArquivo = Path.Combine(pastaDoPrograma, arquivo);
                         novaAba.Controls.Add(atcRtf);
                         tbFaltas.TabPages.Add(novaAba);
-                        glo.Loga("Criada aba "+ reg.Nome);
                     }
                     else
                     {
@@ -131,7 +127,6 @@ namespace TeleBonifacio
                     }
                 } 
             }
-            glo.Loga("Saindo de PreparaAbasUsers");
         }
 
         private void ConfigureDataGridView(DataGridView grid)
