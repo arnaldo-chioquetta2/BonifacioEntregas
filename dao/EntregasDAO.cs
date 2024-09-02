@@ -11,7 +11,7 @@ namespace TeleBonifacio.dao
             
         }
 
-        public DataTable getDados(DateTime? DT1, DateTime? DT2)
+        public DataTable getDados(DateTime? DT1, DateTime? DT2, string sObs)
         {
             StringBuilder query = new StringBuilder();
             int maxLength = 10; 
@@ -46,6 +46,10 @@ namespace TeleBonifacio.dao
             string dataInicioStr = dataInicio.ToString("MM/dd/yyyy HH:mm:ss");
             string dataFimStr = dataFim.ToString("MM/dd/yyyy 23:59:59");
             query.AppendFormat(" WHERE e.Data BETWEEN #{0}# AND #{1}#", dataInicioStr, dataFimStr);
+            if (sObs.Length>0)
+            {
+                query.AppendFormat(" AND e.Obs Like '%{0}%' ", sObs);
+            }
             query.Append(" Order By e.ID desc");
             DataTable dt = DB.ExecutarConsulta(query.ToString());
             return dt;

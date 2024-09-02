@@ -77,7 +77,8 @@ namespace TeleBonifacio
         {
             entregasDAO = new EntregasDAO();
             DateTime DT2 = dtpData.Value.AddDays(-1);
-            DataTable dados = entregasDAO.getDados(DT2, dtpData.Value);
+            string sObs = txObs.Text;
+            DataTable dados = entregasDAO.getDados(DT2, dtpData.Value, sObs);
             if (dados.Rows.Count > 0)
             {
                 decimal totalValor = 0;
@@ -110,7 +111,6 @@ namespace TeleBonifacio
             dataGrid1.DataSource = boundDataView;
 
         }
-
 
         private void btnAdicionar_Click(object sender, EventArgs e)
         {
@@ -288,7 +288,6 @@ namespace TeleBonifacio
 
         private void btnFiltrar_Click(object sender, EventArgs e)
         {
-            //DateTime DT = dtpData.Value;
             CarregaGrid();
         }
 

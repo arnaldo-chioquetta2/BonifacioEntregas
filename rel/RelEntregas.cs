@@ -79,7 +79,7 @@ namespace TeleBonifacio.rel
         public void GerarRelEntregas()
         {
             entregasDAO = new EntregasDAO();
-            DataTable dados = entregasDAO.getDados(dtpDataIN.Value, dtnDtFim.Value);
+            DataTable dados = entregasDAO.getDados(dtpDataIN.Value, dtnDtFim.Value, null);
             StringBuilder sb = new StringBuilder();
             sb.AppendLine("Relatório de Entregas");
             sb.AppendLine();
