@@ -39,27 +39,34 @@ namespace TeleBonifacio.rel
             this.Height = Screen.PrimaryScreen.WorkingArea.Height;
         }
 
+        // Refatorado em 04/09/24 Original 71 linhas, resultado 12 linhas
         private List<Lanctos> CarregaCaixa()
         {
             DateTime dataInicio = this.DT1.Date;
-            DateTime dataFim = this.DT2.Date.AddDays(1).AddSeconds(-1);
-
-            string filtroForma = "";
-            if (cmbTipo.SelectedIndex > 0)
-            {
-                int idFormaSelecionada = ((tb.ComboBoxItem)cmbTipo.SelectedItem).Id;
-                filtroForma = $" AND C.idForma = {idFormaSelecionada - 1}";
-            }
-
+            DateTime dataFim = this.DT2.Date.AddDays(1).AddSeconds(-1); 
+            string filtroForma = ObterFiltroForma();
             string SQL = $@"SELECT C.ID, C.Data, C.Valor, C.Desconto, 
                 C.idForma AS FormaPagto, C.Obs, F.Tipo AS FormaTipo
                 FROM Caixa C                
                 LEFT JOIN Formas f ON F.ID = (C.idForma + 1)
                 WHERE C.Data BETWEEN #{dataInicio:yyyy-MM-dd HH:mm:ss}# AND #{dataFim:yyyy-MM-dd HH:mm:ss}#{filtroForma}";
+            return ExecutarConsulta(SQL);
+        }
 
+        private string ObterFiltroForma()
+        {
+            if (cmbTipo.SelectedIndex > 0)
+            {
+                int idFormaSelecionada = ((tb.ComboBoxItem)cmbTipo.SelectedItem).Id;
+                return $" AND C.idForma = {idFormaSelecionada - 1}";
+            }
+            return "";
+        }
+
+        private List<Lanctos> ExecutarConsulta(string SQL)
+        {
             List<Lanctos> lancamentos = new List<Lanctos>();
             Dictionary<int, int> mapaFormas = CriarMapaFormas();
-
             using (OleDbConnection connection = new OleDbConnection(glo.connectionString))
             {
                 try
@@ -71,32 +78,7 @@ namespace TeleBonifacio.rel
                         {
                             while (reader.Read())
                             {
-                                int idFormaCaixa = Convert.ToInt32(reader["FormaPagto"]);
-                                int idFormaReal = mapaFormas.ContainsKey(idFormaCaixa) ? mapaFormas[idFormaCaixa] : idFormaCaixa + 1;
-
-                                Lanctos lancamento = new Lanctos
-                                {
-                                    ID = Convert.ToInt32(reader["ID"]),
-                                    DataPagamento = Convert.ToDateTime(reader["Data"]),
-                                    Desconto = Convert.ToDecimal(reader["Desconto"]),
-                                    idFormaPagto = idFormaReal,
-                                    Entrada = 0,
-                                    Saida = 0,
-                                    Obs = reader["Obs"].ToString()
-                                };
-
-                                var valor = Convert.ToDecimal(reader["Valor"]);
-                                int formaTipo = Convert.ToInt32(reader["FormaTipo"]);
-                                if (formaTipo == 1) // Saída
-                                {
-                                    lancamento.Saida = valor;
-                                }
-                                else // Entrada
-                                {
-                                    lancamento.Entrada = valor;
-                                }
-
-                                lancamento.Saldo = lancamento.Entrada - lancamento.Desconto - lancamento.Saida;
+                                var lancamento = CriarLancamento(reader, mapaFormas);
                                 lancamentos.Add(lancamento);
                             }
                         }
@@ -110,6 +92,37 @@ namespace TeleBonifacio.rel
             }
             return lancamentos;
         }
+
+        private Lanctos CriarLancamento(OleDbDataReader reader, Dictionary<int, int> mapaFormas)
+        {
+            int idFormaCaixa = Convert.ToInt32(reader["FormaPagto"]);
+            int idFormaReal = mapaFormas.ContainsKey(idFormaCaixa) ? mapaFormas[idFormaCaixa] : idFormaCaixa + 1;
+
+            var lancamento = new Lanctos
+            {
+                ID = Convert.ToInt32(reader["ID"]),
+                DataPagamento = Convert.ToDateTime(reader["Data"]),
+                Desconto = Convert.ToDecimal(reader["Desconto"]),
+                idFormaPagto = idFormaReal,
+                Entrada = 0,
+                Saida = 0,
+                Obs = reader["Obs"].ToString()
+            };
+
+            decimal valor = Convert.ToDecimal(reader["Valor"]);
+            int formaTipo = Convert.ToInt32(reader["FormaTipo"]);
+            if (formaTipo == 1)
+            {
+                lancamento.Saida = valor;
+            }
+            else
+            {
+                lancamento.Entrada = valor;
+            }
+
+            lancamento.Saldo = lancamento.Entrada - lancamento.Desconto - lancamento.Saida;
+            return lancamento;
+        }        
 
         public void GerarRelCaixa()
         {
