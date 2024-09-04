@@ -5,7 +5,6 @@ using System.Drawing;
 using System.Globalization;
 using System.Windows.Forms;
 using TeleBonifacio.dao;
-using TeleBonifacio.tb;
 
 namespace TeleBonifacio
 {
@@ -231,7 +230,6 @@ namespace TeleBonifacio
 
         private void btnFiltrar_Click(object sender, EventArgs e)
         {
-            // Verifica se algum item foi selecionado no ComboBox
             if (cbFormas.SelectedItem is tb.ComboBoxItem selectedForma)
             {
                 int idForma = selectedForma.Id;
@@ -263,6 +261,13 @@ namespace TeleBonifacio
             rel.Caixa fRel = new rel.Caixa();
             fRel.DT1 = dtpDataIN.Value;
             fRel.DT2 = dtnDtFim.Value;
+            int idForma = -1;
+            if (cbFormas.SelectedItem is tb.ComboBoxItem selectedForma)
+            {
+                idForma = selectedForma.Id;
+            }
+            fRel.Forma = idForma;
+            fRel.txtForma = cbFormas.Text;
             fRel.Show();
         }
 

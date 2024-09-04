@@ -25,6 +25,7 @@ namespace TeleBonifacio.dao
         {
             bool Sair = false;
             DataTable dt = null;
+            int qtD = 0;
             while (Sair==false)
             {
                 DateTime dataInicio = DT1.Date;
@@ -57,7 +58,14 @@ namespace TeleBonifacio.dao
                     } else
                     {
                         DT1 = (DateTime)dt2.Rows[0]["Data"];
-                        DT2 = DT2.AddDays(1);
+                        if (qtD<10)
+                        {
+                            qtD++;
+                            DT2 = DT2.AddDays(1);
+                        } else
+                        {
+                            Sair = true;
+                        }                        
                     }                        
                 } else
                 {

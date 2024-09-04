@@ -38,7 +38,6 @@ namespace TeleBonifacio.rel
             this.label5 = new System.Windows.Forms.Label();
             this.dtnDtFim = new System.Windows.Forms.DateTimePicker();
             this.dtpDataIN = new System.Windows.Forms.DateTimePicker();
-            this.label1 = new System.Windows.Forms.Label();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -139,20 +138,11 @@ namespace TeleBonifacio.rel
             this.dtpDataIN.TabIndex = 42;
             this.dtpDataIN.Tag = "H";
             // 
-            // label1
-            // 
-            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(8, 57);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(100, 23);
-            this.label1.TabIndex = 12;
-            // 
             // Caixa
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(975, 450);
-            this.Controls.Add(this.label1);
             this.Controls.Add(this.textBox1);
             this.Controls.Add(this.panel1);
             this.MaximizeBox = false;
@@ -177,7 +167,6 @@ namespace TeleBonifacio.rel
         private System.Windows.Forms.ComboBox cmbTipo;
         private System.Windows.Forms.Button btImprimir;
         private System.Windows.Forms.Button btnFiltrar;
-        private System.Windows.Forms.Label label1;
     }
 }
 

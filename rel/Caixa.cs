@@ -15,10 +15,12 @@ namespace TeleBonifacio.rel
     {
 
         private bool ativou = false;
+        public string txtForma="";
 
         private List<Lanctos> relcaixa { get; set; }
         public DateTime DT1 { get; set; }
         public DateTime DT2 { get; set; }
+        public int Forma { get; internal set; }
 
         public Caixa()
         {
@@ -51,8 +53,8 @@ namespace TeleBonifacio.rel
 
             string SQL = $@"SELECT C.ID, C.Data, C.Valor, C.Desconto, 
                 C.idForma AS FormaPagto, C.Obs, F.Tipo AS FormaTipo
-                FROM Caixa C
-                INNER JOIN Formas F ON C.idForma = F.ID
+                FROM Caixa C                
+                LEFT JOIN Formas f ON F.ID = (C.idForma + 1)
                 WHERE C.Data BETWEEN #{dataInicio:yyyy-MM-dd HH:mm:ss}# AND #{dataFim:yyyy-MM-dd HH:mm:ss}#{filtroForma}";
 
             List<Lanctos> lancamentos = new List<Lanctos>();
@@ -111,30 +113,86 @@ namespace TeleBonifacio.rel
 
         public void GerarRelCaixa()
         {
+            int? formaPagamentoFiltro = null;
+            if (cmbTipo.SelectedIndex > 0)
+            {
+                formaPagamentoFiltro = ((tb.ComboBoxItem)cmbTipo.SelectedItem).Id;
+            }
             var relcaixa = CarregaCaixa();
             var formas = CarregaFormas();
             StringBuilder sb = new StringBuilder();
             sb.AppendLine("Extrato de Movimentação do Caixa");
             sb.AppendLine();
             sb.AppendLine($"Período: {this.DT1:dd/MM/yyyy} a {this.DT2:dd/MM/yyyy}");
-            sb.AppendLine();
-            sb.AppendLine("ID       Data     |  Entrada | Desconto |  Saídas |  FormaPagto |   Saldo   | Observação");
 
-            var totaisPorForma = formas.ToDictionary(f => f.Id, _ => 0m);
-            int c = 0;
+            var formaSelecionada = formaPagamentoFiltro.HasValue
+                ? formas.FirstOrDefault(f => f.Id == formaPagamentoFiltro.Value)
+                : null;
+
+            if (formaSelecionada != null)
+            {
+                sb.AppendLine($"Forma de Pagamento: {formaSelecionada.Nome}");
+            }
+
+            sb.AppendLine();
+            sb.AppendLine("ID       Data     |  Entrada | Desconto |  Saídas |  FormaPagto |   Valor   | Observação");
+
+            decimal totalEntradas = 0m;
+            decimal totalSaidas = 0m;
+
             foreach (var lancos in relcaixa)
             {
-                string ID = glo.ComplStr(lancos.ID.ToString(), 5, 2);
-                string Data = glo.ComplStr(lancos.DataPagamento.ToString("dd/MM/yyyy"), 10, 2);
-                string Entrada = glo.ComplStr(lancos.Entrada.ToString("N2"), 8, 3);
-                string Desconto = glo.ComplStr(lancos.Desconto.ToString("N2"), 8, 3);
-                string Saidas = glo.ComplStr(lancos.Saida.ToString("N2"), 7, 3);
-                string Forma = glo.ComplStr(formas.FirstOrDefault(f => f.Id == lancos.idFormaPagto)?.Nome ?? "Desconhecido", 11, 2);
-                string Saldo = glo.ComplStr(lancos.Saldo.ToString("N2"), 9, 2);
-                string Obs = lancos.Obs.Substring(0, Math.Min(lancos.Obs.Length, 20));
+                var formaPagamento = formas.FirstOrDefault(f => f.Id == lancos.idFormaPagto);
+                if (formaPagamento == null) continue;
 
-                sb.AppendLine($"{ID}   {Data}   {Entrada}   {Desconto}   {Saidas}   {Forma}   {Saldo} {Obs}");
+                if (!formaPagamentoFiltro.HasValue || lancos.idFormaPagto == formaPagamentoFiltro.Value)
+                {
+                    string ID = glo.ComplStr(lancos.ID.ToString(), 5, 2);
+                    string Data = glo.ComplStr(lancos.DataPagamento.ToString("dd/MM/yyyy"), 10, 2);
+                    string Entrada = glo.ComplStr(lancos.Entrada.ToString("N2"), 8, 3);
+                    string Desconto = glo.ComplStr(lancos.Desconto.ToString("N2"), 8, 3);
+                    string Saidas = glo.ComplStr(lancos.Saida.ToString("N2"), 7, 3);
+                    string Forma = glo.ComplStr(formaPagamento.Nome, 11, 2);
+                    string Valor = glo.ComplStr((lancos.Entrada - lancos.Desconto - lancos.Saida).ToString("N2"), 9, 2);
+                    string Obs = lancos.Obs.Substring(0, Math.Min(lancos.Obs.Length, 20));
 
+                    sb.AppendLine($"{ID}   {Data}   {Entrada}   {Desconto}   {Saidas}   {Forma}   {Valor} {Obs}");
+
+                    totalEntradas += lancos.Entrada;
+                    totalSaidas += lancos.Saida;
+                }
+            }
+            sb.AppendLine();
+
+            decimal totalLiquido = totalEntradas - totalSaidas;
+
+            if (formaSelecionada != null)
+            {
+                string nome = formaSelecionada.Nome.PadRight(11);
+                string valorFormatado = Math.Abs(totalLiquido).ToString("N2").PadLeft(12);
+                sb.AppendLine($"{nome}: {valorFormatado}");
+            }
+            else
+            {
+                GerarTotaisFormas(sb, relcaixa, formas);
+            }
+
+            sb.AppendLine("");
+            sb.AppendLine("Total de entradas:" + glo.ComplStr(totalEntradas.ToString("N2"), 10, 2));
+            sb.AppendLine("Total de saídas  :" + glo.ComplStr(totalSaidas.ToString("N2"), 10, 2));
+            sb.AppendLine("Saldo            :" + glo.ComplStr(totalLiquido.ToString("N2"), 10, 2));
+
+            textBox1.Text = sb.ToString();
+            textBox1.SelectionStart = textBox1.Text.Length;
+            textBox1.ScrollToCaret();
+        }
+
+        private void GerarTotaisFormas(StringBuilder sb, List<Lanctos> relcaixa, List<tb.Forma> formas)
+        {
+            var totaisPorForma = formas.ToDictionary(f => f.Id, _ => 0m);
+
+            foreach (var lancos in relcaixa)
+            {
                 var formaPagamento = formas.FirstOrDefault(f => f.Id == lancos.idFormaPagto);
                 if (formaPagamento != null)
                 {
@@ -148,37 +206,18 @@ namespace TeleBonifacio.rel
                     }
                 }
             }
-            sb.AppendLine();
 
-            GerarTotaisFormas(sb, totaisPorForma, formas);
-
-            decimal Entradas = totaisPorForma.Where(kvp => formas.First(f => f.Id == kvp.Key).Tipo == 0).Sum(kvp => kvp.Value);
-            decimal TDespesa = totaisPorForma.Where(kvp => formas.First(f => f.Id == kvp.Key).Tipo == 1).Sum(kvp => kvp.Value);
-            decimal saldo = Entradas - TDespesa;
-
-            sb.AppendLine("");
-            sb.AppendLine("Total de entradas:" + glo.ComplStr(Entradas.ToString("N2"), 10, 2));
-            sb.AppendLine("Total de saídas  :" + glo.ComplStr(TDespesa.ToString("N2"), 10, 2));
-            sb.AppendLine("Saldo            :" + glo.ComplStr(saldo.ToString("N2"), 10, 2));
-
-            textBox1.Text = sb.ToString();
-            textBox1.SelectionStart = textBox1.Text.Length;
-            textBox1.ScrollToCaret();
-        }
-
-        private void GerarTotaisFormas(StringBuilder sb, Dictionary<int, decimal> totaisPorForma, List<tb.Forma> formas)
-        {
             int maxNomeLength = formas.Max(f => f.Nome.Length);
 
             foreach (var forma in formas)
             {
-                decimal total = totaisPorForma.ContainsKey(forma.Id) ? totaisPorForma[forma.Id] : 0m;
+                decimal total = totaisPorForma[forma.Id];
                 string nome = forma.Nome.PadRight(maxNomeLength);
                 string valorFormatado = total.ToString("N2").PadLeft(12);
 
                 sb.AppendLine($"{nome}: {valorFormatado}");
             }
-        }
+        }        
 
         private Dictionary<int, int> CriarMapaFormas()
         {
@@ -248,6 +287,10 @@ namespace TeleBonifacio.rel
                 ativou = true;
                 dtpDataIN.Value = this.DT1;
                 dtnDtFim.Value = this.DT2.Date.AddDays(1).AddMinutes(-1);
+                if (this.Forma>-1)
+                {
+                    cmbTipo.Text = this.txtForma;
+                } 
                 GerarRelCaixa();
             }
         }

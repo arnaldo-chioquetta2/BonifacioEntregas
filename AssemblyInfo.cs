@@ -13,7 +13,7 @@ using System.Runtime.InteropServices;
 [assembly: Guid("308c57af-e663-456d-8a2c-188bbd61423d")]
 [assembly: AssemblyVersion("2.8.4.0")]
 [assembly: AssemblyFileVersion("2.8.4.0")]
-// 2.8.4 Aceleração no relatório de 
+// 2.8.4 Aceleração no relatório de Caixa
 // 2.8.3 Filtro para observação na tela de entregas
 // 2.8.2 Abas de usuários nas faltas usando usuário em vez de nome
 // 2.8.1 Relatório de caixa adaptado a tabela formas

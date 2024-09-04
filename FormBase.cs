@@ -209,37 +209,7 @@ namespace TeleBonifacio
                     // Tratamento adequado de exceções
                 }
             }
-        }
-        //private void MapearCamposParaModelo(dao.BaseDAO reg)
-        //{
-        //    foreach (Control control in this.Controls)
-        //    {
-        //        try
-        //        {
-        //            if (control is TextBox textBox)
-        //            {
-        //                MapearTextBoxParaModelo(textBox, reg);
-        //            }
-        //            else if (control is DateTimePicker dateTimePicker)
-        //            {
-        //                MapearDateTimePickerParaModelo(dateTimePicker, reg);
-        //            } else if (control is CheckBox Check)
-        //            {
-        //                MapearCheckParaModelo(Check, reg);
-        //            }
-        //            else if (control is ComboBox cmb)
-        //            {
-        //                MapearComboParaModelo(cmb, reg);
-        //            }
-
-        //        }
-        //        catch (Exception ex)
-        //        {
-        //            string x = ex.ToString();
-        //            // Tratamento adequado de exceções
-        //        }
-        //    }
-        //}
+        }        
 
         private void MapearComboParaModelo(ComboBox cmb, BaseDAO reg)
         {
