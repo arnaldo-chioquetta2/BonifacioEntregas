@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.OleDb;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -18,7 +19,7 @@ namespace TeleBonifacio
         private ProdutosDao cDaoP;      
         private GarantiasDao cDaoG;
         private pesCliente FpesCliente;
-        private DataTable dadosCli;
+        private DataTable dadosCli;        
         private bool carregando = true;
         private bool Restrito = false;
         private Color originalBackgroundColor;
@@ -558,57 +559,7 @@ namespace TeleBonifacio
 
         private void dataGrid1_CellClick_1(object sender, DataGridViewCellEventArgs e)
         {
-            DataGridView grid = (DataGridView)sender;
-            if (grid != null && e.RowIndex >= 0 && e.RowIndex < grid.Rows.Count)
-            {
-                carregando = true;
-                DataGridViewRow selectedRow = grid.Rows[e.RowIndex];
-                this.iID = Convert.ToInt32(selectedRow.Cells["ID"].Value);
-                txQuantidade.Text = FiltraOZero(selectedRow.Cells["Quant"].Value);
-                txtCodigo.Text = FiltraOZero(selectedRow.Cells["Codigo"].Value);
-                txMarca.Text = FiltraOZero(selectedRow.Cells["Marca"].Value);
-                txObs.Text = FiltraOZero(selectedRow.Cells["Obs"].Value);
-                txDescr.Text = Convert.ToString(selectedRow.Cells["Descricao"].Value);
-                txValor.Text = glo.fmtVlr(Convert.ToString(selectedRow.Cells["Valor"].Value));
-                cmbVendedor.SelectedValue = Convert.ToInt32(selectedRow.Cells["IDBalconista"].Value);
-                try
-                {
-                    cmbForn.SelectedValue = Convert.ToInt32(selectedRow.Cells["idForn"].Value);
-                }
-                catch (Exception)
-                {
-                    cmbForn.SelectedValue = -1;
-                }
-                try
-                {
-                    cmbTipos.SelectedValue = Convert.ToInt32(selectedRow.Cells["TipoOrig"].Value);
-                }
-                catch (Exception)
-                {
-                    cmbTipos.SelectedValue = -1;
-                }
-                ReadlyOnly(true);
-                btnAdicionar.Text = "Limpar";
-                btnAdicionar.Enabled = true;
-                btnExcluir.Enabled = true;
-                btComprei.Enabled = true;
-                txQuantidade.ReadOnly = false;
-                txMarca.ReadOnly = false;
-                if (dataGrid1.SelectedRows.Count == 1)
-                {
-                    txtCodigo.ReadOnly = false;
-                }
-                else
-                {
-                    txtCodigo.ReadOnly = true;
-                }
-                txQuantidade.BackColor = originalBackgroundColor;
-                txMarca.BackColor = originalBackgroundColor;
-                txtCodigo.BackColor = originalBackgroundColor;
-                txDescr.BackColor = originalBackgroundColor;
-                txObs.BackColor = originalBackgroundColor;
-                carregando = false;
-            }
+
         }
 
         private void AtualizarLinha<T>(DataGridViewRow row, List<T> items, string idColumnName, string displayColumnName)
@@ -1091,6 +1042,20 @@ namespace TeleBonifacio
         #endregion
 
         #region Filtro
+
+        private string FiltraOZero(object Value)
+        {
+            string texto = Convert.ToString(Value);
+            if (texto == "0")
+            {
+                return "";
+            }
+            else
+            {
+                return texto;
+            }
+        }
+
         private void cmbTiposFiltro_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (!carregando)
@@ -1362,7 +1327,12 @@ namespace TeleBonifacio
                             rtfTexto.Carrega();
                         }
                         break;
-
+                    case 5:
+                        if (this.iniGrid.Length==0)
+                        {
+                            SetupDataGridView();
+                        } 
+                        break;
                     default: // Novas abas criadas dinamicamente
                         groupBox1.Enabled = false;
                         cmbTipos.Enabled = false;
@@ -1748,7 +1718,6 @@ namespace TeleBonifacio
             if (scrollPosition > 0)
                 dataGrid3.FirstDisplayedScrollingRowIndex = scrollPosition;
             }
-            //scrollPosition = dataGrid3.FirstDisplayedScrollingRowIndex;
         }
 
         private void dataGrid3_CellClick(object sender, DataGridViewCellEventArgs e)
@@ -1797,19 +1766,136 @@ namespace TeleBonifacio
             }
         }
 
-        #endregion        
-        private string FiltraOZero(object Value)
+        #endregion
+
+        #region Taxas
+
+        private string iniGrid = "";
+        private const int INITIAL_COLUMN_COUNT = 13;
+        private const int INITIAL_ROW_COUNT = 28;
+
+        private void SetupDataGridView()
         {
-            string texto = Convert.ToString(Value);
-            if (texto == "0")
+            DynamicGridDao cGrid = new DynamicGridDao(griTaxas);
+            this.iniGrid = @"C:\Entregas\Grid.ini";
+
+            // Carregar dados do banco de dados
+            int loadedCellCount = cGrid.LoadDataFromDatabase();
+
+            // Garantir o número mínimo de colunas e linhas
+            EnsureMinimumGridSize();
+
+            // Carregar larguras das colunas se houver dados, caso contrário, usar larguras padrão
+            if (loadedCellCount > 0)
             {
-                return "";
+                LoadColumnWidths();
             }
             else
             {
-                return texto;
+                SetDefaultColumnWidths();
+            }
+
+            // Adicionar eventos após a configuração inicial
+            griTaxas.CellEndEdit += griTaxas_CellEndEdit;
+            griTaxas.ColumnWidthChanged += griTaxas_ColumnWidthChanged;
+        }
+
+        private void SetDefaultColumnWidths()
+        {
+            for (int i = 0; i < griTaxas.ColumnCount; i++)
+            {
+                griTaxas.Columns[i].Width = 100; // ou qualquer largura padrão desejada
             }
         }
+        private void EnsureMinimumGridSize()
+        {
+            Font font = new Font("Arial", 12, FontStyle.Regular);
+
+            while (griTaxas.ColumnCount < INITIAL_COLUMN_COUNT)
+            {
+                DataGridViewTextBoxColumn column = new DataGridViewTextBoxColumn();
+                column.HeaderText = string.Empty; // Cabeçalho vazio
+                column.DefaultCellStyle.Font = font;
+                griTaxas.Columns.Add(column);
+            }
+
+            while (griTaxas.RowCount < INITIAL_ROW_COUNT)
+            {
+                DataGridViewRow row = new DataGridViewRow();
+                row.DefaultCellStyle.Font = font;
+                griTaxas.Rows.Add(row);
+            }
+        }
+
+        private void griTaxas_CellEndEdit(object sender, DataGridViewCellEventArgs e)
+        {
+            string cellValue = griTaxas.Rows[e.RowIndex].Cells[e.ColumnIndex].Value?.ToString() ?? "";
+            SaveCellToDatabase(e.RowIndex, e.ColumnIndex, cellValue);
+
+            if (e.RowIndex == griTaxas.RowCount - 1)
+            {
+                DataGridViewRow newRow = new DataGridViewRow();
+                newRow.DefaultCellStyle.Font = new Font("Arial", 12, FontStyle.Regular);
+                griTaxas.Rows.Add(newRow);
+            }
+
+            if (e.ColumnIndex == griTaxas.ColumnCount - 1)
+            {
+                DataGridViewTextBoxColumn column = new DataGridViewTextBoxColumn();
+                column.HeaderText = string.Empty; // Cabeçalho vazio
+                column.DefaultCellStyle.Font = new Font("Arial", 12, FontStyle.Regular);
+                griTaxas.Columns.Add(column);
+            }
+        }
+
+        private void SaveCellToDatabase(int rowIndex, int columnIndex, string cellValue)
+        {
+            string query = $@"INSERT INTO DynamicGrid (RowIndex, ColumnIndex, CellValue) VALUES ({rowIndex}, {columnIndex}, '{cellValue}')";
+            DB.ExecutarComandoSQL(query);
+        }
+
+        private void griTaxas_ColumnWidthChanged(object sender, DataGridViewColumnEventArgs e)
+        {
+            SaveColumnWidths();
+        }
+
+        private void SaveColumnWidths()
+        {
+            using (StreamWriter writer = new StreamWriter(this.iniGrid))
+            {
+                for (int i = 0; i < griTaxas.ColumnCount; i++)
+                {
+                    writer.WriteLine($"Column{i}Width={griTaxas.Columns[i].Width}");
+                }
+            }
+        }
+
+        private void LoadColumnWidths()
+        {
+            if (File.Exists(this.iniGrid))
+            {
+                string[] lines = File.ReadAllLines(this.iniGrid);
+                foreach (string line in lines)
+                {
+                    string[] parts = line.Split('=');
+                    if (parts.Length == 2)
+                    {
+                        string columnName = parts[0].Replace("Width", "");
+                        int width;
+                        if (int.TryParse(parts[1], out width))
+                        {
+                            DataGridViewColumn column = griTaxas.Columns[columnName];
+                            if (column != null)
+                            {
+                                column.Width = width;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        #endregion
 
     }
 }

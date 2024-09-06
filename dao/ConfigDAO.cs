@@ -12,27 +12,6 @@ namespace TeleBonifacio.dao
             return dt;
         }
 
-        //private DataTable ExecutarConsulta(string query)
-        //{
-        //    DataTable dataTable = new DataTable();
-        //    using (OleDbConnection connection = new OleDbConnection(glo.connectionString))
-        //    {
-        //        try
-        //        {
-        //            connection.Open();
-        //            using (OleDbDataAdapter adapter = new OleDbDataAdapter(query, connection))
-        //            {
-        //                adapter.Fill(dataTable);
-        //            }
-        //        }
-        //        catch (Exception ex)
-        //        {
-        //            Console.WriteLine(ex.Message);
-        //        }
-        //    }
-        //    return dataTable;
-        //}
-
         public decimal getPercentual()
         {
             DataTable tb = GetConfig();
@@ -53,19 +32,6 @@ namespace TeleBonifacio.dao
                 return 0;
             }
         }
-        //public void SetPerc(float perc)
-        //{
-        //    string sql = "UPDATE Config SET UtComissoes = @perc";
-        //    using (OleDbConnection connection = new OleDbConnection(glo.connectionString))
-        //    {
-        //        connection.Open();
-        //        using (OleDbCommand command = new OleDbCommand(sql, connection))
-        //        {
-        //            command.Parameters.AddWithValue("@perc", perc);
-        //            command.ExecuteNonQuery();
-        //        }
-        //    }
-        //}
 
     }
 }

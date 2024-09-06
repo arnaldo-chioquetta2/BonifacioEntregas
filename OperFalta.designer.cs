@@ -34,6 +34,7 @@ namespace TeleBonifacio
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(OperFalta));
             this.panel1 = new System.Windows.Forms.Panel();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
@@ -78,6 +79,8 @@ namespace TeleBonifacio
             this.dataGrid4 = new System.Windows.Forms.DataGridView();
             this.tabPage5 = new System.Windows.Forms.TabPage();
             this.rtfTexto = new AtcCtrl.ATCRTF();
+            this.tabPage6 = new System.Windows.Forms.TabPage();
+            this.griTaxas = new System.Windows.Forms.DataGridView();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.Aumentar = new System.Windows.Forms.ToolStripMenuItem();
@@ -95,6 +98,8 @@ namespace TeleBonifacio
             this.tabPage4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGrid4)).BeginInit();
             this.tabPage5.SuspendLayout();
+            this.tabPage6.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.griTaxas)).BeginInit();
             this.contextMenuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -461,6 +466,7 @@ namespace TeleBonifacio
             this.tbFaltas.Controls.Add(this.tabPage3);
             this.tbFaltas.Controls.Add(this.tabPage4);
             this.tbFaltas.Controls.Add(this.tabPage5);
+            this.tbFaltas.Controls.Add(this.tabPage6);
             this.tbFaltas.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tbFaltas.Location = new System.Drawing.Point(0, 108);
             this.tbFaltas.Name = "tbFaltas";
@@ -490,7 +496,7 @@ namespace TeleBonifacio
             this.dataGrid1.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dataGrid1.Size = new System.Drawing.Size(1331, 292);
             this.dataGrid1.TabIndex = 1;
-            this.dataGrid1.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGrid1_CellClick_1);
+            this.dataGrid1.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGrid4_CellClick);
             this.dataGrid1.MouseUp += new System.Windows.Forms.MouseEventHandler(this.dataGridView1_MouseDown);
             // 
             // tabPage2
@@ -499,7 +505,7 @@ namespace TeleBonifacio
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(1291, 298);
+            this.tabPage2.Size = new System.Drawing.Size(1337, 298);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Produtos";
             this.tabPage2.UseVisualStyleBackColor = true;
@@ -512,7 +518,7 @@ namespace TeleBonifacio
             this.dataGrid2.Name = "dataGrid2";
             this.dataGrid2.ReadOnly = true;
             this.dataGrid2.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dataGrid2.Size = new System.Drawing.Size(1285, 292);
+            this.dataGrid2.Size = new System.Drawing.Size(1331, 292);
             this.dataGrid2.TabIndex = 16;
             this.dataGrid2.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGrid2_CellClick);
             // 
@@ -521,7 +527,7 @@ namespace TeleBonifacio
             this.tabPage3.Controls.Add(this.dataGrid3);
             this.tabPage3.Location = new System.Drawing.Point(4, 22);
             this.tabPage3.Name = "tabPage3";
-            this.tabPage3.Size = new System.Drawing.Size(1291, 298);
+            this.tabPage3.Size = new System.Drawing.Size(1337, 298);
             this.tabPage3.TabIndex = 2;
             this.tabPage3.Text = "Encomenda";
             this.tabPage3.UseVisualStyleBackColor = true;
@@ -534,7 +540,7 @@ namespace TeleBonifacio
             this.dataGrid3.Name = "dataGrid3";
             this.dataGrid3.ReadOnly = true;
             this.dataGrid3.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dataGrid3.Size = new System.Drawing.Size(1291, 298);
+            this.dataGrid3.Size = new System.Drawing.Size(1337, 298);
             this.dataGrid3.TabIndex = 17;
             this.dataGrid3.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGrid3_CellClick);
             this.dataGrid3.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGrid3_CellDoubleClick);
@@ -544,7 +550,7 @@ namespace TeleBonifacio
             this.tabPage4.Controls.Add(this.dataGrid4);
             this.tabPage4.Location = new System.Drawing.Point(4, 22);
             this.tabPage4.Name = "tabPage4";
-            this.tabPage4.Size = new System.Drawing.Size(1291, 298);
+            this.tabPage4.Size = new System.Drawing.Size(1337, 298);
             this.tabPage4.TabIndex = 3;
             this.tabPage4.Text = "Garantia";
             this.tabPage4.UseVisualStyleBackColor = true;
@@ -557,7 +563,7 @@ namespace TeleBonifacio
             this.dataGrid4.Name = "dataGrid4";
             this.dataGrid4.ReadOnly = true;
             this.dataGrid4.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dataGrid4.Size = new System.Drawing.Size(1291, 298);
+            this.dataGrid4.Size = new System.Drawing.Size(1337, 298);
             this.dataGrid4.TabIndex = 18;
             this.dataGrid4.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGrid4_CellClick);
             // 
@@ -566,7 +572,7 @@ namespace TeleBonifacio
             this.tabPage5.Controls.Add(this.rtfTexto);
             this.tabPage5.Location = new System.Drawing.Point(4, 22);
             this.tabPage5.Name = "tabPage5";
-            this.tabPage5.Size = new System.Drawing.Size(1291, 298);
+            this.tabPage5.Size = new System.Drawing.Size(1337, 298);
             this.tabPage5.TabIndex = 4;
             this.tabPage5.Text = "Anotações";
             this.tabPage5.UseVisualStyleBackColor = true;
@@ -576,8 +582,39 @@ namespace TeleBonifacio
             this.rtfTexto.Dock = System.Windows.Forms.DockStyle.Fill;
             this.rtfTexto.Location = new System.Drawing.Point(0, 0);
             this.rtfTexto.Name = "rtfTexto";
-            this.rtfTexto.Size = new System.Drawing.Size(1291, 298);
+            this.rtfTexto.Size = new System.Drawing.Size(1337, 298);
             this.rtfTexto.TabIndex = 0;
+            // 
+            // tabPage6
+            // 
+            this.tabPage6.Controls.Add(this.griTaxas);
+            this.tabPage6.Location = new System.Drawing.Point(4, 22);
+            this.tabPage6.Name = "tabPage6";
+            this.tabPage6.Size = new System.Drawing.Size(1337, 298);
+            this.tabPage6.TabIndex = 5;
+            this.tabPage6.Text = "Taxas";
+            this.tabPage6.UseVisualStyleBackColor = true;
+            // 
+            // griTaxas
+            // 
+            this.griTaxas.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
+            this.griTaxas.ColumnHeadersVisible = false;
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.griTaxas.DefaultCellStyle = dataGridViewCellStyle1;
+            this.griTaxas.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.griTaxas.Location = new System.Drawing.Point(0, 0);
+            this.griTaxas.Name = "griTaxas";
+            this.griTaxas.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
+            this.griTaxas.Size = new System.Drawing.Size(1337, 298);
+            this.griTaxas.TabIndex = 0;
+            this.griTaxas.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.griTaxas_CellEndEdit);
+            this.griTaxas.ColumnWidthChanged += new System.Windows.Forms.DataGridViewColumnEventHandler(this.griTaxas_ColumnWidthChanged);
             // 
             // contextMenuStrip1
             // 
@@ -629,6 +666,8 @@ namespace TeleBonifacio
             this.tabPage4.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dataGrid4)).EndInit();
             this.tabPage5.ResumeLayout(false);
+            this.tabPage6.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.griTaxas)).EndInit();
             this.contextMenuStrip1.ResumeLayout(false);
             this.ResumeLayout(false);
 
@@ -682,6 +721,8 @@ namespace TeleBonifacio
         private ContextMenuStrip contextMenuStrip1;
         private ToolStripMenuItem Aumentar;
         private ToolStripMenuItem DiminirPrio;
+        private TabPage tabPage6;
+        private DataGridView griTaxas;
         //private AtcCtrl.ATCRTF rtfTexto;
     }
 }

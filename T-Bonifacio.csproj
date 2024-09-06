@@ -162,6 +162,7 @@
     <Compile Include="dao\ClienteDAO.cs" />
     <Compile Include="dao\ConfigDAO.cs" />
     <Compile Include="dao\ContasAPagarDao.cs" />
+    <Compile Include="dao\DynamicGridDao.cs" />
     <Compile Include="dao\EncomendasDao.cs" />
     <Compile Include="dao\EntregadorDAO.cs" />
     <Compile Include="dao\EntregasDAO.cs" />
@@ -334,6 +335,7 @@
     <Compile Include="tb\ComboBoxItem.cs" />
     <Compile Include="tb\ContasAPagar.cs" />
     <Compile Include="tb\Document.cs" />
+    <Compile Include="tb\DynamicGrid.cs" />
     <Compile Include="tb\Encomendas.cs" />
     <Compile Include="tb\Entregador.cs" />
     <Compile Include="tb\Entregas.cs" />
