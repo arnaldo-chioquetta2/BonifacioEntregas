@@ -121,6 +121,10 @@ namespace TeleBonifacio.dao
         public int InserirNovoCliente(string nome, string telefone)
         {
             tb.Cliente ret = GetUltimo() as tb.Cliente;
+            if (telefone.Length==0)
+            {
+                telefone = "0";
+            }
             string query = $@"INSERT INTO Clientes (NrCli, Nome, Telefone, Data) VALUES (
                         {ret.Id+1}, '{nome}', '{telefone}', '{DateTime.Now:yyyy-MM-dd HH:mm:ss}' ) ";
             DB.ExecutarComandoSQL(query);

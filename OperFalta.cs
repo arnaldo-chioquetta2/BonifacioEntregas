@@ -559,7 +559,57 @@ namespace TeleBonifacio
 
         private void dataGrid1_CellClick_1(object sender, DataGridViewCellEventArgs e)
         {
-
+            DataGridView grid = (DataGridView)sender;
+            if (grid != null && e.RowIndex >= 0 && e.RowIndex < grid.Rows.Count)
+            {
+                carregando = true;
+                DataGridViewRow selectedRow = grid.Rows[e.RowIndex];
+                this.iID = Convert.ToInt32(selectedRow.Cells["ID"].Value);
+                txQuantidade.Text = FiltraOZero(selectedRow.Cells["Quant"].Value);
+                txtCodigo.Text = FiltraOZero(selectedRow.Cells["Codigo"].Value);
+                txMarca.Text = FiltraOZero(selectedRow.Cells["Marca"].Value);
+                txObs.Text = FiltraOZero(selectedRow.Cells["Obs"].Value);
+                txDescr.Text = Convert.ToString(selectedRow.Cells["Descricao"].Value);
+                txValor.Text = glo.fmtVlr(Convert.ToString(selectedRow.Cells["Valor"].Value));
+                cmbVendedor.SelectedValue = Convert.ToInt32(selectedRow.Cells["IDBalconista"].Value);
+                try
+                {
+                    cmbForn.SelectedValue = Convert.ToInt32(selectedRow.Cells["idForn"].Value);
+                }
+                catch (Exception)
+                {
+                    cmbForn.SelectedValue = -1;
+                }
+                try
+                {
+                    cmbTipos.SelectedValue = Convert.ToInt32(selectedRow.Cells["TipoOrig"].Value);
+                }
+                catch (Exception)
+                {
+                    cmbTipos.SelectedValue = -1;
+                }
+                ReadlyOnly(true);
+                btnAdicionar.Text = "Limpar";
+                btnAdicionar.Enabled = true;
+                btnExcluir.Enabled = true;
+                btComprei.Enabled = true;
+                txQuantidade.ReadOnly = false;
+                txMarca.ReadOnly = false;
+                if (dataGrid1.SelectedRows.Count == 1)
+                {
+                    txtCodigo.ReadOnly = false;
+                }
+                else
+                {
+                    txtCodigo.ReadOnly = true;
+                }
+                txQuantidade.BackColor = originalBackgroundColor;
+                txMarca.BackColor = originalBackgroundColor;
+                txtCodigo.BackColor = originalBackgroundColor;
+                txDescr.BackColor = originalBackgroundColor;
+                txObs.BackColor = originalBackgroundColor;
+                carregando = false;
+            }
         }
 
         private void AtualizarLinha<T>(DataGridViewRow row, List<T> items, string idColumnName, string displayColumnName)
