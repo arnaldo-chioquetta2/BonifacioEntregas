@@ -82,7 +82,24 @@ namespace TeleBonifacio
             CarregaGrafVendas(DT1, DT2);            
         }
 
+        // Refatorado em 09/09/24 Original 34 linhas, resultado 15 linhas
         private void CarregaGrafVendas(DateTime DT1, DateTime DT2)
+        {
+            ConfiguraGrafico();
+            DataTable dados = entregasDAO.GraficVendas(DT1, DT2);
+            if (dados.Rows.Count > 0)
+            {
+                AdicionaPontosGrafico(dados);
+                ConfiguraEixosGrafico();
+                chartVendas.Invalidate();
+            }
+            else
+            {
+                MessageBox.Show("Não há dados para o período selecionado.");
+            }
+        }
+
+        private void ConfiguraGrafico()
         {
             chartVendas.Series.Clear();
             chartVendas.ChartAreas.Clear();
@@ -94,27 +111,26 @@ namespace TeleBonifacio
                 Color = Color.Blue
             };
             chartVendas.Series.Add(seriesVendas);
-            DataTable dados = entregasDAO.GraficVendas(DT1, DT2);
-            if (dados.Rows.Count > 0)
+        }
+
+        private void AdicionaPontosGrafico(DataTable dados)
+        {
+            foreach (DataRow row in dados.Rows)
             {
-                foreach (DataRow row in dados.Rows)
-                {
-                    DateTime data = Convert.ToDateTime(row["DataFormatada"]);
-                    decimal totalVendas = Convert.ToDecimal(row["TotalVendas"]);
-                    chartVendas.Series["Vendas"].Points.AddXY(data.ToShortDateString(), totalVendas);
-                    int pointIndex = chartVendas.Series["Vendas"].Points.Count - 1;
-                    chartVendas.Series["Vendas"].Points[pointIndex].Color = totalVendas >= 0 ? Color.Blue : Color.Red;
-                }
-                chartVendas.ChartAreas[0].AxisX.Interval = 1;
-                chartVendas.ChartAreas[0].AxisX.IntervalType = DateTimeIntervalType.Days;
-                chartVendas.ChartAreas[0].AxisX.LabelStyle.Format = "dd/MM";
-                chartVendas.ChartAreas[0].AxisY.LabelStyle.Format = "C2";
-                chartVendas.Invalidate();
+                DateTime data = Convert.ToDateTime(row["DataFormatada"]);
+                decimal totalVendas = Convert.ToDecimal(row["TotalVendas"]);
+                chartVendas.Series["Vendas"].Points.AddXY(data.ToShortDateString(), totalVendas);
+                int pointIndex = chartVendas.Series["Vendas"].Points.Count - 1;
+                chartVendas.Series["Vendas"].Points[pointIndex].Color = totalVendas >= 0 ? Color.Blue : Color.Red;
             }
-            else
-            {
-                MessageBox.Show("Não há dados para o período selecionado.");
-            }
+        }
+
+        private void ConfiguraEixosGrafico()
+        {
+            chartVendas.ChartAreas[0].AxisX.Interval = 1;
+            chartVendas.ChartAreas[0].AxisX.IntervalType = DateTimeIntervalType.Days;
+            chartVendas.ChartAreas[0].AxisX.LabelStyle.Format = "dd/MM";
+            chartVendas.ChartAreas[0].AxisY.LabelStyle.Format = "C2";
         }
 
         private void CarregaGrafEntregadores(DateTime DT1, DateTime DT2)

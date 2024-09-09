@@ -51,7 +51,19 @@ namespace TeleBonifacio
             SetStartPosition();
         }
 
+        // Refatorado em 09/09/24 Original 44 linhas, resultado 10 linhas
         private void OperFalta_Load(object sender, EventArgs e)
+        {
+            InicializarObjetos();
+            ConfigurarUI();
+            VerificarNivel();
+            carregando = false;
+            CarregaGrid();
+            ConfigureDataGridView(this.dataGrid1);
+            rt.AdjustFormComponents(this);
+        }
+
+        private void InicializarObjetos()
         {
             VendedoresDAO Vendedor = new VendedoresDAO();
             iUser = glo.iUsuario.ToString();
@@ -60,6 +72,10 @@ namespace TeleBonifacio
             TpoFalta = new TpoFaltaDAO();
             Forn = new FornecedorDao();
             MostraTipos();
+        }
+
+        private void ConfigurarUI()
+        {
             if (iUser.Length == 0)
             {
                 btAdicTpo.Visible = false;
@@ -72,8 +88,12 @@ namespace TeleBonifacio
             {
                 btEncomenda.Enabled = false;
             }
-            glo.Loga("glo.Nivel = "+ glo.Nivel.ToString());
-            if (glo.Nivel==2)
+        }
+
+        private void VerificarNivel()
+        {
+            glo.Loga("glo.Nivel = " + glo.Nivel.ToString());
+            if (glo.Nivel == 2)
             {
                 lbVlor.Visible = true;
                 txValor.Visible = true;
@@ -81,7 +101,7 @@ namespace TeleBonifacio
                 ConfigureDataGridView(this.dataGrid3);
                 ConfigureDataGridView(this.dataGrid4);
                 glo.Loga("Vai entrar em PreparaAbasUsers");
-                PreparaAbasUsers(Vendedor);
+                PreparaAbasUsers(new VendedoresDAO());
             }
             else
             {
@@ -90,10 +110,6 @@ namespace TeleBonifacio
                 tbFaltas.TabPages.Remove(tabPage4);
                 tbFaltas.TabPages.Remove(tabPage5);
             }
-            carregando = false;
-            CarregaGrid();
-            ConfigureDataGridView(this.dataGrid1); 
-            rt.AdjustFormComponents(this);           
         }
 
         private void PreparaAbasUsers(VendedoresDAO vendedor)
