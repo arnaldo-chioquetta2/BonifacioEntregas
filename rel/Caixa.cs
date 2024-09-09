@@ -131,6 +131,8 @@ namespace TeleBonifacio.rel
             {
                 formaPagamentoFiltro = ((tb.ComboBoxItem)cmbTipo.SelectedItem).Id;
             }
+            this.DT1 = dtpDataIN.Value.Date;
+            this.DT2 = dtnDtFim.Value.Date.AddHours(23).AddMinutes(59);
             var relcaixa = CarregaCaixa();
             var formas = CarregaFormas();
             StringBuilder sb = new StringBuilder();
