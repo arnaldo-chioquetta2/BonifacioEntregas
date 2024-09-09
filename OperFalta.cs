@@ -1826,54 +1826,96 @@ namespace TeleBonifacio
 
         private void SetupDataGridView()
         {
-            DynamicGridDao cGrid = new DynamicGridDao(griTaxas);
             this.iniGrid = @"C:\Entregas\Grid.ini";
 
+            // Inicializar a grid com o tamanho inicial
+            InitializeGrid();
+
+            // Carregar larguras das colunas
+            LoadColumnWidths();
+
             // Carregar dados do banco de dados
-            int loadedCellCount = cGrid.LoadDataFromDatabase();
-
-            // Garantir o número mínimo de colunas e linhas
-            EnsureMinimumGridSize();
-
-            // Carregar larguras das colunas se houver dados, caso contrário, usar larguras padrão
-            if (loadedCellCount > 0)
-            {
-                LoadColumnWidths();
-            }
-            else
-            {
-                SetDefaultColumnWidths();
-            }
+            LoadDataFromDatabase();
 
             // Adicionar eventos após a configuração inicial
             griTaxas.CellEndEdit += griTaxas_CellEndEdit;
             griTaxas.ColumnWidthChanged += griTaxas_ColumnWidthChanged;
+
+            // Forçar a atualização visual da grid
+            griTaxas.Refresh();
         }
 
-        private void SetDefaultColumnWidths()
+        public void LoadDataFromDatabase()
         {
-            for (int i = 0; i < griTaxas.ColumnCount; i++)
+            string query = "SELECT RowIndex, ColumnIndex, CellValue FROM DynamicGrid ORDER BY RowIndex, ColumnIndex";
+            DataTable dataTable = DB.ExecutarConsulta(query);
+
+            foreach (DataRow row in dataTable.Rows)
             {
-                griTaxas.Columns[i].Width = 100; // ou qualquer largura padrão desejada
+                int rowIndex = Convert.ToInt32(row["RowIndex"]);
+                int columnIndex = Convert.ToInt32(row["ColumnIndex"]);
+                string cellValue = row["CellValue"].ToString();
+
+                // Garantir que existem colunas e linhas suficientes
+                EnsureGridSize(rowIndex, columnIndex);
+
+                // Definir o valor da célula
+                griTaxas.Rows[rowIndex].Cells[columnIndex].Value = cellValue;
             }
         }
-        private void EnsureMinimumGridSize()
-        {
-            Font font = new Font("Arial", 12, FontStyle.Regular);
 
-            while (griTaxas.ColumnCount < INITIAL_COLUMN_COUNT)
+        private void EnsureGridSize(int requiredRowIndex, int requiredColumnIndex)
+        {
+            // Adicionar colunas, se necessário
+            while (griTaxas.ColumnCount <= requiredColumnIndex)
             {
                 DataGridViewTextBoxColumn column = new DataGridViewTextBoxColumn();
-                column.HeaderText = string.Empty; // Cabeçalho vazio
+                column.HeaderText = $"Column {griTaxas.ColumnCount}";
+                column.Name = $"Column{griTaxas.ColumnCount}";
+                column.DefaultCellStyle.Font = new Font("Arial", 12, FontStyle.Regular);
+                griTaxas.Columns.Add(column);
+            }
+
+            // Adicionar linhas, se necessário
+            while (griTaxas.RowCount <= requiredRowIndex)
+            {
+                DataGridViewRow row = new DataGridViewRow();
+                row.DefaultCellStyle.Font = new Font("Arial", 12, FontStyle.Regular);
+                griTaxas.Rows.Add(row);
+            }
+        }
+        private void InitializeGrid()
+        {
+            griTaxas.Rows.Clear();
+            griTaxas.Columns.Clear();
+
+            Font font = new Font("Arial", 12, FontStyle.Regular);
+
+            // Adicionar colunas
+            for (int i = 0; i < INITIAL_COLUMN_COUNT; i++)
+            {
+                DataGridViewTextBoxColumn column = new DataGridViewTextBoxColumn();
+                column.HeaderText = $"Column {i}";
+                column.Name = $"Column{i}";
                 column.DefaultCellStyle.Font = font;
                 griTaxas.Columns.Add(column);
             }
 
-            while (griTaxas.RowCount < INITIAL_ROW_COUNT)
+            // Adicionar linhas
+            for (int i = 0; i < INITIAL_ROW_COUNT; i++)
             {
                 DataGridViewRow row = new DataGridViewRow();
                 row.DefaultCellStyle.Font = font;
                 griTaxas.Rows.Add(row);
+            }
+
+            // Garantir que todas as células sejam criadas
+            for (int i = 0; i < INITIAL_ROW_COUNT; i++)
+            {
+                for (int j = 0; j < INITIAL_COLUMN_COUNT; j++)
+                {
+                    griTaxas[j, i].Value = "";
+                }
             }
         }
 
@@ -1882,25 +1924,27 @@ namespace TeleBonifacio
             string cellValue = griTaxas.Rows[e.RowIndex].Cells[e.ColumnIndex].Value?.ToString() ?? "";
             SaveCellToDatabase(e.RowIndex, e.ColumnIndex, cellValue);
 
-            if (e.RowIndex == griTaxas.RowCount - 1)
-            {
-                DataGridViewRow newRow = new DataGridViewRow();
-                newRow.DefaultCellStyle.Font = new Font("Arial", 12, FontStyle.Regular);
-                griTaxas.Rows.Add(newRow);
-            }
-
-            if (e.ColumnIndex == griTaxas.ColumnCount - 1)
-            {
-                DataGridViewTextBoxColumn column = new DataGridViewTextBoxColumn();
-                column.HeaderText = string.Empty; // Cabeçalho vazio
-                column.DefaultCellStyle.Font = new Font("Arial", 12, FontStyle.Regular);
-                griTaxas.Columns.Add(column);
-            }
+            // Aumentar a grid se necessário
+            EnsureGridSize(e.RowIndex + 1, e.ColumnIndex + 1);
         }
 
         private void SaveCellToDatabase(int rowIndex, int columnIndex, string cellValue)
         {
-            string query = $@"INSERT INTO DynamicGrid (RowIndex, ColumnIndex, CellValue) VALUES ({rowIndex}, {columnIndex}, '{cellValue}')";
+            string checkQuery = $"SELECT COUNT(*) FROM DynamicGrid WHERE RowIndex = {rowIndex} AND ColumnIndex = {columnIndex}";
+            int count = DB.ExecutarConsultaCount(checkQuery);
+
+            string query;
+            if (count > 0)
+            {
+                // Update existing record
+                query = $@"UPDATE DynamicGrid SET CellValue = '{cellValue}' WHERE RowIndex = {rowIndex} AND ColumnIndex = {columnIndex}";
+            }
+            else
+            {
+                // Insert new record
+                query = $@"INSERT INTO DynamicGrid (RowIndex, ColumnIndex, CellValue) VALUES ({rowIndex}, {columnIndex}, '{cellValue}')";
+            }
+
             DB.ExecutarComandoSQL(query);
         }
 

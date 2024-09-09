@@ -12,8 +12,9 @@ namespace TeleBonifacio
     {
         private Chart chartLucratividade;
         private Chart chartVendas;
-        EntregasDAO entregasDAO;        
+        private EntregasDAO entregasDAO;        
         private DataGridView dataGridView1;
+        private bool MostrouMedias = false;
 
         private void InicializarComponentesDeGrafico()
         {
@@ -40,7 +41,7 @@ namespace TeleBonifacio
             chartVendas.Series.Add(seriesVendas);
             tabPage2.Controls.Add(chartVendas);
         }
-
+        
         public Dashboard()
         {
             InitializeComponent();
@@ -180,6 +181,78 @@ namespace TeleBonifacio
             txtLucroTotal.Text = lucroTotal.ToString("C");
             txtComiss.Text = comiss.ToString("C");
         }
+
+        private void tabControl1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (tabControl1.SelectedIndex==2)
+            {
+                if (!MostrouMedias)
+                {
+                    MostrouMedias = true;
+                    CarragaMedias();
+                }                
+            }
+        }
+
+        #region Medias
+
+        private void CarragaMedias()
+        {
+            this.dtgMedias.Rows.Add(3); // Adiciona 3 linhas
+            this.dtgMedias.Columns[0].Width = 400; // Largura da primeira coluna
+            this.dtgMedias.Columns[1].Width = 400; // Largura da segunda coluna
+            this.dtgMedias.RowTemplate.Height = 100; // Altura das linhas
+
+            // Definindo valores para a primeira coluna
+            this.dtgMedias.Rows[0].Cells[0].Value = "1 ano ";
+            this.dtgMedias.Rows[1].Cells[0].Value = "6 meses ";
+            this.dtgMedias.Rows[2].Cells[0].Value = "3 meses ";
+
+            this.dtgMedias.Rows[0].Cells[1].Value = Cons1ano();
+            this.dtgMedias.Rows[1].Cells[1].Value = Cons6meses();
+            this.dtgMedias.Rows[2].Cells[1].Value = Cons3meses();
+
+            // Estilo da fonte para ambas as colunas
+            DataGridViewCellStyle leftColumnStyle = new DataGridViewCellStyle();
+            leftColumnStyle.Font = new Font("Arial", 36F, GraphicsUnit.Pixel); // Define uma fonte maior para a primeira coluna
+            leftColumnStyle.Alignment = DataGridViewContentAlignment.MiddleLeft; // Alinhamento à esquerda para a primeira coluna
+
+            DataGridViewCellStyle rightColumnStyle = new DataGridViewCellStyle();
+            rightColumnStyle.Font = new Font("Arial", 36F, GraphicsUnit.Pixel); // Define o mesmo tamanho de fonte para a segunda coluna
+            rightColumnStyle.Alignment = DataGridViewContentAlignment.MiddleRight; // Alinhamento à direita para a segunda coluna
+
+            // Aplicando o estilo nas colunas
+            this.dtgMedias.Columns[0].DefaultCellStyle = rightColumnStyle;
+            this.dtgMedias.Columns[1].DefaultCellStyle = leftColumnStyle; 
+        }
+
+        private object Cons3meses()
+        {
+            string sql  = "SELECT AVG(CDbl(VlNota)) AS Media FROM Entregas WHERE Data >= DateAdd('m', -3, Date())";
+            return cons(sql);
+        }
+
+        private object Cons6meses()
+        {
+            string sql = "SELECT AVG(CDbl(VlNota)) AS Media FROM Entregas WHERE Data >= DateAdd('m', -6, Date())";
+            return cons(sql);
+        }
+
+        private string Cons1ano()
+        {
+            string sql = "SELECT AVG(CDbl(VlNota)) AS Media FROM Entregas WHERE Data >= DateAdd('yyyy', -1, Date())";
+            return cons(sql);
+        }
+
+        private string cons(string sql)
+        {
+            DataTable dt = DB.ExecutarConsulta(sql);
+            double vlr = (double)dt.Rows[0]["Media"];
+            string sVlr = " R$ " + vlr.ToString("N2");
+            return sVlr;
+        }
+
+        #endregion
 
     }
 }

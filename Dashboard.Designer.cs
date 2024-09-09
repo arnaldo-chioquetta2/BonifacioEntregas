@@ -1,4 +1,6 @@
 ﻿
+using System.Windows.Forms;
+
 namespace TeleBonifacio
 {
     partial class Dashboard
@@ -37,9 +39,16 @@ namespace TeleBonifacio
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.tabPage3 = new System.Windows.Forms.TabPage();
+            this.dtgMedias = new System.Windows.Forms.DataGridView();
+            this.Column1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.label7 = new System.Windows.Forms.Label();
             this.panel2.SuspendLayout();
             this.panel1.SuspendLayout();
             this.tabControl1.SuspendLayout();
+            this.tabPage3.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dtgMedias)).BeginInit();
             this.SuspendLayout();
             // 
             // panel2
@@ -78,7 +87,7 @@ namespace TeleBonifacio
             this.txtComiss.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtComiss.Location = new System.Drawing.Point(652, 25);
             this.txtComiss.Name = "txtComiss";
-            this.txtComiss.Size = new System.Drawing.Size(93, 33);
+            this.txtComiss.Size = new System.Drawing.Size(110, 33);
             this.txtComiss.TabIndex = 20;
             this.txtComiss.Text = " 8.888,88";
             this.txtComiss.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -86,7 +95,7 @@ namespace TeleBonifacio
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(682, 12);
+            this.label5.Location = new System.Drawing.Point(699, 13);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(63, 13);
             this.label5.TabIndex = 19;
@@ -205,12 +214,14 @@ namespace TeleBonifacio
             // 
             this.tabControl1.Controls.Add(this.tabPage1);
             this.tabControl1.Controls.Add(this.tabPage2);
+            this.tabControl1.Controls.Add(this.tabPage3);
             this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabControl1.Location = new System.Drawing.Point(0, 50);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
             this.tabControl1.Size = new System.Drawing.Size(881, 400);
             this.tabControl1.TabIndex = 1;
+            this.tabControl1.SelectedIndexChanged += new System.EventHandler(this.tabControl1_SelectedIndexChanged);
             // 
             // tabPage1
             // 
@@ -232,6 +243,53 @@ namespace TeleBonifacio
             this.tabPage2.Text = "Vendas";
             this.tabPage2.UseVisualStyleBackColor = true;
             // 
+            // tabPage3
+            // 
+            this.tabPage3.Controls.Add(this.dtgMedias);
+            this.tabPage3.Controls.Add(this.label7);
+            this.tabPage3.Location = new System.Drawing.Point(4, 22);
+            this.tabPage3.Name = "tabPage3";
+            this.tabPage3.Size = new System.Drawing.Size(873, 374);
+            this.tabPage3.TabIndex = 2;
+            this.tabPage3.Text = "Medias";
+            this.tabPage3.UseVisualStyleBackColor = true;
+            // 
+            // dtgMedias
+            // 
+            this.dtgMedias.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.dtgMedias.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dtgMedias.ColumnHeadersVisible = false;
+            this.dtgMedias.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.Column1,
+            this.Column2});
+            this.dtgMedias.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dtgMedias.Location = new System.Drawing.Point(0, 45);
+            this.dtgMedias.Name = "dtgMedias";
+            this.dtgMedias.RowTemplate.Height = 100;
+            this.dtgMedias.Size = new System.Drawing.Size(873, 329);
+            this.dtgMedias.TabIndex = 1;
+            // 
+            // Column1
+            // 
+            this.Column1.HeaderText = "Column1";
+            this.Column1.Name = "Column1";
+            // 
+            // Column2
+            // 
+            this.Column2.HeaderText = "Column2";
+            this.Column2.Name = "Column2";
+            // 
+            // label7
+            // 
+            this.label7.Dock = System.Windows.Forms.DockStyle.Top;
+            this.label7.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label7.Location = new System.Drawing.Point(0, 0);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(873, 45);
+            this.label7.TabIndex = 0;
+            this.label7.Text = "Médias de vendas por tele-entregas";
+            this.label7.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
             // Dashboard
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -241,12 +299,14 @@ namespace TeleBonifacio
             this.Controls.Add(this.panel1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Dashboard";
-            this.Text = "Dashboard";
+            this.Text = "Lucratividade";
             this.Load += new System.EventHandler(this.Dashboard_Load);
             this.panel2.ResumeLayout(false);
             this.panel2.PerformLayout();
             this.panel1.ResumeLayout(false);
             this.tabControl1.ResumeLayout(false);
+            this.tabPage3.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.dtgMedias)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -271,5 +331,10 @@ namespace TeleBonifacio
         private System.Windows.Forms.TabControl tabControl1;
         private System.Windows.Forms.TabPage tabPage1;
         private System.Windows.Forms.TabPage tabPage2;
+        private System.Windows.Forms.TabPage tabPage3;
+        private System.Windows.Forms.DataGridView dtgMedias;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Column1;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Column2;
+        private System.Windows.Forms.Label label7;
     }
 }

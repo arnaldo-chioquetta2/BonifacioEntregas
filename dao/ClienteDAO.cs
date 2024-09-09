@@ -133,7 +133,8 @@ namespace TeleBonifacio.dao
 
         public override tb.IDataEntity Apagar(int direcao, tb.IDataEntity entidade)
         {
-            DB.ExecutarComandoSQL("DELETE FROM Clientes WHERE NrCli = " + id.ToString(), null);
+            string sql = "DELETE FROM Clientes WHERE NrCli = " + id.ToString();
+            DB.ExecutarComandoSQL(sql);
             tb.Cliente proximocliente = direcao > -1 ? ParaFrente() as tb.Cliente : ParaTraz() as tb.Cliente;
             if (proximocliente == null || proximocliente.Id == 0)
             {
