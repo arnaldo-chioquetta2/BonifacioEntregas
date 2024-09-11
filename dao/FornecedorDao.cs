@@ -18,10 +18,13 @@ namespace TeleBonifacio.dao
 
         public string email { get; set; }
 
-        public void Adiciona(string descricao)
+        public int Adiciona(string descricao)
         {
             string sql = $"INSERT INTO Fornecedores (Nome, EhForn) VALUES ('{descricao}', 1)";
             DB.ExecutarComandoSQL(sql);
+            sql = "Select Max(IdForn) From Fornecedores";
+            int id = DB.ExecutarConsultaCount(sql);
+            return id;
         }
 
         public override IDataEntity Apagar(int direcao, IDataEntity entidade)

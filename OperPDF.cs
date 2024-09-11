@@ -135,43 +135,58 @@ namespace TeleBonifacio
             btFiltrar.Enabled = true;
         }
 
+        // Refatorado em 11/09/24 Original 38 linhas, resultado 11 linhas
         private void btnAdicionar_Click_1(object sender, EventArgs e)
         {
             if (txNvForn.Visible)
             {
-                Forn.Adiciona(txNvForn.Text);
-                txNvForn.Visible = false;
-                cmbForn.Visible = true;
-                glo.CarregarComboBox<tb.Fornecedor>(cmbForn, Forn, "ESCOLHA", ItemFinal: "ADICIONE", ItemFinal2: "EDIÇÃO");
-                cmbForn.Text = txNvForn.Text;
-                VeSeHab();
+                AdicionarNovoFornecedor();
             }
             else
             {
-                int idFornecedor = 0;
-                int iForn = cmbForn.SelectedIndex;
-                if (iForn > -1)
-                {
-                    idFornecedor = ((tb.ComboBoxItem)cmbForn.Items[iForn]).Id;
-                }
-                DateTime dataEmissao = dtpDataEmissao.Value;
-                DateTime dataVencimento = DateTime.MinValue;
-                if (dtpDataVencimento.Tag=="M")
-                {
-                    dataVencimento = dtpDataVencimento.Value;
-                }
-                float valorTotal = glo.LeValor(txValorTotal.Text);
-                string chaveNotaFiscal = txChaveNotaFiscal.Text;
-                string descricao = txDescricao.Text;
-                bool pago = ckPago.Checked;
-                DateTime? dataPagamento = null;
-                if (pago)
-                {
-                    dataPagamento = dtpDataPagamento.Value;
-                }
-                string observacoes = txObservacoes.Text;
-                EditarRegistro(idFornecedor, dataEmissao, dataVencimento, valorTotal, chaveNotaFiscal, descricao, pago, dataPagamento, observacoes);
+                EditarFornecedor();
             }
+        }
+
+        private void AdicionarNovoFornecedor()
+        {
+            int idFornecedor = Forn.Adiciona(txNvForn.Text);
+            EfetuaEdicao(idFornecedor);
+            txNvForn.Visible = false;
+            cmbForn.Visible = true;
+            glo.CarregarComboBox<tb.Fornecedor>(cmbForn, Forn, "ESCOLHA", ItemFinal: "ADICIONE", ItemFinal2: "EDIÇÃO");
+            cmbForn.Text = txNvForn.Text;
+            VeSeHab();
+        }
+
+        private void EfetuaEdicao(int idFornecedor)
+        {
+            DateTime dataEmissao = dtpDataEmissao.Value;
+            DateTime dataVencimento = (dtpDataVencimento.Tag == "M" ? dtpDataVencimento.Value : DateTime.MinValue);
+            float valorTotal = glo.LeValor(txValorTotal.Text);
+            string chaveNotaFiscal = txChaveNotaFiscal.Text;
+            string descricao = txDescricao.Text;
+            bool pago = ckPago.Checked;
+            DateTime? dataPagamento = (pago ? dtpDataPagamento.Value : (DateTime?)null);
+            string observacoes = txObservacoes.Text;
+            EditarRegistro(idFornecedor, dataEmissao, dataVencimento, valorTotal, chaveNotaFiscal, descricao, pago, dataPagamento, observacoes);
+
+        }
+
+        private void EditarFornecedor()
+        {
+            int idFornecedor = ObterIdFornecedorSelecionado();
+            EfetuaEdicao(idFornecedor);
+        }
+
+        private int ObterIdFornecedorSelecionado()
+        {
+            int iForn = cmbForn.SelectedIndex;
+            if (iForn > -1)
+            {
+                return ((tb.ComboBoxItem)cmbForn.Items[iForn]).Id;
+            }
+            return 0;
         }
 
         private void EditarRegistro(int idFornecedor, DateTime dataEmissao, DateTime dataVencimento, float valorTotal, string chaveNotaFiscal, string descricao, bool pago, DateTime? dataPagamento, string observacoes)
@@ -1125,6 +1140,9 @@ namespace TeleBonifacio
                 if (row["idFornecedor"] != DBNull.Value)
                 {
                     cmbForn.SelectedValue = Convert.ToInt32(row["idFornecedor"]);
+                } else
+                {
+                    cmbForn.SelectedValue = 0;
                 }
 
                 if (row["DataVencimento"] != DBNull.Value)
