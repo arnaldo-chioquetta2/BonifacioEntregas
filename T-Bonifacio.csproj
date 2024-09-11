@@ -196,6 +196,7 @@
       <DependentUpon>FormBase.cs</DependentUpon>
     </Compile>
     <Compile Include="gen\ADO.cs" />
+    <Compile Include="gen\BackupManager.cs" />
     <Compile Include="gen\DB.cs" />
     <Compile Include="gen\Email.cs" />
     <Compile Include="gen\FTP.cs" />

@@ -16,6 +16,7 @@ namespace TeleBonifacio
         private string Erro = "";
         private ProgressBar ProgressBar1= null;
         private string Mensagem = "";
+        private bool TemProgress;
 
         public int tamanhoConteudo
         {
@@ -27,8 +28,11 @@ namespace TeleBonifacio
             {
                 _tamanhoConteudo = value;
                 Tot += value;
-                this.ProgressBar1.Value = Tot;
-                Console.WriteLine("ProgressBar1.Value = " + Tot.ToString());                
+                if (this.TemProgress)
+                {
+                    this.ProgressBar1.Value = Tot;
+                }
+                
             }
         }
 
@@ -43,7 +47,7 @@ namespace TeleBonifacio
         {
         }
 
-        public bool Upload(string _nomeArquivo, string Caminho)
+        public bool Upload(string _nomeArquivo, string Caminho, bool v)
         {
             this.Tot = 0;
             string Cam = Caminho.Replace(@"\", @"/");
@@ -56,11 +60,13 @@ namespace TeleBonifacio
             requisicaoFTP.Method = WebRequestMethods.Ftp.UploadFile;
             requisicaoFTP.UseBinary = true;
             requisicaoFTP.ContentLength = _arquivoInfo.Length;
-            this.ProgressBar1.Visible = true;
-            Console.WriteLine("ProgressBar1.Visible = true");
-            this.ProgressBar1.Maximum = (int)_arquivoInfo.Length;
-            Console.WriteLine("ProgressBar1.Maximum = "+ this.ProgressBar1.Maximum.ToString());
-            this.ProgressBar1.Enabled = true;
+            this.TemProgress = v;
+            if (this.TemProgress)
+            {
+                this.ProgressBar1.Visible = true;
+                this.ProgressBar1.Maximum = (int)_arquivoInfo.Length;
+                this.ProgressBar1.Enabled = true;
+            }
             FileStream fs = _arquivoInfo.OpenRead();
             bool sair = false;
             bool bReturn = false;

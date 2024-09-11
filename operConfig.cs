@@ -184,5 +184,56 @@ namespace TeleBonifacio
             fCadFormas fCad = new fCadFormas();
             fCad.Show();
         }
-    }    
+
+        private void btBackup_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                // Desabilitar a tela
+                DesabilitarControles(this);
+
+                // Criar e realizar o backup
+                BackupManager backupManager = new BackupManager();
+                backupManager.RealizarBackup(false);
+                button2.Text = "Fechar";
+                MessageBox.Show("Backup realizado com sucesso!");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Erro ao realizar o backup: " + ex.Message);
+            }
+            finally
+            {
+                // Reabilitar a tela
+                HabilitarControles(this);
+            }
+        }
+
+        // Método para desabilitar todos os controles da tela
+        private void DesabilitarControles(Control control)
+        {
+            foreach (Control c in control.Controls)
+            {
+                c.Enabled = false;
+                if (c.HasChildren)
+                {
+                    DesabilitarControles(c);
+                }
+            }
+        }
+
+        // Método para habilitar todos os controles da tela
+        private void HabilitarControles(Control control)
+        {
+            foreach (Control c in control.Controls)
+            {
+                c.Enabled = true;
+                if (c.HasChildren)
+                {
+                    HabilitarControles(c);
+                }
+            }
+        }
+
+    }
 }

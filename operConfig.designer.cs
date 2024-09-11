@@ -51,6 +51,7 @@ namespace TeleBonifacio
             this.ckAdaptar = new System.Windows.Forms.CheckBox();
             this.button5 = new System.Windows.Forms.Button();
             this.btFormas = new System.Windows.Forms.Button();
+            this.btBackup = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // lblNome
@@ -94,7 +95,7 @@ namespace TeleBonifacio
             // button3
             // 
             this.button3.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.button3.Location = new System.Drawing.Point(29, 192);
+            this.button3.Location = new System.Drawing.Point(12, 192);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(75, 23);
             this.button3.TabIndex = 10;
@@ -159,7 +160,7 @@ namespace TeleBonifacio
             // btAtu
             // 
             this.btAtu.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.btAtu.Location = new System.Drawing.Point(145, 161);
+            this.btAtu.Location = new System.Drawing.Point(103, 161);
             this.btAtu.Name = "btAtu";
             this.btAtu.Size = new System.Drawing.Size(121, 23);
             this.btAtu.TabIndex = 8;
@@ -170,7 +171,7 @@ namespace TeleBonifacio
             // ckBackup
             // 
             this.ckBackup.AutoSize = true;
-            this.ckBackup.Location = new System.Drawing.Point(29, 144);
+            this.ckBackup.Location = new System.Drawing.Point(12, 144);
             this.ckBackup.Name = "ckBackup";
             this.ckBackup.Size = new System.Drawing.Size(119, 17);
             this.ckBackup.TabIndex = 7;
@@ -180,7 +181,7 @@ namespace TeleBonifacio
             // btRetVersao
             // 
             this.btRetVersao.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.btRetVersao.Location = new System.Drawing.Point(271, 161);
+            this.btRetVersao.Location = new System.Drawing.Point(232, 161);
             this.btRetVersao.Name = "btRetVersao";
             this.btRetVersao.Size = new System.Drawing.Size(98, 23);
             this.btRetVersao.TabIndex = 9;
@@ -217,7 +218,7 @@ namespace TeleBonifacio
             // ckAdaptar
             // 
             this.ckAdaptar.AutoSize = true;
-            this.ckAdaptar.Location = new System.Drawing.Point(29, 167);
+            this.ckAdaptar.Location = new System.Drawing.Point(12, 167);
             this.ckAdaptar.Name = "ckAdaptar";
             this.ckAdaptar.Size = new System.Drawing.Size(92, 17);
             this.ckAdaptar.TabIndex = 20;
@@ -227,7 +228,7 @@ namespace TeleBonifacio
             // button5
             // 
             this.button5.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.button5.Location = new System.Drawing.Point(374, 161);
+            this.button5.Location = new System.Drawing.Point(339, 161);
             this.button5.Name = "button5";
             this.button5.Size = new System.Drawing.Size(75, 23);
             this.button5.TabIndex = 21;
@@ -238,7 +239,7 @@ namespace TeleBonifacio
             // btFormas
             // 
             this.btFormas.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btFormas.Location = new System.Drawing.Point(455, 161);
+            this.btFormas.Location = new System.Drawing.Point(423, 161);
             this.btFormas.Name = "btFormas";
             this.btFormas.Size = new System.Drawing.Size(75, 23);
             this.btFormas.TabIndex = 22;
@@ -246,11 +247,23 @@ namespace TeleBonifacio
             this.btFormas.UseVisualStyleBackColor = true;
             this.btFormas.Click += new System.EventHandler(this.btFormas_Click);
             // 
+            // btBackup
+            // 
+            this.btBackup.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.btBackup.Location = new System.Drawing.Point(507, 161);
+            this.btBackup.Name = "btBackup";
+            this.btBackup.Size = new System.Drawing.Size(75, 23);
+            this.btBackup.TabIndex = 23;
+            this.btBackup.Text = "Backup";
+            this.btBackup.UseVisualStyleBackColor = true;
+            this.btBackup.Click += new System.EventHandler(this.btBackup_Click);
+            // 
             // oprConfig
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(593, 227);
+            this.Controls.Add(this.btBackup);
             this.Controls.Add(this.btFormas);
             this.Controls.Add(this.button5);
             this.Controls.Add(this.ckAdaptar);
@@ -305,5 +318,6 @@ namespace TeleBonifacio
         private System.Windows.Forms.CheckBox ckAdaptar;
         private System.Windows.Forms.Button button5;
         private System.Windows.Forms.Button btFormas;
+        private System.Windows.Forms.Button btBackup;
     }
 }

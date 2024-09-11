@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
-using System.IO.Compression;
 using System.Linq;
 using System.Reflection;
 using System.Windows.Forms;
@@ -332,79 +330,12 @@ namespace TeleBonifacio
 
                 if (Fazer)
                 {
-                    string caminhoArquivoZip = "";
-                    string pastaOper = cINI.ReadString("Backup", "pastaOper", "");
-                    if (Directory.Exists(pastaOper))
-                    {
-                        DirectoryInfo di = new DirectoryInfo(pastaOper);
-                        foreach (FileInfo file in di.GetFiles())
-                        {
-                            file.Delete();
-                        }
-                    }
-                    else
-                    {
-                        Directory.CreateDirectory(pastaOper);
-                    }
-                    List<string> arquivosParaZipar = new List<string>();
-                    int contador = 1;
-                    this.Text = "Copiando arquivos";
-                    while (true)
-                    {
-                        string nomeArquivo = cINI.ReadString("Backup", "Arq" + contador.ToString(), "");
-                        if (string.IsNullOrEmpty(nomeArquivo))
-                        {
-                            break;
-                        }
-                        string caminhoArquivoOrigem = Path.Combine(Application.StartupPath, nomeArquivo);
-                        string caminhoArquivoDestino = Path.Combine(pastaOper, Path.GetFileName(nomeArquivo));
-                        File.Copy(caminhoArquivoOrigem, caminhoArquivoDestino, true);
-                        contador++;
-                        arquivosParaZipar.Add(caminhoArquivoDestino);
-                    }
-                    string PriParteNome = "Backup" + ((int)DateTime.Now.DayOfWeek).ToString();
-                    string NomeArq = $"{PriParteNome}.zip";
-                    caminhoArquivoZip = Path.Combine(pastaOper, NomeArq);
-                    contador = 0;
-                    this.Text = "Compactando";
-                    while (true)
-                    {
-                        try
-                        {
-                            using (ZipArchive zip = ZipFile.Open(caminhoArquivoZip, ZipArchiveMode.Create))
-                            {
-                                foreach (string caminhoArquivoOrigem in arquivosParaZipar)
-                                {
-                                    zip.CreateEntryFromFile(caminhoArquivoOrigem, Path.GetFileName(caminhoArquivoOrigem));
-                                }
-                            }
-                            break;
-                        }
-                        catch (IOException ex)
-                        {
-                            contador++;
-                            NomeArq = $"{PriParteNome}{contador}";
-                            caminhoArquivoZip = Path.Combine(pastaOper, $"{NomeArq}.zip");
-                        }
-                    }
-                    string URL = cINI.ReadString("FTP", "URL", "");
-                    string user = gen.Cripto.Decrypt(cINI.ReadString("FTP", "user", ""));
-                    string senha = gen.Cripto.Decrypt(cINI.ReadString("FTP", "pass", ""));
-                    this.Text = "Enviando ao servidor";
-                    FTP cFPT = new FTP(URL, user, senha);
-                    string PastaBaseFTP = cINI.ReadString("Backup", "PastaBaseFTP", "");
-                    int pos = caminhoArquivoZip.IndexOf(pastaOper.Replace("/", "\\"));
-                    string CamfTP = caminhoArquivoZip.Substring(pos);
-                    if (CamfTP.EndsWith(NomeArq))
-                    {
-                        CamfTP = CamfTP.Remove(CamfTP.Length - NomeArq.Length);
-                    }
-                    cFPT.setBarra(ref progressBar1);
-                    cFPT.Upload(caminhoArquivoZip, PastaBaseFTP);
-                    this.Text = Caption;
-                    this.Height = 171;
-                    this.DentroDoTimer = false;
+                    BackupManager backupManager = new BackupManager();
+                    backupManager.RealizarBackup(true);
                 }
+                this.Text = Caption;
+                this.Height = 171;
+                this.DentroDoTimer = false;
             }
         }
 
