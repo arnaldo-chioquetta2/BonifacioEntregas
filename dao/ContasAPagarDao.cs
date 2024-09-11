@@ -143,13 +143,10 @@ namespace TeleBonifacio.dao
             string sql = parentFolderId.HasValue
                 ? $@"INSERT INTO Folders (FolderName, ParentFolderID) VALUES ('{nome}', {parentFolderId.Value})"
                 : $@"INSERT INTO Folders (FolderName, ParentFolderID) VALUES ('{nome}', NULL)";
-
             DB.ExecutarComandoSQL(sql);
-
-            string queryNome = "SELECT @@IDENTITY";
+            string queryNome = "SELECT max(FolderID) from Folders";
             return DB.ExecutarConsultaCount(queryNome);
         }
-
 
         public void RenomearPasta(int folderID, string newName)
         {

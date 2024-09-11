@@ -549,22 +549,34 @@ namespace TeleBonifacio
                 treeView2.ImageList.Images.Add(bmp);
             }
 
-            // Carregar apenas as pastas do TreeView1 no TreeView2
-            TreeNode currentParentNode = selectedNodeToMove.Parent;
+            // Carregar todas as pastas do TreeView1 no TreeView2
             foreach (TreeNode node in treeView1.Nodes)
             {
-                if (IsFolderNode(node) && node != currentParentNode) // Verifica se o nó é uma pasta
+                // Verifica se o nó é uma pasta (agora baseada na Tag negativa)
+                if (IsFolderNode(node))
                 {
                     TreeNode newFolderNode = new TreeNode(node.Text)
                     {
-                        Tag = node.Tag,
-                        ImageIndex = 0, // Usar o índice do ícone de pasta no ImageList
+                        Tag = ConvertToNegativeTag(node.Tag), // Converte a Tag para negativa
+                        ImageIndex = 0, // Ícone de pasta
                         SelectedImageIndex = 0
                     };
+
+                    // Adiciona a pasta ao TreeView2
                     treeView2.Nodes.Add(newFolderNode);
+                    // Copia as subpastas recursivamente
                     CopySubFolders(node, newFolderNode);
                 }
             }
+        }
+
+        private int ConvertToNegativeTag(object tag)
+        {
+            if (tag is int tagValue && tagValue > 0)
+            {
+                return -tagValue;
+            }
+            return (int)tag;
         }
 
         private TreeNode FindNodeByTag(TreeNodeCollection nodes, int tag)
@@ -604,10 +616,8 @@ namespace TeleBonifacio
         // Método para determinar se o nó é uma pasta
         private bool IsFolderNode(TreeNode node)
         {
-            return node.Nodes.Count > 0 || node.Tag is int;
-            // return node.Nodes.Count > 0; // Se o nó tem subnós, consideramos que é uma pasta
+            return node.Tag is int tag && tag < 0;
         }
-
 
         private void btEmail_Click(object sender, EventArgs e)
         {
@@ -752,7 +762,11 @@ namespace TeleBonifacio
             var rootFolders = FDao.GetRootFolders(); // Método para obter pastas raiz
             foreach (var folder in rootFolders)
             {
-                var rootNode = new TreeNode(folder.FolderName) { Tag = folder.FolderID };
+                // Atribuindo um valor negativo à Tag das pastas
+                var rootNode = new TreeNode(folder.FolderName)
+                {
+                    Tag = -folder.FolderID  // Tag negativa para indicar que é uma pasta
+                };
                 LoadSubFoldersAndDocuments(rootNode, folder.FolderID);
                 treeView1.Nodes.Add(rootNode);
             }
@@ -763,12 +777,11 @@ namespace TeleBonifacio
             var subFolders = FDao.GetSubFolders(folderId);
             foreach (var subFolder in subFolders)
             {
-                // Criar um nó de pasta personalizado
-                var childNode = new FolderNode(subFolder.FolderName)
+                // Tag negativa para subpastas
+                var childNode = new TreeNode(subFolder.FolderName)
                 {
-                    Tag = subFolder.FolderID
+                    Tag = -subFolder.FolderID  // Tag negativa para indicar que é uma pasta
                 };
-
                 LoadSubFoldersAndDocuments(childNode, subFolder.FolderID);
                 parentNode.Nodes.Add(childNode);
             }
@@ -781,12 +794,11 @@ namespace TeleBonifacio
                 {
                     var docNode = new TreeNode(doc.DocumentName)
                     {
-                        Tag = doc.DocumentID
+                        Tag = doc.DocumentID  // Tag positiva para indicar que é um documento
                     };
 
                     if (doc.idArquivo == 1)
                     {
-                        // Definir a cor de fundo como verde se idArquivo for 1
                         docNode.BackColor = Verde;
                     }
 
@@ -973,12 +985,12 @@ namespace TeleBonifacio
 
             // Criar a nova subpasta no banco de dados
             int parentFolderId = (int)selectedNode.Tag;
-            int novaPastaId = contasAPagarDao.CriarNovaPasta(novaPastaNome, parentFolderId);
+            int novaPastaId = contasAPagarDao.CriarNovaPasta(novaPastaNome, Math.Abs(parentFolderId));
 
             // Criar o nó na TreeView como subpasta
             TreeNode novaPastaNode = new TreeNode(novaPastaNome)
             {
-                Tag = novaPastaId,
+                Tag = novaPastaId*-1,
                 ImageIndex = 0,  // Ícone de pasta
                 SelectedImageIndex = 0
             };
@@ -1175,8 +1187,9 @@ namespace TeleBonifacio
             // Obter o ID do documento a ser movido
             int documentID = (int)selectedNodeToMove.Tag;
 
-            // Obter o ID da nova pasta (pasta de destino)
-            int newFolderID = (int)targetFolderNode.Tag;
+            int newFolderIDOrig = (int)targetFolderNode.Tag;
+            int newFolderID = Math.Abs(newFolderIDOrig);
+            // int newFolderID = (int)targetFolderNode.Tag;
 
             // Realizar o UPDATE na base de dados
             contasAPagarDao.MudaNo(newFolderID, documentID);
@@ -1186,7 +1199,7 @@ namespace TeleBonifacio
             selectedNodeToMove.Remove();
 
             // Adicionar o nó ao novo local na TreeView principal
-            TreeNode targetNodeInMainTreeView = FindNodeByTag(treeView1.Nodes, newFolderID);
+            TreeNode targetNodeInMainTreeView = FindNodeByTag(treeView1.Nodes, newFolderIDOrig);
             if (targetNodeInMainTreeView != null)
             {
                 targetNodeInMainTreeView.Nodes.Add(movedNode);
@@ -1351,7 +1364,6 @@ namespace TeleBonifacio
                 Cursor.Current = Cursors.Default;
             }
         }
-
 
     }
 
