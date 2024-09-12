@@ -236,7 +236,7 @@ namespace TeleBonifacio
         private void PopulaVendedores()
         {
             Vendedor = new VendedoresDAO();
-            DataTable dados = Vendedor.GetDadosOrdenados();
+            DataTable dados = Vendedor.GetDadosOrdenados("Where Atende = 1");
             List<ComboBoxItem> lista = new List<ComboBoxItem>();
             ComboBoxItem item0 = new ComboBoxItem(0, "SELECIONE");
             lista.Add(item0);

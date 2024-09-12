@@ -205,10 +205,10 @@ namespace TeleBonifacio.rel
         private void Extrato_Activated(object sender, EventArgs e)
         {
             if (!ativou)
+            {
                 ativou = true;
-            this.DataFim = DateTime.Now;
-            this.DataInicio = PrimData(this.DataFim.AddYears(-1));
-            textBox1.Text= GerarExtrato(this.DataInicio, this.DataFim);
+                textBox1.Text = GerarExtrato(this.DataInicio, this.DataFim);
+            }            
         }
 
         #region Classes
@@ -229,8 +229,8 @@ namespace TeleBonifacio.rel
 
         internal void SetDatas(DateTime dateIN, DateTime dtFim)
         {
-            DataInicio = dateIN;
-            DataFim = dtFim;
+            this.DataInicio = dateIN;
+            this.DataFim = dtFim;
         }
 
     #endregion

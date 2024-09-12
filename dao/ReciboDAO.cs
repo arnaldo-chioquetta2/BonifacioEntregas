@@ -10,7 +10,7 @@ namespace TeleBonifacio.dao
         public DataTable ValoresAPagar(DateTime? DT1, DateTime? DT2, float fator)
         {
             StringBuilder query = new StringBuilder();
-            query.Append(@"SELECT Entregas.idVend, Vendedores.Nome, SUM(Entregas.VlNota) as TotalVendas, 0 as Valor 
+            query.Append(@"SELECT Entregas.idVend, Vendedores.usuario as Nome, SUM(Entregas.VlNota) as TotalVendas, 0 as Valor 
                    FROM Entregas
                    INNER JOIN Vendedores ON Vendedores.ID = Entregas.idVend
                    WHERE Entregas.Pago IS NULL AND Entregas.idVend > 0 ");
@@ -20,8 +20,8 @@ namespace TeleBonifacio.dao
             string dataInicioStr = dataInicio.ToString("MM/dd/yyyy HH:mm:ss");
             string dataFimStr = dataFim.ToString("MM/dd/yyyy 23:59:59");
             query.AppendFormat(" AND Entregas.Data BETWEEN #{0}# AND #{1}#", dataInicioStr, dataFimStr);
-            query.Append(" GROUP BY Entregas.idVend, Vendedores.Nome ");
-            query.Append("ORDER BY Entregas.idVend, Vendedores.Nome");
+            query.Append(" GROUP BY Entregas.idVend, Vendedores.usuario ");
+            query.Append("ORDER BY Entregas.idVend, Vendedores.usuario");
 
             DataTable dataTable = glo.getDados(query.ToString());
 

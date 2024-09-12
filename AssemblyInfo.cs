@@ -11,8 +11,9 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyCulture("")]
 [assembly: ComVisible(false)]
 [assembly: Guid("308c57af-e663-456d-8a2c-188bbd61423d")]
-[assembly: AssemblyVersion("2.9.0.0")]
-[assembly: AssemblyFileVersion("2.9.0.0")]
+[assembly: AssemblyVersion("2.9.1.0")]
+[assembly: AssemblyFileVersion("2.9.1.0")]
+// 2.9.1 Conserto do acionamento do documento na tela nova de PDF
 // 2.9.0 Ajustes nas operações com pastas da arvore dos PDFs e Backup pela configuração
 // 2.8.9 Ajustes no filtro de data do relatório de caixa
 // 2.8.8 Medias e finalização da grid
