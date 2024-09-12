@@ -1034,17 +1034,13 @@ namespace TeleBonifacio
                         string UID = glo.GenerateUID();
                         string fileName = Path.GetFileName(filePath);
                         DateTime dataEmissao = DateTime.Now;
-
-                        // Inserir na base de dados associando à pasta correta
-                        int idAdic = contasAPagarDao.AdicObterComPasta(dataEmissao, fileName, UID, selectedNode.Tag);
-
+                        int idTag = Math.Abs((int)selectedNode.Tag);
+                        int idAdic = contasAPagarDao.AdicObterComPasta(dataEmissao, fileName, UID, idTag);
                         string fileExtension = Path.GetExtension(fileName).TrimStart('.');
                         string destinationFileName = $"Doc{idAdic}.{fileExtension}";
                         string destinationFilePath = Path.Combine(CaminhoBasePDF, destinationFileName);
                         File.Move(filePath, destinationFilePath);
-
                         AddNodeWithIcon(selectedNode, fileName, destinationFilePath, idAdic, true, true);
-
                     }
                     catch (Exception ex)
                     {

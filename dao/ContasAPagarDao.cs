@@ -113,7 +113,7 @@ namespace TeleBonifacio.dao
             DB.ExecutarComandoSQL(sql);
         }
 
-        public int AdicObterComPasta(DateTime dataEmissao, string NmArq, string UID, object pastaId)
+        public int AdicObterComPasta(DateTime dataEmissao, string NmArq, string UID, int pastaId)
         {
             string sql = $@"INSERT INTO ContasAPagar (DataEmissao, CaminhoPDF, UID, FolderID) VALUES (
                 '{dataEmissao.ToString("yyyy-MM-dd HH:mm:ss")}', 
