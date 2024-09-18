@@ -1745,13 +1745,13 @@ namespace TeleBonifacio
             dataGrid3.Columns[6].Width = 60;        // Marca
             dataGrid3.Columns[7].Width = 280; // 270; // 250; // 190;       // Descrição
             dataGrid3.Columns[8].Visible = false;   // UID
-            dataGrid3.Columns[9].Width = 100;       // Tipo
+            dataGrid3.Columns[9].Width = 50;       // Tipo
             dataGrid3.Columns[10].Width = 80; // 130;      // Compra
             dataGrid3.Columns[11].Width = 100;      // Forn
             dataGrid3.Columns[12].Visible = false;  // IdForn
             dataGrid3.Columns[13].Width = 220;      // Obs
             dataGrid3.Columns[14].Visible = false;  // idCliente 
-            dataGrid3.Columns[15].Visible = false;  // Telefone
+            dataGrid3.Columns[15].Visible = true;   //  false;  // Telefone
             dataGrid3.Columns[16].Visible = false;  // DtPrometida
             dataGrid3.Columns[17].Visible = false;  // idCliente
             if (rt.IsLargeScreen())
