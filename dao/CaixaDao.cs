@@ -21,7 +21,7 @@ namespace TeleBonifacio.dao
             DB.ExecutarComandoSQL(sql);
         }
 
-        public DataTable getDados(DateTime DT1, DateTime DT2, int idForma)
+        public DataTable getDados(DateTime DT1, DateTime DT2, int idForma, string sObs)
         {
             bool Sair = false;
             DataTable dt = null;
@@ -45,6 +45,10 @@ namespace TeleBonifacio.dao
                 if (idForma>0)
                 {
                     query.AppendFormat(" AND ca.idForma = {0}", idForma-1);
+                }
+                if (sObs.Length>0)
+                {
+                    query.AppendFormat(" AND ca.Obs Like '%{0}%' ", sObs);
                 }
                 query.Append(" ORDER BY ca.ID DESC");
                 dt = DB.ExecutarConsulta(query.ToString());

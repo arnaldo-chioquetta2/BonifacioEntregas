@@ -357,8 +357,9 @@ namespace TeleBonifacio
         }
 
         private void CarregaGrid(int idForma = 0)
-        {            
-            DataTable dados = Caixa.getDados(dtpDataIN.Value, dtnDtFim.Value, idForma);
+        {
+            string sObs = txObs.Text;
+            DataTable dados = Caixa.getDados(dtpDataIN.Value, dtnDtFim.Value, idForma, sObs);
             dataGrid1.DataSource = dados;
         }
 

@@ -11,8 +11,10 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyCulture("")]
 [assembly: ComVisible(false)]
 [assembly: Guid("308c57af-e663-456d-8a2c-188bbd61423d")]
-[assembly: AssemblyVersion("2.9.1.0")]
-[assembly: AssemblyFileVersion("2.9.1.0")]
+[assembly: AssemblyVersion("2.9.3.0")]
+[assembly: AssemblyFileVersion("2.9.3.0")]
+// 2.9.3 Filtro pela observação no caixa
+// 2.9.2 Telefone na grid das encomendas
 // 2.9.1 Conserto do acionamento do documento na tela nova de PDF
 // 2.9.0 Ajustes nas operações com pastas da arvore dos PDFs e Backup pela configuração
 // 2.8.9 Ajustes no filtro de data do relatório de caixa
@@ -22,6 +24,3 @@ using System.Runtime.InteropServices;
 // 2.8.5 Ajustes no relatório de caixa em relação as formas TON e Dinheiro
 // 2.8.4 Aceleração no relatório de Caixa
 // 2.8.3 Filtro para observação na tela de entregas
-// 2.8.2 Abas de usuários nas faltas usando usuário em vez de nome
-// 2.8.1 Relatório de caixa adaptado a tabela formas
-// 2.8.0 Caixa com formas vindas da tabela
