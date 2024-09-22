@@ -246,7 +246,8 @@ namespace TeleBonifacio
             }
             else
             {
-                propertyInfo.SetValue(reg, check.Checked, null);
+                int Vlr = check.Checked ? 1 : 0;
+                propertyInfo.SetValue(reg, Vlr, null);
             }
         }
 

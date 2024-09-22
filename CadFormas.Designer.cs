@@ -103,6 +103,7 @@ namespace TeleBonifacio
             this.chkAtivo.Size = new System.Drawing.Size(15, 14);
             this.chkAtivo.TabIndex = 10;
             this.chkAtivo.UseVisualStyleBackColor = true;
+            this.chkAtivo.CheckedChanged += new System.EventHandler(this.chkAtivo_CheckedChanged);
             // 
             // fCadFormas
             // 

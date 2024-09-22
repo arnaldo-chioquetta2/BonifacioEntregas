@@ -106,5 +106,12 @@ namespace TeleBonifacio
             }
         }
 
+        private void chkAtivo_CheckedChanged(object sender, EventArgs e)
+        {
+            if (!Carregando)
+            {
+                cntrole1.EmEdicao = true;
+            }
+        }
     }
 }

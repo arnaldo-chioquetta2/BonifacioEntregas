@@ -11,8 +11,9 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyCulture("")]
 [assembly: ComVisible(false)]
 [assembly: Guid("308c57af-e663-456d-8a2c-188bbd61423d")]
-[assembly: AssemblyVersion("2.9.3.0")]
-[assembly: AssemblyFileVersion("2.9.3.0")]
+[assembly: AssemblyVersion("2.9.4.0")]
+[assembly: AssemblyFileVersion("2.9.4.0")]
+// 2.9.4 Conserto da gravação do campo Ativo nas formas
 // 2.9.3 Filtro pela observação no caixa
 // 2.9.2 Telefone na grid das encomendas
 // 2.9.1 Conserto do acionamento do documento na tela nova de PDF
