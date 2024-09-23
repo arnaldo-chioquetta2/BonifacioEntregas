@@ -25,53 +25,53 @@ namespace TeleBonifacio
             _ftp = new FTP(URL, user, senha);
         }
 
-        public void RealizarBackup(bool usaProgress)
-        {
-            try
-            {
-                this.usaProgress = usaProgress;
-                _ini = new INI();
-                _pastaOper = _ini.ReadString("Backup", "pastaOper", "");
-                ConfigurarFTP();
-                if (!Directory.Exists(_pastaOper))
-                {
-                    Directory.CreateDirectory(_pastaOper);
-                }
-
-                LimparPastaDeBackup();
-                List<string> arquivosParaZipar = CopiarArquivosParaPastaOper();
-                string caminhoArquivoZip = CompactarArquivos(arquivosParaZipar);
-
-                EnviarBackupParaServidor(caminhoArquivoZip);
-            }
-            catch (IOException ioEx)
-            {
-                // Log e manipulação específica para problemas de IO, como falha ao acessar arquivos de rede
-                glo.Loga("Erro de I/O durante o backup: " + ioEx.Message);
-            }
-            catch (Exception ex)
-            {
-                // Log e manipulação genérica
-                glo.Loga("Erro durante o backup: " + ex.Message);
-            }
-        }
         //public void RealizarBackup(bool usaProgress)
         //{
-        //    this.usaProgress = usaProgress;
-        //    _ini = new INI();
-        //    _pastaOper = _ini.ReadString("Backup", "pastaOper", "");
-        //    ConfigurarFTP();
-        //    if (!Directory.Exists(_pastaOper))
+        //    try
         //    {
-        //        Directory.CreateDirectory(_pastaOper);
+        //        this.usaProgress = usaProgress;
+        //        _ini = new INI();
+        //        _pastaOper = _ini.ReadString("Backup", "pastaOper", "");
+        //        ConfigurarFTP();
+        //        if (!Directory.Exists(_pastaOper))
+        //        {
+        //            Directory.CreateDirectory(_pastaOper);
+        //        }
+
+        //        LimparPastaDeBackup();
+        //        List<string> arquivosParaZipar = CopiarArquivosParaPastaOper();
+        //        string caminhoArquivoZip = CompactarArquivos(arquivosParaZipar);
+
+        //        EnviarBackupParaServidor(caminhoArquivoZip);
         //    }
-
-        //    LimparPastaDeBackup();
-        //    List<string> arquivosParaZipar = CopiarArquivosParaPastaOper();
-        //    string caminhoArquivoZip = CompactarArquivos(arquivosParaZipar);
-
-        //    EnviarBackupParaServidor(caminhoArquivoZip);
+        //    catch (IOException ioEx)
+        //    {
+        //        // Log e manipulação específica para problemas de IO, como falha ao acessar arquivos de rede
+        //        glo.Loga("Erro de I/O durante o backup: " + ioEx.Message);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        // Log e manipulação genérica
+        //        glo.Loga("Erro durante o backup: " + ex.Message);
+        //    }
         //}
+        public void RealizarBackup(bool usaProgress)
+        {
+            this.usaProgress = usaProgress;
+            _ini = new INI();
+            _pastaOper = _ini.ReadString("Backup", "pastaOper", "");
+            ConfigurarFTP();
+            if (!Directory.Exists(_pastaOper))
+            {
+                Directory.CreateDirectory(_pastaOper);
+            }
+
+            LimparPastaDeBackup();
+            List<string> arquivosParaZipar = CopiarArquivosParaPastaOper();
+            string caminhoArquivoZip = CompactarArquivos(arquivosParaZipar);
+
+            EnviarBackupParaServidor(caminhoArquivoZip);
+        }
 
 
         private void LimparPastaDeBackup()
@@ -83,43 +83,6 @@ namespace TeleBonifacio
             }
         }
 
-        private List<string> CopiarArquivosParaPastaOper()
-        {
-            List<string> arquivosParaZipar = new List<string>();
-            int contador = 1;
-            while (true)
-            {
-                string nomeArquivo = _ini.ReadString("Backup", "Arq" + contador.ToString(), "");
-                if (string.IsNullOrEmpty(nomeArquivo)) break;
-
-                string caminhoArquivoOrigem = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, nomeArquivo);
-                string caminhoArquivoDestino = Path.Combine(_pastaOper, Path.GetFileName(nomeArquivo));
-
-                int tentativas = 0;
-                bool sucesso = false;
-                while (tentativas < 3 && !sucesso)
-                {
-                    try
-                    {
-                        File.Copy(caminhoArquivoOrigem, caminhoArquivoDestino, true);
-                        arquivosParaZipar.Add(caminhoArquivoDestino);
-                        sucesso = true; // Se chegar aqui, o arquivo foi copiado com sucesso
-                    }
-                    catch (IOException ex)
-                    {
-                        tentativas++;
-                        if (tentativas == 3)
-                        {
-                            // Se falhar depois de 3 tentativas, lança uma exceção
-                            throw new Exception($"Falha ao copiar o arquivo {nomeArquivo} após 3 tentativas. Erro: {ex.Message}");
-                        }
-                        System.Threading.Thread.Sleep(2000); // Espera 2 segundos antes de tentar novamente
-                    }
-                }
-                contador++;
-            }
-            return arquivosParaZipar;
-        }
         //private List<string> CopiarArquivosParaPastaOper()
         //{
         //    List<string> arquivosParaZipar = new List<string>();
@@ -131,12 +94,49 @@ namespace TeleBonifacio
 
         //        string caminhoArquivoOrigem = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, nomeArquivo);
         //        string caminhoArquivoDestino = Path.Combine(_pastaOper, Path.GetFileName(nomeArquivo));
-        //        File.Copy(caminhoArquivoOrigem, caminhoArquivoDestino, true);
-        //        arquivosParaZipar.Add(caminhoArquivoDestino);
+
+        //        int tentativas = 0;
+        //        bool sucesso = false;
+        //        while (tentativas < 3 && !sucesso)
+        //        {
+        //            try
+        //            {
+        //                File.Copy(caminhoArquivoOrigem, caminhoArquivoDestino, true);
+        //                arquivosParaZipar.Add(caminhoArquivoDestino);
+        //                sucesso = true; // Se chegar aqui, o arquivo foi copiado com sucesso
+        //            }
+        //            catch (IOException ex)
+        //            {
+        //                tentativas++;
+        //                if (tentativas == 3)
+        //                {
+        //                    // Se falhar depois de 3 tentativas, lança uma exceção
+        //                    throw new Exception($"Falha ao copiar o arquivo {nomeArquivo} após 3 tentativas. Erro: {ex.Message}");
+        //                }
+        //                System.Threading.Thread.Sleep(2000); // Espera 2 segundos antes de tentar novamente
+        //            }
+        //        }
         //        contador++;
         //    }
         //    return arquivosParaZipar;
         //}
+        private List<string> CopiarArquivosParaPastaOper()
+        {
+            List<string> arquivosParaZipar = new List<string>();
+            int contador = 1;
+            while (true)
+            {
+                string nomeArquivo = _ini.ReadString("Backup", "Arq" + contador.ToString(), "");
+                if (string.IsNullOrEmpty(nomeArquivo)) break;
+
+                string caminhoArquivoOrigem = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, nomeArquivo);
+                string caminhoArquivoDestino = Path.Combine(_pastaOper, Path.GetFileName(nomeArquivo));
+                File.Copy(caminhoArquivoOrigem, caminhoArquivoDestino, true);
+                arquivosParaZipar.Add(caminhoArquivoDestino);
+                contador++;
+            }
+            return arquivosParaZipar;
+        }
 
         private string CompactarArquivos(List<string> arquivosParaZipar)
         {
