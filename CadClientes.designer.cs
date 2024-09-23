@@ -43,7 +43,7 @@ namespace TeleBonifacio
             // 
             // cntrole1
             // 
-            this.cntrole1.Size = new System.Drawing.Size(329, 54);
+            this.cntrole1.Size = new System.Drawing.Size(322, 54);
             this.cntrole1.AcaoRealizada += new System.EventHandler<AcaoEventArgs>(this.cntrole1_AcaoRealizada);
             this.cntrole1.Load += new System.EventHandler(this.cntrole1_Load);
             // 
@@ -148,7 +148,7 @@ namespace TeleBonifacio
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(329, 304);
+            this.ClientSize = new System.Drawing.Size(322, 304);
             this.Controls.Add(this.txtNrOutro);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.label2);
