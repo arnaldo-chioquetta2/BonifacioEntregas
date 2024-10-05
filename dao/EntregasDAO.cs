@@ -46,9 +46,12 @@ namespace TeleBonifacio.dao
             string dataInicioStr = dataInicio.ToString("MM/dd/yyyy HH:mm:ss");
             string dataFimStr = dataFim.ToString("MM/dd/yyyy 23:59:59");
             query.AppendFormat(" WHERE e.Data BETWEEN #{0}# AND #{1}#", dataInicioStr, dataFimStr);
-            if (sObs.Length>0)
+            if (sObs!=null)
             {
-                query.AppendFormat(" AND e.Obs Like '%{0}%' ", sObs);
+                if (sObs.Length > 0)
+                {
+                    query.AppendFormat(" AND e.Obs Like '%{0}%' ", sObs);
+                }
             }
             query.Append(" Order By e.ID desc");
             DataTable dt = DB.ExecutarConsulta(query.ToString());

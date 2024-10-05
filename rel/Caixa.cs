@@ -69,8 +69,8 @@ namespace TeleBonifacio.rel
             Dictionary<int, int> mapaFormas = CriarMapaFormas();
             using (OleDbConnection connection = new OleDbConnection(glo.connectionString))
             {
-                try
-                {
+                //try
+                //{
                     connection.Open();
                     using (OleDbCommand command = new OleDbCommand(SQL, connection))
                     {
@@ -83,12 +83,12 @@ namespace TeleBonifacio.rel
                             }
                         }
                     }
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine(ex.ToString());
-                    return null;
-                }
+                //}
+                //catch (Exception ex)
+                //{
+                //    Console.WriteLine(ex.ToString());
+                //    return null;
+                //}
             }
             return lancamentos;
         }
@@ -97,7 +97,6 @@ namespace TeleBonifacio.rel
         {
             int idFormaCaixa = Convert.ToInt32(reader["FormaPagto"]);
             int idFormaReal = mapaFormas.ContainsKey(idFormaCaixa) ? mapaFormas[idFormaCaixa] : idFormaCaixa + 1;
-
             var lancamento = new Lanctos
             {
                 ID = Convert.ToInt32(reader["ID"]),
@@ -108,7 +107,6 @@ namespace TeleBonifacio.rel
                 Saida = 0,
                 Obs = reader["Obs"].ToString()
             };
-
             decimal valor = Convert.ToDecimal(reader["Valor"]);
             int formaTipo = Convert.ToInt32(reader["FormaTipo"]);
             if (formaTipo == 1)
@@ -119,7 +117,6 @@ namespace TeleBonifacio.rel
             {
                 lancamento.Entrada = valor;
             }
-
             lancamento.Saldo = lancamento.Entrada - lancamento.Desconto - lancamento.Saida;
             return lancamento;
         }        
