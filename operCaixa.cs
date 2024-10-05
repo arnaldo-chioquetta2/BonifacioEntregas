@@ -132,8 +132,22 @@ namespace TeleBonifacio
             {
                 if (clickedButton.Tag != null && int.TryParse(clickedButton.Tag.ToString(), out int IdTag))
                 {
-                    IdTag--;
-                    Registra(IdTag);
+                    IdTag--; // Ajusta o ID da forma de pagamento
+
+                    // Percorre todos os registros selecionados na grid e altera a forma de pagamento
+                    foreach (DataGridViewRow row in dataGrid1.SelectedRows)
+                    {
+                        if (row.Cells["ID"].Value != null && int.TryParse(row.Cells["ID"].Value.ToString(), out int registroId))
+                        {
+                            // Aqui, você pode fazer a alteração no banco de dados
+                            AlterarFormaPagamento(registroId, IdTag);
+                        }
+                    }
+
+                    // Atualiza a grid após as alterações
+                    CarregaGrid();
+
+                    MessageBox.Show("Forma de pagamento alterada com sucesso!", "Sucesso", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
                 else
                 {
@@ -141,6 +155,29 @@ namespace TeleBonifacio
                 }
             }
         }
+
+        private void AlterarFormaPagamento(int registroId, int novaFormaId)
+        {
+            // Exemplo de alteração da forma de pagamento no banco de dados
+            Caixa.EditaFormaPagamento(registroId, novaFormaId);
+        }
+
+
+        //private void Button_Click(object sender, EventArgs e)
+        //{
+        //    if (sender is Button clickedButton)
+        //    {
+        //        if (clickedButton.Tag != null && int.TryParse(clickedButton.Tag.ToString(), out int IdTag))
+        //        {
+        //            IdTag--;
+        //            Registra(IdTag);
+        //        }
+        //        else
+        //        {
+        //            MessageBox.Show("Erro: Tag do botão inválida ou não encontrada.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        //        }
+        //    }
+        //}
 
         private void txDesc_KeyUp(object sender, KeyEventArgs e)
         {

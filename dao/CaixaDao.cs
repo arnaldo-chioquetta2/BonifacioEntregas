@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Data;
+using System.Data.OleDb;
 using System.Text;
 
 namespace TeleBonifacio.dao
@@ -105,6 +106,12 @@ namespace TeleBonifacio.dao
             string sData = data.ToString("MM/dd/yyyy");
             String sql = $@"Update Caixa Set Data = #{sData}# WHERE ID in ({lista}) ";
             DB.ExecutarComandoSQL(sql);
+        }
+
+        public void EditaFormaPagamento(int registroId, int novaFormaId)
+        {
+            string query = $@"UPDATE Caixa SET idForma = {novaFormaId} WHERE ID = {registroId} ";
+            DB.ExecutarComandoSQL(query);
         }
     }
 }
