@@ -14,17 +14,14 @@ namespace TeleBonifacio
         private CaixaDao Caixa;
         private int iID = 0;
         private string UID = "";
+        private int DefCred=0;
+
+        private int DefDeb = 0;
 
         public operCaixa()
         {
             InitializeComponent();
             rt.AdjustFormComponents(this);
-        }
-
-        private void txCompra_KeyUp(object sender, KeyEventArgs e)
-        {
-            MostraTotal();
-            VeSeHab();
         }
 
         private void VeSeHab()
@@ -94,6 +91,12 @@ namespace TeleBonifacio
             CarregaForma(ref cFormas, 0, grpCredito);
             CarregaForma(ref cFormas, 1, grpDebito);
             glo.CarregarComboBox<tb.Forma>(cbFormas, cFormas," ");
+
+            string query = "Select * From Config";            
+            DataTable dt = DB.ExecutarConsulta(query.ToString());
+            DataRow row = dt.Rows[0];
+            this.DefCred = Convert.ToInt32(row["DefCred"]);
+            this.DefDeb = this.DefCred+1;
         }
 
         public void CarregaForma(ref FormasDAO cForma, int tipoForma, GroupBox targetGroupBox)
@@ -152,7 +155,10 @@ namespace TeleBonifacio
             float compra;
             if (!float.TryParse(txCompra.Text, out compra))
             {
-                compra = 0;
+                if (!float.TryParse(textBox1.Text, out compra))
+                {
+                    compra = 0;
+                }                    
             }
             string obs = txObs.Text;
             float desc;
@@ -389,5 +395,30 @@ namespace TeleBonifacio
 
         #endregion
 
+        private void txCompra_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                Registra(this.DefCred);
+            }
+            else
+            {
+                VeSeHab();
+            }
+            MostraTotal();
+        }
+
+        private void textBox1_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                Registra(this.DefDeb);
+            }
+            else
+            {
+                VeSeHab();
+            }
+            MostraTotal();
+        }
     }
 }

@@ -116,6 +116,16 @@ namespace TeleBonifacio.dao
             }
         }
 
+        public int getDefCred()
+        {
+            // DefCred
+            string query = "SELECT * FROM Config";
+            DataTable ret = ExecutarConsulta(query);            
+            string sID = ret.Rows[0]["DefCred"].ToString();
+            int ID = Convert.ToInt32(sID);
+            return ID;
+        }
+
         private tb.Forma ExecutarConsulta2(string query)
         {
             using (OleDbConnection connection = new OleDbConnection(glo.connectionString))

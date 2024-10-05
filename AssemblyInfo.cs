@@ -11,8 +11,9 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyCulture("")]
 [assembly: ComVisible(false)]
 [assembly: Guid("308c57af-e663-456d-8a2c-188bbd61423d")]
-[assembly: AssemblyVersion("2.9.6.0")]
-[assembly: AssemblyFileVersion("2.9.6.0")]
+[assembly: AssemblyVersion("2.9.7.0")]
+[assembly: AssemblyFileVersion("2.9.7.0")]
+// 2.9.7 Lançamento mais facilitado 
 // 2.9.6 Previsão de backup em rede
 // 2.9.5 Conserto da pesquisa de clientes
 // 2.9.4 Conserto da gravação do campo Ativo nas formas

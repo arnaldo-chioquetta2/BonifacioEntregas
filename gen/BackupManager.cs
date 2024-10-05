@@ -82,44 +82,7 @@ namespace TeleBonifacio
                 file.Delete();
             }
         }
-
-        //private List<string> CopiarArquivosParaPastaOper()
-        //{
-        //    List<string> arquivosParaZipar = new List<string>();
-        //    int contador = 1;
-        //    while (true)
-        //    {
-        //        string nomeArquivo = _ini.ReadString("Backup", "Arq" + contador.ToString(), "");
-        //        if (string.IsNullOrEmpty(nomeArquivo)) break;
-
-        //        string caminhoArquivoOrigem = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, nomeArquivo);
-        //        string caminhoArquivoDestino = Path.Combine(_pastaOper, Path.GetFileName(nomeArquivo));
-
-        //        int tentativas = 0;
-        //        bool sucesso = false;
-        //        while (tentativas < 3 && !sucesso)
-        //        {
-        //            try
-        //            {
-        //                File.Copy(caminhoArquivoOrigem, caminhoArquivoDestino, true);
-        //                arquivosParaZipar.Add(caminhoArquivoDestino);
-        //                sucesso = true; // Se chegar aqui, o arquivo foi copiado com sucesso
-        //            }
-        //            catch (IOException ex)
-        //            {
-        //                tentativas++;
-        //                if (tentativas == 3)
-        //                {
-        //                    // Se falhar depois de 3 tentativas, lança uma exceção
-        //                    throw new Exception($"Falha ao copiar o arquivo {nomeArquivo} após 3 tentativas. Erro: {ex.Message}");
-        //                }
-        //                System.Threading.Thread.Sleep(2000); // Espera 2 segundos antes de tentar novamente
-        //            }
-        //        }
-        //        contador++;
-        //    }
-        //    return arquivosParaZipar;
-        //}
+        
         private List<string> CopiarArquivosParaPastaOper()
         {
             List<string> arquivosParaZipar = new List<string>();
