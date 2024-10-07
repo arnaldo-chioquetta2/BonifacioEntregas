@@ -15,7 +15,6 @@ namespace TeleBonifacio
         private int iID = 0;
         private string UID = "";
         private int DefCred=0;
-
         private int DefDeb = 0;
 
         public operCaixa()
@@ -132,22 +131,8 @@ namespace TeleBonifacio
             {
                 if (clickedButton.Tag != null && int.TryParse(clickedButton.Tag.ToString(), out int IdTag))
                 {
-                    IdTag--; // Ajusta o ID da forma de pagamento
-
-                    // Percorre todos os registros selecionados na grid e altera a forma de pagamento
-                    foreach (DataGridViewRow row in dataGrid1.SelectedRows)
-                    {
-                        if (row.Cells["ID"].Value != null && int.TryParse(row.Cells["ID"].Value.ToString(), out int registroId))
-                        {
-                            // Aqui, você pode fazer a alteração no banco de dados
-                            AlterarFormaPagamento(registroId, IdTag);
-                        }
-                    }
-
-                    // Atualiza a grid após as alterações
-                    CarregaGrid();
-
-                    MessageBox.Show("Forma de pagamento alterada com sucesso!", "Sucesso", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    IdTag--;
+                    Registra(IdTag);
                 }
                 else
                 {
@@ -155,22 +140,28 @@ namespace TeleBonifacio
                 }
             }
         }
-
-        private void AlterarFormaPagamento(int registroId, int novaFormaId)
-        {
-            // Exemplo de alteração da forma de pagamento no banco de dados
-            Caixa.EditaFormaPagamento(registroId, novaFormaId);
-        }
-
-
         //private void Button_Click(object sender, EventArgs e)
         //{
         //    if (sender is Button clickedButton)
         //    {
         //        if (clickedButton.Tag != null && int.TryParse(clickedButton.Tag.ToString(), out int IdTag))
         //        {
-        //            IdTag--;
-        //            Registra(IdTag);
+        //            IdTag--; // Ajusta o ID da forma de pagamento
+
+        //            // Percorre todos os registros selecionados na grid e altera a forma de pagamento
+        //            foreach (DataGridViewRow row in dataGrid1.SelectedRows)
+        //            {
+        //                if (row.Cells["ID"].Value != null && int.TryParse(row.Cells["ID"].Value.ToString(), out int registroId))
+        //                {
+        //                    // Aqui, você pode fazer a alteração no banco de dados
+        //                    AlterarFormaPagamento(registroId, IdTag);
+        //                }
+        //            }
+
+        //            // Atualiza a grid após as alterações
+        //            CarregaGrid();
+
+        //            MessageBox.Show("Forma de pagamento alterada com sucesso!", "Sucesso", MessageBoxButtons.OK, MessageBoxIcon.Information);
         //        }
         //        else
         //        {
@@ -179,16 +170,26 @@ namespace TeleBonifacio
         //    }
         //}
 
+        //private void AlterarFormaPagamento(int registroId, int novaFormaId)
+        //{
+        //    // Exemplo de alteração da forma de pagamento no banco de dados
+        //    Caixa.EditaFormaPagamento(registroId, novaFormaId);
+        //}
+
         private void txDesc_KeyUp(object sender, KeyEventArgs e)
         {
             VeSeHab();
             MostraTotal();
         }
 
-        private void Registra(int idForma)
+        private void Registra(int idForma, bool VendIdenf=true)
         {
             int idCliente = Convert.ToInt32(cmbCliente.SelectedValue);
-            int idVend = Convert.ToInt32(cmbVendedor.SelectedValue);
+            int idVend = 0;
+            if (VendIdenf)
+            {
+                idVend = Convert.ToInt32(cmbVendedor.SelectedValue);
+            }
             float compra;
             if (!float.TryParse(txCompra.Text, out compra))
             {
@@ -223,6 +224,7 @@ namespace TeleBonifacio
             txObs.Text = "";
             txCompra.Text = "";
             lbTotal.Text = "";
+            textBox1.Text = "";
             cmbCliente.SelectedIndex = 0;
             cmbVendedor.SelectedIndex = 0;
             this.iID = 0;
@@ -367,7 +369,15 @@ namespace TeleBonifacio
                 this.iID = id;
                 this.UID = Convert.ToString(selectedRow.Cells["UID"].Value);
                 cmbCliente.SelectedValue = nrCli;
-                txCompra.Text = valor.ToString();
+                if (idForma == this.DefDeb)
+                {
+                    textBox1.Text = valor.ToString();
+                    txCompra.Text = "";
+                } else
+                {
+                    txCompra.Text = valor.ToString();
+                    textBox1.Text = "";
+                }                
                 txDesc.Text = desconto.ToString();
                 txObs.Text = selectedRow.Cells["Obs"].Value.ToString();
                 cmbVendedor.SelectedValue = idVend;
@@ -375,7 +385,10 @@ namespace TeleBonifacio
                 btnLimpar.Enabled = true;
                 BotoesNormais();
                 Color cor = Color.FromArgb(128, 255, 128);
-                SetBotaoColor(idForma+1, cor);
+                if (idForma!=this.DefCred && idForma != this.DefDeb) {
+                    SetBotaoColor(idForma + 1, cor);
+                } else { 
+                }
                 btExcluir.Visible = true;
                 btEditar.Visible = true;
             }
@@ -449,7 +462,7 @@ namespace TeleBonifacio
         {
             if (e.KeyCode == Keys.Enter)
             {
-                Registra(this.DefDeb);
+                Registra(this.DefDeb, false);
             }
             else
             {

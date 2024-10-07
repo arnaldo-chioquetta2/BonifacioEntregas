@@ -40,7 +40,7 @@ namespace TeleBonifacio.dao
                     c.NrCli, ca.idVend, ca.idForma, ca.UID 
                     FROM ((Caixa ca
                     LEFT JOIN Clientes c ON c.NrCli = ca.idCliente)
-                    INNER JOIN Vendedores v ON v.ID = ca.idVend)
+                    LEFT JOIN Vendedores v ON v.ID = ca.idVend)
                     LEFT JOIN Formas f ON f.ID = (ca.idForma + 1)");
                 query.AppendFormat(" WHERE ca.Data BETWEEN #{0}# AND #{1}#", dataInicioStr, dataFimStr);
                 if (idForma>0)
