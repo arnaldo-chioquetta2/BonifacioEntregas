@@ -2007,5 +2007,61 @@ namespace TeleBonifacio
 
         #endregion
 
+        private void label2_MouseUp(object sender, MouseEventArgs e)
+        {
+            if (openFileDialog1.ShowDialog() == DialogResult.OK)
+            {
+                string arquivo = openFileDialog1.FileName;
+                int total = ProcessarLog(arquivo);
+                MessageBox.Show(total.ToString() + " Registros importados", "Processamento do log", MessageBoxButtons.OK);
+            }
+        }
+
+        private int ProcessarLog(string caminhoArquivoLog)
+        {
+            string[] linhas = File.ReadAllLines(caminhoArquivoLog);
+            int c = 0;
+            foreach (string linha in linhas)
+            {
+                // Exemplo de log de adição: 25/09/2024 09:30:07: FA,1, 0, , 0, FUSIVEL VIDO 15/20, 0 , 0, 0, 25092024093007ELJev4
+                // Exemplo de log de exclusão: 26/09/2024 10:59:10: FD,353, 29052024164907ikbEYw
+                if (linha.Contains("FA,"))
+                {
+                    ProcessarAdicao(linha);
+                }
+                else if (linha.Contains("FD,"))
+                {
+                    ProcessarExclusao(linha);
+                }
+                c++;
+            }
+            return c;
+        }
+
+        private void ProcessarAdicao(string linha)
+        {
+            string[] partes = linha.Split(',');
+            int idBalconista = Convert.ToInt32(partes[1].Trim());
+            string quantidade = string.IsNullOrWhiteSpace(partes[2]) ? "0" : partes[2].Trim();
+            string codigo = string.IsNullOrWhiteSpace(partes[3]) ? "N/A" : partes[3].Trim();
+            string marca = string.IsNullOrWhiteSpace(partes[4]) ? "N/A" : partes[4].Trim().Replace("'", "''"); // Escapa aspas simples
+            string descricao = string.IsNullOrWhiteSpace(partes[5]) ? "N/A" : partes[5].Trim().Replace("'", "''"); // Escapa aspas simples
+            string obs = string.IsNullOrWhiteSpace(partes[6]) ? "" : partes[6].Trim().Replace("'", "''"); // Escapa aspas simples
+            int idForn = string.IsNullOrWhiteSpace(partes[7]) ? 0 : Convert.ToInt32(partes[7].Trim());
+            int idTipo = string.IsNullOrWhiteSpace(partes[8]) ? 0 : Convert.ToInt32(partes[8].Trim());
+            string UID = string.IsNullOrWhiteSpace(partes[9]) ? "N/A" : partes[9].Trim().Replace("'", "''"); //
+            glo.Loga($@"FA,{idBalconista}, {quantidade}, {codigo}, {marca}, {descricao}, {obs} , {idForn}, {idTipo}, {UID}");
+            faltasDAO.Adiciona(idBalconista, quantidade, codigo, marca, descricao, obs, idForn, idTipo, UID);
+        }
+
+        private void ProcessarExclusao(string linha)
+        {
+            string[] partes = linha.Split(',');
+            int gID = Convert.ToInt32(partes[1].Trim());
+            string UID = partes[2].Trim(); // Pode não ser necessário, dependendo da lógica de exclusão
+            glo.Loga($@"FD,{gID}, {UID}");
+            faltasDAO.Exclui(gID);
+        }
+
     }
 }

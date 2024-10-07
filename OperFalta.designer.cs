@@ -34,7 +34,7 @@ namespace TeleBonifacio
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(OperFalta));
             this.panel1 = new System.Windows.Forms.Panel();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
@@ -85,6 +85,7 @@ namespace TeleBonifacio
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.Aumentar = new System.Windows.Forms.ToolStripMenuItem();
             this.DiminirPrio = new System.Windows.Forms.ToolStripMenuItem();
+            this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.panel1.SuspendLayout();
             this.groupBox3.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -438,6 +439,7 @@ namespace TeleBonifacio
             this.label2.Size = new System.Drawing.Size(52, 16);
             this.label2.TabIndex = 41;
             this.label2.Text = "Código";
+            this.label2.MouseUp += new System.Windows.Forms.MouseEventHandler(this.label2_MouseUp);
             // 
             // txtCodigo
             // 
@@ -599,14 +601,14 @@ namespace TeleBonifacio
             // 
             this.griTaxas.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
             this.griTaxas.ColumnHeadersVisible = false;
-            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.griTaxas.DefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.griTaxas.DefaultCellStyle = dataGridViewCellStyle2;
             this.griTaxas.Dock = System.Windows.Forms.DockStyle.Fill;
             this.griTaxas.Location = new System.Drawing.Point(0, 0);
             this.griTaxas.Name = "griTaxas";
@@ -639,6 +641,10 @@ namespace TeleBonifacio
             this.DiminirPrio.Size = new System.Drawing.Size(234, 26);
             this.DiminirPrio.Text = "Diminuir a prioridade";
             this.DiminirPrio.Click += new System.EventHandler(this.DiminirPrio_Click);
+            // 
+            // openFileDialog1
+            // 
+            this.openFileDialog1.FileName = "openFileDialog1";
             // 
             // OperFalta
             // 
@@ -723,6 +729,7 @@ namespace TeleBonifacio
         private ToolStripMenuItem DiminirPrio;
         private TabPage tabPage6;
         private DataGridView griTaxas;
+        private OpenFileDialog openFileDialog1;
         //private AtcCtrl.ATCRTF rtfTexto;
     }
 }
