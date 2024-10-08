@@ -34,9 +34,10 @@ namespace TeleBonifacio
                 string Texto = File.ReadAllText(ArquivoEmail);
                 txTexto.Text = Texto;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                // throw;
+                glo.Loga("Erro em pesEmails_Load");
+                glo.Loga(ex.ToString());
             }
             CarregarComboBox();
             carregando = false;

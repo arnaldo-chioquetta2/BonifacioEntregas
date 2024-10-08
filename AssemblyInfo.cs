@@ -11,8 +11,11 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyCulture("")]
 [assembly: ComVisible(false)]
 [assembly: Guid("308c57af-e663-456d-8a2c-188bbd61423d")]
-[assembly: AssemblyVersion("2.9.9.0")]
-[assembly: AssemblyFileVersion("2.9.9.0")]
+[assembly: AssemblyVersion("3.0.2.0")]
+[assembly: AssemblyFileVersion("3.0.2.0")]
+// 3.0.2 Ajustes no relatório de entregas
+// 3.0.1 Log no envio de email
+// 3.0.0 Ajustes nas operações de lançamentos do caixa
 // 2.9.9 Processamento do log de faltas
 // 2.9.8 Ajuste no relatório de entregas
 // 2.9.7 Lançamento mais facilitado 

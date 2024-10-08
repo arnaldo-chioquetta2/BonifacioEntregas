@@ -636,11 +636,13 @@ namespace TeleBonifacio
 
         private void btEmail_Click(object sender, EventArgs e)
         {
+            glo.Loga("Clicado no botão email");
             pesEmails OForm = new pesEmails();
             string fileNamePrefix = "Doc";
             string fileExtension = Path.GetExtension(this.nmNo.TrimStart('.'));
             string sourceFilePath = Path.Combine(CaminhoBasePDF, $"{fileNamePrefix}{this.iID}{fileExtension}");
             OForm.Arquivo = sourceFilePath;
+            glo.Loga("Arquivo = " + sourceFilePath);
             OForm.Show();
             AdicionarAoArquivoINI(sourceFilePath);
         }

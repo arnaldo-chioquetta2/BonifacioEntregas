@@ -106,7 +106,10 @@ namespace TeleBonifacio.rel
 
                 decimal valor = Convert.ToDecimal(row["Valor"]);
                 decimal compra = Convert.ToDecimal(row["Compra"]);
-                decimal desconto = Convert.ToDecimal(row["Desconto"]);
+
+                // decimal desconto = Convert.ToDecimal(row["Desconto"]);
+                decimal desconto = 0;
+                decimal.TryParse(row["Desconto"].ToString(), out desconto);
 
                 vendasDiarias += compra;
                 entregasDiarias += valor;
