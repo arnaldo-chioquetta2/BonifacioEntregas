@@ -44,7 +44,6 @@ C:\Prog\T-Bonifacio\T-Bonifacio\obj\Debug\TeleBonifacio.OperFalta.resources
 C:\Prog\T-Bonifacio\T-Bonifacio\obj\Debug\TeleBonifacio.operGarantia.resources
 C:\Prog\T-Bonifacio\T-Bonifacio\obj\Debug\TeleBonifacio.operLancamento.resources
 C:\Prog\T-Bonifacio\T-Bonifacio\obj\Debug\TeleBonifacio.operLogin.resources
-C:\Prog\T-Bonifacio\T-Bonifacio\obj\Debug\TeleBonifacio.OperPagar.resources
 C:\Prog\T-Bonifacio\T-Bonifacio\obj\Debug\TeleBonifacio.OperPDF.resources
 C:\Prog\T-Bonifacio\T-Bonifacio\obj\Debug\TeleBonifacio.OperRH.resources
 C:\Prog\T-Bonifacio\T-Bonifacio\obj\Debug\TeleBonifacio.operSQL.resources

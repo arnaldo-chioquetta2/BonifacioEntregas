@@ -649,9 +649,9 @@ namespace TeleBonifacio
 
         private void button1_Click(object sender, EventArgs e)
         {
-            OperPagar fPagar = new OperPagar();
-            fPagar.Show();
-            Close();
+            //OperPagar fPagar = new OperPagar();
+            //fPagar.Show();
+            //Close();
         }
 
         #endregion

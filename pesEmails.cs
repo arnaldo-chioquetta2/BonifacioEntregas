@@ -58,29 +58,40 @@ namespace TeleBonifacio
                     Cursor = Cursors.WaitCursor; // Define o cursor como ampulheta
                     this.Text = "Enviando Email";
                     File.WriteAllText(ArquivoEmail, Texto);                    
-                    cINI.WriteString("Email", "Titulo", txTitulo.Text);
-                    Email cEmail = new Email();
-                    string Remetente = cINI.ReadString("Email", "Remetente", "");
-
+                    cINI.WriteString("Email", "Titulo", txTitulo.Text);                    
+                    string destinatario = "";
+                    string Remetente = "";
                     string senha = "";
-                    string senhaCri = cINI.ReadString("Email", "senha", "");
-                    if (senhaCri.Length>0)
-                    {
-                        senha = Cripto.Decrypt(senhaCri);
-                    } else
+                    bool TESTE = false;
+                    if (TESTE)
                     {
                         // Minha
+                        Remetente = "xeviousbr@gmail.com";
+                        // senha = "ufRS3753!";
+                        destinatario = "dayse.chioquetta@gmail.com";
                         senha = "uhkikktxafjvpwem";
-
-                        // Denis
-                        // senha = "vxytmxwmbbipbwcg";
                     }
-
+                    else
+                    {
+                        Remetente = cINI.ReadString("Email", "Remetente", "");
+                        string senhaCri = cINI.ReadString("Email", "senha", "");
+                        destinatario = lbEmail.Text;
+                        if (senhaCri.Length > 0)
+                        {
+                            senha = Cripto.Decrypt(senhaCri);
+                        }
+                        else
+                        {
+                            // Denis
+                            // senha = "vxytmxwmbbipbwcg";
+                        }
+                    }
+                    Email cEmail = new Email();
                     bool enviado = cEmail.EnviarEmail(
-                    Remetente,
+                        Remetente,
                         Remetente,
                         senha,
-                        lbEmail.Text,
+                        destinatario,
                         Arquivo,
                         txTitulo.Text,
                         Texto

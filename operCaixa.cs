@@ -69,6 +69,15 @@ namespace TeleBonifacio
             {
                 btnFiltrar.Visible = false;
                 button5.Visible = false;
+            } else
+            {
+                if (glo.Nivel == 2)
+                {
+                    label1.Visible = true;
+                    label2.Visible = true;
+                    textBox1.Visible = true;
+                    textBox1.Visible = true;
+                }
             }
             Caixa = new CaixaDao();
             ClienteDAO Cliente = new ClienteDAO();
@@ -140,41 +149,6 @@ namespace TeleBonifacio
                 }
             }
         }
-        //private void Button_Click(object sender, EventArgs e)
-        //{
-        //    if (sender is Button clickedButton)
-        //    {
-        //        if (clickedButton.Tag != null && int.TryParse(clickedButton.Tag.ToString(), out int IdTag))
-        //        {
-        //            IdTag--; // Ajusta o ID da forma de pagamento
-
-        //            // Percorre todos os registros selecionados na grid e altera a forma de pagamento
-        //            foreach (DataGridViewRow row in dataGrid1.SelectedRows)
-        //            {
-        //                if (row.Cells["ID"].Value != null && int.TryParse(row.Cells["ID"].Value.ToString(), out int registroId))
-        //                {
-        //                    // Aqui, você pode fazer a alteração no banco de dados
-        //                    AlterarFormaPagamento(registroId, IdTag);
-        //                }
-        //            }
-
-        //            // Atualiza a grid após as alterações
-        //            CarregaGrid();
-
-        //            MessageBox.Show("Forma de pagamento alterada com sucesso!", "Sucesso", MessageBoxButtons.OK, MessageBoxIcon.Information);
-        //        }
-        //        else
-        //        {
-        //            MessageBox.Show("Erro: Tag do botão inválida ou não encontrada.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
-        //        }
-        //    }
-        //}
-
-        //private void AlterarFormaPagamento(int registroId, int novaFormaId)
-        //{
-        //    // Exemplo de alteração da forma de pagamento no banco de dados
-        //    Caixa.EditaFormaPagamento(registroId, novaFormaId);
-        //}
 
         private void txDesc_KeyUp(object sender, KeyEventArgs e)
         {
@@ -449,7 +423,10 @@ namespace TeleBonifacio
         {
             if (e.KeyCode == Keys.Enter)
             {
-                Registra(this.DefCred);
+                if (glo.Nivel == 2)
+                {
+                    Registra(this.DefCred);
+                }                    
             }
             else
             {
@@ -462,13 +439,34 @@ namespace TeleBonifacio
         {
             if (e.KeyCode == Keys.Enter)
             {
-                Registra(this.DefDeb, false);
+                if (glo.Nivel == 2)
+                {
+                    Registra(this.DefDeb, false);
+                }                    
             }
             else
             {
                 VeSeHab();
             }
             MostraTotal();
+        }
+
+        private void txObs_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (glo.Nivel == 2)
+            {
+                if (e.KeyCode == Keys.Enter)
+                {
+                    if (textBox1.Text.Length > 0)
+                    {
+                        Registra(this.DefDeb, false);
+                    }
+                    else
+                    {
+                        Registra(this.DefCred, false);
+                    }
+                }
+            }
         }
     }
 }
