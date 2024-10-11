@@ -5,6 +5,7 @@ using System.Drawing;
 using System.Globalization;
 using System.Windows.Forms;
 using TeleBonifacio.dao;
+using TeleBonifacio.gen;
 
 namespace TeleBonifacio
 {
@@ -73,10 +74,15 @@ namespace TeleBonifacio
             {
                 if (glo.Nivel == 2)
                 {
-                    label1.Visible = true;
-                    label2.Visible = true;
-                    textBox1.Visible = true;
-                    textBox1.Visible = true;
+                    INI2 cINI2 = new INI2();
+                    string suser = cINI2.ReadString("Usuario", "User", "0");
+                    if (suser=="1")
+                    {
+                        label1.Visible = true;
+                        label2.Visible = true;
+                        textBox1.Visible = true;
+                        textBox1.Visible = true;
+                    }
                 }
             }
             Caixa = new CaixaDao();
