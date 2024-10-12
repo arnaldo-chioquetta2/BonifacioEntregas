@@ -13,6 +13,7 @@ namespace TeleBonifacio
     {
 
         private CaixaDao Caixa;
+        private FormasDAO cFormas;
         private int iID = 0;
         private string UID = "";
         private int DefCred=0;
@@ -120,7 +121,7 @@ namespace TeleBonifacio
 
         private void CarregaFormas()
         {
-            FormasDAO cFormas = new FormasDAO();
+            cFormas = new FormasDAO();
             CarregaForma(ref cFormas, 0, grpCredito);
             CarregaForma(ref cFormas, 1, grpDebito);
             glo.CarregarComboBox<tb.Forma>(cbFormas, cFormas," ");
@@ -368,7 +369,8 @@ namespace TeleBonifacio
                 this.iID = id;
                 this.UID = Convert.ToString(selectedRow.Cells["UID"].Value);
                 cmbCliente.SelectedValue = nrCli;
-                if (idForma == this.DefDeb)
+                tb.Forma regF = (tb.Forma)cFormas.GetPeloID(idForma.ToString());
+                if (idForma == this.DefDeb || regF.Tipo==1)
                 {
                     textBox1.Text = valor.ToString();
                     txCompra.Text = "";
