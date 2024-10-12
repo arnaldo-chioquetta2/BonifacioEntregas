@@ -17,6 +17,7 @@ namespace TeleBonifacio
         private string UID = "";
         private int DefCred=0;
         private int DefDeb = 0;
+        private bool Especial=false;
 
         public operCaixa()
         {
@@ -26,25 +27,42 @@ namespace TeleBonifacio
 
         private void VeSeHab()
         {
-            bool OK = !string.IsNullOrEmpty(txCompra.Text) || !string.IsNullOrEmpty(txDesc.Text);
-
+            bool OK = !string.IsNullOrEmpty(txCompra.Text) || !string.IsNullOrEmpty(textBox1.Text);
             btnLimpar.Enabled = OK;
 
-            // Percorre os botões em grpCredito
-            foreach (Control control in grpCredito.Controls)
+            if (this.Especial)
             {
-                if (control is Button button)
+                OK = !string.IsNullOrEmpty(txCompra.Text);
+                foreach (Control control in grpCredito.Controls)
                 {
-                    button.Enabled = OK;
+                    if (control is Button button)
+                    {
+                        button.Enabled = OK;
+                    }
+                }
+                foreach (Control control in grpDebito.Controls)
+                {
+                    if (control is Button button)
+                    {
+                        button.Enabled = !OK;
+                    }
                 }
             }
-
-            // Percorre os botões em grpDebito
-            foreach (Control control in grpDebito.Controls)
+            else
             {
-                if (control is Button button)
+                foreach (Control control in grpCredito.Controls)
                 {
-                    button.Enabled = OK;
+                    if (control is Button button)
+                    {
+                        button.Enabled = OK;
+                    }
+                }
+                foreach (Control control in grpDebito.Controls)
+                {
+                    if (control is Button button)
+                    {
+                        button.Enabled = OK;
+                    }
                 }
             }
         }
@@ -78,6 +96,7 @@ namespace TeleBonifacio
                     string suser = cINI2.ReadString("Usuario", "User", "0");
                     if (suser=="1")
                     {
+                        this.Especial = true;
                         label1.Visible = true;
                         label2.Visible = true;
                         textBox1.Visible = true;
