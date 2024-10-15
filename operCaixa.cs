@@ -20,6 +20,53 @@ namespace TeleBonifacio
         private int DefDeb = 0;
         private bool Especial=false;
 
+        private void operCaixa_Load(object sender, EventArgs e)
+        {
+            if (glo.Nivel == 1)
+            {
+                btnFiltrar.Visible = false;
+                button5.Visible = false;
+            }
+            else
+            {
+                if (glo.Nivel == 2)
+                {
+                    INI2 cINI2 = new INI2();
+                    string suser = cINI2.ReadString("Usuario", "User", "0");
+                    if (suser == "1")
+                    {
+                        this.Especial = true;
+                        label1.Visible = true;
+                        label2.Visible = true;
+                        textBox1.Visible = true;
+                    }
+                }
+            }
+            Caixa = new CaixaDao();
+            ClienteDAO Cliente = new ClienteDAO();
+            VendedoresDAO Vendedor = new VendedoresDAO();
+            glo.CarregarComboBox<tb.Cliente>(cmbCliente, Cliente, "NÃO IDENTIFICADO");
+            glo.CarregarComboBox<tb.Vendedor>(cmbVendedor, Vendedor, "", " Where Vendedores.Atende = -1 or Vendedores.Atende = 1 ", " desc ");
+            int idUsuarioLogado = glo.iUsuario;
+            if (cmbVendedor.Items.Count > 0)
+            {
+                foreach (tb.ComboBoxItem item in cmbVendedor.Items)
+                {
+                    if (item.Id == idUsuarioLogado)
+                    {
+                        cmbVendedor.SelectedItem = item;
+                        break;
+                    }
+                }
+            }
+            cmbCliente.SelectedIndex = 0;
+            DateTime ontem = DateTime.Today.AddDays(-1);
+            dtpDataIN.Value = ontem;
+            CarregaGrid();
+            ConfigurarGrid();
+            CarregaFormas();
+        }        
+
         public operCaixa()
         {
             InitializeComponent();
@@ -81,42 +128,6 @@ namespace TeleBonifacio
             {
                 lbTotal.Text = "";
             }
-        }
-
-        private void operCaixa_Load(object sender, EventArgs e)
-        {
-            if (glo.Nivel == 1)
-            {
-                btnFiltrar.Visible = false;
-                button5.Visible = false;
-            } else
-            {
-                if (glo.Nivel == 2)
-                {
-                    INI2 cINI2 = new INI2();
-                    string suser = cINI2.ReadString("Usuario", "User", "0");
-                    if (suser=="1")
-                    {
-                        this.Especial = true;
-                        label1.Visible = true;
-                        label2.Visible = true;
-                        textBox1.Visible = true;
-                        textBox1.Visible = true;
-                    }
-                }
-            }
-            Caixa = new CaixaDao();
-            ClienteDAO Cliente = new ClienteDAO();
-            VendedoresDAO Vendedor = new VendedoresDAO();
-            glo.CarregarComboBox<tb.Cliente>(cmbCliente, Cliente, "NÃO IDENTIFICADO");
-            glo.CarregarComboBox<tb.Vendedor>(cmbVendedor, Vendedor, "", " Where Vendedores.Atende = -1 or Vendedores.Atende = 1 ", " desc ");
-            cmbCliente.SelectedIndex = 0;
-            cmbVendedor.SelectedIndex = 0;
-            DateTime ontem = DateTime.Today.AddDays(-1);
-            dtpDataIN.Value = ontem;
-            CarregaGrid();
-            ConfigurarGrid();
-            CarregaFormas();
         }
 
         private void CarregaFormas()

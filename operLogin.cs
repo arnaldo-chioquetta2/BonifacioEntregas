@@ -66,6 +66,7 @@ namespace TeleBonifacio
                 // glo.Nivel = 1;  // Caixa
                 glo.Nivel = 2;  // Escritório
 
+                // glo.iUsuario = 4;
                 glo.iUsuario = 1;
 
                 Form1 Form = new Form1();
