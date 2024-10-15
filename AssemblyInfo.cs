@@ -24,4 +24,3 @@ using System.Runtime.InteropServices;
 // 2.9.9 Processamento do log de faltas
 // 2.9.8 Ajuste no relatório de entregas
 // 2.9.7 Lançamento mais facilitado 
-// 2.9.6 Previsão de backup em rede

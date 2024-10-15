@@ -177,8 +177,18 @@ namespace TeleBonifacio
             {
                 if (clickedButton.Tag != null && int.TryParse(clickedButton.Tag.ToString(), out int IdTag))
                 {
-                    IdTag--;
-                    Registra(IdTag);
+                    IdTag--; // Ajusta o idForma
+
+                    if (dataGrid1.SelectedRows.Count > 1)
+                    {
+                        // Se mais de uma linha está selecionada, atualiza a forma de pagamento em todos os registros selecionados
+                        AtualizarFormaEmRegistrosSelecionados(IdTag);
+                    }
+                    else
+                    {
+                        // Se apenas uma linha está selecionada, chama o método normal de registro
+                        Registra(IdTag);
+                    }
                 }
                 else
                 {
@@ -186,6 +196,25 @@ namespace TeleBonifacio
                 }
             }
         }
+
+        private void AtualizarFormaEmRegistrosSelecionados(int idForma)
+        {
+            foreach (DataGridViewRow row in dataGrid1.SelectedRows)
+            {
+                if (row.Cells["ID"].Value != null)
+                {
+                    int idRegistro = Convert.ToInt32(row.Cells["ID"].Value);
+
+                    // Atualiza apenas o campo de forma de pagamento (idForma) no banco de dados
+                    Caixa.AtualizaForma(idRegistro, idForma);
+                }
+            }
+
+            // Recarrega a grid após a alteração
+            CarregaGrid();
+            Limpar();
+        }
+
 
         private void txDesc_KeyUp(object sender, KeyEventArgs e)
         {

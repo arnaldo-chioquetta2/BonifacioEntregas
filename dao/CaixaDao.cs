@@ -113,5 +113,13 @@ namespace TeleBonifacio.dao
             string query = $@"UPDATE Caixa SET idForma = {novaFormaId} WHERE ID = {registroId} ";
             DB.ExecutarComandoSQL(query);
         }
+
+        public void AtualizaForma(int iID, int idForma)
+        {
+            String sql = @"UPDATE Caixa SET 
+                      idForma = " + idForma.ToString() +
+                           " WHERE ID = " + iID.ToString();
+            DB.ExecutarComandoSQL(sql);
+        }
     }
 }
