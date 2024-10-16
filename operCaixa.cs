@@ -19,6 +19,7 @@ namespace TeleBonifacio
         private int DefCred=0;
         private int DefDeb = 0;
         private bool Especial=false;
+        private tb.ComboBoxItem IdDoVendNoCombo;
 
         private void operCaixa_Load(object sender, EventArgs e)
         {
@@ -54,7 +55,8 @@ namespace TeleBonifacio
                 {
                     if (item.Id == idUsuarioLogado)
                     {
-                        cmbVendedor.SelectedItem = item;
+                        this.IdDoVendNoCombo = item;
+                        cmbVendedor.SelectedItem = this.IdDoVendNoCombo;
                         break;
                     }
                 }
@@ -215,7 +217,6 @@ namespace TeleBonifacio
             Limpar();
         }
 
-
         private void txDesc_KeyUp(object sender, KeyEventArgs e)
         {
             VeSeHab();
@@ -266,7 +267,10 @@ namespace TeleBonifacio
             lbTotal.Text = "";
             textBox1.Text = "";
             cmbCliente.SelectedIndex = 0;
-            cmbVendedor.SelectedIndex = 0;
+
+            cmbVendedor.SelectedItem = this.IdDoVendNoCombo;
+            // cmbVendedor.SelectedIndex = 0;
+
             this.iID = 0;
             BotoesNormais();
         }
