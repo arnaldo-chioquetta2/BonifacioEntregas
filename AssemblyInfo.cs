@@ -11,8 +11,9 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyCulture("")]
 [assembly: ComVisible(false)]
 [assembly: Guid("308c57af-e663-456d-8a2c-188bbd61423d")]
-[assembly: AssemblyVersion("3.0.8.0")]
-[assembly: AssemblyFileVersion("3.0.8.0")]
+[assembly: AssemblyVersion("3.0.9.0")]
+[assembly: AssemblyFileVersion("3.0.9.0")]
+// 3.0.9 Solução para o caso que no segundo lançamento retornava saia do vendedor
 // 3.0.8 Permitir em vários registros a forma de pagamento no caixa
 // 3.0.7 Caixa passa a mostrar por default o usuário logado
 // 3.0.6 Conserto da situação em que um débito aparecia como crédito no caixa
@@ -24,4 +25,3 @@ using System.Runtime.InteropServices;
 // 3.0.0 Ajustes nas operações de lançamentos do caixa
 // 2.9.9 Processamento do log de faltas
 // 2.9.8 Ajuste no relatório de entregas
-// 2.9.7 Lançamento mais facilitado 

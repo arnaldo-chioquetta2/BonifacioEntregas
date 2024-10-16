@@ -413,7 +413,7 @@ namespace TeleBonifacio
                 this.iID = id;
                 this.UID = Convert.ToString(selectedRow.Cells["UID"].Value);
                 cmbCliente.SelectedValue = nrCli;
-                tb.Forma regF = (tb.Forma)cFormas.GetPeloID(idForma.ToString());
+                tb.Forma regF = (tb.Forma)cFormas.GetPeloID((idForma+1).ToString());
                 if (idForma == this.DefDeb || regF.Tipo==1)
                 {
                     textBox1.Text = valor.ToString();
