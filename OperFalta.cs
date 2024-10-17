@@ -524,7 +524,10 @@ namespace TeleBonifacio
                     ConfigurarGrid();
                     if (scrollPosition > 0)
                     {
-                        dataGrid1.FirstDisplayedScrollingRowIndex = scrollPosition;
+                        if (dataGrid1.Rows.Count> scrollPosition)
+                        {
+                            dataGrid1.FirstDisplayedScrollingRowIndex = scrollPosition;
+                        }                        
                     }
                 }
             }
