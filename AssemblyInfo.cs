@@ -11,8 +11,10 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyCulture("")]
 [assembly: ComVisible(false)]
 [assembly: Guid("308c57af-e663-456d-8a2c-188bbd61423d")]
-[assembly: AssemblyVersion("3.1.0.0")]
-[assembly: AssemblyFileVersion("3.1.0.0")]
+[assembly: AssemblyVersion("3.1.2.0")]
+[assembly: AssemblyFileVersion("3.1.2.0")]
+// 3.1.2 Totalização por semana no relatório de RH
+// 3.1.1 Conserto de um erro que poderia acontecer no uso do filtro nas faltas
 // 3.1.0 Lançamento de crédito rápido no caixa na hora da edição aparecia como débito
 // 3.0.9 Solução para o caso que no segundo lançamento retornava saia do vendedor
 // 3.0.8 Permitir em vários registros a forma de pagamento no caixa
@@ -22,6 +24,3 @@ using System.Runtime.InteropServices;
 // 3.0.4 Reforço para aparecer todos os campos no caixa para user 1
 // 3.0.3 Ajustes no caixa
 // 3.0.2 Ajustes no relatório de entregas
-// 3.0.1 Log no envio de email
-// 3.0.0 Ajustes nas operações de lançamentos do caixa
-

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Drawing;
 using System.Drawing.Printing;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
@@ -15,13 +16,10 @@ namespace TeleBonifacio.rel
 
         private RHDAO cRHDAO;
         private bool ativou = false;
-
         internal DateTime setID1;
-
         private List<Lanctos> relcaixa { get; set; }
-        public DateTime DT1 { get; set; }
+        public DateTime DT1 { get; set; }       
         public DateTime DT2 { get; set; }
-
         private List<string[]> gridDataParaImpressao;
 
         public RH()
@@ -444,12 +442,10 @@ namespace TeleBonifacio.rel
                         linha[8] = FormatarHora(lancto.FnTrd);
                     }
                 }
-
                 linha[9] = FormatarTotalDoDia(totalDoDia);
                 totalMensal += totalDoDia;
                 totalzao += totalDoDia;
             }
-
             gridData.Add(linha);
         }
 
@@ -459,16 +455,26 @@ namespace TeleBonifacio.rel
             List<string[]> gridData = new List<string[]>();
             List<string> cabecalho = GerarCabecalhoRelatorio(dataInicial);
             gridData.AddRange(cabecalho.Select(linha => new string[] { linha }));
-
             List<string[]> corpoGridData = new List<string[]>();
             TimeSpan totalzao = TimeSpan.Zero;
             TimeSpan totalMensal = TimeSpan.Zero;
+            TimeSpan totalSemanal = TimeSpan.Zero;
             int currentMonth = -1;
+            int currentWeek = CultureInfo.CurrentCulture.Calendar.GetWeekOfYear(dataInicial, CalendarWeekRule.FirstDay, DayOfWeek.Monday);
             bool isFirstMonth = true;
             List<Lanctos> relcaixaCompleto = CompletarRelCaixa(dataInicial);
-
             foreach (Lanctos lancto in relcaixaCompleto)
             {
+                int weekOfYear = CultureInfo.CurrentCulture.Calendar.GetWeekOfYear(lancto.Data, CalendarWeekRule.FirstDay, DayOfWeek.Monday);
+                if (weekOfYear != currentWeek)
+                {
+                    if (totalSemanal != TimeSpan.Zero)
+                    {
+                        corpoGridData.Add(new string[] { "", "", "", "", "", "", "", "Total da semana:", $"{totalSemanal.TotalHours:n0}:{totalSemanal.Minutes:00}" });
+                        totalSemanal = TimeSpan.Zero;
+                    }
+                    currentWeek = weekOfYear;
+                }
                 if (currentMonth != lancto.Data.Month)
                 {
                     if (currentMonth != -1)
@@ -485,8 +491,12 @@ namespace TeleBonifacio.rel
                     isFirstMonth = false;
                 }
                 AdicionarLancamento(corpoGridData, lancto, ref totalMensal, ref totalzao);
+                totalSemanal += CalcularTotalDoDia(lancto);
             }
-
+            if (totalSemanal != TimeSpan.Zero)
+            {
+                corpoGridData.Add(new string[] { "", "", "", "", "", "", "", "", "Total da semana:", $"{totalSemanal.TotalHours:n0}:{totalSemanal.Minutes:00}" });
+            }
             if (currentMonth != -1)
             {
                 AdicionarTotalMensal(corpoGridData, totalMensal);

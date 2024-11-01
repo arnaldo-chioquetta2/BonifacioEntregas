@@ -267,10 +267,7 @@ namespace TeleBonifacio
             lbTotal.Text = "";
             textBox1.Text = "";
             cmbCliente.SelectedIndex = 0;
-
             cmbVendedor.SelectedItem = this.IdDoVendNoCombo;
-            // cmbVendedor.SelectedIndex = 0;
-
             this.iID = 0;
             BotoesNormais();
         }
