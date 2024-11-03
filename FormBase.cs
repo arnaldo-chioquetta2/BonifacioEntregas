@@ -30,7 +30,7 @@ namespace TeleBonifacio
         }
         protected tb.IDataEntity reg;
         private List<CampoTagInfo> tagsDosCampos;
-        private System.Windows.Forms.DataGrid dataGrid;
+        private System.Windows.Forms.DataGrid dataGrid = null;
         private bool GridCarregada = false;
         private bool AdicaoPorfora = false;
         private List<string> listCombo;
@@ -436,6 +436,13 @@ namespace TeleBonifacio
                 {
                     cntrole1.Primeiro = true;
                 }
+            }
+            if (GridCarregada)
+            {
+                this.Controls.Remove(dataGrid); 
+                dataGrid.Dispose(); 
+                dataGrid = null; 
+                GridCarregada = false; 
             }
         }
 

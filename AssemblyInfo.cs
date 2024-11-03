@@ -13,6 +13,7 @@ using System.Runtime.InteropServices;
 [assembly: Guid("308c57af-e663-456d-8a2c-188bbd61423d")]
 [assembly: AssemblyVersion("3.1.2.0")]
 [assembly: AssemblyFileVersion("3.1.2.0")]
+// 3.1.3 Ajuste na atualização da grid de pesquisa quando é feita uma exclusão
 // 3.1.2 Totalização por semana no relatório de RH
 // 3.1.1 Conserto de um erro que poderia acontecer no uso do filtro nas faltas
 // 3.1.0 Lançamento de crédito rápido no caixa na hora da edição aparecia como débito
