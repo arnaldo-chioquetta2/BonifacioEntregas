@@ -439,11 +439,16 @@ namespace TeleBonifacio
             }
             if (GridCarregada)
             {
-                this.Controls.Remove(dataGrid); 
-                dataGrid.Dispose(); 
-                dataGrid = null; 
-                GridCarregada = false; 
+                DescarrregaGrid();
             }
+        }
+
+        private void DescarrregaGrid()
+        {
+            this.Controls.Remove(dataGrid);
+            dataGrid.Dispose();
+            dataGrid = null;
+            GridCarregada = false;
         }
 
         private void HandleParaTras()
@@ -465,69 +470,6 @@ namespace TeleBonifacio
                 cntrole1.Primeiro = true;
             }
         }
-
-        //protected void cntrole1_AcaoRealizada(object sender, AcaoEventArgs e, tb.IDataEntity entidade)
-        //{
-        //    switch (e.Acao)
-        //    {
-        //        case "Adicionar":
-        //            LimparCampos();
-        //            EmAdicao = true;
-        //            break;
-        //        case "Delete":
-        //            reg = DAO.Apagar(Direcao, entidade);
-        //            if (!Mostra())
-        //            {
-        //                if (Direcao == 1)
-        //                {
-        //                    cntrole1.Ultimo = true;
-        //                }
-        //                else
-        //                {
-        //                    cntrole1.Primeiro = true;
-        //                }
-        //            }
-        //            break;
-        //        case "ParaTras":
-        //            Direcao = -1;
-        //            reg = DAO.ParaTraz();
-        //            if (!Mostra())
-        //            {
-        //                cntrole1.Ultimo = true;
-        //            }
-        //            break;
-        //        case "ParaFrente":
-        //            Direcao = 1; ;
-        //            reg = DAO.ParaFrente();
-
-        //            if (!Mostra())
-        //            {
-        //                cntrole1.Primeiro = true;
-        //            }
-        //            break;
-        //        case "Editar":
-        //            // this.Text = "clicou";
-        //            break;
-        //        case "CANC":
-        //            Cancela();
-        //            break;
-        //        case "OK":
-        //            Grava();
-        //            break;
-        //        case "PesqON":
-        //            LigaGrid();
-        //            break;
-        //        case "PesqAcionar":
-        //            PesqAcionar();
-        //            break;
-        //        case "PesqOFF":
-        //            PesqOFF();
-        //            break;
-        //        case "Pesquisar":
-        //            Pesquisar();
-        //            break;
-        //    }
-        //}
 
         private void PesqOFF()
         {
@@ -585,6 +527,10 @@ namespace TeleBonifacio
                     cntrole1.ModoNormal();
                     cntrole1.Vazio = false;
                     ok = true;
+                    if (GridCarregada)
+                    {
+                        DescarrregaGrid();
+                    }
                     if (AdicaoPorfora)
                     {
                         this.Close();
@@ -742,8 +688,6 @@ namespace TeleBonifacio
                         grid.TableStyles.Add(new DataGridTableStyle());
                     }
                     DataGridTableStyle tableStyle = grid.TableStyles[0];
-                    //tableStyle.GridColumnStyles[0].Width = 30;
-                    //tableStyle.GridColumnStyles[1].Width = 100;
                     try
                     {
                         tableStyle.GridColumnStyles[0].Width = 30;
