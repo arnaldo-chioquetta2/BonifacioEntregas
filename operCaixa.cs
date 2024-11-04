@@ -7,6 +7,14 @@ using System.Windows.Forms;
 using TeleBonifacio.dao;
 using TeleBonifacio.gen;
 
+/*
+Logs
+    CA  Adição
+    CE  Edição
+    CD  Deleção
+    CT  Alteração de data
+*/
+
 namespace TeleBonifacio
 {
     public partial class operCaixa : Form
@@ -375,6 +383,7 @@ namespace TeleBonifacio
                         }
                     }
                     Lista = Lista.Remove(Lista.Length - 1);
+                    glo.Loga($@"CT,{data},{Lista}");
                     Caixa.MudaData(data, Lista);
                     CarregaGrid();
                     Limpar();
