@@ -1402,6 +1402,23 @@ namespace TeleBonifacio
                             SetupDataGridView();
                         } 
                         break;
+
+                    case 6:
+                        groupBox1.Enabled = false;
+                        cmbTipos.Enabled = false;
+                        btComprei.Visible = false;
+                        ckEmFalta.Visible = false;
+                        lbVlor.Visible = false;
+                        txValor.Visible = false;
+                        if (rtfWord.Text.Length == 0)
+                        {
+                            string caminhoWord = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Word.rtf");
+                            rtfWord.caminhoDoArquivo = caminhoWord;
+                            rtfWord.Criptografia = false;
+                            rtfWord.Carrega();
+                        }
+                        break;
+
                     default: // Novas abas criadas dinamicamente
                         groupBox1.Enabled = false;
                         cmbTipos.Enabled = false;
