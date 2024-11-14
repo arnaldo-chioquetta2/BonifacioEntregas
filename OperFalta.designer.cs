@@ -590,6 +590,7 @@ namespace TeleBonifacio
             this.rtfTexto.Name = "rtfTexto";
             this.rtfTexto.Size = new System.Drawing.Size(1337, 298);
             this.rtfTexto.TabIndex = 0;
+            this.rtfTexto.VlrPerImr = 1F;
             // 
             // tabPage6
             // 
@@ -640,6 +641,8 @@ namespace TeleBonifacio
             this.rtfWord.Name = "rtfWord";
             this.rtfWord.Size = new System.Drawing.Size(1331, 292);
             this.rtfWord.TabIndex = 0;
+            this.rtfWord.VlrPerImr = 1F;
+            this.rtfWord.VlrPerImrChanged += new System.EventHandler<float>(this.rtfWord_VlrPerImrChanged);
             // 
             // contextMenuStrip1
             // 

@@ -12,6 +12,7 @@ namespace TeleBonifacio
 {
     public partial class OperFalta : Form
     {
+        private INI cINI;
         private FaltasDAO faltasDAO;
         private TpoFaltaDAO TpoFalta;
         private FornecedorDao Forn;
@@ -1412,10 +1413,14 @@ namespace TeleBonifacio
                         txValor.Visible = false;
                         if (rtfWord.Text.Length == 0)
                         {
+                            cINI = new INI();
+                            float VlrPerImr = cINI.ReadFloat("Opcoes", "TamFonteWord", 1.0f);
                             string caminhoWord = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Word.rtf");
                             rtfWord.caminhoDoArquivo = caminhoWord;
                             rtfWord.Criptografia = false;
-                            rtfWord.Carrega();
+                            rtfWord.SetaVlrPerImr(VlrPerImr);
+                            rtfWord.Carrega();                            
+                            rtfWord.txPercVisivel();
                         }
                         break;
 
@@ -1863,21 +1868,11 @@ namespace TeleBonifacio
         private void SetupDataGridView()
         {
             this.iniGrid = @"C:\Entregas\Grid.ini";
-
-            // Inicializar a grid com o tamanho inicial
             InitializeGrid();
-
-            // Carregar larguras das colunas
             LoadColumnWidths();
-
-            // Carregar dados do banco de dados
             LoadDataFromDatabase();
-
-            // Adicionar eventos após a configuração inicial
             griTaxas.CellEndEdit += griTaxas_CellEndEdit;
             griTaxas.ColumnWidthChanged += griTaxas_ColumnWidthChanged;
-
-            // Forçar a atualização visual da grid
             griTaxas.Refresh();
         }
 
@@ -1891,11 +1886,7 @@ namespace TeleBonifacio
                 int rowIndex = Convert.ToInt32(row["RowIndex"]);
                 int columnIndex = Convert.ToInt32(row["ColumnIndex"]);
                 string cellValue = row["CellValue"].ToString();
-
-                // Garantir que existem colunas e linhas suficientes
                 EnsureGridSize(rowIndex, columnIndex);
-
-                // Definir o valor da célula
                 griTaxas.Rows[rowIndex].Cells[columnIndex].Value = cellValue;
             }
         }
@@ -1911,8 +1902,6 @@ namespace TeleBonifacio
                 column.DefaultCellStyle.Font = new Font("Arial", 12, FontStyle.Regular);
                 griTaxas.Columns.Add(column);
             }
-
-            // Adicionar linhas, se necessário
             while (griTaxas.RowCount <= requiredRowIndex)
             {
                 DataGridViewRow row = new DataGridViewRow();
@@ -1936,16 +1925,12 @@ namespace TeleBonifacio
                 column.DefaultCellStyle.Font = font;
                 griTaxas.Columns.Add(column);
             }
-
-            // Adicionar linhas
             for (int i = 0; i < INITIAL_ROW_COUNT; i++)
             {
                 DataGridViewRow row = new DataGridViewRow();
                 row.DefaultCellStyle.Font = font;
                 griTaxas.Rows.Add(row);
             }
-
-            // Garantir que todas as células sejam criadas
             for (int i = 0; i < INITIAL_ROW_COUNT; i++)
             {
                 for (int j = 0; j < INITIAL_COLUMN_COUNT; j++)
@@ -2078,10 +2063,14 @@ namespace TeleBonifacio
         {
             string[] partes = linha.Split(',');
             int gID = Convert.ToInt32(partes[1].Trim());
-            string UID = partes[2].Trim(); // Pode não ser necessário, dependendo da lógica de exclusão
+            string UID = partes[2].Trim(); 
             glo.Loga($@"FD,{gID}, {UID}");
             faltasDAO.Exclui(gID);
         }
 
+        private void rtfWord_VlrPerImrChanged(object sender, float e)
+        {
+            cINI.WriteFloat("Opcoes", "TamFonteWord", rtfWord.VlrPerImr);
+        }
     }
 }

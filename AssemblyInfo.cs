@@ -11,8 +11,10 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyCulture("")]
 [assembly: ComVisible(false)]
 [assembly: Guid("308c57af-e663-456d-8a2c-188bbd61423d")]
-[assembly: AssemblyVersion("3.1.5.0")]
-[assembly: AssemblyFileVersion("3.1.5.0")]
+[assembly: AssemblyVersion("3.1.8.0")]
+[assembly: AssemblyFileVersion("3.1.8.0")]
+// 3.1.8 Ajuste fino na impressão
+// 3.1.7 Auto-ajuste da fonte e previsualização
 // 3.1.5 Nova aba nas faltas com impressão
 // 3.1.4 Log para alteração de datas do cqixa
 // 3.1.3 Ajuste na atualização da grid de pesquisa quando é feita uma exclusão
