@@ -1414,13 +1414,14 @@ namespace TeleBonifacio
                         if (rtfWord.Text.Length == 0)
                         {
                             cINI = new INI();
-                            float VlrPerImr = cINI.ReadFloat("Opcoes", "TamFonteWord", 1.0f);
+                            bool AdaptAtivo = cINI.ReadBool("Opcoes", "AdaptAtivo", true);
+                            // float VlrPerImr = cINI.ReadFloat("Opcoes", "TamFonteWord", 1.0f);
                             string caminhoWord = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Word.rtf");
                             rtfWord.caminhoDoArquivo = caminhoWord;
                             rtfWord.Criptografia = false;
-                            rtfWord.SetaVlrPerImr(VlrPerImr);
+                            // rtfWord.SetaVlrPerImr(VlrPerImr);
                             rtfWord.Carrega();                            
-                            rtfWord.txPercVisivel();
+                            rtfWord.txPercVisivel(AdaptAtivo);
                         }
                         break;
 
@@ -2028,8 +2029,6 @@ namespace TeleBonifacio
             int c = 0;
             foreach (string linha in linhas)
             {
-                // Exemplo de log de adição: 25/09/2024 09:30:07: FA,1, 0, , 0, FUSIVEL VIDO 15/20, 0 , 0, 0, 25092024093007ELJev4
-                // Exemplo de log de exclusão: 26/09/2024 10:59:10: FD,353, 29052024164907ikbEYw
                 if (linha.Contains("FA,"))
                 {
                     ProcessarAdicao(linha);
@@ -2068,9 +2067,9 @@ namespace TeleBonifacio
             faltasDAO.Exclui(gID);
         }
 
-        private void rtfWord_VlrPerImrChanged(object sender, float e)
+        private void rtfWord_VlrPerImrChanged(object sender, bool e)
         {
-            cINI.WriteFloat("Opcoes", "TamFonteWord", rtfWord.VlrPerImr);
+            cINI.WriteBool("Opcoes", "AdaptAtivo", rtfWord.AltImprHab);
         }
     }
 }

@@ -642,7 +642,7 @@ namespace TeleBonifacio
             this.rtfWord.Size = new System.Drawing.Size(1331, 292);
             this.rtfWord.TabIndex = 0;
             this.rtfWord.VlrPerImr = 1F;
-            this.rtfWord.VlrPerImrChanged += new System.EventHandler<float>(this.rtfWord_VlrPerImrChanged);
+            this.rtfWord.VlrPerImrChanged += new System.EventHandler<bool>(this.rtfWord_VlrPerImrChanged);
             // 
             // contextMenuStrip1
             // 

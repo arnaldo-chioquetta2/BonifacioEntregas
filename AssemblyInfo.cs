@@ -11,8 +11,9 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyCulture("")]
 [assembly: ComVisible(false)]
 [assembly: Guid("308c57af-e663-456d-8a2c-188bbd61423d")]
-[assembly: AssemblyVersion("3.1.8.0")]
-[assembly: AssemblyFileVersion("3.1.8.0")]
+[assembly: AssemblyVersion("3.1.9.0")]
+[assembly: AssemblyFileVersion("3.1.9.0")]
+// 3.1.9 Opção para desabilitar o auto-ajuste da impressão 
 // 3.1.8 Ajuste fino na impressão
 // 3.1.7 Auto-ajuste da fonte e previsualização
 // 3.1.5 Nova aba nas faltas com impressão
