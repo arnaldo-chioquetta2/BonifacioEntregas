@@ -39,6 +39,7 @@ namespace TeleBonifacio
             this.txtEnder = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
             this.txtNrOutro = new System.Windows.Forms.TextBox();
+            this.btVale = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // cntrole1
@@ -144,11 +145,23 @@ namespace TeleBonifacio
             this.txtNrOutro.Tag = "";
             this.txtNrOutro.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtNrOutro_KeyPress);
             // 
+            // btVale
+            // 
+            this.btVale.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btVale.Location = new System.Drawing.Point(113, 304);
+            this.btVale.Name = "btVale";
+            this.btVale.Size = new System.Drawing.Size(97, 32);
+            this.btVale.TabIndex = 14;
+            this.btVale.Text = "Vale";
+            this.btVale.UseVisualStyleBackColor = true;
+            this.btVale.Click += new System.EventHandler(this.btVale_Click);
+            // 
             // fCadClientes
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(322, 304);
+            this.ClientSize = new System.Drawing.Size(322, 348);
+            this.Controls.Add(this.btVale);
             this.Controls.Add(this.txtNrOutro);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.label2);
@@ -174,6 +187,7 @@ namespace TeleBonifacio
             this.Controls.SetChildIndex(this.label4, 0);
             this.Controls.SetChildIndex(this.txtNrOutro, 0);
             this.Controls.SetChildIndex(this.cntrole1, 0);
+            this.Controls.SetChildIndex(this.btVale, 0);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -191,5 +205,6 @@ namespace TeleBonifacio
         private System.Windows.Forms.TextBox txtEnder;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.TextBox txtNrOutro;
+        private System.Windows.Forms.Button btVale;
     }
 }
