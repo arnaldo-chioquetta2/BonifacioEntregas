@@ -45,11 +45,15 @@ namespace TeleBonifacio
 
         private async void btOK_Click(object sender, EventArgs e)
         {
-            glo.Loga("btOK_Click na tela de emails");
+            glo.Loga("btOK_Click chamado na tela de emails.");
+
             string Texto = txTexto.Text;
+            glo.Loga($"Texto capturado do campo de texto: {(Texto.Length > 0 ? "Texto preenchido" : "Texto vazio")}");
+
             if (Texto.Length == 0)
             {
                 MessageBox.Show("É necessário um conteúdo no email", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                glo.Loga("Erro: O conteúdo do email está vazio.");
             }
             else
             {
@@ -57,38 +61,55 @@ namespace TeleBonifacio
                 {
                     Cursor = Cursors.WaitCursor; // Define o cursor como ampulheta
                     this.Text = "Enviando Email";
-                    File.WriteAllText(ArquivoEmail, Texto);                    
-                    cINI.WriteString("Email", "Titulo", txTitulo.Text);                    
+                    glo.Loga("Iniciando processo de envio de email.");
+
+                    // Gravar texto no arquivo
+                    File.WriteAllText(ArquivoEmail, Texto);
+                    glo.Loga($"Texto gravado no arquivo: {ArquivoEmail}");
+
+                    // Salvar título no arquivo de configuração
+                    cINI.WriteString("Email", "Titulo", txTitulo.Text);
+                    glo.Loga($"Título do email salvo: {txTitulo.Text}");
+
                     string destinatario = "";
                     string Remetente = "";
                     string senha = "";
                     bool TESTE = false;
+                    glo.Loga($"Modo de teste: {TESTE}");
+
                     if (TESTE)
                     {
-                        // Minha
                         Remetente = "xeviousbr@gmail.com";
-                        // senha = "ufRS3753!";
                         destinatario = "dayse.chioquetta@gmail.com";
                         senha = "uhkikktxafjvpwem";
+                        glo.Loga($"Modo de teste ativo. Remetente: {Remetente}, Destinatário: {destinatario}");
                     }
                     else
                     {
-                        Remetente = cINI.ReadString("Email", "Remetente", "");                        
+                        Remetente = cINI.ReadString("Email", "Remetente", "");
                         destinatario = lbEmail.Text;
+                        glo.Loga($"Remetente lido do arquivo de configuração: {Remetente}");
+                        glo.Loga($"Destinatário capturado do label: {destinatario}");
 
                         string senhaCri = cINI.ReadString("Email", "senha", "");
                         if (senhaCri.Length > 0)
                         {
                             senha = Cripto.Decrypt(senhaCri);
+                            glo.Loga("Senha descriptografada com sucesso.");
                         }
                         else
                         {
-                            // Denis
-                            // senha = "vxytmxwmbbipbwcg";
+                            glo.Loga("Aviso: Senha não encontrada no arquivo de configuração.");
                         }
+
+                        // Senha padrão para teste
                         senha = "bzbdmrviekwmamcy";
+                        glo.Loga("Senha definida manualmente para teste.");
                     }
+
                     Email cEmail = new Email();
+                    glo.Loga("Instância da classe Email criada.");
+
                     bool enviado = cEmail.EnviarEmail(
                         Remetente,
                         Remetente,
@@ -98,23 +119,104 @@ namespace TeleBonifacio
                         txTitulo.Text,
                         Texto
                     );
+                    glo.Loga($"Resultado do envio de email: {(enviado ? "Sucesso" : "Falha")}");
 
                     if (enviado)
                     {
+                        glo.Loga("Email enviado com sucesso.");
                         Cursor = Cursors.Default;
                         this.Close();
                     }
                     else
                     {
+                        glo.Loga("Erro: O email não foi enviado.");
                         this.Text = "Email não foi enviado";
                     }
+                }
+                catch (Exception ex)
+                {
+                    glo.Loga($"Erro durante o envio de email: {ex.Message}");
                 }
                 finally
                 {
                     Cursor = Cursors.Default; // Restaura o cursor padrão
+                    glo.Loga("Processo concluído. Cursor restaurado para padrão.");
                 }
             }
         }
+
+        //private async void btOK_Click(object sender, EventArgs e)
+        //{
+        //    glo.Loga("btOK_Click na tela de emails");
+        //    string Texto = txTexto.Text;
+        //    if (Texto.Length == 0)
+        //    {
+        //        MessageBox.Show("É necessário um conteúdo no email", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+        //    }
+        //    else
+        //    {
+        //        try
+        //        {
+        //            Cursor = Cursors.WaitCursor; // Define o cursor como ampulheta
+        //            this.Text = "Enviando Email";
+        //            File.WriteAllText(ArquivoEmail, Texto);                    
+        //            cINI.WriteString("Email", "Titulo", txTitulo.Text);                    
+        //            string destinatario = "";
+        //            string Remetente = "";
+        //            string senha = "";
+        //            bool TESTE = false;
+        //            if (TESTE)
+        //            {
+        //                // Minha
+        //                Remetente = "xeviousbr@gmail.com";
+        //                // senha = "ufRS3753!";
+        //                destinatario = "dayse.chioquetta@gmail.com";
+        //                senha = "uhkikktxafjvpwem";
+        //            }
+        //            else
+        //            {
+        //                Remetente = cINI.ReadString("Email", "Remetente", "");                        
+        //                destinatario = lbEmail.Text;
+
+        //                string senhaCri = cINI.ReadString("Email", "senha", "");
+        //                if (senhaCri.Length > 0)
+        //                {
+        //                    senha = Cripto.Decrypt(senhaCri);
+        //                }
+        //                else
+        //                {
+        //                    // Denis
+        //                    // senha = "vxytmxwmbbipbwcg";
+        //                }
+        //                senha = "bzbdmrviekwmamcy";
+        //            }
+        //            Email cEmail = new Email();
+        //            bool enviado = cEmail.EnviarEmail(
+        //                Remetente,
+        //                Remetente,
+        //                senha,
+        //                destinatario,
+        //                Arquivo,
+        //                txTitulo.Text,
+        //                Texto
+        //            );
+
+        //            if (enviado)
+        //            {
+        //                Cursor = Cursors.Default;
+        //                this.Close();
+        //            }
+        //            else
+        //            {
+        //                this.Text = "Email não foi enviado";
+        //            }
+        //        }
+        //        finally
+        //        {
+        //            Cursor = Cursors.Default; // Restaura o cursor padrão
+        //        }
+        //    }
+        //}
 
         private void CarregarComboBox()
         {
