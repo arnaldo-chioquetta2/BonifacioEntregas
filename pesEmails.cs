@@ -73,9 +73,10 @@ namespace TeleBonifacio
                     }
                     else
                     {
-                        Remetente = cINI.ReadString("Email", "Remetente", "");
-                        string senhaCri = cINI.ReadString("Email", "senha", "");
+                        Remetente = cINI.ReadString("Email", "Remetente", "");                        
                         destinatario = lbEmail.Text;
+
+                        string senhaCri = cINI.ReadString("Email", "senha", "");
                         if (senhaCri.Length > 0)
                         {
                             senha = Cripto.Decrypt(senhaCri);
@@ -85,6 +86,7 @@ namespace TeleBonifacio
                             // Denis
                             // senha = "vxytmxwmbbipbwcg";
                         }
+                        senha = "bzbdmrviekwmamcy";
                     }
                     Email cEmail = new Email();
                     bool enviado = cEmail.EnviarEmail(
