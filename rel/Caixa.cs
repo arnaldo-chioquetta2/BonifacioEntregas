@@ -108,7 +108,19 @@ namespace TeleBonifacio.rel
                 Obs = reader["Obs"].ToString()
             };
             decimal valor = Convert.ToDecimal(reader["Valor"]);
-            int formaTipo = Convert.ToInt32(reader["FormaTipo"]);
+
+            object oFormaTipo = reader["FormaTipo"];
+            int formaTipo = 0;
+            try
+            {
+                formaTipo = Convert.ToInt32(oFormaTipo);
+            }
+            catch (Exception)
+            {
+
+            }
+            // int formaTipo = Convert.ToInt32(reader["FormaTipo"]);
+
             if (formaTipo == 1)
             {
                 lancamento.Saida = valor;
