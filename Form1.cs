@@ -269,12 +269,28 @@ namespace TeleBonifacio
                                     "Atualização Disponível",
                                     MessageBoxButtons.OK,
                                     MessageBoxIcon.Information);
-                            }
+                            }                            
                         }
+                        this.AtualizacaoEspecifica(NovaVersaoINI);
                     }
                 }                
             }
             return ret;
+        }
+
+        private void AtualizacaoEspecifica(string NovaVersaoINI)
+        {
+            if (NovaVersaoINI == "3.2.4")
+            {
+                bool v324 = cINI.ReadBool("Atualizacoes", "324", false);
+                if (v324==false)
+                {
+                    cINI.WriteString("Backup", "Arq4", "rtf.txt");
+                    cINI.WriteString("Backup", "Arq5", "TeleBonifacio.ini");
+                    cINI.WriteString("Backup", "Arq6", "Entregas.txt");
+                    cINI.WriteBool("Atualizacoes", "324", true);
+                } 
+            }
         }
 
         private static void NovoLog()

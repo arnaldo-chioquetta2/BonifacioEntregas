@@ -203,16 +203,22 @@ namespace TeleBonifacio
 
         private void btPDF_Click(object sender, EventArgs e)
         {
+            glo.Loga("btPDF_Click");
+            glo.Loga("AbreArquivo");
             AbreArquivo();
+            glo.Loga("contasAPagarDao.Imprimiu(this.iID)");
             contasAPagarDao.Imprimiu(this.iID);
 
             // Procurar nó baseado no texto
+            glo.Loga("TreeNode nodeToColor = FindNodeByText(treeView1.Nodes, this.nmNo)");
             TreeNode nodeToColor = FindNodeByText(treeView1.Nodes, this.nmNo);
             if (nodeToColor != null)
-            {
+            {                
                 nodeToColor.BackColor = Verde;
+                glo.Loga("nodeToColor.NodeFont = new Font(treeView1.Font, FontStyle.Regular)");
                 nodeToColor.NodeFont = new Font(treeView1.Font, FontStyle.Regular);
             }
+            glo.Loga("btPDF_Click saida");
         }
 
         // Método para encontrar um nó por seu texto
