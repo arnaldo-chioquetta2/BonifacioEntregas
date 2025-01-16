@@ -135,6 +135,11 @@ namespace TeleBonifacio
             AbrirOuFocarFormulario<operAnota>();
         }
 
+        private void pictureBox15_Click(object sender, EventArgs e)
+        {
+            AbrirOuFocarFormulario<operPecas>();
+        }
+
         #endregion
 
         private void Form1_Shown(object sender, EventArgs e)
@@ -288,6 +293,8 @@ namespace TeleBonifacio
                     cINI.WriteString("Backup", "Arq4", "rtf.txt");
                     cINI.WriteString("Backup", "Arq5", "TeleBonifacio.ini");
                     cINI.WriteString("Backup", "Arq6", "Entregas.txt");
+                    string Word = $"C:\\Entregas\\Word.rtf";
+                    File.Delete(Word);
                     cINI.WriteBool("Atualizacoes", "324", true);
                 } 
             }
@@ -500,6 +507,7 @@ namespace TeleBonifacio
                 glo.Loga("Form1_Resize: Sender is not a Form.");
             }
         }
+
 
     }
 

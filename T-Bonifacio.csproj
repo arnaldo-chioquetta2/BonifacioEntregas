@@ -171,6 +171,7 @@
     <Compile Include="dao\FormasDao.cs" />
     <Compile Include="dao\FornecedorDao.cs" />
     <Compile Include="dao\GarantiasDao.cs" />
+    <Compile Include="dao\PecasDao.cs" />
     <Compile Include="dao\PercentsDAO.cs" />
     <Compile Include="dao\ProdutosDao.cs" />
     <Compile Include="dao\ReciboDAO.cs" />
@@ -263,6 +264,12 @@
     <Compile Include="OperPDF.designer.cs">
       <DependentUpon>OperPDF.cs</DependentUpon>
     </Compile>
+    <Compile Include="operPecas.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="operPecas.Designer.cs">
+      <DependentUpon>operPecas.cs</DependentUpon>
+    </Compile>
     <Compile Include="OperRH.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -326,6 +333,8 @@
       <DependentUpon>RH.cs</DependentUpon>
     </Compile>
     <Compile Include="tb\CampoTagInfo.cs" />
+    <Compile Include="tb\Caracteristica.cs" />
+    <Compile Include="tb\Carro.cs" />
     <Compile Include="tb\Cliente.cs" />
     <Compile Include="tb\ComboBoxItem.cs" />
     <Compile Include="tb\ContasAPagar.cs" />
@@ -340,6 +349,7 @@
     <Compile Include="tb\Fornecedor.cs" />
     <Compile Include="tb\Garantias.cs" />
     <Compile Include="tb\IDataEntity.cs" />
+    <Compile Include="tb\Peca.cs" />
     <Compile Include="tb\Percents.cs" />
     <Compile Include="tb\Produtos.cs" />
     <Compile Include="tb\Recibo.cs" />
@@ -406,6 +416,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="OperPDF.resx">
       <DependentUpon>OperPDF.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="operPecas.resx">
+      <DependentUpon>operPecas.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="OperRH.resx">
       <DependentUpon>OperRH.cs</DependentUpon>

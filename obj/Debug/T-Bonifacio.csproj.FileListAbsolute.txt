@@ -61,4 +61,4 @@ C:\Prog\T-Bonifacio\T-Bonifacio\obj\Debug\T-Bonifacio.csproj.CoreCompileInputs.c
 C:\Prog\T-Bonifacio\T-Bonifacio\obj\Debug\TeleBonifacio.exe
 C:\Prog\T-Bonifacio\T-Bonifacio\obj\Debug\TeleBonifacio.pdb
 C:\Prog\T-Bonifacio\T-Bonifacio\obj\Debug\TeleBonifacio.fCadFormas.resources
-C:\Prog\T-Bonifacio\T-Bonifacio\obj\Debug\T-Bonifacio.csproj.CopyComplete
+C:\Prog\T-Bonifacio\T-Bonifacio\obj\Debug\TeleBonifacio.operPecas.resources

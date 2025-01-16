@@ -1,0 +1,210 @@
+﻿using System;
+using System.Data;
+using System.Data.OleDb;
+
+namespace TeleBonifacio.dao
+{
+    public class PecasDAO
+    {
+        // Método para obter todos os registros da tabela Pecas
+        public DataTable GetAllPecas()
+        {
+            string query = "SELECT * FROM Pecas";
+            return ExecutarConsulta(query);
+        }
+
+        // Método para obter todas as peças de um carro específico
+        public DataTable GetPecasByCarroId(int idCarro)
+        {
+            string query = "SELECT * FROM Pecas WHERE IdCarro = @idCarro";
+            DataTable dataTable = new DataTable();
+            using (OleDbConnection connection = new OleDbConnection(glo.connectionString))
+            {
+                try
+                {
+                    connection.Open();
+                    using (OleDbCommand command = new OleDbCommand(query, connection))
+                    {
+                        command.Parameters.AddWithValue("@idCarro", idCarro);
+                        using (OleDbDataAdapter adapter = new OleDbDataAdapter(command))
+                        {
+                            adapter.Fill(dataTable);
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+            }
+            return dataTable;
+        }
+
+        // Método para inserir uma nova peça
+        public void InsertPeca(string nome, int idCarro)
+        {
+            string query = "INSERT INTO Pecas (Nome, IdCarro) VALUES (@nome, @idCarro)";
+            using (OleDbConnection connection = new OleDbConnection(glo.connectionString))
+            {
+                try
+                {
+                    connection.Open();
+                    using (OleDbCommand command = new OleDbCommand(query, connection))
+                    {
+                        command.Parameters.AddWithValue("@nome", nome);
+                        command.Parameters.AddWithValue("@idCarro", idCarro);
+                        command.ExecuteNonQuery();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+            }
+        }
+
+        // Método para atualizar uma peça
+        public void UpdatePeca(int idPeca, string nome)
+        {
+            string query = "UPDATE Pecas SET Nome = @nome WHERE IdPeca = @idPeca";
+            using (OleDbConnection connection = new OleDbConnection(glo.connectionString))
+            {
+                try
+                {
+                    connection.Open();
+                    using (OleDbCommand command = new OleDbCommand(query, connection))
+                    {
+                        command.Parameters.AddWithValue("@nome", nome);
+                        command.Parameters.AddWithValue("@idPeca", idPeca);
+                        command.ExecuteNonQuery();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+            }
+        }
+
+        // Método para deletar uma peça
+        public void DeletePecaById(int idPeca)
+        {
+            string query = "DELETE FROM Pecas WHERE IdPeca = @idPeca";
+            using (OleDbConnection connection = new OleDbConnection(glo.connectionString))
+            {
+                try
+                {
+                    connection.Open();
+                    using (OleDbCommand command = new OleDbCommand(query, connection))
+                    {
+                        command.Parameters.AddWithValue("@idPeca", idPeca);
+                        command.ExecuteNonQuery();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+            }
+        }
+
+        // Método genérico para executar consultas e retornar um DataTable
+        private DataTable ExecutarConsulta(string query)
+        {
+            DataTable dataTable = new DataTable();
+            using (OleDbConnection connection = new OleDbConnection(glo.connectionString))
+            {
+                try
+                {
+                    connection.Open();
+                    using (OleDbDataAdapter adapter = new OleDbDataAdapter(query, connection))
+                    {
+                        adapter.Fill(dataTable);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+            }
+            return dataTable;
+        }
+
+        public void InsertCarro(string nomeCarro)
+        {
+            string query = "INSERT INTO Carros (Nome) VALUES (@nome)";
+            using (OleDbConnection connection = new OleDbConnection(glo.connectionString))
+            {
+                connection.Open();
+                using (OleDbCommand command = new OleDbCommand(query, connection))
+                {
+                    command.Parameters.AddWithValue("@nome", nomeCarro);
+                    command.ExecuteNonQuery();
+                }
+            }
+        }
+
+        public DataTable GetAllCarros()
+        {
+            string query = "SELECT * FROM Carros";
+            return ExecutarConsulta(query);
+        }
+
+        //public void InsertPeca(string nomePeca, int idCarro)
+        //{
+        //    string query = "INSERT INTO Pecas (Nome, IdCarro) VALUES (@nome, @idCarro)";
+        //    using (OleDbConnection connection = new OleDbConnection(glo.connectionString))
+        //    {
+        //        connection.Open();
+        //        using (OleDbCommand command = new OleDbCommand(query, connection))
+        //        {
+        //            command.Parameters.AddWithValue("@nome", nomePeca);
+        //            command.Parameters.AddWithValue("@idCarro", idCarro);
+        //            command.ExecuteNonQuery();
+        //        }
+        //    }
+        //}
+
+        public void InsertCaracteristica(string descricao, int idPeca)
+        {
+            string query = "INSERT INTO Caracteristicas (Descricao, IdPeca) VALUES (@descricao, @idPeca)";
+            using (OleDbConnection connection = new OleDbConnection(glo.connectionString))
+            {
+                connection.Open();
+                using (OleDbCommand command = new OleDbCommand(query, connection))
+                {
+                    command.Parameters.AddWithValue("@descricao", descricao);
+                    command.Parameters.AddWithValue("@idPeca", idPeca);
+                    command.ExecuteNonQuery();
+                }
+            }
+        }
+
+        public DataTable GetCaracteristicasByPecaId(int idPeca)
+        {
+            string query = "SELECT * FROM Caracteristicas WHERE IdPeca = @idPeca";
+            DataTable dataTable = new DataTable();
+            using (OleDbConnection connection = new OleDbConnection(glo.connectionString))
+            {
+                try
+                {
+                    connection.Open();
+                    using (OleDbCommand command = new OleDbCommand(query, connection))
+                    {
+                        command.Parameters.AddWithValue("@idPeca", idPeca);
+                        using (OleDbDataAdapter adapter = new OleDbDataAdapter(command))
+                        {
+                            adapter.Fill(dataTable);
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+            }
+            return dataTable;
+        }
+
+    }
+}
