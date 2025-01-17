@@ -11,8 +11,9 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyCulture("")]
 [assembly: ComVisible(false)]
 [assembly: Guid("308c57af-e663-456d-8a2c-188bbd61423d")]
-[assembly: AssemblyVersion("3.2.5.0")]
-[assembly: AssemblyFileVersion("3.2.5.0")]
+[assembly: AssemblyVersion("3.2.6.0")]
+[assembly: AssemblyFileVersion("3.2.6.0")]
+// 3.2.6 Pesquisa e edição de itens das peças
 // 3.2.5 Tela para consulta de peças
 // 3.2.4 Adição do log do rtf no backup
 // 3.2.3 Pesquisa de cliente no caixa

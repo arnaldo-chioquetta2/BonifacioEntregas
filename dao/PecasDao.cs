@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Data.OleDb;
 
@@ -16,7 +17,14 @@ namespace TeleBonifacio.dao
         // Método para obter todas as peças de um carro específico
         public DataTable GetPecasByCarroId(int idCarro)
         {
-            string query = "SELECT * FROM Pecas WHERE IdCarro = @idCarro";
+            string query = "";
+            if (idCarro>0)
+            {
+                query = "SELECT * FROM Pecas WHERE IdCarro = @idCarro";
+            } else
+            {
+                query = "SELECT * FROM Pecas";
+            }
             DataTable dataTable = new DataTable();
             using (OleDbConnection connection = new OleDbConnection(glo.connectionString))
             {
@@ -206,5 +214,39 @@ namespace TeleBonifacio.dao
             return dataTable;
         }
 
+        public DataTable SearchCarros(string termoPesquisa)
+        {
+            string query = "SELECT * FROM Carros WHERE Nome LIKE LIKE '%" + termoPesquisa + "%'";
+            DataTable dt = DB.ExecutarConsulta(query);
+            return dt;
+        }
+
+        public void UpdateCarro(int idCarro, string nome)
+        {
+            string query = "UPDATE Carros SET Nome = @nome WHERE IdCarro = @idCarro";
+            List<OleDbParameter> parametros = new List<OleDbParameter>
+    {
+        new OleDbParameter("@nome", nome),
+        new OleDbParameter("@idCarro", idCarro)
+    };
+            DB.ExecutarComandoSQL(query, parametros);
+        }
+
+        public void UpdateCaracteristica(int idCaracteristica, string descricao)
+        {
+            string query = "UPDATE Caracteristicas SET Descricao = @descricao WHERE IdCaracteristica = @idCaracteristica";
+            List<OleDbParameter> parametros = new List<OleDbParameter>
+    {
+        new OleDbParameter("@descricao", descricao),
+        new OleDbParameter("@idCaracteristica", idCaracteristica)
+    };
+            DB.ExecutarComandoSQL(query, parametros);
+        }
+
+
+
     }
+
+
+
 }
