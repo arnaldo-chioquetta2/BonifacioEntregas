@@ -162,6 +162,7 @@
     <Compile Include="dao\ClienteDAO.cs" />
     <Compile Include="dao\ConfigDAO.cs" />
     <Compile Include="dao\ContasAPagarDao.cs" />
+    <Compile Include="dao\ContratosDAO.cs" />
     <Compile Include="dao\DynamicGridDao.cs" />
     <Compile Include="dao\EncomendasDao.cs" />
     <Compile Include="dao\EntregadorDAO.cs" />
@@ -233,6 +234,12 @@
     </Compile>
     <Compile Include="operConsulta.Designer.cs">
       <DependentUpon>operConsulta.cs</DependentUpon>
+    </Compile>
+    <Compile Include="operContratos.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="operContratos.designer.cs">
+      <DependentUpon>operContratos.cs</DependentUpon>
     </Compile>
     <Compile Include="OperFalta.cs">
       <SubType>Form</SubType>
@@ -338,6 +345,7 @@
     <Compile Include="tb\Cliente.cs" />
     <Compile Include="tb\ComboBoxItem.cs" />
     <Compile Include="tb\ContasAPagar.cs" />
+    <Compile Include="tb\Contrato.cs" />
     <Compile Include="tb\Document.cs" />
     <Compile Include="tb\DynamicGrid.cs" />
     <Compile Include="tb\Encomendas.cs" />
@@ -401,6 +409,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="operConsulta.resx">
       <DependentUpon>operConsulta.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="operContratos.resx">
+      <DependentUpon>operContratos.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="OperFalta.resx">
       <DependentUpon>OperFalta.cs</DependentUpon>

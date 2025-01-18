@@ -140,6 +140,11 @@ namespace TeleBonifacio
             AbrirOuFocarFormulario<operPecas>();
         }
 
+        private void pictureBox16_Click(object sender, EventArgs e)
+        {
+            AbrirOuFocarFormulario<operContratos>();
+        }
+
         #endregion
 
         private void Form1_Shown(object sender, EventArgs e)

@@ -62,3 +62,5 @@ C:\Prog\T-Bonifacio\T-Bonifacio\obj\Debug\TeleBonifacio.exe
 C:\Prog\T-Bonifacio\T-Bonifacio\obj\Debug\TeleBonifacio.pdb
 C:\Prog\T-Bonifacio\T-Bonifacio\obj\Debug\TeleBonifacio.fCadFormas.resources
 C:\Prog\T-Bonifacio\T-Bonifacio\obj\Debug\TeleBonifacio.operPecas.resources
+C:\Prog\T-Bonifacio\T-Bonifacio\obj\Debug\TeleBonifacio.operContratos.resources
+C:\Prog\T-Bonifacio\T-Bonifacio\obj\Debug\TeleBonifacio.operEdContratos.resources

@@ -29,16 +29,16 @@ namespace TeleBonifacio
         /// </summary>
         private void InitializeComponent()
         {
+            this.txtNrOutro = new System.Windows.Forms.TextBox();
+            this.label4 = new System.Windows.Forms.Label();
+            this.lblTelefone = new System.Windows.Forms.Label();
             this.lblNome = new System.Windows.Forms.Label();
             this.txtNome = new System.Windows.Forms.TextBox();
-            this.lblTelefone = new System.Windows.Forms.Label();
             this.txtTelefone = new System.Windows.Forms.TextBox();
-            this.label1 = new System.Windows.Forms.Label();
-            this.txtemail = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.txtEnder = new System.Windows.Forms.TextBox();
-            this.label4 = new System.Windows.Forms.Label();
-            this.txtNrOutro = new System.Windows.Forms.TextBox();
+            this.label1 = new System.Windows.Forms.Label();
+            this.txtemail = new System.Windows.Forms.TextBox();
             this.btVale = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
@@ -47,6 +47,35 @@ namespace TeleBonifacio
             this.cntrole1.Size = new System.Drawing.Size(322, 54);
             this.cntrole1.AcaoRealizada += new System.EventHandler<AcaoEventArgs>(this.cntrole1_AcaoRealizada);
             this.cntrole1.Load += new System.EventHandler(this.cntrole1_Load);
+            // 
+            // txtNrOutro
+            // 
+            this.txtNrOutro.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtNrOutro.Location = new System.Drawing.Point(242, 132);
+            this.txtNrOutro.MaxLength = 20;
+            this.txtNrOutro.Name = "txtNrOutro";
+            this.txtNrOutro.Size = new System.Drawing.Size(68, 23);
+            this.txtNrOutro.TabIndex = 2;
+            this.txtNrOutro.Tag = "";
+            this.txtNrOutro.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtNrOutro_KeyPress);
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(239, 112);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(71, 13);
+            this.label4.TabIndex = 13;
+            this.label4.Text = "Outro número";
+            // 
+            // lblTelefone
+            // 
+            this.lblTelefone.AutoSize = true;
+            this.lblTelefone.Location = new System.Drawing.Point(12, 112);
+            this.lblTelefone.Name = "lblTelefone";
+            this.lblTelefone.Size = new System.Drawing.Size(49, 13);
+            this.lblTelefone.TabIndex = 6;
+            this.lblTelefone.Text = "Telefone";
             // 
             // lblNome
             // 
@@ -67,15 +96,6 @@ namespace TeleBonifacio
             this.txtNome.TabIndex = 0;
             this.txtNome.Tag = "O";
             // 
-            // lblTelefone
-            // 
-            this.lblTelefone.AutoSize = true;
-            this.lblTelefone.Location = new System.Drawing.Point(12, 112);
-            this.lblTelefone.Name = "lblTelefone";
-            this.lblTelefone.Size = new System.Drawing.Size(49, 13);
-            this.lblTelefone.TabIndex = 6;
-            this.lblTelefone.Text = "Telefone";
-            // 
             // txtTelefone
             // 
             this.txtTelefone.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -86,25 +106,6 @@ namespace TeleBonifacio
             this.txtTelefone.TabIndex = 1;
             this.txtTelefone.Tag = "O";
             this.txtTelefone.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtTelefone_KeyPress);
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(9, 238);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(32, 13);
-            this.label1.TabIndex = 8;
-            this.label1.Text = "Email";
-            // 
-            // txtemail
-            // 
-            this.txtemail.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtemail.Location = new System.Drawing.Point(12, 266);
-            this.txtemail.MaxLength = 100;
-            this.txtemail.Name = "txtemail";
-            this.txtemail.Size = new System.Drawing.Size(298, 23);
-            this.txtemail.TabIndex = 3;
-            this.txtemail.Tag = "";
             // 
             // label2
             // 
@@ -125,25 +126,24 @@ namespace TeleBonifacio
             this.txtEnder.TabIndex = 2;
             this.txtEnder.Tag = "O";
             // 
-            // label4
+            // label1
             // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(239, 112);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(71, 13);
-            this.label4.TabIndex = 13;
-            this.label4.Text = "Outro número";
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(9, 238);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(32, 13);
+            this.label1.TabIndex = 8;
+            this.label1.Text = "Email";
             // 
-            // txtNrOutro
+            // txtemail
             // 
-            this.txtNrOutro.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtNrOutro.Location = new System.Drawing.Point(242, 132);
-            this.txtNrOutro.MaxLength = 20;
-            this.txtNrOutro.Name = "txtNrOutro";
-            this.txtNrOutro.Size = new System.Drawing.Size(68, 23);
-            this.txtNrOutro.TabIndex = 2;
-            this.txtNrOutro.Tag = "";
-            this.txtNrOutro.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtNrOutro_KeyPress);
+            this.txtemail.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtemail.Location = new System.Drawing.Point(12, 266);
+            this.txtemail.MaxLength = 100;
+            this.txtemail.Name = "txtemail";
+            this.txtemail.Size = new System.Drawing.Size(298, 23);
+            this.txtemail.TabIndex = 3;
+            this.txtemail.Tag = "";
             // 
             // btVale
             // 
@@ -186,8 +186,8 @@ namespace TeleBonifacio
             this.Controls.SetChildIndex(this.label2, 0);
             this.Controls.SetChildIndex(this.label4, 0);
             this.Controls.SetChildIndex(this.txtNrOutro, 0);
-            this.Controls.SetChildIndex(this.cntrole1, 0);
             this.Controls.SetChildIndex(this.btVale, 0);
+            this.Controls.SetChildIndex(this.cntrole1, 0);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -195,16 +195,16 @@ namespace TeleBonifacio
 
         #endregion
 
+        private System.Windows.Forms.TextBox txtNrOutro;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Label lblTelefone;
         private System.Windows.Forms.Label lblNome;
         private System.Windows.Forms.TextBox txtNome;
-        private System.Windows.Forms.Label lblTelefone;
         private System.Windows.Forms.TextBox txtTelefone;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.TextBox txtemail;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.TextBox txtEnder;
-        private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.TextBox txtNrOutro;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.TextBox txtemail;
         private System.Windows.Forms.Button btVale;
     }
 }
