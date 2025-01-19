@@ -52,8 +52,15 @@ namespace TeleBonifacio
 
         private void btnNovo_Click(object sender, EventArgs e)
         {
-            //operEdContratos foperSQL = new operEdContratos();
-            //foperSQL.Show();
+            operEdContratos foperSQL = new operEdContratos();
+            foperSQL.Show();
+        }
+
+        private void btnEditar_Click(object sender, EventArgs e)
+        {
+            operEdContratos foperSQL = new operEdContratos();
+            foperSQL.ID = 1;
+            foperSQL.Show();
         }
     }
 

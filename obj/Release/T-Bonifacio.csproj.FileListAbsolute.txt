@@ -64,3 +64,4 @@ C:\Prog\T-Bonifacio\T-Bonifacio\obj\Release\TeleBonifacio.exe
 C:\Prog\T-Bonifacio\T-Bonifacio\obj\Release\TeleBonifacio.pdb
 C:\Prog\T-Bonifacio\T-Bonifacio\obj\Release\TeleBonifacio.operPecas.resources
 C:\Prog\T-Bonifacio\T-Bonifacio\obj\Release\TeleBonifacio.operContratos.resources
+C:\Prog\T-Bonifacio\T-Bonifacio\obj\Release\TeleBonifacio.operEdContratos.resources

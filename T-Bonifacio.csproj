@@ -241,6 +241,12 @@
     <Compile Include="operContratos.designer.cs">
       <DependentUpon>operContratos.cs</DependentUpon>
     </Compile>
+    <Compile Include="operEdContratos.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="operEdContratos.designer.cs">
+      <DependentUpon>operEdContratos.cs</DependentUpon>
+    </Compile>
     <Compile Include="OperFalta.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -412,6 +418,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="operContratos.resx">
       <DependentUpon>operContratos.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="operEdContratos.resx">
+      <DependentUpon>operEdContratos.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="OperFalta.resx">
       <DependentUpon>OperFalta.cs</DependentUpon>
