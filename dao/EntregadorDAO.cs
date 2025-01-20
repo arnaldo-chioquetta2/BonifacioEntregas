@@ -12,6 +12,11 @@ namespace TeleBonifacio.dao
         public string Nome { get; set; }
         public string Telefone { get; set; }
         public string CNH { get; set; }
+
+        public string CPF { get; set; }
+
+        public string Endereco { get; set; }
+
         public DateTime DataValidadeCNH { get; set; }
 
         private int Linhas;
@@ -28,12 +33,12 @@ namespace TeleBonifacio.dao
             List<OleDbParameter> parameters;
             if (entregador.Adicao)
             {
-                query = "INSERT INTO Mecanicos (codi, Oper, Nome, Telefone, CNH, DataValidadeCNH) VALUES (?, ?, ?, ?, ?, ?)";
+                query = "INSERT INTO Mecanicos (codi, Oper, Nome, Telefone, CNH, DataValidadeCNH, CPF, Endereco) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
                 parameters = ConstruirParametrosEntregador(entregador, true);
             }
             else
             {
-                query = "UPDATE Mecanicos SET Nome = ?, Telefone = ?, CNH = ?, DataValidadeCNH = ? WHERE codi = ?";
+                query = "UPDATE Mecanicos SET Nome = ?, Telefone = ?, CNH = ?, DataValidadeCNH = ?, CPF = ?, Endereco = ? WHERE codi = ?";
                 parameters = ConstruirParametrosEntregador(entregador, false);
             }
 
@@ -59,7 +64,9 @@ namespace TeleBonifacio.dao
                 new OleDbParameter("@Nome", entregador.Nome),
                 new OleDbParameter("@Telefone", entregador.Telefone),
                 new OleDbParameter("@CNH", entregador.CNH),
-                new OleDbParameter("@DataValidadeCNH", entregador.DataValidadeCNH)
+                new OleDbParameter("@DataValidadeCNH", entregador.DataValidadeCNH),                
+                new OleDbParameter("@CPF", entregador.CPF),
+                new OleDbParameter("@Endereco", entregador.Endereco)
             };
             if (inserindo)
             {
@@ -138,6 +145,8 @@ namespace TeleBonifacio.dao
                 Nome = Nome,
                 Telefone = Telefone,
                 CNH = CNH,
+                CPF = CPF,
+                Endereco = Endereco,
                 DataValidadeCNH = DataValidadeCNH
             };
 
@@ -178,6 +187,8 @@ namespace TeleBonifacio.dao
                                 id = Convert.ToInt32(reader["codi"]);
                                 Telefone = reader["Telefone"].ToString();
                                 CNH = reader["CNH"].ToString();
+                                CPF = reader["CPF"].ToString();
+                                Endereco = reader["Endereco"].ToString();                                
                                 if (reader["DataValidadeCNH"] != DBNull.Value)
                                 {
                                     DataValidadeCNH = Convert.ToDateTime(reader["DataValidadeCNH"]);

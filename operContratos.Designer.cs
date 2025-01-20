@@ -60,7 +60,9 @@ namespace TeleBonifacio
             this.dgvContratos.Font = new System.Drawing.Font("Segoe UI", 16F);
             this.dgvContratos.Location = new System.Drawing.Point(20, 61);
             this.dgvContratos.Name = "dgvContratos";
+            this.dgvContratos.ReadOnly = true;
             this.dgvContratos.RowTemplate.Height = 40;
+            this.dgvContratos.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgvContratos.Size = new System.Drawing.Size(932, 439);
             this.dgvContratos.TabIndex = 0;
             // 
@@ -136,6 +138,7 @@ namespace TeleBonifacio
             this.btnImprimir.TabIndex = 7;
             this.btnImprimir.Text = "Imprimir";
             this.btnImprimir.UseVisualStyleBackColor = true;
+            this.btnImprimir.Click += new System.EventHandler(this.btnImprimir_Click);
             // 
             // lblDescricao
             // 

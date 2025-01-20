@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace TeleBonifacio.tb
 {
     public class Contrato : IDataEntity
-    {
+    {        
+
         public int Id { get; set; } // Identificador único do contrato
         public bool Adicao { get; set; } // Indica se é uma nova adição ou edição
 
@@ -16,5 +18,15 @@ namespace TeleBonifacio.tb
         public string Pix { get; set; } // Dados PIX do contratado
         public string Observacoes { get; set; } // Observações adicionais
         public string Nome { get; set; }
+
+        public string Contratante { get; set; }
+        public string ContratanteCNPJ { get; set; }
+        public string ContratanteEndereco { get; set; }
+        public string Contratada { get; set; }
+        public string ContratadaCNPJ { get; set; }
+        public string ContratadaEndereco { get; set; }
+
+        public List<string> Clausulas { get; set; }
+
     }
 }

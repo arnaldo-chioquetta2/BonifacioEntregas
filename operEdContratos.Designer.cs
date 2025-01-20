@@ -41,19 +41,23 @@
             this.lblObservacoes = new System.Windows.Forms.Label();
             this.lstClausulas = new System.Windows.Forms.ListBox();
             this.lblClausulas = new System.Windows.Forms.Label();
-            this.txtClausula = new System.Windows.Forms.TextBox();
+            this.txtEditarAdicionar = new System.Windows.Forms.TextBox();
             this.lblEditarClausula = new System.Windows.Forms.Label();
             this.btnAddClausula = new System.Windows.Forms.Button();
             this.btnEditClausula = new System.Windows.Forms.Button();
             this.btnRemoveClausula = new System.Windows.Forms.Button();
             this.btnSalvar = new System.Windows.Forms.Button();
             this.btnCancelar = new System.Windows.Forms.Button();
+            this.lblContratoId = new System.Windows.Forms.Label();
+            this.label1 = new System.Windows.Forms.Label();
+            this.cmbMotoboy = new System.Windows.Forms.ComboBox();
+            this.btnNovoMotoboy = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // txtDescricao
             // 
             this.txtDescricao.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
-            this.txtDescricao.Location = new System.Drawing.Point(140, 20);
+            this.txtDescricao.Location = new System.Drawing.Point(146, 57);
             this.txtDescricao.Name = "txtDescricao";
             this.txtDescricao.Size = new System.Drawing.Size(400, 26);
             this.txtDescricao.TabIndex = 0;
@@ -62,7 +66,7 @@
             // 
             this.lblDescricao.AutoSize = true;
             this.lblDescricao.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
-            this.lblDescricao.Location = new System.Drawing.Point(12, 23);
+            this.lblDescricao.Location = new System.Drawing.Point(18, 60);
             this.lblDescricao.Name = "lblDescricao";
             this.lblDescricao.Size = new System.Drawing.Size(84, 20);
             this.lblDescricao.TabIndex = 1;
@@ -71,7 +75,7 @@
             // txtValor
             // 
             this.txtValor.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
-            this.txtValor.Location = new System.Drawing.Point(140, 60);
+            this.txtValor.Location = new System.Drawing.Point(146, 97);
             this.txtValor.Name = "txtValor";
             this.txtValor.Size = new System.Drawing.Size(200, 26);
             this.txtValor.TabIndex = 2;
@@ -80,7 +84,7 @@
             // 
             this.lblValor.AutoSize = true;
             this.lblValor.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
-            this.lblValor.Location = new System.Drawing.Point(12, 63);
+            this.lblValor.Location = new System.Drawing.Point(18, 100);
             this.lblValor.Name = "lblValor";
             this.lblValor.Size = new System.Drawing.Size(50, 20);
             this.lblValor.TabIndex = 3;
@@ -95,7 +99,7 @@
             "Ativo",
             "Cancelado",
             "Finalizado"});
-            this.cmbStatus.Location = new System.Drawing.Point(140, 100);
+            this.cmbStatus.Location = new System.Drawing.Point(146, 137);
             this.cmbStatus.Name = "cmbStatus";
             this.cmbStatus.Size = new System.Drawing.Size(200, 28);
             this.cmbStatus.TabIndex = 4;
@@ -104,7 +108,7 @@
             // 
             this.lblStatus.AutoSize = true;
             this.lblStatus.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
-            this.lblStatus.Location = new System.Drawing.Point(12, 103);
+            this.lblStatus.Location = new System.Drawing.Point(18, 140);
             this.lblStatus.Name = "lblStatus";
             this.lblStatus.Size = new System.Drawing.Size(60, 20);
             this.lblStatus.TabIndex = 5;
@@ -114,7 +118,7 @@
             // 
             this.dtpInicio.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
             this.dtpInicio.Format = System.Windows.Forms.DateTimePickerFormat.Short;
-            this.dtpInicio.Location = new System.Drawing.Point(140, 140);
+            this.dtpInicio.Location = new System.Drawing.Point(146, 177);
             this.dtpInicio.Name = "dtpInicio";
             this.dtpInicio.Size = new System.Drawing.Size(120, 26);
             this.dtpInicio.TabIndex = 6;
@@ -123,7 +127,7 @@
             // 
             this.dtpFim.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
             this.dtpFim.Format = System.Windows.Forms.DateTimePickerFormat.Short;
-            this.dtpFim.Location = new System.Drawing.Point(300, 140);
+            this.dtpFim.Location = new System.Drawing.Point(306, 177);
             this.dtpFim.Name = "dtpFim";
             this.dtpFim.Size = new System.Drawing.Size(120, 26);
             this.dtpFim.TabIndex = 7;
@@ -132,7 +136,7 @@
             // 
             this.lblPeriodo.AutoSize = true;
             this.lblPeriodo.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
-            this.lblPeriodo.Location = new System.Drawing.Point(12, 143);
+            this.lblPeriodo.Location = new System.Drawing.Point(18, 180);
             this.lblPeriodo.Name = "lblPeriodo";
             this.lblPeriodo.Size = new System.Drawing.Size(67, 20);
             this.lblPeriodo.TabIndex = 8;
@@ -141,7 +145,7 @@
             // txtObservacoes
             // 
             this.txtObservacoes.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
-            this.txtObservacoes.Location = new System.Drawing.Point(140, 177);
+            this.txtObservacoes.Location = new System.Drawing.Point(146, 214);
             this.txtObservacoes.Multiline = true;
             this.txtObservacoes.Name = "txtObservacoes";
             this.txtObservacoes.Size = new System.Drawing.Size(400, 60);
@@ -151,7 +155,7 @@
             // 
             this.lblObservacoes.AutoSize = true;
             this.lblObservacoes.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
-            this.lblObservacoes.Location = new System.Drawing.Point(12, 180);
+            this.lblObservacoes.Location = new System.Drawing.Point(18, 217);
             this.lblObservacoes.Name = "lblObservacoes";
             this.lblObservacoes.Size = new System.Drawing.Size(106, 20);
             this.lblObservacoes.TabIndex = 10;
@@ -162,35 +166,36 @@
             this.lstClausulas.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
             this.lstClausulas.FormattingEnabled = true;
             this.lstClausulas.ItemHeight = 20;
-            this.lstClausulas.Location = new System.Drawing.Point(140, 257);
+            this.lstClausulas.Location = new System.Drawing.Point(146, 294);
             this.lstClausulas.Name = "lstClausulas";
             this.lstClausulas.Size = new System.Drawing.Size(400, 124);
             this.lstClausulas.TabIndex = 11;
+            this.lstClausulas.SelectedIndexChanged += new System.EventHandler(this.lstClausulas_SelectedIndexChanged);
             // 
             // lblClausulas
             // 
             this.lblClausulas.AutoSize = true;
             this.lblClausulas.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
-            this.lblClausulas.Location = new System.Drawing.Point(12, 257);
+            this.lblClausulas.Location = new System.Drawing.Point(18, 294);
             this.lblClausulas.Name = "lblClausulas";
             this.lblClausulas.Size = new System.Drawing.Size(82, 20);
             this.lblClausulas.TabIndex = 12;
             this.lblClausulas.Text = "Cláusulas:";
             // 
-            // txtClausula
+            // txtEditarAdicionar
             // 
-            this.txtClausula.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
-            this.txtClausula.Location = new System.Drawing.Point(143, 426);
-            this.txtClausula.Multiline = true;
-            this.txtClausula.Name = "txtClausula";
-            this.txtClausula.Size = new System.Drawing.Size(400, 60);
-            this.txtClausula.TabIndex = 13;
+            this.txtEditarAdicionar.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
+            this.txtEditarAdicionar.Location = new System.Drawing.Point(149, 463);
+            this.txtEditarAdicionar.Multiline = true;
+            this.txtEditarAdicionar.Name = "txtEditarAdicionar";
+            this.txtEditarAdicionar.Size = new System.Drawing.Size(400, 60);
+            this.txtEditarAdicionar.TabIndex = 13;
             // 
             // lblEditarClausula
             // 
             this.lblEditarClausula.AutoSize = true;
             this.lblEditarClausula.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
-            this.lblEditarClausula.Location = new System.Drawing.Point(15, 426);
+            this.lblEditarClausula.Location = new System.Drawing.Point(21, 463);
             this.lblEditarClausula.Name = "lblEditarClausula";
             this.lblEditarClausula.Size = new System.Drawing.Size(125, 20);
             this.lblEditarClausula.TabIndex = 14;
@@ -199,65 +204,115 @@
             // btnAddClausula
             // 
             this.btnAddClausula.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
-            this.btnAddClausula.Location = new System.Drawing.Point(140, 387);
+            this.btnAddClausula.Location = new System.Drawing.Point(146, 424);
             this.btnAddClausula.Name = "btnAddClausula";
             this.btnAddClausula.Size = new System.Drawing.Size(100, 30);
             this.btnAddClausula.TabIndex = 15;
             this.btnAddClausula.Text = "Adicionar";
             this.btnAddClausula.UseVisualStyleBackColor = true;
+            this.btnAddClausula.Click += new System.EventHandler(this.btnAdicionarClausula_Click);
             // 
             // btnEditClausula
             // 
             this.btnEditClausula.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
-            this.btnEditClausula.Location = new System.Drawing.Point(246, 387);
+            this.btnEditClausula.Location = new System.Drawing.Point(252, 424);
             this.btnEditClausula.Name = "btnEditClausula";
             this.btnEditClausula.Size = new System.Drawing.Size(100, 30);
             this.btnEditClausula.TabIndex = 16;
             this.btnEditClausula.Text = "Editar";
             this.btnEditClausula.UseVisualStyleBackColor = true;
+            this.btnEditClausula.Click += new System.EventHandler(this.btnEditar_Click);
             // 
             // btnRemoveClausula
             // 
             this.btnRemoveClausula.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
-            this.btnRemoveClausula.Location = new System.Drawing.Point(352, 387);
+            this.btnRemoveClausula.Location = new System.Drawing.Point(358, 424);
             this.btnRemoveClausula.Name = "btnRemoveClausula";
             this.btnRemoveClausula.Size = new System.Drawing.Size(100, 30);
             this.btnRemoveClausula.TabIndex = 17;
             this.btnRemoveClausula.Text = "Remover";
             this.btnRemoveClausula.UseVisualStyleBackColor = true;
+            this.btnRemoveClausula.Click += new System.EventHandler(this.btnRemover_Click);
             // 
             // btnSalvar
             // 
             this.btnSalvar.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
-            this.btnSalvar.Location = new System.Drawing.Point(232, 492);
+            this.btnSalvar.Location = new System.Drawing.Point(171, 529);
             this.btnSalvar.Name = "btnSalvar";
             this.btnSalvar.Size = new System.Drawing.Size(100, 30);
             this.btnSalvar.TabIndex = 18;
             this.btnSalvar.Text = "Salvar";
             this.btnSalvar.UseVisualStyleBackColor = true;
+            this.btnSalvar.Click += new System.EventHandler(this.btnAdicionar_Click);
             // 
             // btnCancelar
             // 
             this.btnCancelar.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
-            this.btnCancelar.Location = new System.Drawing.Point(352, 492);
+            this.btnCancelar.Location = new System.Drawing.Point(291, 529);
             this.btnCancelar.Name = "btnCancelar";
             this.btnCancelar.Size = new System.Drawing.Size(100, 30);
             this.btnCancelar.TabIndex = 19;
             this.btnCancelar.Text = "Cancelar";
             this.btnCancelar.UseVisualStyleBackColor = true;
+            this.btnCancelar.Click += new System.EventHandler(this.btnCancelar_Click);
+            // 
+            // lblContratoId
+            // 
+            this.lblContratoId.AutoSize = true;
+            this.lblContratoId.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
+            this.lblContratoId.Location = new System.Drawing.Point(354, 145);
+            this.lblContratoId.Name = "lblContratoId";
+            this.lblContratoId.Size = new System.Drawing.Size(79, 20);
+            this.lblContratoId.TabIndex = 20;
+            this.lblContratoId.Text = "Contrato: ";
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
+            this.label1.Location = new System.Drawing.Point(21, 19);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(93, 20);
+            this.label1.TabIndex = 21;
+            this.label1.Text = "Contratado:";
+            // 
+            // cmbMotoboy
+            // 
+            this.cmbMotoboy.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbMotoboy.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cmbMotoboy.FormattingEnabled = true;
+            this.cmbMotoboy.Location = new System.Drawing.Point(146, 12);
+            this.cmbMotoboy.Name = "cmbMotoboy";
+            this.cmbMotoboy.Size = new System.Drawing.Size(200, 33);
+            this.cmbMotoboy.TabIndex = 22;
+            // 
+            // btnNovoMotoboy
+            // 
+            this.btnNovoMotoboy.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
+            this.btnNovoMotoboy.Location = new System.Drawing.Point(352, 12);
+            this.btnNovoMotoboy.Name = "btnNovoMotoboy";
+            this.btnNovoMotoboy.Size = new System.Drawing.Size(100, 30);
+            this.btnNovoMotoboy.TabIndex = 23;
+            this.btnNovoMotoboy.Text = "Novo";
+            this.btnNovoMotoboy.UseVisualStyleBackColor = true;
+            this.btnNovoMotoboy.Click += new System.EventHandler(this.btnNovoMotoboy_Click);
             // 
             // operEdContratos
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(551, 531);
+            this.ClientSize = new System.Drawing.Size(551, 575);
+            this.Controls.Add(this.btnNovoMotoboy);
+            this.Controls.Add(this.cmbMotoboy);
+            this.Controls.Add(this.label1);
+            this.Controls.Add(this.lblContratoId);
             this.Controls.Add(this.btnCancelar);
             this.Controls.Add(this.btnSalvar);
             this.Controls.Add(this.btnRemoveClausula);
             this.Controls.Add(this.btnEditClausula);
             this.Controls.Add(this.btnAddClausula);
             this.Controls.Add(this.lblEditarClausula);
-            this.Controls.Add(this.txtClausula);
+            this.Controls.Add(this.txtEditarAdicionar);
             this.Controls.Add(this.lblClausulas);
             this.Controls.Add(this.lstClausulas);
             this.Controls.Add(this.lblObservacoes);
@@ -275,6 +330,7 @@
             this.MaximizeBox = false;
             this.Name = "operEdContratos";
             this.Text = "Edição de Contratos";
+            this.Load += new System.EventHandler(this.operEdContratos_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -295,12 +351,16 @@
         private System.Windows.Forms.Label lblObservacoes;
         private System.Windows.Forms.ListBox lstClausulas;
         private System.Windows.Forms.Label lblClausulas;
-        private System.Windows.Forms.TextBox txtClausula;
+        private System.Windows.Forms.TextBox txtEditarAdicionar;
         private System.Windows.Forms.Label lblEditarClausula;
         private System.Windows.Forms.Button btnAddClausula;
         private System.Windows.Forms.Button btnEditClausula;
         private System.Windows.Forms.Button btnRemoveClausula;
         private System.Windows.Forms.Button btnSalvar;
         private System.Windows.Forms.Button btnCancelar;
+        private System.Windows.Forms.Label lblContratoId;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.ComboBox cmbMotoboy;
+        private System.Windows.Forms.Button btnNovoMotoboy;
     }
 }

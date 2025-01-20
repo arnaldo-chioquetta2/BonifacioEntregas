@@ -10,6 +10,10 @@ namespace TeleBonifacio.tb
 
         public string CNH { get; set; }
 
+        public string CPF { get; set; }
+        
+        public string Endereco { get; set; }
+
         public DateTime DataValidadeCNH { get; set; }
 
 

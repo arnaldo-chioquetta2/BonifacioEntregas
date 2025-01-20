@@ -8,6 +8,7 @@ namespace TeleBonifacio
     {
         private tb.Entregador clienteEspecifico;
         private bool txtIdDentro = false;
+        private bool Adicionando = false;
 
         public fCadEntregadores()
         {
@@ -77,6 +78,19 @@ namespace TeleBonifacio
         private void cntrole1_AcaoRealizada_1(object sender, AcaoEventArgs e)
         {
             base.cntrole1_AcaoRealizada(sender, e, clienteEspecifico);
+            if (this.Adicionando)
+            {
+                switch (e.Acao)
+                {
+                    case "OK":
+                        this.DialogResult = DialogResult.OK;
+                        Grava();
+                        //base.reg = DAO.GetUltimo() as tb.Cliente;
+                        //glo.IdAdicionado = base.reg.Id;
+                        //this.Close();
+                        break;
+                }
+            }
         }
 
         private void txtTelefone_KeyPress(object sender, KeyPressEventArgs e)
@@ -100,6 +114,12 @@ namespace TeleBonifacio
         private void txtId_Leave(object sender, EventArgs e)
         {
             this.txtIdDentro = false;
+        }
+
+        public void Adicao()
+        {
+            Adicionando = true;
+            base.Adicionar();
         }
     }
 

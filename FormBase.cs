@@ -511,6 +511,7 @@ namespace TeleBonifacio
                     mensJaTem = DAO.VeSeJaTem(DAO);                    
                 } else
                 {
+                    glo.IdAdicionado = cntrole1.IDAtual;
                     DAO.SetId(cntrole1.IDAtual);
                 }                
                 if (mensJaTem.Length>0)

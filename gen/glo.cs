@@ -69,7 +69,7 @@ namespace TeleBonifacio
         public static DateTime D0 = new DateTime(1, 01, 01).Date;
         public static DateTime D1 = new DateTime(2001, 01, 01).Date;
 
-        #region FormatacaoTela
+        #region Conversões
 
         public static float LeValor(string valorTexto)
         {
@@ -151,14 +151,6 @@ namespace TeleBonifacio
                 .Select(s => s[random.Next(s.Length)]).ToArray());
         }
 
-        public static string GenerateUID()
-        {
-            string dateTimePart = DateTime.Now.ToString("ddMMyyyyHHmmss");
-            int QtdCarac = 20 - dateTimePart.Length;
-            string randomChars = RandomString(QtdCarac);
-            return dateTimePart + randomChars;
-        }
-
         public static string fa(string str)
         {
             return "'" + str + "'";
@@ -174,18 +166,6 @@ namespace TeleBonifacio
         {
             string str = vlr.ToString();
             return str.Replace(",", ".");
-        }
-
-        public static bool IsDateTimeValid(int year, int month, int day)
-        {
-            if (year < DateTime.MinValue.Year || year > DateTime.MaxValue.Year)
-                return false;
-            if (month < 1 || month > 12)
-                return false;
-            if (day < 1 || day > DateTime.DaysInMonth(year, month))
-                return false;
-
-            return true; // A data é válida
         }
 
         public static string ComplStr(string dado, int Tam, int Tipo)
@@ -253,6 +233,30 @@ namespace TeleBonifacio
                 return dado;
             }
         }
+
+        #endregion
+
+        #region FormatacaoTela
+
+        public static string GenerateUID()
+        {
+            string dateTimePart = DateTime.Now.ToString("ddMMyyyyHHmmss");
+            int QtdCarac = 20 - dateTimePart.Length;
+            string randomChars = RandomString(QtdCarac);
+            return dateTimePart + randomChars;
+        }
+
+        public static bool IsDateTimeValid(int year, int month, int day)
+        {
+            if (year < DateTime.MinValue.Year || year > DateTime.MaxValue.Year)
+                return false;
+            if (month < 1 || month > 12)
+                return false;
+            if (day < 1 || day > DateTime.DaysInMonth(year, month))
+                return false;
+
+            return true; // A data é válida
+        }        
 
         #endregion
 

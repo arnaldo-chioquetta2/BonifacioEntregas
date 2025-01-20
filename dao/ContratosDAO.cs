@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Data;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace TeleBonifacio.dao
 {
@@ -57,11 +58,88 @@ namespace TeleBonifacio.dao
             DB.ExecutarComandoSQL(sql);
         }
 
-        // Método para obter um contrato específico pelo ID
-        public DataTable GetContratoById(int idContrato)
+        // Método corrigido em ContratosDAO
+        public tb.Contrato GetContratoById(int idContrato)
         {
             string sql = $"SELECT * FROM Contratos WHERE ID = {idContrato}";
-            return DB.ExecutarConsulta(sql);
+            DataTable dt = DB.ExecutarConsulta(sql);
+
+            if (dt.Rows.Count > 0)
+            {
+                DataRow row = dt.Rows[0];
+                return new tb.Contrato
+                {
+                    Id = Convert.ToInt32(row["ID"]),
+                    Descricao = row["Descricao"]?.ToString(),
+                    IdEntregador = row["idEntregador"] != DBNull.Value ? Convert.ToInt32(row["idEntregador"]) : 0,
+                    Valor = row["Valor"] != DBNull.Value ? Convert.ToDecimal(row["Valor"]) : 0,
+                    Status = row["Status"]?.ToString(),
+                    DataInicio = row["DataInicio"] != DBNull.Value ? Convert.ToDateTime(row["DataInicio"]) : DateTime.MinValue,
+                    DataTermino = row["DataTermino"] != DBNull.Value ? Convert.ToDateTime(row["DataTermino"]) : DateTime.MinValue,
+                    // Pix = row["PIX"]?.ToString(),
+                    Observacoes = row["Observacoes"]?.ToString()
+                };
+            }
+
+            return null; // Contrato não encontrado
         }
+
+        public int GetNextContratoId()
+        {
+            string query = "SELECT MAX(ID) AS MaxId FROM Contratos";
+            DataTable dt = DB.ExecutarConsulta(query);
+
+            if (dt.Rows.Count > 0 && dt.Rows[0]["MaxId"] != DBNull.Value)
+            {
+                return Convert.ToInt32(dt.Rows[0]["MaxId"]) + 1;
+            }
+            return 1; // Caso não haja registros, retorna 1 como primeiro ID
+        }
+
+        public tb.Contrato GetContratoCompleto(int idContrato)
+        {
+            string sqlContrato = $"SELECT * FROM Contratos WHERE ID = {idContrato}";
+            DataTable dtContrato = DB.ExecutarConsulta(sqlContrato);
+
+            if (dtContrato.Rows.Count > 0)
+            {
+                ConfigDAO config = new ConfigDAO();
+                config.CarregarDados();
+
+                int idEntregador = Convert.ToInt32(dtContrato.Rows[0]["idEntregador"]);
+                EntregadorDAO entregadorDAO = new EntregadorDAO();
+                tb.Entregador entregador = (tb.Entregador)entregadorDAO.GetPeloID(idEntregador.ToString());
+
+                tb.Contrato contrato = new tb.Contrato
+                {
+                    Id = Convert.ToInt32(dtContrato.Rows[0]["ID"]),
+                    Contratante = config.GetEmpresa(),
+                    ContratanteCNPJ = config.GetCNPJ(),
+                    ContratanteEndereco = config.GetEndereco(),
+                    Contratada = dtContrato.Rows[0]["Descricao"].ToString()
+                };
+
+                if (entregador != null)
+                {
+                    contrato.ContratadaCNPJ = entregador.CPF; // Assume que o CPF está armazenado no campo ContratadaCNPJ
+                    contrato.ContratadaEndereco = entregador.Endereco; // Endereço do entregador
+                }
+                else
+                {
+                    contrato.ContratadaCNPJ = "Não informado";
+                    contrato.ContratadaEndereco = "Não informado";
+                }
+
+                // Buscar cláusulas associadas ao contrato
+                string sqlClausulas = $"SELECT Descricao FROM Clausulas WHERE idContrato = {idContrato}";
+                DataTable dtClausulas = DB.ExecutarConsulta(sqlClausulas);
+                contrato.Clausulas = dtClausulas.AsEnumerable().Select(r => r["Descricao"].ToString()).ToList();
+                return contrato;
+            }
+
+            return null;
+        }
+
+
     }
 }

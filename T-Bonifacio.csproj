@@ -159,6 +159,7 @@
     </Compile>
     <Compile Include="dao\BaseDAO.cs" />
     <Compile Include="dao\CaixaDao.cs" />
+    <Compile Include="dao\ClausulasDAO.cs" />
     <Compile Include="dao\ClienteDAO.cs" />
     <Compile Include="dao\ConfigDAO.cs" />
     <Compile Include="dao\ContasAPagarDao.cs" />
@@ -326,6 +327,7 @@
     <Compile Include="rel\Caixa.designer.cs">
       <DependentUpon>Caixa.cs</DependentUpon>
     </Compile>
+    <Compile Include="rel\ContratoPrinter.cs" />
     <Compile Include="rel\Extrato.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -527,5 +529,6 @@
     <Content Include="dashboard.ico" />
     <None Include="Resources\%24this.Icon.ico" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

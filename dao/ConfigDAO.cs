@@ -41,7 +41,7 @@ namespace TeleBonifacio.dao
             }
         }
 
-        private void CarregarDados()
+        public void CarregarDados()
         {
             if (!dadosCarregados)
             {
