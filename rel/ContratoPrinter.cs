@@ -70,39 +70,44 @@ namespace TeleBonifacio.rel
                 Console.WriteLine("Nenhuma cláusula disponível.");
             }
         }
-
         private void PrintPageHandler(object sender, PrintPageEventArgs e)
         {
             Graphics g = e.Graphics;
             Font headerFont = new Font("Arial", 14, FontStyle.Bold);
             Font bodyFont = new Font("Arial", 12);
+            Font titleFont = new Font("Arial", 12, FontStyle.Bold);
             Brush brush = Brushes.Black;
-            Font boldBodyFont = new Font("Arial", 12, FontStyle.Bold);
+            Brush backgroundBrush = Brushes.Gray; // Escurecer o fundo
             float y = 50;
 
-            // Título
+            // Título geral
             g.DrawString("INSTRUMENTO PARTICULAR DE PRESTAÇÃO DE SERVIÇOS E OUTRAS AVENÇAS", headerFont, brush, new RectangleF(50, y, e.PageBounds.Width - 100, 50));
             y += 60;
 
-            // Contratante
-            g.DrawString("CONTRATANTE:", headerFont, brush, 50, y);
-            y += 30;
-            g.DrawString($"Nome: {contratante}", bodyFont, brush, 50, y);
-            y += 20;
-            g.DrawString($"CNPJ: {contratanteCNPJ}", bodyFont, brush, 50, y);
-            y += 20;
-            g.DrawString($"Endereço: {contratanteEndereco}", bodyFont, brush, 50, y);
-            y += 40;
+            // Texto introdutório
+            string textoIntro = "Por este instrumento particular (o 'Contrato'), a CONTRATANTE e a CONTRATADA, ambas identificadas no Quadro Resumo a seguir (em conjunto, as 'Partes' e, individualmente, uma 'Parte'), têm entre si, justo e contratado, a prestação de serviços identificada no presente contrato pelas seguintes cláusulas e condições:";
+            g.DrawString(textoIntro, bodyFont, brush, new RectangleF(50, y, e.PageBounds.Width - 100, 80));
+            y += 90;
 
-            // Contratada
-            g.DrawString("CONTRATADA:", headerFont, brush, 50, y);
+            // Caixa Contratante
+            g.FillRectangle(backgroundBrush, 50, y, e.PageBounds.Width - 100, 25); // Fundo escuro
+            g.DrawString("CONTRATANTE:", titleFont, Brushes.White, 55, y + 5); // Título em branco sobre fundo escuro
             y += 30;
-            g.DrawString($"Nome: {contratada}", bodyFont, brush, 50, y);
-            y += 20;
-            g.DrawString($"CNPJ/CPF: {contratadaCNPJ}", bodyFont, brush, 50, y);
-            y += 20;
-            g.DrawString($"Endereço: {contratadaEndereco}", bodyFont, brush, 50, y);
-            y += 40;
+            g.DrawRectangle(Pens.Black, 50, y, e.PageBounds.Width - 100, 70); // Borda
+            g.DrawString($"Nome: {contratante}", bodyFont, brush, 55, y + 5);
+            g.DrawString($"CNPJ: {contratanteCNPJ}", bodyFont, brush, 55, y + 25);
+            g.DrawString($"Endereço: {contratanteEndereco}", bodyFont, brush, 55, y + 45);
+            y += 80;
+
+            // Caixa Contratada
+            g.FillRectangle(backgroundBrush, 50, y, e.PageBounds.Width - 100, 25); // Fundo escuro
+            g.DrawString("CONTRATADA:", titleFont, Brushes.White, 55, y + 5); // Título em branco sobre fundo escuro
+            y += 30;
+            g.DrawRectangle(Pens.Black, 50, y, e.PageBounds.Width - 100, 70); // Borda
+            g.DrawString($"Nome: {contratada}", bodyFont, brush, 55, y + 5);
+            g.DrawString($"CNPJ/CPF: {contratadaCNPJ}", bodyFont, brush, 55, y + 25);
+            g.DrawString($"Endereço: {contratadaEndereco}", bodyFont, brush, 55, y + 45);
+            y += 80;
 
             // Cláusulas
             g.DrawString("Cláusulas do Contrato:", headerFont, brush, 50, y);
@@ -110,8 +115,7 @@ namespace TeleBonifacio.rel
             int clausulaNumero = 1;
             foreach (string clausula in clausulas)
             {
-                g.DrawString($"Cláusula {clausulaNumero}: ", boldBodyFont, brush, 50, y); // Cláusula em negrito
-                g.DrawString(clausula, bodyFont, brush, 150, y); // Descrição da cláusula
+                g.DrawString($"Cláusula {clausulaNumero}: {clausula}", bodyFont, brush, 55, y);
                 y += 20;
                 clausulaNumero++;
             }
