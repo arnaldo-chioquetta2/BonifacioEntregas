@@ -70,14 +70,16 @@ namespace TeleBonifacio.rel
                 Console.WriteLine("Nenhuma cláusula disponível.");
             }
         }
+
         private void PrintPageHandler(object sender, PrintPageEventArgs e)
         {
             Graphics g = e.Graphics;
             Font headerFont = new Font("Arial", 14, FontStyle.Bold);
             Font bodyFont = new Font("Arial", 12);
+            Font boldBodyFont = new Font("Arial", 12, FontStyle.Bold);
             Font titleFont = new Font("Arial", 12, FontStyle.Bold);
             Brush brush = Brushes.Black;
-            Brush backgroundBrush = Brushes.Gray; // Escurecer o fundo
+            Brush backgroundBrush = Brushes.Gray;
             float y = 50;
 
             // Título geral
@@ -90,20 +92,20 @@ namespace TeleBonifacio.rel
             y += 90;
 
             // Caixa Contratante
-            g.FillRectangle(backgroundBrush, 50, y, e.PageBounds.Width - 100, 25); // Fundo escuro
-            g.DrawString("CONTRATANTE:", titleFont, Brushes.White, 55, y + 5); // Título em branco sobre fundo escuro
+            g.FillRectangle(backgroundBrush, 50, y, e.PageBounds.Width - 100, 25);
+            g.DrawString("CONTRATANTE:", titleFont, Brushes.White, 55, y + 5);
             y += 30;
-            g.DrawRectangle(Pens.Black, 50, y, e.PageBounds.Width - 100, 70); // Borda
+            g.DrawRectangle(Pens.Black, 50, y, e.PageBounds.Width - 100, 70);
             g.DrawString($"Nome: {contratante}", bodyFont, brush, 55, y + 5);
             g.DrawString($"CNPJ: {contratanteCNPJ}", bodyFont, brush, 55, y + 25);
             g.DrawString($"Endereço: {contratanteEndereco}", bodyFont, brush, 55, y + 45);
             y += 80;
 
             // Caixa Contratada
-            g.FillRectangle(backgroundBrush, 50, y, e.PageBounds.Width - 100, 25); // Fundo escuro
-            g.DrawString("CONTRATADA:", titleFont, Brushes.White, 55, y + 5); // Título em branco sobre fundo escuro
+            g.FillRectangle(backgroundBrush, 50, y, e.PageBounds.Width - 100, 25);
+            g.DrawString("CONTRATADA:", titleFont, Brushes.White, 55, y + 5);
             y += 30;
-            g.DrawRectangle(Pens.Black, 50, y, e.PageBounds.Width - 100, 70); // Borda
+            g.DrawRectangle(Pens.Black, 50, y, e.PageBounds.Width - 100, 70);
             g.DrawString($"Nome: {contratada}", bodyFont, brush, 55, y + 5);
             g.DrawString($"CNPJ/CPF: {contratadaCNPJ}", bodyFont, brush, 55, y + 25);
             g.DrawString($"Endereço: {contratadaEndereco}", bodyFont, brush, 55, y + 45);
@@ -112,18 +114,41 @@ namespace TeleBonifacio.rel
             // Cláusulas
             g.DrawString("Cláusulas do Contrato:", headerFont, brush, 50, y);
             y += 30;
-            int clausulaNumero = 1;
+
             foreach (string clausula in clausulas)
             {
-                g.DrawString($"Cláusula {clausulaNumero}: {clausula}", bodyFont, brush, 55, y);
-                y += 20;
-                clausulaNumero++;
+                if (clausula.TrimStart().StartsWith("Cláusula", StringComparison.OrdinalIgnoreCase))
+                {
+                    // Extrai a palavra "Cláusula" e o restante do texto
+                    string[] partes = clausula.Split(new[] { ' ' }, 2); // Divide o texto após a palavra "Cláusula"
+                    string palavraNegrito = partes[0];
+                    string restanteTexto = partes.Length > 1 ? partes[1] : "";
+
+                    // Calcula a posição inicial para o texto regular
+                    SizeF tamanhoPalavraNegrito = g.MeasureString(palavraNegrito + " ", boldBodyFont);
+
+                    // Desenha a palavra "Cláusula" em negrito
+                    g.DrawString(palavraNegrito, boldBodyFont, brush, 55, y);
+
+                    // Desenha o restante do texto em fonte regular
+                    g.DrawString(restanteTexto, bodyFont, brush, 55 + tamanhoPalavraNegrito.Width, y);
+                }
+                else
+                {
+                    // Desenha linhas que não começam com "Cláusula" normalmente
+                    g.DrawString(clausula, bodyFont, brush, 55, y);
+                }
+
+                // Calcula a altura do texto e ajusta a posição vertical
+                SizeF clausulaSize = g.MeasureString(clausula, bodyFont, e.PageBounds.Width - 100);
+                y += clausulaSize.Height + 5; // Adiciona um pequeno espaçamento entre as cláusulas
             }
 
+            // Adiciona espaço extra após todas as cláusulas
             y += 40;
 
             // Linhas de Assinatura
-            float signatureLineY = y; // Posição vertical das linhas de assinatura
+            float signatureLineY = y; // Posição vertical ajustada dinamicamente
             float firstSignatureX = 50; // Posição horizontal inicial da linha de assinatura do Contratante
             float secondSignatureX = e.PageBounds.Width - 400; // Posição horizontal inicial da linha de assinatura do Contratada
 
@@ -138,7 +163,10 @@ namespace TeleBonifacio.rel
             g.DrawString("Assinatura Contratada", bodyFont, brush, secondSignatureX + (signatureWidth / 4), signatureLineY + 10);
 
             e.HasMorePages = false;
+
         }
+
 
     }
 }
+

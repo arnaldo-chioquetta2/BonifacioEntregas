@@ -140,6 +140,30 @@ namespace TeleBonifacio.dao
             return null;
         }
 
+        public DataTable GetFilteredContratos(string filtroDescricao = "", string filtroStatus = "Todos", DateTime? inicio = null, DateTime? fim = null)
+        {
+            string sql = "SELECT * FROM Contratos WHERE 1=1";
+
+            if (!string.IsNullOrWhiteSpace(filtroDescricao))
+            {
+                sql += $" AND Descricao LIKE '%{filtroDescricao}%'";
+            }
+
+            if (filtroStatus != "Todos")
+            {
+                sql += $" AND Status = '{filtroStatus}'";
+            }
+
+            if (inicio.HasValue && fim.HasValue)
+            {
+                sql += $" AND DataInicio <= '{fim.Value:yyyy-MM-dd}' AND DataTermino >= '{inicio.Value:yyyy-MM-dd}'";
+            }
+
+            sql += " ORDER BY ID DESC";
+
+            return DB.ExecutarConsulta(sql);
+        }
+
 
     }
 }

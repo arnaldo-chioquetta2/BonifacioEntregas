@@ -52,6 +52,7 @@
             this.label1 = new System.Windows.Forms.Label();
             this.cmbMotoboy = new System.Windows.Forms.ComboBox();
             this.btnNovoMotoboy = new System.Windows.Forms.Button();
+            this.btnImprimir = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // txtDescricao
@@ -59,7 +60,7 @@
             this.txtDescricao.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
             this.txtDescricao.Location = new System.Drawing.Point(146, 57);
             this.txtDescricao.Name = "txtDescricao";
-            this.txtDescricao.Size = new System.Drawing.Size(400, 26);
+            this.txtDescricao.Size = new System.Drawing.Size(459, 26);
             this.txtDescricao.TabIndex = 0;
             // 
             // lblDescricao
@@ -148,7 +149,7 @@
             this.txtObservacoes.Location = new System.Drawing.Point(146, 214);
             this.txtObservacoes.Multiline = true;
             this.txtObservacoes.Name = "txtObservacoes";
-            this.txtObservacoes.Size = new System.Drawing.Size(400, 60);
+            this.txtObservacoes.Size = new System.Drawing.Size(459, 60);
             this.txtObservacoes.TabIndex = 9;
             // 
             // lblObservacoes
@@ -168,7 +169,7 @@
             this.lstClausulas.ItemHeight = 20;
             this.lstClausulas.Location = new System.Drawing.Point(146, 294);
             this.lstClausulas.Name = "lstClausulas";
-            this.lstClausulas.Size = new System.Drawing.Size(400, 124);
+            this.lstClausulas.Size = new System.Drawing.Size(459, 124);
             this.lstClausulas.TabIndex = 11;
             this.lstClausulas.SelectedIndexChanged += new System.EventHandler(this.lstClausulas_SelectedIndexChanged);
             // 
@@ -188,7 +189,7 @@
             this.txtEditarAdicionar.Location = new System.Drawing.Point(149, 463);
             this.txtEditarAdicionar.Multiline = true;
             this.txtEditarAdicionar.Name = "txtEditarAdicionar";
-            this.txtEditarAdicionar.Size = new System.Drawing.Size(400, 60);
+            this.txtEditarAdicionar.Size = new System.Drawing.Size(456, 122);
             this.txtEditarAdicionar.TabIndex = 13;
             // 
             // lblEditarClausula
@@ -226,7 +227,7 @@
             // btnRemoveClausula
             // 
             this.btnRemoveClausula.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
-            this.btnRemoveClausula.Location = new System.Drawing.Point(358, 424);
+            this.btnRemoveClausula.Location = new System.Drawing.Point(361, 424);
             this.btnRemoveClausula.Name = "btnRemoveClausula";
             this.btnRemoveClausula.Size = new System.Drawing.Size(100, 30);
             this.btnRemoveClausula.TabIndex = 17;
@@ -237,7 +238,7 @@
             // btnSalvar
             // 
             this.btnSalvar.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
-            this.btnSalvar.Location = new System.Drawing.Point(171, 529);
+            this.btnSalvar.Location = new System.Drawing.Point(149, 591);
             this.btnSalvar.Name = "btnSalvar";
             this.btnSalvar.Size = new System.Drawing.Size(100, 30);
             this.btnSalvar.TabIndex = 18;
@@ -248,7 +249,7 @@
             // btnCancelar
             // 
             this.btnCancelar.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
-            this.btnCancelar.Location = new System.Drawing.Point(291, 529);
+            this.btnCancelar.Location = new System.Drawing.Point(361, 591);
             this.btnCancelar.Name = "btnCancelar";
             this.btnCancelar.Size = new System.Drawing.Size(100, 30);
             this.btnCancelar.TabIndex = 19;
@@ -297,11 +298,23 @@
             this.btnNovoMotoboy.UseVisualStyleBackColor = true;
             this.btnNovoMotoboy.Click += new System.EventHandler(this.btnNovoMotoboy_Click);
             // 
+            // btnImprimir
+            // 
+            this.btnImprimir.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
+            this.btnImprimir.Location = new System.Drawing.Point(255, 591);
+            this.btnImprimir.Name = "btnImprimir";
+            this.btnImprimir.Size = new System.Drawing.Size(100, 30);
+            this.btnImprimir.TabIndex = 24;
+            this.btnImprimir.Text = "Imprimir";
+            this.btnImprimir.UseVisualStyleBackColor = true;
+            this.btnImprimir.Click += new System.EventHandler(this.btnImprimir_Click);
+            // 
             // operEdContratos
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(551, 575);
+            this.ClientSize = new System.Drawing.Size(617, 633);
+            this.Controls.Add(this.btnImprimir);
             this.Controls.Add(this.btnNovoMotoboy);
             this.Controls.Add(this.cmbMotoboy);
             this.Controls.Add(this.label1);
@@ -362,5 +375,6 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.ComboBox cmbMotoboy;
         private System.Windows.Forms.Button btnNovoMotoboy;
+        private System.Windows.Forms.Button btnImprimir;
     }
 }

@@ -404,6 +404,22 @@ namespace TeleBonifacio
                 }
             }
         }
+
+        private void btnImprimir_Click(object sender, EventArgs e)
+        {
+            tb.Contrato contrato = contratosDAO.GetContratoCompleto(contratoId);
+            rel.ContratoPrinter printer = new rel.ContratoPrinter(
+                contrato.Contratante,
+                contrato.ContratanteCNPJ,
+                contrato.ContratanteEndereco,
+                contrato.Contratada,
+                contrato.ContratadaCNPJ,
+                contrato.ContratadaEndereco,
+                contrato.Clausulas.ToArray() // Converte List<string> para string[]
+            );
+            printer.Imprimir();
+
+        }
     }
 
 }
