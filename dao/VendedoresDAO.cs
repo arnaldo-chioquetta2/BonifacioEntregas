@@ -85,8 +85,19 @@ namespace TeleBonifacio.dao
             int filhoComDeficiencia = vendedor.FilhoComDeficiencia ? 1 : 0;
             if (vendedor.Adicao)
             {
+
                 query = $"INSERT INTO Vendedores (Nome, Loja, Atende, Nro, Usuario, Senha, Nivel, DataNascimento, DataAdmissao, Salario, HorarioSemanaInicio, HorarioSemanaFim, HorarioSabadoInicio, HorarioSabadoFim, FormaPagamento, ValeAlimentacao, ValeTransporte, LinhaOnibus, DataDemissao, MotivoDemissao, RG, CPF, Cargo, FoneEmergencia, QtdFilhosMenor14, FilhoComDeficiencia, CTPS, Fone, Amigo, HSSaiMan, HSIniTrd, HFSaiMan, HFIniTrd) " +
-                        $"VALUES ('{vendedor.Nome}', '{vendedor.Loja}', {iAtende}, '{vendedor.Nro}', '{vendedor.Usuario}', '{sCript}', {vendedor.Nivel}, '{vendedor.DataNascimento:yyyy-MM-dd}', '{vendedor.DataAdmissao:yyyy-MM-dd}', {formattedSalary}, '{vendedor.HorarioSemanaInicio}', '{vendedor.HorarioSemanaFim}', '{vendedor.HorarioSabadoInicio}', '{vendedor.HorarioSabadoFim}', '{vendedor.FormaPagamento}', {valeAlimentacao}, {valeTransporte}, '{vendedor.LinhaOnibus}', '{vendedor.DataDemissao:yyyy-MM-dd}', '{vendedor.MotivoDemissao}', '{vendedor.RG}', '{vendedor.CPF}', '{vendedor.Cargo}', '{vendedor.FoneEmergencia}', {vendedor.QtdFilhosMenor14}, {filhoComDeficiencia}, '{vendedor.CTPS}', '{vendedor.Fone}', '{vendedor.Amigo}', , '{vendedor.HSSaiMan}', '{vendedor.HSIniTrd}', '{vendedor.HFSaiMan}', '{vendedor.HFIniTrd}') ";
+                        $"VALUES ('{vendedor.Nome}', '{vendedor.Loja}', {iAtende}, '{vendedor.Nro}', '{vendedor.Usuario}', '{sCript}', {vendedor.Nivel}, " +
+                        $"'{vendedor.DataNascimento:yyyy-MM-dd}', '{vendedor.DataAdmissao:yyyy-MM-dd}', {formattedSalary}, " +
+                        $"'{vendedor.HorarioSemanaInicio}', '{vendedor.HorarioSemanaFim}', '{vendedor.HorarioSabadoInicio}', '{vendedor.HorarioSabadoFim}', " +
+                        $"'{vendedor.FormaPagamento}', {valeAlimentacao}, {valeTransporte}, '{vendedor.LinhaOnibus}', " +
+                        $"'{vendedor.DataDemissao:yyyy-MM-dd}', '{vendedor.MotivoDemissao}', '{vendedor.RG}', '{vendedor.CPF}', " +
+                        $"'{vendedor.Cargo}', '{vendedor.FoneEmergencia}', {vendedor.QtdFilhosMenor14}, {filhoComDeficiencia}, '{vendedor.CTPS}', " +
+                        $"'{vendedor.Fone}', '{vendedor.Amigo}', '{vendedor.HSSaiMan}', '{vendedor.HSIniTrd}', '{vendedor.HFSaiMan}', '{vendedor.HFIniTrd}')";
+
+                //query = $"INSERT INTO Vendedores (Nome, Loja, Atende, Nro, Usuario, Senha, Nivel, DataNascimento, DataAdmissao, Salario, HorarioSemanaInicio, HorarioSemanaFim, HorarioSabadoInicio, HorarioSabadoFim, FormaPagamento, ValeAlimentacao, ValeTransporte, LinhaOnibus, DataDemissao, MotivoDemissao, RG, CPF, Cargo, FoneEmergencia, QtdFilhosMenor14, FilhoComDeficiencia, CTPS, Fone, Amigo, HSSaiMan, HSIniTrd, HFSaiMan, HFIniTrd) " +
+                //        $"VALUES ('{vendedor.Nome}', '{vendedor.Loja}', {iAtende}, '{vendedor.Nro}', '{vendedor.Usuario}', '{sCript}', {vendedor.Nivel}, '{vendedor.DataNascimento:yyyy-MM-dd}', '{vendedor.DataAdmissao:yyyy-MM-dd}', {formattedSalary}, '{vendedor.HorarioSemanaInicio}', '{vendedor.HorarioSemanaFim}', '{vendedor.HorarioSabadoInicio}', '{vendedor.HorarioSabadoFim}', '{vendedor.FormaPagamento}', {valeAlimentacao}, {valeTransporte}, '{vendedor.LinhaOnibus}', '{vendedor.DataDemissao:yyyy-MM-dd}', '{vendedor.MotivoDemissao}', '{vendedor.RG}', '{vendedor.CPF}', '{vendedor.Cargo}', '{vendedor.FoneEmergencia}', {vendedor.QtdFilhosMenor14}, {filhoComDeficiencia}, '{vendedor.CTPS}', '{vendedor.Fone}', '{vendedor.Amigo}', , '{vendedor.HSSaiMan}', '{vendedor.HSIniTrd}', '{vendedor.HFSaiMan}', '{vendedor.HFIniTrd}') ";
+
             }
             else
             {

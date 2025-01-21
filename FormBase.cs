@@ -16,10 +16,17 @@ namespace TeleBonifacio
     {
 
         protected int Direcao = 0;
-        protected bool EmAdicao = false;
+        
         protected bool Mostrando = false;
         protected bool Pesquisando = false;
         protected dao.BaseDAO _dao;
+        protected tb.IDataEntity reg;
+        private List<CampoTagInfo> tagsDosCampos;
+        private System.Windows.Forms.DataGrid dataGrid = null;
+        private bool GridCarregada = false;
+        private bool AdicaoPorfora = false;
+        private List<string> listCombo;
+
         public dao.BaseDAO DAO
         {
             get { return _dao; }
@@ -28,12 +35,16 @@ namespace TeleBonifacio
                 _dao = value;
             }
         }
-        protected tb.IDataEntity reg;
-        private List<CampoTagInfo> tagsDosCampos;
-        private System.Windows.Forms.DataGrid dataGrid = null;
-        private bool GridCarregada = false;
-        private bool AdicaoPorfora = false;
-        private List<string> listCombo;
+
+        private bool _EmAdicao = false;
+        protected bool EmAdicao
+        {
+            get { return _EmAdicao; }
+            set
+            {
+                _EmAdicao = value;
+            }
+        }
 
         public FormBase()
         {
