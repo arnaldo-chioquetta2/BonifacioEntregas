@@ -23,6 +23,9 @@ namespace TeleBonifacio.dao
 
         public string CNPJ { get; set; }
 
+        public string CNPJEmpresa { get; set; } 
+
+
         private int Linhas;
 
         public EntregadorDAO()

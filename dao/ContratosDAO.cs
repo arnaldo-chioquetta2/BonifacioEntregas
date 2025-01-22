@@ -123,11 +123,17 @@ namespace TeleBonifacio.dao
                 {
                     contrato.ContratadaCNPJ = entregador.CPF; // Assume que o CPF está armazenado no campo ContratadaCNPJ
                     contrato.ContratadaEndereco = entregador.Endereco; // Endereço do entregador
+
+                    // Adicionando campos NomeEmpresa e CNPJEmpresa
+                    contrato.NomeEmpresa = entregador.NomeEmpresa; // Nome da empresa do entregador
+                    contrato.CNPJEmpresa = entregador.CNPJ; // CNPJ da empresa do entregador
                 }
                 else
                 {
                     contrato.ContratadaCNPJ = "Não informado";
                     contrato.ContratadaEndereco = "Não informado";
+                    contrato.NomeEmpresa = "Não informado";
+                    contrato.CNPJEmpresa = "Não informado";
                 }
 
                 // Buscar cláusulas associadas ao contrato
@@ -139,6 +145,7 @@ namespace TeleBonifacio.dao
 
             return null;
         }
+
 
         public DataTable GetFilteredContratos(string filtroDescricao = "", string filtroStatus = "Todos", DateTime? inicio = null, DateTime? fim = null)
         {

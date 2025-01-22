@@ -415,11 +415,14 @@ namespace TeleBonifacio
                 contrato.Contratada,
                 contrato.ContratadaCNPJ,
                 contrato.ContratadaEndereco,
+                contrato.NomeEmpresa, // Adicione este campo
+                contrato.CNPJEmpresa, // Adicione este campo
                 contrato.Clausulas.ToArray() // Converte List<string> para string[]
             );
             printer.Imprimir();
-
         }
+
+
     }
 
 }

@@ -109,8 +109,8 @@ namespace TeleBonifacio
 
         private void btnImprimir_Click(object sender, EventArgs e)
         {
-            int idContratoSelecionado = Convert.ToInt32(dgvContratos.SelectedRows[0].Cells["ID"].Value);
-            tb.Contrato contrato = contratosDAO.GetContratoCompleto(idContratoSelecionado);
+            int contratoId = Convert.ToInt32(dgvContratos.SelectedRows[0].Cells["ID"].Value);
+            tb.Contrato contrato = contratosDAO.GetContratoCompleto(contratoId);
             rel.ContratoPrinter printer = new rel.ContratoPrinter(
                 contrato.Contratante,
                 contrato.ContratanteCNPJ,
@@ -118,6 +118,8 @@ namespace TeleBonifacio
                 contrato.Contratada,
                 contrato.ContratadaCNPJ,
                 contrato.ContratadaEndereco,
+                contrato.NomeEmpresa, // Adicione este campo
+                contrato.CNPJEmpresa, // Adicione este campo
                 contrato.Clausulas.ToArray() // Converte List<string> para string[]
             );
             printer.Imprimir();
