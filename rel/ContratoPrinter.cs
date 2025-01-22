@@ -73,6 +73,7 @@ namespace TeleBonifacio.rel
 
         private void PrintPageHandler(object sender, PrintPageEventArgs e)
         {
+            // REFATORAÇÃO DEU ERRADO EM 21/01/25
             Graphics g = e.Graphics;
             Font headerFont = new Font("Arial", 14, FontStyle.Bold);
             Font bodyFont = new Font("Arial", 12);

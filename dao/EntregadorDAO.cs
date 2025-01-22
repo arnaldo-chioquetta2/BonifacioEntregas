@@ -19,6 +19,10 @@ namespace TeleBonifacio.dao
 
         public DateTime DataValidadeCNH { get; set; }
 
+        public string NomeEmpresa { get; set; }
+
+        public string CNPJ { get; set; }
+
         private int Linhas;
 
         public EntregadorDAO()
@@ -33,12 +37,12 @@ namespace TeleBonifacio.dao
             List<OleDbParameter> parameters;
             if (entregador.Adicao)
             {
-                query = "INSERT INTO Mecanicos (codi, Oper, Nome, Telefone, CNH, DataValidadeCNH, CPF, Endereco) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+                query = "INSERT INTO Mecanicos (codi, Oper, Nome, Telefone, CNH, DataValidadeCNH, CPF, Endereco, NomeEmpresa, CNPj) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
                 parameters = ConstruirParametrosEntregador(entregador, true);
             }
             else
             {
-                query = "UPDATE Mecanicos SET Nome = ?, Telefone = ?, CNH = ?, DataValidadeCNH = ?, CPF = ?, Endereco = ? WHERE codi = ?";
+                query = "UPDATE Mecanicos SET Nome = ?, Telefone = ?, CNH = ?, DataValidadeCNH = ?, CPF = ?, Endereco = ?, NomeEmpresa = ?, CNPj = ? WHERE codi = ?";
                 parameters = ConstruirParametrosEntregador(entregador, false);
             }
 
@@ -66,7 +70,9 @@ namespace TeleBonifacio.dao
                 new OleDbParameter("@CNH", entregador.CNH),
                 new OleDbParameter("@DataValidadeCNH", entregador.DataValidadeCNH),                
                 new OleDbParameter("@CPF", entregador.CPF),
-                new OleDbParameter("@Endereco", entregador.Endereco)
+                new OleDbParameter("@Endereco", entregador.Endereco),
+                new OleDbParameter("@NomeEmpresa", entregador.NomeEmpresa),
+                new OleDbParameter("@CNPJ", entregador.CNPJ)
             };
             if (inserindo)
             {
@@ -147,7 +153,9 @@ namespace TeleBonifacio.dao
                 CNH = CNH,
                 CPF = CPF,
                 Endereco = Endereco,
-                DataValidadeCNH = DataValidadeCNH
+                DataValidadeCNH = DataValidadeCNH,
+                NomeEmpresa = NomeEmpresa,
+                CNPJ = CNPJ
             };
 
         }
@@ -188,7 +196,7 @@ namespace TeleBonifacio.dao
                                 Telefone = reader["Telefone"].ToString();
                                 CNH = reader["CNH"].ToString();
                                 CPF = reader["CPF"].ToString();
-                                Endereco = reader["Endereco"].ToString();                                
+                                Endereco = reader["Endereco"].ToString(); 
                                 if (reader["DataValidadeCNH"] != DBNull.Value)
                                 {
                                     DataValidadeCNH = Convert.ToDateTime(reader["DataValidadeCNH"]);
@@ -197,6 +205,8 @@ namespace TeleBonifacio.dao
                                 {
                                     DataValidadeCNH = DateTime.MinValue;
                                 }
+                                NomeEmpresa = reader["NomeEmpresa"].ToString();
+                                CNPJ = reader["CNPJ"].ToString();
                                 return (tb.Entregador)GetEsse();
                             }
                         }
@@ -238,6 +248,8 @@ namespace TeleBonifacio.dao
                             dataTable.Columns.Add("Nome", typeof(string));
                             dataTable.Columns.Add("Telefone", typeof(string));
                             dataTable.Columns.Add("CNH", typeof(string));
+                            dataTable.Columns.Add("NomeEmpresa", typeof(string));
+                            dataTable.Columns.Add("CNPJ", typeof(string));                                                        
                             while (reader.Read())
                             {
                                 DataRow row = dataTable.NewRow();
@@ -245,6 +257,8 @@ namespace TeleBonifacio.dao
                                 row["Nome"] = reader["Nome"];
                                 row["Telefone"] = reader["Telefone"];
                                 row["CNH"] = reader["CNH"];
+                                row["NomeEmpresa"] = reader["NomeEmpresa"];
+                                row["CNPJ"] = reader["CNPJ"];
                                 dataTable.Rows.Add(row);
                             }
                             return dataTable;

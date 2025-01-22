@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using System.Windows.Forms;
 
@@ -19,11 +21,6 @@ namespace TeleBonifacio
             base.Mostra();
             base.LerTagsDosCamposDeTexto();
             rt.AdjustFormComponents(this);
-        }
-
-        private void cntrole1_Load(object sender, EventArgs e)
-        {
-
         }
 
         private void Teclou(object sender, KeyEventArgs e)
@@ -78,19 +75,104 @@ namespace TeleBonifacio
         private void cntrole1_AcaoRealizada_1(object sender, AcaoEventArgs e)
         {
             base.cntrole1_AcaoRealizada(sender, e, clienteEspecifico);
-            if (this.Adicionando)
+
+            switch (e.Acao)
             {
-                switch (e.Acao)
-                {
-                    case "OK":
-                        this.DialogResult = DialogResult.OK;
-                        Grava();
-                        //base.reg = DAO.GetUltimo() as tb.Cliente;
-                        //glo.IdAdicionado = base.reg.Id;
-                        //this.Close();
-                        break;
-                }
+                case "OK":
+                    List<string> criticas = new List<string>();
+
+                    // Validação do CPF
+                    if (string.IsNullOrWhiteSpace(txtCPF.Text) || !IsCPFValido(txtCPF.Text))
+                    {
+                        criticas.Add("O CPF informado é inválido ou está vazio.");
+                    }
+
+                    // Validação do CNPJ (somente se o nome da empresa estiver preenchido)
+                    if (!string.IsNullOrWhiteSpace(txtNomeEmpresa.Text))
+                    {
+                        if (string.IsNullOrWhiteSpace(txtCNPJ.Text) || !IsCNPJValido(txtCNPJ.Text))
+                        {
+                            criticas.Add("O CNPJ informado é inválido ou está vazio.");
+                        }
+                    }
+
+                    // Exibe críticas, se houver
+                    if (criticas.Count > 0)
+                    {
+                        MessageBox.Show(string.Join("\n", criticas), "Erro de Validação", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        return; // Impede o processo de gravação caso haja erros
+                    }
+
+                    // Gravação, se tudo estiver válido
+                    Grava();
+                    this.DialogResult = DialogResult.OK;
+                    break;
             }
+
+        }
+
+        private bool IsCPFValido(string cpf)
+        {
+            // Remove caracteres não numéricos
+            cpf = new string(cpf.Where(char.IsDigit).ToArray());
+
+            // Verifica se o CPF possui 11 dígitos
+            if (cpf.Length != 11) return false;
+
+            // Verifica se todos os dígitos são iguais (ex.: 111.111.111-11 é inválido)
+            if (cpf.Distinct().Count() == 1) return false;
+
+            // Calcula o primeiro dígito verificador
+            int[] multiplicadores1 = { 10, 9, 8, 7, 6, 5, 4, 3, 2 };
+            int soma = cpf.Take(9).Select((digit, i) => int.Parse(digit.ToString()) * multiplicadores1[i]).Sum();
+            int resto = soma % 11;
+            int digito1 = resto < 2 ? 0 : 11 - resto;
+
+            // Calcula o segundo dígito verificador
+            int[] multiplicadores2 = { 11, 10, 9, 8, 7, 6, 5, 4, 3, 2 };
+            soma = cpf.Take(10).Select((digit, i) => int.Parse(digit.ToString()) * multiplicadores2[i]).Sum();
+            resto = soma % 11;
+            int digito2 = resto < 2 ? 0 : 11 - resto;
+
+            // Verifica os dígitos verificadores
+            return cpf.EndsWith($"{digito1}{digito2}");
+        }
+
+        private bool IsCNPJValido(string cnpj)
+        {
+            // Remove quaisquer caracteres não numéricos
+            cnpj = new string(cnpj.Where(char.IsDigit).ToArray());
+
+            // Verifica se o CNPJ tem 14 dígitos
+            if (cnpj.Length != 14)
+                return false;
+
+            // Verifica se todos os dígitos são iguais (ex.: 11.111.111/1111-11)
+            if (cnpj.Distinct().Count() == 1)
+                return false;
+
+            // Calcula o primeiro dígito verificador
+            int[] multiplicador1 = { 5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2 };
+            int soma = 0;
+            for (int i = 0; i < 12; i++)
+                soma += int.Parse(cnpj[i].ToString()) * multiplicador1[i];
+            int resto = soma % 11;
+            int digito1 = resto < 2 ? 0 : 11 - resto;
+
+            // Verifica o primeiro dígito
+            if (int.Parse(cnpj[12].ToString()) != digito1)
+                return false;
+
+            // Calcula o segundo dígito verificador
+            int[] multiplicador2 = { 6, 5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2 };
+            soma = 0;
+            for (int i = 0; i < 13; i++)
+                soma += int.Parse(cnpj[i].ToString()) * multiplicador2[i];
+            resto = soma % 11;
+            int digito2 = resto < 2 ? 0 : 11 - resto;
+
+            // Verifica o segundo dígito
+            return int.Parse(cnpj[13].ToString()) == digito2;
         }
 
         private void txtTelefone_KeyPress(object sender, KeyPressEventArgs e)

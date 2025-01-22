@@ -16,6 +16,9 @@ namespace TeleBonifacio.tb
 
         public DateTime DataValidadeCNH { get; set; }
 
+        public string NomeEmpresa { get; set; }
+
+        public string CNPJ { get; set; }
 
         public bool Adicao { get; set; }
     }

@@ -73,38 +73,102 @@ namespace TeleBonifacio
             }
             else
             {
-                if (reg.Id==0)
+                if (reg.Id == 0)
                 {
                     cntrole1.Vazio = true;
                     return false;
-                } else
+                }
+                else
                 {
                     cntrole1.TemDados = true;
                     Pesquisando = false;
                     Mostrando = true;
+
                     foreach (Control control in this.Controls)
                     {
-                        if (control is TextBox textBox)
+                        if (control is GroupBox groupBox)
                         {
-                            ProcessarTextBox(textBox);
+                            // Itera nos controles dentro do GroupBox
+                            foreach (Control innerControl in groupBox.Controls)
+                            {
+                                ProcessarControle(innerControl);
+                            }
                         }
-                        else if (control is DateTimePicker dateTimePicker)
+                        else
                         {
-                            ProcessarDateTimePicker(dateTimePicker);
-                        } else if (control is CheckBox Check)
-                        {
-                            ProcessaCheck(Check);
-                        } else if (control is ComboBox cmb)
-                        {
-                            ProcessaCombo(cmb);
+                            ProcessarControle(control);
                         }
                     }
+
                     Mostrando = false;
                     cntrole1.IDAtual = reg.Id;
                     return true;
                 }
             }
         }
+
+        private void ProcessarControle(Control control)
+        {
+            if (control is TextBox textBox)
+            {
+                ProcessarTextBox(textBox);
+            }
+            else if (control is DateTimePicker dateTimePicker)
+            {
+                ProcessarDateTimePicker(dateTimePicker);
+            }
+            else if (control is CheckBox checkBox)
+            {
+                ProcessaCheck(checkBox);
+            }
+            else if (control is ComboBox comboBox)
+            {
+                ProcessaCombo(comboBox);
+            }
+        }
+
+
+        //protected bool Mostra()
+        //{
+        //    if (reg == null)
+        //    {
+        //        cntrole1.Vazio = true;
+        //        return false;
+        //    }
+        //    else
+        //    {
+        //        if (reg.Id==0)
+        //        {
+        //            cntrole1.Vazio = true;
+        //            return false;
+        //        } else
+        //        {
+        //            cntrole1.TemDados = true;
+        //            Pesquisando = false;
+        //            Mostrando = true;
+        //            foreach (Control control in this.Controls)
+        //            {
+        //                if (control is TextBox textBox)
+        //                {
+        //                    ProcessarTextBox(textBox);
+        //                }
+        //                else if (control is DateTimePicker dateTimePicker)
+        //                {
+        //                    ProcessarDateTimePicker(dateTimePicker);
+        //                } else if (control is CheckBox Check)
+        //                {
+        //                    ProcessaCheck(Check);
+        //                } else if (control is ComboBox cmb)
+        //                {
+        //                    ProcessaCombo(cmb);
+        //                }
+        //            }
+        //            Mostrando = false;
+        //            cntrole1.IDAtual = reg.Id;
+        //            return true;
+        //        }
+        //    }
+        //}
 
         private void ProcessaCombo(ComboBox cmb)
         {
@@ -365,16 +429,57 @@ namespace TeleBonifacio
         #endregion
 
         #region TratamentoDeTela
+        //protected void LimparCampos()
+        //{
+        //    foreach (Control control in this.Controls)
+        //    {
+        //        if (control is TextBox)
+        //        {
+        //            control.Text = string.Empty;
+        //        }
+        //    }
+        //}
+
         protected void LimparCampos()
         {
             foreach (Control control in this.Controls)
             {
-                if (control is TextBox)
+                if (control is GroupBox groupBox)
                 {
-                    control.Text = string.Empty;
+                    // Itera nos controles dentro do GroupBox
+                    foreach (Control innerControl in groupBox.Controls)
+                    {
+                        LimparControle(innerControl);
+                    }
+                }
+                else
+                {
+                    LimparControle(control);
                 }
             }
         }
+
+        private void LimparControle(Control control)
+        {
+            if (control is TextBox textBox)
+            {
+                textBox.Text = string.Empty;
+            }
+            else if (control is DateTimePicker dateTimePicker)
+            {
+                dateTimePicker.CustomFormat = " ";
+                dateTimePicker.Format = DateTimePickerFormat.Custom;
+            }
+            else if (control is CheckBox checkBox)
+            {
+                checkBox.Checked = false;
+            }
+            else if (control is ComboBox comboBox)
+            {
+                comboBox.SelectedIndex = -1;
+            }
+        }
+
 
         public void ResetarAparenciaControles()
         {
