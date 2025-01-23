@@ -156,22 +156,7 @@ namespace TeleBonifacio.dao
         {
             string query = "SELECT * FROM Carros";
             return ExecutarConsulta(query);
-        }
-
-        //public void InsertPeca(string nomePeca, int idCarro)
-        //{
-        //    string query = "INSERT INTO Pecas (Nome, IdCarro) VALUES (@nome, @idCarro)";
-        //    using (OleDbConnection connection = new OleDbConnection(glo.connectionString))
-        //    {
-        //        connection.Open();
-        //        using (OleDbCommand command = new OleDbCommand(query, connection))
-        //        {
-        //            command.Parameters.AddWithValue("@nome", nomePeca);
-        //            command.Parameters.AddWithValue("@idCarro", idCarro);
-        //            command.ExecuteNonQuery();
-        //        }
-        //    }
-        //}
+        }        
 
         public void InsertCaracteristica(string descricao, int idPeca)
         {
@@ -225,10 +210,10 @@ namespace TeleBonifacio.dao
         {
             string query = "UPDATE Carros SET Nome = @nome WHERE IdCarro = @idCarro";
             List<OleDbParameter> parametros = new List<OleDbParameter>
-    {
-        new OleDbParameter("@nome", nome),
-        new OleDbParameter("@idCarro", idCarro)
-    };
+            {
+                new OleDbParameter("@nome", nome),
+                new OleDbParameter("@idCarro", idCarro)
+            };
             DB.ExecutarComandoSQL(query, parametros);
         }
 
@@ -236,17 +221,105 @@ namespace TeleBonifacio.dao
         {
             string query = "UPDATE Caracteristicas SET Descricao = @descricao WHERE IdCaracteristica = @idCaracteristica";
             List<OleDbParameter> parametros = new List<OleDbParameter>
-    {
-        new OleDbParameter("@descricao", descricao),
-        new OleDbParameter("@idCaracteristica", idCaracteristica)
-    };
+            {
+                new OleDbParameter("@descricao", descricao),
+                new OleDbParameter("@idCaracteristica", idCaracteristica)
+            };
             DB.ExecutarComandoSQL(query, parametros);
         }
 
+        public DataTable GetCodigosByPecaId(int idPeca)
+        {
+            string query = "SELECT * FROM Codigos WHERE IdPeca = @idPeca";
+            DataTable dataTable = new DataTable();
+            using (OleDbConnection connection = new OleDbConnection(glo.connectionString))
+            {
+                try
+                {
+                    connection.Open();
+                    using (OleDbCommand command = new OleDbCommand(query, connection))
+                    {
+                        command.Parameters.AddWithValue("@idPeca", idPeca);
+                        using (OleDbDataAdapter adapter = new OleDbDataAdapter(command))
+                        {
+                            adapter.Fill(dataTable);
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+            }
+            return dataTable;
+        }
+
+        public void InsertCodigo(int idPeca, string codigo)
+        {
+            string query = "INSERT INTO Codigos (IdPeca, Codigo) VALUES (@idPeca, @codigo)";
+            using (OleDbConnection connection = new OleDbConnection(glo.connectionString))
+            {
+                try
+                {
+                    connection.Open();
+                    using (OleDbCommand command = new OleDbCommand(query, connection))
+                    {
+                        command.Parameters.AddWithValue("@idPeca", idPeca);
+                        command.Parameters.AddWithValue("@codigo", codigo);
+                        command.ExecuteNonQuery();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+            }
+        }
+
+        public void UpdateCodigo(int idCodigo, string novoCodigo)
+        {
+            string query = "UPDATE Codigos SET Codigo = @codigo WHERE IdCodigo = @idCodigo";
+            using (OleDbConnection connection = new OleDbConnection(glo.connectionString))
+            {
+                try
+                {
+                    connection.Open();
+                    using (OleDbCommand command = new OleDbCommand(query, connection))
+                    {
+                        command.Parameters.AddWithValue("@codigo", novoCodigo);
+                        command.Parameters.AddWithValue("@idCodigo", idCodigo);
+                        command.ExecuteNonQuery();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+            }
+        }
+
+        public void DeleteCodigoById(int idCodigo)
+        {
+            string query = "DELETE FROM Codigos WHERE IdCodigo = @idCodigo";
+            using (OleDbConnection connection = new OleDbConnection(glo.connectionString))
+            {
+                try
+                {
+                    connection.Open();
+                    using (OleDbCommand command = new OleDbCommand(query, connection))
+                    {
+                        command.Parameters.AddWithValue("@idCodigo", idCodigo);
+                        command.ExecuteNonQuery();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+            }
+        }
 
 
     }
-
-
 
 }

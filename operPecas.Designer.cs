@@ -47,6 +47,10 @@ namespace TeleBonifacio
             this.txtPesquisa = new System.Windows.Forms.TextBox();
             this.btnPesquisar = new System.Windows.Forms.Button();
             this.cmbFiltro = new System.Windows.Forms.ComboBox();
+            this.lstCodigos = new System.Windows.Forms.ListBox();
+            this.btnAddCodigos = new System.Windows.Forms.Button();
+            this.txtCodigo = new System.Windows.Forms.TextBox();
+            this.label4 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // lstCarros
@@ -56,7 +60,7 @@ namespace TeleBonifacio
             this.lstCarros.ItemHeight = 24;
             this.lstCarros.Location = new System.Drawing.Point(15, 86);
             this.lstCarros.Name = "lstCarros";
-            this.lstCarros.Size = new System.Drawing.Size(294, 388);
+            this.lstCarros.Size = new System.Drawing.Size(280, 388);
             this.lstCarros.TabIndex = 0;
             this.lstCarros.SelectedIndexChanged += new System.EventHandler(this.lstCarros_SelectedIndexChanged);
             this.lstCarros.DataSourceChanged += new System.EventHandler(this.lstCarros_DataSourceChanged);
@@ -67,9 +71,9 @@ namespace TeleBonifacio
             this.lstPecas.Font = new System.Drawing.Font("Arial", 16F);
             this.lstPecas.FormattingEnabled = true;
             this.lstPecas.ItemHeight = 24;
-            this.lstPecas.Location = new System.Drawing.Point(315, 86);
+            this.lstPecas.Location = new System.Drawing.Point(301, 86);
             this.lstPecas.Name = "lstPecas";
-            this.lstPecas.Size = new System.Drawing.Size(294, 388);
+            this.lstPecas.Size = new System.Drawing.Size(280, 388);
             this.lstPecas.TabIndex = 1;
             this.lstPecas.SelectedIndexChanged += new System.EventHandler(this.lstPecas_SelectedIndexChanged);
             this.lstPecas.DoubleClick += new System.EventHandler(this.LstPecas_DoubleClick);
@@ -79,9 +83,9 @@ namespace TeleBonifacio
             this.lstCaracteristicas.Font = new System.Drawing.Font("Arial", 16F);
             this.lstCaracteristicas.FormattingEnabled = true;
             this.lstCaracteristicas.ItemHeight = 24;
-            this.lstCaracteristicas.Location = new System.Drawing.Point(620, 86);
+            this.lstCaracteristicas.Location = new System.Drawing.Point(874, 86);
             this.lstCaracteristicas.Name = "lstCaracteristicas";
-            this.lstCaracteristicas.Size = new System.Drawing.Size(294, 388);
+            this.lstCaracteristicas.Size = new System.Drawing.Size(280, 388);
             this.lstCaracteristicas.TabIndex = 2;
             this.lstCaracteristicas.DoubleClick += new System.EventHandler(this.LstCaracteristicas_DoubleClick);
             // 
@@ -90,29 +94,29 @@ namespace TeleBonifacio
             this.txtCarro.Font = new System.Drawing.Font("Arial", 16F);
             this.txtCarro.Location = new System.Drawing.Point(15, 480);
             this.txtCarro.Name = "txtCarro";
-            this.txtCarro.Size = new System.Drawing.Size(248, 32);
+            this.txtCarro.Size = new System.Drawing.Size(234, 32);
             this.txtCarro.TabIndex = 3;
             // 
             // txtPeca
             // 
             this.txtPeca.Font = new System.Drawing.Font("Arial", 16F);
-            this.txtPeca.Location = new System.Drawing.Point(315, 480);
+            this.txtPeca.Location = new System.Drawing.Point(301, 480);
             this.txtPeca.Name = "txtPeca";
-            this.txtPeca.Size = new System.Drawing.Size(248, 32);
+            this.txtPeca.Size = new System.Drawing.Size(234, 32);
             this.txtPeca.TabIndex = 5;
             // 
             // txtCaracteristica
             // 
             this.txtCaracteristica.Font = new System.Drawing.Font("Arial", 16F);
-            this.txtCaracteristica.Location = new System.Drawing.Point(620, 480);
+            this.txtCaracteristica.Location = new System.Drawing.Point(874, 481);
             this.txtCaracteristica.Name = "txtCaracteristica";
-            this.txtCaracteristica.Size = new System.Drawing.Size(248, 32);
+            this.txtCaracteristica.Size = new System.Drawing.Size(234, 32);
             this.txtCaracteristica.TabIndex = 7;
             // 
             // btnAddCarro
             // 
             this.btnAddCarro.Font = new System.Drawing.Font("Arial", 16F);
-            this.btnAddCarro.Location = new System.Drawing.Point(269, 479);
+            this.btnAddCarro.Location = new System.Drawing.Point(255, 480);
             this.btnAddCarro.Name = "btnAddCarro";
             this.btnAddCarro.Size = new System.Drawing.Size(40, 32);
             this.btnAddCarro.TabIndex = 4;
@@ -123,7 +127,7 @@ namespace TeleBonifacio
             // btnAddPeca
             // 
             this.btnAddPeca.Font = new System.Drawing.Font("Arial", 16F);
-            this.btnAddPeca.Location = new System.Drawing.Point(569, 480);
+            this.btnAddPeca.Location = new System.Drawing.Point(541, 480);
             this.btnAddPeca.Name = "btnAddPeca";
             this.btnAddPeca.Size = new System.Drawing.Size(40, 32);
             this.btnAddPeca.TabIndex = 6;
@@ -134,7 +138,7 @@ namespace TeleBonifacio
             // btnAddCaracteristica
             // 
             this.btnAddCaracteristica.Font = new System.Drawing.Font("Arial", 16F);
-            this.btnAddCaracteristica.Location = new System.Drawing.Point(874, 479);
+            this.btnAddCaracteristica.Location = new System.Drawing.Point(1114, 481);
             this.btnAddCaracteristica.Name = "btnAddCaracteristica";
             this.btnAddCaracteristica.Size = new System.Drawing.Size(40, 32);
             this.btnAddCaracteristica.TabIndex = 8;
@@ -147,7 +151,7 @@ namespace TeleBonifacio
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label1.Location = new System.Drawing.Point(15, 57);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(294, 23);
+            this.label1.Size = new System.Drawing.Size(280, 23);
             this.label1.TabIndex = 9;
             this.label1.Text = "Carros";
             this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -155,9 +159,9 @@ namespace TeleBonifacio
             // label2
             // 
             this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(313, 60);
+            this.label2.Location = new System.Drawing.Point(301, 60);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(296, 23);
+            this.label2.Size = new System.Drawing.Size(280, 23);
             this.label2.TabIndex = 10;
             this.label2.Text = "Peças";
             this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -165,9 +169,9 @@ namespace TeleBonifacio
             // label3
             // 
             this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label3.Location = new System.Drawing.Point(615, 60);
+            this.label3.Location = new System.Drawing.Point(874, 60);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(299, 23);
+            this.label3.Size = new System.Drawing.Size(280, 23);
             this.label3.TabIndex = 11;
             this.label3.Text = "Características";
             this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -200,11 +204,55 @@ namespace TeleBonifacio
             this.cmbFiltro.Size = new System.Drawing.Size(162, 33);
             this.cmbFiltro.TabIndex = 14;
             // 
+            // lstCodigos
+            // 
+            this.lstCodigos.Font = new System.Drawing.Font("Arial", 16F);
+            this.lstCodigos.FormattingEnabled = true;
+            this.lstCodigos.ItemHeight = 24;
+            this.lstCodigos.Location = new System.Drawing.Point(588, 86);
+            this.lstCodigos.Name = "lstCodigos";
+            this.lstCodigos.Size = new System.Drawing.Size(280, 388);
+            this.lstCodigos.TabIndex = 15;
+            this.lstCodigos.SelectedIndexChanged += new System.EventHandler(this.lstCodigos_SelectedIndexChanged);
+            // 
+            // btnAddCodigos
+            // 
+            this.btnAddCodigos.Font = new System.Drawing.Font("Arial", 16F);
+            this.btnAddCodigos.Location = new System.Drawing.Point(827, 482);
+            this.btnAddCodigos.Name = "btnAddCodigos";
+            this.btnAddCodigos.Size = new System.Drawing.Size(40, 32);
+            this.btnAddCodigos.TabIndex = 17;
+            this.btnAddCodigos.Text = "+";
+            this.btnAddCodigos.UseVisualStyleBackColor = true;
+            this.btnAddCodigos.Click += new System.EventHandler(this.btnAddCodigos_Click);
+            // 
+            // txtCodigo
+            // 
+            this.txtCodigo.Font = new System.Drawing.Font("Arial", 16F);
+            this.txtCodigo.Location = new System.Drawing.Point(587, 482);
+            this.txtCodigo.Name = "txtCodigo";
+            this.txtCodigo.Size = new System.Drawing.Size(234, 32);
+            this.txtCodigo.TabIndex = 16;
+            // 
+            // label4
+            // 
+            this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label4.Location = new System.Drawing.Point(588, 60);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(280, 23);
+            this.label4.TabIndex = 18;
+            this.label4.Text = "Códigos";
+            this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
             // operPecas
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(929, 524);
+            this.ClientSize = new System.Drawing.Size(1166, 524);
+            this.Controls.Add(this.label4);
+            this.Controls.Add(this.btnAddCodigos);
+            this.Controls.Add(this.txtCodigo);
+            this.Controls.Add(this.lstCodigos);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
@@ -249,6 +297,10 @@ namespace TeleBonifacio
         private System.Windows.Forms.TextBox txtPesquisa;
         private System.Windows.Forms.Button btnPesquisar;
         private System.Windows.Forms.ComboBox cmbFiltro;
+        private System.Windows.Forms.ListBox lstCodigos;
+        private System.Windows.Forms.Button btnAddCodigos;
+        private System.Windows.Forms.TextBox txtCodigo;
+        private System.Windows.Forms.Label label4;
     }
 }
 

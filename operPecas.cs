@@ -329,25 +329,17 @@ namespace TeleBonifacio
             }
         }
 
-
         private void lstPecas_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (!carregando)
             {
                 if (lstPecas.SelectedItem != null)
                 {
-                    this.CarregandoPecas = true;
                     DataRowView pecaSelecionada = lstPecas.SelectedItem as DataRowView;
                     int idPeca = Convert.ToInt32(pecaSelecionada["IdPeca"]);
 
-                    if (!carregandoCarro)
-                    {
-                        AtualizarListaCarrosPorPeca(idPeca);
-                    }                    
-
-                    // Mostrar as características da peça
-                    AtualizarListaCaracteristicas(idPeca);
-                    this.CarregandoPecas = false;
+                    AtualizarListaCodigos(idPeca); // Atualiza os códigos da peça
+                    AtualizarListaCaracteristicas(idPeca); // Atualiza as características da peça
                 }
             }
         }
@@ -472,6 +464,53 @@ namespace TeleBonifacio
         private void txtPesquisa_Click(object sender, EventArgs e)
         {
             Inicializar();
+        }
+
+        private void AtualizarListaCodigos(int idPeca)
+        {
+            DataTable codigos = pecasDao.GetCodigosByPecaId(idPeca);
+            if (codigos.Rows.Count > 0)
+            {
+                lstCodigos.DataSource = codigos;
+                lstCodigos.DisplayMember = "Codigo";
+                lstCodigos.ValueMember = "IdCodigo";
+            }
+            else
+            {
+                lstCodigos.DataSource = null; // Nenhum código para a peça selecionada
+            }
+        }
+
+        private void lstCodigos_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+
+        private void btnAddCodigo_Click(object sender, EventArgs e)
+        {
+            string novoCodigo = txtCodigo.Text.Trim();
+            if (!string.IsNullOrWhiteSpace(novoCodigo) && lstPecas.SelectedItem != null)
+            {
+                DataRowView pecaSelecionada = lstPecas.SelectedItem as DataRowView;
+                int idPeca = Convert.ToInt32(pecaSelecionada["IdPeca"]);
+                pecasDao.InsertCodigo(idPeca, novoCodigo);
+                AtualizarListaCodigos(idPeca); // Atualiza a lista de códigos
+                txtCodigo.Clear();
+            }
+        }
+
+        private void btnAddCodigos_Click(object sender, EventArgs e)
+        {
+            string novoCodigo = txtCodigo.Text.Trim();
+            if (!string.IsNullOrWhiteSpace(novoCodigo) && lstPecas.SelectedItem != null)
+            {
+                DataRowView pecaSelecionada = lstPecas.SelectedItem as DataRowView;
+                int idPeca = Convert.ToInt32(pecaSelecionada["IdPeca"]);
+                pecasDao.InsertCodigo(idPeca, novoCodigo);
+                AtualizarListaCodigos(idPeca); // Atualiza a lista de códigos
+                txtCodigo.Clear();
+            }
         }
     }
 }
