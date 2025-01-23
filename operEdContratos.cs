@@ -115,7 +115,7 @@ namespace TeleBonifacio
                         "PIX", // Placeholder para PIX
                         txtObservacoes.Text
                     );
-                    MessageBox.Show("Contrato atualizado com sucesso!", "Sucesso", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    // MessageBox.Show("Contrato atualizado com sucesso!", "Sucesso", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
                 else
                 {
@@ -130,7 +130,7 @@ namespace TeleBonifacio
                         "PIX", // Placeholder para PIX
                         txtObservacoes.Text
                     );
-                    MessageBox.Show("Contrato criado com sucesso!", "Sucesso", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    // MessageBox.Show("Contrato criado com sucesso!", "Sucesso", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
 
                 // Fecha a tela após salvar
@@ -415,9 +415,11 @@ namespace TeleBonifacio
                 contrato.Contratada,
                 contrato.ContratadaCNPJ,
                 contrato.ContratadaEndereco,
-                contrato.NomeEmpresa, // Adicione este campo
-                contrato.CNPJEmpresa, // Adicione este campo
-                contrato.Clausulas.ToArray() // Converte List<string> para string[]
+                contrato.NomeEmpresa, 
+                contrato.CNPJEmpresa, 
+                contrato.Valor,
+                contrato.Descricao,
+                contrato.Clausulas.ToArray() 
             );
             printer.Imprimir();
         }

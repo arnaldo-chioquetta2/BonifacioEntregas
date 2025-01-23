@@ -25,8 +25,8 @@ namespace TeleBonifacio.tb
         public string Contratada { get; set; }
         public string ContratadaCNPJ { get; set; }
         public string ContratadaEndereco { get; set; }
-        public string NomeEmpresa { get; set; } // Novo campo
-        public string CNPJEmpresa { get; set; } // Novo campo
+        public string NomeEmpresa { get; set; } 
+        public string CNPJEmpresa { get; set; }
 
         public List<string> Clausulas { get; set; }
 

@@ -73,25 +73,66 @@ namespace TeleBonifacio
 
         public static float LeValor(string valorTexto)
         {
+            // Remove espaços e caracteres não numéricos, exceto ',' e '.'
             string valorLimpo = new string(valorTexto.Where(c => char.IsDigit(c) || c == ',' || c == '.').ToArray());
+
+            // Detecta o separador decimal do sistema
             char decimalSeparator = CultureInfo.CurrentCulture.NumberFormat.CurrencyDecimalSeparator[0];
+
+            // Ajusta o valorLimpo para garantir que o último separador seja o separador decimal correto
             if (valorLimpo.Contains('.') && valorLimpo.Contains(','))
             {
-                valorLimpo = valorLimpo.Replace(".", decimalSeparator.ToString());
+                // Assume que o último separador é o decimal
+                int lastComma = valorLimpo.LastIndexOf(',');
+                int lastDot = valorLimpo.LastIndexOf('.');
+
+                if (lastComma > lastDot)
+                {
+                    valorLimpo = valorLimpo.Replace(".", "").Replace(",", decimalSeparator.ToString());
+                }
+                else
+                {
+                    valorLimpo = valorLimpo.Replace(",", "").Replace(".", decimalSeparator.ToString());
+                }
             }
-            else if (valorLimpo.Contains('.') || valorLimpo.Contains(','))
+            else if (valorLimpo.Contains(',') || valorLimpo.Contains('.'))
             {
+                // Substitui qualquer separador único pelo separador decimal do sistema
                 valorLimpo = valorLimpo.Replace(',', decimalSeparator).Replace('.', decimalSeparator);
             }
-            if (float.TryParse(valorLimpo, out float valorFloat))
+
+            // Tenta converter o valor ajustado para float
+            if (float.TryParse(valorLimpo, NumberStyles.AllowDecimalPoint, CultureInfo.CurrentCulture, out float valorFloat))
             {
                 return valorFloat;
             }
-            else
-            {
-                return 0.0f;
-            }
+
+            // Retorna 0.0f em caso de erro na conversão
+            return 0.0f;
         }
+
+
+        //public static float LeValor(string valorTexto)
+        //{
+        //    string valorLimpo = new string(valorTexto.Where(c => char.IsDigit(c) || c == ',' || c == '.').ToArray());
+        //    char decimalSeparator = CultureInfo.CurrentCulture.NumberFormat.CurrencyDecimalSeparator[0];
+        //    if (valorLimpo.Contains('.') && valorLimpo.Contains(','))
+        //    {
+        //        valorLimpo = valorLimpo.Replace(".", decimalSeparator.ToString());
+        //    }
+        //    else if (valorLimpo.Contains('.') || valorLimpo.Contains(','))
+        //    {
+        //        valorLimpo = valorLimpo.Replace(',', decimalSeparator).Replace('.', decimalSeparator);
+        //    }
+        //    if (float.TryParse(valorLimpo, out float valorFloat))
+        //    {
+        //        return valorFloat;
+        //    }
+        //    else
+        //    {
+        //        return 0.0f;
+        //    }
+        //}
 
         public static string fmtVlr(string input)
         {

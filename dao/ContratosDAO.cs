@@ -110,14 +110,14 @@ namespace TeleBonifacio.dao
                 EntregadorDAO entregadorDAO = new EntregadorDAO();
                 tb.Entregador entregador = (tb.Entregador)entregadorDAO.GetPeloID(idEntregador.ToString());
 
-                tb.Contrato contrato = new tb.Contrato
-                {
-                    Id = Convert.ToInt32(dtContrato.Rows[0]["ID"]),
-                    Contratante = config.GetEmpresa(),
-                    ContratanteCNPJ = config.GetCNPJ(),
-                    ContratanteEndereco = config.GetEndereco(),
-                    Contratada = dtContrato.Rows[0]["Descricao"].ToString()
-                };
+                tb.Contrato contrato = new tb.Contrato();
+                contrato.Id = Convert.ToInt32(dtContrato.Rows[0]["ID"]);
+                contrato.Contratante = config.GetEmpresa();
+                contrato.ContratanteCNPJ = config.GetCNPJ();
+                contrato.ContratanteEndereco = config.GetEndereco();
+                contrato.Descricao = dtContrato.Rows[0]["Descricao"].ToString();
+                string sValor = dtContrato.Rows[0]["Valor"].ToString();
+                contrato.Valor = Convert.ToDecimal(sValor);
 
                 if (entregador != null)
                 {
