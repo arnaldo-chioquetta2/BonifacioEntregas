@@ -44,6 +44,7 @@ namespace TeleBonifacio
             this.lblPeriodo = new System.Windows.Forms.Label();
             this.btnPesquisa = new System.Windows.Forms.Button();
             this.chkPeriodo = new System.Windows.Forms.CheckBox();
+            this.btnTpContrato = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dgvContratos)).BeginInit();
             this.SuspendLayout();
             // 
@@ -196,11 +197,23 @@ namespace TeleBonifacio
             this.chkPeriodo.UseVisualStyleBackColor = true;
             this.chkPeriodo.CheckedChanged += new System.EventHandler(this.chkPeriodo_CheckedChanged);
             // 
+            // btnTpContrato
+            // 
+            this.btnTpContrato.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnTpContrato.Location = new System.Drawing.Point(385, 506);
+            this.btnTpContrato.Name = "btnTpContrato";
+            this.btnTpContrato.Size = new System.Drawing.Size(200, 40);
+            this.btnTpContrato.TabIndex = 14;
+            this.btnTpContrato.Text = "Tipos de Contrato";
+            this.btnTpContrato.UseVisualStyleBackColor = true;
+            this.btnTpContrato.Click += new System.EventHandler(this.btnTpContrato_Click);
+            // 
             // operContratos
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1081, 557);
+            this.Controls.Add(this.btnTpContrato);
             this.Controls.Add(this.chkPeriodo);
             this.Controls.Add(this.btnPesquisa);
             this.Controls.Add(this.lblPeriodo);
@@ -240,5 +253,6 @@ namespace TeleBonifacio
         private System.Windows.Forms.Label lblPeriodo;
         private System.Windows.Forms.Button btnPesquisa;
         private System.Windows.Forms.CheckBox chkPeriodo;
+        private System.Windows.Forms.Button btnTpContrato;
     }
 }

@@ -1,0 +1,252 @@
+﻿namespace TeleBonifacio
+{
+    partial class opeTpContrato
+    {
+        private System.ComponentModel.IContainer components = null;
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing && (components != null))
+            {
+                components.Dispose();
+            }
+            base.Dispose(disposing);
+        }
+
+        #region Windows Form Designer generated code
+
+        private void InitializeComponent()
+        {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(opeTpContrato));
+            this.cmbTipoContrato = new System.Windows.Forms.ComboBox();
+            this.lblTipoContrato = new System.Windows.Forms.Label();
+            this.txtNovoTipoContrato = new System.Windows.Forms.TextBox();
+            this.lblNovoTipoContrato = new System.Windows.Forms.Label();
+            this.cmbCadastroAssociado = new System.Windows.Forms.ComboBox();
+            this.lblCadastroAssociado = new System.Windows.Forms.Label();
+            this.btnAdicionarTipo = new System.Windows.Forms.Button();
+            this.dgvClausulas = new System.Windows.Forms.DataGridView();
+            this.ColunaNumero = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ColunaTexto = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ColunaAcoes = new System.Windows.Forms.DataGridViewButtonColumn();
+            this.lblClausulas = new System.Windows.Forms.Label();
+            this.txtNovaClausula = new System.Windows.Forms.TextBox();
+            this.lblNovaClausula = new System.Windows.Forms.Label();
+            this.btnSalvarClausula = new System.Windows.Forms.Button();
+            this.button1 = new System.Windows.Forms.Button();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvClausulas)).BeginInit();
+            this.SuspendLayout();
+            // 
+            // cmbTipoContrato
+            // 
+            this.cmbTipoContrato.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbTipoContrato.Font = new System.Drawing.Font("Microsoft Tai Le", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cmbTipoContrato.FormattingEnabled = true;
+            this.cmbTipoContrato.Location = new System.Drawing.Point(18, 55);
+            this.cmbTipoContrato.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.cmbTipoContrato.Name = "cmbTipoContrato";
+            this.cmbTipoContrato.Size = new System.Drawing.Size(320, 29);
+            this.cmbTipoContrato.TabIndex = 1;
+            // 
+            // lblTipoContrato
+            // 
+            this.lblTipoContrato.AutoSize = true;
+            this.lblTipoContrato.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblTipoContrato.Location = new System.Drawing.Point(18, 21);
+            this.lblTipoContrato.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lblTipoContrato.Name = "lblTipoContrato";
+            this.lblTipoContrato.Size = new System.Drawing.Size(171, 20);
+            this.lblTipoContrato.TabIndex = 2;
+            this.lblTipoContrato.Text = "Selecione o Tipo Atual:";
+            // 
+            // txtNovoTipoContrato
+            // 
+            this.txtNovoTipoContrato.Location = new System.Drawing.Point(18, 138);
+            this.txtNovoTipoContrato.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.txtNovoTipoContrato.Name = "txtNovoTipoContrato";
+            this.txtNovoTipoContrato.Size = new System.Drawing.Size(291, 26);
+            this.txtNovoTipoContrato.TabIndex = 3;
+            // 
+            // lblNovoTipoContrato
+            // 
+            this.lblNovoTipoContrato.AutoSize = true;
+            this.lblNovoTipoContrato.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblNovoTipoContrato.Location = new System.Drawing.Point(18, 108);
+            this.lblNovoTipoContrato.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lblNovoTipoContrato.Name = "lblNovoTipoContrato";
+            this.lblNovoTipoContrato.Size = new System.Drawing.Size(160, 20);
+            this.lblNovoTipoContrato.TabIndex = 4;
+            this.lblNovoTipoContrato.Text = "Novo tipo de contrato";
+            // 
+            // cmbCadastroAssociado
+            // 
+            this.cmbCadastroAssociado.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbCadastroAssociado.FormattingEnabled = true;
+            this.cmbCadastroAssociado.Items.AddRange(new object[] {
+            "Funcionários",
+            "Clientes",
+            "Entregadores",
+            "Fornecedores"});
+            this.cmbCadastroAssociado.Location = new System.Drawing.Point(317, 136);
+            this.cmbCadastroAssociado.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.cmbCadastroAssociado.Name = "cmbCadastroAssociado";
+            this.cmbCadastroAssociado.Size = new System.Drawing.Size(256, 28);
+            this.cmbCadastroAssociado.TabIndex = 5;
+            // 
+            // lblCadastroAssociado
+            // 
+            this.lblCadastroAssociado.AutoSize = true;
+            this.lblCadastroAssociado.Location = new System.Drawing.Point(313, 108);
+            this.lblCadastroAssociado.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lblCadastroAssociado.Name = "lblCadastroAssociado";
+            this.lblCadastroAssociado.Size = new System.Drawing.Size(216, 20);
+            this.lblCadastroAssociado.TabIndex = 6;
+            this.lblCadastroAssociado.Text = "Associar Dados ao Cadastro:";
+            // 
+            // btnAdicionarTipo
+            // 
+            this.btnAdicionarTipo.Location = new System.Drawing.Point(581, 133);
+            this.btnAdicionarTipo.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.btnAdicionarTipo.Name = "btnAdicionarTipo";
+            this.btnAdicionarTipo.Size = new System.Drawing.Size(129, 31);
+            this.btnAdicionarTipo.TabIndex = 7;
+            this.btnAdicionarTipo.Text = "Adicionar Tipo";
+            this.btnAdicionarTipo.UseVisualStyleBackColor = true;
+            // 
+            // dgvClausulas
+            // 
+            this.dgvClausulas.AllowUserToAddRows = false;
+            this.dgvClausulas.AllowUserToDeleteRows = false;
+            this.dgvClausulas.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgvClausulas.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.ColunaNumero,
+            this.ColunaTexto,
+            this.ColunaAcoes});
+            this.dgvClausulas.Location = new System.Drawing.Point(18, 206);
+            this.dgvClausulas.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.dgvClausulas.Name = "dgvClausulas";
+            this.dgvClausulas.ReadOnly = true;
+            this.dgvClausulas.RowTemplate.Height = 25;
+            this.dgvClausulas.Size = new System.Drawing.Size(694, 200);
+            this.dgvClausulas.TabIndex = 8;
+            // 
+            // ColunaNumero
+            // 
+            this.ColunaNumero.HeaderText = "#";
+            this.ColunaNumero.Name = "ColunaNumero";
+            this.ColunaNumero.ReadOnly = true;
+            this.ColunaNumero.Width = 30;
+            // 
+            // ColunaTexto
+            // 
+            this.ColunaTexto.HeaderText = "Cláusula";
+            this.ColunaTexto.Name = "ColunaTexto";
+            this.ColunaTexto.ReadOnly = true;
+            this.ColunaTexto.Width = 400;
+            // 
+            // ColunaAcoes
+            // 
+            this.ColunaAcoes.HeaderText = "Ações";
+            this.ColunaAcoes.Name = "ColunaAcoes";
+            this.ColunaAcoes.ReadOnly = true;
+            this.ColunaAcoes.Text = "Editar/Remover";
+            this.ColunaAcoes.UseColumnTextForButtonValue = true;
+            this.ColunaAcoes.Width = 80;
+            // 
+            // lblClausulas
+            // 
+            this.lblClausulas.AutoSize = true;
+            this.lblClausulas.Location = new System.Drawing.Point(18, 180);
+            this.lblClausulas.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lblClausulas.Name = "lblClausulas";
+            this.lblClausulas.Size = new System.Drawing.Size(170, 20);
+            this.lblClausulas.TabIndex = 9;
+            this.lblClausulas.Text = "Cláusulas do Contrato:";
+            // 
+            // txtNovaClausula
+            // 
+            this.txtNovaClausula.Location = new System.Drawing.Point(18, 436);
+            this.txtNovaClausula.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.txtNovaClausula.Multiline = true;
+            this.txtNovaClausula.Name = "txtNovaClausula";
+            this.txtNovaClausula.Size = new System.Drawing.Size(692, 66);
+            this.txtNovaClausula.TabIndex = 10;
+            // 
+            // lblNovaClausula
+            // 
+            this.lblNovaClausula.AutoSize = true;
+            this.lblNovaClausula.Location = new System.Drawing.Point(18, 411);
+            this.lblNovaClausula.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lblNovaClausula.Name = "lblNovaClausula";
+            this.lblNovaClausula.Size = new System.Drawing.Size(114, 20);
+            this.lblNovaClausula.TabIndex = 11;
+            this.lblNovaClausula.Text = "Nova Cláusula:";
+            // 
+            // btnSalvarClausula
+            // 
+            this.btnSalvarClausula.Location = new System.Drawing.Point(18, 514);
+            this.btnSalvarClausula.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.btnSalvarClausula.Name = "btnSalvarClausula";
+            this.btnSalvarClausula.Size = new System.Drawing.Size(129, 31);
+            this.btnSalvarClausula.TabIndex = 12;
+            this.btnSalvarClausula.Text = "Salvar Cláusula";
+            this.btnSalvarClausula.UseVisualStyleBackColor = true;
+            // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(517, 514);
+            this.button1.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(193, 31);
+            this.button1.TabIndex = 13;
+            this.button1.Text = "Salvar Tipo de Contrato";
+            this.button1.UseVisualStyleBackColor = true;
+            // 
+            // opeTpContrato
+            // 
+            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.ClientSize = new System.Drawing.Size(729, 559);
+            this.Controls.Add(this.button1);
+            this.Controls.Add(this.btnSalvarClausula);
+            this.Controls.Add(this.lblNovaClausula);
+            this.Controls.Add(this.txtNovaClausula);
+            this.Controls.Add(this.lblClausulas);
+            this.Controls.Add(this.dgvClausulas);
+            this.Controls.Add(this.btnAdicionarTipo);
+            this.Controls.Add(this.lblCadastroAssociado);
+            this.Controls.Add(this.cmbCadastroAssociado);
+            this.Controls.Add(this.lblNovoTipoContrato);
+            this.Controls.Add(this.txtNovoTipoContrato);
+            this.Controls.Add(this.lblTipoContrato);
+            this.Controls.Add(this.cmbTipoContrato);
+            this.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.Name = "opeTpContrato";
+            this.Text = "Configuração de Tipos de Contratos";
+            ((System.ComponentModel.ISupportInitialize)(this.dgvClausulas)).EndInit();
+            this.ResumeLayout(false);
+            this.PerformLayout();
+
+        }
+
+        #endregion
+        private System.Windows.Forms.ComboBox cmbTipoContrato;
+        private System.Windows.Forms.Label lblTipoContrato;
+        private System.Windows.Forms.TextBox txtNovoTipoContrato;
+        private System.Windows.Forms.Label lblNovoTipoContrato;
+        private System.Windows.Forms.ComboBox cmbCadastroAssociado;
+        private System.Windows.Forms.Label lblCadastroAssociado;
+        private System.Windows.Forms.Button btnAdicionarTipo;
+        private System.Windows.Forms.DataGridView dgvClausulas;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ColunaNumero;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ColunaTexto;
+        private System.Windows.Forms.DataGridViewButtonColumn ColunaAcoes;
+        private System.Windows.Forms.Label lblClausulas;
+        private System.Windows.Forms.TextBox txtNovaClausula;
+        private System.Windows.Forms.Label lblNovaClausula;
+        private System.Windows.Forms.Button btnSalvarClausula;
+        private System.Windows.Forms.Button button1;
+    }
+}

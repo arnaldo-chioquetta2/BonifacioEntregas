@@ -296,6 +296,12 @@
     <Compile Include="operSQL.designer.cs">
       <DependentUpon>operSQL.cs</DependentUpon>
     </Compile>
+    <Compile Include="opeTpContrato.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="opeTpContrato.designer.cs">
+      <DependentUpon>opeTpContrato.cs</DependentUpon>
+    </Compile>
     <Compile Include="opRecibos.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -447,6 +453,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="operSQL.resx">
       <DependentUpon>operSQL.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="opeTpContrato.resx">
+      <DependentUpon>opeTpContrato.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="opRecibos.resx">
       <DependentUpon>opRecibos.cs</DependentUpon>

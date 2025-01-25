@@ -28,7 +28,6 @@ namespace TeleBonifacio
             btnPesquisa_Click(null, null); // Aciona a pesquisa automaticamente ao carregar a tela
         }
 
-
         private void CarregarContratos(string filtroDescricao = "", string filtroStatus = "Todos")
         {
             contratosDAO = new ContratosDAO();
@@ -51,7 +50,6 @@ namespace TeleBonifacio
             dgvContratos.Columns["Status"].Width = 100;
             dgvContratos.Columns["Observacoes"].Width = 300;
         }
-
 
         private void btnNovo_Click(object sender, EventArgs e)
         {
@@ -148,6 +146,11 @@ namespace TeleBonifacio
             }
         }
 
+        private void btnTpContrato_Click(object sender, EventArgs e)
+        {
+            opeTpContrato foperSQL = new opeTpContrato();
+            foperSQL.ShowDialog();
+        }
     }
 
 }
