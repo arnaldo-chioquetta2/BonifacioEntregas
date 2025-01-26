@@ -2,12 +2,15 @@
 using System.Data;
 using System.Collections.Generic;
 using System.Linq;
+using System.Data.OleDb;
 
 namespace TeleBonifacio.dao
 {
     public class ContratosDAO
     {
+
         // Método para obter todos os contratos
+
         public DataTable GetAllContratos()
         {
             string sql = "SELECT * FROM Contratos ORDER BY ID DESC";
@@ -51,6 +54,17 @@ namespace TeleBonifacio.dao
             DB.ExecutarComandoSQL(sql);
         }
 
+        public DataTable GetClausulasByTipoContrato(int idTipoContrato)
+        {
+            string query = "SELECT Ordem, Texto FROM ClausulasContrato WHERE IdTipoContrato = @IdTipoContrato ORDER BY Ordem";
+            List<OleDbParameter> parametros = new List<OleDbParameter>
+            {
+                new OleDbParameter("@IdTipoContrato", idTipoContrato)
+            };
+            return DB.ExecutarConsulta(query, parametros);
+        }
+
+
         // Método para deletar um contrato
         public void DeleteContrato(int idContrato)
         {
@@ -83,6 +97,39 @@ namespace TeleBonifacio.dao
 
             return null; // Contrato não encontrado
         }
+
+        public void DeleteClausulaByTexto(string texto)
+        {
+            string sql = "DELETE FROM ClausulasContrato WHERE Texto = @texto";
+            List<OleDbParameter> parametros = new List<OleDbParameter>
+            {
+                new OleDbParameter("@texto", texto)
+            };
+            DB.ExecutarComandoSQL(sql, parametros);
+        }
+
+        public void UpdateClausulaByTexto(string textoOriginal, string novoTexto)
+        {
+            string sql = "UPDATE ClausulasContrato SET Texto = @novoTexto WHERE Texto = @textoOriginal";
+            List<OleDbParameter> parametros = new List<OleDbParameter>
+            {
+                new OleDbParameter("@novoTexto", novoTexto),
+                new OleDbParameter("@textoOriginal", textoOriginal)
+            };
+            DB.ExecutarComandoSQL(sql, parametros);
+        }
+
+        public void InsertClausula(string texto, int idTipoContrato)
+        {
+            string sql = "INSERT INTO ClausulasContrato (IdTipoContrato, Texto) VALUES (@idTipoContrato, @texto)";
+            List<OleDbParameter> parametros = new List<OleDbParameter>
+            {
+                new OleDbParameter("@idTipoContrato", idTipoContrato),
+                new OleDbParameter("@texto", texto)
+            };
+            DB.ExecutarComandoSQL(sql, parametros);
+        }
+
 
         public int GetNextContratoId()
         {
@@ -169,6 +216,12 @@ namespace TeleBonifacio.dao
             sql += " ORDER BY ID DESC";
 
             return DB.ExecutarConsulta(sql);
+        }
+
+        public DataTable GetTiposDeContrato()
+        {
+            string query = "SELECT IdTipoContrato, Nome FROM TiposContrato ORDER BY Nome ASC";
+            return DB.ExecutarConsulta(query);
         }
 
 

@@ -11,7 +11,7 @@ namespace TeleBonifacio
 
         private tb.Forma clienteEspecifico;
 
-        private bool Adicionando = false;
+        //private bool Adicionando = false;
         private bool Carregando = true;
         private int ID = 0;
 
@@ -101,7 +101,7 @@ namespace TeleBonifacio
             if (glo.IdAdicionado == -1)
             {
                 glo.IdAdicionado = 0;
-                Adicionando = true;
+                //Adicionando = true;
                 base.Adicionar();
             }
         }

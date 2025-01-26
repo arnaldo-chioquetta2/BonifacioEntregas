@@ -10,7 +10,7 @@ namespace TeleBonifacio
     {
         private tb.Entregador clienteEspecifico;
         private bool txtIdDentro = false;
-        private bool Adicionando = false;
+        //private bool Adicionando = false;
 
         public fCadEntregadores()
         {
@@ -200,7 +200,7 @@ namespace TeleBonifacio
 
         public void Adicao()
         {
-            Adicionando = true;
+            // Adicionando = true;
             base.Adicionar();
         }
     }

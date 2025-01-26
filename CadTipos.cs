@@ -10,8 +10,8 @@ namespace TeleBonifacio
 
         private tb.TpoFalta clienteEspecifico;
 
-        private bool Adicionando = false;
-        private bool Carregando = true;
+        //private bool Adicionando = false;
+        //private bool Carregando = true;
         private int ID = 0;
 
         public fCadTiposFaltas()
@@ -24,7 +24,7 @@ namespace TeleBonifacio
             base.Mostra();
             base.LerTagsDosCamposDeTexto();
             rt.AdjustFormComponents(this);
-            Carregando = false;
+            //Carregando = false;
         }
 
         private tb.TpoFalta getUlt()
@@ -65,9 +65,9 @@ namespace TeleBonifacio
 
         private void cntrole1_AcaoRealizada(object sender, AcaoEventArgs e)
         {
-            Carregando = true;
+            //Carregando = true;
             base.cntrole1_AcaoRealizada(sender, e, base.reg);
-            Carregando = false;
+            //Carregando = false;
         }
 
         private void fCadClientes_KeyUp(object sender, KeyEventArgs e)
@@ -93,7 +93,7 @@ namespace TeleBonifacio
             if (glo.IdAdicionado == -1)
             {
                 glo.IdAdicionado = 0;
-                Adicionando = true;
+                //Adicionando = true;
                 base.Adicionar();
             }
         }
