@@ -1415,11 +1415,9 @@ namespace TeleBonifacio
                         {
                             cINI = new INI();
                             bool AdaptAtivo = cINI.ReadBool("Opcoes", "AdaptAtivo", true);
-                            // float VlrPerImr = cINI.ReadFloat("Opcoes", "TamFonteWord", 1.0f);
                             string caminhoWord = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Word.rtf");
                             rtfWord.caminhoDoArquivo = caminhoWord;
                             rtfWord.Criptografia = false;
-                            // rtfWord.SetaVlrPerImr(VlrPerImr);
                             rtfWord.Carrega();                            
                             rtfWord.txPercVisivel(AdaptAtivo);
                         }
