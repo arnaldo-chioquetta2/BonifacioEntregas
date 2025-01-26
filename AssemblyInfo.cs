@@ -22,7 +22,6 @@ using System.Runtime.InteropServices;
 // 3.2.9 Versão inicial da tela de edição de contratos
 // 3.2.8 Versão inicial da tela de contratos
 // 3.2.6 Pesquisa e edição de itens das peças
-// 3.2.5 Tela para consulta de peças
 
 
 

@@ -1,4 +1,5 @@
-﻿using System.Data;
+﻿using System;
+using System.Data;
 using System.Windows.Forms;
 using TeleBonifacio.dao;
 
@@ -73,7 +74,16 @@ namespace TeleBonifacio
             if (cmbTiposContrato.SelectedValue != null && int.TryParse(cmbTiposContrato.SelectedValue.ToString(), out int idTipoContrato))
             {
                 MostrarDadosTipoContrato(idTipoContrato);
+                HabilitaBotoes();
             }
+        }
+
+        private void HabilitaBotoes()
+        {
+            btnAdicionarClausula.Enabled = true;
+            btnExcluirClausula.Enabled = true;
+            btnSalvarClausula.Enabled = true;
+            btSalvaContrato.Enabled = true;
         }
 
         private void lstClausulas_CellClick(object sender, DataGridViewCellEventArgs e)
@@ -113,6 +123,47 @@ namespace TeleBonifacio
 
         }
 
+        private void btnAdicionarClausula_Click(object sender, EventArgs e)
+        {
+            // Verificar se há um tipo de contrato selecionado
+
+            // Verificar se o campo da nova cláusula está preenchido
+            if (string.IsNullOrWhiteSpace(txtNovaClausula.Text))
+            {
+                MessageBox.Show("Digite o texto da cláusula antes de adicioná-la.", "Atenção", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            // Obter o ID do tipo de contrato selecionado
+            int idTipoContrato = Convert.ToInt32(cmbTiposContrato.SelectedValue);
+
+            // Obter o texto da cláusula
+            string textoClausula = txtNovaClausula.Text.Trim();
+
+            try
+            {
+                // Instanciar o DAO
+                ContratosDAO contratosDAO = new ContratosDAO();
+
+                // Obter a próxima ordem para a cláusula
+                int novaOrdem = contratosDAO.GetProximaOrdemClausula(idTipoContrato);
+
+                // Inserir a nova cláusula no banco de dados
+                contratosDAO.InsertClausula(idTipoContrato, novaOrdem, textoClausula);
+
+                // Atualizar a lista de cláusulas exibida
+                MostrarDadosTipoContrato(idTipoContrato);
+
+                // Limpar o campo de texto
+                txtNovaClausula.Clear();
+
+                MessageBox.Show("Cláusula adicionada com sucesso!", "Sucesso", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Erro ao adicionar a cláusula: {ex.Message}", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
 
     }
 }

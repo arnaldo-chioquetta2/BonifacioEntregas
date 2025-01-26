@@ -119,16 +119,27 @@ namespace TeleBonifacio.dao
             DB.ExecutarComandoSQL(sql, parametros);
         }
 
-        public void InsertClausula(string texto, int idTipoContrato)
+        public void InsertClausula(int idTipoContrato, int ordem, string texto)
         {
-            string sql = "INSERT INTO ClausulasContrato (IdTipoContrato, Texto) VALUES (@idTipoContrato, @texto)";
-            List<OleDbParameter> parametros = new List<OleDbParameter>
+            string query = "INSERT INTO ClausulasContrato (IdTipoContrato, Ordem, Texto) VALUES (@idTipoContrato, @ordem, @texto)";
+            DB.ExecutarComandoSQL(query, new List<OleDbParameter>
             {
                 new OleDbParameter("@idTipoContrato", idTipoContrato),
+                new OleDbParameter("@ordem", ordem),
                 new OleDbParameter("@texto", texto)
-            };
-            DB.ExecutarComandoSQL(sql, parametros);
+            });
         }
+
+        //public void InsertClausula(string texto, int idTipoContrato)
+        //{
+        //    string sql = "INSERT INTO ClausulasContrato (IdTipoContrato, Texto) VALUES (@idTipoContrato, @texto)";
+        //    List<OleDbParameter> parametros = new List<OleDbParameter>
+        //    {
+        //        new OleDbParameter("@idTipoContrato", idTipoContrato),
+        //        new OleDbParameter("@texto", texto)
+        //    };
+        //    DB.ExecutarComandoSQL(sql, parametros);
+        //}
 
 
         public int GetNextContratoId()
@@ -142,6 +153,21 @@ namespace TeleBonifacio.dao
             }
             return 1; // Caso não haja registros, retorna 1 como primeiro ID
         }
+
+        public int GetProximaOrdemClausula(int idTipoContrato)
+        {
+            string query = "SELECT MAX(Ordem) FROM ClausulasContrato WHERE IdTipoContrato = @idTipoContrato";
+            DataTable dt = DB.ExecutarConsulta(query, new List<OleDbParameter>
+            {
+                new OleDbParameter("@idTipoContrato", idTipoContrato)
+            });
+            if (dt.Rows.Count > 0 && dt.Rows[0][0] != DBNull.Value)
+            {
+                return Convert.ToInt32(dt.Rows[0][0]) + 1;
+            }
+            return 1; // Caso seja a primeira cláusula
+        }
+
 
         public tb.Contrato GetContratoCompleto(int idContrato)
         {

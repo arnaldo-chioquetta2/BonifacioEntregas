@@ -33,7 +33,7 @@
             this.txtNovaClausula = new System.Windows.Forms.TextBox();
             this.lblNovaClausula = new System.Windows.Forms.Label();
             this.btnSalvarClausula = new System.Windows.Forms.Button();
-            this.button1 = new System.Windows.Forms.Button();
+            this.btSalvaContrato = new System.Windows.Forms.Button();
             this.btnExcluirClausula = new System.Windows.Forms.Button();
             this.btnAdicionarClausula = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.lstClausulas)).BeginInit();
@@ -188,6 +188,7 @@
             // 
             // btnSalvarClausula
             // 
+            this.btnSalvarClausula.Enabled = false;
             this.btnSalvarClausula.Location = new System.Drawing.Point(292, 578);
             this.btnSalvarClausula.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.btnSalvarClausula.Name = "btnSalvarClausula";
@@ -196,18 +197,20 @@
             this.btnSalvarClausula.Text = "Salvar Cláusula";
             this.btnSalvarClausula.UseVisualStyleBackColor = true;
             // 
-            // button1
+            // btSalvaContrato
             // 
-            this.button1.Location = new System.Drawing.Point(517, 578);
-            this.button1.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(193, 31);
-            this.button1.TabIndex = 13;
-            this.button1.Text = "Salvar Tipo de Contrato";
-            this.button1.UseVisualStyleBackColor = true;
+            this.btSalvaContrato.Enabled = false;
+            this.btSalvaContrato.Location = new System.Drawing.Point(517, 578);
+            this.btSalvaContrato.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.btSalvaContrato.Name = "btSalvaContrato";
+            this.btSalvaContrato.Size = new System.Drawing.Size(193, 31);
+            this.btSalvaContrato.TabIndex = 13;
+            this.btSalvaContrato.Text = "Salvar Tipo de Contrato";
+            this.btSalvaContrato.UseVisualStyleBackColor = true;
             // 
             // btnExcluirClausula
             // 
+            this.btnExcluirClausula.Enabled = false;
             this.btnExcluirClausula.Location = new System.Drawing.Point(155, 580);
             this.btnExcluirClausula.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.btnExcluirClausula.Name = "btnExcluirClausula";
@@ -219,6 +222,7 @@
             // 
             // btnAdicionarClausula
             // 
+            this.btnAdicionarClausula.Enabled = false;
             this.btnAdicionarClausula.Location = new System.Drawing.Point(18, 578);
             this.btnAdicionarClausula.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.btnAdicionarClausula.Name = "btnAdicionarClausula";
@@ -226,6 +230,7 @@
             this.btnAdicionarClausula.TabIndex = 15;
             this.btnAdicionarClausula.Text = "Adicionar Cláusula";
             this.btnAdicionarClausula.UseVisualStyleBackColor = true;
+            this.btnAdicionarClausula.Click += new System.EventHandler(this.btnAdicionarClausula_Click);
             // 
             // opeTpContrato
             // 
@@ -234,7 +239,7 @@
             this.ClientSize = new System.Drawing.Size(723, 623);
             this.Controls.Add(this.btnAdicionarClausula);
             this.Controls.Add(this.btnExcluirClausula);
-            this.Controls.Add(this.button1);
+            this.Controls.Add(this.btSalvaContrato);
             this.Controls.Add(this.btnSalvarClausula);
             this.Controls.Add(this.lblNovaClausula);
             this.Controls.Add(this.txtNovaClausula);
@@ -274,7 +279,7 @@
         private System.Windows.Forms.TextBox txtNovaClausula;
         private System.Windows.Forms.Label lblNovaClausula;
         private System.Windows.Forms.Button btnSalvarClausula;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button btSalvaContrato;
         private System.Windows.Forms.Button btnExcluirClausula;
         private System.Windows.Forms.Button btnAdicionarClausula;
     }
