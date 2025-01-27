@@ -11,6 +11,8 @@ namespace TeleBonifacio
 
         private dao.ContratosDAO contratosDao = new dao.ContratosDAO();
         private ClausulasDAO clausulasDAO = new ClausulasDAO();
+        private bool carregando = false;
+        private int cadastroAssociado = 0;
 
         public opeTpContrato()
         {
@@ -70,13 +72,39 @@ namespace TeleBonifacio
             btnExcluirClausula.Enabled = false;
         }
 
+        private void MostraTipo(int idTipoContrato)
+        {
+            switch (idTipoContrato)
+            {
+                case 1:
+                    lbTiContrato.Text = "Funcionários";
+                    break;
+                case 2: // Clientes
+                    lbTiContrato.Text = "Clientes";
+                    break;
+                case 3: // Entregadores
+                    lbTiContrato.Text = "Motoboys";
+                    break;
+                case 4: // Fornecedores
+                    lbTiContrato.Text = "Fornecedores";
+                    break;
+                default:
+                    lbTiContrato.Text = "?";
+                    break;
+            }
+        }
+
         private void cmbTiposContrato_SelectedIndexChanged(object sender, System.EventArgs e)
         {
-            if (cmbTiposContrato.SelectedValue != null && int.TryParse(cmbTiposContrato.SelectedValue.ToString(), out int idTipoContrato))
+            if (carregando==false)
             {
-                MostrarDadosTipoContrato(idTipoContrato);
-                HabilitaBotoes();
-            }
+                if (cmbTiposContrato.SelectedValue != null && int.TryParse(cmbTiposContrato.SelectedValue.ToString(), out int idTipoContrato))
+                {
+                    MostrarDadosTipoContrato(idTipoContrato);
+                    HabilitaBotoes();
+                    MostraTipo(idTipoContrato);
+                }
+            }            
         }
 
         private void HabilitaBotoes()
@@ -157,7 +185,7 @@ namespace TeleBonifacio
                 // Limpar o campo de texto
                 txtNovaClausula.Clear();
 
-                MessageBox.Show("Cláusula adicionada com sucesso!", "Sucesso", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                // MessageBox.Show("Cláusula adicionada com sucesso!", "Sucesso", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch (Exception ex)
             {
@@ -201,19 +229,21 @@ namespace TeleBonifacio
 
         private void btnAdicionarTipo_Click(object sender, EventArgs e)
         {
-            // Obtém os valores dos campos
+            carregando = true;
             string novoTipoContrato = txtNovoTipoContrato.Text.Trim();
-            int cadastroAssociado = cmbAssociarDados.SelectedIndex + 1; // Assume que os índices correspondem aos cadastros
+            cadastroAssociado = cmbAssociarDados.SelectedIndex + 1; // Assume que os índices correspondem aos cadastros
 
             // Validações
             if (string.IsNullOrWhiteSpace(novoTipoContrato))
             {
+                carregando = false;
                 MessageBox.Show("Por favor, insira o nome do novo tipo de contrato.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
             if (cadastroAssociado < 1 || cadastroAssociado > 4)
             {
+                carregando = false;
                 MessageBox.Show("Por favor, selecione o cadastro associado.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
@@ -242,13 +272,69 @@ namespace TeleBonifacio
                 cmbAssociarDados.SelectedIndex = -1;
                 lstClausulas.DataSource = null; // Limpa a lista de cláusulas
 
-                //MessageBox.Show("Tipo de contrato adicionado com sucesso!", "Sucesso", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MostraTipo(cadastroAssociado);
+                HabilitaBotoes();
+                carregando = false;
             }
             catch (Exception ex)
             {
+                carregando = false;
                 MessageBox.Show($"Erro ao adicionar tipo de contrato: {ex.Message}", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
+        //private void btSalvaContrato_Click(object sender, EventArgs e)
+        //{
+        //    // Obter o nome do tipo de contrato
+        //    string nomeTipoContrato = txtNovoTipoContrato.Text.Trim();
+
+        //    // Validação do nome do tipo de contrato
+        //    if (string.IsNullOrWhiteSpace(nomeTipoContrato))
+        //    {
+        //        MessageBox.Show("Por favor, insira um nome para o tipo de contrato.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        //        return; // Sai do método sem salvar
+        //    }
+
+        //    // Validação do cadastro associado
+        //    if (cmbAssociarDados.SelectedIndex < 0)
+        //    {
+        //        MessageBox.Show("Por favor, selecione um cadastro associado.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        //        return; // Sai do método sem salvar
+        //    }
+
+        //    // Obter o cadastro associado
+        //    int cadastroAssociado = cmbAssociarDados.SelectedIndex + 1;
+
+        //    try
+        //    {
+        //        // Salvar o novo tipo de contrato
+        //        contratosDao.InsertTipoContrato(nomeTipoContrato, cadastroAssociado);
+
+        //        // Atualizar o combo de tipos de contrato
+        //        CarregarTiposDeContrato();
+
+        //        // Selecionar automaticamente o novo tipo de contrato no combo
+        //        for (int i = 0; i < cmbTiposContrato.Items.Count; i++)
+        //        {
+        //            if (cmbTiposContrato.GetItemText(cmbTiposContrato.Items[i]).Equals(nomeTipoContrato, StringComparison.OrdinalIgnoreCase))
+        //            {
+        //                cmbTiposContrato.SelectedIndex = i;
+        //                break;
+        //            }
+        //        }
+
+        //        // Limpar os campos após o salvamento
+        //        txtNovoTipoContrato.Clear();
+        //        cmbAssociarDados.SelectedIndex = -1;
+        //        lstClausulas.DataSource = null; // Limpa a lista de cláusulas
+
+        //        MessageBox.Show("Novo tipo de contrato salvo com sucesso!", "Sucesso", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        MessageBox.Show($"Erro ao salvar o tipo de contrato: {ex.Message}", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        //    }
+        //}
 
     }
 }

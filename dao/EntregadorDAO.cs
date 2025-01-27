@@ -91,7 +91,7 @@ namespace TeleBonifacio.dao
 
         private int VeUltReg()
         {
-            string query = $"SELECT Max(codi) as codi FROM Mecanicos";
+            string query = $"SELECT Max(codi) as codi FROM Mecanicos Where Oper = 3";
             using (OleDbConnection connection = new OleDbConnection(glo.connectionString))
             {
                 try

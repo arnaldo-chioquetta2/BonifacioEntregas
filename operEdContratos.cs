@@ -8,17 +8,78 @@ namespace TeleBonifacio
 {
     public partial class operEdContratos : Form
     {
-        private ContratosDAO contratosDAO; // Objeto DAO para manipular os contratos
-        private Contrato contratoExistente; // Contrato a ser editado (se for o ca
-        private ClausulasDAO clausulasDAO = new ClausulasDAO();
         public int contratoId;
-        private bool modoEdicao;
-        private int clausulaSelecionadaId = 0; // ID da cláusula atualmente selecionada
+        private ContratosDAO contratosDAO; 
+        private Contrato contratoExistente; 
+        private ClausulasDAO clausulasDAO = new ClausulasDAO();        
+        private bool modoEdicao;        
+        private int clausulaSelecionadaId = 0; 
         private bool Carregando = false;
+        private int idTipoContrato = -1;
 
         private void operEdContratos_Load(object sender, EventArgs e)
         {
             InicializarTela();
+            InicializarComboTiposContrato();
+            if (modoEdicao && contratoExistente != null)
+            {
+                CarregarContratoParaEdicao(contratoExistente);
+            }
+        }
+
+        private void CarregarContratoParaEdicao(Contrato contrato)
+        {
+            txtDescricao.Text = contrato.Descricao;
+            txtValor.Text = contrato.Valor.ToString("N2");
+            cmbStatus.SelectedItem = contrato.Status;
+            dtpInicio.Value = contrato.DataInicio;
+            dtpFim.Value = contrato.DataTermino;
+            txtObservacoes.Text = contrato.Observacoes;
+
+            // Selecionar o tipo de contrato no combo
+            cmbTipoContrato.SelectedValue = contrato.Id;
+
+            // Carregar as cláusulas do tipo de contrato
+            ClausulasDAO clausulasDAO = new ClausulasDAO();
+            DataTable clausulas = clausulasDAO.GetClausulasByTipoContrato(contrato.Id);
+
+            lstClausulas.DataSource = clausulas;
+            lstClausulas.DisplayMember = "Texto"; // Atualize para o nome correto da coluna no banco
+            lstClausulas.ValueMember = "IdClausula"; // Atualize para o nome correto da coluna no banco
+
+            // Habilitar os campos
+            ToggleCampos(true);
+        }
+        
+        public operEdContratos(int nrContrato)
+        {
+            InitializeComponent();
+            contratosDAO = new ContratosDAO();
+            clausulasDAO = new ClausulasDAO();
+
+            // Carrega os motoboys no ComboBox
+            //CarregarMotoboys();
+
+            if (nrContrato > 0) // Edição de contrato
+            {
+                modoEdicao = true;
+                contratoExistente = contratosDAO.GetContratoById(nrContrato);
+                idTipoContrato = contratoExistente.Id;
+                CarregarDadosAssociados(idTipoContrato);
+
+                if (contratoExistente != null)
+                {
+                    // Seleciona o motoboy no ComboBox
+                    cmbMotoboy.SelectedValue = contratoExistente.IdEntregador;
+                    cmbMotoboy.Enabled = false; // Desativa edição do Motoboy
+                    btnNovoMotoboy.Enabled = false;
+                }
+            }
+            else // Novo contrato
+            {
+                modoEdicao = false;
+                contratoExistente = null;
+            }
         }
 
         private void InicializarTela()
@@ -46,39 +107,10 @@ namespace TeleBonifacio
                 dtpInicio.Value = DateTime.Today;
                 dtpFim.Value = DateTime.Today;
                 txtObservacoes.Clear();
-                lstClausulas.DataSource = null;                
+                lstClausulas.DataSource = null;
             }
             lblContratoId.Text = "Contrato: " + contratoId.ToString();
             Carregando = false;
-        }
-
-        public operEdContratos(int nrContrato)
-        {
-            InitializeComponent();
-            contratosDAO = new ContratosDAO();
-            clausulasDAO = new ClausulasDAO();
-
-            // Carrega os motoboys no ComboBox
-            CarregarMotoboys();
-
-            if (nrContrato > 0) // Edição de contrato
-            {
-                modoEdicao = true;
-                contratoExistente = contratosDAO.GetContratoById(nrContrato);
-
-                if (contratoExistente != null)
-                {
-                    // Seleciona o motoboy no ComboBox
-                    cmbMotoboy.SelectedValue = contratoExistente.IdEntregador;
-                    cmbMotoboy.Enabled = false; // Desativa edição do Motoboy
-                    btnNovoMotoboy.Enabled = false;
-                }
-            }
-            else // Novo contrato
-            {
-                modoEdicao = false;
-                contratoExistente = null;
-            }
         }
 
         private void btnCancelar_Click(object sender, EventArgs e)
@@ -251,51 +283,7 @@ namespace TeleBonifacio
             {
                 MessageBox.Show("Selecione uma cláusula para remover.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-        }
-
-        //private bool ValidarContrato()
-        //{
-        //    // Validação: Verificar se a descrição está preenchida
-        //    if (string.IsNullOrWhiteSpace(txtDescricao.Text))
-        //    {
-        //        MessageBox.Show("A descrição do contrato é obrigatória.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
-        //        txtDescricao.Focus();
-        //        return false;
-        //    }
-
-        //    // Validação: Verificar se o valor é válido
-        //    if (!decimal.TryParse(txtValor.Text, out decimal valor) || valor <= 0)
-        //    {
-        //        MessageBox.Show("O valor do contrato deve ser maior que zero.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
-        //        txtValor.Focus();
-        //        return false;
-        //    }
-
-        //    // Validação: Verificar se as datas são consistentes
-        //    if (dtpInicio.Value >= dtpFim.Value)
-        //    {
-        //        MessageBox.Show("A data de início deve ser anterior à data de término.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
-        //        dtpInicio.Focus();
-        //        return false;
-        //    }
-
-        //    // Validação: Verificar se há observações
-        //    //if (string.IsNullOrWhiteSpace(txtObservacoes.Text))
-        //    //{
-        //    //    MessageBox.Show("As observações são obrigatórias.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
-        //    //    txtObservacoes.Focus();
-        //    //    return false;
-        //    //}
-
-        //    // Validação: Verificar se há cláusulas no contrato
-        //    if (lstClausulas.Items.Count == 0)
-        //    {
-        //        MessageBox.Show("O contrato deve ter pelo menos uma cláusula.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
-        //        return false;
-        //    }
-
-        //    return true;
-        //}
+        }       
 
         private void GravarContrato()
         {
@@ -353,28 +341,7 @@ namespace TeleBonifacio
             }
 
         }
-
-        private void CarregarMotoboys()
-        {
-            // Instancia o DAO de Entregadores
-            EntregadorDAO entregadorDAO = new EntregadorDAO();
-
-            // Obtém os dados dos entregadores no formato DataTable
-            DataTable motoboys = entregadorDAO.getDados();
-
-            if (motoboys.Rows.Count > 0)
-            {
-                // Preenche o ComboBox com os dados dos motoboys
-                cmbMotoboy.DataSource = motoboys;
-                cmbMotoboy.DisplayMember = "Nome"; // Nome do motoboy exibido no ComboBox
-                cmbMotoboy.ValueMember = "id";    // Valor associado ao item (ID do motoboy)
-            }
-            else
-            {
-                cmbMotoboy.DataSource = null;
-            }
-        }
-
+        
         private void btnNovoMotoboy_Click(object sender, EventArgs e)
         {
             fCadEntregadores CadEntregadores = new fCadEntregadores();
@@ -399,7 +366,7 @@ namespace TeleBonifacio
                     if (clausulaSelecionada != null)
                     {
                         clausulaSelecionadaId = Convert.ToInt32(clausulaSelecionada[0]); // Armazena o ID da cláusula
-                        txtEditarAdicionar.Text = clausulaSelecionada["Descricao"].ToString(); // Mostra a descrição no campo de edição
+                        txtEditarAdicionar.Text = clausulaSelecionada[0].ToString(); // Mostra a descrição no campo de edição
                     }
                 }
             }
@@ -431,6 +398,155 @@ namespace TeleBonifacio
                               WHERE ID = {clausulaId}";
             DB.ExecutarComandoSQL(query);
         }
+
+        private void InicializarComboTiposContrato()
+        {
+            ContratosDAO contratosDAO = new ContratosDAO();
+            DataTable tiposContrato = contratosDAO.GetTiposDeContrato();
+
+            // Adiciona "Escolha o contrato" como item inicial
+            DataRow linhaInicial = tiposContrato.NewRow();
+            linhaInicial["Nome"] = "Escolha o contrato";
+            linhaInicial["IdTipoContrato"] = 0;
+            tiposContrato.Rows.InsertAt(linhaInicial, 0);
+
+            cmbTipoContrato.DataSource = tiposContrato;
+            cmbTipoContrato.DisplayMember = "Nome";
+            cmbTipoContrato.ValueMember = "IdTipoContrato";
+            cmbTipoContrato.SelectedIndex = 0;
+
+            // Desabilita os campos até que um tipo seja selecionado
+            ToggleCampos(false);
+        }
+
+        private void ToggleCampos(bool habilitar)
+        {
+            txtDescricao.Enabled = habilitar;
+            txtValor.Enabled = habilitar;
+            cmbStatus.Enabled = habilitar;
+            dtpInicio.Enabled = habilitar;
+            dtpFim.Enabled = habilitar;
+            txtObservacoes.Enabled = habilitar;
+            lstClausulas.Enabled = habilitar;
+            btnAddClausula.Enabled = habilitar;
+            btnEditClausula.Enabled = habilitar;
+            btnRemoveClausula.Enabled = habilitar;
+            txtEditarAdicionar.Enabled = habilitar;
+            btnSalvar.Enabled = habilitar;
+            btnImprimir.Enabled = habilitar;
+        }
+
+        private void cmbTipoContrato_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (cmbTipoContrato.SelectedIndex > 0) // Um tipo de contrato válido foi selecionado
+            {
+                Carregando = true;
+                idTipoContrato = Convert.ToInt32(cmbTipoContrato.SelectedValue);
+
+                CarregarDadosAssociados(idTipoContrato);
+
+                // Atualizar as cláusulas para o novo tipo de contrato
+                //ClausulasDAO clausulasDAO = new ClausulasDAO();
+                DataTable clausulas = clausulasDAO.GetClausulasByTipoContrato(idTipoContrato);
+
+                lstClausulas.DataSource = clausulas;
+                lstClausulas.DisplayMember = "Texto";
+                lstClausulas.ValueMember = "Ordem";
+                ToggleCampos(true);
+                Carregando = false;
+            }
+
+        }
+
+        private void CarregarDadosAssociados(int cadastroAssociado)
+        {
+            switch (cadastroAssociado)
+            {
+                case 1:
+                    CarregarFuncion();
+                    break;
+                case 2: // Clientes
+                    CarregarClientes();
+                    break;
+                case 3: // Entregadores
+                    CarregarMotoboys();
+                    break;
+                case 4: // Fornecedores
+                    CarregarFornecedores();
+                    break;
+                default:
+                    cmbMotoboy.DataSource = null;
+                    return;
+            }
+        }
+
+        #region Carregantos
+
+        private void CarregarMotoboys()
+        {
+            EntregadorDAO entregadorDAO = new EntregadorDAO();
+            DataTable motoboys = entregadorDAO.getDados();
+            if (motoboys.Rows.Count > 0)
+            {
+                cmbMotoboy.DataSource = motoboys;
+                cmbMotoboy.DisplayMember = "Nome";
+                cmbMotoboy.ValueMember = "id";
+            }
+            else
+            {
+                cmbMotoboy.DataSource = null;
+            }
+        }
+
+        private void CarregarFornecedores()
+        {
+            FornecedorDao entregadorDAO = new FornecedorDao();
+            DataTable motoboys = entregadorDAO.getDados();
+            if (motoboys.Rows.Count > 0)
+            {
+                cmbMotoboy.DataSource = motoboys;
+                cmbMotoboy.DisplayMember = "Nome";
+                cmbMotoboy.ValueMember = "id";
+            }
+            else
+            {
+                cmbMotoboy.DataSource = null;
+            }
+        }
+
+        private void CarregarFuncion()
+        {
+            VendedoresDAO entregadorDAO = new VendedoresDAO();
+            DataTable motoboys = entregadorDAO.getDados();
+            if (motoboys.Rows.Count > 0)
+            {
+                cmbMotoboy.DataSource = motoboys;
+                cmbMotoboy.DisplayMember = "Nome";
+                cmbMotoboy.ValueMember = "id";
+            }
+            else
+            {
+                cmbMotoboy.DataSource = null;
+            }
+        }
+        
+        private void CarregarClientes()
+        {
+            ClienteDAO entregadorDAO = new ClienteDAO();
+            DataTable motoboys = entregadorDAO.getDados();
+            if (motoboys.Rows.Count > 0)
+            {
+                cmbMotoboy.DataSource = motoboys;
+                cmbMotoboy.DisplayMember = "Nome";
+                cmbMotoboy.ValueMember = "id";
+            }
+            else
+            {
+                cmbMotoboy.DataSource = null;
+            }
+        }
+
+        #endregion
 
     }
 
