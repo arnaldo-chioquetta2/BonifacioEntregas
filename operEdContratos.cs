@@ -424,6 +424,13 @@ namespace TeleBonifacio
             printer.Imprimir();
         }
 
+        public void UpdateClausula(int clausulaId, string descricao)
+        {
+            string query = $@"UPDATE Clausulas 
+                              SET Descricao = '{descricao.Replace("'", "''")}' 
+                              WHERE ID = {clausulaId}";
+            DB.ExecutarComandoSQL(query);
+        }
 
     }
 

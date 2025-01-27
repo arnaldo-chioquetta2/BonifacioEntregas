@@ -10,6 +10,7 @@ namespace TeleBonifacio
     {
 
         private dao.ContratosDAO contratosDao = new dao.ContratosDAO();
+        private ClausulasDAO clausulasDAO = new ClausulasDAO();
 
         public opeTpContrato()
         {
@@ -26,7 +27,7 @@ namespace TeleBonifacio
                 // Cria uma nova linha para o item inicial
                 DataRow novaLinha = tiposContrato.NewRow();
                 novaLinha["IdTipoContrato"] = -1; // ID fictício
-                novaLinha["Nome"] = "Escolha o Contrato";
+                novaLinha["Nome"] = "Escolha o tipo de Contrato";
                 tiposContrato.Rows.InsertAt(novaLinha, 0); // Insere na primeira posição
 
                 // Popula o ComboBox
@@ -55,7 +56,7 @@ namespace TeleBonifacio
 
             // Consulta ao banco de dados para buscar as cláusulas
             ContratosDAO contratosDAO = new ContratosDAO();
-            DataTable clausulas = contratosDAO.GetClausulasByTipoContrato(idTipoContrato);
+            DataTable clausulas = clausulasDAO.GetClausulasByTipoContrato(idTipoContrato);
 
             // Adiciona as cláusulas ao DataGridView
             foreach (DataRow row in clausulas.Rows)
@@ -92,8 +93,9 @@ namespace TeleBonifacio
             {
                 var row = lstClausulas.Rows[e.RowIndex];
                 txtNovaClausula.Text = row.Cells[0].Value.ToString(); // Exibe o texto no campo de edição
-                btnExcluirClausula.Enabled = true; // Habilita o botão de excluir
                 lblNovaClausula.Text = "Editar Cláusula";
+                btnExcluirClausula.Enabled = true;
+                btnSalvarClausula.Enabled = true;
             }
         }
 
@@ -112,9 +114,7 @@ namespace TeleBonifacio
                     // Remover do DataGridView
                     lstClausulas.Rows.RemoveAt(rowIndex);
 
-                    // Opcional: Atualizar o banco de dados
-                    ContratosDAO contratosDAO = new ContratosDAO();
-                    contratosDAO.DeleteClausulaByTexto(clausulaTexto); // Implemente este método para deletar no banco
+                    clausulasDAO.DeleteClausulaByTexto(clausulaTexto); // Implemente este método para deletar no banco
 
                     txtNovaClausula.Clear();
                     btnExcluirClausula.Enabled = false;
@@ -143,13 +143,13 @@ namespace TeleBonifacio
             try
             {
                 // Instanciar o DAO
-                ContratosDAO contratosDAO = new ContratosDAO();
+                //ContratosDAO contratosDAO = new ContratosDAO();
 
                 // Obter a próxima ordem para a cláusula
-                int novaOrdem = contratosDAO.GetProximaOrdemClausula(idTipoContrato);
+                int novaOrdem = clausulasDAO.GetProximaOrdemClausula(idTipoContrato);
 
                 // Inserir a nova cláusula no banco de dados
-                contratosDAO.InsertClausula(idTipoContrato, novaOrdem, textoClausula);
+                clausulasDAO.InsertClausula(idTipoContrato, novaOrdem, textoClausula);
 
                 // Atualizar a lista de cláusulas exibida
                 MostrarDadosTipoContrato(idTipoContrato);
@@ -162,6 +162,91 @@ namespace TeleBonifacio
             catch (Exception ex)
             {
                 MessageBox.Show($"Erro ao adicionar a cláusula: {ex.Message}", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void btnSalvarClausula_Click(object sender, EventArgs e)
+        {
+            // Verifica se há uma linha selecionada no DataGridView
+            if (lstClausulas.CurrentRow != null)
+            {
+                // Obtém o texto original da cláusula a partir da célula correspondente
+                string textoOriginal = lstClausulas.CurrentRow.Cells["Texto"].Value.ToString();
+                string novoTexto = txtNovaClausula.Text.Trim();
+
+                // Verifica se o campo de texto não está vazio
+                if (string.IsNullOrWhiteSpace(novoTexto))
+                {
+                    MessageBox.Show("O texto da cláusula não pode estar vazio.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+
+                // Atualiza a cláusula no banco de dados
+                ClausulasDAO clausulasDAO = new ClausulasDAO();
+                clausulasDAO.UpdateClausulaByTexto(textoOriginal, novoTexto);
+
+                // Atualiza o texto da célula no DataGridView
+                lstClausulas.CurrentRow.Cells["Texto"].Value = novoTexto;
+
+                // Limpa o campo de texto após a atualização
+                txtNovaClausula.Clear();
+
+                MessageBox.Show("Cláusula atualizada com sucesso!", "Sucesso", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            else
+            {
+                MessageBox.Show("Por favor, selecione uma cláusula para atualizar.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void btnAdicionarTipo_Click(object sender, EventArgs e)
+        {
+            // Obtém os valores dos campos
+            string novoTipoContrato = txtNovoTipoContrato.Text.Trim();
+            int cadastroAssociado = cmbAssociarDados.SelectedIndex + 1; // Assume que os índices correspondem aos cadastros
+
+            // Validações
+            if (string.IsNullOrWhiteSpace(novoTipoContrato))
+            {
+                MessageBox.Show("Por favor, insira o nome do novo tipo de contrato.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            if (cadastroAssociado < 1 || cadastroAssociado > 4)
+            {
+                MessageBox.Show("Por favor, selecione o cadastro associado.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            // Adiciona o novo tipo de contrato ao banco de dados
+            try
+            {
+                //ContratosDAO contratosDAO = new ContratosDAO();
+                contratosDao.InsertTipoContrato(novoTipoContrato, cadastroAssociado);
+
+                // Atualiza o combo de tipos de contrato
+                CarregarTiposDeContrato();
+
+                // Busca o índice do novo tipo de contrato pelo nome e o seleciona
+                for (int i = 0; i < cmbTiposContrato.Items.Count; i++)
+                {
+                    if (cmbTiposContrato.GetItemText(cmbTiposContrato.Items[i]).Equals(novoTipoContrato, StringComparison.OrdinalIgnoreCase))
+                    {
+                        cmbTiposContrato.SelectedIndex = i;
+                        break;
+                    }
+                }
+
+                // Limpa os campos e reseta a lista de cláusulas
+                txtNovoTipoContrato.Clear();
+                cmbAssociarDados.SelectedIndex = -1;
+                lstClausulas.DataSource = null; // Limpa a lista de cláusulas
+
+                //MessageBox.Show("Tipo de contrato adicionado com sucesso!", "Sucesso", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Erro ao adicionar tipo de contrato: {ex.Message}", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 

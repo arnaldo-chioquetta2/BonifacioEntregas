@@ -22,7 +22,7 @@
             this.lblTipoContrato = new System.Windows.Forms.Label();
             this.txtNovoTipoContrato = new System.Windows.Forms.TextBox();
             this.lblNovoTipoContrato = new System.Windows.Forms.Label();
-            this.cmbCadastroAssociado = new System.Windows.Forms.ComboBox();
+            this.cmbAssociarDados = new System.Windows.Forms.ComboBox();
             this.lblCadastroAssociado = new System.Windows.Forms.Label();
             this.btnAdicionarTipo = new System.Windows.Forms.Button();
             this.lstClausulas = new System.Windows.Forms.DataGridView();
@@ -81,20 +81,20 @@
             this.lblNovoTipoContrato.TabIndex = 4;
             this.lblNovoTipoContrato.Text = "Novo tipo de contrato";
             // 
-            // cmbCadastroAssociado
+            // cmbAssociarDados
             // 
-            this.cmbCadastroAssociado.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbCadastroAssociado.FormattingEnabled = true;
-            this.cmbCadastroAssociado.Items.AddRange(new object[] {
+            this.cmbAssociarDados.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbAssociarDados.FormattingEnabled = true;
+            this.cmbAssociarDados.Items.AddRange(new object[] {
             "Funcionários",
             "Clientes",
             "Entregadores",
             "Fornecedores"});
-            this.cmbCadastroAssociado.Location = new System.Drawing.Point(317, 136);
-            this.cmbCadastroAssociado.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.cmbCadastroAssociado.Name = "cmbCadastroAssociado";
-            this.cmbCadastroAssociado.Size = new System.Drawing.Size(256, 28);
-            this.cmbCadastroAssociado.TabIndex = 5;
+            this.cmbAssociarDados.Location = new System.Drawing.Point(317, 136);
+            this.cmbAssociarDados.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.cmbAssociarDados.Name = "cmbAssociarDados";
+            this.cmbAssociarDados.Size = new System.Drawing.Size(256, 28);
+            this.cmbAssociarDados.TabIndex = 5;
             // 
             // lblCadastroAssociado
             // 
@@ -115,6 +115,7 @@
             this.btnAdicionarTipo.TabIndex = 7;
             this.btnAdicionarTipo.Text = "Adicionar Tipo";
             this.btnAdicionarTipo.UseVisualStyleBackColor = true;
+            this.btnAdicionarTipo.Click += new System.EventHandler(this.btnAdicionarTipo_Click);
             // 
             // lstClausulas
             // 
@@ -196,6 +197,7 @@
             this.btnSalvarClausula.TabIndex = 12;
             this.btnSalvarClausula.Text = "Salvar Cláusula";
             this.btnSalvarClausula.UseVisualStyleBackColor = true;
+            this.btnSalvarClausula.Click += new System.EventHandler(this.btnSalvarClausula_Click);
             // 
             // btSalvaContrato
             // 
@@ -247,7 +249,7 @@
             this.Controls.Add(this.lstClausulas);
             this.Controls.Add(this.btnAdicionarTipo);
             this.Controls.Add(this.lblCadastroAssociado);
-            this.Controls.Add(this.cmbCadastroAssociado);
+            this.Controls.Add(this.cmbAssociarDados);
             this.Controls.Add(this.lblNovoTipoContrato);
             this.Controls.Add(this.txtNovoTipoContrato);
             this.Controls.Add(this.lblTipoContrato);
@@ -268,7 +270,7 @@
         private System.Windows.Forms.Label lblTipoContrato;
         private System.Windows.Forms.TextBox txtNovoTipoContrato;
         private System.Windows.Forms.Label lblNovoTipoContrato;
-        private System.Windows.Forms.ComboBox cmbCadastroAssociado;
+        private System.Windows.Forms.ComboBox cmbAssociarDados;
         private System.Windows.Forms.Label lblCadastroAssociado;
         private System.Windows.Forms.Button btnAdicionarTipo;
         private System.Windows.Forms.DataGridView lstClausulas;

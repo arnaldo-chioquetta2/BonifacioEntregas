@@ -54,16 +54,15 @@ namespace TeleBonifacio.dao
             DB.ExecutarComandoSQL(sql);
         }
 
-        public DataTable GetClausulasByTipoContrato(int idTipoContrato)
-        {
-            string query = "SELECT Ordem, Texto FROM ClausulasContrato WHERE IdTipoContrato = @IdTipoContrato ORDER BY Ordem";
-            List<OleDbParameter> parametros = new List<OleDbParameter>
-            {
-                new OleDbParameter("@IdTipoContrato", idTipoContrato)
-            };
-            return DB.ExecutarConsulta(query, parametros);
-        }
-
+        //public DataTable GetClausulasByTipoContrato(int idTipoContrato)
+        //{
+        //    string query = "SELECT Ordem, Texto FROM ClausulasContrato WHERE IdTipoContrato = @IdTipoContrato ORDER BY Ordem";
+        //    List<OleDbParameter> parametros = new List<OleDbParameter>
+        //    {
+        //        new OleDbParameter("@IdTipoContrato", idTipoContrato)
+        //    };
+        //    return DB.ExecutarConsulta(query, parametros);
+        //}
 
         // Método para deletar um contrato
         public void DeleteContrato(int idContrato)
@@ -98,49 +97,37 @@ namespace TeleBonifacio.dao
             return null; // Contrato não encontrado
         }
 
-        public void DeleteClausulaByTexto(string texto)
-        {
-            string sql = "DELETE FROM ClausulasContrato WHERE Texto = @texto";
-            List<OleDbParameter> parametros = new List<OleDbParameter>
-            {
-                new OleDbParameter("@texto", texto)
-            };
-            DB.ExecutarComandoSQL(sql, parametros);
-        }
-
-        public void UpdateClausulaByTexto(string textoOriginal, string novoTexto)
-        {
-            string sql = "UPDATE ClausulasContrato SET Texto = @novoTexto WHERE Texto = @textoOriginal";
-            List<OleDbParameter> parametros = new List<OleDbParameter>
-            {
-                new OleDbParameter("@novoTexto", novoTexto),
-                new OleDbParameter("@textoOriginal", textoOriginal)
-            };
-            DB.ExecutarComandoSQL(sql, parametros);
-        }
-
-        public void InsertClausula(int idTipoContrato, int ordem, string texto)
-        {
-            string query = "INSERT INTO ClausulasContrato (IdTipoContrato, Ordem, Texto) VALUES (@idTipoContrato, @ordem, @texto)";
-            DB.ExecutarComandoSQL(query, new List<OleDbParameter>
-            {
-                new OleDbParameter("@idTipoContrato", idTipoContrato),
-                new OleDbParameter("@ordem", ordem),
-                new OleDbParameter("@texto", texto)
-            });
-        }
-
-        //public void InsertClausula(string texto, int idTipoContrato)
+        //public void DeleteClausulaByTexto(string texto)
         //{
-        //    string sql = "INSERT INTO ClausulasContrato (IdTipoContrato, Texto) VALUES (@idTipoContrato, @texto)";
+        //    string sql = "DELETE FROM ClausulasContrato WHERE Texto = @texto";
         //    List<OleDbParameter> parametros = new List<OleDbParameter>
         //    {
-        //        new OleDbParameter("@idTipoContrato", idTipoContrato),
         //        new OleDbParameter("@texto", texto)
         //    };
         //    DB.ExecutarComandoSQL(sql, parametros);
         //}
 
+        //public void UpdateClausulaByTexto(string textoOriginal, string novoTexto)
+        //{
+        //    string sql = "UPDATE ClausulasContrato SET Texto = @novoTexto WHERE Texto = @textoOriginal";
+        //    List<OleDbParameter> parametros = new List<OleDbParameter>
+        //    {
+        //        new OleDbParameter("@novoTexto", novoTexto),
+        //        new OleDbParameter("@textoOriginal", textoOriginal)
+        //    };
+        //    DB.ExecutarComandoSQL(sql, parametros);
+        //}
+
+        //public void InsertClausula(int idTipoContrato, int ordem, string texto)
+        //{
+        //    string query = "INSERT INTO ClausulasContrato (IdTipoContrato, Ordem, Texto) VALUES (@idTipoContrato, @ordem, @texto)";
+        //    DB.ExecutarComandoSQL(query, new List<OleDbParameter>
+        //    {
+        //        new OleDbParameter("@idTipoContrato", idTipoContrato),
+        //        new OleDbParameter("@ordem", ordem),
+        //        new OleDbParameter("@texto", texto)
+        //    });
+        //}
 
         public int GetNextContratoId()
         {
@@ -154,19 +141,19 @@ namespace TeleBonifacio.dao
             return 1; // Caso não haja registros, retorna 1 como primeiro ID
         }
 
-        public int GetProximaOrdemClausula(int idTipoContrato)
-        {
-            string query = "SELECT MAX(Ordem) FROM ClausulasContrato WHERE IdTipoContrato = @idTipoContrato";
-            DataTable dt = DB.ExecutarConsulta(query, new List<OleDbParameter>
-            {
-                new OleDbParameter("@idTipoContrato", idTipoContrato)
-            });
-            if (dt.Rows.Count > 0 && dt.Rows[0][0] != DBNull.Value)
-            {
-                return Convert.ToInt32(dt.Rows[0][0]) + 1;
-            }
-            return 1; // Caso seja a primeira cláusula
-        }
+        //public int GetProximaOrdemClausula(int idTipoContrato)
+        //{
+        //    string query = "SELECT MAX(Ordem) FROM ClausulasContrato WHERE IdTipoContrato = @idTipoContrato";
+        //    DataTable dt = DB.ExecutarConsulta(query, new List<OleDbParameter>
+        //    {
+        //        new OleDbParameter("@idTipoContrato", idTipoContrato)
+        //    });
+        //    if (dt.Rows.Count > 0 && dt.Rows[0][0] != DBNull.Value)
+        //    {
+        //        return Convert.ToInt32(dt.Rows[0][0]) + 1;
+        //    }
+        //    return 1; // Caso seja a primeira cláusula
+        //}
 
 
         public tb.Contrato GetContratoCompleto(int idContrato)
@@ -219,6 +206,38 @@ namespace TeleBonifacio.dao
             return null;
         }
 
+        public int InsertTipoContrato(string nome, int cadastroAssociado)
+        {
+            string query = "INSERT INTO TiposContrato (Nome, CadastroAssociado) VALUES (@nome, @cadastroAssociado)";
+            List<OleDbParameter> parametros = new List<OleDbParameter>
+            {
+                new OleDbParameter("@nome", nome),
+                new OleDbParameter("@cadastroAssociado", cadastroAssociado)
+            };
+
+            try
+            {
+                // Executa a inserção
+                DB.ExecutarComandoSQL(query, parametros);
+
+                // Recupera o último ID gerado
+                string queryId = "SELECT @@IDENTITY";
+                DataTable result = DB.ExecutarConsulta(queryId);
+
+                if (result.Rows.Count > 0 && result.Rows[0][0] != DBNull.Value)
+                {
+                    return Convert.ToInt32(result.Rows[0][0]);
+                }
+                else
+                {
+                    throw new Exception("Não foi possível recuperar o ID do novo tipo de contrato.");
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Erro ao inserir tipo de contrato: {ex.Message}");
+            }
+        }
 
         public DataTable GetFilteredContratos(string filtroDescricao = "", string filtroStatus = "Todos", DateTime? inicio = null, DateTime? fim = null)
         {
