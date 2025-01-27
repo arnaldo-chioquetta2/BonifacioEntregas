@@ -3,6 +3,7 @@ using System.Data;
 using System.Collections.Generic;
 using System.Linq;
 using System.Data.OleDb;
+using System.Windows.Forms;
 
 namespace TeleBonifacio.dao
 {
@@ -10,6 +11,7 @@ namespace TeleBonifacio.dao
     {
 
         // Método para obter todos os contratos
+        public int IdTipoContrato = 0;
 
         public DataTable GetAllContratos()
         {
@@ -40,29 +42,20 @@ namespace TeleBonifacio.dao
         }
 
         // Método para atualizar um contrato existente
-        public void UpdateContrato(int idContrato, string descricao, decimal valor, string status, DateTime dataInicio, DateTime dataTermino, string pix, string observacoes)
+        public void UpdateContrato(int idContrato, string descricao, decimal valor, string status, DateTime dataInicio, DateTime dataTermino, string pix, string observacoes, string nomeEmpresa)
         {
             string sql = $@"UPDATE Contratos SET 
-                            Descricao = '{descricao}', 
-                            Valor = {glo.sv(valor)}, 
-                            Status = '{status}', 
-                            DataInicio = '{dataInicio:yyyy-MM-dd HH:mm:ss}', 
-                            DataTermino = '{dataTermino:yyyy-MM-dd HH:mm:ss}', 
-                            PIX = '{pix}', 
-                            Observacoes = '{observacoes}'
-                            WHERE ID = {idContrato}";
+                    Descricao = '{descricao}', 
+                    Valor = {glo.sv(valor)}, 
+                    Status = '{status}', 
+                    DataInicio = '{dataInicio:yyyy-MM-dd HH:mm:ss}', 
+                    DataTermino = '{dataTermino:yyyy-MM-dd HH:mm:ss}', 
+                    PIX = '{pix}', 
+                    Observacoes = '{observacoes}', 
+                    NomeEmpresa = '{nomeEmpresa.Replace("'", "''")}' -- Escapa apóstrofos no nome da empresa
+                    WHERE ID = {idContrato}";
             DB.ExecutarComandoSQL(sql);
         }
-
-        //public DataTable GetClausulasByTipoContrato(int idTipoContrato)
-        //{
-        //    string query = "SELECT Ordem, Texto FROM ClausulasContrato WHERE IdTipoContrato = @IdTipoContrato ORDER BY Ordem";
-        //    List<OleDbParameter> parametros = new List<OleDbParameter>
-        //    {
-        //        new OleDbParameter("@IdTipoContrato", idTipoContrato)
-        //    };
-        //    return DB.ExecutarConsulta(query, parametros);
-        //}
 
         // Método para deletar um contrato
         public void DeleteContrato(int idContrato)
@@ -89,45 +82,13 @@ namespace TeleBonifacio.dao
                     Status = row["Status"]?.ToString(),
                     DataInicio = row["DataInicio"] != DBNull.Value ? Convert.ToDateTime(row["DataInicio"]) : DateTime.MinValue,
                     DataTermino = row["DataTermino"] != DBNull.Value ? Convert.ToDateTime(row["DataTermino"]) : DateTime.MinValue,
-                    // Pix = row["PIX"]?.ToString(),
-                    Observacoes = row["Observacoes"]?.ToString()
+                    Observacoes = row["Observacoes"]?.ToString(),
+                    NomeEmpresa = row["NomeEmpresa"]?.ToString()
                 };
             }
 
             return null; // Contrato não encontrado
         }
-
-        //public void DeleteClausulaByTexto(string texto)
-        //{
-        //    string sql = "DELETE FROM ClausulasContrato WHERE Texto = @texto";
-        //    List<OleDbParameter> parametros = new List<OleDbParameter>
-        //    {
-        //        new OleDbParameter("@texto", texto)
-        //    };
-        //    DB.ExecutarComandoSQL(sql, parametros);
-        //}
-
-        //public void UpdateClausulaByTexto(string textoOriginal, string novoTexto)
-        //{
-        //    string sql = "UPDATE ClausulasContrato SET Texto = @novoTexto WHERE Texto = @textoOriginal";
-        //    List<OleDbParameter> parametros = new List<OleDbParameter>
-        //    {
-        //        new OleDbParameter("@novoTexto", novoTexto),
-        //        new OleDbParameter("@textoOriginal", textoOriginal)
-        //    };
-        //    DB.ExecutarComandoSQL(sql, parametros);
-        //}
-
-        //public void InsertClausula(int idTipoContrato, int ordem, string texto)
-        //{
-        //    string query = "INSERT INTO ClausulasContrato (IdTipoContrato, Ordem, Texto) VALUES (@idTipoContrato, @ordem, @texto)";
-        //    DB.ExecutarComandoSQL(query, new List<OleDbParameter>
-        //    {
-        //        new OleDbParameter("@idTipoContrato", idTipoContrato),
-        //        new OleDbParameter("@ordem", ordem),
-        //        new OleDbParameter("@texto", texto)
-        //    });
-        //}
 
         public int GetNextContratoId()
         {
@@ -140,21 +101,6 @@ namespace TeleBonifacio.dao
             }
             return 1; // Caso não haja registros, retorna 1 como primeiro ID
         }
-
-        //public int GetProximaOrdemClausula(int idTipoContrato)
-        //{
-        //    string query = "SELECT MAX(Ordem) FROM ClausulasContrato WHERE IdTipoContrato = @idTipoContrato";
-        //    DataTable dt = DB.ExecutarConsulta(query, new List<OleDbParameter>
-        //    {
-        //        new OleDbParameter("@idTipoContrato", idTipoContrato)
-        //    });
-        //    if (dt.Rows.Count > 0 && dt.Rows[0][0] != DBNull.Value)
-        //    {
-        //        return Convert.ToInt32(dt.Rows[0][0]) + 1;
-        //    }
-        //    return 1; // Caso seja a primeira cláusula
-        //}
-
 
         public tb.Contrato GetContratoCompleto(int idContrato)
         {
@@ -269,6 +215,31 @@ namespace TeleBonifacio.dao
             return DB.ExecutarConsulta(query);
         }
 
+        public int ObterIdCadastroAssociado(string textoTipoContrato)
+        {
+            try
+            {
+                string query = "SELECT IdTipoContrato, CadastroAssociado FROM TiposContrato WHERE Nome = @Nome";
+                List<OleDbParameter> parametros = new List<OleDbParameter>
+                {
+                    new OleDbParameter("@Nome", textoTipoContrato)
+                };
+
+                DataTable resultado = DB.ExecutarConsulta(query, parametros);
+
+                if (resultado.Rows.Count > 0)
+                {
+                    IdTipoContrato = Convert.ToInt32(resultado.Rows[0]["IdTipoContrato"]);
+                    return Convert.ToInt32(resultado.Rows[0]["CadastroAssociado"]);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Erro ao buscar o ID do tipo de contrato: {ex.Message}", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
+            return -1; // Retorna -1 em caso de erro ou ID não encontrado
+        }
 
     }
 }

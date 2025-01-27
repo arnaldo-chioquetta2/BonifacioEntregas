@@ -16,6 +16,7 @@ namespace TeleBonifacio
         private int clausulaSelecionadaId = 0; 
         private bool Carregando = false;
         private int idTipoContrato = -1;
+        private int idCadastroAssociado = 0;
 
         private void operEdContratos_Load(object sender, EventArgs e)
         {
@@ -29,28 +30,65 @@ namespace TeleBonifacio
 
         private void CarregarContratoParaEdicao(Contrato contrato)
         {
-            txtDescricao.Text = contrato.Descricao;
-            txtValor.Text = contrato.Valor.ToString("N2");
-            cmbStatus.SelectedItem = contrato.Status;
-            dtpInicio.Value = contrato.DataInicio;
-            dtpFim.Value = contrato.DataTermino;
-            txtObservacoes.Text = contrato.Observacoes;
+            if (!Carregando)
+            {
+                Carregando = true;
 
-            // Selecionar o tipo de contrato no combo
-            cmbTipoContrato.SelectedValue = contrato.Id;
+                // Preencher os campos do contrato
+                txtDescricao.Text = contrato.Descricao;
+                txtValor.Text = contrato.Valor.ToString("N2");
+                cmbStatus.SelectedItem = contrato.Status;
+                dtpInicio.Value = contrato.DataInicio;
+                dtpFim.Value = contrato.DataTermino;
+                txtObservacoes.Text = contrato.Observacoes;
 
-            // Carregar as cláusulas do tipo de contrato
-            ClausulasDAO clausulasDAO = new ClausulasDAO();
-            DataTable clausulas = clausulasDAO.GetClausulasByTipoContrato(contrato.Id);
+                // Verificar se há um nome de empresa ou nome associado ao contrato
+                string nomePessoa = contrato.NomeEmpresa;
 
-            lstClausulas.DataSource = clausulas;
-            lstClausulas.DisplayMember = "Texto"; // Atualize para o nome correto da coluna no banco
-            lstClausulas.ValueMember = "IdClausula"; // Atualize para o nome correto da coluna no banco
+                DataTable dt = new DataTable();
+                dt.Columns.Add("id", typeof(int)); // Coluna para ID
+                dt.Columns.Add("Nome", typeof(string)); // Coluna para Nome
 
-            // Habilitar os campos
-            ToggleCampos(true);
+                // Adiciona o registro com o ID fixo e o nome
+                dt.Rows.Add(1, nomePessoa);
+
+                // Define o DataSource do ComboBox
+                cmbMotoboy.DataSource = dt;
+                cmbMotoboy.DisplayMember = "Nome"; // Nome visível no ComboBox
+                cmbMotoboy.ValueMember = "id"; // Valor associado ao ComboBox
+                cmbMotoboy.SelectedValue = 1; 
+
+                        //if (!string.IsNullOrWhiteSpace(nomePessoa))
+                        //{
+                        //    // Percorre os itens do ComboBox para encontrar o nome correspondente
+                        //    foreach (DataRowView item in cmbMotoboy.Items)
+                        //    {
+                        //        if (item["Nome"].ToString().Equals(nomePessoa, StringComparison.OrdinalIgnoreCase))
+                        //        {
+                        //            cmbMotoboy.SelectedValue = item["id"]; // Define o valor correspondente ao ID no ComboBox
+                        //            break;
+                        //        }
+                        //    }
+                        //}
+
+                        // Selecionar o tipo de contrato no combo
+                        cmbTipoContrato.SelectedValue = contrato.Id;
+
+                // Carregar as cláusulas do tipo de contrato
+                // ClausulasDAO clausulasDAO = new ClausulasDAO();
+                DataTable clausulas = clausulasDAO.GetClausulasByTipoContrato(contrato.Id);
+
+                lstClausulas.DataSource = clausulas;
+                lstClausulas.DisplayMember = "Texto"; // Atualize para o nome correto da coluna no banco
+                lstClausulas.ValueMember = "Ordem";   // Atualize para o nome correto da coluna no banco
+
+                // Habilitar os campos
+                ToggleCampos(true);
+
+                Carregando = false;
+            }
         }
-        
+
         public operEdContratos(int nrContrato)
         {
             InitializeComponent();
@@ -72,7 +110,7 @@ namespace TeleBonifacio
                     // Seleciona o motoboy no ComboBox
                     cmbMotoboy.SelectedValue = contratoExistente.IdEntregador;
                     cmbMotoboy.Enabled = false; // Desativa edição do Motoboy
-                    btnNovoMotoboy.Enabled = false;
+                    //btnNovoMotoboy.Enabled = false;
                 }
             }
             else // Novo contrato
@@ -137,16 +175,19 @@ namespace TeleBonifacio
                 if (modoEdicao)
                 {
                     // Atualiza os dados do contrato
+                    float fValor = glo.LeValor(txtValor.Text);
                     contratosDAO.UpdateContrato(
-                        contratoId,
-                        txtDescricao.Text,
-                        decimal.Parse(txtValor.Text),
+                        contratoExistente.Id,
+                        txtDescricao.Text.Trim(),
+                        (decimal)fValor,
                         cmbStatus.SelectedItem.ToString(),
                         dtpInicio.Value,
                         dtpFim.Value,
-                        "PIX", // Placeholder para PIX
-                        txtObservacoes.Text
+                        null, // PIX pode ser adicionado futuramente
+                        txtObservacoes.Text.Trim(),
+                        cmbMotoboy.Text // Inclui o texto do ComboBox como NomeEmpresa
                     );
+
                     // MessageBox.Show("Contrato atualizado com sucesso!", "Sucesso", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
                 else
@@ -296,6 +337,7 @@ namespace TeleBonifacio
             if (modoEdicao)
             {
                 float fValor = glo.LeValor(txtValor.Text);
+
                 contratosDAO.UpdateContrato(
                     contratoExistente.Id,
                     txtDescricao.Text.Trim(),
@@ -304,8 +346,21 @@ namespace TeleBonifacio
                     dtpInicio.Value,
                     dtpFim.Value,
                     null, // PIX pode ser adicionado futuramente
-                    txtObservacoes.Text.Trim()
+                    txtObservacoes.Text.Trim(),
+                    cmbMotoboy.Text // Inclui o texto do ComboBox como NomeEmpresa
                 );
+
+
+                //contratosDAO.UpdateContrato(
+                //    contratoExistente.Id,
+                //    txtDescricao.Text.Trim(),
+                //    (decimal)fValor,
+                //    cmbStatus.SelectedItem.ToString(),
+                //    dtpInicio.Value,
+                //    dtpFim.Value,
+                //    null, // PIX pode ser adicionado futuramente
+                //    txtObservacoes.Text.Trim()
+                //);
                 AtualizarClausulas(contratoExistente.Id);
             }
             else
@@ -334,27 +389,35 @@ namespace TeleBonifacio
             clausulasDAO.RemoverClausulasPorContrato(contratoId);
 
             // Adiciona as cláusulas atuais da lista
-            foreach (DataRowView item in lstClausulas.Items) // Alterado para DataRowView
+            foreach (var item in lstClausulas.Items)
             {
-                string clausulaTexto = item["Descricao"].ToString(); // Acessa a propriedade correta
-                clausulasDAO.AdicionarClausula(contratoId, clausulaTexto);
-            }
-
-        }
-        
-        private void btnNovoMotoboy_Click(object sender, EventArgs e)
-        {
-            fCadEntregadores CadEntregadores = new fCadEntregadores();
-            CadEntregadores.Adicao();
-            if (CadEntregadores.ShowDialog() == DialogResult.OK)
-            {
-                // Atualiza o ComboBox com o novo Motoboy
-                CarregarMotoboys();
-
-                // Seleciona o novo Motoboy automaticamente
-                cmbMotoboy.SelectedValue = glo.IdAdicionado;
+                if (item is DataRowView rowView && rowView.Row.Table.Columns.Contains("Texto")) // Verifica a existência da coluna
+                {
+                    string clausulaTexto = rowView["Texto"].ToString(); // Acessa a propriedade correta
+                    clausulasDAO.AdicionarClausula(contratoId, clausulaTexto);
+                }
+                else
+                {
+                    // Tratar o caso onde a coluna não existe
+                    MessageBox.Show("Erro: Coluna 'Texto' não encontrada na DataTable associada.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
         }
+
+
+        //private void AtualizarClausulas(int contratoId)
+        //{
+        //    // Instância do DAO para manipular cláusulas
+        //    clausulasDAO.RemoverClausulasPorContrato(contratoId);
+
+        //    // Adiciona as cláusulas atuais da lista
+        //    foreach (DataRowView item in lstClausulas.Items) // Alterado para DataRowView
+        //    {
+        //        string clausulaTexto = item["Descricao"].ToString(); // Acessa a propriedade correta
+        //        clausulasDAO.AdicionarClausula(contratoId, clausulaTexto);
+        //    }
+
+        //}
 
         private void lstClausulas_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -401,12 +464,13 @@ namespace TeleBonifacio
 
         private void InicializarComboTiposContrato()
         {
+            Carregando = true;
             ContratosDAO contratosDAO = new ContratosDAO();
             DataTable tiposContrato = contratosDAO.GetTiposDeContrato();
 
             // Adiciona "Escolha o contrato" como item inicial
             DataRow linhaInicial = tiposContrato.NewRow();
-            linhaInicial["Nome"] = "Escolha o contrato";
+            linhaInicial["Nome"] = "Escolha o tipo de contrato";
             linhaInicial["IdTipoContrato"] = 0;
             tiposContrato.Rows.InsertAt(linhaInicial, 0);
 
@@ -417,6 +481,7 @@ namespace TeleBonifacio
 
             // Desabilita os campos até que um tipo seja selecionado
             ToggleCampos(false);
+            Carregando = false;
         }
 
         private void ToggleCampos(bool habilitar)
@@ -438,24 +503,47 @@ namespace TeleBonifacio
 
         private void cmbTipoContrato_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (cmbTipoContrato.SelectedIndex > 0) // Um tipo de contrato válido foi selecionado
+            if (!Carregando)
             {
-                Carregando = true;
-                idTipoContrato = Convert.ToInt32(cmbTipoContrato.SelectedValue);
+                if (cmbTipoContrato.SelectedIndex > 0) // Um tipo de contrato válido foi selecionado
+                {
+                    Carregando = true;
 
-                CarregarDadosAssociados(idTipoContrato);
+                    // Obtém o texto do tipo de contrato selecionado
+                    string tipoContratoTexto = cmbTipoContrato.Text;
 
-                // Atualizar as cláusulas para o novo tipo de contrato
-                //ClausulasDAO clausulasDAO = new ClausulasDAO();
-                DataTable clausulas = clausulasDAO.GetClausulasByTipoContrato(idTipoContrato);
+                    // Busca o ID do tipo de contrato com base no texto selecionado
+                    idCadastroAssociado = contratosDAO.ObterIdCadastroAssociado(tipoContratoTexto);
 
-                lstClausulas.DataSource = clausulas;
-                lstClausulas.DisplayMember = "Texto";
-                lstClausulas.ValueMember = "Ordem";
-                ToggleCampos(true);
-                Carregando = false;
+                    if (idCadastroAssociado > 0) // ID encontrado
+                    {
+                        // Carrega os dados associados ao tipo de contrato
+                        CarregarDadosAssociados(idCadastroAssociado);
+
+                        // Carrega as cláusulas associadas ao tipo de contrato
+                        DataTable clausulas = clausulasDAO.GetClausulasByTipoContrato(contratosDAO.IdTipoContrato);
+
+                        lstClausulas.DataSource = clausulas;
+                        lstClausulas.DisplayMember = "Texto"; // Coluna para exibir no DataGridView
+                        lstClausulas.ValueMember = "Ordem";  // Coluna que identifica os registros
+
+                        // Habilita os campos para edição
+                        ToggleCampos(true);
+                    }
+                    else
+                    {
+                        MessageBox.Show("Erro ao encontrar o tipo de contrato selecionado.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+
+                    Carregando = false;
+                }
+                else
+                {
+                    // Caso "Escolha o contrato" seja selecionado, desabilita os campos
+                    ToggleCampos(false);
+                    lstClausulas.DataSource = null;
+                }
             }
-
         }
 
         private void CarregarDadosAssociados(int cadastroAssociado)
@@ -506,7 +594,7 @@ namespace TeleBonifacio
             {
                 cmbMotoboy.DataSource = motoboys;
                 cmbMotoboy.DisplayMember = "Nome";
-                cmbMotoboy.ValueMember = "id";
+                cmbMotoboy.ValueMember = "IdForn";
             }
             else
             {

@@ -51,7 +51,6 @@
             this.lblContratoId = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.cmbMotoboy = new System.Windows.Forms.ComboBox();
-            this.btnNovoMotoboy = new System.Windows.Forms.Button();
             this.btnImprimir = new System.Windows.Forms.Button();
             this.cmbTipoContrato = new System.Windows.Forms.ComboBox();
             this.label2 = new System.Windows.Forms.Label();
@@ -286,19 +285,8 @@
             this.cmbMotoboy.FormattingEnabled = true;
             this.cmbMotoboy.Location = new System.Drawing.Point(121, 55);
             this.cmbMotoboy.Name = "cmbMotoboy";
-            this.cmbMotoboy.Size = new System.Drawing.Size(200, 33);
+            this.cmbMotoboy.Size = new System.Drawing.Size(306, 33);
             this.cmbMotoboy.TabIndex = 22;
-            // 
-            // btnNovoMotoboy
-            // 
-            this.btnNovoMotoboy.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
-            this.btnNovoMotoboy.Location = new System.Drawing.Point(327, 55);
-            this.btnNovoMotoboy.Name = "btnNovoMotoboy";
-            this.btnNovoMotoboy.Size = new System.Drawing.Size(100, 30);
-            this.btnNovoMotoboy.TabIndex = 23;
-            this.btnNovoMotoboy.Text = "Novo";
-            this.btnNovoMotoboy.UseVisualStyleBackColor = true;
-            this.btnNovoMotoboy.Click += new System.EventHandler(this.btnNovoMotoboy_Click);
             // 
             // btnImprimir
             // 
@@ -340,7 +328,6 @@
             this.Controls.Add(this.cmbTipoContrato);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.btnImprimir);
-            this.Controls.Add(this.btnNovoMotoboy);
             this.Controls.Add(this.cmbMotoboy);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.lblContratoId);
@@ -399,7 +386,6 @@
         private System.Windows.Forms.Label lblContratoId;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.ComboBox cmbMotoboy;
-        private System.Windows.Forms.Button btnNovoMotoboy;
         private System.Windows.Forms.Button btnImprimir;
         private System.Windows.Forms.ComboBox cmbTipoContrato;
         private System.Windows.Forms.Label label2;

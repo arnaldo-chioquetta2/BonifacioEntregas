@@ -11,8 +11,9 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyCulture("")]
 [assembly: ComVisible(false)]
 [assembly: Guid("308c57af-e663-456d-8a2c-188bbd61423d")]
-[assembly: AssemblyVersion("3.3.6.0")]
-[assembly: AssemblyFileVersion("3.3.6.0")]
+[assembly: AssemblyVersion("3.3.7.0")]
+[assembly: AssemblyFileVersion("3.3.7.0")]
+// 3.3.7 Finalização dos tipos de contratos
 // 3.3.6 Tratamentos de erros para o carregamento do Word
 // 3.3.5 Inicio da tela para tipos de contratos
 // 3.3.4 Campos Valor e Descrição no Contrato e Códigos nas Peças
