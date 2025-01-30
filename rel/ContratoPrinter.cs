@@ -15,7 +15,9 @@ namespace TeleBonifacio.rel
         private string contratadaEndereco;
         private string nomeEmpresa; 
         private string cnpjEmpresa; 
-        private string descricaoContrato; 
+        private string descricaoContrato;
+        private DateTime dataInicio;
+        private DateTime dataTermino;
         private string[] clausulas;
         private decimal valorContrato;
         private int eMarginBoundsWidth = 800;
@@ -31,7 +33,9 @@ namespace TeleBonifacio.rel
                 string cnpjEmpresa, // Novo parâmetro
                 decimal valorContrato,
                 string descricaoContrato,
-                string[] clausulas)
+                string[] clausulas,
+                DateTime dataInicio,
+                DateTime dataTermino)
         {
             this.contratante = contratante;
             this.contratanteCNPJ = contratanteCNPJ;
@@ -44,6 +48,8 @@ namespace TeleBonifacio.rel
             this.valorContrato = valorContrato;
             this.clausulas = clausulas;
             this.descricaoContrato = descricaoContrato;
+            this.dataInicio = dataInicio;
+            this.dataTermino = dataTermino;
         }
 
         public void Imprimir()
@@ -111,7 +117,8 @@ namespace TeleBonifacio.rel
             float y = e.MarginBounds.Top;
 
             // Título geral
-            g.DrawString("INSTRUMENTO PARTICULAR DE PRESTAÇÃO DE SERVIÇOS E OUTRAS AVENÇAS", headerFont, brush, new RectangleF(e.MarginBounds.Left, y, this.eMarginBoundsWidth, 50));
+            g.DrawString("INSTRUMENTO PARTICULAR DE PRESTAÇÃO DE SERVIÇOS E OUTRAS AVENÇAS",
+                         headerFont, brush, new RectangleF(e.MarginBounds.Left, y, this.eMarginBoundsWidth, 50));
             y += 60;
 
             // Texto introdutório
@@ -120,6 +127,7 @@ namespace TeleBonifacio.rel
             g.DrawString(textoIntro, bodyFont, brush, new RectangleF(e.MarginBounds.Left, y, this.eMarginBoundsWidth, textoIntroSize.Height));
             y += textoIntroSize.Height + 20;
 
+            // Descrição do contrato
             g.FillRectangle(backgroundBrush, e.MarginBounds.Left, y, this.eMarginBoundsWidth, 25);
             g.DrawString("DESCRIÇÃO DO CONTRATO:", titleFont, Brushes.White, e.MarginBounds.Left + 5, y + 5);
             y += 30;
@@ -164,36 +172,22 @@ namespace TeleBonifacio.rel
             g.DrawString(valorInfo, bodyFont, brush, new RectangleF(e.MarginBounds.Left + 5, y + 5, this.eMarginBoundsWidth - 10, valorSize.Height));
             y += valorSize.Height + 20;
 
+            // **Adicionando Data de Início e Data de Término**
+            g.FillRectangle(backgroundBrush, e.MarginBounds.Left, y, this.eMarginBoundsWidth, 25);
+            g.DrawString("PERÍODO DO CONTRATO:", titleFont, Brushes.White, e.MarginBounds.Left + 5, y + 5);
+            y += 30;
+
+            string periodoInfo = $"Início: {dataInicio:dd/MM/yyyy}  -  Término: {dataTermino:dd/MM/yyyy}";
+            SizeF periodoSize = g.MeasureString(periodoInfo, bodyFont, this.eMarginBoundsWidth - 10);
+            g.DrawRectangle(Pens.Black, e.MarginBounds.Left, y, this.eMarginBoundsWidth, periodoSize.Height + 10);
+            g.DrawString(periodoInfo, bodyFont, brush, new RectangleF(e.MarginBounds.Left + 5, y + 5, this.eMarginBoundsWidth - 10, periodoSize.Height));
+            y += periodoSize.Height + 20;
+
             // Cláusulas do contrato
             g.DrawString("Cláusulas do Contrato:", headerFont, brush, e.MarginBounds.Left, y);
             y += 30;
 
-            foreach (string clausula in clausulas)
-            {
-                if (y + 50 > e.MarginBounds.Bottom)
-                {
-                    e.HasMorePages = true;
-                    return;
-                }
-
-                if (clausula.TrimStart().StartsWith("Cláusula", StringComparison.OrdinalIgnoreCase))
-                {
-                    string[] partes = clausula.Split(new[] { ' ' }, 2);
-                    string palavraNegrito = partes[0];
-                    string restanteTexto = partes.Length > 1 ? partes[1] : "";
-
-                    SizeF tamanhoPalavraNegrito = g.MeasureString(palavraNegrito + " ", boldBodyFont);
-                    g.DrawString(palavraNegrito, boldBodyFont, brush, e.MarginBounds.Left + 5, y);
-                    g.DrawString(restanteTexto, bodyFont, brush, e.MarginBounds.Left + 5 + tamanhoPalavraNegrito.Width, y);
-                }
-                else
-                {
-                    g.DrawString(clausula, bodyFont, brush, e.MarginBounds.Left + 5, y);
-                }
-
-                SizeF clausulaSize = g.MeasureString(clausula, bodyFont, this.eMarginBoundsWidth - 10);
-                y += clausulaSize.Height + 5;
-            }
+            ImprimirClausulas(g, e, e.MarginBounds.Left, ref y, this.eMarginBoundsWidth, bodyFont, brush);
 
             y += 40;
 
@@ -204,11 +198,34 @@ namespace TeleBonifacio.rel
             g.DrawLine(Pens.Black, e.MarginBounds.Left, signatureLineY, e.MarginBounds.Left + signatureWidth, signatureLineY);
             g.DrawString("Assinatura Contratante", bodyFont, brush, e.MarginBounds.Left + (signatureWidth / 4), signatureLineY + 10);
 
-            g.DrawLine(Pens.Black, e.MarginBounds.Right - signatureWidth, signatureLineY, e.MarginBounds.Right, signatureLineY);
-            g.DrawString("Assinatura Contratada", bodyFont, brush, e.MarginBounds.Right - signatureWidth + (signatureWidth / 4), signatureLineY + 10);
+            float espacamentoAssinaturas = 200; 
+            float assinaturaContratadaX = e.MarginBounds.Left + signatureWidth + espacamentoAssinaturas;
+            g.DrawLine(Pens.Black, assinaturaContratadaX, signatureLineY, assinaturaContratadaX + signatureWidth, signatureLineY);
+            g.DrawString("Assinatura Contratada", bodyFont, brush, assinaturaContratadaX + (signatureWidth / 4), signatureLineY + 10);
 
             e.HasMorePages = false;
         }
+
+        private void ImprimirClausulas(Graphics g, PrintPageEventArgs e, float x, ref float y, float larguraCaixa, Font bodyFont, Brush brush)
+        {
+            foreach (string clausula in clausulas)
+            {
+                if (y + 50 > e.MarginBounds.Bottom) // Verifica se precisa ir para outra página
+                {
+                    e.HasMorePages = true;
+                    return;
+                }
+
+                // Define a largura do texto para corresponder às caixas
+                int larguraTexto = (int)(larguraCaixa - 10);
+
+                SizeF clausulaSize = g.MeasureString(clausula, bodyFont, larguraTexto);
+                g.DrawString(clausula, bodyFont, brush, new RectangleF(x + 5, y, larguraTexto, clausulaSize.Height));
+
+                y += clausulaSize.Height + 5;
+            }
+        }
+
 
     }
 }

@@ -120,7 +120,9 @@ namespace TeleBonifacio
                 contrato.CNPJEmpresa, 
                 contrato.Valor,
                 contrato.Descricao,
-                contrato.Clausulas.ToArray() // Converte List<string> para string[]
+                contrato.Clausulas.ToArray(),
+                contrato.DataInicio, 
+                contrato.DataTermino
             );
             printer.Imprimir();
         }

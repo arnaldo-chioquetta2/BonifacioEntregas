@@ -404,21 +404,6 @@ namespace TeleBonifacio
             }
         }
 
-
-        //private void AtualizarClausulas(int contratoId)
-        //{
-        //    // Instância do DAO para manipular cláusulas
-        //    clausulasDAO.RemoverClausulasPorContrato(contratoId);
-
-        //    // Adiciona as cláusulas atuais da lista
-        //    foreach (DataRowView item in lstClausulas.Items) // Alterado para DataRowView
-        //    {
-        //        string clausulaTexto = item["Descricao"].ToString(); // Acessa a propriedade correta
-        //        clausulasDAO.AdicionarClausula(contratoId, clausulaTexto);
-        //    }
-
-        //}
-
         private void lstClausulas_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (!this.Carregando)
@@ -429,7 +414,7 @@ namespace TeleBonifacio
                     if (clausulaSelecionada != null)
                     {
                         clausulaSelecionadaId = Convert.ToInt32(clausulaSelecionada[0]); // Armazena o ID da cláusula
-                        txtEditarAdicionar.Text = clausulaSelecionada[0].ToString(); // Mostra a descrição no campo de edição
+                        txtEditarAdicionar.Text = clausulaSelecionada[1].ToString(); // Mostra a descrição no campo de edição
                     }
                 }
             }
@@ -449,7 +434,9 @@ namespace TeleBonifacio
                 contrato.CNPJEmpresa, 
                 contrato.Valor,
                 contrato.Descricao,
-                contrato.Clausulas.ToArray() 
+                contrato.Clausulas.ToArray(),
+                contrato.DataInicio,
+                contrato.DataTermino
             );
             printer.Imprimir();
         }

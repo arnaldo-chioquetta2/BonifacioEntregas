@@ -154,7 +154,7 @@ namespace TeleBonifacio.dao
 
         internal Vendedor GetPeloNr(string numeroString)
         {
-            string query = $"SELECT * FROM Vendedores Where Nro = '{numeroString}' ";
+            string query = $"SELECT* FROM Vendedores WHERE Nro = 1 AND datademissao IS NOT NULL AND datademissao<> #01/01/2001# ";
             return ExecutarConsultaVendedor2(query);
         }
 

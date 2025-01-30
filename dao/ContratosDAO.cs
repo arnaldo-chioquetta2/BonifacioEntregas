@@ -125,14 +125,25 @@ namespace TeleBonifacio.dao
                 string sValor = dtContrato.Rows[0]["Valor"].ToString();
                 contrato.Valor = Convert.ToDecimal(sValor);
 
+                // Adicionando a leitura das datas de início e término do contrato
+                if (dtContrato.Rows[0]["DataInicio"] != DBNull.Value)
+                    contrato.DataInicio = Convert.ToDateTime(dtContrato.Rows[0]["DataInicio"]);
+                else
+                    contrato.DataInicio = DateTime.MinValue; // Caso a data não esteja definida
+
+                if (dtContrato.Rows[0]["DataTermino"] != DBNull.Value)
+                    contrato.DataTermino = Convert.ToDateTime(dtContrato.Rows[0]["DataTermino"]);
+                else
+                    contrato.DataTermino = DateTime.MinValue; // Caso a data não esteja definida
+
                 if (entregador != null)
                 {
                     contrato.ContratadaCNPJ = entregador.CPF; // Assume que o CPF está armazenado no campo ContratadaCNPJ
                     contrato.ContratadaEndereco = entregador.Endereco; // Endereço do entregador
 
                     // Adicionando campos NomeEmpresa e CNPJEmpresa
-                    contrato.NomeEmpresa = entregador.NomeEmpresa; // Nome da empresa do entregador
-                    contrato.CNPJEmpresa = entregador.CNPJ; // CNPJ da empresa do entregador
+                    contrato.NomeEmpresa = entregador.NomeEmpresa ?? "Não informado"; // Nome da empresa do entregador
+                    contrato.CNPJEmpresa = entregador.CNPJ ?? "Não informado"; // CNPJ da empresa do entregador
                 }
                 else
                 {
@@ -146,11 +157,13 @@ namespace TeleBonifacio.dao
                 string sqlClausulas = $"SELECT Descricao FROM Clausulas WHERE idContrato = {idContrato}";
                 DataTable dtClausulas = DB.ExecutarConsulta(sqlClausulas);
                 contrato.Clausulas = dtClausulas.AsEnumerable().Select(r => r["Descricao"].ToString()).ToList();
+
                 return contrato;
             }
 
             return null;
         }
+
 
         public int InsertTipoContrato(string nome, int cadastroAssociado)
         {

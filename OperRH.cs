@@ -231,10 +231,20 @@ namespace TeleBonifacio
             {
                 if (dataGrid1.SelectedRows.Count > 0)
                 {
+                    DataGridViewRow selectedRow = dataGrid1.SelectedRows[0];
+                    try
+                    {
+                        this.iID = Convert.ToInt16(selectedRow.Cells["ID"].Value.ToString());
+                    }
+                    catch (Exception)
+                    {
+
+                        return;
+                    }                                        
                     LancaRegistro();
                     btExcluir.Visible = true;
-                    DataGridViewRow selectedRow = dataGrid1.SelectedRows[0];
-                    this.iID = Convert.ToInt16(selectedRow.Cells["ID"].Value.ToString());
+                    
+                    // this.iID = Convert.ToInt16(selectedRow.Cells["ID"].Value.ToString());
                     this.UID = selectedRow.Cells["UID"].Value.ToString();
                     this.idFunc = Convert.ToInt16(selectedRow.Cells["FuncID"].Value.ToString());
                     dtpHorario.Value = Convert.ToDateTime(selectedRow.Cells["Data"].Value);

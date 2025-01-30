@@ -11,8 +11,10 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyCulture("")]
 [assembly: ComVisible(false)]
 [assembly: Guid("308c57af-e663-456d-8a2c-188bbd61423d")]
-[assembly: AssemblyVersion("3.3.7.0")]
-[assembly: AssemblyFileVersion("3.3.7.0")]
+[assembly: AssemblyVersion("3.3.9.0")]
+[assembly: AssemblyFileVersion("3.3.9.0")]
+// 3.3.9 Não cria abas de anotações para funcionários demitidos
+// 3.3.8 Ajuste na edição do contrato
 // 3.3.7 Finalização dos tipos de contratos
 // 3.3.6 Tratamentos de erros para o carregamento do Word
 // 3.3.5 Inicio da tela para tipos de contratos
@@ -21,8 +23,6 @@ using System.Runtime.InteropServices;
 // 3.3.2 Finalização dos contratos e conserto da adição de funcionários
 // 3.3.0 Impressão do contrato
 // 3.2.9 Versão inicial da tela de edição de contratos
-// 3.2.8 Versão inicial da tela de contratos
-// 3.2.6 Pesquisa e edição de itens das peças
 
 
 
