@@ -122,7 +122,8 @@ namespace TeleBonifacio
                 contrato.Descricao,
                 contrato.Clausulas.ToArray(),
                 contrato.DataInicio, 
-                contrato.DataTermino
+                contrato.DataTermino,
+                contrato.Observacoes
             );
             printer.Imprimir();
         }

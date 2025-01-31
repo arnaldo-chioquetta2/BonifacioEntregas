@@ -58,29 +58,8 @@ namespace TeleBonifacio
                 cmbMotoboy.ValueMember = "id"; // Valor associado ao ComboBox
                 cmbMotoboy.SelectedValue = 1; 
 
-                        //if (!string.IsNullOrWhiteSpace(nomePessoa))
-                        //{
-                        //    // Percorre os itens do ComboBox para encontrar o nome correspondente
-                        //    foreach (DataRowView item in cmbMotoboy.Items)
-                        //    {
-                        //        if (item["Nome"].ToString().Equals(nomePessoa, StringComparison.OrdinalIgnoreCase))
-                        //        {
-                        //            cmbMotoboy.SelectedValue = item["id"]; // Define o valor correspondente ao ID no ComboBox
-                        //            break;
-                        //        }
-                        //    }
-                        //}
-
-                        // Selecionar o tipo de contrato no combo
-                        cmbTipoContrato.SelectedValue = contrato.Id;
-
-                // Carregar as cláusulas do tipo de contrato
-                // ClausulasDAO clausulasDAO = new ClausulasDAO();
-                DataTable clausulas = clausulasDAO.GetClausulasByTipoContrato(contrato.Id);
-
-                lstClausulas.DataSource = clausulas;
-                lstClausulas.DisplayMember = "Texto"; // Atualize para o nome correto da coluna no banco
-                lstClausulas.ValueMember = "Ordem";   // Atualize para o nome correto da coluna no banco
+                // Selecionar o tipo de contrato no combo
+                cmbTipoContrato.SelectedValue = contrato.Id;
 
                 // Habilitar os campos
                 ToggleCampos(true);
@@ -305,20 +284,24 @@ namespace TeleBonifacio
             clausulasDAO.UpdateClausula(clausulaSelecionadaId, txtEditarAdicionar.Text.Trim());
 
             // Recarregar a lista de cláusulas
+            this.Carregando = true;
             AtualizarListaClausulas();
 
             // Limpar o ID da cláusula selecionada e o campo de edição
             clausulaSelecionadaId = 0;
             txtEditarAdicionar.Clear();
+            this.Carregando = false;
         }
 
         private void btnRemover_Click(object sender, EventArgs e)
         {
             if (lstClausulas.SelectedItem != null)
             {
-                int clausulaId = Convert.ToInt32(lstClausulas.SelectedValue);
-                clausulasDAO.DeleteClausula(clausulaId);
+                clausulasDAO.DeleteClausula(clausulaSelecionadaId);
+                this.Carregando = true;
                 AtualizarListaClausulas();
+                txtEditarAdicionar.Text = "";
+                this.Carregando = false;
             }
             else
             {
@@ -414,7 +397,7 @@ namespace TeleBonifacio
                     if (clausulaSelecionada != null)
                     {
                         clausulaSelecionadaId = Convert.ToInt32(clausulaSelecionada[0]); // Armazena o ID da cláusula
-                        txtEditarAdicionar.Text = clausulaSelecionada[1].ToString(); // Mostra a descrição no campo de edição
+                        txtEditarAdicionar.Text = clausulaSelecionada[2].ToString(); // Mostra a descrição no campo de edição
                     }
                 }
             }
@@ -436,7 +419,8 @@ namespace TeleBonifacio
                 contrato.Descricao,
                 contrato.Clausulas.ToArray(),
                 contrato.DataInicio,
-                contrato.DataTermino
+                contrato.DataTermino, 
+                contrato.Observacoes
             );
             printer.Imprimir();
         }

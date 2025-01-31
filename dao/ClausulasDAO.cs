@@ -93,7 +93,7 @@ namespace TeleBonifacio.dao
 
         public DataTable GetClausulasByContratoId(int contratoId)
         {
-            string query = $"SELECT * FROM Clausulas WHERE idContrato = {contratoId} ORDER BY ID";
+            string query = $"SELECT * FROM Clausulas WHERE Descricao> '' and idContrato = {contratoId} ORDER BY ID";
             return DB.ExecutarConsulta(query);
         }
 

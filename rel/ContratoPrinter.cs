@@ -14,12 +14,13 @@ namespace TeleBonifacio.rel
         private string contratadaCPF;
         private string contratadaEndereco;
         private string nomeEmpresa; 
-        private string cnpjEmpresa; 
+        private string cnpjEmpresa;
         private string descricaoContrato;
         private DateTime dataInicio;
         private DateTime dataTermino;
         private string[] clausulas;
         private decimal valorContrato;
+        private string obs;
         private int eMarginBoundsWidth = 800;
 
         public ContratoPrinter(
@@ -35,7 +36,8 @@ namespace TeleBonifacio.rel
                 string descricaoContrato,
                 string[] clausulas,
                 DateTime dataInicio,
-                DateTime dataTermino)
+                DateTime dataTermino,
+                string obs)
         {
             this.contratante = contratante;
             this.contratanteCNPJ = contratanteCNPJ;
@@ -50,6 +52,7 @@ namespace TeleBonifacio.rel
             this.descricaoContrato = descricaoContrato;
             this.dataInicio = dataInicio;
             this.dataTermino = dataTermino;
+            this.obs = obs;            
         }
 
         public void Imprimir()
@@ -127,65 +130,28 @@ namespace TeleBonifacio.rel
             g.DrawString(textoIntro, bodyFont, brush, new RectangleF(e.MarginBounds.Left, y, this.eMarginBoundsWidth, textoIntroSize.Height));
             y += textoIntroSize.Height + 20;
 
-            // Descrição do contrato
-            g.FillRectangle(backgroundBrush, e.MarginBounds.Left, y, this.eMarginBoundsWidth, 25);
-            g.DrawString("DESCRIÇÃO DO CONTRATO:", titleFont, Brushes.White, e.MarginBounds.Left + 5, y + 5);
-            y += 30;
+            // Seções do contrato
+            ImprimirSecao(g, e, "DESCRIÇÃO DO CONTRATO:", descricaoContrato, titleFont, bodyFont, backgroundBrush, brush, ref y);
+            ImprimirSecao(g, e, "CONTRATANTE:", $"Nome: {contratante}\nCNPJ: {contratanteCNPJ}\nEndereço: {contratanteEndereco}",
+                          titleFont, bodyFont, backgroundBrush, brush, ref y);
+            ImprimirSecao(g, e, "CONTRATADA:", !string.IsNullOrWhiteSpace(nomeEmpresa)
+                          ? $"Empresa: {nomeEmpresa}\nCNPJ: {cnpjEmpresa}\nCPF: {contratadaCPF}\nEndereço: {contratadaEndereco}"
+                          : $"Nome: {contratada}\nCPF: {contratadaCPF}\nEndereço: {contratadaEndereco}",
+                          titleFont, bodyFont, backgroundBrush, brush, ref y);
+            ImprimirSecao(g, e, "VALOR DO CONTRATO:", $"R$ {valorContrato:F2}", titleFont, bodyFont, backgroundBrush, brush, ref y);
+            ImprimirSecao(g, e, "PERÍODO DO CONTRATO:", $"Início: {dataInicio:dd/MM/yyyy}  -  Término: {dataTermino:dd/MM/yyyy}",
+                          titleFont, bodyFont, backgroundBrush, brush, ref y);
 
-            SizeF descricaoSize = g.MeasureString(descricaoContrato, bodyFont, this.eMarginBoundsWidth - 10);
-            g.DrawRectangle(Pens.Black, e.MarginBounds.Left, y, this.eMarginBoundsWidth, descricaoSize.Height + 10);
-            g.DrawString(descricaoContrato, bodyFont, brush, new RectangleF(e.MarginBounds.Left + 5, y + 5, this.eMarginBoundsWidth - 10, descricaoSize.Height));
-            y += descricaoSize.Height + 20;
+            // **Observações do contrato**
+            if (!string.IsNullOrWhiteSpace(this.obs))
+            {
+                ImprimirSecao(g, e, "OBSERVAÇÕES:", this.obs, titleFont, bodyFont, backgroundBrush, brush, ref y);
+            }
 
-            // Caixa Contratante
-            g.FillRectangle(backgroundBrush, e.MarginBounds.Left, y, this.eMarginBoundsWidth, 25);
-            g.DrawString("CONTRATANTE:", titleFont, Brushes.White, e.MarginBounds.Left + 5, y + 5);
-            y += 30;
-
-            string contratanteInfo = $"Nome: {contratante}\nCNPJ: {contratanteCNPJ}\nEndereço: {contratanteEndereco}";
-            SizeF contratanteSize = g.MeasureString(contratanteInfo, bodyFont, this.eMarginBoundsWidth - 10);
-            g.DrawRectangle(Pens.Black, e.MarginBounds.Left, y, this.eMarginBoundsWidth, contratanteSize.Height + 10);
-            g.DrawString(contratanteInfo, bodyFont, brush, new RectangleF(e.MarginBounds.Left + 5, y + 5, this.eMarginBoundsWidth - 10, contratanteSize.Height));
-            y += contratanteSize.Height + 20;
-
-            // Caixa Contratada
-            g.FillRectangle(backgroundBrush, e.MarginBounds.Left, y, this.eMarginBoundsWidth, 25);
-            g.DrawString("CONTRATADA:", titleFont, Brushes.White, e.MarginBounds.Left + 5, y + 5);
-            y += 30;
-
-            string contratadaInfo = !string.IsNullOrWhiteSpace(nomeEmpresa)
-                ? $"Empresa: {nomeEmpresa}\nCNPJ: {cnpjEmpresa}\nCPF: {contratadaCPF}\nEndereço: {contratadaEndereco}"
-                : $"Nome: {contratada}\nCPF: {contratadaCPF}\nEndereço: {contratadaEndereco}";
-            SizeF contratadaSize = g.MeasureString(contratadaInfo, bodyFont, this.eMarginBoundsWidth - 10);
-            g.DrawRectangle(Pens.Black, e.MarginBounds.Left, y, this.eMarginBoundsWidth, contratadaSize.Height + 10);
-            g.DrawString(contratadaInfo, bodyFont, brush, new RectangleF(e.MarginBounds.Left + 5, y + 5, this.eMarginBoundsWidth - 10, contratadaSize.Height));
-            y += contratadaSize.Height + 20;
-
-            // Valor do Contrato
-            g.FillRectangle(backgroundBrush, e.MarginBounds.Left, y, this.eMarginBoundsWidth, 25);
-            g.DrawString("VALOR DO CONTRATO:", titleFont, Brushes.White, e.MarginBounds.Left + 5, y + 5);
-            y += 30;
-
-            string valorInfo = $"R$ {valorContrato:F2}";
-            SizeF valorSize = g.MeasureString(valorInfo, bodyFont, this.eMarginBoundsWidth - 10);
-            g.DrawRectangle(Pens.Black, e.MarginBounds.Left, y, this.eMarginBoundsWidth, valorSize.Height + 10);
-            g.DrawString(valorInfo, bodyFont, brush, new RectangleF(e.MarginBounds.Left + 5, y + 5, this.eMarginBoundsWidth - 10, valorSize.Height));
-            y += valorSize.Height + 20;
-
-            // **Adicionando Data de Início e Data de Término**
-            g.FillRectangle(backgroundBrush, e.MarginBounds.Left, y, this.eMarginBoundsWidth, 25);
-            g.DrawString("PERÍODO DO CONTRATO:", titleFont, Brushes.White, e.MarginBounds.Left + 5, y + 5);
-            y += 30;
-
-            string periodoInfo = $"Início: {dataInicio:dd/MM/yyyy}  -  Término: {dataTermino:dd/MM/yyyy}";
-            SizeF periodoSize = g.MeasureString(periodoInfo, bodyFont, this.eMarginBoundsWidth - 10);
-            g.DrawRectangle(Pens.Black, e.MarginBounds.Left, y, this.eMarginBoundsWidth, periodoSize.Height + 10);
-            g.DrawString(periodoInfo, bodyFont, brush, new RectangleF(e.MarginBounds.Left + 5, y + 5, this.eMarginBoundsWidth - 10, periodoSize.Height));
-            y += periodoSize.Height + 20;
-
-            // Cláusulas do contrato
+            // **Cláusulas do contrato**
             g.DrawString("Cláusulas do Contrato:", headerFont, brush, e.MarginBounds.Left, y);
             y += 30;
+
 
             ImprimirClausulas(g, e, e.MarginBounds.Left, ref y, this.eMarginBoundsWidth, bodyFont, brush);
 
@@ -198,7 +164,7 @@ namespace TeleBonifacio.rel
             g.DrawLine(Pens.Black, e.MarginBounds.Left, signatureLineY, e.MarginBounds.Left + signatureWidth, signatureLineY);
             g.DrawString("Assinatura Contratante", bodyFont, brush, e.MarginBounds.Left + (signatureWidth / 4), signatureLineY + 10);
 
-            float espacamentoAssinaturas = 200; 
+            float espacamentoAssinaturas = 200;
             float assinaturaContratadaX = e.MarginBounds.Left + signatureWidth + espacamentoAssinaturas;
             g.DrawLine(Pens.Black, assinaturaContratadaX, signatureLineY, assinaturaContratadaX + signatureWidth, signatureLineY);
             g.DrawString("Assinatura Contratada", bodyFont, brush, assinaturaContratadaX + (signatureWidth / 4), signatureLineY + 10);
@@ -206,11 +172,25 @@ namespace TeleBonifacio.rel
             e.HasMorePages = false;
         }
 
+        // Método auxiliar para imprimir seções formatadas do contrato
+        private void ImprimirSecao(Graphics g, PrintPageEventArgs e, string titulo, string conteudo, Font titleFont, Font bodyFont, Brush backgroundBrush, Brush brush, ref float y)
+        {
+            g.FillRectangle(backgroundBrush, e.MarginBounds.Left, y, this.eMarginBoundsWidth, 25);
+            g.DrawString(titulo, titleFont, Brushes.White, e.MarginBounds.Left + 5, y + 5);
+            y += 30;
+
+            SizeF conteudoSize = g.MeasureString(conteudo, bodyFont, this.eMarginBoundsWidth - 10);
+            g.DrawRectangle(Pens.Black, e.MarginBounds.Left, y, this.eMarginBoundsWidth, conteudoSize.Height + 10);
+            g.DrawString(conteudo, bodyFont, brush, new RectangleF(e.MarginBounds.Left + 5, y + 5, this.eMarginBoundsWidth - 10, conteudoSize.Height));
+            y += conteudoSize.Height + 20;
+        }
+
+        // Método para imprimir as cláusulas dentro da mesma largura das outras caixas
         private void ImprimirClausulas(Graphics g, PrintPageEventArgs e, float x, ref float y, float larguraCaixa, Font bodyFont, Brush brush)
         {
             foreach (string clausula in clausulas)
             {
-                if (y + 50 > e.MarginBounds.Bottom) // Verifica se precisa ir para outra página
+                if (y + 50 > e.MarginBounds.Bottom)
                 {
                     e.HasMorePages = true;
                     return;
@@ -224,8 +204,7 @@ namespace TeleBonifacio.rel
 
                 y += clausulaSize.Height + 5;
             }
-        }
-
+        }        
 
     }
 }
