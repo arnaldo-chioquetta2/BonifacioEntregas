@@ -332,18 +332,6 @@ namespace TeleBonifacio
                     txtObservacoes.Text.Trim(),
                     cmbMotoboy.Text // Inclui o texto do ComboBox como NomeEmpresa
                 );
-
-
-                //contratosDAO.UpdateContrato(
-                //    contratoExistente.Id,
-                //    txtDescricao.Text.Trim(),
-                //    (decimal)fValor,
-                //    cmbStatus.SelectedItem.ToString(),
-                //    dtpInicio.Value,
-                //    dtpFim.Value,
-                //    null, // PIX pode ser adicionado futuramente
-                //    txtObservacoes.Text.Trim()
-                //);
                 AtualizarClausulas(contratoExistente.Id);
             }
             else
@@ -368,21 +356,15 @@ namespace TeleBonifacio
 
         private void AtualizarClausulas(int contratoId)
         {
-            // Instância do DAO para manipular cláusulas
+            // Remove todas as cláusulas do contrato antes de adicionar as novas
             clausulasDAO.RemoverClausulasPorContrato(contratoId);
 
-            // Adiciona as cláusulas atuais da lista
+            // Percorre a lista e adiciona cada cláusula individualmente
             foreach (var item in lstClausulas.Items)
             {
-                if (item is DataRowView rowView && rowView.Row.Table.Columns.Contains("Texto")) // Verifica a existência da coluna
+                if (item is string clausulaTexto) // Verifica se o item é uma string
                 {
-                    string clausulaTexto = rowView["Texto"].ToString(); // Acessa a propriedade correta
                     clausulasDAO.AdicionarClausula(contratoId, clausulaTexto);
-                }
-                else
-                {
-                    // Tratar o caso onde a coluna não existe
-                    MessageBox.Show("Erro: Coluna 'Texto' não encontrada na DataTable associada.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
         }

@@ -52,6 +52,7 @@ namespace TeleBonifacio
 
         public static void ExecutarComandoSQL(string query, List<OleDbParameter> parameters = null)
         {
+            // COLOCAR O TRATAMENTO AQUI
             if (glo.ODBC)
             {
                 odbc.ExecutarComandoSQL(query, parameters);

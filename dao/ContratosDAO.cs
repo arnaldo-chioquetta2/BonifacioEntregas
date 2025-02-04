@@ -52,7 +52,7 @@ namespace TeleBonifacio.dao
                     DataTermino = '{dataTermino:yyyy-MM-dd HH:mm:ss}', 
                     PIX = '{pix}', 
                     Observacoes = '{observacoes}', 
-                    NomeEmpresa = '{nomeEmpresa.Replace("'", "''")}' -- Escapa apóstrofos no nome da empresa
+                    NomeEmpresa = '{nomeEmpresa.Replace("'", "''")}' 
                     WHERE ID = {idContrato}";
             DB.ExecutarComandoSQL(sql);
         }
