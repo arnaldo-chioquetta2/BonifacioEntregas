@@ -281,11 +281,12 @@ namespace TeleBonifacio
             // txNvTipo
             // 
             this.txNvTipo.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txNvTipo.Location = new System.Drawing.Point(39, 24);
+            this.txNvTipo.Location = new System.Drawing.Point(41, 24);
             this.txNvTipo.Name = "txNvTipo";
-            this.txNvTipo.Size = new System.Drawing.Size(202, 21);
+            this.txNvTipo.Size = new System.Drawing.Size(200, 21);
             this.txNvTipo.TabIndex = 45;
             this.txNvTipo.Visible = false;
+            this.txNvTipo.KeyUp += new System.Windows.Forms.KeyEventHandler(this.txNvTipo_KeyUp);
             // 
             // groupBox1
             // 

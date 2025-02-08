@@ -897,22 +897,6 @@ namespace TeleBonifacio
             }
         }
 
-        private void RetCmboTpo()
-        {
-            txNvTipo.Text = "";
-            txNvForn.Text = "";
-            txNvTipo.Visible = false;
-            txNvForn.Visible = false;
-            cmbTipos.Visible = true;
-            cmbForn.Visible = true;
-            cmbTipos.DataSource = null;
-            cmbForn.DataSource = null;
-            MostraTipos();
-            btAdicTpo.Text = "Atualizar";
-            btAdicTpo.Enabled = false;
-            btComprei.Text = "Comprei";
-            btComprei.Enabled = false;
-        }
 
         private void AtualizouEmBaixo()
         {
@@ -2069,5 +2053,35 @@ namespace TeleBonifacio
         {
             cINI.WriteBool("Opcoes", "AdaptAtivo", rtfWord.AltImprHab);
         }
+
+        private void txNvTipo_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                if (txNvTipo.Text.Length>0)
+                {
+                    TpoFalta.Adiciona(txNvTipo.Text);
+                    RetCmboTpo();
+                }                
+            }
+        }
+
+        private void RetCmboTpo()
+        {
+            txNvTipo.Text = "";
+            txNvForn.Text = "";
+            txNvTipo.Visible = false;
+            txNvForn.Visible = false;
+            cmbTipos.Visible = true;
+            cmbForn.Visible = true;
+            cmbTipos.DataSource = null;
+            cmbForn.DataSource = null;
+            MostraTipos(); 
+            btAdicTpo.Text = "Atualizar";
+            btAdicTpo.Enabled = false;
+            btComprei.Text = "Comprei";
+            btComprei.Enabled = false;
+        }
+
     }
 }

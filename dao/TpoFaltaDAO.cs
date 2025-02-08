@@ -16,10 +16,15 @@ namespace TeleBonifacio.dao
         public string Nome { get; set; }
 
 
-        public void Adiciona(string descricao)
+        public int Adiciona(string descricao)
         {
+            string qry = $"SELECT TOP 1 * FROM TpoFalta Where Nome > '' ORDER BY IdFalta Desc ";
+            DataTable ret = ExecutarConsulta(qry);
+            string sId = ret.Rows[0][0].ToString();
+            int reti = Convert.ToInt32(sId) + 1;
             string sql = $"INSERT INTO TpoFalta (Nome) VALUES ('{descricao}')";
             DB.ExecutarComandoSQL(sql);
+            return reti;
         }
 
         public override IDataEntity Apagar(int direcao, IDataEntity entidade)

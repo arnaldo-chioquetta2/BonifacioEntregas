@@ -142,11 +142,7 @@ namespace TeleBonifacio.rel
             ImprimirSecao(g, e, "PERÍODO DO CONTRATO:", $"Início: {dataInicio:dd/MM/yyyy}  -  Término: {dataTermino:dd/MM/yyyy}",
                           titleFont, bodyFont, backgroundBrush, brush, ref y);
 
-            // **Observações do contrato**
-            if (!string.IsNullOrWhiteSpace(this.obs))
-            {
-                ImprimirSecao(g, e, "OBSERVAÇÕES:", this.obs, titleFont, bodyFont, backgroundBrush, brush, ref y);
-            }
+            ImprimirSecao(g, e, "OBSERVAÇÕES:", this.obs, titleFont, bodyFont, backgroundBrush, brush, ref y);
 
             // **Cláusulas do contrato**
             g.DrawString("Cláusulas do Contrato:", headerFont, brush, e.MarginBounds.Left, y);
@@ -155,7 +151,7 @@ namespace TeleBonifacio.rel
 
             ImprimirClausulas(g, e, e.MarginBounds.Left, ref y, this.eMarginBoundsWidth, bodyFont, brush);
 
-            y += 40;
+            y += 50;
 
             // Linhas de assinatura
             float signatureLineY = y;
@@ -169,7 +165,16 @@ namespace TeleBonifacio.rel
             g.DrawLine(Pens.Black, assinaturaContratadaX, signatureLineY, assinaturaContratadaX + signatureWidth, signatureLineY);
             g.DrawString("Assinatura Contratada", bodyFont, brush, assinaturaContratadaX + (signatureWidth / 4), signatureLineY + 10);
 
+            y += 50;
+
+            string dataExtenso = $"Porto Alegre, {DateTime.Now.ToString("dd 'de' MMMM 'de' yyyy", new System.Globalization.CultureInfo("pt-BR"))}";
+            SizeF dataSize = g.MeasureString(dataExtenso, bodyFont);
+            float dataX = e.MarginBounds.Left + (this.eMarginBoundsWidth - dataSize.Width) / 2;
+            g.DrawString(dataExtenso, bodyFont, brush, dataX, y);
+
+
             e.HasMorePages = false;
+
         }
 
         // Método auxiliar para imprimir seções formatadas do contrato

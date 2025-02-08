@@ -35,7 +35,7 @@ namespace TeleBonifacio
             // 
             // cntrole1
             // 
-            this.cntrole1.Size = new System.Drawing.Size(330, 54);
+            this.cntrole1.Size = new System.Drawing.Size(340, 54);
             this.cntrole1.AcaoRealizada += new System.EventHandler<AcaoEventArgs>(this.cntrole1_AcaoRealizada);
             // 
             // lblNome
@@ -60,7 +60,7 @@ namespace TeleBonifacio
             // fCadTiposFaltas
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-            this.ClientSize = new System.Drawing.Size(330, 122);
+            this.ClientSize = new System.Drawing.Size(340, 122);
             this.Controls.Add(this.lblNome);
             this.Controls.Add(this.txtNome);
             this.Name = "fCadTiposFaltas";

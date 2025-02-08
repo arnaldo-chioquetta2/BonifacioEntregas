@@ -158,6 +158,8 @@ namespace TeleBonifacio.dao
                 DataTable dtClausulas = DB.ExecutarConsulta(sqlClausulas);
                 contrato.Clausulas = dtClausulas.AsEnumerable().Select(r => r["Descricao"].ToString()).ToList();
 
+                contrato.Observacoes = dtContrato.Rows[0]["Observacoes"].ToString();
+
                 return contrato;
             }
 
