@@ -20,6 +20,7 @@ namespace TeleBonifacio
         // 0 Modo neutro
         // < 0 ID adicionado
         public static int IdAdicionado=0;
+        //public static bool Inicializando = false;
 
         public static int Nivel = 0;
         // 0 Balconista, ve só as faltas  
@@ -67,7 +68,8 @@ namespace TeleBonifacio
         }
 
         public static DateTime D0 = new DateTime(1, 01, 01).Date;
-        public static DateTime D1 = new DateTime(2001, 01, 01).Date;
+        public static DateTime D1 = new DateTime(2001, 01, 01).Date;        
+
 
         #region Conversões
 
@@ -337,6 +339,131 @@ namespace TeleBonifacio
                 }
             }
             return null;
+        }
+
+        public static void CarregarComboBoxComCores<T>(ComboBox comboBox, dao.BaseDAO classe, string ItemZero = "", string filtro = "", string ordem = "", string ItemFinal = "", string ItemFinal2 = "", Dictionary<int, Color> tipoFaltaCores = null) where T : tb.IDataEntity, new()
+        {
+            DataTable dados = classe.GetDadosOrdenados(filtro, ordem);
+            List<tb.ComboBoxItemComCor> lista = new List<tb.ComboBoxItemComCor>();
+
+            // Adiciona opção inicial (Sem Cor)
+            if (ItemZero.Length > 0)
+            {
+                lista.Add(new tb.ComboBoxItemComCor(0, ItemZero, Color.Transparent));
+            }
+
+            // Adiciona os itens do banco com suas respectivas cores
+            foreach (DataRow row in dados.Rows)
+            {
+                int id = Convert.ToInt32(row["id"]);
+                string nome = row["Nome"].ToString();
+                string corString = row.Table.Columns.Contains("Cor") ? row["Cor"].ToString() : "";
+
+                // Converte a cor corretamente
+                Color cor = glo.ConverterParaCor(corString);
+
+                lista.Add(new tb.ComboBoxItemComCor(id, nome, cor));
+
+                // Armazena a cor no array global
+                if (tipoFaltaCores != null)
+                {
+                    tipoFaltaCores[id] = cor;
+                }
+            }
+
+            // Adiciona itens finais, se houver
+            if (ItemFinal.Length > 0)
+            {
+                lista.Add(new tb.ComboBoxItemComCor(0, ItemFinal, Color.Transparent));
+                if (ItemFinal2.Length > 0)
+                {
+                    lista.Add(new tb.ComboBoxItemComCor(0, ItemFinal2, Color.Transparent));
+                }
+            }
+
+            comboBox.DataSource = lista;
+            comboBox.DisplayMember = "Nome";
+            comboBox.ValueMember = "Id";
+
+            // Customiza a exibição do ComboBox para exibir cores nos itens
+            comboBox.DrawMode = DrawMode.OwnerDrawFixed;
+            comboBox.DrawItem -= ComboBox_DrawItem; // Remove eventos duplicados
+            comboBox.DrawItem += ComboBox_DrawItem;
+        }
+
+
+        public static Color ConverterParaCor(string corString)
+        {
+            if (string.IsNullOrEmpty(corString) || corString == "Sem Cor")
+                return Color.Transparent;
+
+            // 🔹 Mapeamento manual de algumas cores conhecidas que podem vir com nomes diferentes
+            Dictionary<string, string> mapaCores = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
+            {
+                { "Amarelo", "Yellow" },
+                { "Azul", "Blue" },
+                { "Vermelho", "Red" },
+                { "Verde", "Green" },
+                { "Laranja", "Orange" },
+                { "Roxo", "Purple" },
+                { "Cinza", "Gray" },
+                { "Preto", "Black" },
+                { "Branco", "White" }
+            };
+            // Se a cor estiver no dicionário, substitui pelo nome correto
+            if (mapaCores.TryGetValue(corString, out string nomeCorCorrigido))
+            {
+                return Color.FromName(nomeCorCorrigido);
+            }
+
+            // Se for formato [Nome, Color [Cor]], extrai a parte útil
+            if (corString.Contains("["))
+            {
+                int startIndex = corString.IndexOf("[") + 1;
+                int endIndex = corString.IndexOf(",");
+                if (startIndex > 0 && endIndex > startIndex)
+                {
+                    string nomeCorExtraido = corString.Substring(startIndex, endIndex - startIndex).Trim();
+
+                    // Verifica se está no mapeamento e retorna o nome correto
+                    if (mapaCores.TryGetValue(nomeCorExtraido, out string corCorrigida))
+                    {
+                        return Color.FromName(corCorrigida);
+                    }
+
+                    return Color.FromName(nomeCorExtraido); // Caso não esteja no mapeamento, tenta usar diretamente
+                }
+            }
+
+            // Se for hexadecimal, tenta converter
+            if (corString.StartsWith("#"))
+            {
+                try
+                {
+                    return ColorTranslator.FromHtml(corString);
+                }
+                catch { }
+            }
+
+            return Color.Transparent; // Retorna sem cor caso não consiga converter
+        }
+
+
+        // 🔹 Método para desenhar os itens do ComboBox com cores
+        private static void ComboBox_DrawItem(object sender, DrawItemEventArgs e)
+        {
+            if (e.Index < 0) return;
+
+            ComboBox comboBox = sender as ComboBox;
+            tb.ComboBoxItemComCor item = (tb.ComboBoxItemComCor)comboBox.Items[e.Index];
+
+            e.DrawBackground();
+            using (SolidBrush brush = new SolidBrush(item.Cor))
+            {
+                e.Graphics.FillRectangle(brush, e.Bounds);
+            }
+            e.Graphics.DrawString(item.Nome, comboBox.Font, Brushes.Black, e.Bounds.X + 5, e.Bounds.Y + 2);
+            e.DrawFocusRectangle();
         }
 
         public static void CarregarComboBox<T>(ComboBox comboBox, dao.BaseDAO classe, string ItemZero = "", string filtro = "", string ordem = "", string ItemFinal = "", string ItemFinal2 = "") where T : tb.IDataEntity, new()

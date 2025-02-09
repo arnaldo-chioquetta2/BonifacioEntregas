@@ -9,20 +9,22 @@ using TeleBonifacio.tb;
 namespace TeleBonifacio.dao
 {
     public class TpoFaltaDAO : BaseDAO
-    {
-
+    { 
         public int Id { get; set; }
 
         public string Nome { get; set; }
 
+        public string Cor { get; set; }
 
-        public int Adiciona(string descricao)
+        public int Adiciona(string descricao, string cor)
         {
             string qry = $"SELECT TOP 1 * FROM TpoFalta Where Nome > '' ORDER BY IdFalta Desc ";
             DataTable ret = ExecutarConsulta(qry);
             string sId = ret.Rows[0][0].ToString();
             int reti = Convert.ToInt32(sId) + 1;
-            string sql = $"INSERT INTO TpoFalta (Nome) VALUES ('{descricao}')";
+
+            // 🔹 Agora inclui a cor na inserção
+            string sql = $"INSERT INTO TpoFalta (Nome, Cor) VALUES ('{descricao}', '{cor}')";
             DB.ExecutarComandoSQL(sql);
             return reti;
         }
@@ -46,7 +48,7 @@ namespace TeleBonifacio.dao
 
         public override DataTable GetDadosOrdenados(string filtro = "", string ordem = "")
         {
-            string query = @"SELECT IdFalta AS id, Nome  
+            string query = @"SELECT IdFalta AS id, Nome, Cor   
                 FROM TpoFalta 
                 Where Nome > '' 
                 Order By Nome ";
@@ -59,7 +61,8 @@ namespace TeleBonifacio.dao
             return (tb.TpoFalta)new tb.TpoFalta
             {
                 Id = Id,
-                Nome = Nome
+                Nome = Nome,
+                Cor = Cor // 🔹 Inclui a cor na recuperação do objeto
             };
         }
 
@@ -73,7 +76,8 @@ namespace TeleBonifacio.dao
         {
             string query = "SELECT TOP 1 * FROM TpoFalta Where Nome > '' ORDER BY idFalta Desc";
             DataTable ret = ExecutarConsulta(query);
-            Nome = ret.Rows[0]["Nome"].ToString();
+            Nome = ret.Rows[0]["nome"].ToString();
+            Cor = ret.Rows[0]["Cor"].ToString();
             return ret; 
         }
 
@@ -96,11 +100,13 @@ namespace TeleBonifacio.dao
                             DataTable dataTable = new DataTable();
                             dataTable.Columns.Add("ID", typeof(int));
                             dataTable.Columns.Add("Nome", typeof(string));
+                            dataTable.Columns.Add("Cor", typeof(string));
                             while (reader.Read())
                             {
                                 DataRow row = dataTable.NewRow();
                                 row["ID"] = reader["IdFalta"];
                                 row["Nome"] = reader["Nome"];
+                                row["Cor"] = reader["Cor"];
                                 dataTable.Rows.Add(row);
                             }
                             return dataTable;
@@ -119,7 +125,8 @@ namespace TeleBonifacio.dao
         {
             var parametros = new List<OleDbParameter>
             {
-                new OleDbParameter("@Nome", tpoFalta.Nome)
+                new OleDbParameter("@Nome", tpoFalta.Nome),
+                new OleDbParameter("@Cor", tpoFalta.Cor) // 🔹 Adicionamos a cor aqui
             };
             if (!inserindo)
             {
@@ -128,6 +135,7 @@ namespace TeleBonifacio.dao
             return parametros;
         }
 
+
         public override void Grava(object obj)
         {
             TpoFaltaDAO tpoFalta = (TpoFaltaDAO)obj;
@@ -135,25 +143,23 @@ namespace TeleBonifacio.dao
             List<OleDbParameter> parameters;
             if (tpoFalta.Adicao)
             {
-                query = "INSERT INTO TpoFalta (Nome) VALUES (?)";
+                query = "INSERT INTO TpoFalta (Nome, Cor) VALUES (?, ?)";
                 parameters = ConstruirParametro(tpoFalta, true);
             }
             else
             {
-                query = "UPDATE TpoFalta SET Nome = ? WHERE IdFalta = ?";
-                parameters = ConstruirParametro(tpoFalta, false);
+                query = $"UPDATE TpoFalta SET Nome = '{tpoFalta.Nome}', Cor = '{tpoFalta.Cor}' WHERE IdFalta = {tpoFalta.Id}";
             }
 
             try
             {
-                DB.ExecutarComandoSQL(query, parameters);
+                DB.ExecutarComandoSQL(query);
             }
             catch (Exception ex)
             {
                 string x = ex.ToString();
                 MessageBox.Show(x, "Erro na operação do banco de dados", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
-
         }
 
         public override tb.IDataEntity ParaFrente()
@@ -183,6 +189,7 @@ namespace TeleBonifacio.dao
                             {
                                 Nome = reader["Nome"].ToString();
                                 Id = Convert.ToInt32(reader["idFalta"]);
+                                Cor = reader["Cor"].ToString(); // 🔹 Inclui a cor
                                 return (tb.TpoFalta)GetEsse();
                             }
                         }
@@ -195,6 +202,7 @@ namespace TeleBonifacio.dao
             }
             return null;
         }
+
 
         public override string VeSeJaTem(object obj)
         {

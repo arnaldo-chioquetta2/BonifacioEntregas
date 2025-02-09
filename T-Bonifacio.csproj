@@ -358,6 +358,7 @@
     <Compile Include="tb\Carro.cs" />
     <Compile Include="tb\Cliente.cs" />
     <Compile Include="tb\ComboBoxItem.cs" />
+    <Compile Include="tb\ComboBoxItemComCor.cs" />
     <Compile Include="tb\ContasAPagar.cs" />
     <Compile Include="tb\Contrato.cs" />
     <Compile Include="tb\Document.cs" />
@@ -538,6 +539,8 @@
     <Content Include="dashboard.ico" />
     <None Include="Resources\%24this.Icon.ico" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="tb\NewFolder1\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

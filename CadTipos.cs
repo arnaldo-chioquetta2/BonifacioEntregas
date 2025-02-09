@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data.OleDb;
+using System.Drawing;
 using System.Windows.Forms;
 using TeleBonifacio.tb;
 
@@ -11,6 +13,7 @@ namespace TeleBonifacio
         private tb.TpoFalta clienteEspecifico;
 
         private int ID = 0;
+        private bool mudando = true;
 
         public fCadTiposFaltas()
         {
@@ -19,9 +22,61 @@ namespace TeleBonifacio
             clienteEspecifico = DAO.GetUltimo() as tb.TpoFalta;
             base.reg = getUlt();
             ID = base.reg.Id;
+
+            Dictionary<string, Color?> coresDisponiveis = new Dictionary<string, Color?>
+            {
+                { "Sem Cor", null },  
+                { "Vermelho", Color.Red },
+                { "Azul", Color.Blue },
+                { "Verde", Color.Green },
+                { "Amarelo", Color.Yellow },
+                { "Roxo", Color.Purple },
+                { "Laranja", Color.Orange },
+                { "Cinza", Color.Gray }
+            };
+
+            // Associar as cores ao ComboBox
+            cmbCor.DataSource = new BindingSource(coresDisponiveis, null);
+            cmbCor.DisplayMember = "Key";  // Nome visível no ComboBox
+            cmbCor.ValueMember = "Value";  // Valor real (cor)
+
+            // Exibir a cor no fundo do ComboBox
+            cmbCor.DrawMode = DrawMode.OwnerDrawFixed;
+            cmbCor.DropDownStyle = ComboBoxStyle.DropDownList;
+            cmbCor.DrawItem += new DrawItemEventHandler(cmbCores_DrawItem);
+
             base.Mostra();
             base.LerTagsDosCamposDeTexto();
+
             rt.AdjustFormComponents(this);
+
+            List<string> lista = new List<string>();
+            foreach (var item in cmbCor.Items)
+            {
+                lista.Add(item.ToString());
+            }
+            base.setListCombo(lista);
+
+            mudando = false;
+        }
+
+        private void cmbCores_DrawItem(object sender, DrawItemEventArgs e)
+        {
+            if (e.Index < 0) return;
+
+            ComboBox cmb = (ComboBox)sender;
+            KeyValuePair<string, Color?> item = (KeyValuePair<string, Color?>)cmb.Items[e.Index];
+
+            e.DrawBackground();
+            if (item.Value != null)
+            {
+                using (SolidBrush brush = new SolidBrush(item.Value.Value))
+                {
+                    e.Graphics.FillRectangle(brush, e.Bounds);
+                }
+            }
+            e.Graphics.DrawString(item.Key, cmb.Font, Brushes.Black, e.Bounds.X + 5, e.Bounds.Y + 2);
+            e.DrawFocusRectangle();
         }
 
         private tb.TpoFalta getUlt()
@@ -46,6 +101,15 @@ namespace TeleBonifacio
                             {
                                 ret.Id = (int)reader["IdFalta"];
                                 ret.Nome = (string)reader["Nome"];
+
+                                if (reader["Cor"] != DBNull.Value)
+                                {
+                                    ret.Cor = (string)reader["Cor"];
+                                }
+                                else
+                                {
+                                    ret.Cor = "";
+                                }
                             }
                             return ret;
                         }
@@ -62,7 +126,16 @@ namespace TeleBonifacio
 
         private void cntrole1_AcaoRealizada(object sender, AcaoEventArgs e)
         {
+            if (base.reg.Id!=null)
+            {
+                ID = base.reg.Id;
+            }
             base.cntrole1_AcaoRealizada(sender, e, base.reg);
+            if (e.Acao== "CANC")
+            {
+                base.reg.Id = ID;
+                base.Mostra();
+            }
         }
 
         private void fCadClientes_KeyUp(object sender, KeyEventArgs e)
@@ -92,5 +165,12 @@ namespace TeleBonifacio
             }
         }
 
+        private void cmbCores_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (!mudando)
+            {
+                base.cntrole1.EmEdicao = true;
+            }
+        }
     }
 }

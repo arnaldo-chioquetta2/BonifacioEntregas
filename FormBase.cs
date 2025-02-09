@@ -83,7 +83,6 @@ namespace TeleBonifacio
                     cntrole1.TemDados = true;
                     Pesquisando = false;
                     Mostrando = true;
-
                     foreach (Control control in this.Controls)
                     {
                         if (control is GroupBox groupBox)
@@ -127,61 +126,92 @@ namespace TeleBonifacio
             }
         }
 
-
-        //protected bool Mostra()
-        //{
-        //    if (reg == null)
-        //    {
-        //        cntrole1.Vazio = true;
-        //        return false;
-        //    }
-        //    else
-        //    {
-        //        if (reg.Id==0)
-        //        {
-        //            cntrole1.Vazio = true;
-        //            return false;
-        //        } else
-        //        {
-        //            cntrole1.TemDados = true;
-        //            Pesquisando = false;
-        //            Mostrando = true;
-        //            foreach (Control control in this.Controls)
-        //            {
-        //                if (control is TextBox textBox)
-        //                {
-        //                    ProcessarTextBox(textBox);
-        //                }
-        //                else if (control is DateTimePicker dateTimePicker)
-        //                {
-        //                    ProcessarDateTimePicker(dateTimePicker);
-        //                } else if (control is CheckBox Check)
-        //                {
-        //                    ProcessaCheck(Check);
-        //                } else if (control is ComboBox cmb)
-        //                {
-        //                    ProcessaCombo(cmb);
-        //                }
-        //            }
-        //            Mostrando = false;
-        //            cntrole1.IDAtual = reg.Id;
-        //            return true;
-        //        }
-        //    }
-        //}
-
         private void ProcessaCombo(ComboBox cmb)
         {
             string propertyName = cmb.Name.Substring(3);
             PropertyInfo propertyInfo = reg.GetType().GetProperty(propertyName);
+
             if (propertyInfo == null)
             {
-                cmb.SelectedIndex = 0;
-            } else
+                cmb.SelectedIndex = 0; // Valor padrão
+                cmb.BackColor = SystemColors.Window;
+                return;
+            }
+
+            string valor = propertyInfo.GetValue(reg, null)?.ToString() ?? string.Empty;
+
+            // 🔹 Tratamento especial para o ComboBox de cor
+            if (cmb.Tag?.ToString() == "cor")
             {
-                string valor = propertyInfo.GetValue(reg, null)?.ToString() ?? string.Empty;
-                int iVlr = Convert.ToInt16(valor);
-                cmb.SelectedIndex = iVlr;
+                // Se a cor estiver vazia ou for NULL, seleciona "Sem Cor" (índice 0)
+                if (string.IsNullOrEmpty(valor))
+                {
+                    cmb.SelectedIndex = 0;
+                    cmb.BackColor = SystemColors.Window; // Garante que a aparência volte ao padrão
+                    return;
+                }
+
+                // 🔹 Certifica-se de que o valor armazenado está no mesmo formato que os itens do ComboBox
+                string corFormatada = valor.Trim().ToUpper();
+
+                // 🔹 Percorre a lista do ComboBox para encontrar o índice correto
+                int index = -1;
+                for (int i = 0; i < cmb.Items.Count; i++)
+                {
+                    if (cmb.Items[i].ToString().Trim().ToUpper() == corFormatada)
+                    {
+                        index = i;
+                        break;
+                    }
+                }
+
+                // Se encontrou a cor no ComboBox, seleciona; caso contrário, mantém "Sem Cor"
+                cmb.SelectedIndex = (index >= 0) ? index : 0;
+
+                // 🔹 Força a atualização da cor do fundo do ComboBox
+                AtualizaAparenciaComboCor(cmb);
+            }
+            else
+            {
+                // 🔹 Processamento padrão para outros ComboBoxes
+                if (int.TryParse(valor, out int iVlr))
+                {
+                    cmb.SelectedIndex = iVlr;
+                }
+                else
+                {
+                    cmb.SelectedIndex = 0; // Valor padrão em caso de erro
+                }
+            }
+        }
+
+        private void AtualizaAparenciaComboCor(ComboBox cmb)
+        {
+            if (cmb.SelectedIndex == 0)
+            {
+                // 🔹 "Sem Cor", então volta ao fundo padrão do sistema
+                cmb.BackColor = SystemColors.Window;
+            }
+            else
+            {
+                // 🔹 Obtém a cor do próprio item selecionado (desde que seja um Color válido)
+                if (cmb.SelectedItem is Color corSelecionada)
+                {
+                    cmb.BackColor = corSelecionada;
+                }
+                else
+                {
+                    try
+                    {
+                        // 🔹 Extraindo apenas o nome da cor da string retornada
+                        string nomeCor = cmb.SelectedItem.ToString().Split(',')[0].Trim('[', ']');
+                        cmb.BackColor = Color.FromName(nomeCor);
+                    }
+                    catch
+                    {
+                        cmb.BackColor = SystemColors.Window; // 🔹 Fallback para fundo padrão se falhar
+                    }
+                }
             }
         }
 
@@ -290,26 +320,73 @@ namespace TeleBonifacio
         {
             string propertyName = cmb.Name.Substring(3);
             PropertyInfo propertyInfo = reg.GetType().GetProperty(propertyName);
+
             if (propertyInfo == null)
             {
                 propertyInfo.SetValue(reg, null, null);
+                return;
+            }
+
+            if (cmb.Tag?.ToString() == "cor") // 🔹 Se for um ComboBox de cor, armazena como string
+            {
+                Color selectedColor = Color.Transparent; // Default para "Sem Cor"
+
+                if (cmb.SelectedItem != null && cmb.SelectedItem.ToString() != "Sem Cor")
+                {
+                    selectedColor = Color.FromName(cmb.SelectedItem.ToString());
+                }
+
+                // 🔹 Salva a cor como string (nome da cor)
+                propertyInfo.SetValue(reg, selectedColor.Name, null);
             }
             else
             {
+                // 🔹 Para outros ComboBoxes, armazena o índice da seleção
                 int c = 0;
-                foreach (string item in listCombo)
+                if (listCombo != null && listCombo.Count > 0) // 🔹 Evita erro se listCombo for nulo ou vazio
                 {
-                    if (item == cmb.Text)
-                    {                        
-                        break;
-                    } else
+                    foreach (string item in listCombo)
                     {
-                        c++;
+                        if (item == cmb.Text)
+                        {
+                            break;
+                        }
+                        else
+                        {
+                            c++;
+                        }
                     }
                 }
                 propertyInfo.SetValue(reg, c, null);
             }
         }
+
+        //private void MapearComboParaModelo(ComboBox cmb, BaseDAO reg)
+        //{
+        //    string propertyName = cmb.Name.Substring(3);
+        //    PropertyInfo propertyInfo = reg.GetType().GetProperty(propertyName);
+        //    if (propertyInfo == null)
+        //    {
+        //        propertyInfo.SetValue(reg, null, null);
+        //    }
+        //    else
+        //    {
+        //        // Se der erro aqui é porque falto o setListCombo
+        //        int c = 0;
+        //        foreach (string item in listCombo)
+        //        {
+        //            if (item == cmb.Text)
+        //            {
+        //                break;
+        //            }
+        //            else
+        //            {
+        //                c++;
+        //            }
+        //        }
+        //        propertyInfo.SetValue(reg, c, null);
+        //    }
+        //}
 
         private void MapearCheckParaModelo(CheckBox check, BaseDAO reg)
         {
@@ -429,16 +506,6 @@ namespace TeleBonifacio
         #endregion
 
         #region TratamentoDeTela
-        //protected void LimparCampos()
-        //{
-        //    foreach (Control control in this.Controls)
-        //    {
-        //        if (control is TextBox)
-        //        {
-        //            control.Text = string.Empty;
-        //        }
-        //    }
-        //}
 
         protected void LimparCampos()
         {

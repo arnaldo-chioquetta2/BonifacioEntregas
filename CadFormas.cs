@@ -11,7 +11,6 @@ namespace TeleBonifacio
 
         private tb.Forma clienteEspecifico;
 
-        //private bool Adicionando = false;
         private bool Carregando = true;
         private int ID = 0;
 

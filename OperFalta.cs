@@ -20,10 +20,11 @@ namespace TeleBonifacio
         private ProdutosDao cDaoP;      
         private GarantiasDao cDaoG;
         private pesCliente FpesCliente;
-        private DataTable dadosCli;        
-        private bool carregando = true;
-        private bool Restrito = false;
+        private DataTable dadosCli;
+        private Dictionary<int, Color> tipoFaltaCores = new Dictionary<int, Color>();
         private Color originalBackgroundColor;
+        private bool carregando = true;
+        private bool Restrito = false;        
         private int BakidTipo = 0;
         private int BakidForn = 0;
         private int bakComprado = 0;
@@ -553,16 +554,53 @@ namespace TeleBonifacio
             if (!row.Cells["Tipo"].Value.Equals(DBNull.Value))
             {
                 int tipoId = Convert.ToInt32(row.Cells["Tipo"].Value);
-                if (tipoId == 8)
+
+                // Busca a cor no array global
+                if (tipoFaltaCores.TryGetValue(tipoId, out Color cor))
                 {
-                    row.DefaultCellStyle.BackColor = Color.LightGreen;
+                    row.DefaultCellStyle.BackColor = cor;
                 }
-                else if (tipoId == 26)
+                else
                 {
-                    row.DefaultCellStyle.BackColor = Color.Red;
+                    row.DefaultCellStyle.BackColor = SystemColors.Window; // Cor padrão se não tiver cor definida
                 }
             }
         }
+
+        //private void AplicarCorPorTipo(DataGridViewRow row)
+        //{
+        //    if (!row.Cells["Tipo"].Value.Equals(DBNull.Value))
+        //    {
+        //        int tipoId = Convert.ToInt32(row.Cells["Tipo"].Value);
+
+        //        // Busca o tipo correspondente na lista de tipos cadastrados
+        //        tb.TpoFalta tipo = TpoFalta.getTipos().FirstOrDefault(t => t.Id == tipoId);
+
+        //        if (tipo != null && !string.IsNullOrEmpty(tipo.Cor)) // Se o tipo existir e tiver cor definida
+        //        {
+        //            row.DefaultCellStyle.BackColor = glo.ConverterParaCor(tipo.Cor);
+        //        }
+        //        else
+        //        {
+        //            row.DefaultCellStyle.BackColor = SystemColors.Window; // Cor padrão se não tiver cor definida
+        //        }
+        //    }
+        //}
+        //private void AplicarCorPorTipo(DataGridViewRow row)
+        //{
+        //    if (!row.Cells["Tipo"].Value.Equals(DBNull.Value))
+        //    {
+        //        int tipoId = Convert.ToInt32(row.Cells["Tipo"].Value);
+        //        if (tipoId == 8)
+        //        {
+        //            row.DefaultCellStyle.BackColor = Color.LightGreen;
+        //        }
+        //        else if (tipoId == 26)
+        //        {
+        //            row.DefaultCellStyle.BackColor = Color.Red;
+        //        }
+        //    }
+        //}
 
         private void AplicarFontePorPrioridade(DataGridViewRow row)
         {
@@ -726,7 +764,7 @@ namespace TeleBonifacio
             }
             else
             {
-                glo.CarregarComboBox<tb.TpoFalta>(cmbTipos, TpoFalta, "ESCOLHA", ItemFinal: "ADICIONE", ItemFinal2: "EDIÇÃO");
+                glo.CarregarComboBoxComCores<tb.TpoFalta>(cmbTipos, TpoFalta, "ESCOLHA", "", "", "ADICIONE", "EDIÇÃO", tipoFaltaCores: tipoFaltaCores);
                 glo.CarregarComboBox<tb.Fornecedor>(cmbForn, Forn, "ESCOLHA", ItemFinal: "ADICIONE", ItemFinal2: "EDIÇÃO", filtro: "EhForn = 1 ");
             }
         }
@@ -746,7 +784,7 @@ namespace TeleBonifacio
                 {
                     if (txNvTipo.Visible)
                     {
-                        TpoFalta.Adiciona(txNvTipo.Text);
+                        TpoFalta.Adiciona(txNvTipo.Text, null);
                     }
                     else
                     {
@@ -939,6 +977,7 @@ namespace TeleBonifacio
                                 fCadTiposFaltas novoForm = new fCadTiposFaltas();
                                 novoForm.ShowDialog();
                                 MostraTipos();
+                                CarregaGrid();
                             }
                             else
                             {
@@ -2060,7 +2099,7 @@ namespace TeleBonifacio
             {
                 if (txNvTipo.Text.Length>0)
                 {
-                    TpoFalta.Adiciona(txNvTipo.Text);
+                    TpoFalta.Adiciona(txNvTipo.Text, null);
                     RetCmboTpo();
                 }                
             }
