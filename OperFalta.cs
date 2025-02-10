@@ -567,41 +567,6 @@ namespace TeleBonifacio
             }
         }
 
-        //private void AplicarCorPorTipo(DataGridViewRow row)
-        //{
-        //    if (!row.Cells["Tipo"].Value.Equals(DBNull.Value))
-        //    {
-        //        int tipoId = Convert.ToInt32(row.Cells["Tipo"].Value);
-
-        //        // Busca o tipo correspondente na lista de tipos cadastrados
-        //        tb.TpoFalta tipo = TpoFalta.getTipos().FirstOrDefault(t => t.Id == tipoId);
-
-        //        if (tipo != null && !string.IsNullOrEmpty(tipo.Cor)) // Se o tipo existir e tiver cor definida
-        //        {
-        //            row.DefaultCellStyle.BackColor = glo.ConverterParaCor(tipo.Cor);
-        //        }
-        //        else
-        //        {
-        //            row.DefaultCellStyle.BackColor = SystemColors.Window; // Cor padrão se não tiver cor definida
-        //        }
-        //    }
-        //}
-        //private void AplicarCorPorTipo(DataGridViewRow row)
-        //{
-        //    if (!row.Cells["Tipo"].Value.Equals(DBNull.Value))
-        //    {
-        //        int tipoId = Convert.ToInt32(row.Cells["Tipo"].Value);
-        //        if (tipoId == 8)
-        //        {
-        //            row.DefaultCellStyle.BackColor = Color.LightGreen;
-        //        }
-        //        else if (tipoId == 26)
-        //        {
-        //            row.DefaultCellStyle.BackColor = Color.Red;
-        //        }
-        //    }
-        //}
-
         private void AplicarFontePorPrioridade(DataGridViewRow row)
         {
             int prioridade = Convert.ToInt32(row.Cells["Prioridade"].Value);
@@ -827,8 +792,13 @@ namespace TeleBonifacio
                     {
                         int iTpo = cmbTipos.SelectedIndex;
                         if (iTpo > -1)
-                        {
-                            idTipo = ((tb.ComboBoxItem)cmbTipos.Items[iTpo]).Id;
+                        {                            
+                            string sTipo = cmbTipos.Text;
+                            DataTable dados = TpoFalta.GetDadosOrdenados($" and Nome = '{sTipo}'");
+                            idTipo = Convert.ToInt32(dados.Rows[0]["id"]);
+                            // idTipo = 0; // Preciso colocar o conteúdo do campo id nesta variável
+                            // Antes estava assim
+                            // idTipo = ((tb.ComboBoxItem)cmbTipos.Items[iTpo]).Id;
                         }
                     }
                     string quantidade = "";

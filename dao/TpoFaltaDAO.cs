@@ -48,9 +48,9 @@ namespace TeleBonifacio.dao
 
         public override DataTable GetDadosOrdenados(string filtro = "", string ordem = "")
         {
-            string query = @"SELECT IdFalta AS id, Nome, Cor   
+            string query = $@"SELECT IdFalta AS id, Nome, Cor   
                 FROM TpoFalta 
-                Where Nome > '' 
+                Where Nome > '' {filtro} 
                 Order By Nome ";
             DataTable dt = DB.ExecutarConsulta(query);
             return dt;
