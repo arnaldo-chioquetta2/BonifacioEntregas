@@ -196,13 +196,13 @@ namespace TeleBonifacio
             }
         }
 
-        private void OperFalta_Activated(object sender, EventArgs e)
-        {
-            if (carregando)
-            {
-                carregando = false;
-            }
-        }
+        //private void OperFalta_Activated(object sender, EventArgs e)
+        //{
+        //    if (carregando)
+        //    {
+        //        carregando = false;
+        //    }
+        //}
 
         #endregion
 

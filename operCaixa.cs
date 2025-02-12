@@ -27,6 +27,7 @@ namespace TeleBonifacio
         private int DefCred=0;
         private int DefDeb = 0;
         private bool Especial=false;
+        private bool mudando = true;
         private tb.ComboBoxItem IdDoVendNoCombo;
 
         private void operCaixa_Load(object sender, EventArgs e)
@@ -75,6 +76,7 @@ namespace TeleBonifacio
             CarregaGrid();
             ConfigurarGrid();
             CarregaFormas();
+            mudando = false;
         }        
 
         public operCaixa()
@@ -144,7 +146,9 @@ namespace TeleBonifacio
         {
             cFormas = new FormasDAO();
             CarregaForma(ref cFormas, 0, grpCredito);
-            CarregaForma(ref cFormas, 1, grpDebito);
+
+            CarregaFormaDuasLinhas(ref cFormas, 1, grpDebito);
+
             glo.CarregarComboBox<tb.Forma>(cbFormas, cFormas," ");
 
             string query = "Select * From Config";            
@@ -180,6 +184,44 @@ namespace TeleBonifacio
                 }
             }
         }
+
+        public void CarregaFormaDuasLinhas(ref FormasDAO cForma, int tipoForma, GroupBox targetGroupBox)
+        {
+            List<tb.Forma> lstFormas = cForma.getFormas(tipoForma);
+            int buttonWidth = 75;
+            int buttonHeight = 23;
+            int margin = 15;
+            int availableWidth = targetGroupBox.Width - (2 * margin);
+            int totalButtons = lstFormas.Count;
+
+            if (totalButtons > 0)
+            {
+                int buttonsPerRow = (int)Math.Ceiling(totalButtons / 2.0); // Divide em 2 linhas
+                int spacing = (availableWidth - (buttonWidth * buttonsPerRow)) / (buttonsPerRow - 1);
+                int rowHeight = targetGroupBox.Height / 3; // Define altura das linhas
+
+                for (int i = 0; i < totalButtons; i++)
+                {
+                    Button btn = new Button();
+                    btn.Width = buttonWidth;
+                    btn.Height = buttonHeight;
+                    btn.Text = lstFormas[i].Nome;
+                    btn.Tag = lstFormas[i].Id;
+                    btn.Enabled = false;
+
+                    int row = i / buttonsPerRow; // Define a linha (0 ou 1)
+                    int col = i % buttonsPerRow; // Define a coluna
+
+                    int xPosition = margin + (col * (buttonWidth + spacing));
+                    int yPosition = margin + (row * rowHeight); // Alterna entre primeira e segunda linha
+
+                    btn.Location = new Point(xPosition, yPosition);
+                    targetGroupBox.Controls.Add(btn);
+                    btn.Click += new EventHandler(Button_Click);
+                }
+            }
+        }
+
 
         private void Button_Click(object sender, EventArgs e)
         {
@@ -466,7 +508,16 @@ namespace TeleBonifacio
         private void CarregaGrid(int idForma = 0)
         {
             string sObs = txObs.Text;
-            DataTable dados = Caixa.getDados(dtpDataIN.Value, dtnDtFim.Value, idForma, sObs);
+            string sCliente = "";
+            if (cmbCliente.SelectedIndex>0)
+            {
+                sCliente = cmbCliente.Text;
+            }
+            string sVendedor = "";
+            string sValor = "";
+            string sValorDebito = "";
+            string sDesconto = "";
+            DataTable dados = Caixa.getDados(dtpDataIN.Value, dtnDtFim.Value, idForma, sObs, sCliente, sVendedor, sValor, sValorDebito, sDesconto);
             dataGrid1.DataSource = dados;
         }
 

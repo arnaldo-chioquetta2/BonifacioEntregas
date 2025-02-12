@@ -11,8 +11,9 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyCulture("")]
 [assembly: ComVisible(false)]
 [assembly: Guid("308c57af-e663-456d-8a2c-188bbd61423d")]
-[assembly: AssemblyVersion("3.4.6.0")]
-[assembly: AssemblyFileVersion("3.4.6.0")]
+[assembly: AssemblyVersion("3.4.7.0")]
+[assembly: AssemblyFileVersion("3.4.7.0")]
+// 3.4.7 Pesquisa pelo cliente na tela de caixa
 // 3.4.6 Conserto da alteração do tipo depois da cor nos tipos
 // 3.4.5 Cores nos tipos
 // 3.4.4 Ajustes na edição dos tipos pela tela das faltas

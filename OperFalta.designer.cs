@@ -682,7 +682,7 @@ namespace TeleBonifacio
             this.MaximizeBox = false;
             this.Name = "OperFalta";
             this.Text = "Produtos em Falta";
-            this.Activated += new System.EventHandler(this.OperFalta_Activated);
+            //this.Activated += new System.EventHandler(this.OperFalta_Activated);
             this.Load += new System.EventHandler(this.OperFalta_Load);
             this.panel1.ResumeLayout(false);
             this.groupBox3.ResumeLayout(false);

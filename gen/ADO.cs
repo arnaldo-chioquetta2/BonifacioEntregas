@@ -23,7 +23,7 @@ namespace TeleBonifacio.gen
                 catch (Exception ex)
                 {
                     glo.Loga(ex.Message);
-                    // Console.WriteLine(ex.Message);
+                    Console.WriteLine(ex.Message);
                 }
             }
             return dataTable;

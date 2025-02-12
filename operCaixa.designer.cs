@@ -115,7 +115,7 @@ namespace TeleBonifacio
             // 
             this.dtpDataIN.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
             this.dtpDataIN.Format = System.Windows.Forms.DateTimePickerFormat.Short;
-            this.dtpDataIN.Location = new System.Drawing.Point(534, 231);
+            this.dtpDataIN.Location = new System.Drawing.Point(534, 257);
             this.dtpDataIN.Name = "dtpDataIN";
             this.dtpDataIN.Size = new System.Drawing.Size(90, 23);
             this.dtpDataIN.TabIndex = 29;
@@ -193,7 +193,7 @@ namespace TeleBonifacio
             // 
             // btnFiltrar
             // 
-            this.btnFiltrar.Location = new System.Drawing.Point(835, 229);
+            this.btnFiltrar.Location = new System.Drawing.Point(835, 255);
             this.btnFiltrar.Name = "btnFiltrar";
             this.btnFiltrar.Size = new System.Drawing.Size(81, 23);
             this.btnFiltrar.TabIndex = 18;
@@ -202,7 +202,7 @@ namespace TeleBonifacio
             // 
             // btnNovoCliente
             // 
-            this.btnNovoCliente.Location = new System.Drawing.Point(9, 229);
+            this.btnNovoCliente.Location = new System.Drawing.Point(9, 255);
             this.btnNovoCliente.Name = "btnNovoCliente";
             this.btnNovoCliente.Size = new System.Drawing.Size(99, 23);
             this.btnNovoCliente.TabIndex = 19;
@@ -239,7 +239,7 @@ namespace TeleBonifacio
             this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(928, 263);
+            this.panel1.Size = new System.Drawing.Size(928, 294);
             this.panel1.TabIndex = 13;
             // 
             // label2
@@ -279,7 +279,7 @@ namespace TeleBonifacio
             // 
             this.cbFormas.DisplayMember = "Nome";
             this.cbFormas.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cbFormas.Location = new System.Drawing.Point(726, 230);
+            this.cbFormas.Location = new System.Drawing.Point(726, 256);
             this.cbFormas.Name = "cbFormas";
             this.cbFormas.Size = new System.Drawing.Size(97, 24);
             this.cbFormas.TabIndex = 47;
@@ -289,7 +289,7 @@ namespace TeleBonifacio
             // 
             this.grpDebito.Location = new System.Drawing.Point(10, 169);
             this.grpDebito.Name = "grpDebito";
-            this.grpDebito.Size = new System.Drawing.Size(814, 53);
+            this.grpDebito.Size = new System.Drawing.Size(814, 77);
             this.grpDebito.TabIndex = 46;
             this.grpDebito.TabStop = false;
             this.grpDebito.Text = "Débitos";
@@ -319,7 +319,7 @@ namespace TeleBonifacio
             // 
             this.dtnDtFim.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
             this.dtnDtFim.Format = System.Windows.Forms.DateTimePickerFormat.Short;
-            this.dtnDtFim.Location = new System.Drawing.Point(630, 231);
+            this.dtnDtFim.Location = new System.Drawing.Point(630, 257);
             this.dtnDtFim.Name = "dtnDtFim";
             this.dtnDtFim.Size = new System.Drawing.Size(90, 23);
             this.dtnDtFim.TabIndex = 41;
@@ -351,11 +351,11 @@ namespace TeleBonifacio
             // 
             this.dataGrid1.AllowUserToAddRows = false;
             this.dataGrid1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dataGrid1.Location = new System.Drawing.Point(0, 263);
+            this.dataGrid1.Location = new System.Drawing.Point(0, 294);
             this.dataGrid1.Name = "dataGrid1";
             this.dataGrid1.ReadOnly = true;
             this.dataGrid1.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dataGrid1.Size = new System.Drawing.Size(928, 228);
+            this.dataGrid1.Size = new System.Drawing.Size(928, 262);
             this.dataGrid1.TabIndex = 0;
             this.dataGrid1.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGrid1_CellClick);
             // 
@@ -367,7 +367,7 @@ namespace TeleBonifacio
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(928, 491);
+            this.ClientSize = new System.Drawing.Size(928, 556);
             this.Controls.Add(this.dataGrid1);
             this.Controls.Add(this.panel1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));

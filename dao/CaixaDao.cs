@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Data.OleDb;
 using System.Text;
@@ -22,12 +23,13 @@ namespace TeleBonifacio.dao
             DB.ExecutarComandoSQL(sql);
         }
 
-        public DataTable getDados(DateTime DT1, DateTime DT2, int idForma, string sObs)
+        public DataTable getDados(DateTime DT1, DateTime DT2, int idForma, string sObs, string sCliente, string sVendedor, string sValor, string sValorDebito, string sDesconto)
         {
             bool Sair = false;
             DataTable dt = null;
             int qtD = 0;
-            while (Sair==false)
+
+            while (!Sair)
             {
                 DateTime dataInicio = DT1.Date;
                 DateTime dataFim = DT2.Date;
@@ -37,47 +39,91 @@ namespace TeleBonifacio.dao
                 StringBuilder query = new StringBuilder();
                 query.Append(@"SELECT ca.ID, c.Nome AS Cliente, ca.Valor, ca.Desconto, ca.VlNota, 
                     v.Nome AS Vendedor, ca.Data, f.Nome AS Pagamento, ca.Obs,
-                    c.NrCli, ca.idVend, ca.idForma, ca.UID 
-                    FROM ((Caixa ca
+                    c.NrCli, ca.idVend, ca.idForma, ca.UID");
+
+                // 🔹 Somente adiciona `ca.VlDebito` se a pesquisa foi feita pelo valor de débito
+                if (!string.IsNullOrEmpty(sValorDebito))
+                {
+                    query.Append(", ca.VlDebito");
+                }
+
+                query.Append(@" FROM ((Caixa ca
                     LEFT JOIN Clientes c ON c.NrCli = ca.idCliente)
                     LEFT JOIN Vendedores v ON v.ID = ca.idVend)
                     LEFT JOIN Formas f ON f.ID = (ca.idForma + 1)");
+
                 query.AppendFormat(" WHERE ca.Data BETWEEN #{0}# AND #{1}#", dataInicioStr, dataFimStr);
-                if (idForma>0)
+
+                bool hasCondition = false;
+
+                if (idForma > 0)
                 {
-                    query.AppendFormat(" AND ca.idForma = {0}", idForma-1);
+                    query.AppendFormat(" AND ca.idForma = {0}", idForma - 1);
+                    hasCondition = true;
                 }
-                if (sObs.Length>0)
+                if (!string.IsNullOrEmpty(sObs))
                 {
-                    query.AppendFormat(" AND ca.Obs Like '%{0}%' ", sObs);
+                    query.AppendFormat(" AND ca.Obs LIKE '%{0}%'", sObs);
+                    hasCondition = true;
                 }
+                if (!string.IsNullOrEmpty(sCliente))
+                {
+                    query.AppendFormat(" AND c.Nome LIKE '%{0}%'", sCliente);
+                    hasCondition = true;
+                }
+                if (!string.IsNullOrEmpty(sVendedor))
+                {
+                    query.AppendFormat(" AND v.Nome LIKE '%{0}%'", sVendedor);
+                    hasCondition = true;
+                }
+                if (!string.IsNullOrEmpty(sValor) && decimal.TryParse(sValor, out decimal valor))
+                {
+                    query.AppendFormat(" AND ca.Valor = {0}", valor.ToString(System.Globalization.CultureInfo.InvariantCulture));
+                    hasCondition = true;
+                }
+                if (!string.IsNullOrEmpty(sValorDebito) && decimal.TryParse(sValorDebito, out decimal vlDebito))
+                {
+                    query.AppendFormat(" AND ca.VlDebito = {0}", vlDebito.ToString(System.Globalization.CultureInfo.InvariantCulture));
+                    hasCondition = true;
+                }
+                if (!string.IsNullOrEmpty(sDesconto) && decimal.TryParse(sDesconto, out decimal desconto))
+                {
+                    query.AppendFormat(" AND ca.Desconto = {0}", desconto.ToString(System.Globalization.CultureInfo.InvariantCulture));
+                    hasCondition = true;
+                }
+
                 query.Append(" ORDER BY ca.ID DESC");
                 dt = DB.ExecutarConsulta(query.ToString());
+
                 if (dt.Rows.Count == 0)
                 {
-                    string q2 = "Select Data From Caixa Order by Data desc";
+                    string q2 = "SELECT Data FROM Caixa ORDER BY Data DESC";
                     DataTable dt2 = DB.ExecutarConsulta(q2);
+
                     if (dt2.Rows.Count == 0)
                     {
                         Sair = true;
-                    } else
+                    }
+                    else
                     {
                         DT1 = (DateTime)dt2.Rows[0]["Data"];
-                        if (qtD<10)
+                        if (qtD < 10)
                         {
                             qtD++;
                             DT2 = DT2.AddDays(1);
-                        } else
+                        }
+                        else
                         {
                             Sair = true;
-                        }                        
-                    }                        
-                } else
+                        }
+                    }
+                }
+                else
                 {
                     Sair = true;
                 }
-
             }
+
             return dt;
         }
 
