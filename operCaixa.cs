@@ -509,14 +509,18 @@ namespace TeleBonifacio
         {
             string sObs = txObs.Text;
             string sCliente = "";
+            string sVendedor = "";
             if (cmbCliente.SelectedIndex>0)
             {
                 sCliente = cmbCliente.Text;
             }
-            string sVendedor = "";
-            string sValor = "";
-            string sValorDebito = "";
-            string sDesconto = "";
+            if (cmbVendedor.SelectedIndex>0)
+            {
+                sVendedor = cmbVendedor.Text;
+            }
+            string sValor = txCompra.Text;
+            string sValorDebito = textBox1.Text;
+            string sDesconto = txDesc.Text;
             DataTable dados = Caixa.getDados(dtpDataIN.Value, dtnDtFim.Value, idForma, sObs, sCliente, sVendedor, sValor, sValorDebito, sDesconto);
             dataGrid1.DataSource = dados;
         }
