@@ -605,6 +605,8 @@ namespace TeleBonifacio
             // 
             // griTaxas
             // 
+            this.griTaxas.AllowUserToAddRows = false;
+            this.griTaxas.AllowUserToOrderColumns = true;
             this.griTaxas.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
             this.griTaxas.ColumnHeadersVisible = false;
             dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
@@ -623,6 +625,7 @@ namespace TeleBonifacio
             this.griTaxas.TabIndex = 0;
             this.griTaxas.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.griTaxas_CellEndEdit);
             this.griTaxas.ColumnWidthChanged += new System.Windows.Forms.DataGridViewColumnEventHandler(this.griTaxas_ColumnWidthChanged);
+            this.griTaxas.KeyDown += new System.Windows.Forms.KeyEventHandler(this.griTaxas_KeyDown);
             // 
             // tabPage7
             // 
@@ -682,7 +685,6 @@ namespace TeleBonifacio
             this.MaximizeBox = false;
             this.Name = "OperFalta";
             this.Text = "Produtos em Falta";
-            //this.Activated += new System.EventHandler(this.OperFalta_Activated);
             this.Load += new System.EventHandler(this.OperFalta_Load);
             this.panel1.ResumeLayout(false);
             this.groupBox3.ResumeLayout(false);

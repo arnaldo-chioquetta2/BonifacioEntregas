@@ -1862,7 +1862,11 @@ namespace TeleBonifacio
             this.iniGrid = @"C:\Entregas\Grid.ini";
             InitializeGrid();
             LoadColumnWidths();
+            griTaxas.CellEndEdit -= griTaxas_CellEndEdit;
+            griTaxas.ColumnWidthChanged -= griTaxas_ColumnWidthChanged;
             LoadDataFromDatabase();
+            griTaxas.CellEndEdit += griTaxas_CellEndEdit;
+            griTaxas.ColumnWidthChanged += griTaxas_ColumnWidthChanged;
             griTaxas.CellEndEdit += griTaxas_CellEndEdit;
             griTaxas.ColumnWidthChanged += griTaxas_ColumnWidthChanged;
             griTaxas.Refresh();
@@ -1894,6 +1898,7 @@ namespace TeleBonifacio
                 column.DefaultCellStyle.Font = new Font("Arial", 12, FontStyle.Regular);
                 griTaxas.Columns.Add(column);
             }
+            Console.WriteLine($"Total de Linhas: {griTaxas.RowCount}, Total de Colunas: {griTaxas.ColumnCount}");
             while (griTaxas.RowCount <= requiredRowIndex)
             {
                 DataGridViewRow row = new DataGridViewRow();
@@ -1901,6 +1906,7 @@ namespace TeleBonifacio
                 griTaxas.Rows.Add(row);
             }
         }
+
         private void InitializeGrid()
         {
             griTaxas.Rows.Clear();
@@ -1939,6 +1945,7 @@ namespace TeleBonifacio
 
             // Aumentar a grid se necessário
             EnsureGridSize(e.RowIndex + 1, e.ColumnIndex + 1);
+
         }
 
         private void SaveCellToDatabase(int rowIndex, int columnIndex, string cellValue)
@@ -2091,6 +2098,29 @@ namespace TeleBonifacio
             btComprei.Text = "Comprei";
             btComprei.Enabled = false;
         }
+
+        private void griTaxas_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Down) // Verifica se a tecla pressionada é a seta para baixo
+            {
+                // Obtém a linha e a coluna atuais do cursor
+                int rowIndex = griTaxas.CurrentCell.RowIndex;
+                int colIndex = griTaxas.CurrentCell.ColumnIndex;
+                if (rowIndex == griTaxas.RowCount - 1)
+                {
+                    AdicionarNovaLinha();
+                }
+                griTaxas.CurrentCell = griTaxas.Rows[rowIndex + 1].Cells[colIndex];
+            }
+        }
+
+        private void AdicionarNovaLinha()
+        {
+            DataGridViewRow newRow = new DataGridViewRow();
+            newRow.DefaultCellStyle.Font = new Font("Arial", 12, FontStyle.Regular);
+            griTaxas.Rows.Add(newRow);
+        }
+
 
     }
 }
