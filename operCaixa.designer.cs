@@ -120,6 +120,7 @@ namespace TeleBonifacio
             this.dtpDataIN.Size = new System.Drawing.Size(90, 23);
             this.dtpDataIN.TabIndex = 29;
             this.dtpDataIN.Tag = "H";
+            this.dtpDataIN.ValueChanged += new System.EventHandler(this.dtpDataIN_ValueChanged);
             // 
             // txObs
             // 

@@ -29,6 +29,7 @@ namespace TeleBonifacio
         private bool Especial=false;
         private bool mudando = true;
         private tb.ComboBoxItem IdDoVendNoCombo;
+        private DateTime DT1;
 
         private void operCaixa_Load(object sender, EventArgs e)
         {
@@ -521,7 +522,11 @@ namespace TeleBonifacio
             string sValor = txCompra.Text;
             string sValorDebito = textBox1.Text;
             string sDesconto = txDesc.Text;
-            DataTable dados = Caixa.getDados(dtpDataIN.Value, dtnDtFim.Value, idForma, sObs, sCliente, sVendedor, sValor, sValorDebito, sDesconto);
+
+            DateTime DT11 = DateTime.FromOADate(Convert.ToDouble(dtpDataIN.Tag));
+            DataTable dados = Caixa.getDados(DT11, dtnDtFim.Value, idForma, sObs, sCliente, sVendedor, sValor, sValorDebito, sDesconto);
+            dtpDataIN.Tag = Caixa.DT1.ToOADate().ToString();
+
             dataGrid1.DataSource = dados;
         }
 
@@ -599,6 +604,11 @@ namespace TeleBonifacio
                     }
                 }
             }
+        }
+
+        private void dtpDataIN_ValueChanged(object sender, EventArgs e)
+        {
+            dtpDataIN.Tag = dtpDataIN.Value.ToOADate().ToString();
         }
     }
 }

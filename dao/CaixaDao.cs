@@ -8,6 +8,8 @@ namespace TeleBonifacio.dao
 {
     public class CaixaDao
     {
+        public DateTime DT1 { get; private set; }
+
         public void Adiciona(int idForma, float compra, int idCliente, string obs, float desc, int idVend, string UID)
         {
             String sql = @"INSERT INTO Caixa (idCliente, idForma, Valor, VlNota, Obs, Desconto, idVend, UID, Data) VALUES ("
@@ -123,7 +125,7 @@ namespace TeleBonifacio.dao
                     Sair = true;
                 }
             }
-
+            this.DT1 = DT1;
             return dt;
         }
 
