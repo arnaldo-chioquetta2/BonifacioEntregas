@@ -11,8 +11,9 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyCulture("")]
 [assembly: ComVisible(false)]
 [assembly: Guid("308c57af-e663-456d-8a2c-188bbd61423d")]
-[assembly: AssemblyVersion("3.5.0.0")]
-[assembly: AssemblyFileVersion("3.5.0.0")]
+[assembly: AssemblyVersion("3.5.1.0")]
+[assembly: AssemblyFileVersion("3.5.1.0")]
+// 3.5.1 Busca no RTF
 // 3.5.0 Ajuste no funcionamento da data inicial na tela do caixa
 // 3.4.9 Solução para aumentar linhas da grid Taxas
 // 3.4.8 Conserto dos Words dos funcionários que não apareciam e resto dos filtros 
