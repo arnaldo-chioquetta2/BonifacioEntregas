@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Drawing;
 using System.Globalization;
+using System.Linq;
 using System.Windows.Forms;
 using TeleBonifacio.dao;
 using TeleBonifacio.gen;
@@ -300,16 +301,75 @@ namespace TeleBonifacio
             {
                 string UID = glo.GenerateUID();
                 glo.Loga($@"CA,{idForma},{compra},{idCliente}, {obs}, {desc}, {idVend}, {UID}");
-                Caixa.Adiciona(idForma, compra, idCliente, obs, desc, idVend, UID);
+
+
+                int novoId = Caixa.Adiciona(idForma, compra, idCliente, obs, desc, idVend, UID);
+
+                AdicionarNovaLinhaNaGrid(novoId, idForma, compra, idCliente, obs, desc, idVend);
+
             }
             else
             {
                 glo.Loga($@"CE,{this.iID},{idForma},{compra},{idCliente}, {obs}, {desc}, {idVend}, {this.UID}");
                 Caixa.Edita(this.iID, idForma, compra, idCliente, obs, desc, idVend);
+
+                AtualizarLinhaNaGrid(this.iID, idForma, compra, idCliente, obs, desc, idVend);
             }
-            CarregaGrid();
+            // CarregaGrid();
             Limpar();
         }
+
+        private void AdicionarNovaLinhaNaGrid(int id, int idForma, float valor, int idCliente, string obs, float desconto, int idVend)
+        {
+            if (dataGrid1.DataSource is DataTable dt)
+            {
+                tb.Forma regF = (tb.Forma)cFormas.GetPeloID((idForma + 1).ToString());
+                string formaPagamento = regF != null ? regF.Nome : "Desconhecido";
+
+                DataRow novaLinha = dt.NewRow();
+                novaLinha["ID"] = id;
+                novaLinha["Cliente"] = cmbCliente.Text;
+                novaLinha["Valor"] = valor.ToString("F2");
+                novaLinha["Desconto"] = desconto.ToString("F2");
+                novaLinha["VlNota"] = (valor - desconto).ToString("F2");
+                novaLinha["Vendedor"] = cmbVendedor.Text;
+                novaLinha["idVend"] = idVend;  // 🔹 Armazena corretamente na grid
+                novaLinha["Data"] = DateTime.Now.ToString("dd/MM/yyyy HH:mm");
+                novaLinha["Pagamento"] = formaPagamento;
+                novaLinha["Obs"] = obs;
+
+                dt.Rows.InsertAt(novaLinha, 0);
+
+                dataGrid1.DataSource = dt;
+
+                // 🔹 Log para verificar se o ID foi salvo corretamente na grid
+                Console.WriteLine($"DEBUG: Nova linha adicionada na grid - idVend = {novaLinha["idVend"]}");
+            }
+        }
+
+
+        private void AtualizarLinhaNaGrid(int id, int idForma, float valor, int idCliente, string obs, float desconto, int idVend)
+        {
+            tb.Forma regF = (tb.Forma)cFormas.GetPeloID((idForma + 1).ToString());
+            string formaPagamento = regF != null ? regF.Nome : "Desconhecido"; // Obtém a descrição correta
+
+            foreach (DataGridViewRow row in dataGrid1.Rows)
+            {
+                if (Convert.ToInt32(row.Cells["ID"].Value) == id) // 🔹 Usa o nome da coluna ao invés de índice fixo
+                {
+                    row.Cells["Cliente"].Value = cmbCliente.Text; // Nome do cliente atualizado
+                    row.Cells["Valor"].Value = valor.ToString("F2"); // Valor atualizado
+                    row.Cells["Desconto"].Value = desconto.ToString("F2"); // Desconto atualizado
+                    row.Cells["VlNota"].Value = (valor - desconto).ToString("F2"); // Valor Nota atualizado
+                    row.Cells["Vendedor"].Value = cmbVendedor.Text; // Nome do vendedor atualizado
+                    row.Cells["Data"].Value = DateTime.Now.ToString("dd/MM/yyyy HH:mm"); // Data/Hora atualizada
+                    row.Cells["Pagamento"].Value = formaPagamento; // 🔹 Forma de pagamento corrigida
+                    row.Cells["Obs"].Value = obs; // Observação atualizada
+                    break; // 🔹 Sai do loop assim que encontrar o ID correspondente
+                }
+            }
+        }
+
         private void Limpar()
         {
             txDesc.Text = "";
@@ -448,41 +508,76 @@ namespace TeleBonifacio
             if (grid != null && e.RowIndex >= 0 && e.RowIndex < grid.Rows.Count)
             {
                 DataGridViewRow selectedRow = grid.Rows[e.RowIndex];
+
                 int id = Convert.ToInt32(selectedRow.Cells["ID"].Value);
-                int nrCli = 0;
-                string snrCli = Convert.ToString(selectedRow.Cells["NrCli"].Value);
-                if (snrCli.Length > 0)
-                {
-                    nrCli = Convert.ToInt32(selectedRow.Cells["NrCli"].Value);
-                }
+                int nrCli = selectedRow.Cells["NrCli"].Value != DBNull.Value ? Convert.ToInt32(selectedRow.Cells["NrCli"].Value) : 0;
                 decimal valor = Convert.ToDecimal(selectedRow.Cells["Valor"].Value);
                 decimal desconto = Convert.ToDecimal(selectedRow.Cells["Desconto"].Value);
-                int idVend = Convert.ToInt32(selectedRow.Cells["idVend"].Value);
-                int idForma = Convert.ToInt32(selectedRow.Cells["idForma"].Value);
+
+                // 🔹 Obtém idVend e garante que não seja nulo
+                object idVendObj = selectedRow.Cells["idVend"].Value;
+                int idVend = (idVendObj != DBNull.Value && idVendObj != null) ? Convert.ToInt32(idVendObj) : -1;
+
+                // 🔹 Obtém idForma corretamente antes de usá-lo
+                int idForma = selectedRow.Cells["idForma"].Value != DBNull.Value ? Convert.ToInt32(selectedRow.Cells["idForma"].Value) : -1;
+
+                Console.WriteLine($"DEBUG: idVend recebido ao clicar = {idVend}");
+                Console.WriteLine($"DEBUG: idForma recebido ao clicar = {idForma}");
+
                 this.iID = id;
                 this.UID = Convert.ToString(selectedRow.Cells["UID"].Value);
                 cmbCliente.SelectedValue = nrCli;
-                tb.Forma regF = (tb.Forma)cFormas.GetPeloID((idForma+1).ToString());
-                if (idForma == this.DefDeb || regF.Tipo==1)
+
+                // 🔹 Agora idForma sempre terá um valor válido antes de ser usado
+                tb.Forma regF = idForma >= 0 ? (tb.Forma)cFormas.GetPeloID((idForma + 1).ToString()) : null;
+
+                if (idForma == this.DefDeb || (regF != null && regF.Tipo == 1))
                 {
                     textBox1.Text = valor.ToString();
                     txCompra.Text = "";
-                } else
+                }
+                else
                 {
                     txCompra.Text = valor.ToString();
                     textBox1.Text = "";
-                }                
+                }
                 txDesc.Text = desconto.ToString();
                 txObs.Text = selectedRow.Cells["Obs"].Value.ToString();
-                cmbVendedor.SelectedValue = idVend;
+
+                // 🔹 Agora garantimos que idVend só será atualizado se for válido
+                if (idVend != -1 && cmbVendedor.DataSource is List<tb.ComboBoxItem> vendedorList)
+                {
+                    Console.WriteLine($"DEBUG: Lista de vendedores contém {vendedorList.Count} registros.");
+
+                    var vendedorEncontrado = vendedorList.FirstOrDefault(v => v.Id == idVend);
+
+                    if (vendedorEncontrado != null)
+                    {
+                        Console.WriteLine($"DEBUG: Nome do vendedor encontrado = {vendedorEncontrado.Nome}");
+                        cmbVendedor.Text = vendedorEncontrado.Nome;
+                    }
+                    else
+                    {
+                        Console.WriteLine("DEBUG: Nenhum vendedor encontrado! Definindo para 'Não Definido'.");
+                        cmbVendedor.Text = "Não Definido";
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("DEBUG: Vendedor inválido! Definindo como 'Não Definido'.");
+                    cmbVendedor.Text = "Não Definido";
+                }
+
                 MostraTotal();
                 btnLimpar.Enabled = true;
                 BotoesNormais();
+
                 Color cor = Color.FromArgb(128, 255, 128);
-                if (idForma!=this.DefCred && idForma != this.DefDeb) {
+                if (idForma != this.DefCred && idForma != this.DefDeb)
+                {
                     SetBotaoColor(idForma + 1, cor);
-                } else { 
                 }
+
                 btExcluir.Visible = true;
                 btEditar.Visible = true;
             }

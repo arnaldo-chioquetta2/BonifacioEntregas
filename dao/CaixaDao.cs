@@ -10,19 +10,22 @@ namespace TeleBonifacio.dao
     {
         public DateTime DT1 { get; private set; }
 
-        public void Adiciona(int idForma, float compra, int idCliente, string obs, float desc, int idVend, string UID)
+        public int Adiciona(int idForma, float compra, int idCliente, string obs, float desc, int idVend, string UID)
         {
-            String sql = @"INSERT INTO Caixa (idCliente, idForma, Valor, VlNota, Obs, Desconto, idVend, UID, Data) VALUES ("
-                + idCliente.ToString() + ", "
-                + idForma.ToString() + ", "
-                + glo.sv(compra) + ", "
-                + glo.sv(compra - desc) + ", "
-                + glo.fa(obs) + ", "
-                + glo.sv(desc) + ", "
-                + idVend.ToString() + ", "
-                + glo.fa(UID)
-                + ",Now)";
+            string sql = @"INSERT INTO Caixa (idCliente, idForma, Valor, VlNota, Obs, Desconto, idVend, UID, Data) VALUES ("
+                        + idCliente.ToString() + ", "
+                        + idForma.ToString() + ", "
+                        + glo.sv(compra) + ", "
+                        + glo.sv(compra - desc) + ", "
+                        + glo.fa(obs) + ", "
+                        + glo.sv(desc) + ", "
+                        + idVend.ToString() + ", "
+                        + glo.fa(UID)
+                        + ", Now)";
             DB.ExecutarComandoSQL(sql);
+            string queryUltimoId = "SELECT @@IDENTITY";
+            DataTable dt = DB.ExecutarConsulta(queryUltimoId);
+            return Convert.ToInt32(dt.Rows[0][0]); // Retorna o ID gerado
         }
 
         public DataTable getDados(DateTime DT1, DateTime DT2, int idForma, string sObs, string sCliente, string sVendedor, string sValor, string sValorDebito, string sDesconto)
