@@ -600,7 +600,7 @@ namespace TeleBonifacio
             this.tabPage6.Name = "tabPage6";
             this.tabPage6.Size = new System.Drawing.Size(1337, 298);
             this.tabPage6.TabIndex = 5;
-            this.tabPage6.Text = "Taxas";
+            this.tabPage6.Text = "Clientes";
             this.tabPage6.UseVisualStyleBackColor = true;
             // 
             // griTaxas
