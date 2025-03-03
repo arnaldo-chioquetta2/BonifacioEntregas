@@ -65,3 +65,4 @@ C:\Prog\T-Bonifacio\T-Bonifacio\obj\Debug\TeleBonifacio.operPecas.resources
 C:\Prog\T-Bonifacio\T-Bonifacio\obj\Debug\TeleBonifacio.operContratos.resources
 C:\Prog\T-Bonifacio\T-Bonifacio\obj\Debug\TeleBonifacio.operEdContratos.resources
 C:\Prog\T-Bonifacio\T-Bonifacio\obj\Debug\TeleBonifacio.opeTpContrato.resources
+C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug\AdvancedDataGridView.dll

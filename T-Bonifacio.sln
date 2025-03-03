@@ -11,6 +11,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ATCDll", "..\ATCDll\ATCDll\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AtcCtrl", "..\AtcCtrl\AtcCtrl\AtcCtrl.csproj", "{74547907-32B4-40EC-807B-E5BDAF90F61B}"
 EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "SetupBonifacio", "..\SetupBonifacio\SetupBonifacio.vdproj", "{0856A7F2-F6A0-4D5D-8933-9E0DE6BD2E41}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -51,6 +53,10 @@ Global
 		{74547907-32B4-40EC-807B-E5BDAF90F61B}.Release|Any CPU.Build.0 = Release|Any CPU
 		{74547907-32B4-40EC-807B-E5BDAF90F61B}.Release|x64.ActiveCfg = Release|Any CPU
 		{74547907-32B4-40EC-807B-E5BDAF90F61B}.Release|x64.Build.0 = Release|Any CPU
+		{0856A7F2-F6A0-4D5D-8933-9E0DE6BD2E41}.Debug|Any CPU.ActiveCfg = Debug
+		{0856A7F2-F6A0-4D5D-8933-9E0DE6BD2E41}.Debug|x64.ActiveCfg = Debug
+		{0856A7F2-F6A0-4D5D-8933-9E0DE6BD2E41}.Release|Any CPU.ActiveCfg = Release
+		{0856A7F2-F6A0-4D5D-8933-9E0DE6BD2E41}.Release|x64.ActiveCfg = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

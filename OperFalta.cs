@@ -1883,6 +1883,7 @@ namespace TeleBonifacio
                 int columnIndex = Convert.ToInt32(row["ColumnIndex"]);
                 string cellValue = row["CellValue"].ToString();
                 EnsureGridSize(rowIndex, columnIndex);
+                Console.WriteLine($"rowIndex: {rowIndex}, {cellValue}");
                 griTaxas.Rows[rowIndex].Cells[columnIndex].Value = cellValue;
             }
         }
@@ -1898,7 +1899,7 @@ namespace TeleBonifacio
                 column.DefaultCellStyle.Font = new Font("Arial", 12, FontStyle.Regular);
                 griTaxas.Columns.Add(column);
             }
-            Console.WriteLine($"Total de Linhas: {griTaxas.RowCount}, Total de Colunas: {griTaxas.ColumnCount}");
+            // Console.WriteLine($"Total de Linhas: {griTaxas.RowCount}, Total de Colunas: {griTaxas.ColumnCount}");
             while (griTaxas.RowCount <= requiredRowIndex)
             {
                 DataGridViewRow row = new DataGridViewRow();
@@ -1952,19 +1953,17 @@ namespace TeleBonifacio
         {
             string checkQuery = $"SELECT COUNT(*) FROM DynamicGrid WHERE RowIndex = {rowIndex} AND ColumnIndex = {columnIndex}";
             int count = DB.ExecutarConsultaCount(checkQuery);
-
             string query;
             if (count > 0)
             {
-                // Update existing record
+                glo.Loga($@"UD,{rowIndex}, {columnIndex}, {cellValue}");
                 query = $@"UPDATE DynamicGrid SET CellValue = '{cellValue}' WHERE RowIndex = {rowIndex} AND ColumnIndex = {columnIndex}";
             }
             else
             {
-                // Insert new record
+                glo.Loga($@"ID,{rowIndex}, {columnIndex}, {cellValue}");
                 query = $@"INSERT INTO DynamicGrid (RowIndex, ColumnIndex, CellValue) VALUES ({rowIndex}, {columnIndex}, '{cellValue}')";
             }
-
             DB.ExecutarComandoSQL(query);
         }
 

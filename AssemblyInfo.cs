@@ -11,8 +11,11 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyCulture("")]
 [assembly: ComVisible(false)]
 [assembly: Guid("308c57af-e663-456d-8a2c-188bbd61423d")]
-[assembly: AssemblyVersion("3.5.3.0")]
-[assembly: AssemblyFileVersion("3.5.3.0")]
+[assembly: AssemblyVersion("3.5.6.0")]
+[assembly: AssemblyFileVersion("3.5.6.0")]
+// 3.5.6 Log na atialização da DinamicGrid
+// 3.5.5 Atualização pra incluir a DLL do Advanced GridView
+// 3.5.4 Implantação do componente Advance DridView
 // 3.5.3 Mudei o nome da planilha Taxas para clientes
 // 3.5.2 Ao adicionar lançamento no caixa não filtra a grid.
 // 3.5.1 Busca no RTF
