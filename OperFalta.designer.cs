@@ -79,6 +79,7 @@ namespace TeleBonifacio
             this.tabPage5 = new System.Windows.Forms.TabPage();
             this.rtfTexto = new AtcCtrl.ATCRTF();
             this.tabPage6 = new System.Windows.Forms.TabPage();
+            this.griTaxas = new Zuby.ADGV.AdvancedDataGridView();
             this.tabPage7 = new System.Windows.Forms.TabPage();
             this.rtfWord = new AtcCtrl.ATCRTF();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
@@ -86,7 +87,6 @@ namespace TeleBonifacio
             this.Aumentar = new System.Windows.Forms.ToolStripMenuItem();
             this.DiminirPrio = new System.Windows.Forms.ToolStripMenuItem();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
-            this.griTaxas = new Zuby.ADGV.AdvancedDataGridView();
             this.panel1.SuspendLayout();
             this.groupBox3.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -101,9 +101,9 @@ namespace TeleBonifacio
             ((System.ComponentModel.ISupportInitialize)(this.dataGrid4)).BeginInit();
             this.tabPage5.SuspendLayout();
             this.tabPage6.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.griTaxas)).BeginInit();
             this.tabPage7.SuspendLayout();
             this.contextMenuStrip1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.griTaxas)).BeginInit();
             this.SuspendLayout();
             // 
             // panel1
@@ -602,6 +602,24 @@ namespace TeleBonifacio
             this.tabPage6.Text = "Clientes";
             this.tabPage6.UseVisualStyleBackColor = true;
             // 
+            // griTaxas
+            // 
+            this.griTaxas.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.griTaxas.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.griTaxas.FilterAndSortEnabled = true;
+            this.griTaxas.FilterStringChangedInvokeBeforeDatasourceUpdate = true;
+            this.griTaxas.Location = new System.Drawing.Point(0, 0);
+            this.griTaxas.MaxFilterButtonImageHeight = 23;
+            this.griTaxas.Name = "griTaxas";
+            this.griTaxas.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.griTaxas.Size = new System.Drawing.Size(1337, 298);
+            this.griTaxas.SortStringChangedInvokeBeforeDatasourceUpdate = true;
+            this.griTaxas.TabIndex = 0;
+            this.griTaxas.SortStringChanged += new System.EventHandler<Zuby.ADGV.AdvancedDataGridView.SortEventArgs>(this.griTaxas_SortStringChanged);
+            this.griTaxas.FilterStringChanged += new System.EventHandler<Zuby.ADGV.AdvancedDataGridView.FilterEventArgs>(this.griTaxas_FilterStringChanged_1);
+            this.griTaxas.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.griTaxas_CellClick);
+            this.griTaxas.KeyDown += new System.Windows.Forms.KeyEventHandler(this.griTaxas_KeyDown);
+            // 
             // tabPage7
             // 
             this.tabPage7.Controls.Add(this.rtfWord);
@@ -651,21 +669,6 @@ namespace TeleBonifacio
             // 
             this.openFileDialog1.FileName = "openFileDialog1";
             // 
-            // griTaxas
-            // 
-            this.griTaxas.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.griTaxas.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.griTaxas.FilterAndSortEnabled = true;
-            this.griTaxas.FilterStringChangedInvokeBeforeDatasourceUpdate = true;
-            this.griTaxas.Location = new System.Drawing.Point(0, 0);
-            this.griTaxas.MaxFilterButtonImageHeight = 23;
-            this.griTaxas.Name = "griTaxas";
-            this.griTaxas.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.griTaxas.Size = new System.Drawing.Size(1337, 298);
-            this.griTaxas.SortStringChangedInvokeBeforeDatasourceUpdate = true;
-            this.griTaxas.TabIndex = 0;
-            this.griTaxas.KeyDown += new System.Windows.Forms.KeyEventHandler(this.griTaxas_KeyDown);
-            // 
             // OperFalta
             // 
             this.ClientSize = new System.Drawing.Size(1345, 432);
@@ -692,9 +695,9 @@ namespace TeleBonifacio
             ((System.ComponentModel.ISupportInitialize)(this.dataGrid4)).EndInit();
             this.tabPage5.ResumeLayout(false);
             this.tabPage6.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.griTaxas)).EndInit();
             this.tabPage7.ResumeLayout(false);
             this.contextMenuStrip1.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.griTaxas)).EndInit();
             this.ResumeLayout(false);
 
         }
