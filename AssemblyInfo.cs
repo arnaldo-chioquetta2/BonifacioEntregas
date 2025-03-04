@@ -24,23 +24,3 @@ using System.Runtime.InteropServices;
 // 3.4.9 Solução para aumentar linhas da grid Taxas
 // 3.4.8 Conserto dos Words dos funcionários que não apareciam e resto dos filtros 
 // 3.4.7 Pesquisa pelo cliente na tela de caixa
-// 3.4.6 Conserto da alteração do tipo depois da cor nos tipos
-// 3.4.5 Cores nos tipos
-// 3.4.4 Ajustes na edição dos tipos pela tela das faltas
-// 3.4.2 Impressão da data e da observação
-// 3.4.1 Ajustes na gravação do contrato
-// 3.4.0 Troca do funcionamento interno das clausulas e impressão da observação
-// 3.3.9 Não cria abas de anotações para funcionários demitidos
-// 3.3.8 Ajuste na edição do contrato
-// 3.3.7 Finalização dos tipos de contratos
-// 3.3.6 Tratamentos de erros para o carregamento do Word
-// 3.3.5 Inicio da tela para tipos de contratos
-// 3.3.4 Campos Valor e Descrição no Contrato e Códigos nas Peças
-// 3.3.3 Ajuste do contrado para empresa privada
-// 3.3.2 Finalização dos contratos e conserto da adição de funcionários
-// 3.3.0 Impressão do contrato
-// 3.2.9 Versão inicial da tela de edição de contratos
-
-
-
-

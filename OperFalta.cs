@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.OleDb;
 using System.Drawing;
+using System.Dynamic;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -23,7 +24,7 @@ namespace TeleBonifacio
         private GarantiasDao cDaoG;
         private pesCliente FpesCliente;
         private DataTable dadosCli;
-        private Dictionary<int, Color> tipoFaltaCores = new Dictionary<int, Color>();
+        private Dictionary<int, Color> tipoFaltaCores = new Dictionary<int, Color>();        
         private Color originalBackgroundColor;
         private bool carregando = true;
         private bool Restrito = false;        
@@ -1861,6 +1862,8 @@ namespace TeleBonifacio
         private bool acionadoFiltroSort = false;
         private const int INITIAL_COLUMN_COUNT = 13;
         private const int INITIAL_ROW_COUNT = 28;
+        private int ModoGrid =0;
+        private List<CellInfo> gridCellsInfo = new List<CellInfo>();
 
         private void SetupDataGridView()
         {
@@ -1890,6 +1893,15 @@ namespace TeleBonifacio
                 EnsureGridSize(rowIndex, columnIndex);
                 Console.WriteLine($"rowIndex: {rowIndex}, {cellValue}");
                 griTaxas.Rows[rowIndex].Cells[columnIndex].Value = cellValue;
+
+                gridCellsInfo.Add(new CellInfo
+                {
+                    RowIndexOriginal = rowIndex,
+                    GridRowIndex = rowIndex,
+                    ColumnIndex = columnIndex,
+                    CellValue = cellValue
+                });
+
             }
         }
 
@@ -1947,30 +1959,72 @@ namespace TeleBonifacio
         private void griTaxas_CellEndEdit(object sender, DataGridViewCellEventArgs e)
         {
             string cellValue = griTaxas.Rows[e.RowIndex].Cells[e.ColumnIndex].Value?.ToString() ?? "";
-            SaveCellToDatabase(e.RowIndex, e.ColumnIndex, cellValue);
+            int rowIndexParaSalvar=0;
+            switch (ModoGrid)
+            {
+                case 0: // 🔹 Modo padrão (sem ordenação/filtragem)
+                    rowIndexParaSalvar = e.RowIndex;
+                    break;
 
-            // Aumentar a grid se necessário
+                case 1: // 🔹 Modo ordenado (usa GridRowIndex)
+                    rowIndexParaSalvar = gridCellsInfo[e.RowIndex].GridRowIndex;
+                    break;
+
+                case 2: // 🔹 Modo filtrado (precisa localizar RowIndexOriginal através do GridRowIndex)
+
+                    var itemEncontrado = gridCellsInfo
+                                    .FirstOrDefault(x => x.GridRowIndex == e.RowIndex && x.ColumnIndex == e.ColumnIndex);
+
+                    if (itemEncontrado != null)
+                    {
+                        rowIndexParaSalvar = itemEncontrado.RowIndexOriginal;
+                        Console.WriteLine($"DEBUG: Encontrado - RowIndexOriginal: {itemEncontrado.RowIndexOriginal}, GridRowIndex: {itemEncontrado.GridRowIndex}, ColumnIndex: {itemEncontrado.ColumnIndex}");
+                    }
+                    else
+                    {
+                        Console.WriteLine($"⚠ AVISO: Nenhum item encontrado para GridRowIndex={e.RowIndex} e ColumnIndex={e.ColumnIndex}. Usando índice padrão.");
+                    }
+                    break;
+
+                default:
+                    Console.WriteLine($"⚠ ModoGrid inválido: {ModoGrid}, usando índice padrão.");
+                    rowIndexParaSalvar = e.RowIndex;
+                    break;
+            }
+
+            SaveCellToDatabase(rowIndexParaSalvar, e.ColumnIndex, cellValue);
             EnsureGridSize(e.RowIndex + 1, e.ColumnIndex + 1);
-
         }
 
         private void SaveCellToDatabase(int rowIndex, int columnIndex, string cellValue)
         {
+            // 🔹 Evita erro de SQL Injection ao tratar aspas no valor da célula
+            string safeCellValue = cellValue.Replace("'", "''");
+
+            // 🔹 Verifica se o registro já existe
             string checkQuery = $"SELECT COUNT(*) FROM DynamicGrid WHERE RowIndex = {rowIndex} AND ColumnIndex = {columnIndex}";
             int count = DB.ExecutarConsultaCount(checkQuery);
+
             string query;
             if (count > 0)
             {
-                glo.Loga($@"UD,{rowIndex}, {columnIndex}, {cellValue}");
-                query = $@"UPDATE DynamicGrid SET CellValue = '{cellValue}' WHERE RowIndex = {rowIndex} AND ColumnIndex = {columnIndex}";
+                // 🔹 Caso o registro já exista, faz um UPDATE
+                query = $@"UPDATE DynamicGrid 
+                   SET CellValue = '{safeCellValue}' 
+                   WHERE RowIndex = {rowIndex} AND ColumnIndex = {columnIndex}";
+                glo.Loga($@"UD,{rowIndex}, {columnIndex}, {safeCellValue} - Registro atualizado");
             }
             else
             {
-                glo.Loga($@"ID,{rowIndex}, {columnIndex}, {cellValue}");
-                query = $@"INSERT INTO DynamicGrid (RowIndex, ColumnIndex, CellValue) VALUES ({rowIndex}, {columnIndex}, '{cellValue}')";
+                // 🔹 Caso não exista, faz um INSERT
+                query = $@"INSERT INTO DynamicGrid (RowIndex, ColumnIndex, CellValue) 
+                   VALUES ({rowIndex}, {columnIndex}, '{safeCellValue}')";
+                glo.Loga($@"ID,{rowIndex}, {columnIndex}, {safeCellValue} - Novo registro inserido");
             }
+
+            // 🔹 Executa o comando SQL final (INSERT ou UPDATE)
             DB.ExecutarComandoSQL(query);
-        }
+        }        
 
         private void griTaxas_ColumnWidthChanged(object sender, DataGridViewColumnEventArgs e)
         {
@@ -2010,6 +2064,234 @@ namespace TeleBonifacio
                         }
                     }
                 }
+            }
+        }
+
+        private void griTaxas_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Down) // Verifica se a tecla pressionada é a seta para baixo
+            {
+                // Obtém a linha e a coluna atuais do cursor
+                int rowIndex = griTaxas.CurrentCell.RowIndex;
+                int colIndex = griTaxas.CurrentCell.ColumnIndex;
+                if (rowIndex == griTaxas.RowCount - 1)
+                {
+                    AdicionarNovaLinha();
+                }
+                griTaxas.CurrentCell = griTaxas.Rows[rowIndex + 1].Cells[colIndex];
+            }
+        }
+        private void AdicionarNovaLinha()
+        {
+            DataGridViewRow newRow = new DataGridViewRow();
+            newRow.DefaultCellStyle.Font = new Font("Arial", 12, FontStyle.Regular);
+            griTaxas.Rows.Add(newRow);
+        }
+        private void griTaxas_SortStringChanged(object sender, Zuby.ADGV.AdvancedDataGridView.SortEventArgs e)
+        {
+            if (!this.acionadoFiltroSort)
+            {
+                LoadDataOrdenado();
+                //griTaxas.ReadOnly = true;
+                this.acionadoFiltroSort = true;
+            }
+            else
+            {
+                this.acionadoFiltroSort = false;
+            }
+        }
+
+        public void LoadDataOrdenado()
+        {
+            ModoGrid = 1;
+            Console.WriteLine("LoadDataOrdenado Versao 4");
+
+            griTaxas.SuspendLayout(); // 🔹 Impede atualizações visuais temporariamente
+            griTaxas.Rows.Clear();
+            griTaxas.Refresh();
+            Application.DoEvents();
+
+            string ordenacao = griTaxas.SortString?.Trim(); // Obtém a string de ordenação e remove espaços extras
+            string direcaoOrdenacao = ordenacao.Contains("DESC") ? "DESC" : "ASC"; // 🔹 Define a direção da ordenação
+
+            // 🔹 Etapa 1: Obter os RowIndex ordenados com base na CellValue da coluna clicada
+            string subQuery = $@"
+        SELECT RowIndex 
+        FROM DynamicGrid 
+        WHERE ColumnIndex = {this.colunaClicada} 
+        GROUP BY RowIndex, CellValue 
+        ORDER BY CellValue {direcaoOrdenacao}";
+
+            Console.WriteLine("DEBUG: Subconsulta de Ordenação -> " + subQuery);
+
+            try
+            {
+                DataTable dtRowIndexes = DB.ExecutarConsulta(subQuery);
+
+                // 🔹 Obtém os RowIndex ordenados corretamente
+                List<int> rowIndexes = dtRowIndexes.AsEnumerable()
+                                                   .Select(r => r.Field<int>("RowIndex"))
+                                                   .ToList();
+
+                if (!rowIndexes.Contains(0)) rowIndexes.Insert(0, 0); // 🔹 Garante que a linha de cabeçalho sempre apareça
+
+                // 🔹 Etapa 2: Consulta principal para buscar os dados dos RowIndex ordenados
+                string mainQuery = $@"
+            SELECT RowIndex, ColumnIndex, CellValue 
+            FROM DynamicGrid 
+            WHERE RowIndex IN ({string.Join(",", rowIndexes)}) 
+            ORDER BY RowIndex, ColumnIndex";
+
+                Console.WriteLine("DEBUG: Consulta Principal -> " + mainQuery);
+
+                DataTable dataTable = DB.ExecutarConsulta(mainQuery);
+
+                // 🔹 Criamos as linhas primeiro
+                foreach (int rowIndex in rowIndexes)
+                {
+                    DataGridViewRow newRow = new DataGridViewRow();
+                    newRow.DefaultCellStyle.Font = new Font("Arial", 12, FontStyle.Regular);
+                    griTaxas.Rows.Add(newRow);
+                }
+                gridCellsInfo.Clear();
+                // 🔹 Preenche os dados na DataGridView
+                foreach (DataRow row in dataTable.Rows)
+                {
+                    int rowIndex = rowIndexes.IndexOf(Convert.ToInt32(row["RowIndex"])); // Obtém a posição correta
+                    int columnIndex = Convert.ToInt32(row["ColumnIndex"]);
+                    string cellValue = row["CellValue"].ToString();
+
+                    int rowIndexOriginal = Convert.ToInt32(row["RowIndex"]);
+                    int gridRowIndex = rowIndexes.IndexOf(rowIndexOriginal);
+
+                    griTaxas.Rows[rowIndex].Cells[columnIndex].Value = cellValue;
+
+                    gridCellsInfo.Add(new CellInfo
+                    {
+                        RowIndexOriginal = rowIndexOriginal,
+                        GridRowIndex = gridRowIndex,
+                        ColumnIndex = columnIndex,
+                        CellValue = cellValue
+                    });
+
+                    Console.WriteLine($"DEBUG: Linha Atualizada -> RowIndex: {rowIndex}, ColumnIndex: {columnIndex}, Valor: {cellValue}");
+                }
+
+                Console.WriteLine($"DEBUG: Total de linhas carregadas após ordenação: {griTaxas.Rows.Count}");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("❌ ERRO ao executar a ordenação: " + ex.Message);
+            }
+            griTaxas.ResumeLayout(); // 🔹 Retoma as atualizações visuais
+        }
+
+        private void griTaxas_FilterStringChanged_1(object sender, AdvancedDataGridView.FilterEventArgs e)
+        {
+            LoadDataFiltrado();
+        }
+
+        public void LoadDataFiltrado()
+        {
+            ModoGrid = 2;
+            griTaxas.SuspendLayout(); // 🔹 Impede atualizações visuais
+            griTaxas.Rows.Clear();
+            griTaxas.Refresh();
+            Application.DoEvents();
+
+            string filtro = griTaxas.FilterString;
+            string ordenacao = griTaxas.SortString;
+
+            // 🔹 Etapa 1: Obter a lista de RowIndex filtrados
+            string subQuery = "SELECT DISTINCT RowIndex FROM DynamicGrid";
+            List<string> subCondicoes = new List<string>();
+
+            Match match = Regex.Match(filtro, @"'([^']*)'"); // Captura o valor do filtro
+            string filtroFormatado = match.Success ? match.Groups[1].Value : "";
+
+            subCondicoes.Add($"CellValue LIKE '%{filtroFormatado}%'");
+            subCondicoes.Add($"ColumnIndex = {this.colunaClicada}");
+            subQuery += " WHERE " + string.Join(" AND ", subCondicoes);
+
+            Console.WriteLine("DEBUG: Subconsulta -> " + subQuery);
+
+            DataTable rowIndexesTable = DB.ExecutarConsulta(subQuery);
+            List<int> rowIndexes = rowIndexesTable.AsEnumerable().Select(r => r.Field<int>("RowIndex")).ToList();
+
+            if (rowIndexes.Count == 0)
+            {
+                Console.WriteLine("DEBUG: Nenhum resultado encontrado.");
+                griTaxas.ResumeLayout();
+                return;
+            }
+
+            // 🔹 Criamos as linhas primeiro com base na quantidade de resultados da subconsulta
+            for (int i = 0; i < rowIndexes.Count; i++)
+            {
+                DataGridViewRow newRow = new DataGridViewRow();
+                newRow.DefaultCellStyle.Font = new Font("Arial", 12, FontStyle.Regular);
+                griTaxas.Rows.Add(newRow);
+            }
+
+            // 🔹 Etapa 2: Buscar os dados para os RowIndex obtidos
+            string query = $@"
+        SELECT RowIndex, ColumnIndex, CellValue 
+        FROM DynamicGrid 
+        WHERE RowIndex IN ({string.Join(",", rowIndexes)}) 
+        ORDER BY RowIndex, ColumnIndex";
+
+            Console.WriteLine("DEBUG: Consulta Final -> " + query);
+
+            DataTable dataTable = DB.ExecutarConsulta(query);
+            gridCellsInfo.Clear();
+            // 🔹 Preenche as células da grid com os dados recuperados
+            foreach (DataRow row in dataTable.Rows)
+            {
+                int rowIndex = rowIndexes.IndexOf(Convert.ToInt32(row["RowIndex"])); // Pega a posição correta na grid
+                int columnIndex = Convert.ToInt32(row["ColumnIndex"]);
+                string cellValue = row["CellValue"].ToString();
+
+                int rowIndexOriginal = Convert.ToInt32(row["RowIndex"]);
+                int gridRowIndex = rowIndexes.IndexOf(rowIndexOriginal);
+
+                griTaxas.Rows[rowIndex].Cells[columnIndex].Value = cellValue;
+
+                if (cellValue == "ArrudaDeve2.6")
+                {
+                    int x = 0;
+                }
+
+                gridCellsInfo.Add(new CellInfo
+                {
+                    RowIndexOriginal = rowIndexOriginal,
+                    GridRowIndex = gridRowIndex,
+                    ColumnIndex = columnIndex,
+                    CellValue = cellValue
+                });
+
+                Console.WriteLine($"DEBUG: Linha Atualizada -> RowIndex: {rowIndex}, ColumnIndex: {columnIndex}, Valor: {cellValue}");
+            }
+
+            Console.WriteLine($"DEBUG: Total de linhas carregadas: {griTaxas.Rows.Count}");
+            griTaxas.ResumeLayout(); // 🔹 Retoma a atualização visual
+        }
+
+        private void griTaxas_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            this.colunaClicada = e.ColumnIndex;
+        }
+
+        private void GriTaxas_SortStringChanged(object sender, AdvancedDataGridView.SortEventArgs e)
+        {
+            if (!this.acionadoFiltroSort)
+            {
+                LoadDataFiltrado();
+                //griTaxas.ReadOnly = true;
+                this.acionadoFiltroSort = true;
+            }
+            else
+            {
+                this.acionadoFiltroSort = false;
             }
         }
 
@@ -2103,204 +2385,15 @@ namespace TeleBonifacio
             btComprei.Enabled = false;
         }
 
-        private void griTaxas_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.KeyCode == Keys.Down) // Verifica se a tecla pressionada é a seta para baixo
-            {
-                // Obtém a linha e a coluna atuais do cursor
-                int rowIndex = griTaxas.CurrentCell.RowIndex;
-                int colIndex = griTaxas.CurrentCell.ColumnIndex;
-                if (rowIndex == griTaxas.RowCount - 1)
-                {
-                    AdicionarNovaLinha();
-                }
-                griTaxas.CurrentCell = griTaxas.Rows[rowIndex + 1].Cells[colIndex];
-            }
-        }
-        private void AdicionarNovaLinha()
-        {
-            DataGridViewRow newRow = new DataGridViewRow();
-            newRow.DefaultCellStyle.Font = new Font("Arial", 12, FontStyle.Regular);
-            griTaxas.Rows.Add(newRow);
-        }
-        private void griTaxas_SortStringChanged(object sender, Zuby.ADGV.AdvancedDataGridView.SortEventArgs e)
-        {
-            if (!this.acionadoFiltroSort)
-            {
-                LoadDataOrdenado();
-                griTaxas.ReadOnly = true;
-                this.acionadoFiltroSort = true;
-            }
-            else
-            {
-                this.acionadoFiltroSort = false;
-            }
-        }
-
-        public void LoadDataOrdenado()
-        {
-            Console.WriteLine("LoadDataOrdenado Versao 4");
-
-            griTaxas.SuspendLayout(); // 🔹 Impede atualizações visuais temporariamente
-            griTaxas.Rows.Clear();
-            griTaxas.Refresh();
-            Application.DoEvents();
-
-            string ordenacao = griTaxas.SortString?.Trim(); // Obtém a string de ordenação e remove espaços extras
-            string direcaoOrdenacao = ordenacao.Contains("DESC") ? "DESC" : "ASC"; // 🔹 Define a direção da ordenação
-
-            // 🔹 Etapa 1: Obter os RowIndex ordenados com base na CellValue da coluna clicada
-            string subQuery = $@"
-        SELECT RowIndex 
-        FROM DynamicGrid 
-        WHERE ColumnIndex = {this.colunaClicada} 
-        GROUP BY RowIndex, CellValue 
-        ORDER BY CellValue {direcaoOrdenacao}";
-
-            Console.WriteLine("DEBUG: Subconsulta de Ordenação -> " + subQuery);
-
-            try
-            {
-                DataTable dtRowIndexes = DB.ExecutarConsulta(subQuery);
-
-                // 🔹 Obtém os RowIndex ordenados corretamente
-                List<int> rowIndexes = dtRowIndexes.AsEnumerable()
-                                                   .Select(r => r.Field<int>("RowIndex"))
-                                                   .ToList();
-
-                if (!rowIndexes.Contains(0)) rowIndexes.Insert(0, 0); // 🔹 Garante que a linha de cabeçalho sempre apareça
-
-                // 🔹 Etapa 2: Consulta principal para buscar os dados dos RowIndex ordenados
-                string mainQuery = $@"
-            SELECT RowIndex, ColumnIndex, CellValue 
-            FROM DynamicGrid 
-            WHERE RowIndex IN ({string.Join(",", rowIndexes)}) 
-            ORDER BY RowIndex, ColumnIndex";
-
-                Console.WriteLine("DEBUG: Consulta Principal -> " + mainQuery);
-
-                DataTable dataTable = DB.ExecutarConsulta(mainQuery);
-
-                // 🔹 Criamos as linhas primeiro
-                foreach (int rowIndex in rowIndexes)
-                {
-                    DataGridViewRow newRow = new DataGridViewRow();
-                    newRow.DefaultCellStyle.Font = new Font("Arial", 12, FontStyle.Regular);
-                    griTaxas.Rows.Add(newRow);
-                }
-
-                // 🔹 Preenche os dados na DataGridView
-                foreach (DataRow row in dataTable.Rows)
-                {
-                    int rowIndex = rowIndexes.IndexOf(Convert.ToInt32(row["RowIndex"])); // Obtém a posição correta
-                    int columnIndex = Convert.ToInt32(row["ColumnIndex"]);
-                    string cellValue = row["CellValue"].ToString();
-
-                    griTaxas.Rows[rowIndex].Cells[columnIndex].Value = cellValue;
-                    Console.WriteLine($"DEBUG: Linha Atualizada -> RowIndex: {rowIndex}, ColumnIndex: {columnIndex}, Valor: {cellValue}");
-                }
-
-                Console.WriteLine($"DEBUG: Total de linhas carregadas após ordenação: {griTaxas.Rows.Count}");
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("❌ ERRO ao executar a ordenação: " + ex.Message);
-            }
-            griTaxas.ResumeLayout(); // 🔹 Retoma as atualizações visuais
-        }
-
-
-        private void griTaxas_FilterStringChanged_1(object sender, AdvancedDataGridView.FilterEventArgs e)
-        {
-            LoadDataFromDatabase2();
-        }        
-
-        public void LoadDataFromDatabase2()
-        {
-            griTaxas.SuspendLayout(); // 🔹 Impede atualizações visuais
-            griTaxas.Rows.Clear();
-            griTaxas.Refresh();
-            Application.DoEvents();
-
-            string filtro = griTaxas.FilterString;
-            string ordenacao = griTaxas.SortString;
-
-            // 🔹 Etapa 1: Obter a lista de RowIndex filtrados
-            string subQuery = "SELECT DISTINCT RowIndex FROM DynamicGrid";
-            List<string> subCondicoes = new List<string>();
-
-            Match match = Regex.Match(filtro, @"'([^']*)'"); // Captura o valor do filtro
-            string filtroFormatado = match.Success ? match.Groups[1].Value : "";
-
-            subCondicoes.Add($"CellValue LIKE '%{filtroFormatado}%'");
-            subCondicoes.Add($"ColumnIndex = {this.colunaClicada}");
-            subQuery += " WHERE " + string.Join(" AND ", subCondicoes);
-
-            Console.WriteLine("DEBUG: Subconsulta -> " + subQuery);
-
-            DataTable rowIndexesTable = DB.ExecutarConsulta(subQuery);
-            List<int> rowIndexes = rowIndexesTable.AsEnumerable().Select(r => r.Field<int>("RowIndex")).ToList();
-
-            if (rowIndexes.Count == 0)
-            {
-                Console.WriteLine("DEBUG: Nenhum resultado encontrado.");
-                griTaxas.ResumeLayout();
-                return;
-            }
-
-            // 🔹 Criamos as linhas primeiro com base na quantidade de resultados da subconsulta
-            for (int i = 0; i < rowIndexes.Count; i++)
-            {
-                DataGridViewRow newRow = new DataGridViewRow();
-                newRow.DefaultCellStyle.Font = new Font("Arial", 12, FontStyle.Regular);
-                griTaxas.Rows.Add(newRow);
-            }
-
-            // 🔹 Etapa 2: Buscar os dados para os RowIndex obtidos
-            string query = $@"
-        SELECT RowIndex, ColumnIndex, CellValue 
-        FROM DynamicGrid 
-        WHERE RowIndex IN ({string.Join(",", rowIndexes)}) 
-        ORDER BY RowIndex, ColumnIndex";
-
-            Console.WriteLine("DEBUG: Consulta Final -> " + query);
-
-            DataTable dataTable = DB.ExecutarConsulta(query);
-
-            // 🔹 Preenche as células da grid com os dados recuperados
-            foreach (DataRow row in dataTable.Rows)
-            {
-                int rowIndex = rowIndexes.IndexOf(Convert.ToInt32(row["RowIndex"])); // Pega a posição correta na grid
-                int columnIndex = Convert.ToInt32(row["ColumnIndex"]);
-                string cellValue = row["CellValue"].ToString();
-
-                griTaxas.Rows[rowIndex].Cells[columnIndex].Value = cellValue;
-
-                Console.WriteLine($"DEBUG: Linha Atualizada -> RowIndex: {rowIndex}, ColumnIndex: {columnIndex}, Valor: {cellValue}");
-            }
-
-            Console.WriteLine($"DEBUG: Total de linhas carregadas: {griTaxas.Rows.Count}");
-            griTaxas.ResumeLayout(); // 🔹 Retoma a atualização visual
-        }
-
-        private void griTaxas_CellClick(object sender, DataGridViewCellEventArgs e)
-        {
-            this.colunaClicada = e.ColumnIndex;
-        }
- 
-        private void GriTaxas_SortStringChanged(object sender, AdvancedDataGridView.SortEventArgs e)
-        {
-            if (!this.acionadoFiltroSort)
-            {
-                LoadDataFromDatabase2();
-                griTaxas.ReadOnly = true;
-                this.acionadoFiltroSort = true;
-            } else
-            {
-                this.acionadoFiltroSort = false;
-            }
-        }
-
-
     }
+
+    public class CellInfo
+    {
+        public int RowIndexOriginal { get; set; } // Índice real do banco
+        public int GridRowIndex { get; set; } // Índice da grid
+        public int ColumnIndex { get; set; }
+        public string CellValue { get; set; }
+    }
+
 }
+
