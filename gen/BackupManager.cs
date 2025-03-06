@@ -82,7 +82,7 @@ namespace TeleBonifacio
                 file.Delete();
             }
         }
-        
+
         private List<string> CopiarArquivosParaPastaOper()
         {
             List<string> arquivosParaZipar = new List<string>();
@@ -98,6 +98,11 @@ namespace TeleBonifacio
                 arquivosParaZipar.Add(caminhoArquivoDestino);
                 contador++;
             }
+            string arquivoExtra = @"C:\Entregas\Entregas.txt";
+            string destinoExtra = Path.Combine(_pastaOper, Path.GetFileName(arquivoExtra));
+            File.Copy(arquivoExtra, destinoExtra, true);
+            arquivosParaZipar.Add(destinoExtra);
+            Console.WriteLine($"✅ DEBUG: Adicionado manualmente {arquivoExtra} à lista de zip.");
             return arquivosParaZipar;
         }
 

@@ -189,13 +189,12 @@ namespace TeleBonifacio
         {
             try
             {
-                // Desabilitar a tela
+                glo.Loga("Acionamento do Backup");
                 DesabilitarControles(this);
-
-                // Criar e realizar o backup
                 BackupManager backupManager = new BackupManager();
                 backupManager.RealizarBackup(false);
                 button2.Text = "Fechar";
+                glo.Loga("Backup realizado com sucesso!");
                 MessageBox.Show("Backup realizado com sucesso!");
             }
             catch (Exception ex)
@@ -204,12 +203,10 @@ namespace TeleBonifacio
             }
             finally
             {
-                // Reabilitar a tela
                 HabilitarControles(this);
             }
         }
 
-        // Método para desabilitar todos os controles da tela
         private void DesabilitarControles(Control control)
         {
             foreach (Control c in control.Controls)
@@ -222,7 +219,6 @@ namespace TeleBonifacio
             }
         }
 
-        // Método para habilitar todos os controles da tela
         private void HabilitarControles(Control control)
         {
             foreach (Control c in control.Controls)
