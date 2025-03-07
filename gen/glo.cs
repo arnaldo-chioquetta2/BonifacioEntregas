@@ -9,6 +9,8 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
+using System.Net;
+using System.Reflection;
 
 namespace TeleBonifacio
 {
@@ -299,22 +301,81 @@ namespace TeleBonifacio
                 return false;
 
             return true; // A data é válida
-        }        
+        }
 
         #endregion
 
+        #region DB
+
+        #region Log
+
+        private static string logFilePath;
+        private static bool isNetworkPathChecked = false;
+
         public static void Loga(string message)
         {
-            string logFilePath = @"C:\Entregas\Entregas.txt";
-            using (StreamWriter writer = new StreamWriter(logFilePath, true))
+            if (!isNetworkPathChecked)
             {
-                string Texto = $"{DateTime.Now}: {message}";
-                writer.WriteLine(Texto);
-                Console.WriteLine(Texto);
+                VerificarCaminhoDeExecucao();
+            }
+
+            try
+            {
+                using (StreamWriter writer = new StreamWriter(logFilePath, true))
+                {
+                    string texto = $"{DateTime.Now}: {message}";
+                    writer.WriteLine(texto);
+                    Console.WriteLine(texto);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"⚠ ERRO AO ESCREVER LOG: {ex.Message}");
             }
         }
 
-        #region DB
+        private static void VerificarCaminhoDeExecucao()
+        {
+            string caminhoExecucao = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+            if (caminhoExecucao.StartsWith(@"\\") || DriveIsNetwork(caminhoExecucao))
+            {
+                string nomeComputador = Dns.GetHostName();
+                logFilePath = Path.Combine(caminhoExecucao, $"{nomeComputador}.txt");
+            }
+            else
+            {
+                logFilePath = @"C:\Entregas\Entregas.txt";
+            }
+
+            isNetworkPathChecked = true;
+            Console.WriteLine($"📌 LOG definido para: {logFilePath}");
+        }
+
+        private static bool DriveIsNetwork(string path)
+        {
+            try
+            {
+                DriveInfo drive = new DriveInfo(Path.GetPathRoot(path));
+                return drive.DriveType == DriveType.Network;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        //public static void Loga(string message)
+        //{
+        //    string logFilePath = @"C:\Entregas\Entregas.txt";
+        //    using (StreamWriter writer = new StreamWriter(logFilePath, true))
+        //    {
+        //        string Texto = $"{DateTime.Now}: {message}";
+        //        writer.WriteLine(Texto);
+        //        Console.WriteLine(Texto);
+        //    }
+        //}
+
+        #endregion
 
         public static DataTable getDados(string query)
         {
