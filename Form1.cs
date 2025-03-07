@@ -14,6 +14,8 @@ namespace TeleBonifacio
         private bool ativou = false;
         private INI cINI;
         private bool DentroDoTimer = false;
+        private static readonly string baseDirectory = @"C:\Entregas";
+        private static readonly string logsDirectory = Path.Combine(baseDirectory, "Logs");
 
         public Form1()
         {
@@ -203,15 +205,20 @@ namespace TeleBonifacio
         {
             bool ret = false;
             string pastaAtual = Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName);
-            NovoLog();
-            glo.Loga("Executado a partir de "+ pastaAtual);            
+            // NovoLog();
+            // glo.Loga("Executado a partir de "+ pastaAtual);            
             int diaAtual = DateTime.Now.Day;
             int UltExec = cINI.ReadInt("INI", "UltExec", 0);
             cINI.WriteInt("INI", "UltExec", diaAtual);
 
             bool atualizar = (diaAtual != UltExec);
+            if (atualizar)
+            {
+                NovoLog();
+            }
+            glo.Loga("Executado a partir de " + pastaAtual);
             // atualizar = true;
-            
+
             glo.Loga("atualizar = "+atualizar.ToString());
             if (atualizar)
             {
@@ -281,60 +288,56 @@ namespace TeleBonifacio
                                     MessageBoxIcon.Information);
                             }                            
                         }
-                        this.AtualizacaoEspecifica(NovaVersaoINI);
                     }
                 }                
             }
             return ret;
         }
 
-        private void AtualizacaoEspecifica(string NovaVersaoINI)
+        public static void NovoLog()
         {
-            if (NovaVersaoINI == "3.2.4")
+            try
             {
-                bool v324 = cINI.ReadBool("Atualizacoes", "324", false);
-                if (v324==false)
+                string[] logFiles = Directory.GetFiles(baseDirectory, "*.txt");
+                DateTime hoje = DateTime.Today;
+
+                foreach (string logFilePath in logFiles)
                 {
-                    cINI.WriteString("Backup", "Arq4", "rtf.txt");
-                    cINI.WriteString("Backup", "Arq5", "TeleBonifacio.ini");
-                    cINI.WriteString("Backup", "Arq6", "Entregas.txt");
-                    string Word = $"C:\\Entregas\\Word.rtf";
-                    File.Delete(Word);
-                    cINI.WriteBool("Atualizacoes", "324", true);
-                } 
+                    FileInfo fileInfo = new FileInfo(logFilePath);
+                    if (fileInfo.LastWriteTime.Date == hoje)
+                    {
+                        ProcessarArquivoDeLog(fileInfo);
+                    }
+                }
+                Console.WriteLine("✅ Processamento de logs concluído.");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"❌ ERRO ao processar logs: {ex.Message}");
             }
         }
 
-        private static void NovoLog()
+        private static void ProcessarArquivoDeLog(FileInfo fileInfo)
         {
-            string baseDirectory = @"C:\Entregas";
-            string logFileName = "Entregas.txt";
-            string logFilePath = Path.Combine(baseDirectory, logFileName);
-            string backupPath = Path.Combine(baseDirectory, "Logs", $"{DateTime.Now:yyyyMMdd}_Entregas.txt"); // Rename based on current date
-            Directory.CreateDirectory(Path.GetDirectoryName(backupPath));
-            if (!File.Exists(logFilePath))
+            string fileName = fileInfo.Name;
+            string backupName = $"{DateTime.Now:yyyyMMdd}_{fileName}";
+            string backupFullPath = Path.Combine(logsDirectory, backupName);
+
+            try
             {
-                if (File.Exists(backupPath))
+                // 🔹 Move o arquivo do dia para a pasta de logs
+                File.Copy(fileInfo.FullName, backupFullPath, true);
+                Console.WriteLine($"📁 Log {fileName} arquivado em {backupFullPath}");
+
+                // 🔹 Cria um novo arquivo de log vazio
+                using (StreamWriter sw = File.CreateText(fileInfo.FullName))
                 {
-                    File.Copy(backupPath, logFilePath, true);
-                    Console.WriteLine($"Log do dia anterior copiado para {logFilePath}");
+                    sw.WriteLine($"Log de {fileName} copiado para Logs/{backupName}");
                 }
             }
-            else
+            catch (Exception ex)
             {
-                FileInfo fileInfo = new FileInfo(logFilePath);
-                DateTime logCreationDate = fileInfo.LastWriteTime;
-                    //.CreationTime.Date;
-                if (logCreationDate < DateTime.Today)
-                {
-                    string backupName = $"{DateTime.Now:yyyyMMdd}_{logFileName}";
-                    string backupFullPath = Path.Combine(baseDirectory, "Logs", backupName);
-                    File.Copy(logFilePath, backupFullPath, true);
-                    using (StreamWriter sw = File.CreateText(logFilePath))
-                    {
-                        sw.WriteLine($"Log de {logCreationDate.ToShortDateString()} copiado para Logs/{backupName}");
-                    }
-                }
+                Console.WriteLine($"⚠ Erro ao processar {fileName}: {ex.Message}");
             }
         }
 
