@@ -86,6 +86,9 @@ namespace TeleBonifacio
         private List<string> CopiarArquivosParaPastaOper()
         {
             List<string> arquivosParaZipar = new List<string>();
+            DateTime hoje = DateTime.Today;
+
+            // 🔹 Passo 1: Adicionar arquivos definidos no INI
             int contador = 1;
             while (true)
             {
@@ -94,17 +97,69 @@ namespace TeleBonifacio
 
                 string caminhoArquivoOrigem = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, nomeArquivo);
                 string caminhoArquivoDestino = Path.Combine(_pastaOper, Path.GetFileName(nomeArquivo));
-                File.Copy(caminhoArquivoOrigem, caminhoArquivoDestino, true);
-                arquivosParaZipar.Add(caminhoArquivoDestino);
+
+                if (File.Exists(caminhoArquivoOrigem))
+                {
+                    File.Copy(caminhoArquivoOrigem, caminhoArquivoDestino, true);
+                    arquivosParaZipar.Add(caminhoArquivoDestino);
+                    Console.WriteLine($"✅ DEBUG: Adicionado {nomeArquivo} via INI.");
+                }
+                else
+                {
+                    Console.WriteLine($"⚠ AVISO: Arquivo {nomeArquivo} do INI não encontrado.");
+                }
                 contador++;
             }
-            string arquivoExtra = @"C:\Entregas\Entregas.txt";
-            string destinoExtra = Path.Combine(_pastaOper, Path.GetFileName(arquivoExtra));
-            File.Copy(arquivoExtra, destinoExtra, true);
-            arquivosParaZipar.Add(destinoExtra);
-            Console.WriteLine($"✅ DEBUG: Adicionado manualmente {arquivoExtra} à lista de zip.");
+
+            // 🔹 Passo 2: Adicionar arquivos .txt modificados hoje
+            string diretorioEntregas = @"C:\Entregas";
+            if (Directory.Exists(diretorioEntregas))
+            {
+                string[] arquivosTxt = Directory.GetFiles(diretorioEntregas, "*.txt");
+
+                foreach (string arquivo in arquivosTxt)
+                {
+                    FileInfo fileInfo = new FileInfo(arquivo);
+                    if (fileInfo.LastWriteTime.Date == hoje)
+                    {
+                        string destinoArquivo = Path.Combine(_pastaOper, fileInfo.Name);
+                        File.Copy(arquivo, destinoArquivo, true);
+                        arquivosParaZipar.Add(destinoArquivo);
+                        Console.WriteLine($"✅ DEBUG: Adicionado {arquivo} à lista de zip.");
+                    }
+                }
+            }
+            else
+            {
+                Console.WriteLine($"❌ ERRO: Diretório {diretorioEntregas} não encontrado.");
+            }
+
+            Console.WriteLine($"📦 DEBUG: Total de arquivos para ZIP: {arquivosParaZipar.Count}");
             return arquivosParaZipar;
         }
+
+        //private List<string> CopiarArquivosParaPastaOper()
+        //{
+        //    List<string> arquivosParaZipar = new List<string>();
+        //    int contador = 1;
+        //    while (true)
+        //    {
+        //        string nomeArquivo = _ini.ReadString("Backup", "Arq" + contador.ToString(), "");
+        //        if (string.IsNullOrEmpty(nomeArquivo)) break;
+
+        //        string caminhoArquivoOrigem = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, nomeArquivo);
+        //        string caminhoArquivoDestino = Path.Combine(_pastaOper, Path.GetFileName(nomeArquivo));
+        //        File.Copy(caminhoArquivoOrigem, caminhoArquivoDestino, true);
+        //        arquivosParaZipar.Add(caminhoArquivoDestino);
+        //        contador++;
+        //    }
+        //    string arquivoExtra = @"C:\Entregas\Entregas.txt";
+        //    string destinoExtra = Path.Combine(_pastaOper, Path.GetFileName(arquivoExtra));
+        //    File.Copy(arquivoExtra, destinoExtra, true);
+        //    arquivosParaZipar.Add(destinoExtra);
+        //    Console.WriteLine($"✅ DEBUG: Adicionado manualmente {arquivoExtra} à lista de zip.");
+        //    return arquivosParaZipar;
+        //}
 
         private string CompactarArquivos(List<string> arquivosParaZipar)
         {
