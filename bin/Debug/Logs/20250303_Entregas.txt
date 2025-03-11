@@ -1,0 +1,63 @@
+Log de 28/02/2025 copiado para Logs/20250302_Entregas.txt
+02/03/2025 00:28:22: Executado a partir de C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug
+02/03/2025 00:28:22: atualizar = True
+02/03/2025 00:28:24: Versão Atual 355
+02/03/2025 00:28:24: Versão no FTP 355
+02/03/2025 00:29:24: glo.Nivel = 2
+02/03/2025 00:29:24: Vai entrar em PreparaAbasUsers
+02/03/2025 00:29:24: pastaDoPrograma = C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug\
+02/03/2025 00:35:45: Executado a partir de C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug
+02/03/2025 00:35:45: atualizar = False
+02/03/2025 00:35:48: glo.Nivel = 2
+02/03/2025 00:35:48: Vai entrar em PreparaAbasUsers
+02/03/2025 00:35:48: pastaDoPrograma = C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug\
+02/03/2025 00:40:36: Executado a partir de C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug
+02/03/2025 00:40:36: atualizar = False
+02/03/2025 00:40:39: glo.Nivel = 2
+02/03/2025 00:40:39: Vai entrar em PreparaAbasUsers
+02/03/2025 00:40:39: pastaDoPrograma = C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug\
+02/03/2025 00:42:34: Executado a partir de C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug
+02/03/2025 00:42:34: atualizar = False
+02/03/2025 00:42:40: glo.Nivel = 2
+02/03/2025 00:42:40: Vai entrar em PreparaAbasUsers
+02/03/2025 00:42:40: pastaDoPrograma = C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug\
+02/03/2025 00:56:45: Executado a partir de C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug
+02/03/2025 00:56:45: atualizar = False
+02/03/2025 00:57:15: glo.Nivel = 2
+02/03/2025 00:57:15: Vai entrar em PreparaAbasUsers
+02/03/2025 00:57:15: pastaDoPrograma = C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug\
+02/03/2025 01:02:51: Executado a partir de C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug
+02/03/2025 01:02:51: atualizar = False
+02/03/2025 01:02:55: glo.Nivel = 2
+02/03/2025 01:02:55: Vai entrar em PreparaAbasUsers
+02/03/2025 01:02:55: pastaDoPrograma = C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug\
+02/03/2025 01:04:50: Executado a partir de C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug
+02/03/2025 01:04:50: atualizar = False
+02/03/2025 01:04:54: glo.Nivel = 2
+02/03/2025 01:04:54: Vai entrar em PreparaAbasUsers
+02/03/2025 01:04:54: pastaDoPrograma = C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug\
+02/03/2025 01:07:43: Executado a partir de C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug
+02/03/2025 01:07:43: atualizar = False
+02/03/2025 01:07:45: glo.Nivel = 2
+02/03/2025 01:07:45: Vai entrar em PreparaAbasUsers
+02/03/2025 01:07:45: pastaDoPrograma = C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug\
+02/03/2025 01:08:17: Executado a partir de C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug
+02/03/2025 01:08:17: atualizar = False
+02/03/2025 01:08:19: glo.Nivel = 2
+02/03/2025 01:08:19: Vai entrar em PreparaAbasUsers
+02/03/2025 01:08:19: pastaDoPrograma = C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug\
+02/03/2025 01:10:38: Executado a partir de C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug
+02/03/2025 01:10:38: atualizar = False
+02/03/2025 01:10:40: glo.Nivel = 2
+02/03/2025 01:10:40: Vai entrar em PreparaAbasUsers
+02/03/2025 01:10:40: pastaDoPrograma = C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug\
+02/03/2025 22:26:11: Executado a partir de C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug
+02/03/2025 22:26:11: atualizar = False
+02/03/2025 22:26:31: glo.Nivel = 2
+02/03/2025 22:26:31: Vai entrar em PreparaAbasUsers
+02/03/2025 22:26:31: pastaDoPrograma = C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug\
+02/03/2025 23:37:24: Executado a partir de C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug
+02/03/2025 23:37:24: atualizar = False
+02/03/2025 23:37:28: glo.Nivel = 2
+02/03/2025 23:37:28: Vai entrar em PreparaAbasUsers
+02/03/2025 23:37:28: pastaDoPrograma = C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug\

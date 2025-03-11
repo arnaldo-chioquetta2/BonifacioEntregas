@@ -1,13 +1,16 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Drawing;
 using System.IO;
-using System.Linq;
-using System.Text.RegularExpressions;
-using System.Windows.Forms;
-using TeleBonifacio.dao;
 using Zuby.ADGV;
+using System.Data;
+using System.Linq;
+using System.Drawing;
+using TeleBonifacio.dao;
+using System.Diagnostics;
+using System.Windows.Forms;
+using System.Collections.Generic;
+using System.Runtime.InteropServices;
+using System.Text.RegularExpressions;
+using Excel = Microsoft.Office.Interop.Excel;
 
 namespace TeleBonifacio
 {
@@ -64,7 +67,6 @@ namespace TeleBonifacio
             CarregaGrid();
             ConfigureDataGridView(this.dataGrid1);
             griTaxas.SortStringChanged += GriTaxas_SortStringChanged;
-            //griTaxas.FilterStringChanged += GriTaxas_FilterStringChanged;
             rt.AdjustFormComponents(this);
         }
 
@@ -1417,6 +1419,18 @@ namespace TeleBonifacio
                             rtfWord.txPercVisivel(AdaptAtivo);
                         }
                         break;
+                    case 7:
+                        if (!excelAppVisible)
+                        {
+                            AbrirExcel();
+                            excelAppVisible = true;
+                        }                            
+                        //excelApp = new Excel.Application();
+                        //excelApp.Visible = true; // Exibe o Excel
+
+                        //excelWorkbook = excelApp.Workbooks.Open(caminhoArquivo);
+                        //this.Text = "Planilha Aberta: " + Path.GetFileName(caminhoArquivo);
+                        break;
 
                     default: // Novas abas criadas dinamicamente
                         groupBox1.Enabled = false;
@@ -1861,7 +1875,7 @@ namespace TeleBonifacio
         private const int INITIAL_COLUMN_COUNT = 13;
         private const int INITIAL_ROW_COUNT = 28;
         private int ModoGrid =0;
-        private List<CellInfo> gridCellsInfo = new List<CellInfo>();
+        private List<CellInfo> gridCellsInfo = new List<CellInfo>();        
 
         private void SetupDataGridView()
         {
@@ -2290,6 +2304,86 @@ namespace TeleBonifacio
             else
             {
                 this.acionadoFiltroSort = false;
+            }
+        }
+
+        #endregion
+
+        #region Excel
+
+        private bool excelAppVisible=false;
+        private Excel.Application excelApp;
+        private Excel.Workbook excelWorkbook;
+        private Excel.Worksheet excelSheet;
+        private string caminhoArquivoExcel = @"C:\Entregas\Arquivo.xlsx";
+
+        private Excel.Workbook workbook;
+
+        [DllImport("user32.dll")]
+        private static extern int SetParent(IntPtr hWndChild, IntPtr hWndNewParent);
+
+        [DllImport("user32.dll")]
+        private static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
+
+        [DllImport("user32.dll")]
+        static extern bool SetWindowPos(IntPtr hWnd, IntPtr hWndInsertAfter, int X, int Y, int cx, int cy, uint uFlags);
+
+        private const uint SWP_SHOWWINDOW = 0x0040;
+
+        private const int SW_MAXIMIZE = 3;
+
+        private void AbrirExcel()
+        {
+            foreach (var process in Process.GetProcessesByName("EXCEL"))
+            {
+                process.Kill();
+            }
+            if (!File.Exists(caminhoArquivoExcel))
+            {
+                CriarNovoArquivoExcel();
+            }
+
+            excelApp = new Excel.Application
+            {
+                Visible = true,
+                DisplayFullScreen = false,
+            };
+            File.SetAttributes(caminhoArquivoExcel, FileAttributes.Normal);
+
+            workbook = excelApp.Workbooks.Open(caminhoArquivoExcel, ReadOnly: false);
+
+            // Força exibição da Ribbon corretamente:
+            excelApp.ExecuteExcel4Macro("SHOW.TOOLBAR(\"Ribbon\",TRUE)");
+            excelApp.SendKeys("^{F1}", true); // Ctrl + F1 para mostrar Ribbon (garantia adicional)
+
+            // Embute o Excel no painel
+            IntPtr excelHandle = new IntPtr(excelApp.Hwnd);
+            SetParent(excelHandle, panelExcel.Handle);
+            ShowWindow(excelHandle, SW_MAXIMIZE);
+        }
+
+        private void CriarNovoArquivoExcel()
+        {
+            try
+            {
+                excelApp = new Excel.Application();
+                excelWorkbook = excelApp.Workbooks.Add();
+                Excel.Worksheet excelSheet = (Excel.Worksheet)excelWorkbook.Sheets[1];
+
+                // 🔹 Criando um cabeçalho na planilha
+                excelSheet.Cells[1, 1] = "ID";
+                excelSheet.Cells[1, 2] = "Nome";
+                excelSheet.Cells[1, 3] = "Data";
+                excelSheet.Cells[1, 4] = "Valor";
+
+                // 🔹 Salvando o arquivo
+                excelWorkbook.SaveAs(caminhoArquivoExcel);
+                excelWorkbook.Close();
+                excelApp.Quit();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Erro ao criar novo arquivo Excel: " + ex.Message);
             }
         }
 

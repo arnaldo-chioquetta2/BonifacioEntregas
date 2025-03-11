@@ -82,11 +82,13 @@ namespace TeleBonifacio
             this.griTaxas = new Zuby.ADGV.AdvancedDataGridView();
             this.tabPage7 = new System.Windows.Forms.TabPage();
             this.rtfWord = new AtcCtrl.ATCRTF();
+            this.tabPage8 = new System.Windows.Forms.TabPage();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.Aumentar = new System.Windows.Forms.ToolStripMenuItem();
             this.DiminirPrio = new System.Windows.Forms.ToolStripMenuItem();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
+            this.panelExcel = new System.Windows.Forms.Panel();
             this.panel1.SuspendLayout();
             this.groupBox3.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -103,6 +105,7 @@ namespace TeleBonifacio
             this.tabPage6.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.griTaxas)).BeginInit();
             this.tabPage7.SuspendLayout();
+            this.tabPage8.SuspendLayout();
             this.contextMenuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -473,6 +476,7 @@ namespace TeleBonifacio
             this.tbFaltas.Controls.Add(this.tabPage5);
             this.tbFaltas.Controls.Add(this.tabPage6);
             this.tbFaltas.Controls.Add(this.tabPage7);
+            this.tbFaltas.Controls.Add(this.tabPage8);
             this.tbFaltas.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tbFaltas.Location = new System.Drawing.Point(0, 108);
             this.tbFaltas.Name = "tbFaltas";
@@ -641,6 +645,17 @@ namespace TeleBonifacio
             this.rtfWord.VlrPerImr = 1F;
             this.rtfWord.VlrPerImrChanged += new System.EventHandler<bool>(this.rtfWord_VlrPerImrChanged);
             // 
+            // tabPage8
+            // 
+            this.tabPage8.Controls.Add(this.panelExcel);
+            this.tabPage8.Location = new System.Drawing.Point(4, 22);
+            this.tabPage8.Name = "tabPage8";
+            this.tabPage8.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage8.Size = new System.Drawing.Size(1337, 298);
+            this.tabPage8.TabIndex = 7;
+            this.tabPage8.Text = "Excel";
+            this.tabPage8.UseVisualStyleBackColor = true;
+            // 
             // contextMenuStrip1
             // 
             this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -668,6 +683,14 @@ namespace TeleBonifacio
             // openFileDialog1
             // 
             this.openFileDialog1.FileName = "openFileDialog1";
+            // 
+            // panelExcel
+            // 
+            this.panelExcel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panelExcel.Location = new System.Drawing.Point(3, 3);
+            this.panelExcel.Name = "panelExcel";
+            this.panelExcel.Size = new System.Drawing.Size(1331, 292);
+            this.panelExcel.TabIndex = 0;
             // 
             // OperFalta
             // 
@@ -697,6 +720,7 @@ namespace TeleBonifacio
             this.tabPage6.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.griTaxas)).EndInit();
             this.tabPage7.ResumeLayout(false);
+            this.tabPage8.ResumeLayout(false);
             this.contextMenuStrip1.ResumeLayout(false);
             this.ResumeLayout(false);
 
@@ -755,6 +779,8 @@ namespace TeleBonifacio
         private OpenFileDialog openFileDialog1;
         private TabPage tabPage7;
         private Zuby.ADGV.AdvancedDataGridView griTaxas;
+        private TabPage tabPage8;
+        private Panel panelExcel;
         //private AtcCtrl.ATCRTF rtfTexto;
     }
 }

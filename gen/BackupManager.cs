@@ -86,7 +86,8 @@ namespace TeleBonifacio
         private List<string> CopiarArquivosParaPastaOper()
         {
             List<string> arquivosParaZipar = new List<string>();
-            DateTime hoje = DateTime.Today;
+            DateTime hoje = DateTime.Now;
+            DateTime ultimas24Horas = hoje.AddHours(-24);
 
             // 🔹 Passo 1: Adicionar arquivos definidos no INI
             int contador = 1;
@@ -120,7 +121,7 @@ namespace TeleBonifacio
                 foreach (string arquivo in arquivosTxt)
                 {
                     FileInfo fileInfo = new FileInfo(arquivo);
-                    if (fileInfo.LastWriteTime.Date == hoje)
+                    if (fileInfo.LastWriteTime.Date == hoje.Date)
                     {
                         string destinoArquivo = Path.Combine(_pastaOper, fileInfo.Name);
                         File.Copy(arquivo, destinoArquivo, true);
@@ -134,6 +135,43 @@ namespace TeleBonifacio
                 Console.WriteLine($"❌ ERRO: Diretório {diretorioEntregas} não encontrado.");
             }
 
+            // 🔹 Passo 3: Adicionar arquivos da subpasta "Logs" criados nas últimas 24 horas
+            string diretorioLogs = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Logs");
+            if (Directory.Exists(diretorioLogs))
+            {
+                string[] arquivosLogs = Directory.GetFiles(diretorioLogs, "*.*", SearchOption.AllDirectories);
+
+                foreach (string arquivo in arquivosLogs)
+                {
+                    FileInfo fileInfo = new FileInfo(arquivo);
+                    if (fileInfo.CreationTime >= ultimas24Horas)
+                    {
+                        string destinoArquivo = Path.Combine(_pastaOper, fileInfo.Name);
+                        File.Copy(arquivo, destinoArquivo, true);
+                        arquivosParaZipar.Add(destinoArquivo);
+                        Console.WriteLine($"✅ DEBUG: Adicionado {arquivo} à lista de zip.");
+                    }
+                }
+            }
+            else
+            {
+                Console.WriteLine($"❌ ERRO: Diretório {diretorioLogs} não encontrado.");
+            }
+
+            // 🔹 Passo 4: Adicionar o arquivo "Arquivo.xlsx"
+            string caminhoArquivoXlsx = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Arquivo.xlsx");
+            if (File.Exists(caminhoArquivoXlsx))
+            {
+                string destinoArquivoXlsx = Path.Combine(_pastaOper, "Arquivo.xlsx");
+                File.Copy(caminhoArquivoXlsx, destinoArquivoXlsx, true);
+                arquivosParaZipar.Add(destinoArquivoXlsx);
+                Console.WriteLine($"✅ DEBUG: Adicionado Arquivo.xlsx à lista de zip.");
+            }
+            else
+            {
+                Console.WriteLine($"⚠ AVISO: Arquivo Arquivo.xlsx não encontrado.");
+            }
+
             Console.WriteLine($"📦 DEBUG: Total de arquivos para ZIP: {arquivosParaZipar.Count}");
             return arquivosParaZipar;
         }
@@ -141,6 +179,9 @@ namespace TeleBonifacio
         //private List<string> CopiarArquivosParaPastaOper()
         //{
         //    List<string> arquivosParaZipar = new List<string>();
+        //    DateTime hoje = DateTime.Today;
+
+        //    // 🔹 Passo 1: Adicionar arquivos definidos no INI
         //    int contador = 1;
         //    while (true)
         //    {
@@ -149,15 +190,44 @@ namespace TeleBonifacio
 
         //        string caminhoArquivoOrigem = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, nomeArquivo);
         //        string caminhoArquivoDestino = Path.Combine(_pastaOper, Path.GetFileName(nomeArquivo));
-        //        File.Copy(caminhoArquivoOrigem, caminhoArquivoDestino, true);
-        //        arquivosParaZipar.Add(caminhoArquivoDestino);
+
+        //        if (File.Exists(caminhoArquivoOrigem))
+        //        {
+        //            File.Copy(caminhoArquivoOrigem, caminhoArquivoDestino, true);
+        //            arquivosParaZipar.Add(caminhoArquivoDestino);
+        //            Console.WriteLine($"✅ DEBUG: Adicionado {nomeArquivo} via INI.");
+        //        }
+        //        else
+        //        {
+        //            Console.WriteLine($"⚠ AVISO: Arquivo {nomeArquivo} do INI não encontrado.");
+        //        }
         //        contador++;
         //    }
-        //    string arquivoExtra = @"C:\Entregas\Entregas.txt";
-        //    string destinoExtra = Path.Combine(_pastaOper, Path.GetFileName(arquivoExtra));
-        //    File.Copy(arquivoExtra, destinoExtra, true);
-        //    arquivosParaZipar.Add(destinoExtra);
-        //    Console.WriteLine($"✅ DEBUG: Adicionado manualmente {arquivoExtra} à lista de zip.");
+
+        //    // 🔹 Passo 2: Adicionar arquivos .txt modificados hoje
+        //    string diretorioEntregas = @"C:\Entregas";
+        //    if (Directory.Exists(diretorioEntregas))
+        //    {
+        //        string[] arquivosTxt = Directory.GetFiles(diretorioEntregas, "*.txt");
+
+        //        foreach (string arquivo in arquivosTxt)
+        //        {
+        //            FileInfo fileInfo = new FileInfo(arquivo);
+        //            if (fileInfo.LastWriteTime.Date == hoje)
+        //            {
+        //                string destinoArquivo = Path.Combine(_pastaOper, fileInfo.Name);
+        //                File.Copy(arquivo, destinoArquivo, true);
+        //                arquivosParaZipar.Add(destinoArquivo);
+        //                Console.WriteLine($"✅ DEBUG: Adicionado {arquivo} à lista de zip.");
+        //            }
+        //        }
+        //    }
+        //    else
+        //    {
+        //        Console.WriteLine($"❌ ERRO: Diretório {diretorioEntregas} não encontrado.");
+        //    }
+
+        //    Console.WriteLine($"📦 DEBUG: Total de arquivos para ZIP: {arquivosParaZipar.Count}");
         //    return arquivosParaZipar;
         //}
 

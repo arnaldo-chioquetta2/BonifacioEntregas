@@ -11,8 +11,11 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyCulture("")]
 [assembly: ComVisible(false)]
 [assembly: Guid("308c57af-e663-456d-8a2c-188bbd61423d")]
-[assembly: AssemblyVersion("3.5.9.0")]
-[assembly: AssemblyFileVersion("3.5.9.0")]
+[assembly: AssemblyVersion("3.6.2.0")]
+[assembly: AssemblyFileVersion("3.6.2.0")]
+// 3.6.2 Mais arquivos de logs no Backup
+// 3.6.1 Implantação do excel
+// 3.6.0 Logs em rede e no Backup
 // 3.5.9 Adição do log no Backup
 // 3.5.8 Gravação na Advanced GridView
 // 3.5.7 Ordenação e filtro na Advanced GridView
@@ -23,4 +26,3 @@ using System.Runtime.InteropServices;
 // 3.5.2 Ao adicionar lançamento no caixa não filtra a grid.
 // 3.5.1 Busca no RTF
 // 3.5.0 Ajuste no funcionamento da data inicial na tela do caixa
-// 3.4.9 Solução para aumentar linhas da grid Taxas

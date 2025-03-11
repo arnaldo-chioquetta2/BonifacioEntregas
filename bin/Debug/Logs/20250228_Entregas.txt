@@ -1,0 +1,8 @@
+Log de 25/02/2025 copiado para Logs/20250226_Entregas.txt
+26/02/2025 23:24:14: Executado a partir de C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug
+26/02/2025 23:24:14: atualizar = True
+26/02/2025 23:24:17: Versão Atual 352
+26/02/2025 23:24:17: Versão no FTP 352
+26/02/2025 23:24:20: glo.Nivel = 2
+26/02/2025 23:24:20: Vai entrar em PreparaAbasUsers
+26/02/2025 23:24:20: pastaDoPrograma = C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug\

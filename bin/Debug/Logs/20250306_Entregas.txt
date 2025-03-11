@@ -1,0 +1,20 @@
+Log de 04/03/2025 copiado para Logs/20250306_Entregas.txt
+06/03/2025 00:24:26: Executado a partir de C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug
+06/03/2025 00:24:26: atualizar = True
+06/03/2025 00:24:29: Versão Atual 358
+06/03/2025 00:24:29: Versão no FTP 358
+06/03/2025 00:24:32: glo.Nivel = 2
+06/03/2025 00:24:32: Vai entrar em PreparaAbasUsers
+06/03/2025 00:24:32: pastaDoPrograma = C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug\
+06/03/2025 00:24:42: ID,15, 4, 1 - Novo registro inserido
+06/03/2025 00:24:56: UD,15, 4, 1 - Registro atualizado
+06/03/2025 00:38:34: Executado a partir de C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug
+06/03/2025 00:38:34: atualizar = False
+06/03/2025 00:38:37: glo.Nivel = 2
+06/03/2025 00:38:37: Vai entrar em PreparaAbasUsers
+06/03/2025 00:38:37: pastaDoPrograma = C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug\
+06/03/2025 00:38:48: UD,18, 3,  - Registro atualizado
+06/03/2025 00:38:48: UD,18, 3,  - Registro atualizado
+06/03/2025 22:22:25: Executado a partir de C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug
+06/03/2025 23:01:15: Executado a partir de C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug
+06/03/2025 23:01:15: atualizar = False

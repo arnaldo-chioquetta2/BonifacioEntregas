@@ -1,0 +1,994 @@
+09/01/2025 01:18:24: AlterarTamanhoFonteSelecionada
+09/01/2025 01:18:24: sTam = 30
+09/01/2025 01:18:24: Setou rtfTexto.SelectionFont
+09/01/2025 01:25:48: rtfTexto_TextChanged
+09/01/2025 01:27:54: rtfTexto_KeyDown Return
+09/01/2025 01:27:54: rtfTexto_TextChanged
+09/01/2025 01:27:55: rtfTexto_KeyDown E
+09/01/2025 01:27:55: rtfTexto_KeyDown S
+09/01/2025 01:27:55: rtfTexto_KeyDown T
+09/01/2025 01:27:55: rtfTexto_KeyDown O
+09/01/2025 01:27:55: rtfTexto_KeyDown U
+09/01/2025 01:27:56: rtfTexto_KeyDown E
+09/01/2025 01:27:56: rtfTexto_KeyDown S
+09/01/2025 01:27:56: rtfTexto_TextChanged
+09/01/2025 01:27:56: rtfTexto_KeyDown Back
+09/01/2025 01:27:56: rtfTexto_KeyDown Back
+09/01/2025 01:27:57: rtfTexto_KeyDown Space
+09/01/2025 01:27:57: rtfTexto_KeyDown E
+09/01/2025 01:27:57: rtfTexto_KeyDown S
+09/01/2025 01:27:57: rtfTexto_KeyDown C
+09/01/2025 01:27:57: rtfTexto_KeyDown R
+09/01/2025 01:27:57: rtfTexto_KeyDown E
+09/01/2025 01:27:58: rtfTexto_KeyDown V
+09/01/2025 01:27:58: rtfTexto_KeyDown E
+09/01/2025 01:27:58: rtfTexto_TextChanged
+09/01/2025 01:27:58: rtfTexto_KeyDown N
+09/01/2025 01:27:58: rtfTexto_KeyDown D
+09/01/2025 01:27:58: rtfTexto_KeyDown O
+09/01/2025 01:27:58: rtfTexto_KeyDown Space
+09/01/2025 01:27:58: rtfTexto_KeyDown A
+09/01/2025 01:27:58: rtfTexto_KeyDown L
+09/01/2025 01:27:58: rtfTexto_KeyDown G
+09/01/2025 01:27:59: rtfTexto_KeyDown O
+09/01/2025 01:27:59: rtfTexto_KeyDown ShiftKey
+09/01/2025 01:27:59: rtfTexto_KeyDown Left
+09/01/2025 01:27:59: rtfTexto_KeyDown Left
+09/01/2025 01:27:59: rtfTexto_KeyDown Left
+09/01/2025 01:28:00: rtfTexto_KeyDown Left
+09/01/2025 01:28:05: AlterarTamanhoFonteSelecionada
+09/01/2025 01:28:05: sTam = 40
+09/01/2025 01:28:05: rtfTexto_TextChanged
+09/01/2025 01:28:05: Setou rtfTexto.SelectionFont
+anotacoes 09/01/2025 01:40:49: rtfTexto_TextChanged
+anotacoes 09/01/2025 01:40:52: rtfTexto_KeyDown F
+anotacoes 09/01/2025 01:40:52: rtfTexto_TextChanged
+anotacoes 09/01/2025 01:40:52: rtfTexto_KeyDown G
+anotacoes 09/01/2025 01:40:52: rtfTexto_KeyDown D
+anotacoes 09/01/2025 01:40:52: rtfTexto_KeyDown G
+anotacoes 09/01/2025 01:40:52: rtfTexto_KeyDown D
+anotacoes 09/01/2025 01:40:52: rtfTexto_KeyDown G
+anotacoes 09/01/2025 01:40:52: rtfTexto_KeyDown D
+anotacoes 09/01/2025 01:40:52: rtfTexto_KeyDown F
+anotacoes 09/01/2025 01:40:52: rtfTexto_KeyDown G
+anotacoes 09/01/2025 01:40:53: rtfTexto_KeyDown F
+anotacoes 09/01/2025 01:40:53: rtfTexto_KeyDown D
+anotacoes 09/01/2025 01:40:53: rtfTexto_KeyDown G
+anotacoes 09/01/2025 01:41:02: AlterarTamanhoFonteSelecionada
+anotacoes 09/01/2025 01:41:02: sTam = 14
+anotacoes 09/01/2025 01:41:02: rtfTexto_TextChanged
+anotacoes 09/01/2025 01:41:02: Setou rtfTexto.SelectionFont
+Word 09/01/2025 01:41:06: rtfTexto_TextChanged
+Word 09/01/2025 01:41:08: rtfTexto_KeyDown B
+Word 09/01/2025 01:41:08: rtfTexto_TextChanged
+Word 09/01/2025 01:41:08: rtfTexto_KeyDown B
+Word 09/01/2025 01:41:08: rtfTexto_KeyDown B
+Word 09/01/2025 01:41:08: rtfTexto_KeyDown B
+Word 09/01/2025 01:41:16: AlterarTamanhoFonteSelecionada
+Word 09/01/2025 01:41:16: sTam = 35
+Word 09/01/2025 01:41:16: rtfTexto_TextChanged
+Word 09/01/2025 01:41:16: Setou rtfTexto.SelectionFont
+09/01/2025 01:44:26 anotacoes rtfTexto_TextChanged
+09/01/2025 01:44:29 anotacoes DecreaseFont
+09/01/2025 01:44:29 anotacoes rtfTexto_TextChanged
+09/01/2025 01:44:29 anotacoes DecreaseFont
+09/01/2025 01:44:30 anotacoes DecreaseFont
+09/01/2025 01:44:30 anotacoes DecreaseFont
+09/01/2025 01:44:34 Word rtfTexto_TextChanged
+09/01/2025 01:44:40 Word DecreaseFont
+09/01/2025 01:44:40 Word rtfTexto_TextChanged
+09/01/2025 01:44:40 Word DecreaseFont
+09/01/2025 01:44:40 Word DecreaseFont
+09/01/2025 01:44:40 Word DecreaseFont
+09/01/2025 01:44:40 Word DecreaseFont
+09/01/2025 01:44:41 Word DecreaseFont
+09/01/2025 01:44:41 Word DecreaseFont
+09/01/2025 01:44:43 Word IncreaseFont
+09/01/2025 01:44:43 Word rtfTexto_TextChanged
+09/01/2025 01:44:43 Word IncreaseFont
+09/01/2025 01:44:44 Word IncreaseFont
+09/01/2025 01:44:44 Word IncreaseFont
+09/01/2025 01:44:44 Word IncreaseFont
+09/01/2025 01:44:44 Word IncreaseFont
+09/01/2025 01:44:44 Word IncreaseFont
+26/01/2025 13:15:20 Word rtfTexto_TextChanged
+26/01/2025 13:26:33 Word rtfTexto_TextChanged
+26/01/2025 14:04:38 Word rtfTexto_TextChanged
+15/02/2025 23:41:32 Word rtfTexto_TextChanged
+23/02/2025 17:52:10 anotacoes rtfTexto_TextChanged
+23/02/2025 17:52:13 anotacoes rtfTexto_KeyDown ControlKey
+23/02/2025 17:52:14 anotacoes rtfTexto_KeyDown Ctrl+F
+23/02/2025 17:52:27 anotacoes rtfTexto_KeyDown Return
+23/02/2025 17:52:27 anotacoes rtfTexto_TextChanged
+23/02/2025 17:52:27 anotacoes rtfTexto_KeyDown Return
+23/02/2025 17:52:28 anotacoes rtfTexto_KeyDown ShiftKey
+23/02/2025 17:52:28 anotacoes rtfTexto_KeyDown G
+23/02/2025 17:52:28 anotacoes rtfTexto_KeyDown R
+23/02/2025 17:52:28 anotacoes rtfTexto_KeyDown U
+23/02/2025 17:52:28 anotacoes rtfTexto_KeyDown P
+23/02/2025 17:52:29 anotacoes rtfTexto_KeyDown O
+23/02/2025 17:52:29 anotacoes rtfTexto_KeyDown S
+23/02/2025 17:52:29 anotacoes rtfTexto_KeyDown ControlKey
+23/02/2025 17:52:30 anotacoes rtfTexto_KeyDown Home
+23/02/2025 17:52:30 anotacoes rtfTexto_KeyDown F3
+23/02/2025 17:52:31 anotacoes rtfTexto_KeyDown F3
+23/02/2025 17:52:32 anotacoes rtfTexto_KeyDown F3
+23/02/2025 17:52:32 anotacoes rtfTexto_KeyDown ControlKey
+23/02/2025 17:52:33 anotacoes rtfTexto_KeyDown Ctrl+F
+23/02/2025 17:52:38 anotacoes rtfTexto_KeyDown F3
+23/02/2025 17:52:39 anotacoes rtfTexto_KeyDown ControlKey
+23/02/2025 17:52:39 anotacoes rtfTexto_KeyDown ControlKey
+23/02/2025 17:52:39 anotacoes rtfTexto_KeyDown ControlKey
+23/02/2025 17:52:39 anotacoes rtfTexto_KeyDown ControlKey
+23/02/2025 17:52:40 anotacoes rtfTexto_KeyDown ControlKey
+23/02/2025 17:52:40 anotacoes rtfTexto_KeyDown Ctrl+F
+23/02/2025 17:52:41 anotacoes rtfTexto_KeyDown ControlKey
+23/02/2025 17:52:42 anotacoes rtfTexto_KeyDown ControlKey
+23/02/2025 17:52:42 anotacoes rtfTexto_KeyDown ControlKey
+23/02/2025 17:52:42 anotacoes rtfTexto_KeyDown ControlKey
+23/02/2025 17:52:42 anotacoes rtfTexto_KeyDown ControlKey
+23/02/2025 17:52:42 anotacoes rtfTexto_KeyDown ControlKey
+23/02/2025 17:52:42 anotacoes rtfTexto_KeyDown ControlKey
+23/02/2025 17:52:42 anotacoes rtfTexto_KeyDown ControlKey
+23/02/2025 17:52:42 anotacoes rtfTexto_KeyDown ControlKey
+23/02/2025 17:52:42 anotacoes rtfTexto_KeyDown ControlKey
+23/02/2025 17:52:42 anotacoes rtfTexto_KeyDown ControlKey
+23/02/2025 17:52:42 anotacoes rtfTexto_KeyDown ControlKey
+23/02/2025 17:52:42 anotacoes rtfTexto_KeyDown ControlKey
+23/02/2025 17:52:42 anotacoes rtfTexto_KeyDown ControlKey
+23/02/2025 17:52:42 anotacoes rtfTexto_KeyDown ControlKey
+23/02/2025 17:52:42 anotacoes rtfTexto_KeyDown ControlKey
+23/02/2025 17:52:42 anotacoes rtfTexto_KeyDown ControlKey
+23/02/2025 17:52:42 anotacoes rtfTexto_KeyDown ControlKey
+23/02/2025 17:52:43 anotacoes rtfTexto_KeyDown ControlKey
+23/02/2025 17:52:43 anotacoes rtfTexto_KeyDown ControlKey
+23/02/2025 17:52:43 anotacoes rtfTexto_KeyDown ControlKey
+23/02/2025 17:52:43 anotacoes rtfTexto_KeyDown ControlKey
+23/02/2025 17:52:43 anotacoes rtfTexto_KeyDown ControlKey
+23/02/2025 17:52:43 anotacoes rtfTexto_KeyDown ControlKey
+23/02/2025 17:52:43 anotacoes rtfTexto_KeyDown ControlKey
+23/02/2025 17:52:43 anotacoes rtfTexto_KeyDown ControlKey
+23/02/2025 17:52:43 anotacoes rtfTexto_KeyDown ControlKey
+23/02/2025 17:52:43 anotacoes rtfTexto_KeyDown ControlKey
+23/02/2025 17:52:43 anotacoes rtfTexto_KeyDown ControlKey
+23/02/2025 17:52:43 anotacoes rtfTexto_KeyDown ControlKey
+23/02/2025 17:52:43 anotacoes rtfTexto_KeyDown ControlKey
+23/02/2025 17:52:43 anotacoes rtfTexto_KeyDown ControlKey
+23/02/2025 17:52:43 anotacoes rtfTexto_KeyDown ControlKey
+23/02/2025 17:52:43 anotacoes rtfTexto_KeyDown ControlKey
+23/02/2025 17:52:43 anotacoes rtfTexto_KeyDown ControlKey
+23/02/2025 17:52:48 anotacoes rtfTexto_KeyDown ControlKey
+23/02/2025 17:52:48 anotacoes rtfTexto_KeyDown ControlKey
+23/02/2025 17:52:48 anotacoes rtfTexto_KeyDown ControlKey
+23/02/2025 17:52:48 anotacoes rtfTexto_KeyDown ControlKey
+23/02/2025 17:52:48 anotacoes rtfTexto_KeyDown ControlKey
+23/02/2025 17:52:48 anotacoes rtfTexto_KeyDown ControlKey
+23/02/2025 17:52:48 anotacoes rtfTexto_KeyDown ControlKey
+23/02/2025 17:52:48 anotacoes rtfTexto_KeyDown ControlKey
+23/02/2025 17:52:48 anotacoes rtfTexto_KeyDown ControlKey
+23/02/2025 17:52:48 anotacoes rtfTexto_KeyDown ControlKey
+23/02/2025 17:52:48 anotacoes rtfTexto_KeyDown ControlKey
+23/02/2025 17:52:48 anotacoes rtfTexto_KeyDown ControlKey
+23/02/2025 17:52:48 anotacoes rtfTexto_KeyDown ControlKey
+23/02/2025 17:52:49 anotacoes rtfTexto_KeyDown ControlKey
+23/02/2025 17:52:49 anotacoes rtfTexto_KeyDown ControlKey
+23/02/2025 17:52:49 anotacoes rtfTexto_KeyDown ControlKey
+23/02/2025 17:52:49 anotacoes rtfTexto_KeyDown ControlKey
+23/02/2025 17:52:49 anotacoes rtfTexto_KeyDown ControlKey
+23/02/2025 17:52:49 anotacoes rtfTexto_KeyDown ControlKey
+23/02/2025 17:52:49 anotacoes rtfTexto_KeyDown C
+23/02/2025 17:52:49 anotacoes rtfTexto_KeyDown Ctrl+F
+23/02/2025 17:52:54 anotacoes rtfTexto_KeyDown ControlKey
+23/02/2025 17:52:54 anotacoes rtfTexto_KeyDown Ctrl+F
+23/02/2025 17:53:04 anotacoes rtfTexto_KeyDown ControlKey
+23/02/2025 17:53:04 anotacoes rtfTexto_KeyDown Ctrl+F
+23/02/2025 17:53:14 anotacoes rtfTexto_KeyDown F3
+23/02/2025 17:53:14 anotacoes rtfTexto_KeyDown ControlKey
+23/02/2025 17:53:15 anotacoes rtfTexto_KeyDown Ctrl+F
+23/02/2025 17:53:20 anotacoes rtfTexto_TextChanged
+23/02/2025 17:58:58 Word rtfTexto_TextChanged
+23/02/2025 17:59:01 Word rtfTexto_KeyDown ControlKey
+23/02/2025 17:59:01 Word rtfTexto_KeyDown Ctrl+F
+23/02/2025 18:12:02 anotacoes rtfTexto_TextChanged
+23/02/2025 18:12:06 anotacoes rtfTexto_KeyDown ControlKey
+23/02/2025 18:12:06 anotacoes rtfTexto_KeyDown Ctrl+F
+23/02/2025 18:12:49 anotacoes rtfTexto_TextChanged
+23/02/2025 18:12:55 anotacoes rtfTexto_KeyDown ControlKey
+23/02/2025 18:12:55 anotacoes rtfTexto_KeyDown ControlKey
+23/02/2025 18:12:55 anotacoes rtfTexto_KeyDown ControlKey
+23/02/2025 18:12:55 anotacoes rtfTexto_KeyDown ControlKey
+23/02/2025 18:12:55 anotacoes rtfTexto_KeyDown ControlKey
+23/02/2025 18:12:55 anotacoes rtfTexto_KeyDown Ctrl+F
+23/02/2025 19:29:45 anotacoes rtfTexto_TextChanged
+23/02/2025 19:29:47 anotacoes rtfTexto_KeyDown ControlKey
+23/02/2025 19:29:48 anotacoes rtfTexto_KeyDown ControlKey
+23/02/2025 19:29:48 anotacoes rtfTexto_KeyDown ControlKey
+23/02/2025 19:29:48 anotacoes rtfTexto_KeyDown Ctrl+F
+23/02/2025 21:10:50 anotacoes rtfTexto_TextChanged
+23/02/2025 21:16:07 anotacoes rtfTexto_KeyDown X
+23/02/2025 21:16:07 anotacoes rtfTexto_TextChanged
+23/02/2025 21:16:07 anotacoes rtfTexto_KeyDown Left
+23/02/2025 21:16:08 anotacoes rtfTexto_KeyDown Left
+23/02/2025 21:16:08 anotacoes rtfTexto_KeyDown Delete
+24/02/2025 22:41:40 anotacoes rtfTexto_TextChanged
+24/02/2025 22:42:12 anotacoes rtfTexto_KeyDown ControlKey
+24/02/2025 22:42:13 anotacoes rtfTexto_KeyDown Home
+24/02/2025 22:42:14 anotacoes rtfTexto_KeyDown ShiftKey
+24/02/2025 22:42:14 anotacoes rtfTexto_KeyDown ShiftKey
+24/02/2025 22:42:14 anotacoes rtfTexto_KeyDown ShiftKey
+24/02/2025 22:42:14 anotacoes rtfTexto_KeyDown ShiftKey
+24/02/2025 22:42:14 anotacoes rtfTexto_KeyDown ShiftKey
+24/02/2025 22:42:14 anotacoes rtfTexto_KeyDown ShiftKey
+24/02/2025 22:42:14 anotacoes rtfTexto_KeyDown ShiftKey
+24/02/2025 22:42:14 anotacoes rtfTexto_KeyDown ShiftKey
+24/02/2025 22:42:14 anotacoes rtfTexto_KeyDown ShiftKey
+24/02/2025 22:42:14 anotacoes rtfTexto_KeyDown ShiftKey
+24/02/2025 22:42:14 anotacoes rtfTexto_KeyDown ShiftKey
+24/02/2025 22:42:14 anotacoes rtfTexto_KeyDown ShiftKey
+24/02/2025 22:42:14 anotacoes rtfTexto_KeyDown ShiftKey
+24/02/2025 22:42:14 anotacoes rtfTexto_KeyDown ShiftKey
+24/02/2025 22:42:15 anotacoes rtfTexto_KeyDown ShiftKey
+24/02/2025 22:42:15 anotacoes rtfTexto_KeyDown ShiftKey
+24/02/2025 22:42:15 anotacoes rtfTexto_KeyDown ShiftKey
+24/02/2025 22:42:15 anotacoes rtfTexto_KeyDown ShiftKey
+24/02/2025 22:42:15 anotacoes rtfTexto_KeyDown ShiftKey
+24/02/2025 22:42:15 anotacoes rtfTexto_KeyDown End
+24/02/2025 22:42:15 anotacoes rtfTexto_KeyDown Delete
+24/02/2025 22:42:15 anotacoes rtfTexto_TextChanged
+24/02/2025 22:42:17 anotacoes rtfTexto_KeyDown Down
+24/02/2025 22:42:17 anotacoes rtfTexto_KeyDown Down
+24/02/2025 22:42:18 anotacoes rtfTexto_KeyDown Up
+24/02/2025 22:42:18 anotacoes rtfTexto_KeyDown Up
+24/02/2025 22:42:18 anotacoes rtfTexto_KeyDown Delete
+24/02/2025 22:42:18 anotacoes rtfTexto_TextChanged
+24/02/2025 22:42:19 anotacoes rtfTexto_KeyDown Down
+24/02/2025 22:42:19 anotacoes rtfTexto_KeyDown End
+24/02/2025 22:42:22 anotacoes rtfTexto_KeyDown Home
+24/02/2025 22:42:27 anotacoes rtfTexto_KeyDown End
+24/02/2025 22:42:27 anotacoes rtfTexto_KeyDown Return
+24/02/2025 22:42:27 anotacoes rtfTexto_TextChanged
+24/02/2025 22:42:28 anotacoes rtfTexto_KeyDown Oem6
+24/02/2025 22:42:28 anotacoes rtfTexto_KeyDown Space
+24/02/2025 22:42:28 anotacoes rtfTexto_KeyDown Oem5
+24/02/2025 22:42:28 anotacoes rtfTexto_KeyDown Space
+24/02/2025 22:42:29 anotacoes rtfTexto_KeyDown Back
+24/02/2025 22:42:29 anotacoes rtfTexto_TextChanged
+24/02/2025 22:42:29 anotacoes rtfTexto_KeyDown Back
+24/02/2025 22:42:29 anotacoes rtfTexto_KeyDown Space
+24/02/2025 22:42:30 anotacoes rtfTexto_KeyDown Space
+24/02/2025 22:42:30 anotacoes rtfTexto_KeyDown Space
+24/02/2025 22:42:31 anotacoes rtfTexto_KeyDown Oem5
+24/02/2025 22:42:31 anotacoes rtfTexto_TextChanged
+24/02/2025 22:42:31 anotacoes rtfTexto_KeyDown Space
+24/02/2025 22:42:31 anotacoes rtfTexto_KeyDown ShiftKey
+24/02/2025 22:42:32 anotacoes rtfTexto_KeyDown C
+24/02/2025 22:42:32 anotacoes rtfTexto_KeyDown A
+24/02/2025 22:42:32 anotacoes rtfTexto_KeyDown S
+24/02/2025 22:42:32 anotacoes rtfTexto_KeyDown O
+24/02/2025 22:42:32 anotacoes rtfTexto_KeyDown Space
+24/02/2025 22:42:34 anotacoes rtfTexto_KeyDown N
+24/02/2025 22:42:34 anotacoes rtfTexto_TextChanged
+24/02/2025 22:42:35 anotacoes rtfTexto_KeyDown Oem7
+24/02/2025 22:42:35 anotacoes rtfTexto_KeyDown A
+24/02/2025 22:42:35 anotacoes rtfTexto_KeyDown O
+24/02/2025 22:42:35 anotacoes rtfTexto_KeyDown Space
+24/02/2025 22:42:36 anotacoes rtfTexto_KeyDown E
+24/02/2025 22:42:36 anotacoes rtfTexto_TextChanged
+24/02/2025 22:42:36 anotacoes rtfTexto_KeyDown N
+24/02/2025 22:42:36 anotacoes rtfTexto_KeyDown V
+24/02/2025 22:42:36 anotacoes rtfTexto_KeyDown I
+24/02/2025 22:42:36 anotacoes rtfTexto_KeyDown E
+24/02/2025 22:42:36 anotacoes rtfTexto_KeyDown Space
+24/02/2025 22:42:37 anotacoes rtfTexto_KeyDown O
+24/02/2025 22:42:37 anotacoes rtfTexto_TextChanged
+24/02/2025 22:42:37 anotacoes rtfTexto_KeyDown Space
+24/02/2025 22:42:39 anotacoes rtfTexto_KeyDown Back
+24/02/2025 22:42:39 anotacoes rtfTexto_TextChanged
+24/02/2025 22:42:39 anotacoes rtfTexto_KeyDown Back
+24/02/2025 22:42:44 anotacoes rtfTexto_KeyDown A
+24/02/2025 22:42:44 anotacoes rtfTexto_TextChanged
+24/02/2025 22:42:44 anotacoes rtfTexto_KeyDown Space
+24/02/2025 22:42:45 anotacoes rtfTexto_KeyDown C
+24/02/2025 22:42:45 anotacoes rtfTexto_KeyDown N
+24/02/2025 22:42:45 anotacoes rtfTexto_TextChanged
+24/02/2025 22:42:45 anotacoes rtfTexto_KeyDown D
+24/02/2025 22:42:46 anotacoes rtfTexto_KeyDown Back
+24/02/2025 22:42:46 anotacoes rtfTexto_KeyDown Back
+24/02/2025 22:42:47 anotacoes rtfTexto_KeyDown N
+24/02/2025 22:42:47 anotacoes rtfTexto_TextChanged
+24/02/2025 22:42:47 anotacoes rtfTexto_KeyDown H
+24/02/2025 22:42:47 anotacoes rtfTexto_KeyDown Space
+24/02/2025 22:42:51 anotacoes rtfTexto_KeyDown D
+24/02/2025 22:42:51 anotacoes rtfTexto_TextChanged
+24/02/2025 22:42:51 anotacoes rtfTexto_KeyDown E
+24/02/2025 22:42:51 anotacoes rtfTexto_KeyDown V
+24/02/2025 22:42:51 anotacoes rtfTexto_KeyDown E
+24/02/2025 22:42:51 anotacoes rtfTexto_KeyDown Space
+24/02/2025 22:42:52 anotacoes rtfTexto_KeyDown I
+24/02/2025 22:42:52 anotacoes rtfTexto_KeyDown N
+24/02/2025 22:42:52 anotacoes rtfTexto_TextChanged
+24/02/2025 22:42:52 anotacoes rtfTexto_KeyDown F
+24/02/2025 22:42:52 anotacoes rtfTexto_KeyDown O
+24/02/2025 22:42:52 anotacoes rtfTexto_KeyDown R
+24/02/2025 22:42:52 anotacoes rtfTexto_KeyDown M
+24/02/2025 22:42:52 anotacoes rtfTexto_KeyDown A
+24/02/2025 22:42:52 anotacoes rtfTexto_KeyDown R
+24/02/2025 22:42:52 anotacoes rtfTexto_KeyDown Space
+24/02/2025 22:42:52 anotacoes rtfTexto_TextChanged
+24/02/2025 22:42:54 anotacoes rtfTexto_KeyDown Back
+24/02/2025 22:42:54 anotacoes rtfTexto_TextChanged
+24/02/2025 22:42:54 anotacoes rtfTexto_KeyDown Back
+24/02/2025 22:42:54 anotacoes rtfTexto_KeyDown Back
+24/02/2025 22:42:54 anotacoes rtfTexto_KeyDown Back
+24/02/2025 22:42:54 anotacoes rtfTexto_KeyDown Back
+24/02/2025 22:42:54 anotacoes rtfTexto_TextChanged
+24/02/2025 22:42:54 anotacoes rtfTexto_KeyDown Back
+24/02/2025 22:42:54 anotacoes rtfTexto_KeyDown Back
+24/02/2025 22:42:55 anotacoes rtfTexto_KeyDown Back
+24/02/2025 22:42:55 anotacoes rtfTexto_KeyDown Back
+24/02/2025 22:42:55 anotacoes rtfTexto_KeyDown P
+24/02/2025 22:42:55 anotacoes rtfTexto_TextChanged
+24/02/2025 22:42:55 anotacoes rtfTexto_KeyDown R
+24/02/2025 22:42:55 anotacoes rtfTexto_KeyDown O
+24/02/2025 22:42:56 anotacoes rtfTexto_KeyDown P
+24/02/2025 22:42:56 anotacoes rtfTexto_KeyDown A
+24/02/2025 22:42:56 anotacoes rtfTexto_KeyDown G
+24/02/2025 22:42:56 anotacoes rtfTexto_TextChanged
+24/02/2025 22:42:56 anotacoes rtfTexto_KeyDown A
+24/02/2025 22:42:56 anotacoes rtfTexto_KeyDown R
+24/02/2025 22:42:56 anotacoes rtfTexto_KeyDown Space
+24/02/2025 22:42:56 anotacoes rtfTexto_KeyDown A
+24/02/2025 22:42:56 anotacoes rtfTexto_KeyDown O
+24/02/2025 22:42:57 anotacoes rtfTexto_KeyDown Space
+24/02/2025 22:42:57 anotacoes rtfTexto_TextChanged
+24/02/2025 22:42:57 anotacoes rtfTexto_KeyDown R
+24/02/2025 22:42:57 anotacoes rtfTexto_KeyDown Back
+24/02/2025 22:42:57 anotacoes rtfTexto_TextChanged
+24/02/2025 22:42:57 anotacoes rtfTexto_KeyDown S
+24/02/2025 22:42:57 anotacoes rtfTexto_KeyDown E
+24/02/2025 22:42:57 anotacoes rtfTexto_KeyDown R
+24/02/2025 22:42:58 anotacoes rtfTexto_KeyDown V
+24/02/2025 22:42:58 anotacoes rtfTexto_KeyDown I
+24/02/2025 22:42:58 anotacoes rtfTexto_TextChanged
+24/02/2025 22:42:58 anotacoes rtfTexto_KeyDown D
+24/02/2025 22:42:58 anotacoes rtfTexto_KeyDown O
+24/02/2025 22:42:58 anotacoes rtfTexto_KeyDown R
+24/02/2025 22:42:59 anotacoes rtfTexto_KeyDown Return
+24/02/2025 22:42:59 anotacoes rtfTexto_TextChanged
+24/02/2025 22:43:00 anotacoes rtfTexto_KeyDown Delete
+24/02/2025 22:43:00 anotacoes rtfTexto_TextChanged
+25/02/2025 21:30:13 anotacoes rtfTexto_TextChanged
+28/02/2025 20:15:01 anotacoes rtfTexto_TextChanged
+28/02/2025 20:15:04 anotacoes rtfTexto_KeyDown ControlKey
+28/02/2025 20:15:05 anotacoes rtfTexto_KeyDown Home
+28/02/2025 20:15:05 anotacoes rtfTexto_KeyDown Return
+28/02/2025 20:15:05 anotacoes rtfTexto_TextChanged
+28/02/2025 20:15:05 anotacoes rtfTexto_KeyDown Return
+28/02/2025 20:15:05 anotacoes rtfTexto_KeyDown Up
+28/02/2025 20:15:05 anotacoes rtfTexto_KeyDown Up
+28/02/2025 20:15:07 anotacoes rtfTexto_KeyDown Oem6
+28/02/2025 20:15:07 anotacoes rtfTexto_TextChanged
+28/02/2025 20:15:08 anotacoes rtfTexto_KeyDown Space
+28/02/2025 20:15:08 anotacoes rtfTexto_KeyDown Oem5
+28/02/2025 20:15:09 anotacoes rtfTexto_KeyDown Back
+28/02/2025 20:15:09 anotacoes rtfTexto_TextChanged
+28/02/2025 20:15:09 anotacoes rtfTexto_KeyDown Space
+28/02/2025 20:15:10 anotacoes rtfTexto_KeyDown Space
+28/02/2025 20:15:11 anotacoes rtfTexto_KeyDown Oem5
+28/02/2025 20:15:11 anotacoes rtfTexto_TextChanged
+28/02/2025 20:15:11 anotacoes rtfTexto_KeyDown Space
+28/02/2025 20:15:12 anotacoes rtfTexto_KeyDown ShiftKey
+28/02/2025 20:15:12 anotacoes rtfTexto_KeyDown C
+28/02/2025 20:15:13 anotacoes rtfTexto_KeyDown Down
+28/02/2025 20:15:13 anotacoes rtfTexto_KeyDown Down
+28/02/2025 20:15:13 anotacoes rtfTexto_KeyDown Down
+28/02/2025 20:15:14 anotacoes rtfTexto_KeyDown Down
+28/02/2025 20:15:14 anotacoes rtfTexto_KeyDown Down
+28/02/2025 20:15:14 anotacoes rtfTexto_KeyDown Left
+28/02/2025 20:15:15 anotacoes rtfTexto_KeyDown Left
+28/02/2025 20:15:15 anotacoes rtfTexto_KeyDown ShiftKey
+28/02/2025 20:15:15 anotacoes rtfTexto_KeyDown Home
+28/02/2025 20:15:15 anotacoes rtfTexto_KeyDown ControlKey
+28/02/2025 20:15:16 anotacoes rtfTexto_KeyDown C
+28/02/2025 20:15:16 anotacoes rtfTexto_KeyDown Home
+28/02/2025 20:15:16 anotacoes rtfTexto_KeyDown ShiftKey
+28/02/2025 20:15:16 anotacoes rtfTexto_KeyDown End
+28/02/2025 20:15:16 anotacoes rtfTexto_KeyDown Insert
+28/02/2025 20:15:16 anotacoes rtfTexto_TextChanged
+28/02/2025 20:15:17 anotacoes rtfTexto_KeyDown Return
+28/02/2025 20:15:17 anotacoes rtfTexto_KeyDown Up
+28/02/2025 20:15:17 anotacoes rtfTexto_KeyDown End
+28/02/2025 20:15:18 anotacoes rtfTexto_KeyDown Space
+28/02/2025 20:15:18 anotacoes rtfTexto_TextChanged
+28/02/2025 20:15:18 anotacoes rtfTexto_KeyDown ShiftKey
+28/02/2025 20:15:18 anotacoes rtfTexto_KeyDown C
+28/02/2025 20:15:18 anotacoes rtfTexto_KeyDown O
+28/02/2025 20:15:18 anotacoes rtfTexto_KeyDown N
+28/02/2025 20:15:18 anotacoes rtfTexto_KeyDown T
+28/02/2025 20:15:19 anotacoes rtfTexto_KeyDown I
+28/02/2025 20:15:19 anotacoes rtfTexto_KeyDown N
+28/02/2025 20:15:19 anotacoes rtfTexto_KeyDown U
+28/02/2025 20:15:19 anotacoes rtfTexto_KeyDown A
+28/02/2025 20:15:19 anotacoes rtfTexto_KeyDown R
+28/02/2025 20:15:19 anotacoes rtfTexto_KeyDown Space
+28/02/2025 20:15:19 anotacoes rtfTexto_KeyDown A
+28/02/2025 20:15:19 anotacoes rtfTexto_KeyDown S
+28/02/2025 20:15:19 anotacoes rtfTexto_KeyDown Space
+28/02/2025 20:15:20 anotacoes rtfTexto_KeyDown A
+28/02/2025 20:15:20 anotacoes rtfTexto_TextChanged
+28/02/2025 20:15:20 anotacoes rtfTexto_KeyDown L
+28/02/2025 20:15:20 anotacoes rtfTexto_KeyDown T
+28/02/2025 20:15:20 anotacoes rtfTexto_KeyDown E
+28/02/2025 20:15:20 anotacoes rtfTexto_KeyDown R
+28/02/2025 20:15:20 anotacoes rtfTexto_KeyDown A
+28/02/2025 20:15:20 anotacoes rtfTexto_KeyDown Oem1
+28/02/2025 20:15:21 anotacoes rtfTexto_KeyDown Oem1
+28/02/2025 20:15:21 anotacoes rtfTexto_KeyDown Oem7
+28/02/2025 20:15:21 anotacoes rtfTexto_KeyDown O
+28/02/2025 20:15:21 anotacoes rtfTexto_KeyDown E
+28/02/2025 20:15:21 anotacoes rtfTexto_TextChanged
+28/02/2025 20:15:21 anotacoes rtfTexto_KeyDown S
+28/02/2025 20:15:21 anotacoes rtfTexto_KeyDown Space
+28/02/2025 20:15:21 anotacoes rtfTexto_KeyDown Back
+28/02/2025 20:15:22 anotacoes rtfTexto_KeyDown Back
+28/02/2025 20:15:22 anotacoes rtfTexto_KeyDown Back
+28/02/2025 20:15:22 anotacoes rtfTexto_KeyDown Back
+28/02/2025 20:15:22 anotacoes rtfTexto_KeyDown Back
+28/02/2025 20:15:23 anotacoes rtfTexto_KeyDown Oem7
+28/02/2025 20:15:23 anotacoes rtfTexto_KeyDown O
+28/02/2025 20:15:23 anotacoes rtfTexto_TextChanged
+28/02/2025 20:15:23 anotacoes rtfTexto_KeyDown E
+28/02/2025 20:15:23 anotacoes rtfTexto_KeyDown S
+28/02/2025 20:15:23 anotacoes rtfTexto_KeyDown Space
+28/02/2025 20:15:23 anotacoes rtfTexto_KeyDown N
+28/02/2025 20:15:23 anotacoes rtfTexto_KeyDown O
+28/02/2025 20:15:23 anotacoes rtfTexto_KeyDown Space
+28/02/2025 20:15:24 anotacoes rtfTexto_KeyDown ControlKey
+28/02/2025 20:15:24 anotacoes rtfTexto_KeyDown A
+28/02/2025 20:15:24 anotacoes rtfTexto_KeyDown OemBackslash
+28/02/2025 20:15:24 anotacoes rtfTexto_KeyDown N
+28/02/2025 20:15:24 anotacoes rtfTexto_TextChanged
+28/02/2025 20:15:25 anotacoes rtfTexto_KeyDown ControlKey
+28/02/2025 20:15:25 anotacoes rtfTexto_KeyDown Z
+28/02/2025 20:15:26 anotacoes rtfTexto_KeyDown ControlKey
+28/02/2025 20:15:26 anotacoes rtfTexto_KeyDown Home
+28/02/2025 20:15:26 anotacoes rtfTexto_KeyDown End
+28/02/2025 20:15:27 anotacoes rtfTexto_KeyDown ControlKey
+28/02/2025 20:15:27 anotacoes rtfTexto_KeyDown Home
+28/02/2025 20:15:28 anotacoes rtfTexto_KeyDown End
+28/02/2025 20:15:28 anotacoes rtfTexto_KeyDown ShiftKey
+28/02/2025 20:15:28 anotacoes rtfTexto_KeyDown A
+28/02/2025 20:15:28 anotacoes rtfTexto_TextChanged
+28/02/2025 20:15:28 anotacoes rtfTexto_KeyDown N
+28/02/2025 20:15:28 anotacoes rtfTexto_KeyDown O
+28/02/2025 20:15:29 anotacoes rtfTexto_KeyDown T
+28/02/2025 20:15:29 anotacoes rtfTexto_KeyDown E
+28/02/2025 20:15:29 anotacoes rtfTexto_KeyDown I
+28/02/2025 20:15:29 anotacoes rtfTexto_KeyDown T
+28/02/2025 20:15:29 anotacoes rtfTexto_KeyDown O
+28/02/2025 20:15:29 anotacoes rtfTexto_TextChanged
+28/02/2025 20:15:29 anotacoes rtfTexto_KeyDown R
+28/02/2025 20:15:30 anotacoes rtfTexto_KeyDown ShiftKey
+28/02/2025 20:15:33 anotacoes rtfTexto_TextChanged
+28/02/2025 20:15:34 anotacoes rtfTexto_KeyDown ShiftKey
+28/02/2025 20:15:35 anotacoes rtfTexto_KeyDown Home
+28/02/2025 20:15:35 anotacoes rtfTexto_KeyDown ControlKey
+28/02/2025 20:15:35 anotacoes rtfTexto_KeyDown C
+28/02/2025 20:15:35 anotacoes rtfTexto_KeyDown End
+28/02/2025 20:15:36 anotacoes rtfTexto_KeyDown Return
+28/02/2025 20:15:36 anotacoes rtfTexto_TextChanged
+28/02/2025 20:15:36 anotacoes rtfTexto_KeyDown ShiftKey
+28/02/2025 20:15:36 anotacoes rtfTexto_KeyDown Insert
+28/02/2025 20:15:37 anotacoes rtfTexto_KeyDown Back
+28/02/2025 20:15:37 anotacoes rtfTexto_TextChanged
+28/02/2025 20:15:37 anotacoes rtfTexto_KeyDown Back
+28/02/2025 20:15:37 anotacoes rtfTexto_KeyDown Back
+28/02/2025 20:15:37 anotacoes rtfTexto_KeyDown Back
+28/02/2025 20:15:38 anotacoes rtfTexto_KeyDown ShiftKey
+28/02/2025 20:15:38 anotacoes rtfTexto_KeyDown F
+28/02/2025 20:15:38 anotacoes rtfTexto_TextChanged
+28/02/2025 20:15:38 anotacoes rtfTexto_KeyDown A
+28/02/2025 20:15:38 anotacoes rtfTexto_KeyDown Z
+28/02/2025 20:15:39 anotacoes rtfTexto_KeyDown E
+28/02/2025 20:15:39 anotacoes rtfTexto_KeyDown R
+28/02/2025 20:15:39 anotacoes rtfTexto_TextChanged
+28/02/2025 20:15:39 anotacoes rtfTexto_KeyDown Space
+28/02/2025 20:15:40 anotacoes rtfTexto_KeyDown P
+28/02/2025 20:15:40 anotacoes rtfTexto_TextChanged
+28/02/2025 20:15:40 anotacoes rtfTexto_KeyDown A
+28/02/2025 20:15:41 anotacoes rtfTexto_KeyDown G
+28/02/2025 20:15:41 anotacoes rtfTexto_KeyDown I
+28/02/2025 20:15:41 anotacoes rtfTexto_TextChanged
+28/02/2025 20:15:41 anotacoes rtfTexto_KeyDown N
+28/02/2025 20:15:41 anotacoes rtfTexto_KeyDown A
+28/02/2025 20:15:41 anotacoes rtfTexto_KeyDown Space
+28/02/2025 20:15:41 anotacoes rtfTexto_KeyDown S
+28/02/2025 20:15:41 anotacoes rtfTexto_KeyDown O
+28/02/2025 20:15:41 anotacoes rtfTexto_TextChanged
+28/02/2025 20:15:41 anotacoes rtfTexto_KeyDown B
+28/02/2025 20:15:41 anotacoes rtfTexto_KeyDown R
+28/02/2025 20:15:41 anotacoes rtfTexto_KeyDown E
+28/02/2025 20:15:42 anotacoes rtfTexto_KeyDown Space
+28/02/2025 20:15:42 anotacoes rtfTexto_KeyDown C
+28/02/2025 20:15:42 anotacoes rtfTexto_TextChanged
+28/02/2025 20:15:42 anotacoes rtfTexto_KeyDown O
+28/02/2025 20:15:42 anotacoes rtfTexto_KeyDown M
+28/02/2025 20:15:42 anotacoes rtfTexto_KeyDown O
+28/02/2025 20:15:42 anotacoes rtfTexto_KeyDown Space
+28/02/2025 20:15:42 anotacoes rtfTexto_KeyDown C
+28/02/2025 20:15:42 anotacoes rtfTexto_KeyDown R
+28/02/2025 20:15:42 anotacoes rtfTexto_TextChanged
+28/02/2025 20:15:43 anotacoes rtfTexto_KeyDown A
+28/02/2025 20:15:43 anotacoes rtfTexto_KeyDown I
+28/02/2025 20:15:43 anotacoes rtfTexto_KeyDown R
+28/02/2025 20:15:43 anotacoes rtfTexto_KeyDown Space
+28/02/2025 20:15:43 anotacoes rtfTexto_KeyDown A
+28/02/2025 20:15:43 anotacoes rtfTexto_TextChanged
+28/02/2025 20:15:43 anotacoes rtfTexto_KeyDown Back
+28/02/2025 20:15:44 anotacoes rtfTexto_KeyDown Back
+28/02/2025 20:15:44 anotacoes rtfTexto_TextChanged
+28/02/2025 20:15:44 anotacoes rtfTexto_KeyDown Back
+28/02/2025 20:15:44 anotacoes rtfTexto_KeyDown Back
+28/02/2025 20:15:44 anotacoes rtfTexto_KeyDown Back
+28/02/2025 20:15:44 anotacoes rtfTexto_KeyDown I
+28/02/2025 20:15:44 anotacoes rtfTexto_TextChanged
+28/02/2025 20:15:44 anotacoes rtfTexto_KeyDown A
+28/02/2025 20:15:45 anotacoes rtfTexto_KeyDown R
+28/02/2025 20:15:45 anotacoes rtfTexto_KeyDown Space
+28/02/2025 20:15:45 anotacoes rtfTexto_KeyDown A
+28/02/2025 20:15:45 anotacoes rtfTexto_KeyDown S
+28/02/2025 20:15:45 anotacoes rtfTexto_KeyDown Space
+28/02/2025 20:15:45 anotacoes rtfTexto_KeyDown I
+28/02/2025 20:15:45 anotacoes rtfTexto_TextChanged
+28/02/2025 20:15:45 anotacoes rtfTexto_KeyDown M
+28/02/2025 20:15:45 anotacoes rtfTexto_KeyDown A
+28/02/2025 20:15:45 anotacoes rtfTexto_KeyDown G
+28/02/2025 20:15:45 anotacoes rtfTexto_KeyDown E
+28/02/2025 20:15:46 anotacoes rtfTexto_KeyDown N
+28/02/2025 20:15:46 anotacoes rtfTexto_KeyDown S
+28/02/2025 20:15:46 anotacoes rtfTexto_TextChanged
+28/02/2025 20:15:46 anotacoes rtfTexto_KeyDown Space
+28/02/2025 20:15:46 anotacoes rtfTexto_KeyDown D
+28/02/2025 20:15:46 anotacoes rtfTexto_KeyDown E
+28/02/2025 20:15:46 anotacoes rtfTexto_KeyDown Space
+28/02/2025 20:15:46 anotacoes rtfTexto_KeyDown A
+28/02/2025 20:15:46 anotacoes rtfTexto_KeyDown N
+28/02/2025 20:15:46 anotacoes rtfTexto_TextChanged
+28/02/2025 20:15:46 anotacoes rtfTexto_KeyDown U
+28/02/2025 20:15:46 anotacoes rtfTexto_KeyDown N
+28/02/2025 20:15:46 anotacoes rtfTexto_KeyDown C
+28/02/2025 20:15:47 anotacoes rtfTexto_KeyDown I
+28/02/2025 20:15:47 anotacoes rtfTexto_KeyDown O
+28/02/2025 20:15:47 anotacoes rtfTexto_KeyDown S
+28/02/2025 20:15:47 anotacoes rtfTexto_TextChanged
+28/02/2025 20:15:52 anotacoes rtfTexto_KeyDown Return
+28/02/2025 20:15:52 anotacoes rtfTexto_TextChanged
+28/02/2025 20:15:54 anotacoes rtfTexto_KeyDown ShiftKey
+28/02/2025 20:15:54 anotacoes rtfTexto_KeyDown Insert
+28/02/2025 20:15:54 anotacoes rtfTexto_TextChanged
+28/02/2025 20:15:54 anotacoes rtfTexto_KeyDown Back
+28/02/2025 20:15:54 anotacoes rtfTexto_TextChanged
+28/02/2025 20:15:55 anotacoes rtfTexto_KeyDown Back
+28/02/2025 20:15:55 anotacoes rtfTexto_KeyDown Back
+28/02/2025 20:15:55 anotacoes rtfTexto_KeyDown Back
+28/02/2025 20:15:55 anotacoes rtfTexto_KeyDown Back
+28/02/2025 20:15:55 anotacoes rtfTexto_TextChanged
+28/02/2025 20:15:55 anotacoes rtfTexto_KeyDown Space
+28/02/2025 20:15:56 anotacoes rtfTexto_KeyDown ShiftKey
+28/02/2025 20:15:56 anotacoes rtfTexto_KeyDown V
+28/02/2025 20:15:56 anotacoes rtfTexto_TextChanged
+28/02/2025 20:15:56 anotacoes rtfTexto_KeyDown E
+28/02/2025 20:15:56 anotacoes rtfTexto_KeyDown R
+28/02/2025 20:15:56 anotacoes rtfTexto_KeyDown Space
+28/02/2025 20:15:56 anotacoes rtfTexto_KeyDown C
+28/02/2025 20:15:56 anotacoes rtfTexto_TextChanged
+28/02/2025 20:15:57 anotacoes rtfTexto_KeyDown O
+28/02/2025 20:15:57 anotacoes rtfTexto_TextChanged
+28/02/2025 20:15:57 anotacoes rtfTexto_KeyDown M
+28/02/2025 20:15:57 anotacoes rtfTexto_KeyDown P
+28/02/2025 20:15:57 anotacoes rtfTexto_KeyDown O
+28/02/2025 20:15:57 anotacoes rtfTexto_KeyDown N
+28/02/2025 20:15:57 anotacoes rtfTexto_TextChanged
+28/02/2025 20:15:58 anotacoes rtfTexto_KeyDown E
+28/02/2025 20:15:58 anotacoes rtfTexto_KeyDown N
+28/02/2025 20:15:58 anotacoes rtfTexto_KeyDown T
+28/02/2025 20:15:58 anotacoes rtfTexto_KeyDown E
+28/02/2025 20:15:58 anotacoes rtfTexto_KeyDown Space
+28/02/2025 20:15:58 anotacoes rtfTexto_KeyDown D
+28/02/2025 20:15:58 anotacoes rtfTexto_KeyDown E
+28/02/2025 20:15:58 anotacoes rtfTexto_TextChanged
+28/02/2025 20:15:58 anotacoes rtfTexto_KeyDown Space
+28/02/2025 20:15:58 anotacoes rtfTexto_KeyDown G
+28/02/2025 20:15:58 anotacoes rtfTexto_KeyDown R
+28/02/2025 20:15:59 anotacoes rtfTexto_KeyDown I
+28/02/2025 20:15:59 anotacoes rtfTexto_TextChanged
+28/02/2025 20:15:59 anotacoes rtfTexto_KeyDown D
+28/02/2025 20:15:59 anotacoes rtfTexto_KeyDown Space
+28/02/2025 20:15:59 anotacoes rtfTexto_KeyDown P
+28/02/2025 20:15:59 anotacoes rtfTexto_KeyDown R
+28/02/2025 20:15:59 anotacoes rtfTexto_TextChanged
+28/02/2025 20:15:59 anotacoes rtfTexto_KeyDown O
+28/02/2025 20:15:59 anotacoes rtfTexto_KeyDown Space
+28/02/2025 20:16:00 anotacoes rtfTexto_KeyDown ShiftKey
+28/02/2025 20:16:01 anotacoes rtfTexto_KeyDown D
+28/02/2025 20:16:01 anotacoes rtfTexto_TextChanged
+28/02/2025 20:16:01 anotacoes rtfTexto_KeyDown E
+28/02/2025 20:16:01 anotacoes rtfTexto_KeyDown N
+28/02/2025 20:16:01 anotacoes rtfTexto_KeyDown I
+28/02/2025 20:16:01 anotacoes rtfTexto_KeyDown S
+28/02/2025 20:16:01 anotacoes rtfTexto_TextChanged
+28/02/2025 20:28:01 anotacoes rtfTexto_TextChanged
+28/02/2025 20:28:03 anotacoes rtfTexto_KeyDown ControlKey
+28/02/2025 20:28:03 anotacoes rtfTexto_KeyDown Home
+28/02/2025 20:28:04 anotacoes rtfTexto_KeyDown ControlKey
+28/02/2025 20:28:04 anotacoes rtfTexto_KeyDown Right
+28/02/2025 20:28:04 anotacoes rtfTexto_KeyDown Right
+28/02/2025 20:28:06 anotacoes rtfTexto_KeyDown ControlKey
+28/02/2025 20:28:06 anotacoes rtfTexto_KeyDown Home
+28/02/2025 20:28:06 anotacoes rtfTexto_KeyDown Return
+28/02/2025 20:28:06 anotacoes rtfTexto_TextChanged
+28/02/2025 20:28:06 anotacoes rtfTexto_KeyDown Up
+28/02/2025 20:28:11 anotacoes rtfTexto_KeyDown Down
+28/02/2025 20:28:11 anotacoes rtfTexto_KeyDown ControlKey
+28/02/2025 20:28:11 anotacoes rtfTexto_KeyDown Right
+28/02/2025 20:28:11 anotacoes rtfTexto_KeyDown Right
+28/02/2025 20:28:12 anotacoes rtfTexto_KeyDown Right
+28/02/2025 20:28:12 anotacoes rtfTexto_KeyDown ShiftKey
+28/02/2025 20:28:12 anotacoes rtfTexto_KeyDown Home
+28/02/2025 20:28:12 anotacoes rtfTexto_KeyDown ControlKey
+28/02/2025 20:28:13 anotacoes rtfTexto_KeyDown C
+28/02/2025 20:28:13 anotacoes rtfTexto_KeyDown Home
+28/02/2025 20:28:13 anotacoes rtfTexto_KeyDown ShiftKey
+28/02/2025 20:28:13 anotacoes rtfTexto_KeyDown Insert
+28/02/2025 20:28:13 anotacoes rtfTexto_TextChanged
+28/02/2025 20:28:14 anotacoes rtfTexto_KeyDown ControlKey
+28/02/2025 20:28:14 anotacoes rtfTexto_KeyDown Left
+28/02/2025 20:28:14 anotacoes rtfTexto_KeyDown ShiftKey
+28/02/2025 20:28:14 anotacoes rtfTexto_KeyDown End
+28/02/2025 20:28:15 anotacoes rtfTexto_KeyDown G
+28/02/2025 20:28:15 anotacoes rtfTexto_KeyDown R
+28/02/2025 20:28:15 anotacoes rtfTexto_TextChanged
+28/02/2025 20:28:15 anotacoes rtfTexto_KeyDown U
+28/02/2025 20:28:16 anotacoes rtfTexto_KeyDown Back
+28/02/2025 20:28:16 anotacoes rtfTexto_KeyDown U
+28/02/2025 20:28:17 anotacoes rtfTexto_KeyDown P
+28/02/2025 20:28:17 anotacoes rtfTexto_KeyDown O
+28/02/2025 20:28:17 anotacoes rtfTexto_KeyDown Space
+28/02/2025 20:28:17 anotacoes rtfTexto_TextChanged
+28/02/2025 20:28:17 anotacoes rtfTexto_KeyDown D
+28/02/2025 20:28:17 anotacoes rtfTexto_KeyDown E
+28/02/2025 20:28:17 anotacoes rtfTexto_KeyDown Space
+28/02/2025 20:28:18 anotacoes rtfTexto_KeyDown C
+28/02/2025 20:28:18 anotacoes rtfTexto_KeyDown O
+28/02/2025 20:28:18 anotacoes rtfTexto_KeyDown M
+28/02/2025 20:28:18 anotacoes rtfTexto_KeyDown P
+28/02/2025 20:28:18 anotacoes rtfTexto_KeyDown U
+28/02/2025 20:28:18 anotacoes rtfTexto_KeyDown T
+28/02/2025 20:28:18 anotacoes rtfTexto_KeyDown A
+28/02/2025 20:28:19 anotacoes rtfTexto_KeyDown Oem1
+28/02/2025 20:28:19 anotacoes rtfTexto_TextChanged
+28/02/2025 20:28:19 anotacoes rtfTexto_KeyDown Oem7
+28/02/2025 20:28:19 anotacoes rtfTexto_KeyDown A
+28/02/2025 20:28:19 anotacoes rtfTexto_KeyDown O
+28/02/2025 20:28:19 anotacoes rtfTexto_KeyDown Space
+28/02/2025 20:28:19 anotacoes rtfTexto_KeyDown Q
+28/02/2025 20:28:19 anotacoes rtfTexto_KeyDown U
+28/02/2025 20:28:19 anotacoes rtfTexto_KeyDown N
+28/02/2025 20:28:20 anotacoes rtfTexto_KeyDown A
+28/02/2025 20:28:20 anotacoes rtfTexto_KeyDown T
+28/02/2025 20:28:20 anotacoes rtfTexto_KeyDown I
+28/02/2025 20:28:20 anotacoes rtfTexto_KeyDown C
+28/02/2025 20:28:20 anotacoes rtfTexto_KeyDown Back
+28/02/2025 20:28:20 anotacoes rtfTexto_KeyDown Back
+28/02/2025 20:28:20 anotacoes rtfTexto_TextChanged
+28/02/2025 20:28:20 anotacoes rtfTexto_KeyDown Back
+28/02/2025 20:28:21 anotacoes rtfTexto_KeyDown Back
+28/02/2025 20:28:21 anotacoes rtfTexto_KeyDown Back
+28/02/2025 20:28:21 anotacoes rtfTexto_KeyDown A
+28/02/2025 20:28:21 anotacoes rtfTexto_KeyDown N
+28/02/2025 20:28:21 anotacoes rtfTexto_KeyDown T
+28/02/2025 20:28:21 anotacoes rtfTexto_KeyDown I
+28/02/2025 20:28:21 anotacoes rtfTexto_KeyDown C
+28/02/2025 20:28:21 anotacoes rtfTexto_KeyDown A
+28/02/2025 20:48:03 anotacoes rtfTexto_TextChanged
+28/02/2025 20:51:14 anotacoes rtfTexto_TextChanged
+28/02/2025 20:55:49 anotacoes rtfTexto_KeyDown Menu
+28/02/2025 20:56:00 anotacoes rtfTexto_KeyDown Menu
+28/02/2025 21:31:17 anotacoes rtfTexto_TextChanged
+28/02/2025 22:52:09 anotacoes rtfTexto_TextChanged
+28/02/2025 22:52:14 anotacoes rtfTexto_KeyDown Return
+28/02/2025 22:52:14 anotacoes rtfTexto_TextChanged
+28/02/2025 22:52:15 anotacoes rtfTexto_KeyDown ControlKey
+28/02/2025 22:52:15 anotacoes rtfTexto_KeyDown Z
+28/02/2025 22:52:16 anotacoes rtfTexto_KeyDown End
+28/02/2025 22:52:16 anotacoes rtfTexto_KeyDown Return
+28/02/2025 22:52:17 anotacoes rtfTexto_KeyDown Back
+28/02/2025 22:52:17 anotacoes rtfTexto_TextChanged
+28/02/2025 22:52:18 anotacoes rtfTexto_KeyDown Home
+28/02/2025 22:52:18 anotacoes rtfTexto_KeyDown ControlKey
+28/02/2025 22:52:18 anotacoes rtfTexto_KeyDown Right
+28/02/2025 22:52:18 anotacoes rtfTexto_KeyDown Right
+28/02/2025 22:52:19 anotacoes rtfTexto_KeyDown ShiftKey
+28/02/2025 22:52:19 anotacoes rtfTexto_KeyDown End
+28/02/2025 22:52:19 anotacoes rtfTexto_KeyDown C
+28/02/2025 22:52:19 anotacoes rtfTexto_TextChanged
+28/02/2025 22:52:19 anotacoes rtfTexto_KeyDown O
+28/02/2025 22:52:19 anotacoes rtfTexto_KeyDown N
+28/02/2025 22:52:20 anotacoes rtfTexto_KeyDown T
+28/02/2025 22:52:20 anotacoes rtfTexto_KeyDown I
+28/02/2025 22:52:20 anotacoes rtfTexto_KeyDown N
+28/02/2025 22:52:20 anotacoes rtfTexto_KeyDown U
+28/02/2025 22:52:20 anotacoes rtfTexto_KeyDown A
+28/02/2025 22:52:20 anotacoes rtfTexto_KeyDown R
+28/02/2025 22:52:20 anotacoes rtfTexto_KeyDown Space
+28/02/2025 22:52:20 anotacoes rtfTexto_KeyDown O
+28/02/2025 22:52:20 anotacoes rtfTexto_KeyDown Space
+28/02/2025 22:52:21 anotacoes rtfTexto_KeyDown A
+28/02/2025 22:52:21 anotacoes rtfTexto_KeyDown J
+28/02/2025 22:52:21 anotacoes rtfTexto_KeyDown U
+28/02/2025 22:52:21 anotacoes rtfTexto_KeyDown S
+28/02/2025 22:52:21 anotacoes rtfTexto_TextChanged
+28/02/2025 22:52:21 anotacoes rtfTexto_KeyDown T
+28/02/2025 22:52:21 anotacoes rtfTexto_KeyDown E
+28/02/2025 22:52:21 anotacoes rtfTexto_KeyDown Space
+28/02/2025 22:52:21 anotacoes rtfTexto_KeyDown N
+28/02/2025 22:52:21 anotacoes rtfTexto_KeyDown O
+28/02/2025 22:52:22 anotacoes rtfTexto_KeyDown Space
+28/02/2025 22:52:22 anotacoes rtfTexto_KeyDown P
+28/02/2025 22:52:22 anotacoes rtfTexto_KeyDown R
+28/02/2025 22:52:22 anotacoes rtfTexto_KeyDown O
+28/02/2025 22:52:22 anotacoes rtfTexto_KeyDown M
+28/02/2025 22:52:23 anotacoes rtfTexto_KeyDown P
+28/02/2025 22:52:23 anotacoes rtfTexto_TextChanged
+28/02/2025 22:52:23 anotacoes rtfTexto_KeyDown T
+28/02/2025 22:52:23 anotacoes rtfTexto_KeyDown Space
+28/02/2025 22:52:24 anotacoes rtfTexto_KeyDown I
+28/02/2025 22:52:24 anotacoes rtfTexto_KeyDown M
+28/02/2025 22:52:24 anotacoes rtfTexto_KeyDown G
+28/02/2025 22:52:24 anotacoes rtfTexto_TextChanged
+28/02/2025 22:52:25 anotacoes rtfTexto_KeyDown S
+28/02/2025 22:52:25 anotacoes rtfTexto_KeyDown E
+28/02/2025 22:52:25 anotacoes rtfTexto_KeyDown R
+28/02/2025 22:52:25 anotacoes rtfTexto_KeyDown V
+28/02/2025 22:52:25 anotacoes rtfTexto_KeyDown Space
+28/02/2025 22:52:25 anotacoes rtfTexto_KeyDown D
+28/02/2025 22:52:26 anotacoes rtfTexto_KeyDown O
+28/02/2025 22:52:26 anotacoes rtfTexto_KeyDown Space
+28/02/2025 22:52:26 anotacoes rtfTexto_KeyDown P
+28/02/2025 22:52:26 anotacoes rtfTexto_TextChanged
+28/02/2025 22:52:26 anotacoes rtfTexto_KeyDown O
+28/02/2025 22:52:26 anotacoes rtfTexto_KeyDown E
+28/02/2025 22:52:27 anotacoes rtfTexto_KeyDown Space
+28/02/2025 22:52:28 anotacoes rtfTexto_KeyDown Back
+28/02/2025 22:52:28 anotacoes rtfTexto_TextChanged
+28/02/2025 22:52:28 anotacoes rtfTexto_KeyDown Return
+28/02/2025 22:52:29 anotacoes rtfTexto_KeyDown Space
+28/02/2025 22:52:29 anotacoes rtfTexto_KeyDown Space
+28/02/2025 22:52:29 anotacoes rtfTexto_KeyDown Space
+28/02/2025 22:52:29 anotacoes rtfTexto_KeyDown Space
+28/02/2025 22:52:29 anotacoes rtfTexto_TextChanged
+28/02/2025 22:52:29 anotacoes rtfTexto_KeyDown Space
+28/02/2025 22:52:30 anotacoes rtfTexto_KeyDown Space
+28/02/2025 22:52:30 anotacoes rtfTexto_KeyDown U
+28/02/2025 22:52:30 anotacoes rtfTexto_KeyDown S
+28/02/2025 22:52:31 anotacoes rtfTexto_KeyDown R
+28/02/2025 22:52:31 anotacoes rtfTexto_TextChanged
+28/02/2025 22:52:31 anotacoes rtfTexto_KeyDown Space
+28/02/2025 22:52:31 anotacoes rtfTexto_KeyDown Back
+28/02/2025 22:52:31 anotacoes rtfTexto_KeyDown Back
+28/02/2025 22:52:31 anotacoes rtfTexto_KeyDown A
+28/02/2025 22:52:32 anotacoes rtfTexto_KeyDown R
+28/02/2025 22:52:32 anotacoes rtfTexto_KeyDown Space
+28/02/2025 22:52:32 anotacoes rtfTexto_TextChanged
+28/02/2025 22:52:32 anotacoes rtfTexto_KeyDown E
+28/02/2025 22:52:32 anotacoes rtfTexto_KeyDown N
+28/02/2025 22:52:32 anotacoes rtfTexto_KeyDown G
+28/02/2025 22:52:32 anotacoes rtfTexto_KeyDown I
+28/02/2025 22:52:32 anotacoes rtfTexto_KeyDown N
+28/02/2025 22:52:32 anotacoes rtfTexto_KeyDown E
+28/02/2025 22:52:32 anotacoes rtfTexto_KeyDown Space
+28/02/2025 22:52:33 anotacoes rtfTexto_KeyDown M
+28/02/2025 22:52:33 anotacoes rtfTexto_TextChanged
+28/02/2025 22:52:33 anotacoes rtfTexto_KeyDown A
+28/02/2025 22:52:33 anotacoes rtfTexto_KeyDown I
+28/02/2025 22:52:33 anotacoes rtfTexto_KeyDown S
+28/02/2025 22:52:33 anotacoes rtfTexto_KeyDown Space
+28/02/2025 22:52:33 anotacoes rtfTexto_KeyDown B
+28/02/2025 22:52:33 anotacoes rtfTexto_KeyDown A
+28/02/2025 22:52:33 anotacoes rtfTexto_KeyDown R
+28/02/2025 22:52:34 anotacoes rtfTexto_KeyDown A
+28/02/2025 22:52:34 anotacoes rtfTexto_TextChanged
+28/02/2025 22:52:34 anotacoes rtfTexto_KeyDown T
+28/02/2025 22:52:34 anotacoes rtfTexto_KeyDown O
+28/02/2025 22:52:35 anotacoes rtfTexto_KeyDown ControlKey
+28/02/2025 22:52:35 anotacoes rtfTexto_KeyDown Left
+28/02/2025 22:52:35 anotacoes rtfTexto_KeyDown Left
+28/02/2025 22:52:35 anotacoes rtfTexto_KeyDown Left
+28/02/2025 22:52:35 anotacoes rtfTexto_KeyDown Left
+28/02/2025 22:52:35 anotacoes rtfTexto_KeyDown Left
+28/02/2025 22:52:35 anotacoes rtfTexto_KeyDown ControlKey
+28/02/2025 22:52:35 anotacoes rtfTexto_KeyDown Right
+28/02/2025 22:52:36 anotacoes rtfTexto_KeyDown ControlKey
+28/02/2025 22:52:36 anotacoes rtfTexto_KeyDown ControlKey
+28/02/2025 22:52:37 anotacoes rtfTexto_KeyDown Left
+28/02/2025 22:52:37 anotacoes rtfTexto_KeyDown Left
+28/02/2025 22:52:37 anotacoes rtfTexto_KeyDown Down
+28/02/2025 22:52:38 anotacoes rtfTexto_KeyDown Home
+28/02/2025 22:52:38 anotacoes rtfTexto_KeyDown ControlKey
+28/02/2025 22:52:38 anotacoes rtfTexto_KeyDown Right
+28/02/2025 22:52:38 anotacoes rtfTexto_KeyDown ShiftKey
+28/02/2025 22:52:38 anotacoes rtfTexto_KeyDown End
+28/02/2025 22:52:39 anotacoes rtfTexto_KeyDown F
+28/02/2025 22:52:39 anotacoes rtfTexto_TextChanged
+28/02/2025 22:52:39 anotacoes rtfTexto_KeyDown A
+28/02/2025 22:52:39 anotacoes rtfTexto_KeyDown Z
+28/02/2025 22:52:39 anotacoes rtfTexto_KeyDown E
+28/02/2025 22:52:39 anotacoes rtfTexto_KeyDown R
+28/02/2025 22:52:39 anotacoes rtfTexto_KeyDown Space
+28/02/2025 22:52:40 anotacoes rtfTexto_KeyDown F
+28/02/2025 22:52:40 anotacoes rtfTexto_TextChanged
+28/02/2025 22:52:40 anotacoes rtfTexto_KeyDown U
+28/02/2025 22:52:40 anotacoes rtfTexto_KeyDown N
+28/02/2025 22:52:40 anotacoes rtfTexto_KeyDown C
+28/02/2025 22:52:40 anotacoes rtfTexto_KeyDown I
+28/02/2025 22:52:40 anotacoes rtfTexto_KeyDown O
+28/02/2025 22:52:40 anotacoes rtfTexto_KeyDown N
+28/02/2025 22:52:40 anotacoes rtfTexto_TextChanged
+28/02/2025 22:52:40 anotacoes rtfTexto_KeyDown A
+28/02/2025 22:52:40 anotacoes rtfTexto_KeyDown R
+28/02/2025 22:52:40 anotacoes rtfTexto_KeyDown Space
+28/02/2025 22:52:41 anotacoes rtfTexto_KeyDown N
+28/02/2025 22:52:41 anotacoes rtfTexto_KeyDown U
+28/02/2025 22:52:41 anotacoes rtfTexto_TextChanged
+28/02/2025 22:52:42 anotacoes rtfTexto_KeyDown M
+28/02/2025 22:52:42 anotacoes rtfTexto_KeyDown Space
+28/02/2025 22:52:42 anotacoes rtfTexto_KeyDown E
+28/02/2025 22:52:42 anotacoes rtfTexto_KeyDown N
+28/02/2025 22:52:42 anotacoes rtfTexto_TextChanged
+28/02/2025 22:52:42 anotacoes rtfTexto_KeyDown G
+28/02/2025 22:52:42 anotacoes rtfTexto_KeyDown I
+28/02/2025 22:52:42 anotacoes rtfTexto_KeyDown N
+28/02/2025 22:52:42 anotacoes rtfTexto_KeyDown E
+28/02/2025 22:52:42 anotacoes rtfTexto_KeyDown Space
+28/02/2025 22:52:42 anotacoes rtfTexto_TextChanged
+28/02/2025 22:52:43 anotacoes rtfTexto_KeyDown M
+28/02/2025 22:52:43 anotacoes rtfTexto_KeyDown A
+28/02/2025 22:52:43 anotacoes rtfTexto_KeyDown I
+28/02/2025 22:52:43 anotacoes rtfTexto_KeyDown S
+28/02/2025 22:52:43 anotacoes rtfTexto_KeyDown Space
+28/02/2025 22:52:43 anotacoes rtfTexto_KeyDown B
+28/02/2025 22:52:43 anotacoes rtfTexto_TextChanged
+28/02/2025 22:52:43 anotacoes rtfTexto_KeyDown A
+28/02/2025 22:52:43 anotacoes rtfTexto_KeyDown R
+28/02/2025 22:52:43 anotacoes rtfTexto_KeyDown A
+28/02/2025 22:52:44 anotacoes rtfTexto_KeyDown T
+28/02/2025 22:52:44 anotacoes rtfTexto_KeyDown O
+28/02/2025 22:53:08 anotacoes rtfTexto_KeyDown Home
+28/02/2025 22:53:08 anotacoes rtfTexto_KeyDown ControlKey
+28/02/2025 22:53:09 anotacoes rtfTexto_KeyDown Right
+28/02/2025 22:53:09 anotacoes rtfTexto_KeyDown Delete
+28/02/2025 22:53:09 anotacoes rtfTexto_TextChanged
+28/02/2025 22:53:09 anotacoes rtfTexto_KeyDown ShiftKey
+28/02/2025 22:53:10 anotacoes rtfTexto_KeyDown ShiftKey
+28/02/2025 22:53:10 anotacoes rtfTexto_KeyDown ShiftKey
+28/02/2025 22:53:10 anotacoes rtfTexto_KeyDown ShiftKey
+28/02/2025 22:53:10 anotacoes rtfTexto_KeyDown ShiftKey
+28/02/2025 22:53:10 anotacoes rtfTexto_KeyDown ShiftKey
+28/02/2025 22:53:10 anotacoes rtfTexto_KeyDown ShiftKey
+28/02/2025 22:53:10 anotacoes rtfTexto_KeyDown ShiftKey
+28/02/2025 22:53:10 anotacoes rtfTexto_KeyDown ShiftKey
+28/02/2025 22:53:10 anotacoes rtfTexto_KeyDown ShiftKey
+28/02/2025 22:53:10 anotacoes rtfTexto_KeyDown ShiftKey
+28/02/2025 22:53:10 anotacoes rtfTexto_KeyDown F
+28/02/2025 22:53:10 anotacoes rtfTexto_TextChanged
+28/02/2025 22:53:16 anotacoes rtfTexto_KeyDown Space
+28/02/2025 22:53:16 anotacoes rtfTexto_TextChanged
+28/02/2025 22:53:34 anotacoes rtfTexto_KeyDown Back
+28/02/2025 22:53:34 anotacoes rtfTexto_TextChanged
+28/02/2025 22:53:34 anotacoes rtfTexto_KeyDown Up
+28/02/2025 22:53:34 anotacoes rtfTexto_KeyDown Up
+28/02/2025 22:53:35 anotacoes rtfTexto_KeyDown Up
+28/02/2025 22:53:35 anotacoes rtfTexto_KeyDown Left
+28/02/2025 22:53:35 anotacoes rtfTexto_KeyDown ShiftKey
+28/02/2025 22:53:36 anotacoes rtfTexto_KeyDown Home
+28/02/2025 22:53:36 anotacoes rtfTexto_KeyDown Delete
+28/02/2025 22:53:36 anotacoes rtfTexto_TextChanged
+28/02/2025 22:53:37 anotacoes rtfTexto_KeyDown Down
+28/02/2025 22:53:37 anotacoes rtfTexto_KeyDown Down
+28/02/2025 22:53:37 anotacoes rtfTexto_KeyDown Up
+28/02/2025 22:53:38 anotacoes rtfTexto_KeyDown ControlKey
+28/02/2025 22:53:38 anotacoes rtfTexto_KeyDown Right
+28/02/2025 22:53:39 anotacoes rtfTexto_KeyDown ControlKey
+28/02/2025 22:53:39 anotacoes rtfTexto_KeyDown Z
+28/02/2025 22:53:39 anotacoes rtfTexto_TextChanged
+28/02/2025 22:53:40 anotacoes rtfTexto_KeyDown Down
+28/02/2025 22:53:40 anotacoes rtfTexto_KeyDown Down
+28/02/2025 22:53:41 anotacoes rtfTexto_KeyDown Down
+28/02/2025 22:53:41 anotacoes rtfTexto_KeyDown Down
+28/02/2025 22:53:42 anotacoes rtfTexto_KeyDown Down
+28/02/2025 22:53:43 anotacoes rtfTexto_KeyDown Up
+28/02/2025 23:21:42 anotacoes rtfTexto_TextChanged
+28/02/2025 23:49:23 Word rtfTexto_TextChanged
+28/02/2025 23:49:28 anotacoes rtfTexto_TextChanged
+01/03/2025 02:12:26 anotacoes rtfTexto_TextChanged
+01/03/2025 03:57:10 anotacoes rtfTexto_TextChanged
+02/03/2025 22:17:40 anotacoes rtfTexto_TextChanged
+02/03/2025 23:26:48 anotacoes rtfTexto_TextChanged
+02/03/2025 23:27:10 anotacoes rtfTexto_KeyDown Delete
+02/03/2025 23:27:10 anotacoes rtfTexto_TextChanged
+02/03/2025 23:27:12 anotacoes rtfTexto_KeyDown ShiftKey
+02/03/2025 23:27:12 anotacoes rtfTexto_KeyDown ShiftKey
+02/03/2025 23:27:12 anotacoes rtfTexto_KeyDown End
+02/03/2025 23:27:13 anotacoes rtfTexto_KeyDown Delete
+02/03/2025 23:27:13 anotacoes rtfTexto_TextChanged
+03/03/2025 17:57:34 Word rtfTexto_TextChanged
+03/03/2025 18:14:25 Word rtfTexto_TextChanged
+03/03/2025 18:28:35 anotacoes rtfTexto_TextChanged
+03/03/2025 18:33:34 anotacoes rtfTexto_TextChanged
+03/03/2025 18:37:38 anotacoes rtfTexto_TextChanged
+03/03/2025 19:07:08 anotacoes rtfTexto_TextChanged
+03/03/2025 20:47:35 Word rtfTexto_TextChanged
+04/03/2025 14:01:34 anotacoes rtfTexto_TextChanged
+04/03/2025 14:03:36 anotacoes rtfTexto_TextChanged
+04/03/2025 14:03:43 anotacoes rtfTexto_KeyDown ShiftKey
+04/03/2025 14:03:43 anotacoes rtfTexto_KeyDown Home
+04/03/2025 14:03:44 anotacoes rtfTexto_KeyDown Delete
+04/03/2025 14:03:44 anotacoes rtfTexto_TextChanged
+04/03/2025 14:03:44 anotacoes rtfTexto_KeyDown Down
+04/03/2025 14:03:44 anotacoes rtfTexto_KeyDown ControlKey
+04/03/2025 14:03:44 anotacoes rtfTexto_KeyDown Right
+04/03/2025 14:03:45 anotacoes rtfTexto_KeyDown Right
+04/03/2025 14:03:45 anotacoes rtfTexto_KeyDown ShiftKey
+04/03/2025 14:03:46 anotacoes rtfTexto_KeyDown Home
+04/03/2025 14:03:46 anotacoes rtfTexto_KeyDown Delete
+04/03/2025 14:03:46 anotacoes rtfTexto_TextChanged
+04/03/2025 16:26:17 Word rtfTexto_TextChanged
+04/03/2025 17:51:20 anotacoes rtfTexto_TextChanged
+04/03/2025 17:54:51 anotacoes rtfTexto_TextChanged
+04/03/2025 17:54:59 Word rtfTexto_TextChanged
+04/03/2025 18:05:35 anotacoes rtfTexto_TextChanged
+05/03/2025 00:26:28 anotacoes rtfTexto_TextChanged
+06/03/2025 21:58:44 anotacoes rtfTexto_TextChanged
+06/03/2025 21:58:46 anotacoes rtfTexto_KeyDown Return
+06/03/2025 21:58:46 anotacoes rtfTexto_TextChanged
+06/03/2025 21:58:47 anotacoes rtfTexto_KeyDown Return
+06/03/2025 21:58:47 anotacoes rtfTexto_KeyDown ShiftKey
+06/03/2025 21:58:47 anotacoes rtfTexto_KeyDown E
+06/03/2025 21:58:48 anotacoes rtfTexto_KeyDown Menu
+06/03/2025 21:58:48 anotacoes rtfTexto_KeyDown Back
+06/03/2025 21:58:48 anotacoes rtfTexto_TextChanged
+06/03/2025 21:58:49 anotacoes rtfTexto_KeyDown ShiftKey
+06/03/2025 21:58:49 anotacoes rtfTexto_KeyDown E
+06/03/2025 21:58:50 anotacoes rtfTexto_KeyDown X
+06/03/2025 21:58:50 anotacoes rtfTexto_KeyDown P
+06/03/2025 21:58:50 anotacoes rtfTexto_KeyDown L
+06/03/2025 21:58:50 anotacoes rtfTexto_KeyDown I
+06/03/2025 21:58:50 anotacoes rtfTexto_KeyDown C
+06/03/2025 21:58:50 anotacoes rtfTexto_TextChanged
+06/03/2025 21:58:51 anotacoes rtfTexto_KeyDown A
+06/03/2025 21:58:51 anotacoes rtfTexto_KeyDown R
+06/03/2025 21:58:51 anotacoes rtfTexto_KeyDown Space
+06/03/2025 21:58:51 anotacoes rtfTexto_KeyDown C
+06/03/2025 21:58:51 anotacoes rtfTexto_KeyDown O
+06/03/2025 21:58:51 anotacoes rtfTexto_KeyDown M
+06/03/2025 21:58:51 anotacoes rtfTexto_KeyDown O
+06/03/2025 21:58:51 anotacoes rtfTexto_KeyDown Space
+06/03/2025 21:58:52 anotacoes rtfTexto_KeyDown C
+06/03/2025 21:58:52 anotacoes rtfTexto_KeyDown O
+06/03/2025 21:58:52 anotacoes rtfTexto_KeyDown N
+06/03/2025 21:58:52 anotacoes rtfTexto_KeyDown S
+06/03/2025 21:58:52 anotacoes rtfTexto_KeyDown E
+06/03/2025 21:58:52 anotacoes rtfTexto_KeyDown G
+06/03/2025 21:58:52 anotacoes rtfTexto_TextChanged
+06/03/2025 21:58:52 anotacoes rtfTexto_KeyDown U
+06/03/2025 21:58:52 anotacoes rtfTexto_KeyDown I
+06/03/2025 21:58:52 anotacoes rtfTexto_KeyDown R
+06/03/2025 21:58:53 anotacoes rtfTexto_KeyDown Space
+06/03/2025 21:58:53 anotacoes rtfTexto_KeyDown S
+06/03/2025 21:58:53 anotacoes rtfTexto_KeyDown E
+06/03/2025 21:58:53 anotacoes rtfTexto_KeyDown Space
+06/03/2025 21:58:53 anotacoes rtfTexto_KeyDown M
+06/03/2025 21:58:53 anotacoes rtfTexto_KeyDown U
+06/03/2025 21:58:53 anotacoes rtfTexto_KeyDown D
+06/03/2025 21:58:53 anotacoes rtfTexto_KeyDown A
+06/03/2025 21:58:54 anotacoes rtfTexto_KeyDown R

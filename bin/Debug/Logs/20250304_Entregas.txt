@@ -1,0 +1,476 @@
+Log de 02/03/2025 copiado para Logs/20250303_Entregas.txt
+03/03/2025 00:18:23: Executado a partir de C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug
+03/03/2025 00:18:23: atualizar = True
+03/03/2025 00:18:25: Versão Atual 356
+03/03/2025 00:18:25: Versão no FTP 356
+03/03/2025 00:18:28: glo.Nivel = 2
+03/03/2025 00:18:28: Vai entrar em PreparaAbasUsers
+03/03/2025 00:18:29: pastaDoPrograma = C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug\
+03/03/2025 00:41:55: Executado a partir de C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug
+03/03/2025 00:41:55: atualizar = False
+03/03/2025 00:41:59: glo.Nivel = 2
+03/03/2025 00:41:59: Vai entrar em PreparaAbasUsers
+03/03/2025 00:41:59: pastaDoPrograma = C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug\
+03/03/2025 01:40:45: Executado a partir de C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug
+03/03/2025 01:40:45: atualizar = False
+03/03/2025 01:40:53: glo.Nivel = 2
+03/03/2025 01:40:53: Vai entrar em PreparaAbasUsers
+03/03/2025 01:40:53: pastaDoPrograma = C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug\
+03/03/2025 01:41:53: Executado a partir de C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug
+03/03/2025 01:41:53: atualizar = False
+03/03/2025 01:41:56: glo.Nivel = 2
+03/03/2025 01:41:56: Vai entrar em PreparaAbasUsers
+03/03/2025 01:41:56: pastaDoPrograma = C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug\
+03/03/2025 01:43:48: Executado a partir de C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug
+03/03/2025 01:43:48: atualizar = False
+03/03/2025 01:43:53: glo.Nivel = 2
+03/03/2025 01:43:53: Vai entrar em PreparaAbasUsers
+03/03/2025 01:43:53: pastaDoPrograma = C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug\
+03/03/2025 01:47:33: Executado a partir de C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug
+03/03/2025 01:47:33: atualizar = False
+03/03/2025 01:47:36: glo.Nivel = 2
+03/03/2025 01:47:36: Vai entrar em PreparaAbasUsers
+03/03/2025 01:47:36: pastaDoPrograma = C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug\
+03/03/2025 01:47:47: Erro de sintaxe (operador faltando) na expressão de consulta '(Convert(,System.String) IN ('DEVE'))'.
+03/03/2025 01:48:51: Executado a partir de C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug
+03/03/2025 01:48:51: atualizar = False
+03/03/2025 01:48:54: glo.Nivel = 2
+03/03/2025 01:48:54: Vai entrar em PreparaAbasUsers
+03/03/2025 01:48:54: pastaDoPrograma = C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug\
+03/03/2025 01:50:06: Erro de sintaxe (operador faltando) na expressão de consulta '(Convert(,System.String) IN ('DEVE'))'.
+03/03/2025 01:57:14: Executado a partir de C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug
+03/03/2025 01:57:14: atualizar = False
+03/03/2025 01:57:18: glo.Nivel = 2
+03/03/2025 01:57:18: Vai entrar em PreparaAbasUsers
+03/03/2025 01:57:18: pastaDoPrograma = C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug\
+03/03/2025 01:58:05: Erro de sintaxe (operador faltando) na expressão de consulta '(Convert(,System.String) IN ('DEVE'))'.
+03/03/2025 02:54:49: Executado a partir de C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug
+03/03/2025 02:54:49: atualizar = False
+03/03/2025 02:54:54: glo.Nivel = 2
+03/03/2025 02:54:54: Vai entrar em PreparaAbasUsers
+03/03/2025 02:54:54: pastaDoPrograma = C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug\
+03/03/2025 02:55:05: Erro de sintaxe (operador faltando) na expressão de consulta 'CellValue LIKE (Convert(,System.String) IN ('DEVE'))'.
+03/03/2025 02:55:49: Executado a partir de C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug
+03/03/2025 02:55:49: atualizar = False
+03/03/2025 02:55:52: glo.Nivel = 2
+03/03/2025 02:55:52: Vai entrar em PreparaAbasUsers
+03/03/2025 02:55:52: pastaDoPrograma = C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug\
+03/03/2025 02:58:26: Executado a partir de C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug
+03/03/2025 02:58:26: atualizar = False
+03/03/2025 02:58:29: glo.Nivel = 2
+03/03/2025 02:58:29: Vai entrar em PreparaAbasUsers
+03/03/2025 02:58:29: pastaDoPrograma = C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug\
+03/03/2025 03:12:54: Executado a partir de C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug
+03/03/2025 03:12:54: atualizar = False
+03/03/2025 03:12:59: glo.Nivel = 2
+03/03/2025 03:12:59: Vai entrar em PreparaAbasUsers
+03/03/2025 03:12:59: pastaDoPrograma = C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug\
+03/03/2025 03:14:00: Executado a partir de C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug
+03/03/2025 03:14:00: atualizar = False
+03/03/2025 03:14:03: glo.Nivel = 2
+03/03/2025 03:14:03: Vai entrar em PreparaAbasUsers
+03/03/2025 03:14:03: pastaDoPrograma = C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug\
+03/03/2025 03:17:33: Executado a partir de C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug
+03/03/2025 03:17:34: atualizar = False
+03/03/2025 03:17:37: glo.Nivel = 2
+03/03/2025 03:17:37: Vai entrar em PreparaAbasUsers
+03/03/2025 03:17:37: pastaDoPrograma = C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug\
+03/03/2025 03:18:49: Executado a partir de C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug
+03/03/2025 03:18:49: atualizar = False
+03/03/2025 03:18:52: glo.Nivel = 2
+03/03/2025 03:18:52: Vai entrar em PreparaAbasUsers
+03/03/2025 03:18:52: pastaDoPrograma = C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug\
+03/03/2025 03:22:35: Executado a partir de C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug
+03/03/2025 03:22:35: atualizar = False
+03/03/2025 03:22:37: glo.Nivel = 2
+03/03/2025 03:22:37: Vai entrar em PreparaAbasUsers
+03/03/2025 03:22:37: pastaDoPrograma = C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug\
+03/03/2025 03:24:20: Executado a partir de C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug
+03/03/2025 03:24:20: atualizar = False
+03/03/2025 03:24:22: glo.Nivel = 2
+03/03/2025 03:24:22: Vai entrar em PreparaAbasUsers
+03/03/2025 03:24:22: pastaDoPrograma = C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug\
+03/03/2025 16:22:48: Executado a partir de C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug
+03/03/2025 16:22:48: atualizar = False
+03/03/2025 16:22:52: glo.Nivel = 2
+03/03/2025 16:22:52: Vai entrar em PreparaAbasUsers
+03/03/2025 16:22:52: pastaDoPrograma = C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug\
+03/03/2025 16:24:59: Executado a partir de C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug
+03/03/2025 16:24:59: atualizar = False
+03/03/2025 16:25:01: glo.Nivel = 2
+03/03/2025 16:25:01: Vai entrar em PreparaAbasUsers
+03/03/2025 16:25:01: pastaDoPrograma = C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug\
+03/03/2025 16:25:39: Executado a partir de C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug
+03/03/2025 16:25:39: atualizar = False
+03/03/2025 16:25:42: glo.Nivel = 2
+03/03/2025 16:25:42: Vai entrar em PreparaAbasUsers
+03/03/2025 16:25:42: pastaDoPrograma = C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug\
+03/03/2025 16:27:39: Executado a partir de C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug
+03/03/2025 16:27:39: atualizar = False
+03/03/2025 16:27:41: glo.Nivel = 2
+03/03/2025 16:27:41: Vai entrar em PreparaAbasUsers
+03/03/2025 16:27:41: pastaDoPrograma = C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug\
+03/03/2025 16:27:51: Erro de sintaxe na cláusula ORDER BY.
+03/03/2025 16:27:59: Erro de sintaxe na cláusula ORDER BY.
+03/03/2025 16:28:21: Erro de sintaxe na cláusula ORDER BY.
+03/03/2025 16:28:42: Erro de sintaxe na cláusula ORDER BY.
+03/03/2025 16:29:46: Executado a partir de C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug
+03/03/2025 16:29:46: atualizar = False
+03/03/2025 16:29:48: glo.Nivel = 2
+03/03/2025 16:29:48: Vai entrar em PreparaAbasUsers
+03/03/2025 16:29:48: pastaDoPrograma = C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug\
+03/03/2025 16:30:29: Executado a partir de C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug
+03/03/2025 16:30:29: atualizar = False
+03/03/2025 16:30:32: glo.Nivel = 2
+03/03/2025 16:30:32: Vai entrar em PreparaAbasUsers
+03/03/2025 16:30:32: pastaDoPrograma = C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug\
+03/03/2025 16:32:10: glo.Nivel = 2
+03/03/2025 16:32:10: Vai entrar em PreparaAbasUsers
+03/03/2025 16:32:10: pastaDoPrograma = C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug\
+03/03/2025 16:34:13: Executado a partir de C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug
+03/03/2025 16:34:13: atualizar = False
+03/03/2025 16:34:16: glo.Nivel = 2
+03/03/2025 16:34:16: Vai entrar em PreparaAbasUsers
+03/03/2025 16:34:16: pastaDoPrograma = C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug\
+03/03/2025 16:34:47: Form1_Resize: Form size is now Width=160, Height=28
+03/03/2025 16:36:11: Executado a partir de C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug
+03/03/2025 16:36:11: atualizar = False
+03/03/2025 16:36:13: glo.Nivel = 2
+03/03/2025 16:36:13: Vai entrar em PreparaAbasUsers
+03/03/2025 16:36:13: pastaDoPrograma = C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug\
+03/03/2025 16:37:13: Executado a partir de C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug
+03/03/2025 16:37:13: atualizar = False
+03/03/2025 16:37:15: glo.Nivel = 2
+03/03/2025 16:37:15: Vai entrar em PreparaAbasUsers
+03/03/2025 16:37:15: pastaDoPrograma = C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug\
+03/03/2025 16:37:47: Executado a partir de C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug
+03/03/2025 16:37:47: atualizar = False
+03/03/2025 16:37:50: glo.Nivel = 2
+03/03/2025 16:37:50: Vai entrar em PreparaAbasUsers
+03/03/2025 16:37:50: pastaDoPrograma = C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug\
+03/03/2025 16:52:13: Executado a partir de C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug
+03/03/2025 16:52:13: atualizar = False
+03/03/2025 16:52:16: glo.Nivel = 2
+03/03/2025 16:52:16: Vai entrar em PreparaAbasUsers
+03/03/2025 16:52:16: pastaDoPrograma = C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug\
+03/03/2025 16:52:33: Erro de sintaxe (operador faltando) na expressão de consulta 'RowIndex = 0 CellValue LIKE '%DEVE%''.
+03/03/2025 16:53:58: Executado a partir de C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug
+03/03/2025 16:53:58: atualizar = False
+03/03/2025 16:54:00: glo.Nivel = 2
+03/03/2025 16:54:00: Vai entrar em PreparaAbasUsers
+03/03/2025 16:54:00: pastaDoPrograma = C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug\
+03/03/2025 16:54:52: Executado a partir de C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug
+03/03/2025 16:54:52: atualizar = False
+03/03/2025 16:54:55: glo.Nivel = 2
+03/03/2025 16:54:55: Vai entrar em PreparaAbasUsers
+03/03/2025 16:54:55: pastaDoPrograma = C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug\
+03/03/2025 16:56:31: glo.Nivel = 2
+03/03/2025 16:56:31: Vai entrar em PreparaAbasUsers
+03/03/2025 16:56:31: pastaDoPrograma = C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug\
+03/03/2025 16:58:05: Executado a partir de C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug
+03/03/2025 16:58:05: atualizar = False
+03/03/2025 16:58:07: glo.Nivel = 2
+03/03/2025 16:58:07: Vai entrar em PreparaAbasUsers
+03/03/2025 16:58:07: pastaDoPrograma = C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug\
+03/03/2025 17:01:23: UD,1, 1, ADRIANO MC
+03/03/2025 17:01:23: UD,1, 1, ADRIANO MC
+03/03/2025 17:01:26: glo.Nivel = 2
+03/03/2025 17:01:26: Vai entrar em PreparaAbasUsers
+03/03/2025 17:01:26: pastaDoPrograma = C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug\
+03/03/2025 17:02:38: glo.Nivel = 2
+03/03/2025 17:02:38: Vai entrar em PreparaAbasUsers
+03/03/2025 17:02:38: pastaDoPrograma = C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug\
+03/03/2025 17:07:47: Executado a partir de C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug
+03/03/2025 17:07:47: atualizar = False
+03/03/2025 17:07:49: glo.Nivel = 2
+03/03/2025 17:07:49: Vai entrar em PreparaAbasUsers
+03/03/2025 17:07:49: pastaDoPrograma = C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug\
+03/03/2025 17:52:40: Executado a partir de C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug
+03/03/2025 17:52:40: atualizar = False
+03/03/2025 17:52:47: glo.Nivel = 2
+03/03/2025 17:52:47: Vai entrar em PreparaAbasUsers
+03/03/2025 17:52:47: pastaDoPrograma = C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug\
+03/03/2025 17:53:37: glo.Nivel = 2
+03/03/2025 17:53:37: Vai entrar em PreparaAbasUsers
+03/03/2025 17:53:37: pastaDoPrograma = C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug\
+03/03/2025 17:54:20: glo.Nivel = 2
+03/03/2025 17:54:20: Vai entrar em PreparaAbasUsers
+03/03/2025 17:54:20: pastaDoPrograma = C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug\
+03/03/2025 17:57:23: Executado a partir de C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug
+03/03/2025 17:57:23: atualizar = False
+03/03/2025 17:57:31: glo.Nivel = 2
+03/03/2025 17:57:31: Vai entrar em PreparaAbasUsers
+03/03/2025 17:57:31: pastaDoPrograma = C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug\
+03/03/2025 17:58:16: glo.Nivel = 2
+03/03/2025 17:58:16: Vai entrar em PreparaAbasUsers
+03/03/2025 17:58:16: pastaDoPrograma = C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug\
+03/03/2025 18:01:02: Executado a partir de C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug
+03/03/2025 18:01:02: atualizar = False
+03/03/2025 18:01:05: glo.Nivel = 2
+03/03/2025 18:01:05: Vai entrar em PreparaAbasUsers
+03/03/2025 18:01:05: pastaDoPrograma = C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug\
+03/03/2025 18:01:43: glo.Nivel = 2
+03/03/2025 18:01:43: Vai entrar em PreparaAbasUsers
+03/03/2025 18:01:43: pastaDoPrograma = C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug\
+03/03/2025 18:02:53: Executado a partir de C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug
+03/03/2025 18:02:53: atualizar = False
+03/03/2025 18:02:55: glo.Nivel = 2
+03/03/2025 18:02:55: Vai entrar em PreparaAbasUsers
+03/03/2025 18:02:55: pastaDoPrograma = C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug\
+03/03/2025 18:03:58: Executado a partir de C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug
+03/03/2025 18:03:58: atualizar = False
+03/03/2025 18:04:00: glo.Nivel = 2
+03/03/2025 18:04:00: Vai entrar em PreparaAbasUsers
+03/03/2025 18:04:00: pastaDoPrograma = C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug\
+03/03/2025 18:04:28: glo.Nivel = 2
+03/03/2025 18:04:28: Vai entrar em PreparaAbasUsers
+03/03/2025 18:04:28: pastaDoPrograma = C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug\
+03/03/2025 18:07:24: Executado a partir de C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug
+03/03/2025 18:07:24: atualizar = False
+03/03/2025 18:07:27: glo.Nivel = 2
+03/03/2025 18:07:27: Vai entrar em PreparaAbasUsers
+03/03/2025 18:07:27: pastaDoPrograma = C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug\
+03/03/2025 18:08:01: Executado a partir de C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug
+03/03/2025 18:08:01: atualizar = False
+03/03/2025 18:08:03: glo.Nivel = 2
+03/03/2025 18:08:03: Vai entrar em PreparaAbasUsers
+03/03/2025 18:08:03: pastaDoPrograma = C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug\
+03/03/2025 18:13:33: Executado a partir de C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug
+03/03/2025 18:13:33: atualizar = False
+03/03/2025 18:13:36: glo.Nivel = 2
+03/03/2025 18:13:36: Vai entrar em PreparaAbasUsers
+03/03/2025 18:13:36: pastaDoPrograma = C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug\
+03/03/2025 18:14:21: Executado a partir de C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug
+03/03/2025 18:14:21: atualizar = False
+03/03/2025 18:14:23: glo.Nivel = 2
+03/03/2025 18:14:23: Vai entrar em PreparaAbasUsers
+03/03/2025 18:14:23: pastaDoPrograma = C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug\
+03/03/2025 18:15:15: Executado a partir de C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug
+03/03/2025 18:15:15: atualizar = False
+03/03/2025 18:15:18: glo.Nivel = 2
+03/03/2025 18:15:18: Vai entrar em PreparaAbasUsers
+03/03/2025 18:15:18: pastaDoPrograma = C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug\
+03/03/2025 18:15:45: Executado a partir de C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug
+03/03/2025 18:15:45: atualizar = False
+03/03/2025 18:15:48: glo.Nivel = 2
+03/03/2025 18:15:48: Vai entrar em PreparaAbasUsers
+03/03/2025 18:15:48: pastaDoPrograma = C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug\
+03/03/2025 18:16:46: Executado a partir de C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug
+03/03/2025 18:16:46: atualizar = False
+03/03/2025 18:16:48: glo.Nivel = 2
+03/03/2025 18:16:48: Vai entrar em PreparaAbasUsers
+03/03/2025 18:16:48: pastaDoPrograma = C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug\
+03/03/2025 18:17:57: Executado a partir de C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug
+03/03/2025 18:17:57: atualizar = False
+03/03/2025 18:17:59: glo.Nivel = 2
+03/03/2025 18:18:00: Vai entrar em PreparaAbasUsers
+03/03/2025 18:18:00: pastaDoPrograma = C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug\
+03/03/2025 18:18:43: Executado a partir de C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug
+03/03/2025 18:18:43: atualizar = False
+03/03/2025 18:18:45: glo.Nivel = 2
+03/03/2025 18:18:45: Vai entrar em PreparaAbasUsers
+03/03/2025 18:18:45: pastaDoPrograma = C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug\
+03/03/2025 19:00:01: Executado a partir de C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug
+03/03/2025 19:00:01: atualizar = False
+03/03/2025 19:00:03: glo.Nivel = 2
+03/03/2025 19:00:03: Vai entrar em PreparaAbasUsers
+03/03/2025 19:00:03: pastaDoPrograma = C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug\
+03/03/2025 19:00:43: Executado a partir de C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug
+03/03/2025 19:00:43: atualizar = False
+03/03/2025 19:00:45: glo.Nivel = 2
+03/03/2025 19:00:45: Vai entrar em PreparaAbasUsers
+03/03/2025 19:00:45: pastaDoPrograma = C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug\
+03/03/2025 19:01:10: Executado a partir de C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug
+03/03/2025 19:01:10: atualizar = False
+03/03/2025 19:01:12: glo.Nivel = 2
+03/03/2025 19:01:12: Vai entrar em PreparaAbasUsers
+03/03/2025 19:01:12: pastaDoPrograma = C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug\
+03/03/2025 19:22:29: Executado a partir de C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug
+03/03/2025 19:22:29: atualizar = False
+03/03/2025 19:22:31: glo.Nivel = 2
+03/03/2025 19:22:31: Vai entrar em PreparaAbasUsers
+03/03/2025 19:22:31: pastaDoPrograma = C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug\
+03/03/2025 19:23:02: Executado a partir de C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug
+03/03/2025 19:23:02: atualizar = False
+03/03/2025 19:23:05: glo.Nivel = 2
+03/03/2025 19:23:05: Vai entrar em PreparaAbasUsers
+03/03/2025 19:23:05: pastaDoPrograma = C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug\
+03/03/2025 19:27:05: UD,2, 1, GUTO MC
+03/03/2025 19:27:05: UD,2, 1, GUTO MC
+03/03/2025 19:32:27: Executado a partir de C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug
+03/03/2025 19:32:27: atualizar = False
+03/03/2025 19:32:30: glo.Nivel = 2
+03/03/2025 19:32:30: Vai entrar em PreparaAbasUsers
+03/03/2025 19:32:30: pastaDoPrograma = C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug\
+03/03/2025 19:36:25: Executado a partir de C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug
+03/03/2025 19:36:25: atualizar = False
+03/03/2025 19:36:27: glo.Nivel = 2
+03/03/2025 19:36:27: Vai entrar em PreparaAbasUsers
+03/03/2025 19:36:27: pastaDoPrograma = C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug\
+03/03/2025 19:37:18: Executado a partir de C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug
+03/03/2025 19:37:18: atualizar = False
+03/03/2025 19:37:20: glo.Nivel = 2
+03/03/2025 19:37:20: Vai entrar em PreparaAbasUsers
+03/03/2025 19:37:20: pastaDoPrograma = C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug\
+03/03/2025 20:35:47: Executado a partir de C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug
+03/03/2025 20:35:47: atualizar = False
+03/03/2025 20:35:50: glo.Nivel = 2
+03/03/2025 20:35:50: Vai entrar em PreparaAbasUsers
+03/03/2025 20:35:50: pastaDoPrograma = C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug\
+03/03/2025 20:37:30: Executado a partir de C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug
+03/03/2025 20:37:30: atualizar = False
+03/03/2025 20:37:32: glo.Nivel = 2
+03/03/2025 20:37:32: Vai entrar em PreparaAbasUsers
+03/03/2025 20:37:32: pastaDoPrograma = C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug\
+03/03/2025 20:38:00: Executado a partir de C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug
+03/03/2025 20:38:00: atualizar = False
+03/03/2025 20:38:02: glo.Nivel = 2
+03/03/2025 20:38:02: Vai entrar em PreparaAbasUsers
+03/03/2025 20:38:02: pastaDoPrograma = C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug\
+03/03/2025 20:39:01: Executado a partir de C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug
+03/03/2025 20:39:01: atualizar = False
+03/03/2025 20:39:03: glo.Nivel = 2
+03/03/2025 20:39:03: Vai entrar em PreparaAbasUsers
+03/03/2025 20:39:03: pastaDoPrograma = C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug\
+03/03/2025 20:39:32: Executado a partir de C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug
+03/03/2025 20:39:32: atualizar = False
+03/03/2025 20:39:34: glo.Nivel = 2
+03/03/2025 20:39:34: Vai entrar em PreparaAbasUsers
+03/03/2025 20:39:34: pastaDoPrograma = C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug\
+03/03/2025 20:43:38: glo.Nivel = 2
+03/03/2025 20:43:38: Vai entrar em PreparaAbasUsers
+03/03/2025 20:43:38: pastaDoPrograma = C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug\
+03/03/2025 20:43:54: Executado a partir de C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug
+03/03/2025 20:43:54: atualizar = False
+03/03/2025 20:43:57: glo.Nivel = 2
+03/03/2025 20:43:57: Vai entrar em PreparaAbasUsers
+03/03/2025 20:43:57: pastaDoPrograma = C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug\
+03/03/2025 20:46:27: Executado a partir de C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug
+03/03/2025 20:46:27: atualizar = False
+03/03/2025 20:46:29: glo.Nivel = 2
+03/03/2025 20:46:29: Vai entrar em PreparaAbasUsers
+03/03/2025 20:46:29: pastaDoPrograma = C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug\
+03/03/2025 20:47:04: Executado a partir de C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug
+03/03/2025 20:47:04: atualizar = False
+03/03/2025 20:47:06: glo.Nivel = 2
+03/03/2025 20:47:06: Vai entrar em PreparaAbasUsers
+03/03/2025 20:47:06: pastaDoPrograma = C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug\
+03/03/2025 20:47:30: Executado a partir de C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug
+03/03/2025 20:47:30: atualizar = False
+03/03/2025 20:47:33: glo.Nivel = 2
+03/03/2025 20:47:33: Vai entrar em PreparaAbasUsers
+03/03/2025 20:47:33: pastaDoPrograma = C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug\
+03/03/2025 20:48:22: Executado a partir de C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug
+03/03/2025 20:48:22: atualizar = False
+03/03/2025 20:48:25: glo.Nivel = 2
+03/03/2025 20:48:25: Vai entrar em PreparaAbasUsers
+03/03/2025 20:48:25: pastaDoPrograma = C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug\
+03/03/2025 20:49:43: Executado a partir de C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug
+03/03/2025 20:49:43: atualizar = False
+03/03/2025 20:49:46: glo.Nivel = 2
+03/03/2025 20:49:46: Vai entrar em PreparaAbasUsers
+03/03/2025 20:49:46: pastaDoPrograma = C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug\
+03/03/2025 20:50:21: Executado a partir de C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug
+03/03/2025 20:50:21: atualizar = False
+03/03/2025 20:50:23: glo.Nivel = 2
+03/03/2025 20:50:23: Vai entrar em PreparaAbasUsers
+03/03/2025 20:50:23: pastaDoPrograma = C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug\
+03/03/2025 21:05:18: Executado a partir de C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug
+03/03/2025 21:05:18: atualizar = False
+03/03/2025 21:05:21: glo.Nivel = 2
+03/03/2025 21:05:21: Vai entrar em PreparaAbasUsers
+03/03/2025 21:05:21: pastaDoPrograma = C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug\
+03/03/2025 21:26:44: Executado a partir de C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug
+03/03/2025 21:26:44: atualizar = False
+03/03/2025 21:26:47: glo.Nivel = 2
+03/03/2025 21:26:47: Vai entrar em PreparaAbasUsers
+03/03/2025 21:26:47: pastaDoPrograma = C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug\
+03/03/2025 21:28:05: Executado a partir de C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug
+03/03/2025 21:28:05: atualizar = False
+03/03/2025 21:28:07: glo.Nivel = 2
+03/03/2025 21:28:07: Vai entrar em PreparaAbasUsers
+03/03/2025 21:28:07: pastaDoPrograma = C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug\
+03/03/2025 21:29:34: Executado a partir de C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug
+03/03/2025 21:29:34: atualizar = False
+03/03/2025 21:29:36: glo.Nivel = 2
+03/03/2025 21:29:36: Vai entrar em PreparaAbasUsers
+03/03/2025 21:29:36: pastaDoPrograma = C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug\
+03/03/2025 21:31:09: Executado a partir de C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug
+03/03/2025 21:31:09: atualizar = False
+03/03/2025 21:31:11: glo.Nivel = 2
+03/03/2025 21:31:11: Vai entrar em PreparaAbasUsers
+03/03/2025 21:31:11: pastaDoPrograma = C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug\
+03/03/2025 21:43:08: Executado a partir de C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug
+03/03/2025 21:43:08: atualizar = False
+03/03/2025 21:43:11: glo.Nivel = 2
+03/03/2025 21:43:11: Vai entrar em PreparaAbasUsers
+03/03/2025 21:43:11: pastaDoPrograma = C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug\
+03/03/2025 22:08:17: Executado a partir de C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug
+03/03/2025 22:08:17: atualizar = False
+03/03/2025 22:08:20: glo.Nivel = 2
+03/03/2025 22:08:20: Vai entrar em PreparaAbasUsers
+03/03/2025 22:08:20: pastaDoPrograma = C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug\
+03/03/2025 22:08:58: UD,5, 6, Alterado!
+03/03/2025 22:08:58: UD,5, 6, Alterado!
+03/03/2025 22:09:03: glo.Nivel = 2
+03/03/2025 22:09:03: Vai entrar em PreparaAbasUsers
+03/03/2025 22:09:03: pastaDoPrograma = C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug\
+03/03/2025 22:26:44: Executado a partir de C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug
+03/03/2025 22:26:44: atualizar = False
+03/03/2025 22:26:48: glo.Nivel = 2
+03/03/2025 22:26:48: Vai entrar em PreparaAbasUsers
+03/03/2025 22:26:48: pastaDoPrograma = C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug\
+03/03/2025 22:27:01: Erro de sintaxe na cláusula ORDER BY.
+03/03/2025 22:28:07: Executado a partir de C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug
+03/03/2025 22:28:07: atualizar = False
+03/03/2025 22:28:10: glo.Nivel = 2
+03/03/2025 22:28:10: Vai entrar em PreparaAbasUsers
+03/03/2025 22:28:10: pastaDoPrograma = C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug\
+03/03/2025 22:28:18: Erro de sintaxe na cláusula ORDER BY.
+03/03/2025 22:28:58: Executado a partir de C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug
+03/03/2025 22:28:58: atualizar = False
+03/03/2025 22:29:01: glo.Nivel = 2
+03/03/2025 22:29:01: Vai entrar em PreparaAbasUsers
+03/03/2025 22:29:01: pastaDoPrograma = C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug\
+03/03/2025 22:30:14: Executado a partir de C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug
+03/03/2025 22:30:14: atualizar = False
+03/03/2025 22:30:18: glo.Nivel = 2
+03/03/2025 22:30:18: Vai entrar em PreparaAbasUsers
+03/03/2025 22:30:18: pastaDoPrograma = C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug\
+03/03/2025 22:30:46: Erro de sintaxe na cláusula ORDER BY.
+03/03/2025 22:31:58: Executado a partir de C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug
+03/03/2025 22:31:59: atualizar = False
+03/03/2025 22:32:02: glo.Nivel = 2
+03/03/2025 22:32:02: Vai entrar em PreparaAbasUsers
+03/03/2025 22:32:02: pastaDoPrograma = C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug\
+03/03/2025 22:32:14: Erro de sintaxe na cláusula ORDER BY.
+03/03/2025 22:33:19: Executado a partir de C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug
+03/03/2025 22:33:19: atualizar = False
+03/03/2025 22:33:21: glo.Nivel = 2
+03/03/2025 22:33:21: Vai entrar em PreparaAbasUsers
+03/03/2025 22:33:21: pastaDoPrograma = C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug\
+03/03/2025 22:33:40: Erro de sintaxe na cláusula ORDER BY.
+03/03/2025 22:52:52: Executado a partir de C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug
+03/03/2025 22:52:52: atualizar = False
+03/03/2025 22:52:57: glo.Nivel = 2
+03/03/2025 22:52:57: Vai entrar em PreparaAbasUsers
+03/03/2025 22:52:57: pastaDoPrograma = C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug\
+03/03/2025 22:53:05: Erro de sintaxe na cláusula ORDER BY.
+03/03/2025 23:00:48: Executado a partir de C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug
+03/03/2025 23:00:48: atualizar = False
+03/03/2025 23:00:50: glo.Nivel = 2
+03/03/2025 23:00:50: Vai entrar em PreparaAbasUsers
+03/03/2025 23:00:50: pastaDoPrograma = C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug\
+03/03/2025 23:01:16: Erro de sintaxe na cláusula ORDER BY.
+03/03/2025 23:03:17: Executado a partir de C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug
+03/03/2025 23:03:17: atualizar = False
+03/03/2025 23:03:23: glo.Nivel = 2
+03/03/2025 23:03:23: Vai entrar em PreparaAbasUsers
+03/03/2025 23:03:23: pastaDoPrograma = C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug\
+03/03/2025 23:03:36: Erro de sintaxe na cláusula ORDER BY.
+03/03/2025 23:46:28: Executado a partir de C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug
+03/03/2025 23:46:28: atualizar = False
+03/03/2025 23:46:30: glo.Nivel = 2
+03/03/2025 23:46:30: Vai entrar em PreparaAbasUsers
+03/03/2025 23:46:30: pastaDoPrograma = C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug\
+03/03/2025 23:46:39: Erro de sintaxe na cláusula ORDER BY.
