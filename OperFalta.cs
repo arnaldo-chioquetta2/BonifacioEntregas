@@ -2013,6 +2013,17 @@ namespace TeleBonifacio
             // 🔹 Evita erro de SQL Injection ao tratar aspas no valor da célula
             string safeCellValue = cellValue.Replace("'", "''");
 
+            // 🔹 Verifica se o usuário deseja apagar o conteúdo (inserindo um ".")
+            if (safeCellValue == ".")
+            {
+                string deleteQuery = $@"DELETE FROM DynamicGrid 
+                                WHERE RowIndex = {rowIndex} AND ColumnIndex = {columnIndex}";
+                glo.Loga($@"DL,{rowIndex}, {columnIndex} - Registro removido");
+                DB.ExecutarComandoSQL(deleteQuery);
+                Console.WriteLine($"🗑 Registro removido para RowIndex {rowIndex}, ColumnIndex {columnIndex}");
+                return; // Sai antes de continuar o fluxo normal
+            }
+
             // 🔹 Verifica se o registro já existe
             string checkQuery = $"SELECT COUNT(*) FROM DynamicGrid WHERE RowIndex = {rowIndex} AND ColumnIndex = {columnIndex}";
             int count = DB.ExecutarConsultaCount(checkQuery);
@@ -2036,7 +2047,38 @@ namespace TeleBonifacio
 
             // 🔹 Executa o comando SQL final (INSERT ou UPDATE)
             DB.ExecutarComandoSQL(query);
-        }        
+        }
+
+
+        //private void SaveCellToDatabase(int rowIndex, int columnIndex, string cellValue)
+        //{
+        //    // 🔹 Evita erro de SQL Injection ao tratar aspas no valor da célula
+        //    string safeCellValue = cellValue.Replace("'", "''");
+
+        //    // 🔹 Verifica se o registro já existe
+        //    string checkQuery = $"SELECT COUNT(*) FROM DynamicGrid WHERE RowIndex = {rowIndex} AND ColumnIndex = {columnIndex}";
+        //    int count = DB.ExecutarConsultaCount(checkQuery);
+
+        //    string query;
+        //    if (count > 0)
+        //    {
+        //        // 🔹 Caso o registro já exista, faz um UPDATE
+        //        query = $@"UPDATE DynamicGrid 
+        //           SET CellValue = '{safeCellValue}' 
+        //           WHERE RowIndex = {rowIndex} AND ColumnIndex = {columnIndex}";
+        //        glo.Loga($@"UD,{rowIndex}, {columnIndex}, {safeCellValue} - Registro atualizado");
+        //    }
+        //    else
+        //    {
+        //        // 🔹 Caso não exista, faz um INSERT
+        //        query = $@"INSERT INTO DynamicGrid (RowIndex, ColumnIndex, CellValue) 
+        //           VALUES ({rowIndex}, {columnIndex}, '{safeCellValue}')";
+        //        glo.Loga($@"ID,{rowIndex}, {columnIndex}, {safeCellValue} - Novo registro inserido");
+        //    }
+
+        //    // 🔹 Executa o comando SQL final (INSERT ou UPDATE)
+        //    DB.ExecutarComandoSQL(query);
+        //}        
 
         private void griTaxas_ColumnWidthChanged(object sender, DataGridViewColumnEventArgs e)
         {
