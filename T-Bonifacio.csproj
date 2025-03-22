@@ -129,6 +129,12 @@
     <Compile Include="CadClientes.designer.cs">
       <DependentUpon>CadClientes.cs</DependentUpon>
     </Compile>
+    <Compile Include="operDevedores.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="operDevedores.designer.cs">
+      <DependentUpon>operDevedores.cs</DependentUpon>
+    </Compile>
     <Compile Include="CadEntregadores.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -172,6 +178,7 @@
     <Compile Include="dao\ConfigDAO.cs" />
     <Compile Include="dao\ContasAPagarDao.cs" />
     <Compile Include="dao\ContratosDAO.cs" />
+    <Compile Include="dao\DevedoresDao.cs" />
     <Compile Include="dao\DynamicGridDao.cs" />
     <Compile Include="dao\EncomendasDao.cs" />
     <Compile Include="dao\EntregadorDAO.cs" />
@@ -369,6 +376,7 @@
     <Compile Include="tb\ComboBoxItemComCor.cs" />
     <Compile Include="tb\ContasAPagar.cs" />
     <Compile Include="tb\Contrato.cs" />
+    <Compile Include="tb\Devedores.cs" />
     <Compile Include="tb\Document.cs" />
     <Compile Include="tb\DynamicGrid.cs" />
     <Compile Include="tb\Encomendas.cs" />
@@ -389,6 +397,9 @@
     <EmbeddedResource Include="CadClientes.resx">
       <DependentUpon>CadClientes.cs</DependentUpon>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="operDevedores.resx">
+      <DependentUpon>operDevedores.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="CadEntregadores.resx">
       <DependentUpon>CadEntregadores.cs</DependentUpon>

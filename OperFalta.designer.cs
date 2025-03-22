@@ -37,6 +37,7 @@ namespace TeleBonifacio
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(OperFalta));
             this.panel1 = new System.Windows.Forms.Panel();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.btDevedores = new System.Windows.Forms.Button();
             this.btGarantia = new System.Windows.Forms.Button();
             this.btEncomenda = new System.Windows.Forms.Button();
             this.ckEmFalta = new System.Windows.Forms.CheckBox();
@@ -83,12 +84,14 @@ namespace TeleBonifacio
             this.tabPage7 = new System.Windows.Forms.TabPage();
             this.rtfWord = new AtcCtrl.ATCRTF();
             this.tabPage8 = new System.Windows.Forms.TabPage();
+            this.panelExcel = new System.Windows.Forms.Panel();
+            this.tabPage9 = new System.Windows.Forms.TabPage();
+            this.dvDevedores = new System.Windows.Forms.DataGridView();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.Aumentar = new System.Windows.Forms.ToolStripMenuItem();
             this.DiminirPrio = new System.Windows.Forms.ToolStripMenuItem();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
-            this.panelExcel = new System.Windows.Forms.Panel();
             this.panel1.SuspendLayout();
             this.groupBox3.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -106,6 +109,8 @@ namespace TeleBonifacio
             ((System.ComponentModel.ISupportInitialize)(this.griTaxas)).BeginInit();
             this.tabPage7.SuspendLayout();
             this.tabPage8.SuspendLayout();
+            this.tabPage9.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dvDevedores)).BeginInit();
             this.contextMenuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -121,6 +126,7 @@ namespace TeleBonifacio
             // 
             // groupBox3
             // 
+            this.groupBox3.Controls.Add(this.btDevedores);
             this.groupBox3.Controls.Add(this.btGarantia);
             this.groupBox3.Controls.Add(this.btEncomenda);
             this.groupBox3.Controls.Add(this.ckEmFalta);
@@ -142,6 +148,16 @@ namespace TeleBonifacio
             this.groupBox3.TabIndex = 41;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Filtro";
+            // 
+            // btDevedores
+            // 
+            this.btDevedores.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btDevedores.Location = new System.Drawing.Point(1170, 24);
+            this.btDevedores.Name = "btDevedores";
+            this.btDevedores.Size = new System.Drawing.Size(75, 23);
+            this.btDevedores.TabIndex = 56;
+            this.btDevedores.Text = "Devedor";
+            this.btDevedores.Click += new System.EventHandler(this.btDevedores_Click);
             // 
             // btGarantia
             // 
@@ -166,7 +182,7 @@ namespace TeleBonifacio
             // ckEmFalta
             // 
             this.ckEmFalta.AutoSize = true;
-            this.ckEmFalta.Location = new System.Drawing.Point(1180, 25);
+            this.ckEmFalta.Location = new System.Drawing.Point(1266, 25);
             this.ckEmFalta.Name = "ckEmFalta";
             this.ckEmFalta.Size = new System.Drawing.Size(67, 17);
             this.ckEmFalta.TabIndex = 49;
@@ -477,6 +493,7 @@ namespace TeleBonifacio
             this.tbFaltas.Controls.Add(this.tabPage6);
             this.tbFaltas.Controls.Add(this.tabPage7);
             this.tbFaltas.Controls.Add(this.tabPage8);
+            this.tbFaltas.Controls.Add(this.tabPage9);
             this.tbFaltas.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tbFaltas.Location = new System.Drawing.Point(0, 108);
             this.tbFaltas.Name = "tbFaltas";
@@ -656,6 +673,38 @@ namespace TeleBonifacio
             this.tabPage8.Text = "Excel";
             this.tabPage8.UseVisualStyleBackColor = true;
             // 
+            // panelExcel
+            // 
+            this.panelExcel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panelExcel.Location = new System.Drawing.Point(3, 3);
+            this.panelExcel.Name = "panelExcel";
+            this.panelExcel.Size = new System.Drawing.Size(1331, 292);
+            this.panelExcel.TabIndex = 0;
+            // 
+            // tabPage9
+            // 
+            this.tabPage9.Controls.Add(this.dvDevedores);
+            this.tabPage9.Location = new System.Drawing.Point(4, 22);
+            this.tabPage9.Name = "tabPage9";
+            this.tabPage9.Size = new System.Drawing.Size(1337, 298);
+            this.tabPage9.TabIndex = 8;
+            this.tabPage9.Text = "Devedores";
+            this.tabPage9.UseVisualStyleBackColor = true;
+            // 
+            // dvDevedores
+            // 
+            this.dvDevedores.AllowUserToAddRows = false;
+            this.dvDevedores.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dvDevedores.Location = new System.Drawing.Point(0, 0);
+            this.dvDevedores.Name = "dvDevedores";
+            this.dvDevedores.ReadOnly = true;
+            this.dvDevedores.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.dvDevedores.Size = new System.Drawing.Size(1337, 298);
+            this.dvDevedores.TabIndex = 19;
+            this.dvDevedores.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dvDevedores_CellClick);
+            this.dvDevedores.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dvDevedores_CellDoubleClick);
+            this.dvDevedores.CellFormatting += new System.Windows.Forms.DataGridViewCellFormattingEventHandler(this.dvDevedores_CellFormatting);
+            // 
             // contextMenuStrip1
             // 
             this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -683,14 +732,6 @@ namespace TeleBonifacio
             // openFileDialog1
             // 
             this.openFileDialog1.FileName = "openFileDialog1";
-            // 
-            // panelExcel
-            // 
-            this.panelExcel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panelExcel.Location = new System.Drawing.Point(3, 3);
-            this.panelExcel.Name = "panelExcel";
-            this.panelExcel.Size = new System.Drawing.Size(1331, 292);
-            this.panelExcel.TabIndex = 0;
             // 
             // OperFalta
             // 
@@ -721,6 +762,8 @@ namespace TeleBonifacio
             ((System.ComponentModel.ISupportInitialize)(this.griTaxas)).EndInit();
             this.tabPage7.ResumeLayout(false);
             this.tabPage8.ResumeLayout(false);
+            this.tabPage9.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.dvDevedores)).EndInit();
             this.contextMenuStrip1.ResumeLayout(false);
             this.ResumeLayout(false);
 
@@ -781,7 +824,9 @@ namespace TeleBonifacio
         private Zuby.ADGV.AdvancedDataGridView griTaxas;
         private TabPage tabPage8;
         private Panel panelExcel;
-        //private AtcCtrl.ATCRTF rtfTexto;
+        private TabPage tabPage9;
+        private DataGridView dvDevedores;
+        private Button btDevedores;
     }
 }
 

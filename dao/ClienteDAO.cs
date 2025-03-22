@@ -125,6 +125,7 @@ namespace TeleBonifacio.dao
             {
                 telefone = "0";
             }
+            glo.Loga($@"IC,{ret.Id + 1},{nome},{telefone}, {DateTime.Now}");
             string query = $@"INSERT INTO Clientes (NrCli, Nome, Telefone, Data) VALUES (
                         {ret.Id+1}, '{nome}', '{telefone}', '{DateTime.Now:yyyy-MM-dd HH:mm:ss}' ) ";
             DB.ExecutarComandoSQL(query);
@@ -244,34 +245,48 @@ namespace TeleBonifacio.dao
                         using (OleDbDataReader reader = command.ExecuteReader())
                         {
                             DataTable dataTable = new DataTable();
+                            int colCount = reader.FieldCount;
+
                             dataTable.Columns.Add("id", typeof(int));
                             dataTable.Columns.Add("Nome", typeof(string));
-                            dataTable.Columns.Add("Telefone", typeof(string));
-                            dataTable.Columns.Add("email", typeof(string));
-                            dataTable.Columns.Add("Ender", typeof(string));
-                            dataTable.Columns.Add("NrOutro", typeof(string));
+
+                            bool modoSimples = (colCount == 2);
+
+                            if (!modoSimples)
+                            {
+                                dataTable.Columns.Add("Telefone", typeof(string));
+                                dataTable.Columns.Add("email", typeof(string));
+                                dataTable.Columns.Add("Ender", typeof(string));
+                                dataTable.Columns.Add("NrOutro", typeof(string));
+                            }
+
                             while (reader.Read())
                             {
                                 DataRow row = dataTable.NewRow();
                                 row["id"] = reader["NrCli"];
                                 row["Nome"] = reader["Nome"];
-                                row["Telefone"] = reader["Telefone"];
-                                row["email"] = reader["email"];
-                                row["Ender"] = reader["Ender"];
-                                row["NrOutro"] = reader["NrOutro"];
+
+                                if (!modoSimples)
+                                {
+                                    row["Telefone"] = reader["Telefone"];
+                                    row["email"] = reader["email"];
+                                    row["Ender"] = reader["Ender"];
+                                    row["NrOutro"] = reader["NrOutro"];
+                                }
+
                                 dataTable.Rows.Add(row);
                             }
+
                             return dataTable;
                         }
                     }
                 }
                 catch (Exception ex)
                 {
-                    // Aqui você pode decidir como lidar com a exceção
                     throw;
                 }
             }
-        }
+        }        
 
         private DataTable ExecutarConsultaODBC(string query)
         {
@@ -335,8 +350,9 @@ namespace TeleBonifacio.dao
 
         public override DataTable GetDadosOrdenados(string filtro = "", string ordem = "")
         {
-            Console.WriteLine("SELECT * FROM Clientes Order By Nome ");
-            string query = "SELECT * FROM Clientes Order By Nome ";
+            string query = "SELECT MIN(NrCli) AS NrCli, Nome FROM Clientes GROUP BY Nome ORDER BY Nome";
+            // string query = "SELECT * FROM Clientes Order By Nome";
+            Console.WriteLine(query);
             return ExecutarConsulta(query);
         }
 

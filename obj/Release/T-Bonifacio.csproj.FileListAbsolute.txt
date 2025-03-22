@@ -67,3 +67,4 @@ C:\Prog\T-Bonifacio\T-Bonifacio\obj\Release\TeleBonifacio.operContratos.resource
 C:\Prog\T-Bonifacio\T-Bonifacio\obj\Release\TeleBonifacio.operEdContratos.resources
 C:\Prog\T-Bonifacio\T-Bonifacio\obj\Release\TeleBonifacio.opeTpContrato.resources
 C:\Prog\T-Bonifacio\T-Bonifacio\bin\Release\AdvancedDataGridView.dll
+C:\Prog\T-Bonifacio\T-Bonifacio\obj\Release\TeleBonifacio.operDevedores.resources

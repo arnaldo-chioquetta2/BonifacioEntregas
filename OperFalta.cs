@@ -11,6 +11,8 @@ using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
 using Excel = Microsoft.Office.Interop.Excel;
+using System.Data.SqlClient;
+using System.Data.OleDb;
 
 namespace TeleBonifacio
 {
@@ -21,14 +23,15 @@ namespace TeleBonifacio
         private TpoFaltaDAO TpoFalta;
         private FornecedorDao Forn;
         private EncomendasDao EncoDao;
-        private ProdutosDao cDaoP;      
+        private ProdutosDao cDaoP;
         private GarantiasDao cDaoG;
+        private DevedoresDao cDaoD;
         private pesCliente FpesCliente;
         private DataTable dadosCli;
-        private Dictionary<int, Color> tipoFaltaCores = new Dictionary<int, Color>();        
+        private Dictionary<int, Color> tipoFaltaCores = new Dictionary<int, Color>();
         private Color originalBackgroundColor;
         private bool carregando = true;
-        private bool Restrito = false;        
+        private bool Restrito = false;
         private int BakidTipo = 0;
         private int BakidForn = 0;
         private int bakComprado = 0;
@@ -45,6 +48,7 @@ namespace TeleBonifacio
         private bool AtualizarGridP = true;
         private bool AtualizarGridE = true;
         private bool AtualizarGridG = true;
+        private bool AtualizarGridD = true;
         private int iID = 0;
         private string caminhoDoArquivo = "";
         private bool Instanciar = true;
@@ -121,7 +125,7 @@ namespace TeleBonifacio
         private void PreparaAbasUsers(VendedoresDAO vendedor)
         {
             string pastaDoPrograma = AppDomain.CurrentDomain.BaseDirectory;
-            glo.Loga("pastaDoPrograma = "+ pastaDoPrograma);
+            glo.Loga("pastaDoPrograma = " + pastaDoPrograma);
             string padraoDeBusca = "Anotacoes*.rtf";
             string[] arquivosEncontrados = Directory.GetFiles(pastaDoPrograma, padraoDeBusca)
                                                         .Select(Path.GetFileName)
@@ -148,7 +152,7 @@ namespace TeleBonifacio
                     {
                         glo.Loga("reg = null");
                     }
-                } 
+                }
             }
         }
 
@@ -157,7 +161,7 @@ namespace TeleBonifacio
             grid.Font = new System.Drawing.Font("Segoe UI", 12);
             grid.ColumnHeadersDefaultCellStyle.Font = new System.Drawing.Font("Segoe UI", 12, System.Drawing.FontStyle.Regular);
             grid.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.EnableResizing;
-            grid.ColumnHeadersHeight = 30; 
+            grid.ColumnHeadersHeight = 30;
         }
 
         private void SetStartPosition()
@@ -268,13 +272,13 @@ namespace TeleBonifacio
         }
 
         private void Limpar()
-        {            
+        {
             cmbTipos.FlatStyle = FlatStyle.System;
             cmbForn.FlatStyle = FlatStyle.System;
             cmbTipos.Tag = "";
             cmbForn.Tag = "";
             cmbTipos.SelectedIndex = 0;
-            cmbForn.SelectedIndex = 0;            
+            cmbForn.SelectedIndex = 0;
             btnAdicionar.Text = "Adicionar";
             btnExcluir.Enabled = false;
             btAdicTpo.Enabled = false;
@@ -348,7 +352,7 @@ namespace TeleBonifacio
                             button2.Enabled = btLmpFiltro.Enabled = true;
                             btAdicTpo.Enabled = true;
                             obj.Tag = "M";
-                        } 
+                        }
                     }
                 }
             }
@@ -494,13 +498,13 @@ namespace TeleBonifacio
             if (glo.Nivel == 2)
             {
                 dataGrid1.Columns[15].Visible = true;   // Valor
-                dataGrid1.Columns[15].Width = 50; 
+                dataGrid1.Columns[15].Width = 50;
                 dataGrid1.Columns[15].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
             }
             else
             {
                 dataGrid1.Columns[15].Visible = false;  // Valor
-            }            
+            }
             dataGrid1.Columns[16].Width = 170;      // Obs
             dataGrid1.Columns[17].Visible = false;  // Prioridade
             if (rt.IsLargeScreen())
@@ -530,10 +534,10 @@ namespace TeleBonifacio
                     ConfigurarGrid();
                     if (scrollPosition > 0)
                     {
-                        if (dataGrid1.Rows.Count> scrollPosition)
+                        if (dataGrid1.Rows.Count > scrollPosition)
                         {
                             dataGrid1.FirstDisplayedScrollingRowIndex = scrollPosition;
-                        }                        
+                        }
                     }
                 }
             }
@@ -582,7 +586,7 @@ namespace TeleBonifacio
             {
                 row.DefaultCellStyle.Font = new Font("Arial", 12, FontStyle.Regular);
             }
-        }        
+        }
 
         private void dataGrid1_CellClick_1(object sender, DataGridViewCellEventArgs e)
         {
@@ -676,7 +680,7 @@ namespace TeleBonifacio
                 }
             }
         }
-        
+
         private void ckEmFalta_Click(object sender, EventArgs e)
         {
             button2.Enabled = true;
@@ -729,7 +733,7 @@ namespace TeleBonifacio
             if (glo.ODBC)
             {
                 glo.CarregarComboBox<tb.TpoFalta>(cmbTipos, TpoFalta, "ESCOLHA");
-                glo.CarregarComboBox<tb.Fornecedor>(cmbForn, Forn, "ESCOLHA", filtro:"EhForn = 1 ");
+                glo.CarregarComboBox<tb.Fornecedor>(cmbForn, Forn, "ESCOLHA", filtro: "EhForn = 1 ");
             }
             else
             {
@@ -796,7 +800,7 @@ namespace TeleBonifacio
                     {
                         int iTpo = cmbTipos.SelectedIndex;
                         if (iTpo > -1)
-                        {                            
+                        {
                             string sTipo = cmbTipos.Text;
                             DataTable dados = TpoFalta.GetDadosOrdenados($" and Nome = '{sTipo}'");
                             idTipo = Convert.ToInt32(dados.Rows[0]["id"]);
@@ -904,7 +908,7 @@ namespace TeleBonifacio
                 }
             }
             if (grid.SelectedRows.Count > 1)
-            {                
+            {
                 NormalizaCampos();
             }
         }
@@ -1021,22 +1025,23 @@ namespace TeleBonifacio
             {
                 //  COMPROU A MERCADORIA QUE ESTAVA EM FALTA
                 int scrollPosition = dataGrid1.FirstDisplayedScrollingRowIndex;
-                if (dataGrid1.SelectedRows.Count==1)
+                if (dataGrid1.SelectedRows.Count == 1)
                 {
                     string sID = dataGrid1.SelectedRows[0].Cells["ID"].Value.ToString();
                     int gID = Convert.ToInt32(sID);
                     string sVlr = dataGrid1.SelectedRows[0].Cells["Valor"].Value.ToString();
-                    if (sVlr.Length==0)
+                    if (sVlr.Length == 0)
                     {
                         sVlr = "0";
                     }
                     string inputValue = Microsoft.VisualBasic.Interaction.InputBox("Valor de compra", "Input Value", sVlr, -1, -1);
-                    if (inputValue.Length>0)
+                    if (inputValue.Length > 0)
                     {
                         float valor = glo.LeValor(inputValue);
                         faltasDAO.Comprou(gID, valor);
                     }
-                } else
+                }
+                else
                 {
                     foreach (DataGridViewRow row in dataGrid1.SelectedRows)
                     {
@@ -1046,7 +1051,7 @@ namespace TeleBonifacio
                 }
                 AtualizarGridP = true;
                 CarregaGrid();
-                if (scrollPosition>0)  
+                if (scrollPosition > 0)
                     dataGrid1.FirstDisplayedScrollingRowIndex = scrollPosition;
             }
             else
@@ -1210,7 +1215,7 @@ namespace TeleBonifacio
         private void btLmpFiltro_Click(object sender, EventArgs e)
         {
             button2.Tag = "";
-            btLmpFiltro.Enabled = false; 
+            btLmpFiltro.Enabled = false;
             Limpar();
             BakidTipo = 0;
             BakidForn = 0;
@@ -1248,13 +1253,14 @@ namespace TeleBonifacio
             dataGrid2.Columns[2].Visible = false;   // ID
             dataGrid2.Columns[3].Width = 80; // 100;       // Data
             dataGrid2.Columns[4].Width = 80;        // Código
-            if (glo.Nivel==2)
+            if (glo.Nivel == 2)
             {
                 dataGrid2.Columns[5].Visible = true;
                 dataGrid2.Columns[5].Width = 80;
                 dataGrid2.Columns[5].DefaultCellStyle.Format = "F2";
                 dataGrid2.Columns[5].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
-            } else
+            }
+            else
             {
                 dataGrid2.Columns[5].Visible = false;
             }
@@ -1329,7 +1335,7 @@ namespace TeleBonifacio
                         btComprei.Text = "Em Falta";
                         ckEmFalta.Visible = false;
                         timer1.Enabled = false;
-                        if (glo.Nivel==2)
+                        if (glo.Nivel == 2)
                         {
                             lbVlor.Visible = true;
                             txValor.Visible = true;
@@ -1395,10 +1401,10 @@ namespace TeleBonifacio
                         }
                         break;
                     case 5:
-                        if (this.iniGrid.Length==0)
+                        if (this.iniGrid.Length == 0)
                         {
                             SetupDataGridView();
-                        } 
+                        }
                         break;
 
                     case 6:
@@ -1415,7 +1421,7 @@ namespace TeleBonifacio
                             string caminhoWord = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Word.rtf");
                             rtfWord.caminhoDoArquivo = caminhoWord;
                             rtfWord.Criptografia = false;
-                            rtfWord.Carrega();                            
+                            rtfWord.Carrega();
                             rtfWord.txPercVisivel(AdaptAtivo);
                         }
                         break;
@@ -1424,12 +1430,21 @@ namespace TeleBonifacio
                         {
                             AbrirExcel();
                             excelAppVisible = true;
-                        }                            
+                        }
                         //excelApp = new Excel.Application();
                         //excelApp.Visible = true; // Exibe o Excel
 
                         //excelWorkbook = excelApp.Workbooks.Open(caminhoArquivo);
                         //this.Text = "Planilha Aberta: " + Path.GetFileName(caminhoArquivo);
+                        break;
+
+                    case 8:
+                        if (AtualizarGridD)
+                        {
+                            carregando = true;
+                            CarregaGridD();
+                            carregando = false;
+                        }
                         break;
 
                     default: // Novas abas criadas dinamicamente
@@ -1635,10 +1650,11 @@ namespace TeleBonifacio
             }
             if (FpesCliente.OK)
             {
-                if (tbFaltas.SelectedIndex==2)
+                if (tbFaltas.SelectedIndex == 2)
                 {
                     CarregaGridE();
-                } else
+                }
+                else
                 {
                     AtualizarGridE = true;
                     if (ProdNovo == false)
@@ -1671,7 +1687,7 @@ namespace TeleBonifacio
                 if (FpesCliente.getAlterado())
                 {
                     CarregaGridE();
-                    Limpar();                                       
+                    Limpar();
                 }
             }
         }
@@ -1679,7 +1695,7 @@ namespace TeleBonifacio
         private void PrepareAndShowFpesCliente(bool instanciar, string nome, string telefone, DateTime data, DateTime dataPrometida, string codigo, decimal valor, string descricao)
         {
             bool sair = false;
-            while (sair==false)
+            while (sair == false)
             {
                 glo.Loga("Preparando FpesCliente");
                 if (FpesCliente == null)
@@ -1707,13 +1723,13 @@ namespace TeleBonifacio
                 {
                     try
                     {
-                        FpesCliente.Visible = true;                        
+                        FpesCliente.Visible = true;
                     }
                     catch (Exception)
                     {
                         FpesCliente = null;
                         instanciar = true;
-                    }                    
+                    }
                 }
             }
         }
@@ -1748,7 +1764,7 @@ namespace TeleBonifacio
             if (dadosCli == null)
             {
                 ClienteDAO Cliente = new ClienteDAO();
-                dadosCli = Cliente.GetDadosOrdenados();                
+                dadosCli = Cliente.GetDadosOrdenados();
             }
             FpesCliente.setOperacao(1);
             if (Instanciar)
@@ -1756,7 +1772,7 @@ namespace TeleBonifacio
                 if (EncoDao == null)
                     EncoDao = new EncomendasDao();
                 FpesCliente.RecebeDadosCli(ref dadosCli, ref Forn, ref EncoDao, tbFaltas.SelectedIndex);
-                FpesCliente.Ativar();                
+                FpesCliente.Ativar();
                 FpesCliente.ShowDialog();
             }
             else
@@ -1799,8 +1815,8 @@ namespace TeleBonifacio
 
         private void CarregaGridE()
         {
-            int scrollPosition = dataGrid3.FirstDisplayedScrollingRowIndex;            
-            if (EncoDao==null)
+            int scrollPosition = dataGrid3.FirstDisplayedScrollingRowIndex;
+            if (EncoDao == null)
                 EncoDao = new EncomendasDao();
             DataTable dados = EncoDao.getDados(BakidTipo, BakidForn, Bakcodigo, Bakquantidade, Bakmarca, BakObs, BakDescr);
             List<tb.TpoFalta> tipos = TpoFalta.getTipos();
@@ -1814,8 +1830,8 @@ namespace TeleBonifacio
             if (dados != null)
             {
                 ConfigurarGridE();
-            if (scrollPosition > 0)
-                dataGrid3.FirstDisplayedScrollingRowIndex = scrollPosition;
+                if (scrollPosition > 0)
+                    dataGrid3.FirstDisplayedScrollingRowIndex = scrollPosition;
             }
         }
 
@@ -1874,8 +1890,8 @@ namespace TeleBonifacio
         private bool acionadoFiltroSort = false;
         private const int INITIAL_COLUMN_COUNT = 13;
         private const int INITIAL_ROW_COUNT = 28;
-        private int ModoGrid =0;
-        private List<CellInfo> gridCellsInfo = new List<CellInfo>();        
+        private int ModoGrid = 0;
+        private List<CellInfo> gridCellsInfo = new List<CellInfo>();
 
         private void SetupDataGridView()
         {
@@ -1971,7 +1987,7 @@ namespace TeleBonifacio
         private void griTaxas_CellEndEdit(object sender, DataGridViewCellEventArgs e)
         {
             string cellValue = griTaxas.Rows[e.RowIndex].Cells[e.ColumnIndex].Value?.ToString() ?? "";
-            int rowIndexParaSalvar=0;
+            int rowIndexParaSalvar = 0;
             switch (ModoGrid)
             {
                 case 0: // 🔹 Modo padrão (sem ordenação/filtragem)
@@ -2024,61 +2040,34 @@ namespace TeleBonifacio
                 return; // Sai antes de continuar o fluxo normal
             }
 
-            // 🔹 Verifica se o registro já existe
-            string checkQuery = $"SELECT COUNT(*) FROM DynamicGrid WHERE RowIndex = {rowIndex} AND ColumnIndex = {columnIndex}";
-            int count = DB.ExecutarConsultaCount(checkQuery);
-
-            string query;
-            if (count > 0)
+            if (safeCellValue.Length > 0)
             {
-                // 🔹 Caso o registro já exista, faz um UPDATE
-                query = $@"UPDATE DynamicGrid 
+                // 🔹 Verifica se o registro já existe
+                string checkQuery = $"SELECT COUNT(*) FROM DynamicGrid WHERE RowIndex = {rowIndex} AND ColumnIndex = {columnIndex}";
+                int count = DB.ExecutarConsultaCount(checkQuery);
+
+                string query;
+                if (count > 0)
+                {
+                    // 🔹 Caso o registro já exista, faz um UPDATE
+                    query = $@"UPDATE DynamicGrid 
                    SET CellValue = '{safeCellValue}' 
                    WHERE RowIndex = {rowIndex} AND ColumnIndex = {columnIndex}";
-                glo.Loga($@"UD,{rowIndex}, {columnIndex}, {safeCellValue} - Registro atualizado");
-            }
-            else
-            {
-                // 🔹 Caso não exista, faz um INSERT
-                query = $@"INSERT INTO DynamicGrid (RowIndex, ColumnIndex, CellValue) 
+                    glo.Loga($@"UD,{rowIndex}, {columnIndex}, {safeCellValue} - Registro atualizado");
+                }
+                else
+                {
+                    // 🔹 Caso não exista, faz um INSERT
+                    query = $@"INSERT INTO DynamicGrid (RowIndex, ColumnIndex, CellValue) 
                    VALUES ({rowIndex}, {columnIndex}, '{safeCellValue}')";
-                glo.Loga($@"ID,{rowIndex}, {columnIndex}, {safeCellValue} - Novo registro inserido");
+                    glo.Loga($@"ID,{rowIndex}, {columnIndex}, {safeCellValue} - Novo registro inserido");
+                }
+
+                // 🔹 Executa o comando SQL final (INSERT ou UPDATE)
+                DB.ExecutarComandoSQL(query);
+
             }
-
-            // 🔹 Executa o comando SQL final (INSERT ou UPDATE)
-            DB.ExecutarComandoSQL(query);
         }
-
-
-        //private void SaveCellToDatabase(int rowIndex, int columnIndex, string cellValue)
-        //{
-        //    // 🔹 Evita erro de SQL Injection ao tratar aspas no valor da célula
-        //    string safeCellValue = cellValue.Replace("'", "''");
-
-        //    // 🔹 Verifica se o registro já existe
-        //    string checkQuery = $"SELECT COUNT(*) FROM DynamicGrid WHERE RowIndex = {rowIndex} AND ColumnIndex = {columnIndex}";
-        //    int count = DB.ExecutarConsultaCount(checkQuery);
-
-        //    string query;
-        //    if (count > 0)
-        //    {
-        //        // 🔹 Caso o registro já exista, faz um UPDATE
-        //        query = $@"UPDATE DynamicGrid 
-        //           SET CellValue = '{safeCellValue}' 
-        //           WHERE RowIndex = {rowIndex} AND ColumnIndex = {columnIndex}";
-        //        glo.Loga($@"UD,{rowIndex}, {columnIndex}, {safeCellValue} - Registro atualizado");
-        //    }
-        //    else
-        //    {
-        //        // 🔹 Caso não exista, faz um INSERT
-        //        query = $@"INSERT INTO DynamicGrid (RowIndex, ColumnIndex, CellValue) 
-        //           VALUES ({rowIndex}, {columnIndex}, '{safeCellValue}')";
-        //        glo.Loga($@"ID,{rowIndex}, {columnIndex}, {safeCellValue} - Novo registro inserido");
-        //    }
-
-        //    // 🔹 Executa o comando SQL final (INSERT ou UPDATE)
-        //    DB.ExecutarComandoSQL(query);
-        //}        
 
         private void griTaxas_ColumnWidthChanged(object sender, DataGridViewColumnEventArgs e)
         {
@@ -2353,13 +2342,14 @@ namespace TeleBonifacio
 
         #region Excel
 
-        private bool excelAppVisible=false;
+        private bool excelAppVisible = false;
         private Excel.Application excelApp;
         private Excel.Workbook excelWorkbook;
         private Excel.Worksheet excelSheet;
         private string caminhoArquivoExcel = @"C:\Entregas\Arquivo.xlsx";
 
         private Excel.Workbook workbook;
+
 
         [DllImport("user32.dll")]
         private static extern int SetParent(IntPtr hWndChild, IntPtr hWndNewParent);
@@ -2431,6 +2421,7 @@ namespace TeleBonifacio
 
         #endregion
 
+        #region Documentos
         private void label2_MouseUp(object sender, MouseEventArgs e)
         {
             if (openFileDialog1.ShowDialog() == DialogResult.OK)
@@ -2480,7 +2471,7 @@ namespace TeleBonifacio
         {
             string[] partes = linha.Split(',');
             int gID = Convert.ToInt32(partes[1].Trim());
-            string UID = partes[2].Trim(); 
+            string UID = partes[2].Trim();
             glo.Loga($@"FD,{gID}, {UID}");
             faltasDAO.Exclui(gID);
         }
@@ -2494,11 +2485,11 @@ namespace TeleBonifacio
         {
             if (e.KeyCode == Keys.Enter)
             {
-                if (txNvTipo.Text.Length>0)
+                if (txNvTipo.Text.Length > 0)
                 {
                     TpoFalta.Adiciona(txNvTipo.Text, null);
                     RetCmboTpo();
-                }                
+                }
             }
         }
 
@@ -2512,22 +2503,245 @@ namespace TeleBonifacio
             cmbForn.Visible = true;
             cmbTipos.DataSource = null;
             cmbForn.DataSource = null;
-            MostraTipos(); 
+            MostraTipos();
             btAdicTpo.Text = "Atualizar";
             btAdicTpo.Enabled = false;
             btComprei.Text = "Comprei";
             btComprei.Enabled = false;
         }
 
-    }
+        #endregion
 
-    public class CellInfo
-    {
-        public int RowIndexOriginal { get; set; } // Índice real do banco
-        public int GridRowIndex { get; set; } // Índice da grid
-        public int ColumnIndex { get; set; }
-        public string CellValue { get; set; }
+        #region Devedores
+        private void CarregaGridD()
+        {
+            int scrollPosition = dvDevedores.FirstDisplayedScrollingRowIndex;
+            AtualizarGridD = false;
+            cDaoD = new DevedoresDao();
+            DataTable dados = cDaoD.getDados();
+            dvDevedores.DataSource = dados;
+            if (dados != null)
+            {
+                ConfigurarGridD();
+                if (scrollPosition > 0)
+                    dvDevedores.FirstDisplayedScrollingRowIndex = scrollPosition;
+            }
+        }
+
+        private void ConfigurarGridD()
+        {
+            // Adiciona coluna de contador se ainda não existir
+            if (!dvDevedores.Columns.Contains("Contador"))
+            {
+                DataGridViewTextBoxColumn colContador = new DataGridViewTextBoxColumn();
+                colContador.Name = "Contador";
+                colContador.HeaderText = "#";
+                colContador.ReadOnly = true;
+                dvDevedores.Columns.Insert(0, colContador); // insere como primeira
+            }
+
+            // Adiciona coluna de status formatado se ainda não existir
+            if (!dvDevedores.Columns.Contains("StatusDescricao"))
+            {
+                DataGridViewTextBoxColumn colStatus = new DataGridViewTextBoxColumn();
+                colStatus.Name = "StatusDescricao";
+                colStatus.HeaderText = "Status";
+                colStatus.ReadOnly = true;
+                dvDevedores.Columns.Insert(dvDevedores.Columns["Status"].Index + 1, colStatus);
+            }
+
+            // Preenche contador e status descritivo
+            int contador = 1;
+            foreach (DataGridViewRow row in dvDevedores.Rows)
+            {
+                if (!row.IsNewRow)
+                {
+                    // Altura da linha de dados (~30% maior)
+                    row.Height = 30;
+
+                    row.Cells["Contador"].Value = contador++;
+
+                    int status = Convert.ToInt32(row.Cells["Status"].Value);
+                    string statusTexto = "Desconhecido";
+                    switch (status)
+                    {
+                        case 1: statusTexto = "Aberto"; break;
+                        case 2: statusTexto = "Atrasado"; break;
+                        case 3: statusTexto = "Pago"; break;
+                    }
+                    row.Cells["StatusDescricao"].Value = statusTexto;
+                }
+            }
+
+            // Configura os cabeçalhos visíveis
+            dvDevedores.Columns["ClienteNome"].HeaderText = "Cliente";
+            dvDevedores.Columns["DataCompra"].HeaderText = "Compra";
+            dvDevedores.Columns["StatusDescricao"].HeaderText = "Status";
+            dvDevedores.Columns["Vencimento"].HeaderText = "Vencimento";
+            dvDevedores.Columns["Valor"].HeaderText = "Valor";
+            dvDevedores.Columns["Nota"].HeaderText = "Nota";
+            dvDevedores.Columns["Observacao"].HeaderText = "Observação";
+
+            // Oculta colunas internas
+            string[] colunasOcultas = { "ID", "Status", "Cliente" };
+            foreach (var nome in colunasOcultas)
+            {
+                if (dvDevedores.Columns.Contains(nome))
+                {
+                    dvDevedores.Columns[nome].Visible = false;
+                }
+            }
+
+            // Define estilo e altura da fonte
+            dvDevedores.Font = new Font("Segoe UI", 12);
+
+            // Aumenta a altura do cabeçalho (~30%)
+            dvDevedores.ColumnHeadersHeight = 30;
+            dvDevedores.ColumnHeadersDefaultCellStyle.Font = new Font("Segoe UI", 12, FontStyle.Bold);
+            dvDevedores.ColumnHeadersDefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
+
+            // Ajusta larguras das colunas
+            dvDevedores.Columns["Contador"].Width = 84;
+            dvDevedores.Columns["DataCompra"].Width = 110;
+            dvDevedores.Columns["StatusDescricao"].Width = 90;
+            dvDevedores.Columns["Vencimento"].Width = 110;
+            dvDevedores.Columns["Valor"].Width = 100;
+            dvDevedores.Columns["Nota"].Width = 100;
+            dvDevedores.Columns["Observacao"].Width = 300; // Observação com o dobro de espaço
+
+            // Cliente ocupa o espaço restante da grid
+            dvDevedores.Columns["ClienteNome"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+
+            // Garante formatação de valor em moeda
+            dvDevedores.CellFormatting -= dvDevedores_CellFormatting;
+            dvDevedores.CellFormatting += dvDevedores_CellFormatting;
+        }
+
+        private void dvDevedores_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            DataGridView grid = (DataGridView)sender;
+            if (grid != null && e.RowIndex >= 0 && e.RowIndex < grid.Rows.Count)
+            {
+                carregando = true;
+                DataGridViewRow selectedRow = grid.Rows[e.RowIndex];
+                this.iID = Convert.ToInt32(selectedRow.Cells["ID"].Value);
+
+                try
+                {
+                    //cmbClientes.SelectedValue = Convert.ToInt32(selectedRow.Cells["Cliente"].Value);
+                }
+                catch (Exception)
+                {
+                    //cmbClientes.SelectedValue = -1;
+                }
+
+                btnExcluir.Enabled = true;
+                carregando = false;
+            }
+        }
+
+        private void btDevedores_Click(object sender, EventArgs e)
+        {
+            operDevedores Oform = new operDevedores();
+            Oform.ShowDialog();
+            if (Oform.DialogResult == DialogResult.OK)
+            {
+                if (tbFaltas.SelectedIndex == 8)
+                {
+                    CarregaGridD();
+                }
+            }
+        }
+
+        private void dvDevedores_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex >= 0 && e.RowIndex < dvDevedores.Rows.Count)
+            {
+                DataGridViewRow row = dvDevedores.Rows[e.RowIndex];
+
+                int id = Convert.ToInt32(row.Cells["ID"].Value);
+                int idCliente = Convert.ToInt32(row.Cells["Cliente"].Value);
+                string nome = row.Cells["ClienteNome"].Value.ToString();
+                DateTime dataCompra = Convert.ToDateTime(row.Cells["DataCompra"].Value);
+                DateTime vencimento = Convert.ToDateTime(row.Cells["Vencimento"].Value);
+                int status = Convert.ToInt32(row.Cells["Status"].Value);
+                string nota = row.Cells["Nota"].Value?.ToString() ?? "";
+                string observacao = row.Cells["Observacao"].Value?.ToString() ?? "";
+                decimal valor = 0;
+
+                if (dvDevedores.Columns.Contains("Valor"))
+                {
+                    decimal.TryParse(row.Cells["Valor"].Value?.ToString(), out valor);
+                }
+
+                operDevedores frm = new operDevedores();
+                frm.CarregarDados(id, idCliente, nome, dataCompra, vencimento, status, nota, observacao, valor);
+                frm.ShowDialog();
+
+                if (frm.OK)
+                {
+                    //var dao = new DevedoresDao();
+                    DataTable dt = cDaoD.getDados(id); // Buscar apenas pelo ID do devedor
+
+                    if (dt.Rows.Count > 0)
+                    {
+                        DataRow updated = dt.Rows[0];
+
+                        // 🔎 DEPURAÇÃO
+                        string debug = $"ID: {updated["ID"]}\n" +
+                                       $"Cliente: {updated["ClienteNome"]}\n" +
+                                       $"Compra: {updated["DataCompra"]}\n" +
+                                       $"Status: {updated["Status"]}\n" +
+                                       $"Vencimento: {updated["Vencimento"]}\n" +
+                                       $"Nota: {updated["Nota"]}\n" +
+                                       $"Observacao: {updated["Observacao"]}\n" +
+                                       $"Valor: {updated["Valor"]}";
+
+                        MessageBox.Show(debug, "🔍 Dados retornados da base");
+
+                        // Atualiza os valores da linha atual
+                        row.Cells["ClienteNome"].Value = updated["ClienteNome"];
+                        row.Cells["DataCompra"].Value = updated["DataCompra"];
+                        row.Cells["Status"].Value = updated["Status"];
+                        row.Cells["Vencimento"].Value = updated["Vencimento"];
+                        row.Cells["Nota"].Value = updated["Nota"];
+                        row.Cells["Observacao"].Value = updated["Observacao"];
+                        row.Cells["Valor"].Value = updated["Valor"];
+
+                        dvDevedores.Refresh(); // 🔄 força atualização visual
+                    }
+                    else
+                    {
+                        MessageBox.Show("⚠ Nenhum dado foi retornado do banco para o ID " + id);
+                    }
+                }
+
+
+            }
+        }
+
+        private void dvDevedores_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
+        {
+            if (dvDevedores.Columns[e.ColumnIndex].Name == "Valor" && e.Value != null)
+            {
+                if (decimal.TryParse(e.Value.ToString(), out decimal valor))
+                {
+                    e.Value = valor.ToString("C2"); // R$ 1.000,00
+                    e.FormattingApplied = true;
+                }
+            }
+        }
+
+        #endregion
+
+        public class CellInfo
+        {
+            public int RowIndexOriginal { get; set; } // Índice real do banco
+            public int GridRowIndex { get; set; } // Índice da grid
+            public int ColumnIndex { get; set; }
+            public string CellValue { get; set; }
+        }
+
     }
 
 }
-
