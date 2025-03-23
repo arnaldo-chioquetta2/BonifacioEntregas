@@ -44,14 +44,14 @@ namespace TeleBonifacio
             // 
             // cntrole1
             // 
-            this.cntrole1.Size = new System.Drawing.Size(322, 54);
+            this.cntrole1.Size = new System.Drawing.Size(351, 54);
             this.cntrole1.AcaoRealizada += new System.EventHandler<AcaoEventArgs>(this.cntrole1_AcaoRealizada);
             this.cntrole1.Load += new System.EventHandler(this.cntrole1_Load);
             // 
             // txtNrOutro
             // 
             this.txtNrOutro.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtNrOutro.Location = new System.Drawing.Point(242, 132);
+            this.txtNrOutro.Location = new System.Drawing.Point(255, 128);
             this.txtNrOutro.MaxLength = 20;
             this.txtNrOutro.Name = "txtNrOutro";
             this.txtNrOutro.Size = new System.Drawing.Size(68, 23);
@@ -62,7 +62,7 @@ namespace TeleBonifacio
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(239, 112);
+            this.label4.Location = new System.Drawing.Point(252, 108);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(71, 13);
             this.label4.TabIndex = 13;
@@ -71,7 +71,7 @@ namespace TeleBonifacio
             // lblTelefone
             // 
             this.lblTelefone.AutoSize = true;
-            this.lblTelefone.Location = new System.Drawing.Point(12, 112);
+            this.lblTelefone.Location = new System.Drawing.Point(25, 108);
             this.lblTelefone.Name = "lblTelefone";
             this.lblTelefone.Size = new System.Drawing.Size(49, 13);
             this.lblTelefone.TabIndex = 6;
@@ -80,7 +80,7 @@ namespace TeleBonifacio
             // lblNome
             // 
             this.lblNome.AutoSize = true;
-            this.lblNome.Location = new System.Drawing.Point(12, 62);
+            this.lblNome.Location = new System.Drawing.Point(25, 58);
             this.lblNome.Name = "lblNome";
             this.lblNome.Size = new System.Drawing.Size(35, 13);
             this.lblNome.TabIndex = 4;
@@ -89,7 +89,7 @@ namespace TeleBonifacio
             // txtNome
             // 
             this.txtNome.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtNome.Location = new System.Drawing.Point(12, 82);
+            this.txtNome.Location = new System.Drawing.Point(25, 78);
             this.txtNome.MaxLength = 100;
             this.txtNome.Name = "txtNome";
             this.txtNome.Size = new System.Drawing.Size(298, 23);
@@ -99,7 +99,7 @@ namespace TeleBonifacio
             // txtTelefone
             // 
             this.txtTelefone.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtTelefone.Location = new System.Drawing.Point(12, 132);
+            this.txtTelefone.Location = new System.Drawing.Point(25, 128);
             this.txtTelefone.MaxLength = 20;
             this.txtTelefone.Name = "txtTelefone";
             this.txtTelefone.Size = new System.Drawing.Size(108, 23);
@@ -110,7 +110,7 @@ namespace TeleBonifacio
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(9, 169);
+            this.label2.Location = new System.Drawing.Point(22, 165);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(53, 13);
             this.label2.TabIndex = 10;
@@ -119,7 +119,7 @@ namespace TeleBonifacio
             // txtEnder
             // 
             this.txtEnder.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtEnder.Location = new System.Drawing.Point(12, 197);
+            this.txtEnder.Location = new System.Drawing.Point(25, 193);
             this.txtEnder.MaxLength = 40;
             this.txtEnder.Name = "txtEnder";
             this.txtEnder.Size = new System.Drawing.Size(298, 23);
@@ -129,7 +129,7 @@ namespace TeleBonifacio
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(9, 238);
+            this.label1.Location = new System.Drawing.Point(22, 234);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(32, 13);
             this.label1.TabIndex = 8;
@@ -138,7 +138,7 @@ namespace TeleBonifacio
             // txtemail
             // 
             this.txtemail.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtemail.Location = new System.Drawing.Point(12, 266);
+            this.txtemail.Location = new System.Drawing.Point(25, 262);
             this.txtemail.MaxLength = 100;
             this.txtemail.Name = "txtemail";
             this.txtemail.Size = new System.Drawing.Size(298, 23);
@@ -148,7 +148,7 @@ namespace TeleBonifacio
             // btVale
             // 
             this.btVale.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btVale.Location = new System.Drawing.Point(113, 304);
+            this.btVale.Location = new System.Drawing.Point(126, 300);
             this.btVale.Name = "btVale";
             this.btVale.Size = new System.Drawing.Size(97, 32);
             this.btVale.TabIndex = 14;
@@ -160,7 +160,7 @@ namespace TeleBonifacio
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(322, 348);
+            this.ClientSize = new System.Drawing.Size(351, 348);
             this.Controls.Add(this.btVale);
             this.Controls.Add(this.txtNrOutro);
             this.Controls.Add(this.label4);

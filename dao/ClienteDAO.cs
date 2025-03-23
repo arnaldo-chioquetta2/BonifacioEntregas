@@ -348,6 +348,12 @@ namespace TeleBonifacio.dao
             return ExecutarConsultacliente(query);
         }
 
+        public tb.IDataEntity GetPeloNrOutro(string NrOutro)
+        {
+            string query = $"SELECT * FROM Clientes Where NrOutro = {NrOutro} ";
+            return ExecutarConsultacliente(query);
+        }
+
         public override DataTable GetDadosOrdenados(string filtro = "", string ordem = "")
         {
             string query = "SELECT MIN(NrCli) AS NrCli, Nome FROM Clientes GROUP BY Nome ORDER BY Nome";

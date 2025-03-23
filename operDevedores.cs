@@ -182,5 +182,49 @@ namespace TeleBonifacio
         {
             return this.ID;
         }
+
+        private void cmbCliente_Leave(object sender, EventArgs e)
+        {
+            string texto = cmbCliente.Text.Trim();
+
+            // Verifica se o texto é um número (ex: "123")
+            if (int.TryParse(texto, out int numeroCliente))
+            {
+                // Busca o cliente pelo número
+                tb.Cliente reg = (tb.Cliente)Cliente.GetPeloNrOutro(texto);
+                if (reg != null)
+                {
+                    // Atualiza o ComboBox com o nome do cliente encontrado
+                    cmbCliente.Text = reg.Nome;
+
+                    // Opcional: atualizar o ComboBoxItem também, se estiver usando ComboBox com itens complexos
+                    foreach (tb.ComboBoxItem item in cmbCliente.Items)
+                    {
+                        if (item.Id == reg.Id)
+                        {
+                            cmbCliente.SelectedItem = item;
+                            break;
+                        }
+                    }
+
+                    ClienteLocalizado = reg.Id; // Armazena o ID se precisar usar depois
+                }
+                else
+                {
+                    MessageBox.Show("Cliente não encontrado.");
+                    cmbCliente.Focus();
+                }
+            }
+        }
+
+        private void cmbCliente_Enter(object sender, EventArgs e)
+        {
+            cmbCliente.SelectAll();
+        }
+
+        private void cmbCliente_Click(object sender, EventArgs e)
+        {
+            cmbCliente.SelectAll();
+        }
     }
 }

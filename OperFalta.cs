@@ -2258,20 +2258,35 @@ namespace TeleBonifacio
 
         private void dvDevedores_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
         {
+            // Formatar valor em moeda
             if (dvDevedores.Columns[e.ColumnIndex].Name == "Valor" && e.Value != null)
             {
                 if (decimal.TryParse(e.Value.ToString(), out decimal valor))
                 {
-                    if (valor > 0)
+                    e.Value = valor > 0 ? valor.ToString("C2") : "";
+                    e.FormattingApplied = true;
+                }
+            }
+
+            // Verificar vencimento e colorir linha
+            if (dvDevedores.Columns.Contains("Vencimento") && e.RowIndex >= 0)
+            {
+                var row = dvDevedores.Rows[e.RowIndex];
+
+                if (row.Cells["Vencimento"].Value != null &&
+                    DateTime.TryParse(row.Cells["Vencimento"].Value.ToString(), out DateTime vencimento))
+                {
+                    if ((DateTime.Now - vencimento).TotalDays > 30)
                     {
-                        e.Value = valor.ToString("C2"); // Exibe como R$ 1.234,56
+                        row.DefaultCellStyle.ForeColor = Color.White;
+                        row.DefaultCellStyle.BackColor = Color.Red;
                     }
                     else
                     {
-                        e.Value = ""; // Não exibe nada se for zero
+                        // Resetar estilo (caso tenha sido alterado antes)
+                        row.DefaultCellStyle.ForeColor = dvDevedores.DefaultCellStyle.ForeColor;
+                        row.DefaultCellStyle.BackColor = dvDevedores.DefaultCellStyle.BackColor;
                     }
-
-                    e.FormattingApplied = true;
                 }
             }
         }

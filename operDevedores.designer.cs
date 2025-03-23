@@ -44,6 +44,9 @@
             this.cmbCliente.Name = "cmbCliente";
             this.cmbCliente.Size = new System.Drawing.Size(300, 28);
             this.cmbCliente.TabIndex = 0;
+            this.cmbCliente.Click += new System.EventHandler(this.cmbCliente_Click);
+            this.cmbCliente.Enter += new System.EventHandler(this.cmbCliente_Enter);
+            this.cmbCliente.Leave += new System.EventHandler(this.cmbCliente_Leave);
             // 
             // label1
             // 

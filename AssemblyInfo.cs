@@ -11,9 +11,9 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyCulture("")]
 [assembly: ComVisible(false)]
 [assembly: Guid("308c57af-e663-456d-8a2c-188bbd61423d")]
-[assembly: AssemblyVersion("3.6.6.0")]
-[assembly: AssemblyFileVersion("3.6.6.0")]
-// 3.6.6 Acabamento da tela de devedores
+[assembly: AssemblyVersion("3.6.7.0")]
+[assembly: AssemblyFileVersion("3.6.7.0")]
+// 3.6.7 Cor na linha do devedor em caso de 30 dias de atraso
 // 3.6.5 Tela dos Devedores
 // 3.6.4 Ajuste
 // 3.6.3 Impedir gravação de vazios na grid dinâmica
