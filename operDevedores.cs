@@ -18,13 +18,13 @@ namespace TeleBonifacio
         public operDevedores()
         {
             InitializeComponent();
+            cmbStatus.Items.AddRange(new string[] { "Aberto", "Pago", "Atrasado" });
+            cmbStatus.SelectedIndex = 0;
             rt.AdjustFormComponents(this);
         }
 
         private void operDevedores_Load(object sender, EventArgs e)
         {
-            cmbStatus.Items.AddRange(new string[] { "Aberto", "Fechado", "Atrasado" });
-            cmbStatus.SelectedIndex = 0;
             dtpVencimento.Value = DateTime.Today.AddDays(7);
             devDao = new DevedoresDao();
         }
@@ -88,15 +88,38 @@ namespace TeleBonifacio
                     }
                 }
 
+                // 🟦 Captura o status selecionado
+                int status = 1; // valor padrão
+
+                string statusTexto = cmbStatus.Text.Trim(); // ou cmbStatus.SelectedItem.ToString()
+
+                switch (statusTexto)
+                {
+                    case "Aberto":
+                        status = 1;
+                        break;
+                    case "Atrasado":
+                        status = 2;
+                        break;
+                    case "Pago":
+                        status = 3;
+                        break;
+                    default:
+                        status = 1; // valor padrão se algo der errado
+                        break;
+                }
+
+                // Grava o devedor
                 if (this.ID == 0)
                 {
-                    devDao.Adiciona(nrCli, 1, dataCompra, vencimento, nota, observacao, valor);
+                    devDao.Adiciona(nrCli, status, dataCompra, vencimento, nota, observacao, valor);
                 }
                 else
                 {
-                    devDao.Edita(this.ID, nrCli, dataCompra, 1, vencimento, nota, observacao, valor);
+                    devDao.Edita(this.ID, nrCli, dataCompra, status, vencimento, nota, observacao, valor);
                 }
 
+                this.OK = true;
                 this.DialogResult = DialogResult.OK;
                 this.Close();
             }
@@ -127,6 +150,15 @@ namespace TeleBonifacio
             txNota.Text = nota;
             txObs.Text = observacao;
             txValor.Text = valor.ToString("N2");
+            string statusTexto = "";
+
+            switch (status)
+            {
+                case 1: statusTexto = "Aberto"; break;
+                case 2: statusTexto = "Atrasado"; break;
+                case 3: statusTexto = "Pago"; break;
+            }
+            cmbStatus.Text = statusTexto;
             btExcluir.Enabled = true;
         }
 
@@ -144,6 +176,11 @@ namespace TeleBonifacio
                 this.DialogResult = DialogResult.OK;
                 this.Close();
             }
+        }
+
+        internal int getID()
+        {
+            return this.ID;
         }
     }
 }

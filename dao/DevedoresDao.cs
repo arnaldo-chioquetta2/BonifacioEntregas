@@ -57,12 +57,12 @@ namespace TeleBonifacio.dao
             DB.ExecutarComandoSQL(sql);
         }
 
-        public DataTable getDados(int idCliente = 0)
+        public DataTable getDados(int id = 0)
         {
             string sWhe = "";
-            if (idCliente > 0)
+            if (id > 0)
             {
-                sWhe = $" WHERE Devedores.Cliente = {idCliente}";
+                sWhe = $" WHERE Devedores.ID = {id}";
             }
             string sql = $@"
 SELECT 

@@ -179,7 +179,6 @@
     <Compile Include="dao\ContasAPagarDao.cs" />
     <Compile Include="dao\ContratosDAO.cs" />
     <Compile Include="dao\DevedoresDao.cs" />
-    <Compile Include="dao\DynamicGridDao.cs" />
     <Compile Include="dao\EncomendasDao.cs" />
     <Compile Include="dao\EntregadorDAO.cs" />
     <Compile Include="dao\EntregasDAO.cs" />
@@ -378,7 +377,6 @@
     <Compile Include="tb\Contrato.cs" />
     <Compile Include="tb\Devedores.cs" />
     <Compile Include="tb\Document.cs" />
-    <Compile Include="tb\DynamicGrid.cs" />
     <Compile Include="tb\Encomendas.cs" />
     <Compile Include="tb\Entregador.cs" />
     <Compile Include="tb\Entregas.cs" />

@@ -79,8 +79,6 @@ namespace TeleBonifacio
             this.dataGrid4 = new System.Windows.Forms.DataGridView();
             this.tabPage5 = new System.Windows.Forms.TabPage();
             this.rtfTexto = new AtcCtrl.ATCRTF();
-            this.tabPage6 = new System.Windows.Forms.TabPage();
-            this.griTaxas = new Zuby.ADGV.AdvancedDataGridView();
             this.tabPage7 = new System.Windows.Forms.TabPage();
             this.rtfWord = new AtcCtrl.ATCRTF();
             this.tabPage8 = new System.Windows.Forms.TabPage();
@@ -105,8 +103,6 @@ namespace TeleBonifacio
             this.tabPage4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGrid4)).BeginInit();
             this.tabPage5.SuspendLayout();
-            this.tabPage6.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.griTaxas)).BeginInit();
             this.tabPage7.SuspendLayout();
             this.tabPage8.SuspendLayout();
             this.tabPage9.SuspendLayout();
@@ -490,7 +486,6 @@ namespace TeleBonifacio
             this.tbFaltas.Controls.Add(this.tabPage3);
             this.tbFaltas.Controls.Add(this.tabPage4);
             this.tbFaltas.Controls.Add(this.tabPage5);
-            this.tbFaltas.Controls.Add(this.tabPage6);
             this.tbFaltas.Controls.Add(this.tabPage7);
             this.tbFaltas.Controls.Add(this.tabPage8);
             this.tbFaltas.Controls.Add(this.tabPage9);
@@ -613,34 +608,6 @@ namespace TeleBonifacio
             this.rtfTexto.TabIndex = 0;
             this.rtfTexto.VlrPerImr = 1F;
             // 
-            // tabPage6
-            // 
-            this.tabPage6.Controls.Add(this.griTaxas);
-            this.tabPage6.Location = new System.Drawing.Point(4, 22);
-            this.tabPage6.Name = "tabPage6";
-            this.tabPage6.Size = new System.Drawing.Size(1337, 298);
-            this.tabPage6.TabIndex = 5;
-            this.tabPage6.Text = "Clientes";
-            this.tabPage6.UseVisualStyleBackColor = true;
-            // 
-            // griTaxas
-            // 
-            this.griTaxas.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.griTaxas.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.griTaxas.FilterAndSortEnabled = true;
-            this.griTaxas.FilterStringChangedInvokeBeforeDatasourceUpdate = true;
-            this.griTaxas.Location = new System.Drawing.Point(0, 0);
-            this.griTaxas.MaxFilterButtonImageHeight = 23;
-            this.griTaxas.Name = "griTaxas";
-            this.griTaxas.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.griTaxas.Size = new System.Drawing.Size(1337, 298);
-            this.griTaxas.SortStringChangedInvokeBeforeDatasourceUpdate = true;
-            this.griTaxas.TabIndex = 0;
-            this.griTaxas.SortStringChanged += new System.EventHandler<Zuby.ADGV.AdvancedDataGridView.SortEventArgs>(this.griTaxas_SortStringChanged);
-            this.griTaxas.FilterStringChanged += new System.EventHandler<Zuby.ADGV.AdvancedDataGridView.FilterEventArgs>(this.griTaxas_FilterStringChanged_1);
-            this.griTaxas.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.griTaxas_CellClick);
-            this.griTaxas.KeyDown += new System.Windows.Forms.KeyEventHandler(this.griTaxas_KeyDown);
-            // 
             // tabPage7
             // 
             this.tabPage7.Controls.Add(this.rtfWord);
@@ -758,8 +725,6 @@ namespace TeleBonifacio
             this.tabPage4.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dataGrid4)).EndInit();
             this.tabPage5.ResumeLayout(false);
-            this.tabPage6.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.griTaxas)).EndInit();
             this.tabPage7.ResumeLayout(false);
             this.tabPage8.ResumeLayout(false);
             this.tabPage9.ResumeLayout(false);
@@ -818,10 +783,8 @@ namespace TeleBonifacio
         private ContextMenuStrip contextMenuStrip1;
         private ToolStripMenuItem Aumentar;
         private ToolStripMenuItem DiminirPrio;
-        private TabPage tabPage6;
         private OpenFileDialog openFileDialog1;
         private TabPage tabPage7;
-        private Zuby.ADGV.AdvancedDataGridView griTaxas;
         private TabPage tabPage8;
         private Panel panelExcel;
         private TabPage tabPage9;
