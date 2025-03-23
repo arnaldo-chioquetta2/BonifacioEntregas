@@ -2055,36 +2055,54 @@ namespace TeleBonifacio
 
         private void ConfigurarGridD()
         {
-            // Adiciona coluna de contador se ainda não existir
-            if (!dvDevedores.Columns.Contains("Contador"))
+            // Se ainda não criou as colunas virtuais, cria todas de uma vez
+            if (!dvDevedores.Columns.Contains("CodigoCliente"))
             {
-                DataGridViewTextBoxColumn colContador = new DataGridViewTextBoxColumn();
-                colContador.Name = "Contador";
-                colContador.HeaderText = "#";
-                colContador.ReadOnly = true;
-                dvDevedores.Columns.Insert(0, colContador); // insere como primeira
-            }
+                // Contador
+                DataGridViewTextBoxColumn colContador = new DataGridViewTextBoxColumn
+                {
+                    Name = "C",
+                    HeaderText = "",
+                    ReadOnly = true
+                };
+                dvDevedores.Columns.Insert(0, colContador);
 
-            // Adiciona coluna de status formatado se ainda não existir
-            if (!dvDevedores.Columns.Contains("StatusDescricao"))
-            {
-                DataGridViewTextBoxColumn colStatus = new DataGridViewTextBoxColumn();
-                colStatus.Name = "StatusDescricao";
-                colStatus.HeaderText = "Status";
-                colStatus.ReadOnly = true;
+                // Código do cliente (NrOutro)
+                DataGridViewTextBoxColumn colCodigo = new DataGridViewTextBoxColumn
+                {
+                    Name = "CodigoCliente",
+                    HeaderText = "Código",
+                    ReadOnly = true
+                };
+                dvDevedores.Columns.Insert(1, colCodigo);
+
+                // Status formatado
+                DataGridViewTextBoxColumn colStatus = new DataGridViewTextBoxColumn
+                {
+                    Name = "StatusDescricao",
+                    HeaderText = "Status",
+                    ReadOnly = true
+                };
                 dvDevedores.Columns.Insert(dvDevedores.Columns["Status"].Index + 1, colStatus);
+
+                // Dias de atraso
+                DataGridViewTextBoxColumn colAtraso = new DataGridViewTextBoxColumn
+                {
+                    Name = "DiasAtraso",
+                    HeaderText = "Atraso",
+                    ReadOnly = true
+                };
+                dvDevedores.Columns.Insert(dvDevedores.Columns["Vencimento"].Index + 1, colAtraso);
             }
 
-            // Preenche contador e status descritivo
+            // Preenche colunas calculadas por linha
             int contador = 1;
             foreach (DataGridViewRow row in dvDevedores.Rows)
             {
                 if (!row.IsNewRow)
                 {
-                    // Altura da linha de dados (~30% maior)
                     row.Height = 30;
-
-                    row.Cells["Contador"].Value = contador++;
+                    row.Cells["C"].Value = contador++;
 
                     int status = Convert.ToInt32(row.Cells["Status"].Value);
                     string statusTexto = "Desconhecido";
@@ -2095,14 +2113,23 @@ namespace TeleBonifacio
                         case 3: statusTexto = "Pago"; break;
                     }
                     row.Cells["StatusDescricao"].Value = statusTexto;
+
+                    if (row.Cells["Vencimento"].Value != null &&
+                        DateTime.TryParse(row.Cells["Vencimento"].Value.ToString(), out DateTime vencimento))
+                    {
+                        int diasAtraso = (int)(DateTime.Now - vencimento).TotalDays;
+                        row.Cells["DiasAtraso"].Value = diasAtraso > 0 ? diasAtraso.ToString() : "";
+                    }
                 }
             }
 
-            // Configura os cabeçalhos visíveis
+            // Configura cabeçalhos visíveis
+            dvDevedores.Columns["CodigoCliente"].HeaderText = "Código";
             dvDevedores.Columns["ClienteNome"].HeaderText = "Cliente";
             dvDevedores.Columns["DataCompra"].HeaderText = "Compra";
             dvDevedores.Columns["StatusDescricao"].HeaderText = "Status";
             dvDevedores.Columns["Vencimento"].HeaderText = "Vencimento";
+            dvDevedores.Columns["DiasAtraso"].HeaderText = "Atraso";
             dvDevedores.Columns["Valor"].HeaderText = "Valor";
             dvDevedores.Columns["Nota"].HeaderText = "Nota";
             dvDevedores.Columns["Observacao"].HeaderText = "Observação";
@@ -2117,30 +2144,123 @@ namespace TeleBonifacio
                 }
             }
 
-            // Define estilo e altura da fonte
+            // Define estilo geral
             dvDevedores.Font = new Font("Segoe UI", 12);
-
-            // Aumenta a altura do cabeçalho (~30%)
             dvDevedores.ColumnHeadersHeight = 30;
             dvDevedores.ColumnHeadersDefaultCellStyle.Font = new Font("Segoe UI", 12, FontStyle.Bold);
             dvDevedores.ColumnHeadersDefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
 
-            // Ajusta larguras das colunas
-            dvDevedores.Columns["Contador"].Width = 84;
+            // Ajusta larguras
+            dvDevedores.Columns["C"].Width = 42; // metade de 84
+            dvDevedores.Columns["CodigoCliente"].Width = 80;
             dvDevedores.Columns["DataCompra"].Width = 110;
-            dvDevedores.Columns["StatusDescricao"].Width = 90;
+            dvDevedores.Columns["StatusDescricao"].Width = 72; // 20% menor
             dvDevedores.Columns["Vencimento"].Width = 110;
+            dvDevedores.Columns["DiasAtraso"].Width = 72; // 20% menor
             dvDevedores.Columns["Valor"].Width = 100;
             dvDevedores.Columns["Nota"].Width = 100;
-            dvDevedores.Columns["Observacao"].Width = 300; // Observação com o dobro de espaço
+            dvDevedores.Columns["Observacao"].Width = 300;
 
-            // Cliente ocupa o espaço restante da grid
+            // Valor alinhado à direita
+            dvDevedores.Columns["Valor"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+
+            // Cliente ocupa o espaço restante
             dvDevedores.Columns["ClienteNome"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
 
-            // Garante formatação de valor em moeda
+            // Garante formatação de valores
             dvDevedores.CellFormatting -= dvDevedores_CellFormatting;
             dvDevedores.CellFormatting += dvDevedores_CellFormatting;
         }
+
+
+        //private void ConfigurarGridD()
+        //{
+        //    // Adiciona coluna de contador se ainda não existir
+        //    if (!dvDevedores.Columns.Contains("Contador"))
+        //    {
+        //        DataGridViewTextBoxColumn colContador = new DataGridViewTextBoxColumn();
+        //        colContador.Name = "Contador";
+        //        colContador.HeaderText = "#";
+        //        colContador.ReadOnly = true;
+        //        dvDevedores.Columns.Insert(0, colContador); // insere como primeira
+        //    }
+
+        //    // Adiciona coluna de status formatado se ainda não existir
+        //    if (!dvDevedores.Columns.Contains("StatusDescricao"))
+        //    {
+        //        DataGridViewTextBoxColumn colStatus = new DataGridViewTextBoxColumn();
+        //        colStatus.Name = "StatusDescricao";
+        //        colStatus.HeaderText = "Status";
+        //        colStatus.ReadOnly = true;
+        //        dvDevedores.Columns.Insert(dvDevedores.Columns["Status"].Index + 1, colStatus);
+        //    }
+
+        //    // Preenche contador e status descritivo
+        //    int contador = 1;
+        //    foreach (DataGridViewRow row in dvDevedores.Rows)
+        //    {
+        //        if (!row.IsNewRow)
+        //        {
+        //            // Altura da linha de dados (~30% maior)
+        //            row.Height = 30;
+
+        //            row.Cells["Contador"].Value = contador++;
+
+        //            int status = Convert.ToInt32(row.Cells["Status"].Value);
+        //            string statusTexto = "Desconhecido";
+        //            switch (status)
+        //            {
+        //                case 1: statusTexto = "Aberto"; break;
+        //                case 2: statusTexto = "Atrasado"; break;
+        //                case 3: statusTexto = "Pago"; break;
+        //            }
+        //            row.Cells["StatusDescricao"].Value = statusTexto;
+        //        }
+        //    }
+
+        //    // Configura os cabeçalhos visíveis
+        //    dvDevedores.Columns["ClienteNome"].HeaderText = "Cliente";
+        //    dvDevedores.Columns["DataCompra"].HeaderText = "Compra";
+        //    dvDevedores.Columns["StatusDescricao"].HeaderText = "Status";
+        //    dvDevedores.Columns["Vencimento"].HeaderText = "Vencimento";
+        //    dvDevedores.Columns["Valor"].HeaderText = "Valor";
+        //    dvDevedores.Columns["Nota"].HeaderText = "Nota";
+        //    dvDevedores.Columns["Observacao"].HeaderText = "Observação";
+
+        //    // Oculta colunas internas
+        //    string[] colunasOcultas = { "ID", "Status", "Cliente" };
+        //    foreach (var nome in colunasOcultas)
+        //    {
+        //        if (dvDevedores.Columns.Contains(nome))
+        //        {
+        //            dvDevedores.Columns[nome].Visible = false;
+        //        }
+        //    }
+
+        //    // Define estilo e altura da fonte
+        //    dvDevedores.Font = new Font("Segoe UI", 12);
+
+        //    // Aumenta a altura do cabeçalho (~30%)
+        //    dvDevedores.ColumnHeadersHeight = 30;
+        //    dvDevedores.ColumnHeadersDefaultCellStyle.Font = new Font("Segoe UI", 12, FontStyle.Bold);
+        //    dvDevedores.ColumnHeadersDefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
+
+        //    // Ajusta larguras das colunas
+        //    dvDevedores.Columns["Contador"].Width = 84;
+        //    dvDevedores.Columns["DataCompra"].Width = 110;
+        //    dvDevedores.Columns["StatusDescricao"].Width = 90;
+        //    dvDevedores.Columns["Vencimento"].Width = 110;
+        //    dvDevedores.Columns["Valor"].Width = 100;
+        //    dvDevedores.Columns["Nota"].Width = 100;
+        //    dvDevedores.Columns["Observacao"].Width = 300; // Observação com o dobro de espaço
+
+        //    // Cliente ocupa o espaço restante da grid
+        //    dvDevedores.Columns["ClienteNome"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+
+        //    // Garante formatação de valor em moeda
+        //    dvDevedores.CellFormatting -= dvDevedores_CellFormatting;
+        //    dvDevedores.CellFormatting += dvDevedores_CellFormatting;
+        //}
 
         private void dvDevedores_CellClick(object sender, DataGridViewCellEventArgs e)
         {

@@ -66,13 +66,15 @@ namespace TeleBonifacio.dao
             }
             string sql = $@"
 SELECT 
-    1 AS Contador,
+    1 AS C,
+    Clientes.NrOutro AS CodigoCliente,
     Devedores.ID, 
     Clientes.Nome AS ClienteNome, 
     Devedores.DataCompra, 
     Devedores.Status,
-    '' AS StatusDescricao, 
-    Devedores.Vencimento, 
+    '' AS StatusDescricao,
+    Devedores.Vencimento,
+    '' AS DiasAtraso,
     Devedores.Valor, 
     Devedores.Nota, 
     Devedores.Observacao,
@@ -82,7 +84,7 @@ INNER JOIN Clientes ON Clientes.NrCli = Devedores.Cliente
 {sWhe}
 ORDER BY Clientes.Nome ASC";
             return DB.ExecutarConsulta(sql);
-        }        
+        }
 
     }
 }
