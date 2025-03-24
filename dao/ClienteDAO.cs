@@ -118,16 +118,16 @@ namespace TeleBonifacio.dao
             }
         }
 
-        public int InserirNovoCliente(string nome, string telefone)
+        public int InserirNovoCliente(string nome, string telefone="", string nrOutro="")
         {
             tb.Cliente ret = GetUltimo() as tb.Cliente;
             if (telefone.Length==0)
             {
                 telefone = "0";
             }
-            glo.Loga($@"IC,{ret.Id + 1},{nome},{telefone}, {DateTime.Now}");
-            string query = $@"INSERT INTO Clientes (NrCli, Nome, Telefone, Data) VALUES (
-                        {ret.Id+1}, '{nome}', '{telefone}', '{DateTime.Now:yyyy-MM-dd HH:mm:ss}' ) ";
+            glo.Loga($@"IC,{ret.Id + 1},{nome},{telefone}, {DateTime.Now}, {nrOutro} ");
+            string query = $@"INSERT INTO Clientes (NrCli, Nome, Telefone, Data, nrOutro) VALUES (
+                        {ret.Id+1}, '{nome}', '{telefone}', '{DateTime.Now:yyyy-MM-dd HH:mm:ss}', '{nrOutro}' ) ";
             DB.ExecutarComandoSQL(query);
             return ret.Id + 1;
         }
@@ -352,6 +352,14 @@ namespace TeleBonifacio.dao
         {
             string query = $"SELECT * FROM Clientes Where NrOutro = {NrOutro} ";
             return ExecutarConsultacliente(query);
+        }
+
+        public int GetIDPeloNome(string Nome)
+        {
+            string query = $"SELECT NrCli FROM Clientes Where Nome = '{Nome}' ";
+            DataTable dataTable = glo.getDados(query);            
+            int VarId = (int)dataTable.Rows[0]["NrCli"];
+            return VarId;
         }
 
         public override DataTable GetDadosOrdenados(string filtro = "", string ordem = "")

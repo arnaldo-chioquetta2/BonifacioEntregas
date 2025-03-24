@@ -80,12 +80,11 @@ namespace TeleBonifacio
                 }
                 else
                 {
-                    nrCli = clienteDAO.InserirNovoCliente(nomeCliente, "");
-                    if (nrCli <= 0)
+                    nrCli = clienteDAO.GetIDPeloNome(nomeCliente);
+                    if (nrCli==0)
                     {
-                        MessageBox.Show("Erro ao adicionar novo cliente.");
-                        return;
-                    }
+                        nrCli = clienteDAO.InserirNovoCliente(nomeCliente, nrOutro: txNrOutro.Text);
+                    }                    
                 }
 
                 // 🟦 Captura o status selecionado
@@ -187,17 +186,13 @@ namespace TeleBonifacio
         {
             string texto = cmbCliente.Text.Trim();
 
-            // Verifica se o texto é um número (ex: "123")
+            // Se for número, tenta localizar pelo código NrOutro
             if (int.TryParse(texto, out int numeroCliente))
             {
-                // Busca o cliente pelo número
                 tb.Cliente reg = (tb.Cliente)Cliente.GetPeloNrOutro(texto);
                 if (reg != null)
                 {
-                    // Atualiza o ComboBox com o nome do cliente encontrado
                     cmbCliente.Text = reg.Nome;
-
-                    // Opcional: atualizar o ComboBoxItem também, se estiver usando ComboBox com itens complexos
                     foreach (tb.ComboBoxItem item in cmbCliente.Items)
                     {
                         if (item.Id == reg.Id)
@@ -206,8 +201,8 @@ namespace TeleBonifacio
                             break;
                         }
                     }
-
-                    ClienteLocalizado = reg.Id; // Armazena o ID se precisar usar depois
+                    ClienteLocalizado = reg.Id;
+                    txNrOutro.Text = texto;
                 }
                 else
                 {
@@ -215,7 +210,63 @@ namespace TeleBonifacio
                     cmbCliente.Focus();
                 }
             }
+            else
+            {
+                // Verifica se o texto digitado está em algum item da lista
+                bool encontrado = false;
+                foreach (tb.ComboBoxItem item in cmbCliente.Items)
+                {
+                    if (string.Equals(item.Nome, texto, StringComparison.CurrentCultureIgnoreCase))
+                    {
+                        encontrado = true;
+                        ClienteLocalizado = item.Id;
+                        tb.Cliente reg = (tb.Cliente)Cliente.GetPeloID(item.Id.ToString());
+                        txNrOutro.Text = reg.NrOutro;
+                        break;
+                    }
+                }
+
+                if (!encontrado)
+                {
+                    // Nome digitado não está na lista → novo cliente
+                    txNrOutro.ReadOnly = false;
+                    txNrOutro.Focus();
+                }
+            }
         }
+
+        //private void cmbCliente_Leave(object sender, EventArgs e)
+        //{
+        //    string texto = cmbCliente.Text.Trim();
+        //    if (int.TryParse(texto, out int numeroCliente))
+        //    {
+        //        tb.Cliente reg = (tb.Cliente)Cliente.GetPeloNrOutro(texto);
+        //        if (reg != null)
+        //        {
+        //            cmbCliente.Text = reg.Nome;
+        //            foreach (tb.ComboBoxItem item in cmbCliente.Items)
+        //            {
+        //                if (item.Id == reg.Id)
+        //                {
+        //                    cmbCliente.SelectedItem = item;
+        //                    break;
+        //                }
+        //            }
+        //            ClienteLocalizado = reg.Id;
+        //            txNrOutro.Text = texto;
+        //        }
+        //        else
+        //        {
+        //            MessageBox.Show("Cliente não encontrado.");
+        //            cmbCliente.Focus();
+        //        }
+        //    } else
+        //    {
+        //        int idCli = ((tb.ComboBoxItem)cmbCliente.SelectedItem).Id;
+        //        tb.Cliente reg = (tb.Cliente)Cliente.GetPeloID(idCli.ToString());
+        //        txNrOutro.Text = reg.NrOutro;
+        //    }
+        //}
 
         private void cmbCliente_Enter(object sender, EventArgs e)
         {

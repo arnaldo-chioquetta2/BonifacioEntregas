@@ -2114,11 +2114,14 @@ namespace TeleBonifacio
                     }
                     row.Cells["StatusDescricao"].Value = statusTexto;
 
-                    if (row.Cells["Vencimento"].Value != null &&
-                        DateTime.TryParse(row.Cells["Vencimento"].Value.ToString(), out DateTime vencimento))
+                    if (status<3)
                     {
-                        int diasAtraso = (int)(DateTime.Now - vencimento).TotalDays;
-                        row.Cells["DiasAtraso"].Value = diasAtraso > 0 ? diasAtraso.ToString() : "";
+                        if (row.Cells["DataCompra"].Value != null &&
+                            DateTime.TryParse(row.Cells["DataCompra"].Value.ToString(), out DateTime vencimento))
+                        {
+                            int diasAtraso = (int)(DateTime.Now - vencimento).TotalDays;
+                            row.Cells["DiasAtraso"].Value = diasAtraso > 0 ? diasAtraso.ToString() : "";
+                        }
                     }
                 }
             }
@@ -2170,97 +2173,7 @@ namespace TeleBonifacio
             // Garante formatação de valores
             dvDevedores.CellFormatting -= dvDevedores_CellFormatting;
             dvDevedores.CellFormatting += dvDevedores_CellFormatting;
-        }
-
-
-        //private void ConfigurarGridD()
-        //{
-        //    // Adiciona coluna de contador se ainda não existir
-        //    if (!dvDevedores.Columns.Contains("Contador"))
-        //    {
-        //        DataGridViewTextBoxColumn colContador = new DataGridViewTextBoxColumn();
-        //        colContador.Name = "Contador";
-        //        colContador.HeaderText = "#";
-        //        colContador.ReadOnly = true;
-        //        dvDevedores.Columns.Insert(0, colContador); // insere como primeira
-        //    }
-
-        //    // Adiciona coluna de status formatado se ainda não existir
-        //    if (!dvDevedores.Columns.Contains("StatusDescricao"))
-        //    {
-        //        DataGridViewTextBoxColumn colStatus = new DataGridViewTextBoxColumn();
-        //        colStatus.Name = "StatusDescricao";
-        //        colStatus.HeaderText = "Status";
-        //        colStatus.ReadOnly = true;
-        //        dvDevedores.Columns.Insert(dvDevedores.Columns["Status"].Index + 1, colStatus);
-        //    }
-
-        //    // Preenche contador e status descritivo
-        //    int contador = 1;
-        //    foreach (DataGridViewRow row in dvDevedores.Rows)
-        //    {
-        //        if (!row.IsNewRow)
-        //        {
-        //            // Altura da linha de dados (~30% maior)
-        //            row.Height = 30;
-
-        //            row.Cells["Contador"].Value = contador++;
-
-        //            int status = Convert.ToInt32(row.Cells["Status"].Value);
-        //            string statusTexto = "Desconhecido";
-        //            switch (status)
-        //            {
-        //                case 1: statusTexto = "Aberto"; break;
-        //                case 2: statusTexto = "Atrasado"; break;
-        //                case 3: statusTexto = "Pago"; break;
-        //            }
-        //            row.Cells["StatusDescricao"].Value = statusTexto;
-        //        }
-        //    }
-
-        //    // Configura os cabeçalhos visíveis
-        //    dvDevedores.Columns["ClienteNome"].HeaderText = "Cliente";
-        //    dvDevedores.Columns["DataCompra"].HeaderText = "Compra";
-        //    dvDevedores.Columns["StatusDescricao"].HeaderText = "Status";
-        //    dvDevedores.Columns["Vencimento"].HeaderText = "Vencimento";
-        //    dvDevedores.Columns["Valor"].HeaderText = "Valor";
-        //    dvDevedores.Columns["Nota"].HeaderText = "Nota";
-        //    dvDevedores.Columns["Observacao"].HeaderText = "Observação";
-
-        //    // Oculta colunas internas
-        //    string[] colunasOcultas = { "ID", "Status", "Cliente" };
-        //    foreach (var nome in colunasOcultas)
-        //    {
-        //        if (dvDevedores.Columns.Contains(nome))
-        //        {
-        //            dvDevedores.Columns[nome].Visible = false;
-        //        }
-        //    }
-
-        //    // Define estilo e altura da fonte
-        //    dvDevedores.Font = new Font("Segoe UI", 12);
-
-        //    // Aumenta a altura do cabeçalho (~30%)
-        //    dvDevedores.ColumnHeadersHeight = 30;
-        //    dvDevedores.ColumnHeadersDefaultCellStyle.Font = new Font("Segoe UI", 12, FontStyle.Bold);
-        //    dvDevedores.ColumnHeadersDefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
-
-        //    // Ajusta larguras das colunas
-        //    dvDevedores.Columns["Contador"].Width = 84;
-        //    dvDevedores.Columns["DataCompra"].Width = 110;
-        //    dvDevedores.Columns["StatusDescricao"].Width = 90;
-        //    dvDevedores.Columns["Vencimento"].Width = 110;
-        //    dvDevedores.Columns["Valor"].Width = 100;
-        //    dvDevedores.Columns["Nota"].Width = 100;
-        //    dvDevedores.Columns["Observacao"].Width = 300; // Observação com o dobro de espaço
-
-        //    // Cliente ocupa o espaço restante da grid
-        //    dvDevedores.Columns["ClienteNome"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-
-        //    // Garante formatação de valor em moeda
-        //    dvDevedores.CellFormatting -= dvDevedores_CellFormatting;
-        //    dvDevedores.CellFormatting += dvDevedores_CellFormatting;
-        //}
+        }     
 
         private void dvDevedores_CellClick(object sender, DataGridViewCellEventArgs e)
         {
@@ -2362,7 +2275,9 @@ namespace TeleBonifacio
                                 {
                                     case 1: statusTexto = "Aberto"; break;
                                     case 2: statusTexto = "Atrasado"; break;
-                                    case 3: statusTexto = "Pago"; break;
+                                    case 3: statusTexto = "Pago";
+                                        linha["DiasAtraso"] = "";
+                                        break;
                                 }
                                 linha["StatusDescricao"] = statusTexto;
                             }
@@ -2388,24 +2303,27 @@ namespace TeleBonifacio
                 }
             }
 
-            // Verificar vencimento e colorir linha
-            if (dvDevedores.Columns.Contains("Vencimento") && e.RowIndex >= 0)
+            // Verificar vencimento pela DataCompra e colorir se atrasado + status ≠ 3
+            if (e.RowIndex >= 0)
             {
                 var row = dvDevedores.Rows[e.RowIndex];
-
-                if (row.Cells["Vencimento"].Value != null &&
-                    DateTime.TryParse(row.Cells["Vencimento"].Value.ToString(), out DateTime vencimento))
+                if (row.Cells["DataCompra"].Value != null &&
+                    DateTime.TryParse(row.Cells["DataCompra"].Value.ToString(), out DateTime dataCompra))
                 {
-                    if ((DateTime.Now - vencimento).TotalDays > 30)
+                    int diasAtraso = (int)(DateTime.Now.Date - dataCompra.Date).TotalDays;
+                    // Verifica se status está presente e diferente de 3
+                    if (row.Cells["Status"].Value != null &&
+                        int.TryParse(row.Cells["Status"].Value.ToString(), out int status) &&
+                        diasAtraso > 30 && status != 3)
                     {
-                        row.DefaultCellStyle.ForeColor = Color.White;
-                        row.DefaultCellStyle.BackColor = Color.Red;
+                        row.DefaultCellStyle.BackColor = Color.FromArgb(255, 160, 160); // vermelho claro
+                        row.DefaultCellStyle.ForeColor = Color.Black;
                     }
                     else
                     {
-                        // Resetar estilo (caso tenha sido alterado antes)
-                        row.DefaultCellStyle.ForeColor = dvDevedores.DefaultCellStyle.ForeColor;
+                        // Resetar estilo se não for mais necessário
                         row.DefaultCellStyle.BackColor = dvDevedores.DefaultCellStyle.BackColor;
+                        row.DefaultCellStyle.ForeColor = dvDevedores.DefaultCellStyle.ForeColor;
                     }
                 }
             }
