@@ -23,6 +23,7 @@ namespace TeleBonifacio
         private GarantiasDao cDaoG;
         private DevedoresDao cDaoD;
         private pesCliente FpesCliente;
+        private operDevedores FDeve;
         private DataTable dadosCli;
         private Dictionary<int, Color> tipoFaltaCores = new Dictionary<int, Color>();
         private Color originalBackgroundColor;
@@ -2200,9 +2201,18 @@ namespace TeleBonifacio
 
         private void btDevedores_Click(object sender, EventArgs e)
         {
-            operDevedores Oform = new operDevedores();
-            Oform.ShowDialog();
-            if (Oform.DialogResult == DialogResult.OK)
+            if (FDeve == null)
+            {
+                FDeve = new operDevedores();
+            }
+            if (dadosCli == null)
+            {
+                ClienteDAO Cliente = new ClienteDAO();
+                dadosCli = Cliente.GetDadosOrdenados();
+                FDeve.RecebeDadosCli(ref dadosCli);
+            }            
+            FDeve.ShowDialog();
+            if (FDeve.DialogResult == DialogResult.OK)
             {
                 if (tbFaltas.SelectedIndex == 8)
                 {

@@ -527,6 +527,36 @@ namespace TeleBonifacio
             e.DrawFocusRectangle();
         }
 
+        public static void CarregarComboBoxU<T>(ComboBox comboBox, DataTable dados, string ItemZero = "", string filtro = "", string ordem = "", string ItemFinal = "", string ItemFinal2 = "") where T : tb.IDataEntity, new()
+        {
+            List<tb.ComboBoxItem> lista = new List<tb.ComboBoxItem>();
+            if (ItemZero.Length > 0)
+            {
+                tb.ComboBoxItem item = new tb.ComboBoxItem(0, ItemZero);
+                lista.Add(item);
+            }
+            foreach (DataRow row in dados.Rows)
+            {
+                int id = Convert.ToInt32(row["id"]);
+                string nome = row["Nome"].ToString();
+                tb.ComboBoxItem item = new tb.ComboBoxItem(id, nome);
+                lista.Add(item);
+            }
+            if (ItemFinal.Length > 0)
+            {
+                tb.ComboBoxItem item = new tb.ComboBoxItem(0, ItemFinal);
+                lista.Add(item);
+                if (ItemFinal2.Length > 0)
+                {
+                    tb.ComboBoxItem item2 = new tb.ComboBoxItem(0, ItemFinal2);
+                    lista.Add(item2);
+                }
+            }
+            comboBox.DataSource = lista;
+            comboBox.DisplayMember = "Nome";
+            comboBox.ValueMember = "Id";
+        }
+
         public static void CarregarComboBox<T>(ComboBox comboBox, dao.BaseDAO classe, string ItemZero = "", string filtro = "", string ordem = "", string ItemFinal = "", string ItemFinal2 = "") where T : tb.IDataEntity, new()
         {
             DataTable dados = classe.GetDadosOrdenados(filtro, ordem);

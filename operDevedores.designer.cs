@@ -256,6 +256,7 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Cadastro de Devedor";
             this.Activated += new System.EventHandler(this.operDevedores_Activated);
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.operDevedores_FormClosing);
             this.Load += new System.EventHandler(this.operDevedores_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
