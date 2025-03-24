@@ -11,8 +11,9 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyCulture("")]
 [assembly: ComVisible(false)]
 [assembly: Guid("308c57af-e663-456d-8a2c-188bbd61423d")]
-[assembly: AssemblyVersion("3.7.0.0")]
-[assembly: AssemblyFileVersion("3.7.0.0")]
+[assembly: AssemblyVersion("3.7.1.0")]
+[assembly: AssemblyFileVersion("3.7.1.0")]
+// 3.7.1 Correção da busca pelo numero
 // 3.7.0 Reutilização da pesquisa de clientes no devedor
 // 3.6.9 Grava nrOutro na hora de incluir cliente devedor
 // 3.6.8 Dias de atraso nos vendedores

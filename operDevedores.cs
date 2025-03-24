@@ -133,7 +133,7 @@ namespace TeleBonifacio
 
         private void operDevedores_Activated(object sender, EventArgs e)
         {
-            if (this.ID==0)
+            if ((this.ID==0) && (ClienteLocalizado==0) )
             {
                 this.Cursor = Cursors.WaitCursor;
                 Cliente = new ClienteDAO();
@@ -209,7 +209,7 @@ namespace TeleBonifacio
                         {
                             if (item.Id == reg.Id)
                             {
-                                cmbCliente.SelectedItem = item;
+                                cmbCliente.SelectedItem = item.Nome;
                                 break;
                             }
                         }
