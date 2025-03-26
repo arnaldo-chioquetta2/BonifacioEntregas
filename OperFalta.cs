@@ -2054,49 +2054,49 @@ namespace TeleBonifacio
             }
         }
 
+        // Processamento INICIO
+        // Refatorado em 26/03/25 Original 107 linhas, resultado 87 linhas
         private void ConfigurarGridD()
         {
-            // Se ainda não criou as colunas virtuais, cria todas de uma vez
+            CriarColunasVirtuais();
+
+            PreencherColunasCalculadas();
+
+            ConfigurarCabecalhos();
+
+            OcultarColunasInternas();
+
+            DefinirEstiloGeral();
+
+            AjustarLargurasColunas();
+
+            dvDevedores.CellFormatting -= dvDevedores_CellFormatting;
+            dvDevedores.CellFormatting += dvDevedores_CellFormatting;
+        }
+
+        private void CriarColunasVirtuais()
+        {
             if (!dvDevedores.Columns.Contains("CodigoCliente"))
             {
-                // Contador
-                DataGridViewTextBoxColumn colContador = new DataGridViewTextBoxColumn
-                {
-                    Name = "C",
-                    HeaderText = "",
-                    ReadOnly = true
-                };
-                dvDevedores.Columns.Insert(0, colContador);
-
-                // Código do cliente (NrOutro)
-                DataGridViewTextBoxColumn colCodigo = new DataGridViewTextBoxColumn
-                {
-                    Name = "CodigoCliente",
-                    HeaderText = "Código",
-                    ReadOnly = true
-                };
-                dvDevedores.Columns.Insert(1, colCodigo);
-
-                // Status formatado
-                DataGridViewTextBoxColumn colStatus = new DataGridViewTextBoxColumn
-                {
-                    Name = "StatusDescricao",
-                    HeaderText = "Status",
-                    ReadOnly = true
-                };
-                dvDevedores.Columns.Insert(dvDevedores.Columns["Status"].Index + 1, colStatus);
-
-                // Dias de atraso
-                DataGridViewTextBoxColumn colAtraso = new DataGridViewTextBoxColumn
-                {
-                    Name = "DiasAtraso",
-                    HeaderText = "Atraso",
-                    ReadOnly = true
-                };
-                dvDevedores.Columns.Insert(dvDevedores.Columns["Vencimento"].Index + 1, colAtraso);
+                dvDevedores.Columns.Insert(0, NovaColunaTexto("C", "", true));
+                dvDevedores.Columns.Insert(1, NovaColunaTexto("CodigoCliente", "Código", true));
+                dvDevedores.Columns.Insert(dvDevedores.Columns["Status"].Index + 1, NovaColunaTexto("StatusDescricao", "Status", true));
+                dvDevedores.Columns.Insert(dvDevedores.Columns["Vencimento"].Index + 1, NovaColunaTexto("DiasAtraso", "Atraso", true));
             }
+        }
 
-            // Preenche colunas calculadas por linha
+        private DataGridViewTextBoxColumn NovaColunaTexto(string nome, string cabecalho, bool somenteLeitura)
+        {
+            return new DataGridViewTextBoxColumn
+            {
+                Name = nome,
+                HeaderText = cabecalho,
+                ReadOnly = somenteLeitura
+            };
+        }
+
+        private void PreencherColunasCalculadas()
+        {
             int contador = 1;
             foreach (DataGridViewRow row in dvDevedores.Rows)
             {
@@ -2104,30 +2104,31 @@ namespace TeleBonifacio
                 {
                     row.Height = 30;
                     row.Cells["C"].Value = contador++;
-
                     int status = Convert.ToInt32(row.Cells["Status"].Value);
-                    string statusTexto = "Desconhecido";
-                    switch (status)
+                    row.Cells["StatusDescricao"].Value = ObterStatusTexto(status);
+                    if (status < 3 && row.Cells["DataCompra"].Value != null &&
+                        DateTime.TryParse(row.Cells["DataCompra"].Value.ToString(), out DateTime vencimento))
                     {
-                        case 1: statusTexto = "Aberto"; break;
-                        case 2: statusTexto = "Atrasado"; break;
-                        case 3: statusTexto = "Pago"; break;
-                    }
-                    row.Cells["StatusDescricao"].Value = statusTexto;
-
-                    if (status<3)
-                    {
-                        if (row.Cells["DataCompra"].Value != null &&
-                            DateTime.TryParse(row.Cells["DataCompra"].Value.ToString(), out DateTime vencimento))
-                        {
-                            int diasAtraso = (int)(DateTime.Now - vencimento).TotalDays;
-                            row.Cells["DiasAtraso"].Value = diasAtraso > 0 ? diasAtraso.ToString() : "";
-                        }
+                        int diasAtraso = (int)(DateTime.Now - vencimento).TotalDays;
+                        row.Cells["DiasAtraso"].Value = diasAtraso > 0 ? diasAtraso.ToString() : "";
                     }
                 }
             }
+        }
 
-            // Configura cabeçalhos visíveis
+        private string ObterStatusTexto(int status)
+        {
+            switch (status)
+            {
+                case 1: return "Aberto";
+                case 2: return "Atrasado";
+                case 3: return "Pago";
+                default: return "Desconhecido";
+            }
+        }
+
+        private void ConfigurarCabecalhos()
+        {
             dvDevedores.Columns["CodigoCliente"].HeaderText = "Código";
             dvDevedores.Columns["ClienteNome"].HeaderText = "Cliente";
             dvDevedores.Columns["DataCompra"].HeaderText = "Compra";
@@ -2137,44 +2138,42 @@ namespace TeleBonifacio
             dvDevedores.Columns["Valor"].HeaderText = "Valor";
             dvDevedores.Columns["Nota"].HeaderText = "Nota";
             dvDevedores.Columns["Observacao"].HeaderText = "Observação";
+        }
 
-            // Oculta colunas internas
+        private void OcultarColunasInternas()
+        {
             string[] colunasOcultas = { "ID", "Status", "Cliente" };
             foreach (var nome in colunasOcultas)
             {
                 if (dvDevedores.Columns.Contains(nome))
-                {
                     dvDevedores.Columns[nome].Visible = false;
-                }
             }
+        }
 
-            // Define estilo geral
+        private void DefinirEstiloGeral()
+        {
             dvDevedores.Font = new Font("Segoe UI", 12);
             dvDevedores.ColumnHeadersHeight = 30;
             dvDevedores.ColumnHeadersDefaultCellStyle.Font = new Font("Segoe UI", 12, FontStyle.Bold);
             dvDevedores.ColumnHeadersDefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
+        }
 
-            // Ajusta larguras
-            dvDevedores.Columns["C"].Width = 42; // metade de 84
+        private void AjustarLargurasColunas()
+        {
+            dvDevedores.Columns["C"].Width = 42;
             dvDevedores.Columns["CodigoCliente"].Width = 80;
             dvDevedores.Columns["DataCompra"].Width = 110;
-            dvDevedores.Columns["StatusDescricao"].Width = 72; // 20% menor
+            dvDevedores.Columns["StatusDescricao"].Width = 72;
             dvDevedores.Columns["Vencimento"].Width = 110;
-            dvDevedores.Columns["DiasAtraso"].Width = 72; // 20% menor
+            dvDevedores.Columns["DiasAtraso"].Width = 72;
             dvDevedores.Columns["Valor"].Width = 100;
             dvDevedores.Columns["Nota"].Width = 100;
             dvDevedores.Columns["Observacao"].Width = 300;
-
-            // Valor alinhado à direita
             dvDevedores.Columns["Valor"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
-
-            // Cliente ocupa o espaço restante
             dvDevedores.Columns["ClienteNome"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+        }
 
-            // Garante formatação de valores
-            dvDevedores.CellFormatting -= dvDevedores_CellFormatting;
-            dvDevedores.CellFormatting += dvDevedores_CellFormatting;
-        }     
+        // Processamento FIM
 
         private void dvDevedores_CellClick(object sender, DataGridViewCellEventArgs e)
         {

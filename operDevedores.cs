@@ -15,8 +15,9 @@ namespace TeleBonifacio
         public bool OK = false;
         private int ID=0;
         private int ClienteLocalizado = 0;
-        private bool fechando=false;
+        // private bool fechando=false;
         private bool PassouPeloCliente=false;
+        private string OldNrOutro="";
 
         public operDevedores()
         {
@@ -60,7 +61,7 @@ namespace TeleBonifacio
 
         private void btFechar_Click_1(object sender, EventArgs e)
         {
-            this.fechando = true;
+            //this.fechando = true;
             this.DialogResult = DialogResult.Cancel;
         }
 
@@ -88,7 +89,7 @@ namespace TeleBonifacio
                     nrCli = clienteDAO.GetIDPeloNome(nomeCliente);
                     if (nrCli == 0)
                     {
-                        // Verifica duplicidade de NrOutro
+                        // Verifica duplicidade de NrOutro antes de inserir novo cliente
                         if (!string.IsNullOrEmpty(nrOutroDigitado))
                         {
                             tb.Cliente clienteExistente = (tb.Cliente)Cliente.GetPeloNrOutro(nrOutroDigitado);
@@ -97,12 +98,12 @@ namespace TeleBonifacio
                                 MessageBox.Show($"⚠ Este número já está em uso pelo cliente:\n\n{clienteExistente.Nome}", "NrOutro já utilizado", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                                 txNrOutro.Focus();
                                 txNrOutro.SelectAll();
-                                return; // Interrompe a gravação
+                                return;
                             }
                         }
 
-                        // Insere novo cliente com NrOutro informado
-                        nrCli = clienteDAO.InserirNovoCliente(nomeCliente, nrOutro: nrOutroDigitado);
+                        // Insere novo cliente com NrOutro
+                        nrCli = clienteDAO.InserirNovoCliente(nomeCliente, nrOutroDigitado);
                         if (nrCli <= 0)
                         {
                             MessageBox.Show("Erro ao adicionar novo cliente.");
@@ -111,10 +112,24 @@ namespace TeleBonifacio
                     }
                 }
 
-                // 🟦 Captura o status selecionado
-                int status = 1; // valor padrão
-                string statusTexto = cmbStatus.Text.Trim();
+                // Atualiza NrOutro caso esteja em branco
+                if (nrCli > 0 && string.IsNullOrWhiteSpace(this.OldNrOutro) && !string.IsNullOrWhiteSpace(nrOutroDigitado))
+                {
+                    tb.Cliente clienteExistente = (tb.Cliente)Cliente.GetPeloNrOutro(nrOutroDigitado);
+                    if (clienteExistente != null && clienteExistente.Id != nrCli)
+                    {
+                        MessageBox.Show($"⚠ Este número já está em uso por outro cliente:\n\n{clienteExistente.Nome}", "NrOutro já utilizado", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        txNrOutro.Focus();
+                        txNrOutro.SelectAll();
+                        return;
+                    }
 
+                    clienteDAO.AtualizarNrOutro(nrCli, nrOutroDigitado);
+                }
+
+                // Captura o status
+                int status = 1;
+                string statusTexto = cmbStatus.Text.Trim();
                 switch (statusTexto)
                 {
                     case "Aberto": status = 1; break;
@@ -152,6 +167,7 @@ namespace TeleBonifacio
         //        DateTime dataCompra = dtpCompra.Value.Date;
         //        DateTime vencimento = dtpVencimento.Value.Date;
         //        decimal valor = (decimal)glo.LeValor(txValor.Text);
+        //        string nrOutroDigitado = txNrOutro.Text.Trim();
 
         //        // Verifica ou insere cliente
         //        int nrCli;
@@ -163,31 +179,40 @@ namespace TeleBonifacio
         //        else
         //        {
         //            nrCli = clienteDAO.GetIDPeloNome(nomeCliente);
-        //            if (nrCli==0)
+        //            if (nrCli == 0)
         //            {
-        //                nrCli = clienteDAO.InserirNovoCliente(nomeCliente, nrOutro: txNrOutro.Text);
-        //            }                    
+        //                // Verifica duplicidade de NrOutro
+        //                if (!string.IsNullOrEmpty(nrOutroDigitado))
+        //                {
+        //                    tb.Cliente clienteExistente = (tb.Cliente)Cliente.GetPeloNrOutro(nrOutroDigitado);
+        //                    if (clienteExistente != null)
+        //                    {
+        //                        MessageBox.Show($"⚠ Este número já está em uso pelo cliente:\n\n{clienteExistente.Nome}", "NrOutro já utilizado", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+        //                        txNrOutro.Focus();
+        //                        txNrOutro.SelectAll();
+        //                        return; // Interrompe a gravação
+        //                    }
+        //                }
+
+        //                // Insere novo cliente com NrOutro informado
+        //                nrCli = clienteDAO.InserirNovoCliente(nomeCliente, nrOutro: nrOutroDigitado);
+        //                if (nrCli <= 0)
+        //                {
+        //                    MessageBox.Show("Erro ao adicionar novo cliente.");
+        //                    return;
+        //                }
+        //            }
         //        }
 
         //        // 🟦 Captura o status selecionado
         //        int status = 1; // valor padrão
-
-        //        string statusTexto = cmbStatus.Text.Trim(); // ou cmbStatus.SelectedItem.ToString()
+        //        string statusTexto = cmbStatus.Text.Trim();
 
         //        switch (statusTexto)
         //        {
-        //            case "Aberto":
-        //                status = 1;
-        //                break;
-        //            case "Atrasado":
-        //                status = 2;
-        //                break;
-        //            case "Pago":
-        //                status = 3;
-        //                break;
-        //            default:
-        //                status = 1; // valor padrão se algo der errado
-        //                break;
+        //            case "Aberto": status = 1; break;
+        //            case "Atrasado": status = 2; break;
+        //            case "Pago": status = 3; break;
         //        }
 
         //        // Grava o devedor
@@ -267,6 +292,7 @@ namespace TeleBonifacio
 
         private void cmbCliente_Leave(object sender, EventArgs e)
         {
+            this.OldNrOutro = "";
             this.PassouPeloCliente = true;
             string texto = cmbCliente.Text.Trim();
 
@@ -310,6 +336,7 @@ namespace TeleBonifacio
                         {
                             try
                             {
+                                this.OldNrOutro = reg.NrOutro;
                                 txNrOutro.Text = reg.NrOutro;
                                 txNrOutro.TabStop = false;
                             }
@@ -321,13 +348,12 @@ namespace TeleBonifacio
                         }
                     }
                 }
-
-                if (!encontrado)
-                {
-                    txNrOutro.TabStop = true;
-                    txNrOutro.ReadOnly = false;
-                    txNrOutro.Focus();
-                }
+            }
+            if (this.OldNrOutro == "")
+            {
+                txNrOutro.TabStop = true;
+                txNrOutro.ReadOnly = false;
+                txNrOutro.Focus();
             }
         }
 
@@ -343,7 +369,7 @@ namespace TeleBonifacio
 
         private void operDevedores_FormClosing(object sender, FormClosingEventArgs e)
         {
-            this.fechando = true;
+            //this.fechando = true;
         }
 
         public void RecebeDadosCli(ref DataTable dadosC)

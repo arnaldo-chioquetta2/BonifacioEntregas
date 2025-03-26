@@ -144,6 +144,12 @@ namespace TeleBonifacio.dao
             return proximocliente ?? new tb.Cliente();
         }
 
+        public void AtualizarNrOutro(int nrCli, string nrOutroDigitado)
+        {
+            string query = $"UPDATE Clientes SET nrOutro = '{nrOutroDigitado}' WHERE NrCli = {nrCli} ";
+            DB.ExecutarComandoSQL(query);
+        }
+
         internal int RetIdNrAlter(string searchText)
         {
             string query = "SELECT * FROM Clientes Where NrOutro = " + searchText;
