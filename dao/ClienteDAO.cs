@@ -358,8 +358,14 @@ namespace TeleBonifacio.dao
         {
             string query = $"SELECT NrCli FROM Clientes Where Nome = '{Nome}' ";
             DataTable dataTable = glo.getDados(query);            
-            int VarId = (int)dataTable.Rows[0]["NrCli"];
-            return VarId;
+            if (dataTable.Rows.Count==0)
+            {
+                return 0;
+            } else
+            {
+                int VarId = (int)dataTable.Rows[0]["NrCli"];
+                return VarId;
+            }
         }
 
         public override DataTable GetDadosOrdenados(string filtro = "", string ordem = "")

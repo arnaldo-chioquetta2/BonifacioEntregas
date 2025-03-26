@@ -67,7 +67,7 @@
             this.dtpCompra.Location = new System.Drawing.Point(120, 103);
             this.dtpCompra.Name = "dtpCompra";
             this.dtpCompra.Size = new System.Drawing.Size(120, 26);
-            this.dtpCompra.TabIndex = 1;
+            this.dtpCompra.TabIndex = 2;
             // 
             // label2
             // 
@@ -86,7 +86,7 @@
             this.cmbStatus.Location = new System.Drawing.Point(120, 188);
             this.cmbStatus.Name = "cmbStatus";
             this.cmbStatus.Size = new System.Drawing.Size(120, 28);
-            this.cmbStatus.TabIndex = 3;
+            this.cmbStatus.TabIndex = 4;
             // 
             // label3
             // 
@@ -105,7 +105,7 @@
             this.dtpVencimento.Location = new System.Drawing.Point(120, 233);
             this.dtpVencimento.Name = "dtpVencimento";
             this.dtpVencimento.Size = new System.Drawing.Size(120, 26);
-            this.dtpVencimento.TabIndex = 4;
+            this.dtpVencimento.TabIndex = 5;
             // 
             // label4
             // 
@@ -123,7 +123,7 @@
             this.txNota.Location = new System.Drawing.Point(120, 273);
             this.txNota.Name = "txNota";
             this.txNota.Size = new System.Drawing.Size(120, 26);
-            this.txNota.TabIndex = 5;
+            this.txNota.TabIndex = 6;
             // 
             // label5
             // 
@@ -142,7 +142,7 @@
             this.txObs.Multiline = true;
             this.txObs.Name = "txObs";
             this.txObs.Size = new System.Drawing.Size(300, 80);
-            this.txObs.TabIndex = 6;
+            this.txObs.TabIndex = 7;
             // 
             // label6
             // 
@@ -160,7 +160,7 @@
             this.btOK.Location = new System.Drawing.Point(14, 411);
             this.btOK.Name = "btOK";
             this.btOK.Size = new System.Drawing.Size(100, 35);
-            this.btOK.TabIndex = 7;
+            this.btOK.TabIndex = 8;
             this.btOK.Text = "OK";
             this.btOK.UseVisualStyleBackColor = true;
             this.btOK.Click += new System.EventHandler(this.btOK_Click_1);
@@ -171,7 +171,7 @@
             this.btFechar.Location = new System.Drawing.Point(324, 409);
             this.btFechar.Name = "btFechar";
             this.btFechar.Size = new System.Drawing.Size(100, 35);
-            this.btFechar.TabIndex = 8;
+            this.btFechar.TabIndex = 10;
             this.btFechar.Text = "Fechar";
             this.btFechar.UseVisualStyleBackColor = true;
             this.btFechar.Click += new System.EventHandler(this.btFechar_Click_1);
@@ -192,7 +192,7 @@
             this.txValor.Location = new System.Drawing.Point(120, 145);
             this.txValor.Name = "txValor";
             this.txValor.Size = new System.Drawing.Size(120, 26);
-            this.txValor.TabIndex = 2;
+            this.txValor.TabIndex = 3;
             // 
             // btExcluir
             // 
@@ -201,7 +201,7 @@
             this.btExcluir.Location = new System.Drawing.Point(169, 409);
             this.btExcluir.Name = "btExcluir";
             this.btExcluir.Size = new System.Drawing.Size(100, 35);
-            this.btExcluir.TabIndex = 13;
+            this.btExcluir.TabIndex = 9;
             this.btExcluir.Text = "Excluir";
             this.btExcluir.UseVisualStyleBackColor = true;
             this.btExcluir.Click += new System.EventHandler(this.btExcluir_Click);
@@ -223,7 +223,7 @@
             this.txNrOutro.Name = "txNrOutro";
             this.txNrOutro.ReadOnly = true;
             this.txNrOutro.Size = new System.Drawing.Size(120, 26);
-            this.txNrOutro.TabIndex = 14;
+            this.txNrOutro.TabIndex = 1;
             // 
             // operDevedores
             // 

@@ -16,6 +16,7 @@ namespace TeleBonifacio
         private int ID=0;
         private int ClienteLocalizado = 0;
         private bool fechando=false;
+        private bool PassouPeloCliente=false;
 
         public operDevedores()
         {
@@ -73,6 +74,7 @@ namespace TeleBonifacio
                 DateTime dataCompra = dtpCompra.Value.Date;
                 DateTime vencimento = dtpVencimento.Value.Date;
                 decimal valor = (decimal)glo.LeValor(txValor.Text);
+                string nrOutroDigitado = txNrOutro.Text.Trim();
 
                 // Verifica ou insere cliente
                 int nrCli;
@@ -84,31 +86,40 @@ namespace TeleBonifacio
                 else
                 {
                     nrCli = clienteDAO.GetIDPeloNome(nomeCliente);
-                    if (nrCli==0)
+                    if (nrCli == 0)
                     {
-                        nrCli = clienteDAO.InserirNovoCliente(nomeCliente, nrOutro: txNrOutro.Text);
-                    }                    
+                        // Verifica duplicidade de NrOutro
+                        if (!string.IsNullOrEmpty(nrOutroDigitado))
+                        {
+                            tb.Cliente clienteExistente = (tb.Cliente)Cliente.GetPeloNrOutro(nrOutroDigitado);
+                            if (clienteExistente != null)
+                            {
+                                MessageBox.Show($"⚠ Este número já está em uso pelo cliente:\n\n{clienteExistente.Nome}", "NrOutro já utilizado", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                                txNrOutro.Focus();
+                                txNrOutro.SelectAll();
+                                return; // Interrompe a gravação
+                            }
+                        }
+
+                        // Insere novo cliente com NrOutro informado
+                        nrCli = clienteDAO.InserirNovoCliente(nomeCliente, nrOutro: nrOutroDigitado);
+                        if (nrCli <= 0)
+                        {
+                            MessageBox.Show("Erro ao adicionar novo cliente.");
+                            return;
+                        }
+                    }
                 }
 
                 // 🟦 Captura o status selecionado
                 int status = 1; // valor padrão
-
-                string statusTexto = cmbStatus.Text.Trim(); // ou cmbStatus.SelectedItem.ToString()
+                string statusTexto = cmbStatus.Text.Trim();
 
                 switch (statusTexto)
                 {
-                    case "Aberto":
-                        status = 1;
-                        break;
-                    case "Atrasado":
-                        status = 2;
-                        break;
-                    case "Pago":
-                        status = 3;
-                        break;
-                    default:
-                        status = 1; // valor padrão se algo der errado
-                        break;
+                    case "Aberto": status = 1; break;
+                    case "Atrasado": status = 2; break;
+                    case "Pago": status = 3; break;
                 }
 
                 // Grava o devedor
@@ -131,20 +142,82 @@ namespace TeleBonifacio
             }
         }
 
+        //private void btOK_Click_1(object sender, EventArgs e)
+        //{
+        //    try
+        //    {
+        //        string nomeCliente = cmbCliente.Text.Trim();
+        //        string nota = txNota.Text.Trim();
+        //        string observacao = txObs.Text.Trim();
+        //        DateTime dataCompra = dtpCompra.Value.Date;
+        //        DateTime vencimento = dtpVencimento.Value.Date;
+        //        decimal valor = (decimal)glo.LeValor(txValor.Text);
+
+        //        // Verifica ou insere cliente
+        //        int nrCli;
+        //        ClienteDAO clienteDAO = new ClienteDAO();
+        //        if (cmbCliente.SelectedItem is tb.ComboBoxItem itemSelecionado)
+        //        {
+        //            nrCli = itemSelecionado.Id;
+        //        }
+        //        else
+        //        {
+        //            nrCli = clienteDAO.GetIDPeloNome(nomeCliente);
+        //            if (nrCli==0)
+        //            {
+        //                nrCli = clienteDAO.InserirNovoCliente(nomeCliente, nrOutro: txNrOutro.Text);
+        //            }                    
+        //        }
+
+        //        // 🟦 Captura o status selecionado
+        //        int status = 1; // valor padrão
+
+        //        string statusTexto = cmbStatus.Text.Trim(); // ou cmbStatus.SelectedItem.ToString()
+
+        //        switch (statusTexto)
+        //        {
+        //            case "Aberto":
+        //                status = 1;
+        //                break;
+        //            case "Atrasado":
+        //                status = 2;
+        //                break;
+        //            case "Pago":
+        //                status = 3;
+        //                break;
+        //            default:
+        //                status = 1; // valor padrão se algo der errado
+        //                break;
+        //        }
+
+        //        // Grava o devedor
+        //        if (this.ID == 0)
+        //        {
+        //            devDao.Adiciona(nrCli, status, dataCompra, vencimento, nota, observacao, valor);
+        //        }
+        //        else
+        //        {
+        //            devDao.Edita(this.ID, nrCli, dataCompra, status, vencimento, nota, observacao, valor);
+        //        }
+
+        //        this.OK = true;
+        //        this.DialogResult = DialogResult.OK;
+        //        this.Close();
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        MessageBox.Show("Erro ao gravar devedor: " + ex.Message, "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        //    }
+        //}
+
         private void operDevedores_Activated(object sender, EventArgs e)
         {
-            if ((this.ID==0) && (ClienteLocalizado==0) )
+            if ((this.ID==0) && (ClienteLocalizado==0) && (!this.PassouPeloCliente) )
             {
                 this.Cursor = Cursors.WaitCursor;
                 Cliente = new ClienteDAO();
-                cmbCliente.SelectedItem = -1;
-                cmbStatus.SelectedItem = 0;
-                txNota.Text = "";        
-                txObs.Text = "";        
-                txValor.Text = "";
-                txNrOutro.Text = "";
-                txNrOutro.ReadOnly = true;
-                glo.CarregarComboBoxU<tb.Cliente>(cmbCliente, dadosCli, "ESCOLHA ou digite um novo");                
+                ZeraTela();
+                glo.CarregarComboBoxU<tb.Cliente>(cmbCliente, dadosCli, "ESCOLHA ou digite um novo"); 
                 this.Cursor = Cursors.Default;
             }
         }
@@ -194,69 +267,69 @@ namespace TeleBonifacio
 
         private void cmbCliente_Leave(object sender, EventArgs e)
         {
-            if (!this.fechando)
-            {
-                string texto = cmbCliente.Text.Trim();
+            this.PassouPeloCliente = true;
+            string texto = cmbCliente.Text.Trim();
 
-                // Se for número, tenta localizar pelo código NrOutro
-                if (int.TryParse(texto, out int numeroCliente))
+            // Se for número, tenta localizar pelo código NrOutro
+            if (int.TryParse(texto, out int numeroCliente))
+            {
+                tb.Cliente reg = (tb.Cliente)Cliente.GetPeloNrOutro(texto);
+                if (reg != null)
                 {
-                    tb.Cliente reg = (tb.Cliente)Cliente.GetPeloNrOutro(texto);
-                    if (reg != null)
+                    cmbCliente.Text = reg.Nome;
+                    foreach (tb.ComboBoxItem item in cmbCliente.Items)
                     {
-                        cmbCliente.Text = reg.Nome;
-                        foreach (tb.ComboBoxItem item in cmbCliente.Items)
+                        if (item.Id == reg.Id)
                         {
-                            if (item.Id == reg.Id)
-                            {
-                                cmbCliente.SelectedItem = item.Nome;
-                                break;
-                            }
+                            cmbCliente.SelectedItem = item.Nome;
+                            break;
                         }
-                        ClienteLocalizado = reg.Id;
-                        txNrOutro.Text = texto;
                     }
-                    else
-                    {
-                        MessageBox.Show("Cliente não encontrado.");
-                        cmbCliente.Focus();
-                    }
+                    ClienteLocalizado = reg.Id;
+                    txNrOutro.Text = texto;
+                    txNrOutro.TabStop = false;
                 }
                 else
                 {
-                    // Verifica se o texto digitado está em algum item da lista
-                    bool encontrado = false;
-                    foreach (tb.ComboBoxItem item in cmbCliente.Items)
-                    {
-                        if (string.Equals(item.Nome, texto, StringComparison.CurrentCultureIgnoreCase))
-                        {
-                            encontrado = true;
-                            ClienteLocalizado = item.Id;
-                            tb.Cliente reg = (tb.Cliente)Cliente.GetPeloID(item.Id.ToString());
-                            if (reg!=null)
-                            {
-                                try
-                                {
-                                    txNrOutro.Text = reg.NrOutro;
-                                }
-                                catch (Exception)
-                                {
-                                    return;
-                                }
-                                break;
-                            }
-                        }
-                    }
-
-                    if (!encontrado)
-                    {
-                        // Nome digitado não está na lista → novo cliente
-                        txNrOutro.ReadOnly = false;
-                        txNrOutro.Focus();
-                    }
+                    MessageBox.Show("Cliente não encontrado.");
+                    cmbCliente.Focus();
                 }
             }
-        }        
+            else
+            {
+                // Verifica se o texto digitado está em algum item da lista
+                bool encontrado = false;
+                foreach (tb.ComboBoxItem item in cmbCliente.Items)
+                {
+                    if (string.Equals(item.Nome, texto, StringComparison.CurrentCultureIgnoreCase))
+                    {
+                        encontrado = true;
+                        ClienteLocalizado = item.Id;
+                        tb.Cliente reg = (tb.Cliente)Cliente.GetPeloID(item.Id.ToString());
+                        if (reg != null)
+                        {
+                            try
+                            {
+                                txNrOutro.Text = reg.NrOutro;
+                                txNrOutro.TabStop = false;
+                            }
+                            catch (Exception)
+                            {
+                                return;
+                            }
+                            break;
+                        }
+                    }
+                }
+
+                if (!encontrado)
+                {
+                    txNrOutro.TabStop = true;
+                    txNrOutro.ReadOnly = false;
+                    txNrOutro.Focus();
+                }
+            }
+        }
 
         private void cmbCliente_Enter(object sender, EventArgs e)
         {
@@ -273,9 +346,22 @@ namespace TeleBonifacio
             this.fechando = true;
         }
 
-        internal void RecebeDadosCli(ref DataTable dadosC)
+        public void RecebeDadosCli(ref DataTable dadosC)
         {
             dadosCli = dadosC;
+        }
+
+        public void ZeraTela()
+        {
+            cmbCliente.SelectedItem = -1;
+            cmbStatus.SelectedItem = 0;
+            cmbCliente.Text = "ESCOLHA ou digite um novo";
+            txNota.Text = "";
+            txObs.Text = "";
+            txValor.Text = "";
+            txNrOutro.Text = "";
+            txNrOutro.ReadOnly = true;
+            txNrOutro.TabStop = false;
         }
     }
 }

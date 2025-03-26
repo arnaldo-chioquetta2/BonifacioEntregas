@@ -2210,11 +2210,12 @@ namespace TeleBonifacio
                 ClienteDAO Cliente = new ClienteDAO();
                 dadosCli = Cliente.GetDadosOrdenados();
                 FDeve.RecebeDadosCli(ref dadosCli);
-            }            
+            }
+            FDeve.ZeraTela();
             FDeve.ShowDialog();
             if (FDeve.DialogResult == DialogResult.OK)
             {
-                if (tbFaltas.SelectedIndex == 8)
+                if (tbFaltas.SelectedIndex == 7)
                 {
                     CarregaGridD();
                 }
