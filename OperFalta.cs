@@ -2313,31 +2313,45 @@ namespace TeleBonifacio
                 }
             }
 
-            // Verificar vencimento pela DataCompra e colorir se atrasado + status ≠ 3
             if (e.RowIndex >= 0)
             {
                 var row = dvDevedores.Rows[e.RowIndex];
+
+                // Verifica o status primeiro
+                if (row.Cells["Status"].Value != null &&
+                    int.TryParse(row.Cells["Status"].Value.ToString(), out int status))
+                {
+                    if (status == 3)
+                    {
+                        // Azul claro para pagos
+                        row.DefaultCellStyle.BackColor = Color.FromArgb(180, 220, 255);
+                        row.DefaultCellStyle.ForeColor = Color.Black;
+                        return;
+                    }
+                }
+
+                // Se não for pago, verifica atraso
                 if (row.Cells["DataCompra"].Value != null &&
                     DateTime.TryParse(row.Cells["DataCompra"].Value.ToString(), out DateTime dataCompra))
                 {
                     int diasAtraso = (int)(DateTime.Now.Date - dataCompra.Date).TotalDays;
-                    // Verifica se status está presente e diferente de 3
-                    if (row.Cells["Status"].Value != null &&
-                        int.TryParse(row.Cells["Status"].Value.ToString(), out int status) &&
-                        diasAtraso > 30 && status != 3)
+                    int istatus = (int)row.Cells["Status"].Value;
+                    if (istatus != 3 && diasAtraso > 30)
                     {
-                        row.DefaultCellStyle.BackColor = Color.FromArgb(255, 160, 160); // vermelho claro
+                        // Vermelho claro para atrasados
+                        row.DefaultCellStyle.BackColor = Color.FromArgb(255, 160, 160);
                         row.DefaultCellStyle.ForeColor = Color.Black;
                     }
                     else
                     {
-                        // Resetar estilo se não for mais necessário
+                        // Estilo normal
                         row.DefaultCellStyle.BackColor = dvDevedores.DefaultCellStyle.BackColor;
                         row.DefaultCellStyle.ForeColor = dvDevedores.DefaultCellStyle.ForeColor;
                     }
                 }
             }
         }
+
 
         #endregion
 
