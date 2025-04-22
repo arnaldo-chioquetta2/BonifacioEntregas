@@ -504,7 +504,8 @@ namespace TeleBonifacio
             switch (cadastroAssociado)
             {
                 case 1:
-                    CarregarFuncion();
+                    CarregarMotoboys();
+                    // CarregarFuncion();
                     break;
                 case 2: // Clientes
                     CarregarClientes();
@@ -555,21 +556,21 @@ namespace TeleBonifacio
             }
         }
 
-        private void CarregarFuncion()
-        {
-            VendedoresDAO entregadorDAO = new VendedoresDAO();
-            DataTable motoboys = entregadorDAO.getDados();
-            if (motoboys.Rows.Count > 0)
-            {
-                cmbMotoboy.DataSource = motoboys;
-                cmbMotoboy.DisplayMember = "Nome";
-                cmbMotoboy.ValueMember = "id";
-            }
-            else
-            {
-                cmbMotoboy.DataSource = null;
-            }
-        }
+        //private void CarregarFuncion()
+        //{
+        //    VendedoresDAO entregadorDAO = new VendedoresDAO();
+        //    DataTable motoboys = entregadorDAO.getDados();
+        //    if (motoboys.Rows.Count > 0)
+        //    {
+        //        cmbMotoboy.DataSource = motoboys;
+        //        cmbMotoboy.DisplayMember = "Nome";
+        //        cmbMotoboy.ValueMember = "id";
+        //    }
+        //    else
+        //    {
+        //        cmbMotoboy.DataSource = null;
+        //    }
+        //}
         
         private void CarregarClientes()
         {

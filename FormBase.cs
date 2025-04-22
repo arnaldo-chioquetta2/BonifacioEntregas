@@ -176,11 +176,18 @@ namespace TeleBonifacio
                 // 🔹 Processamento padrão para outros ComboBoxes
                 if (int.TryParse(valor, out int iVlr))
                 {
-                    cmb.SelectedIndex = iVlr;
+                    try
+                    {
+                        cmb.SelectedIndex = iVlr;
+                    }
+                    catch (Exception)
+                    {
+                        cmb.SelectedIndex = 0;                       
+                    }                    
                 }
                 else
                 {
-                    cmb.SelectedIndex = 0; // Valor padrão em caso de erro
+                    cmb.SelectedIndex = 0; 
                 }
             }
         }
