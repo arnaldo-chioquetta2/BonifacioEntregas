@@ -46,28 +46,19 @@ namespace TeleBonifacio
 
         private void MostrarDadosTipoContrato(int idTipoContrato)
         {
-            // Limpa os dados do DataGridView
             lstClausulas.DataSource = null;
             lstClausulas.Rows.Clear();
             lstClausulas.Columns.Clear();
-
-            // Adiciona a coluna de cláusulas ao DataGridView
             lstClausulas.Columns.Add("Texto", "Cláusula");
             lstClausulas.Columns[0].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
             lstClausulas.RowHeadersVisible = false; // Remove a numeração da lateral
-
-            // Consulta ao banco de dados para buscar as cláusulas
             ContratosDAO contratosDAO = new ContratosDAO();
             DataTable clausulas = clausulasDAO.GetClausulasByTipoContrato(idTipoContrato);
-
-            // Adiciona as cláusulas ao DataGridView
             foreach (DataRow row in clausulas.Rows)
             {
                 string texto = row["Texto"].ToString();
                 lstClausulas.Rows.Add(texto);
             }
-
-            // Limpa o campo de nova cláusula e desabilita o botão de excluir
             txtNovaClausula.Clear();
             btnExcluirClausula.Enabled = false;
         }
@@ -112,7 +103,7 @@ namespace TeleBonifacio
             btnAdicionarClausula.Enabled = true;
             btnExcluirClausula.Enabled = true;
             btnSalvarClausula.Enabled = true;
-            btSalvaContrato.Enabled = true;
+            // btSalvaContrato.Enabled = true;
         }
 
         private void lstClausulas_CellClick(object sender, DataGridViewCellEventArgs e)
@@ -282,59 +273,6 @@ namespace TeleBonifacio
                 MessageBox.Show($"Erro ao adicionar tipo de contrato: {ex.Message}", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
-        //private void btSalvaContrato_Click(object sender, EventArgs e)
-        //{
-        //    // Obter o nome do tipo de contrato
-        //    string nomeTipoContrato = txtNovoTipoContrato.Text.Trim();
-
-        //    // Validação do nome do tipo de contrato
-        //    if (string.IsNullOrWhiteSpace(nomeTipoContrato))
-        //    {
-        //        MessageBox.Show("Por favor, insira um nome para o tipo de contrato.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
-        //        return; // Sai do método sem salvar
-        //    }
-
-        //    // Validação do cadastro associado
-        //    if (cmbAssociarDados.SelectedIndex < 0)
-        //    {
-        //        MessageBox.Show("Por favor, selecione um cadastro associado.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
-        //        return; // Sai do método sem salvar
-        //    }
-
-        //    // Obter o cadastro associado
-        //    int cadastroAssociado = cmbAssociarDados.SelectedIndex + 1;
-
-        //    try
-        //    {
-        //        // Salvar o novo tipo de contrato
-        //        contratosDao.InsertTipoContrato(nomeTipoContrato, cadastroAssociado);
-
-        //        // Atualizar o combo de tipos de contrato
-        //        CarregarTiposDeContrato();
-
-        //        // Selecionar automaticamente o novo tipo de contrato no combo
-        //        for (int i = 0; i < cmbTiposContrato.Items.Count; i++)
-        //        {
-        //            if (cmbTiposContrato.GetItemText(cmbTiposContrato.Items[i]).Equals(nomeTipoContrato, StringComparison.OrdinalIgnoreCase))
-        //            {
-        //                cmbTiposContrato.SelectedIndex = i;
-        //                break;
-        //            }
-        //        }
-
-        //        // Limpar os campos após o salvamento
-        //        txtNovoTipoContrato.Clear();
-        //        cmbAssociarDados.SelectedIndex = -1;
-        //        lstClausulas.DataSource = null; // Limpa a lista de cláusulas
-
-        //        MessageBox.Show("Novo tipo de contrato salvo com sucesso!", "Sucesso", MessageBoxButtons.OK, MessageBoxIcon.Information);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        MessageBox.Show($"Erro ao salvar o tipo de contrato: {ex.Message}", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
-        //    }
-        //}
 
     }
 }

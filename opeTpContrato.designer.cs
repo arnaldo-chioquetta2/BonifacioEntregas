@@ -33,7 +33,6 @@
             this.txtNovaClausula = new System.Windows.Forms.TextBox();
             this.lblNovaClausula = new System.Windows.Forms.Label();
             this.btnSalvarClausula = new System.Windows.Forms.Button();
-            this.btSalvaContrato = new System.Windows.Forms.Button();
             this.btnExcluirClausula = new System.Windows.Forms.Button();
             this.btnAdicionarClausula = new System.Windows.Forms.Button();
             this.lbTiContrato = new System.Windows.Forms.Label();
@@ -200,18 +199,6 @@
             this.btnSalvarClausula.UseVisualStyleBackColor = true;
             this.btnSalvarClausula.Click += new System.EventHandler(this.btnSalvarClausula_Click);
             // 
-            // btSalvaContrato
-            // 
-            //this.btSalvaContrato.Enabled = false;
-            //this.btSalvaContrato.Location = new System.Drawing.Point(517, 578);
-            //this.btSalvaContrato.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            //this.btSalvaContrato.Name = "btSalvaContrato";
-            //this.btSalvaContrato.Size = new System.Drawing.Size(193, 31);
-            //this.btSalvaContrato.TabIndex = 13;
-            //this.btSalvaContrato.Text = "Salvar Tipo de Contrato";
-            //this.btSalvaContrato.UseVisualStyleBackColor = true;
-            //this.btSalvaContrato.Click += new System.EventHandler(this.btSalvaContrato_Click);
-            //// 
             // btnExcluirClausula
             // 
             this.btnExcluirClausula.Enabled = false;
@@ -254,7 +241,6 @@
             this.Controls.Add(this.lbTiContrato);
             this.Controls.Add(this.btnAdicionarClausula);
             this.Controls.Add(this.btnExcluirClausula);
-            this.Controls.Add(this.btSalvaContrato);
             this.Controls.Add(this.btnSalvarClausula);
             this.Controls.Add(this.lblNovaClausula);
             this.Controls.Add(this.txtNovaClausula);
@@ -294,7 +280,6 @@
         private System.Windows.Forms.TextBox txtNovaClausula;
         private System.Windows.Forms.Label lblNovaClausula;
         private System.Windows.Forms.Button btnSalvarClausula;
-        private System.Windows.Forms.Button btSalvaContrato;
         private System.Windows.Forms.Button btnExcluirClausula;
         private System.Windows.Forms.Button btnAdicionarClausula;
         private System.Windows.Forms.Label lbTiContrato;

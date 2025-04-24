@@ -63,19 +63,12 @@ namespace TeleBonifacio
 
         private void btnEditar_Click(object sender, EventArgs e)
         {
-            // Obtém o ID do contrato selecionado
             int idContratoSelecionado = Convert.ToInt32(dgvContratos.SelectedRows[0].Cells["ID"].Value);
-
-            // Abre a tela de edição
             using (var foperSQL = new operEdContratos(idContratoSelecionado))
             {
-                // Exibe a tela de edição como modal
                 var result = foperSQL.ShowDialog();
-
-                // Após fechar a tela, verifica se houve uma alteração
                 if (result == DialogResult.OK)
                 {
-                    // Recarrega os dados da DataGridView
                     AtualizarListaContratos(idContratoSelecionado);
                 }
             }

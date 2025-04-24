@@ -30,5 +30,7 @@ namespace TeleBonifacio.tb
 
         public List<string> Clausulas { get; set; }
 
+        public int tpContrato { get; set; }
+
     }
 }

@@ -54,6 +54,7 @@
             this.btnImprimir = new System.Windows.Forms.Button();
             this.cmbTipoContrato = new System.Windows.Forms.ComboBox();
             this.label2 = new System.Windows.Forms.Label();
+            this.btDeletar = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // txtDescricao
@@ -320,11 +321,24 @@
             this.label2.TabIndex = 25;
             this.label2.Text = "Tipo:";
             // 
+            // btDeletar
+            // 
+            this.btDeletar.Enabled = false;
+            this.btDeletar.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
+            this.btDeletar.Location = new System.Drawing.Point(442, 634);
+            this.btDeletar.Name = "btDeletar";
+            this.btDeletar.Size = new System.Drawing.Size(100, 30);
+            this.btDeletar.TabIndex = 27;
+            this.btDeletar.Text = "Deletar";
+            this.btDeletar.UseVisualStyleBackColor = true;
+            this.btDeletar.Click += new System.EventHandler(this.btDeletar_Click);
+            // 
             // operEdContratos
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(594, 669);
+            this.Controls.Add(this.btDeletar);
             this.Controls.Add(this.cmbTipoContrato);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.btnImprimir);
@@ -389,5 +403,6 @@
         private System.Windows.Forms.Button btnImprimir;
         private System.Windows.Forms.ComboBox cmbTipoContrato;
         private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Button btDeletar;
     }
 }

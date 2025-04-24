@@ -53,13 +53,14 @@ namespace TeleBonifacio
                 dt.Rows.Add(1, nomePessoa);
 
                 // Define o DataSource do ComboBox
-                cmbMotoboy.DataSource = dt;
-                cmbMotoboy.DisplayMember = "Nome"; // Nome visível no ComboBox
-                cmbMotoboy.ValueMember = "id"; // Valor associado ao ComboBox
-                cmbMotoboy.SelectedValue = 1; 
+                //cmbMotoboy.DataSource = dt;
+                //cmbMotoboy.DisplayMember = "Nome"; // Nome visível no ComboBox
+                //cmbMotoboy.ValueMember = "id"; // Valor associado ao ComboBox
+                //cmbMotoboy.SelectedValue = 1; 
 
                 // Selecionar o tipo de contrato no combo
-                cmbTipoContrato.SelectedValue = contrato.Id;
+                cmbTipoContrato.SelectedValue = contrato.tpContrato;
+                // cmbTipoContrato.SelectedValue = contrato.Id;                
 
                 // Habilitar os campos
                 ToggleCampos(true);
@@ -73,26 +74,24 @@ namespace TeleBonifacio
             InitializeComponent();
             contratosDAO = new ContratosDAO();
             clausulasDAO = new ClausulasDAO();
-
-            // Carrega os motoboys no ComboBox
-            //CarregarMotoboys();
-
             if (nrContrato > 0) // Edição de contrato
             {
                 modoEdicao = true;
                 contratoExistente = contratosDAO.GetContratoById(nrContrato);
                 idTipoContrato = contratoExistente.Id;
                 CarregarDadosAssociados(idTipoContrato);
-
                 if (contratoExistente != null)
                 {
-                    // Seleciona o motoboy no ComboBox
                     cmbMotoboy.SelectedValue = contratoExistente.IdEntregador;
-                    cmbMotoboy.Enabled = false; // Desativa edição do Motoboy
-                    //btnNovoMotoboy.Enabled = false;
+                    cmbMotoboy.Enabled = false; 
+                }
+                btDeletar.Enabled = true;
+                if (cmbMotoboy.Text.Length==0)
+                {
+                    int x = 0;
                 }
             }
-            else // Novo contrato
+            else 
             {
                 modoEdicao = false;
                 contratoExistente = null;
@@ -356,15 +355,19 @@ namespace TeleBonifacio
 
         private void AtualizarClausulas(int contratoId)
         {
-            // Remove todas as cláusulas do contrato antes de adicionar as novas
+            // Remove cláusulas antigas
             clausulasDAO.RemoverClausulasPorContrato(contratoId);
 
-            // Percorre a lista e adiciona cada cláusula individualmente
+            // Adiciona cláusulas visíveis
             foreach (var item in lstClausulas.Items)
             {
-                if (item is string clausulaTexto) // Verifica se o item é uma string
+                if (item is DataRowView rowView && rowView.Row.Table.Columns.Contains("Texto"))
                 {
-                    clausulasDAO.AdicionarClausula(contratoId, clausulaTexto);
+                    string clausulaTexto = rowView.Row["Texto"]?.ToString() ?? "";
+                    if (!string.IsNullOrWhiteSpace(clausulaTexto))
+                    {
+                        clausulasDAO.AdicionarClausula(contratoId, clausulaTexto);
+                    }
                 }
             }
         }
@@ -555,22 +558,6 @@ namespace TeleBonifacio
                 cmbMotoboy.DataSource = null;
             }
         }
-
-        //private void CarregarFuncion()
-        //{
-        //    VendedoresDAO entregadorDAO = new VendedoresDAO();
-        //    DataTable motoboys = entregadorDAO.getDados();
-        //    if (motoboys.Rows.Count > 0)
-        //    {
-        //        cmbMotoboy.DataSource = motoboys;
-        //        cmbMotoboy.DisplayMember = "Nome";
-        //        cmbMotoboy.ValueMember = "id";
-        //    }
-        //    else
-        //    {
-        //        cmbMotoboy.DataSource = null;
-        //    }
-        //}
         
         private void CarregarClientes()
         {
@@ -590,6 +577,20 @@ namespace TeleBonifacio
 
         #endregion
 
+        private void btDeletar_Click(object sender, EventArgs e)
+        {
+
+            DialogResult result = MessageBox.Show("Tem certeza que deseja excluir este contrato?",
+                                                  "Confirmar Deleção",
+                                                  MessageBoxButtons.YesNo,
+                                                 MessageBoxIcon.Question);
+            if (result == DialogResult.Yes)
+            {
+                contratosDAO.DeleteContrato(contratoExistente.Id);
+                this.DialogResult = DialogResult.OK;
+                this.Close();
+            }                
+        }
     }
 
 }

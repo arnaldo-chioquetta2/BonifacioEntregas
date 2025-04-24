@@ -83,7 +83,8 @@ namespace TeleBonifacio.dao
                     DataInicio = row["DataInicio"] != DBNull.Value ? Convert.ToDateTime(row["DataInicio"]) : DateTime.MinValue,
                     DataTermino = row["DataTermino"] != DBNull.Value ? Convert.ToDateTime(row["DataTermino"]) : DateTime.MinValue,
                     Observacoes = row["Observacoes"]?.ToString(),
-                    NomeEmpresa = row["NomeEmpresa"]?.ToString()
+                    NomeEmpresa = row["NomeEmpresa"]?.ToString(),
+                    tpContrato = Convert.ToInt32(row["tpContrato"])
                 };
             }
 
