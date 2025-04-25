@@ -11,8 +11,10 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyCulture("")]
 [assembly: ComVisible(false)]
 [assembly: Guid("308c57af-e663-456d-8a2c-188bbd61423d")]
-[assembly: AssemblyVersion("3.7.7.0")]
-[assembly: AssemblyFileVersion("3.7.7.0")]
+[assembly: AssemblyVersion("3.7.9.0")]
+[assembly: AssemblyFileVersion("3.7.9.0")]
+// 3.7.9 Ajustes na tela de edição de contratos
+// 3.7.8 Conserto de um bug na edição do contrato
 // 3.7.7 Ajustes na adição de contratos
 // 3.7.5 Ajuste na tela de novos contratos pra mostrar os entregadores
 // 3.7.4 Tratamento para caso de tipo de funcionário inválido

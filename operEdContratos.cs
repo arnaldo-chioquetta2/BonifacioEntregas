@@ -358,19 +358,41 @@ namespace TeleBonifacio
             // Remove cláusulas antigas
             clausulasDAO.RemoverClausulasPorContrato(contratoId);
 
-            // Adiciona cláusulas visíveis
             foreach (var item in lstClausulas.Items)
             {
-                if (item is DataRowView rowView && rowView.Row.Table.Columns.Contains("Texto"))
+                if (item is DataRowView rowView)
                 {
-                    string clausulaTexto = rowView.Row["Texto"]?.ToString() ?? "";
-                    if (!string.IsNullOrWhiteSpace(clausulaTexto))
+                    string colunaTexto = lstClausulas.DisplayMember;
+                    if (rowView.Row.Table.Columns.Contains(colunaTexto))
                     {
-                        clausulasDAO.AdicionarClausula(contratoId, clausulaTexto);
+                        string clausulaTexto = rowView.Row[colunaTexto]?.ToString() ?? "";
+                        if (!string.IsNullOrWhiteSpace(clausulaTexto))
+                        {
+                            clausulasDAO.AdicionarClausula(contratoId, clausulaTexto);
+                        }
                     }
                 }
             }
         }
+
+        //private void AtualizarClausulas(int contratoId)
+        //{
+        //    // Remove cláusulas antigas
+        //    clausulasDAO.RemoverClausulasPorContrato(contratoId);
+
+        //    // Adiciona cláusulas visíveis
+        //    foreach (var item in lstClausulas.Items)
+        //    {
+        //        if (item is DataRowView rowView && rowView.Row.Table.Columns.Contains("Texto"))
+        //        {
+        //            string clausulaTexto = rowView.Row["Texto"]?.ToString() ?? "";
+        //            if (!string.IsNullOrWhiteSpace(clausulaTexto))
+        //            {
+        //                clausulasDAO.AdicionarClausula(contratoId, clausulaTexto);
+        //            }
+        //        }
+        //    }
+        //}
 
         private void lstClausulas_SelectedIndexChanged(object sender, EventArgs e)
         {

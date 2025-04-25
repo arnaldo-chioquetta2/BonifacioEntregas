@@ -64,7 +64,6 @@ namespace TeleBonifacio.dao
             DB.ExecutarComandoSQL(sql);
         }
 
-        // Método corrigido em ContratosDAO
         public tb.Contrato GetContratoById(int idContrato)
         {
             string sql = $"SELECT * FROM Contratos WHERE ID = {idContrato}";
@@ -84,7 +83,7 @@ namespace TeleBonifacio.dao
                     DataTermino = row["DataTermino"] != DBNull.Value ? Convert.ToDateTime(row["DataTermino"]) : DateTime.MinValue,
                     Observacoes = row["Observacoes"]?.ToString(),
                     NomeEmpresa = row["NomeEmpresa"]?.ToString(),
-                    tpContrato = Convert.ToInt32(row["tpContrato"])
+                    tpContrato = row["tpContrato"] != DBNull.Value ? Convert.ToInt32(row["tpContrato"]) : 0
                 };
             }
 
