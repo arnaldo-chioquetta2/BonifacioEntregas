@@ -1,0 +1,2 @@
+06/03/2025 22:23:19: Executado a partir de C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug
+06/03/2025 22:23:30: atualizar = False

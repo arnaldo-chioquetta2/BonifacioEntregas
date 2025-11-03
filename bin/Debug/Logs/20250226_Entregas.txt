@@ -1,0 +1,40 @@
+Log de 24/02/2025 copiado para Logs/20250225_Entregas.txt
+25/02/2025 00:26:28: Executado a partir de C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug
+25/02/2025 00:26:28: atualizar = True
+25/02/2025 00:26:31: Versão Atual 351
+25/02/2025 00:26:31: Versão no FTP 351
+25/02/2025 00:26:33: Não ODBC
+25/02/2025 00:26:42: CA,6,444,0, , 0, 1, 25022025002641ebv1n5
+25/02/2025 00:52:24: Executado a partir de C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug
+25/02/2025 00:52:24: atualizar = False
+25/02/2025 00:52:26: Não ODBC
+25/02/2025 00:52:31: CA,6,456,0, , 0, 1, 2502202500523182hKcr
+25/02/2025 00:59:59: Executado a partir de C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug
+25/02/2025 00:59:59: atualizar = False
+25/02/2025 01:00:02: Não ODBC
+25/02/2025 01:00:07: CA,7,555,0, , 0, 1, 25022025010007DS0aSx
+25/02/2025 01:06:18: Executado a partir de C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug
+25/02/2025 01:06:18: atualizar = False
+25/02/2025 01:06:21: Não ODBC
+25/02/2025 01:06:28: CA,1,555,0, , 0, 1, 25022025010628sIAhOU
+25/02/2025 01:12:09: Executado a partir de C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug
+25/02/2025 01:12:09: atualizar = False
+25/02/2025 01:12:12: Não ODBC
+25/02/2025 01:12:18: CA,7,777,0, , 0, 1, 25022025011218PWmwEd
+25/02/2025 01:20:04: Executado a partir de C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug
+25/02/2025 01:20:04: atualizar = False
+25/02/2025 01:20:07: Não ODBC
+25/02/2025 01:20:16: CA,6,555,0, , 0, 1, 25022025012016c747rq
+25/02/2025 01:23:43: Executado a partir de C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug
+25/02/2025 01:23:43: atualizar = False
+25/02/2025 01:23:46: Não ODBC
+25/02/2025 01:23:51: CA,6,222,0, , 0, 1, 250220250123517gNfwG
+25/02/2025 01:26:38: Executado a partir de C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug
+25/02/2025 01:26:38: atualizar = False
+25/02/2025 01:26:48: Não ODBC
+25/02/2025 01:26:54: CA,12,444,0, , 0, 1, 25022025012654O2PIT9
+25/02/2025 01:34:08: Executado a partir de C:\Prog\T-Bonifacio\T-Bonifacio\bin\Debug
+25/02/2025 01:34:08: atualizar = False
+25/02/2025 01:34:10: Não ODBC
+25/02/2025 01:34:15: CA,3,22,0, , 0, 1, 25022025013415YqxHw2
+25/02/2025 01:34:33: CA,12,33,0, , 0, 6, 25022025013433JxRK8L
