@@ -208,4 +208,3 @@ D:\Prog\T-Bonifacio\T-Bonifacio\obj\Debug\T-Bonifacio.csproj.GenerateResource.ca
 D:\Prog\T-Bonifacio\T-Bonifacio\obj\Debug\T-Bonifacio.csproj.CoreCompileInputs.cache
 D:\Prog\T-Bonifacio\T-Bonifacio\obj\Debug\TeleBonifacio.exe
 D:\Prog\T-Bonifacio\T-Bonifacio\obj\Debug\TeleBonifacio.pdb
-D:\Prog\T-Bonifacio\T-Bonifacio\obj\Debug\T-Bonifacio.csproj.CopyComplete

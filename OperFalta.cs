@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using Excel = Microsoft.Office.Interop.Excel;
 
+// 4.0.3 Solução pra não embaralhar a grid das faltass
 // 4.0.1 Ãnotações dinâmicas
 // 3.9.3 Ajuste no ajuste das colunas das faltas
 // 3.9.2 Diminuição das colunas para caber melhor a observação na grid de faltas
@@ -632,7 +633,6 @@ namespace TeleBonifacio
                 glo.Loga($"Erro em ConfigurarGrid: {ex.Message}");
             }
         }
-        
 
         private void CarregaGrid()
         {
@@ -645,7 +645,13 @@ namespace TeleBonifacio
                     DataTable dados = faltasDAO.getDados(BakidTipo, BakidForn, bakComprado, Bakcodigo, Bakquantidade, Bakmarca, BakObs, BakidVendedor, bakEmFalta, BakDescr);
                     List<tb.TpoFalta> tipos = TpoFalta.getTipos();
                     List<tb.Fornecedor> fornecs = Forn.getForns();
+
+                    // PAUSA O DESENHO DA GRID (Isso evita o embaralhamento)
+                    dataGrid1.SuspendLayout();
+
                     dataGrid1.DataSource = dados;
+
+                    // Seu processamento continua igual (sem precisar de delay)
                     ProcessarLinhas(dataGrid1.Rows, tipos, fornecs);
 
                     if (dados != null)
@@ -656,13 +662,47 @@ namespace TeleBonifacio
                             dataGrid1.FirstDisplayedScrollingRowIndex = scrollPosition;
                         }
                     }
+
+                    // LIBERA O DESENHO E ATUALIZA A TELA DE UMA VEZ SÓ
+                    dataGrid1.ResumeLayout();
                 }
             }
             catch (Exception ex)
             {
+                // Garante que o layout volte a funcionar mesmo se der erro
+                dataGrid1.ResumeLayout();
                 glo.Loga($"Erro em CarregaGrid: {ex.Message}");
             }
         }
+        //private void CarregaGrid()
+        //{
+        //    try
+        //    {
+        //        if (!carregando)
+        //        {
+        //            int scrollPosition = dataGrid1.FirstDisplayedScrollingRowIndex;
+        //            FaltasDAO faltasDAO = new FaltasDAO();
+        //            DataTable dados = faltasDAO.getDados(BakidTipo, BakidForn, bakComprado, Bakcodigo, Bakquantidade, Bakmarca, BakObs, BakidVendedor, bakEmFalta, BakDescr);
+        //            List<tb.TpoFalta> tipos = TpoFalta.getTipos();
+        //            List<tb.Fornecedor> fornecs = Forn.getForns();
+        //            dataGrid1.DataSource = dados;
+        //            ProcessarLinhas(dataGrid1.Rows, tipos, fornecs);
+
+        //            if (dados != null)
+        //            {
+        //                ConfigurarGrid();
+        //                if (scrollPosition > 0 && dataGrid1.Rows.Count > scrollPosition)
+        //                {
+        //                    dataGrid1.FirstDisplayedScrollingRowIndex = scrollPosition;
+        //                }
+        //            }
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        glo.Loga($"Erro em CarregaGrid: {ex.Message}");
+        //    }
+        //}
 
         private void ProcessarLinhas(DataGridViewRowCollection linhas, List<tb.TpoFalta> tipos, List<tb.Fornecedor> fornecs)
         {
