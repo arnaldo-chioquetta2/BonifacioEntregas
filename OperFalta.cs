@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using Excel = Microsoft.Office.Interop.Excel;
 
+// 4.0.4 Solução pra não embaralhar a grid das faltas[2]
 // 4.0.3 Solução pra não embaralhar a grid das faltass
 // 4.0.1 Ãnotações dinâmicas
 // 3.9.3 Ajuste no ajuste das colunas das faltas
@@ -58,6 +59,8 @@ namespace TeleBonifacio
         private bool Instanciar = true;
         private const string TAB_ADD_NAME = "tabAddAnotacao";
 
+        private List<tb.TpoFalta> tipos;
+        private List<tb.Fornecedor> fornecs;
 
         #region Inicializacao
 
@@ -308,14 +311,6 @@ namespace TeleBonifacio
                 comboBox.SelectedIndex = -1;
             }
         }
-
-        //private void OperFalta_Activated(object sender, EventArgs e)
-        //{
-        //    if (carregando)
-        //    {
-        //        carregando = false;
-        //    }
-        //}
 
         #endregion
 
@@ -643,16 +638,16 @@ namespace TeleBonifacio
                     int scrollPosition = dataGrid1.FirstDisplayedScrollingRowIndex;
                     FaltasDAO faltasDAO = new FaltasDAO();
                     DataTable dados = faltasDAO.getDados(BakidTipo, BakidForn, bakComprado, Bakcodigo, Bakquantidade, Bakmarca, BakObs, BakidVendedor, bakEmFalta, BakDescr);
-                    List<tb.TpoFalta> tipos = TpoFalta.getTipos();
-                    List<tb.Fornecedor> fornecs = Forn.getForns();
-
+                    // Isso preenche as variáveis globais que o CellFormatting vai usar
+                    tipos = TpoFalta.getTipos();
+                    fornecs = Forn.getForns();
                     // PAUSA O DESENHO DA GRID (Isso evita o embaralhamento)
                     dataGrid1.SuspendLayout();
 
                     dataGrid1.DataSource = dados;
 
                     // Seu processamento continua igual (sem precisar de delay)
-                    ProcessarLinhas(dataGrid1.Rows, tipos, fornecs);
+                    // ProcessarLinhas(dataGrid1.Rows, tipos, fornecs);
 
                     if (dados != null)
                     {
@@ -665,6 +660,7 @@ namespace TeleBonifacio
 
                     // LIBERA O DESENHO E ATUALIZA A TELA DE UMA VEZ SÓ
                     dataGrid1.ResumeLayout();
+                    dataGrid1.Refresh();
                 }
             }
             catch (Exception ex)
@@ -674,136 +670,7 @@ namespace TeleBonifacio
                 glo.Loga($"Erro em CarregaGrid: {ex.Message}");
             }
         }
-        //private void CarregaGrid()
-        //{
-        //    try
-        //    {
-        //        if (!carregando)
-        //        {
-        //            int scrollPosition = dataGrid1.FirstDisplayedScrollingRowIndex;
-        //            FaltasDAO faltasDAO = new FaltasDAO();
-        //            DataTable dados = faltasDAO.getDados(BakidTipo, BakidForn, bakComprado, Bakcodigo, Bakquantidade, Bakmarca, BakObs, BakidVendedor, bakEmFalta, BakDescr);
-        //            List<tb.TpoFalta> tipos = TpoFalta.getTipos();
-        //            List<tb.Fornecedor> fornecs = Forn.getForns();
-        //            dataGrid1.DataSource = dados;
-        //            ProcessarLinhas(dataGrid1.Rows, tipos, fornecs);
-
-        //            if (dados != null)
-        //            {
-        //                ConfigurarGrid();
-        //                if (scrollPosition > 0 && dataGrid1.Rows.Count > scrollPosition)
-        //                {
-        //                    dataGrid1.FirstDisplayedScrollingRowIndex = scrollPosition;
-        //                }
-        //            }
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        glo.Loga($"Erro em CarregaGrid: {ex.Message}");
-        //    }
-        //}
-
-        private void ProcessarLinhas(DataGridViewRowCollection linhas, List<tb.TpoFalta> tipos, List<tb.Fornecedor> fornecs)
-        {
-            try
-            {
-                int contador = 0;
-                foreach (DataGridViewRow row in linhas)
-                {
-                    AplicarCorPorTipo(row);
-                    AplicarFontePorPrioridade(row);
-                    AtualizarLinha(row, tipos, "Tipo", "Tipo");
-                    AtualizarLinha(row, fornecs, "idForn", "Forn");
-                    contador++;
-                    row.Cells["Cont"].Value = contador.ToString();
-                }
-            }
-            catch (Exception ex)
-            {
-                glo.Loga($"Erro em ProcessarLinhas: {ex.Message}");
-            }
-        }
-        //private void ProcessarLinhas(DataGridViewRowCollection linhas, List<tb.TpoFalta> tipos, List<tb.Fornecedor> fornecs)
-        //{
-        //    int contador = 0;
-        //    foreach (DataGridViewRow row in linhas)
-        //    {
-        //        AplicarCorPorTipo(row);
-        //        AplicarFontePorPrioridade(row);
-        //        AtualizarLinha(row, tipos, "Tipo", "Tipo");
-        //        AtualizarLinha(row, fornecs, "idForn", "Forn");
-        //        contador++;
-        //        row.Cells["Cont"].Value = contador.ToString();
-        //    }
-        //}
-
-        private void AplicarCorPorTipo(DataGridViewRow row)
-        {
-            try
-            {
-                if (!row.Cells["Tipo"].Value.Equals(DBNull.Value))
-                {
-                    int tipoId = Convert.ToInt32(row.Cells["Tipo"].Value);
-                    if (tipoFaltaCores.TryGetValue(tipoId, out Color cor))
-                    {
-                        row.DefaultCellStyle.BackColor = cor;
-                    }
-                    else
-                    {
-                        row.DefaultCellStyle.BackColor = SystemColors.Window;
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                glo.Loga($"Erro em AplicarCorPorTipo: {ex.Message}");
-            }
-        }
-
-
-        //private void AplicarCorPorTipo(DataGridViewRow row)
-        //{
-        //    if (!row.Cells["Tipo"].Value.Equals(DBNull.Value))
-        //    {
-        //        int tipoId = Convert.ToInt32(row.Cells["Tipo"].Value);
-
-        //        // Busca a cor no array global
-        //        if (tipoFaltaCores.TryGetValue(tipoId, out Color cor))
-        //        {
-        //            row.DefaultCellStyle.BackColor = cor;
-        //        }
-        //        else
-        //        {
-        //            row.DefaultCellStyle.BackColor = SystemColors.Window; // Cor padrão se não tiver cor definida
-        //        }
-        //    }
-        //}
-
-        private void AplicarFontePorPrioridade(DataGridViewRow row)
-        {
-            try
-            {
-                int prioridade = Convert.ToInt32(row.Cells["Prioridade"].Value);
-                row.DefaultCellStyle.Font = new Font("Arial", 12, prioridade > 0 ? FontStyle.Bold : FontStyle.Regular);
-            }
-            catch (Exception ex)
-            {
-                glo.Loga($"Erro em AplicarFontePorPrioridade: {ex.Message}");
-            }
-        }
-        //private void AplicarFontePorPrioridade(DataGridViewRow row)
-        //{
-        //    int prioridade = Convert.ToInt32(row.Cells["Prioridade"].Value);
-        //    if (prioridade > 0)
-        //    {
-        //        row.DefaultCellStyle.Font = new Font("Arial", 12, FontStyle.Bold);
-        //    }
-        //    else
-        //    {
-        //        row.DefaultCellStyle.Font = new Font("Arial", 12, FontStyle.Regular);
-        //    }
-        //}
+               
 
         private void dataGrid1_CellClick_1(object sender, DataGridViewCellEventArgs e)
         {
@@ -860,44 +727,6 @@ namespace TeleBonifacio
             }
         }
 
-        //private void AtualizarLinha<T>(DataGridViewRow row, List<T> items, string idColumnName, string displayColumnName)
-        //    where T : tb.IDataEntity
-        //{
-        //    if (!row.Cells[idColumnName].Value.Equals(DBNull.Value))
-        //    {
-        //        if (row.Cells[idColumnName].Value.ToString().Equals("0"))
-        //        {
-        //            row.Cells[displayColumnName].Value = "";
-        //        }
-        //        else
-        //        {
-        //            object oItem = row.Cells[idColumnName].Value;
-        //            int itemId = 0;
-        //            if (oItem != null)
-        //            {
-        //                if (oItem is int directInt)
-        //                {
-        //                    itemId = Convert.ToInt32(oItem.ToString());
-        //                }
-        //                else
-        //                {
-        //                    if (oItem is string itemAsString && int.TryParse(itemAsString, out int convertedInt))
-        //                        itemId = convertedInt;
-        //                }
-        //            }
-        //            var itemEncontrado = items.Find(i => i.Id == itemId);
-        //            if (itemEncontrado != null)
-        //            {
-        //                row.Cells[displayColumnName].Value = itemEncontrado.Nome;
-        //            }
-        //            else
-        //            {
-        //                row.Cells[displayColumnName].Value = "";
-        //            }
-        //        }
-        //    }
-        //}
-
         private void AtualizarLinha<T>(DataGridViewRow row, List<T> items, string idColumnName, string displayColumnName)
             where T : tb.IDataEntity
         {
@@ -936,7 +765,6 @@ namespace TeleBonifacio
                 glo.Loga($"Erro em AtualizarLinha: {ex.Message} | Coluna: {idColumnName}");
             }
         }
-
 
         private void ckEmFalta_Click(object sender, EventArgs e)
         {
@@ -979,6 +807,86 @@ namespace TeleBonifacio
         {
             faltasDAO.Prio(this.iID, "-");
             CarregaGrid();
+        }
+
+        // Este evento roda automaticamente para cada célula visível.
+        // É MUITO mais rápido que fazer loops e não causa flicker/embaralhamento.
+        private void dataGrid1_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
+        {
+            if (tipos == null || fornecs == null) return;
+
+            if (e.RowIndex < 0 || e.ColumnIndex < 0) return;
+
+            try
+            {
+                var grid = (DataGridView)sender;
+                string colName = grid.Columns[e.ColumnIndex].Name;
+                var row = grid.Rows[e.RowIndex];
+
+                // 1. COLUNA CONTADOR (Cont)
+                if (colName == "Cont")
+                {
+                    e.Value = (e.RowIndex + 1).ToString();
+                    e.FormattingApplied = true;
+                }
+
+                // 2. COLUNA TIPO (Troca ID por Nome + Aplica Cor)
+                else if (colName == "Tipo")
+                {
+                    if (row.Cells["Tipo"].Value != null && int.TryParse(row.Cells["Tipo"].Value.ToString(), out int tipoId))
+                    {
+                        // A. Tenta achar a cor
+                        if (tipoFaltaCores.TryGetValue(tipoId, out Color cor))
+                        {
+                            // Aplica a cor na LINHA inteira (como você fazia antes)
+                            row.DefaultCellStyle.BackColor = cor;
+
+                            // IMPORTANTE: Define a cor de seleção para não ficar estranho quando clica
+                            row.DefaultCellStyle.SelectionBackColor = cor;
+                            row.DefaultCellStyle.SelectionForeColor = Color.Black;
+                        }
+
+                        // B. Tenta achar o nome (Texto)
+                        var tipoObj = tipos.Find(t => t.Id == tipoId); // 'tipos' precisa ser acessível aqui (veja nota abaixo)
+                        if (tipoObj != null)
+                        {
+                            e.Value = tipoObj.Nome;
+                            e.FormattingApplied = true;
+                        }
+                    }
+                }
+
+                // 3. COLUNA FORNECEDOR (Troca ID por Nome)
+                else if (colName == "Forn") // Ou o nome da coluna que exibe o Fornecedor
+                {
+                    // Pega o ID da coluna escondida 'idForn' ou do próprio valor se for direto
+                    var cellIdForn = row.Cells["idForn"].Value;
+                    if (cellIdForn != null && int.TryParse(cellIdForn.ToString(), out int idForn))
+                    {
+                        var fornObj = fornecs.Find(f => f.Id == idForn); // 'fornecs' precisa ser acessível
+                        if (fornObj != null)
+                        {
+                            e.Value = fornObj.Nome;
+                            e.FormattingApplied = true;
+                        }
+                    }
+                }
+
+                // 4. PRIORIDADE (Fonte Negrito)
+                // Verifica se a coluna 'Prioridade' existe e aplica negrito na linha toda
+                if (grid.Columns.Contains("Prioridade") && row.Cells["Prioridade"].Value != null)
+                {
+                    if (int.TryParse(row.Cells["Prioridade"].Value.ToString(), out int prioridade) && prioridade > 0)
+                    {
+                        e.CellStyle.Font = new Font("Arial", 12, FontStyle.Bold);
+                    }
+                    else
+                    {
+                        e.CellStyle.Font = new Font("Arial", 12, FontStyle.Regular);
+                    }
+                }
+            }
+            catch { /* Ignora erros visuais para não travar */ }
         }
 
         #endregion
@@ -2707,6 +2615,16 @@ namespace TeleBonifacio
             public int GridRowIndex { get; set; } // Índice da grid
             public int ColumnIndex { get; set; }
             public string CellValue { get; set; }
+        }
+
+        protected override CreateParams CreateParams
+        {
+            get
+            {
+                CreateParams cp = base.CreateParams;
+                cp.ExStyle |= 0x02000000;
+                return cp;
+            }
         }
 
     }

@@ -519,6 +519,7 @@ namespace TeleBonifacio
             this.dataGrid1.Size = new System.Drawing.Size(1331, 292);
             this.dataGrid1.TabIndex = 1;
             this.dataGrid1.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGrid1_CellClick_1);
+            this.dataGrid1.CellFormatting += new System.Windows.Forms.DataGridViewCellFormattingEventHandler(this.dataGrid1_CellFormatting);
             this.dataGrid1.MouseUp += new System.Windows.Forms.MouseEventHandler(this.dataGridView1_MouseDown);
             // 
             // tabPage2

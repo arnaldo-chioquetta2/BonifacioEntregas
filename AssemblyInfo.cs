@@ -11,9 +11,10 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyCulture("")]
 [assembly: ComVisible(false)]
 [assembly: Guid("308c57af-e663-456d-8a2c-188bbd61423d")]
-[assembly: AssemblyVersion("4.0.2.0")]
-[assembly: AssemblyFileVersion("4.0.2.0")]
+[assembly: AssemblyVersion("4.0.3.0")]
+[assembly: AssemblyFileVersion("4.0.3.0")]
 
+// 4.0.4 23/11/25 Solução pra não embaralhar a grid das faltas[2]
 // 4.0.3 20/11/25 Solução pra não embaralhar a grid das faltas
 // 4.0.2 Reconstituição dos fontes
 // 4.0.1 Ãnotações dinâmicas
