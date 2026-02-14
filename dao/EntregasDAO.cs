@@ -2,6 +2,7 @@
 using System.Data;
 using System.Text;
 
+// 4.0.7 Ajustes no filtro das entregas
 // 3.9.7 Forma de pagamento Boleto para as entregas
 
 namespace TeleBonifacio.dao
@@ -13,52 +14,72 @@ namespace TeleBonifacio.dao
             
         }
 
-        public DataTable getDados(DateTime? DT1, DateTime? DT2, string sObs)
+        // VERSAO 1.0
+        // Metodo original sem filtro por entregador
+
+        // VERSAO 1.1
+        // Adicionado filtro por idBoy (entregador selecionado)
+        // Data: 14/02/2026
+        public DataTable getDados(DateTime? DT1, DateTime? DT2, string sObs, int? idBoy = null)
         {
+            glo.Loga("VERSAO 1.1 - getDados com filtro por idBoy");
+
             StringBuilder query = new StringBuilder();
-            int maxLength = 10; 
+            int maxLength = 10;
+
             query.Append($@"SELECT
-                e.ID as Id, 
-                e.Data, 
-                m.Nome AS MotoBoy, 
-                Space({maxLength} - Len(Format(e.Valor, 'Standard'))) & Format(e.Valor, 'Standard') AS Valor, 
-                Space({maxLength} - Len(Format(e.Desconto, 'Standard'))) & Format(e.Desconto, 'Standard') AS Desconto,
-                Space({maxLength} - Len(Format(e.VlNota, 'Standard'))) & Format(e.VlNota, 'Standard') AS Compra, 
-                SWITCH(
-                    e.idForma = 0, 'Anotado',
-                    e.idForma = 1, 'Cartão',
-                    e.idForma = 2, 'Dinheiro',
-                    e.idForma = 3, 'Pix',
-                    e.idForma = 4, 'Troca',
-                    e.idForma = 5, 'Boleto',
-                    TRUE, 'Desconhecido'
-                ) AS Pagamento,
-                c.Nome AS Cliente,
-                v.Nome AS Vendedor,  
-                e.Obs, 
-                m.codi as idBoy,
-                c.NrCli,
-                e.idForma, e.idVend, e.UID 
-            FROM 
-                (((Entregas e
-                LEFT JOIN Clientes c ON c.NrCli = e.idCliente)
-                LEFT JOIN Mecanicos m ON m.codi = e.idBoy)
-                LEFT JOIN Vendedores v ON v.ID = e.idVend)");
+        e.ID as Id, 
+        e.Data, 
+        m.Nome AS MotoBoy, 
+        Space({maxLength} - Len(Format(e.Valor, 'Standard'))) & Format(e.Valor, 'Standard') AS Valor, 
+        Space({maxLength} - Len(Format(e.Desconto, 'Standard'))) & Format(e.Desconto, 'Standard') AS Desconto,
+        Space({maxLength} - Len(Format(e.VlNota, 'Standard'))) & Format(e.VlNota, 'Standard') AS Compra, 
+        SWITCH(
+            e.idForma = 0, 'Anotado',
+            e.idForma = 1, 'Cartão',
+            e.idForma = 2, 'Dinheiro',
+            e.idForma = 3, 'Pix',
+            e.idForma = 4, 'Troca',
+            e.idForma = 5, 'Boleto',
+            TRUE, 'Desconhecido'
+        ) AS Pagamento,
+        c.Nome AS Cliente,
+        v.Nome AS Vendedor,  
+        e.Obs, 
+        m.codi as idBoy,
+        c.NrCli,
+        e.idForma, e.idVend, e.UID 
+    FROM 
+        (((Entregas e
+        LEFT JOIN Clientes c ON c.NrCli = e.idCliente)
+        LEFT JOIN Mecanicos m ON m.codi = e.idBoy)
+        LEFT JOIN Vendedores v ON v.ID = e.idVend)");
+
             DateTime dataInicio = DT1.Value.Date;
-            DateTime dataFim = DT2.Value.Date;                
+            DateTime dataFim = DT2.Value.Date;
+
             string dataInicioStr = dataInicio.ToString("MM/dd/yyyy HH:mm:ss");
             string dataFimStr = dataFim.ToString("MM/dd/yyyy 23:59:59");
+
             query.AppendFormat(" WHERE e.Data BETWEEN #{0}# AND #{1}#", dataInicioStr, dataFimStr);
-            if (sObs!=null)
+
+            if (!string.IsNullOrEmpty(sObs))
             {
-                if (sObs.Length > 0)
-                {
-                    query.AppendFormat(" AND e.Obs Like '%{0}%' ", sObs);
-                }
+                query.AppendFormat(" AND e.Obs Like '%{0}%'", sObs.Replace("'", "''"));
             }
+
+            // 🔴 NOVO FILTRO
+            if (idBoy.HasValue && idBoy.Value > 0)
+            {
+                query.AppendFormat(" AND e.idBoy = {0}", idBoy.Value);
+            }
+
             query.Append(" Order By e.ID desc");
-            DataTable dt = DB.ExecutarConsulta(query.ToString());
-            return dt;
+
+            System.Diagnostics.Debug.WriteLine("SQL GERADO:");
+            System.Diagnostics.Debug.WriteLine(query.ToString());
+
+            return DB.ExecutarConsulta(query.ToString());
         }
 
         public DataTable getDadosC(DateTime? DT1, DateTime? DT2)

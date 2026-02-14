@@ -22,17 +22,32 @@ namespace TeleBonifacio.dao
             DB.ExecutarComandoSQL(sql); 
         }
 
-        public DataTable getDados(int tipo, int idForn, int Comprado, string codigo, string quantidade, string marca, string Obs, int idVendedor, int EmFalta, string Descr)
+        // v1.1 – 12/02/2026
+        // Inclusão de filtro por período (Data DE / ATÉ)
+        // Mantida estrutura original v1.0
+        // Log de versão incluído
+        //
+        // v1.0 – Método original sem filtro por período
+        public DataTable getDados(int tipo, int idForn, int Comprado, string codigo, string quantidade,
+            string marca, string Obs, int idVendedor, int EmFalta, string Descr, DateTime? dataDe, DateTime? dataAte)
         {
+            const string VERSAO = "FaltasDAO.getDados v1.1";
+
             try
             {
+                glo.Loga($"{VERSAO} executando");
+
                 StringBuilder query = new StringBuilder();
-                query.Append(@"SELECT 0 as Cont, F.Compra, '' as Forn, F.ID, F.IDBalconista, FORMAT(F.Data, 'dd/MM/yy') as Data, F.Codigo, F.Quant, F.Marca, F.Descricao, 
-                V.Nome AS Balconista, F.UID, F.Tipo, F.Tipo as TipoOrig, F.idForn, F.Valor, F.Obs, F.Prioridade  
-            FROM Faltas F
-            LEFT JOIN Vendedores V ON V.ID = F.IDBalconista ");
+                query.Append(@"SELECT 0 as Cont, F.Compra, '' as Forn, F.ID, F.IDBalconista, 
+                    FORMAT(F.Data, 'dd/MM/yy') as Data, F.Codigo, F.Quant, F.Marca, F.Descricao, 
+                    V.Nome AS Balconista, F.UID, F.Tipo, F.Tipo as TipoOrig, 
+                    F.idForn, F.Valor, F.Obs, F.Prioridade  
+                    FROM Faltas F
+                    LEFT JOIN Vendedores V ON V.ID = F.IDBalconista ");
 
                 StringBuilder alteracoes = new StringBuilder();
+
+                // ===== FILTROS EXISTENTES (v1.0) =====
                 if (tipo > 0) alteracoes.Append($@" F.Tipo = '{tipo}' and ");
                 if (idForn > 0) alteracoes.Append($@" F.idForn = {idForn} and ");
                 if (Comprado > 0) alteracoes.Append(" F.Compra is not null and ");
@@ -44,6 +59,20 @@ namespace TeleBonifacio.dao
                 if (EmFalta > 0) alteracoes.Append($@" F.Tipo = '8' and ");
                 if (Descr.Length > 0) alteracoes.Append($" F.Descricao LIKE '{Descr}%' and ");
 
+                // ===== FILTRO DE PERÍODO (v1.2 – padrão Data Zero do sistema) =====
+                if (dataDe != DateTime.MinValue && dataAte != DateTime.MinValue)
+                {
+                    // Substitua as linhas:
+                    // string dtDe = dataDe.ToString("MM/dd/yyyy HH:mm:ss");
+                    // string dtAte = dataAte.ToString("MM/dd/yyyy HH:mm:ss");
+
+                    // Por:
+                    string dtDe = dataDe.Value.ToString("MM/dd/yyyy HH:mm:ss");
+                    string dtAte = dataAte.Value.ToString("MM/dd/yyyy HH:mm:ss");
+
+                    alteracoes.Append($" F.Data BETWEEN #{dtDe}# AND #{dtAte}# and ");
+                }
+
                 if (alteracoes.Length > 0)
                 {
                     alteracoes.Length -= 4;
@@ -51,11 +80,19 @@ namespace TeleBonifacio.dao
                 }
 
                 query.Append(" ORDER BY F.Prioridade DESC, F.Data DESC, V.Nome");
-                return DB.ExecutarConsulta(query.ToString());
+
+                string sqlFinal = query.ToString();
+
+                glo.Loga($"DEBUG SQL ({VERSAO}) → {sqlFinal}");
+
+                // return DB.ExecutarConsulta(sqlFinal);
+                DataTable dt = DB.ExecutarConsulta(sqlFinal);
+                glo.Loga($"DEBUG {VERSAO} → Registros retornados: {dt?.Rows.Count ?? 0}");
+                return dt;
             }
             catch (Exception ex)
             {
-                glo.Loga($"Erro em getDados: {ex.Message} | Parâmetros: tipo={tipo}, idForn={idForn}, codigo={codigo}");
+                glo.Loga($"Erro em {VERSAO}: {ex.Message}");
                 throw;
             }
         }

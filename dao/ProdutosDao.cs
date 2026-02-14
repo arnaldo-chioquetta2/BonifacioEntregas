@@ -1,4 +1,5 @@
-﻿using System.Data;
+﻿using System;
+using System.Data;
 using System.Text;
 
 namespace TeleBonifacio.dao
@@ -20,50 +21,89 @@ namespace TeleBonifacio.dao
             DB.ExecutarComandoSQL(sql);
         }
 
-        public DataTable getDados(int tipo, int idForn, string codigo, string quantidade, string marca, string Obs, string Descr)
+        // v1.1 – 12/02/2026
+        // Inclusão de filtro opcional por período (Data DE / ATÉ)
+        // Mantido comportamento original quando usarPeriodo = false
+        // Log de versão incluído
+        //
+        // v1.0 – Método original sem filtro por período
+
+        public DataTable getDados(
+            int tipo,
+            int idForn,
+            string codigo,
+            string quantidade,
+            string marca,
+            string Obs,
+            string Descr,
+            DateTime? dataDe,
+            DateTime? dataAte,
+            bool usarPeriodo)
         {
-            StringBuilder query = new StringBuilder();
-            query.Append(@"SELECT F.Compra, '' as Forn, F.ID, FORMAT(F.Data, 'dd/MM/yy') as Data, F.Codigo, F.Valor, F.Quant, F.Marca, F.Descricao, 
-            F.UID, F.Tipo, F.Tipo as TipoOrig, F.idForn, F.Obs 
-        FROM Produtos F ");
-            StringBuilder alteracoes = new StringBuilder();
-            if (tipo > 0)
+            const string VERSAO = "ProdutosDAO.getDados v1.1";
+
+            try
             {
-                alteracoes.Append($@" F.Tipo = '{tipo}' and ");
+                glo.Loga($"{VERSAO} executando");
+
+                StringBuilder query = new StringBuilder();
+                query.Append(@"SELECT F.Compra, '' as Forn, F.ID, 
+                       FORMAT(F.Data, 'dd/MM/yy') as Data, 
+                       F.Codigo, F.Valor, F.Quant, F.Marca, 
+                       F.Descricao, F.UID, F.Tipo, 
+                       F.Tipo as TipoOrig, F.idForn, F.Obs 
+                       FROM Produtos F ");
+
+                StringBuilder alteracoes = new StringBuilder();
+
+                // ===== FILTROS EXISTENTES (v1.0) =====
+                if (tipo > 0)
+                    alteracoes.Append($@" F.Tipo = '{tipo}' and ");
+
+                if (idForn > 0)
+                    alteracoes.Append($@" F.idForn = {idForn} and ");
+
+                if (!string.IsNullOrWhiteSpace(codigo))
+                    alteracoes.Append($" F.Codigo LIKE '{codigo}%' and ");
+
+                if (!string.IsNullOrWhiteSpace(quantidade))
+                    alteracoes.Append($" F.Quant LIKE '{quantidade}%' and ");
+
+                if (!string.IsNullOrWhiteSpace(marca))
+                    alteracoes.Append($" F.Marca LIKE '{marca}%' and ");
+
+                if (!string.IsNullOrWhiteSpace(Obs))
+                    alteracoes.Append($" F.Obs LIKE '{Obs}%' and ");
+
+                if (!string.IsNullOrWhiteSpace(Descr))
+                    alteracoes.Append($" F.Descricao LIKE '{Descr}%' and ");
+
+                // ===== NOVO FILTRO – v1.1 =====
+                if (usarPeriodo && dataDe.HasValue && dataAte.HasValue)
+                {
+                    string dtDe = dataDe.Value.ToString("MM/dd/yyyy HH:mm:ss");
+                    string dtAte = dataAte.Value.ToString("MM/dd/yyyy HH:mm:ss");
+
+                    alteracoes.Append($" F.Data BETWEEN #{dtDe}# AND #{dtAte}# and ");
+                }
+
+                if (alteracoes.Length > 0)
+                {
+                    alteracoes.Length -= 4; // Remove último 'and'
+                    query.Append($@" WHERE {alteracoes}");
+                }
+
+                query.Append(" ORDER BY F.Descricao ");
+
+                return DB.ExecutarConsulta(query.ToString());
             }
-            if (idForn > 0)
+            catch (Exception ex)
             {
-                alteracoes.Append($@" F.idForn = {idForn} and ");
+                glo.Loga($"Erro em {VERSAO}: {ex.Message}");
+                throw;
             }
-            if (codigo.Length > 0)
-            {
-                alteracoes.Append($" F.Codigo LIKE '{codigo}%' and "); // Modificado para usar LIKE com % após o valor de pesquisa
-            }
-            if (quantidade.Length > 0)
-            {
-                alteracoes.Append($@" F.Quant Like ' {quantidade}%' and ");
-            }
-            if (marca.Length > 0)
-            {
-                alteracoes.Append($" F.Marca LIKE '{marca}%' and "); // Modificado para usar LIKE com % após o valor de pesquisa
-            }
-            if (Obs.Length > 0)
-            {
-                alteracoes.Append($" F.Obs LIKE '{Obs}%' and "); // Modificado para usar LIKE com % após o valor de pesquisa
-            }
-            if (Descr.Length > 0)
-            {
-                alteracoes.Append($" F.Descricao LIKE '{Descr}%' and "); // Modificado para usar LIKE com % após o valor de pesquisa
-            }
-            if (alteracoes.Length > 0)
-            {
-                alteracoes.Length -= 4; // Remove o último 'and'
-                query.Append($@" WHERE {alteracoes}");
-            }
-            query.Append(" ORDER BY F.Descricao ");
-            DataTable dt = DB.ExecutarConsulta(query.ToString());
-            return dt;
         }
+
 
         public void Exclui(int id)
         {
