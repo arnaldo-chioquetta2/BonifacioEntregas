@@ -71,9 +71,6 @@
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="AdvancedDataGridView, Version=1.2.30115.18, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>packages\DG.AdvancedDataGridView.1.2.30115.18\lib\net40\AdvancedDataGridView.dll</HintPath>
-    </Reference>
     <Reference Include="ATCRecordNavigator, Version=1.0.2.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>bin\Release\ATCRecordNavigator.dll</HintPath>
@@ -187,6 +184,7 @@
     <Compile Include="CadClientes.designer.cs">
       <DependentUpon>CadClientes.cs</DependentUpon>
     </Compile>
+    <Compile Include="gen\Cripto.cs" />
     <Compile Include="operDevedores.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -450,6 +448,7 @@
     <Compile Include="tb\Recibo.cs" />
     <Compile Include="tb\TpoFalta .cs" />
     <Compile Include="tb\Vendedor.cs" />
+    <Compile Include="TeleBonifacio\gen\Cripto.cs" />
     <EmbeddedResource Include="CadClientes.resx">
       <DependentUpon>CadClientes.cs</DependentUpon>
       <SubType>Designer</SubType>
@@ -582,16 +581,6 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\AtcCtrl\AtcCtrl\AtcCtrl.csproj">
-      <Project>{74547907-32b4-40ec-807b-e5bdaf90f61b}</Project>
-      <Name>AtcCtrl</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\ATCDll\ATCDll\ATCDll.csproj">
-      <Project>{854b7c9c-028d-40d5-97f3-1e0bce678e2a}</Project>
-      <Name>ATCDll</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.8">
       <Visible>False</Visible>
       <ProductName>Microsoft .NET Framework 4.8 %28x86 e x64%29</ProductName>
@@ -612,6 +601,12 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="tb\NewFolder1\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\AtcCtrl\AtcCtrl\AtcCtrl.csproj">
+      <Project>{4fb78ef9-571f-6c62-b6fd-ea8dae537269}</Project>
+      <Name>AtcCtrl</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

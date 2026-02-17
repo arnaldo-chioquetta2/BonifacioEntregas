@@ -1,9 +1,7 @@
-﻿// using PdfSharp.Pdf.IO;
-using System;
+﻿using System;
 using System.Data;
-// using System.Drawing;
-using System.Windows.Forms;
 using TeleBonifacio.gen;
+using System.Windows.Forms;
 
 namespace TeleBonifacio
 {
@@ -63,7 +61,7 @@ namespace TeleBonifacio
             {
 
                 // glo.Nivel = 0;  // Balcão
-                //glo.Nivel = 1;  // Caixa
+                // glo.Nivel = 1;  // Caixa
                 glo.Nivel = 2;  // Escritório
 
                 //glo.iUsuario = 4;

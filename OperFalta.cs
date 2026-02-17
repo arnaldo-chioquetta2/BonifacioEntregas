@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using Excel = Microsoft.Office.Interop.Excel;
 
+// 4.0.6 Filtro por datas
 // 4.0.4 Solução pra não embaralhar a grid das faltas[2]
 // 4.0.3 Solução pra não embaralhar a grid das faltass
 // 4.0.1 Ãnotações dinâmicas
@@ -37,6 +38,7 @@ namespace TeleBonifacio
         private Color originalBackgroundColor;
         private bool carregando = true;
         private bool Restrito = false;
+
         private int BakidTipo = 0;
         private int BakidForn = 0;
         private int bakComprado = 0;
@@ -45,10 +47,15 @@ namespace TeleBonifacio
         private string Bakmarca = "";
         private string BakObs = "";
         private string BakDescr = "";
-        private string iUser = "";
+        private DateTime BakDataDe;
+        private DateTime BakDataAte;        
         private string BakCodigoLost = "";
         private int BakidVendedor = 0;
         private int bakEmFalta = 0;
+        private bool BakUsarPeriodo = false;
+
+
+        private string iUser = "";
         private int idCliente = 0;
         private bool AtualizarGridP = true;
         private bool AtualizarGridE = true;
@@ -77,9 +84,13 @@ namespace TeleBonifacio
             ConfigurarUI();
             VerificarNivel();
             carregando = false;
+            BakUsarPeriodo = false;
             CarregaGrid();
             ConfigureDataGridView(this.dataGrid1);
-            //griTaxas.SortStringChanged += GriTaxas_SortStringChanged;
+            dtpAte.Value = DateTime.Today;
+            dtpDe.Value = DateTime.Today.AddDays(-30);
+            BakDataDe = DateTime.MinValue;
+            BakDataAte = DateTime.MinValue;
             rt.AdjustFormComponents(this);
             this.Width = (int)(this.Width * 1.1);
             SetStartPosition();
@@ -629,48 +640,79 @@ namespace TeleBonifacio
             }
         }
 
+        // v1.1 – 12/02/2026
+        // Inclusão de suporte a filtro por período (BakDataDe / BakDataAte)
+        // Integração com FaltasDAO.getDados v1.1
+        // Log de versão incluído
+        //
+        // v1.0 – Carregamento padrão sem filtro por período
+
         private void CarregaGrid()
         {
+            const string VERSAO = "OperFalta.CarregaGrid v1.1";
+
             try
             {
+                glo.Loga($"{VERSAO} executando");
+
                 if (!carregando)
                 {
                     int scrollPosition = dataGrid1.FirstDisplayedScrollingRowIndex;
+
+                    glo.Loga($"DEBUG CarregaGrid → " +
+                             $"Tipo={BakidTipo}, " +
+                             $"Forn={BakidForn}, " +
+                             $"UsarPeriodo={BakUsarPeriodo}, " +
+                             $"DataDe={BakDataDe:dd/MM/yyyy HH:mm:ss}, " +
+                             $"DataAte={BakDataAte:dd/MM/yyyy HH:mm:ss}");
+
+
                     FaltasDAO faltasDAO = new FaltasDAO();
-                    DataTable dados = faltasDAO.getDados(BakidTipo, BakidForn, bakComprado, Bakcodigo, Bakquantidade, Bakmarca, BakObs, BakidVendedor, bakEmFalta, BakDescr);
-                    // Isso preenche as variáveis globais que o CellFormatting vai usar
+
+                    // >>> ALTERAÇÃO v1.1 – inclusão de período <<<
+                    DataTable dados = faltasDAO.getDados(
+                        BakidTipo,
+                        BakidForn,
+                        bakComprado,
+                        Bakcodigo,
+                        Bakquantidade,
+                        Bakmarca,
+                        BakObs,
+                        BakidVendedor,
+                        bakEmFalta,
+                        BakDescr,
+                        BakDataDe,
+                        BakDataAte);
+
+                    // Mantido comportamento original
                     tipos = TpoFalta.getTipos();
                     fornecs = Forn.getForns();
-                    // PAUSA O DESENHO DA GRID (Isso evita o embaralhamento)
+
                     dataGrid1.SuspendLayout();
 
                     dataGrid1.DataSource = dados;
 
-                    // Seu processamento continua igual (sem precisar de delay)
-                    // ProcessarLinhas(dataGrid1.Rows, tipos, fornecs);
-
                     if (dados != null)
                     {
                         ConfigurarGrid();
+
                         if (scrollPosition > 0 && dataGrid1.Rows.Count > scrollPosition)
                         {
                             dataGrid1.FirstDisplayedScrollingRowIndex = scrollPosition;
                         }
                     }
 
-                    // LIBERA O DESENHO E ATUALIZA A TELA DE UMA VEZ SÓ
                     dataGrid1.ResumeLayout();
                     dataGrid1.Refresh();
                 }
             }
             catch (Exception ex)
             {
-                // Garante que o layout volte a funcionar mesmo se der erro
                 dataGrid1.ResumeLayout();
-                glo.Loga($"Erro em CarregaGrid: {ex.Message}");
+                glo.Loga($"Erro em {VERSAO}: {ex.Message}");
             }
         }
-               
+
 
         private void dataGrid1_CellClick_1(object sender, DataGridViewCellEventArgs e)
         {
@@ -1358,8 +1400,13 @@ namespace TeleBonifacio
 
         private void button2_Click(object sender, EventArgs e)
         {
+            BakUsarPeriodo = true;
             button2.Tag = "F";
             glo.Loga("Filtro");
+            // --- Filtro por Período ---
+            BakDataDe = dtpDe.Value.Date;
+            BakDataAte = dtpAte.Value.Date.AddDays(1).AddSeconds(-1);
+
             int iForn = cmbForn.SelectedIndex;
             BakidForn = 0;
             if (iForn > 0)
@@ -1503,26 +1550,69 @@ namespace TeleBonifacio
             dataGrid2.Invalidate();
         }
 
+        // v1.1 – 12/02/2026
+        // Inclusão de suporte a filtro por período (BakDataDe / BakDataAte)
+        // Integração com ProdutosDao.getDados v1.1
+        // Log de versão incluído
+        //
+        // v1.0 – Carregamento padrão sem filtro por período
+
         private void CarregaGridP()
         {
-            int scrollPosition = dataGrid2.FirstDisplayedScrollingRowIndex;
-            cDaoP = new ProdutosDao();
-            DataTable dados = cDaoP.getDados(BakidTipo, BakidForn, Bakcodigo, Bakquantidade, Bakmarca, BakObs, BakDescr);
-            List<tb.TpoFalta> tipos = TpoFalta.getTipos();
-            List<tb.Fornecedor> Fornecs = Forn.getForns();
-            dataGrid2.DataSource = dados;
-            foreach (DataGridViewRow row in dataGrid2.Rows)
+            const string VERSAO = "OperFalta.CarregaGridP v1.1";
+
+            try
             {
-                AtualizarLinha(row, tipos, "Tipo", "Tipo");
-                AtualizarLinha(row, Fornecs, "idForn", "Forn");
+                glo.Loga($"{VERSAO} executando");
+
+                int scrollPosition = dataGrid2.FirstDisplayedScrollingRowIndex;
+
+                cDaoP = new ProdutosDao();
+
+                // >>> ALTERAÇÃO v1.1 – inclusão de período opcional <<<
+                DataTable dados = cDaoP.getDados(
+                    BakidTipo,
+                    BakidForn,
+                    Bakcodigo,
+                    Bakquantidade,
+                    Bakmarca,
+                    BakObs,
+                    BakDescr,
+                    BakDataDe,
+                    BakDataAte,
+                    BakUsarPeriodo);
+
+                List<tb.TpoFalta> tipos = TpoFalta.getTipos();
+                List<tb.Fornecedor> Fornecs = Forn.getForns();
+
+                dataGrid2.SuspendLayout();
+
+                dataGrid2.DataSource = dados;
+
+                foreach (DataGridViewRow row in dataGrid2.Rows)
+                {
+                    AtualizarLinha(row, tipos, "Tipo", "Tipo");
+                    AtualizarLinha(row, Fornecs, "idForn", "Forn");
+                }
+
+                if (dados != null)
+                {
+                    ConfigurarGridP();
+
+                    if (scrollPosition > 0 && dataGrid2.Rows.Count > scrollPosition)
+                        dataGrid2.FirstDisplayedScrollingRowIndex = scrollPosition;
+                }
+
+                dataGrid2.ResumeLayout();
+                dataGrid2.Refresh();
             }
-            if (dados != null)
+            catch (Exception ex)
             {
-                ConfigurarGridP();
-                if (scrollPosition > 0)
-                    dataGrid2.FirstDisplayedScrollingRowIndex = scrollPosition;
+                dataGrid2.ResumeLayout();
+                glo.Loga($"Erro em {VERSAO}: {ex.Message}");
             }
         }
+
         private void tbFaltas_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (!carregando)
@@ -2605,6 +2695,19 @@ namespace TeleBonifacio
                 dvDevedores.DataSource = cDaoD.Filtrar(letra);
             }
             ConfigurarGridD();
+        }
+
+        #endregion
+
+        #region Filtro de Data
+
+        private void dtpPeriodo_ValueChanged(object sender, EventArgs e)
+        {
+            // Se qualquer data for diferente da data zero
+            if (dtpDe.Value != DateTime.MinValue || dtpAte.Value != DateTime.MinValue)
+            {
+                button2.Enabled = true;
+            }
         }
 
         #endregion

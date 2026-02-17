@@ -11,9 +11,14 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyCulture("")]
 [assembly: ComVisible(false)]
 [assembly: Guid("308c57af-e663-456d-8a2c-188bbd61423d")]
-[assembly: AssemblyVersion("4.0.3.0")]
-[assembly: AssemblyFileVersion("4.0.3.0")]
+[assembly: AssemblyVersion("4.0.9.0")]
+[assembly: AssemblyFileVersion("4.0.9.0")]
 
+// 4.0.9 16/02/26 Filtro de data inicial e final para as entregas   
+// 4.0.8 15/02/26 Total na pesquisa de entregas
+// 4.0.7 14/02/26 Ajustes no filtro das entregas
+// 4.0.6 14/02/26 Filtro por datas
+// 4.0.5 11/02/26 José passa a ser o motoboy principal
 // 4.0.4 23/11/25 Solução pra não embaralhar a grid das faltas[2]
 // 4.0.3 20/11/25 Solução pra não embaralhar a grid das faltas
 // 4.0.2 Reconstituição dos fontes

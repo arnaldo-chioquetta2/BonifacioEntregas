@@ -1,0 +1,207 @@
+D:\Prog\T-Bonifacio\T-Bonifacio Reduzido\bin\Release\TeleBonifacio.exe.config
+D:\Prog\T-Bonifacio\T-Bonifacio Reduzido\bin\Release\TeleBonifacio.exe
+D:\Prog\T-Bonifacio\T-Bonifacio Reduzido\bin\Release\TeleBonifacio.pdb
+D:\Prog\T-Bonifacio\T-Bonifacio Reduzido\bin\Release\AtcCtrl.dll
+D:\Prog\T-Bonifacio\T-Bonifacio Reduzido\bin\Release\Google.Apis.Auth.dll
+D:\Prog\T-Bonifacio\T-Bonifacio Reduzido\bin\Release\Google.Apis.Core.dll
+D:\Prog\T-Bonifacio\T-Bonifacio Reduzido\bin\Release\Google.Apis.dll
+D:\Prog\T-Bonifacio\T-Bonifacio Reduzido\bin\Release\Google.Apis.Gmail.v1.dll
+D:\Prog\T-Bonifacio\T-Bonifacio Reduzido\bin\Release\Microsoft.Bcl.AsyncInterfaces.dll
+D:\Prog\T-Bonifacio\T-Bonifacio Reduzido\bin\Release\Microsoft.Extensions.DependencyInjection.Abstractions.dll
+D:\Prog\T-Bonifacio\T-Bonifacio Reduzido\bin\Release\Microsoft.Extensions.DependencyInjection.dll
+D:\Prog\T-Bonifacio\T-Bonifacio Reduzido\bin\Release\Microsoft.Extensions.Logging.Abstractions.dll
+D:\Prog\T-Bonifacio\T-Bonifacio Reduzido\bin\Release\Microsoft.Extensions.Logging.dll
+D:\Prog\T-Bonifacio\T-Bonifacio Reduzido\bin\Release\Microsoft.Extensions.Options.dll
+D:\Prog\T-Bonifacio\T-Bonifacio Reduzido\bin\Release\Microsoft.Extensions.Primitives.dll
+D:\Prog\T-Bonifacio\T-Bonifacio Reduzido\bin\Release\Newtonsoft.Json.dll
+D:\Prog\T-Bonifacio\T-Bonifacio Reduzido\bin\Release\PdfSharp.Charting.dll
+D:\Prog\T-Bonifacio\T-Bonifacio Reduzido\bin\Release\PdfSharp.dll
+D:\Prog\T-Bonifacio\T-Bonifacio Reduzido\bin\Release\SourceGrid.dll
+D:\Prog\T-Bonifacio\T-Bonifacio Reduzido\bin\Release\System.Buffers.dll
+D:\Prog\T-Bonifacio\T-Bonifacio Reduzido\bin\Release\System.CodeDom.dll
+D:\Prog\T-Bonifacio\T-Bonifacio Reduzido\bin\Release\System.Diagnostics.DiagnosticSource.dll
+D:\Prog\T-Bonifacio\T-Bonifacio Reduzido\bin\Release\System.Memory.dll
+D:\Prog\T-Bonifacio\T-Bonifacio Reduzido\bin\Release\System.Numerics.Vectors.dll
+D:\Prog\T-Bonifacio\T-Bonifacio Reduzido\bin\Release\System.Runtime.CompilerServices.Unsafe.dll
+D:\Prog\T-Bonifacio\T-Bonifacio Reduzido\bin\Release\System.Security.Cryptography.Pkcs.dll
+D:\Prog\T-Bonifacio\T-Bonifacio Reduzido\bin\Release\System.Threading.Tasks.Extensions.dll
+D:\Prog\T-Bonifacio\T-Bonifacio Reduzido\bin\Release\System.ValueTuple.dll
+D:\Prog\T-Bonifacio\T-Bonifacio Reduzido\bin\Release\ATCDll.dll
+D:\Prog\T-Bonifacio\T-Bonifacio Reduzido\bin\Release\AtcCtrl.pdb
+D:\Prog\T-Bonifacio\T-Bonifacio Reduzido\bin\Release\Google.Apis.pdb
+D:\Prog\T-Bonifacio\T-Bonifacio Reduzido\bin\Release\Google.Apis.xml
+D:\Prog\T-Bonifacio\T-Bonifacio Reduzido\bin\Release\Google.Apis.Auth.pdb
+D:\Prog\T-Bonifacio\T-Bonifacio Reduzido\bin\Release\Google.Apis.Auth.xml
+D:\Prog\T-Bonifacio\T-Bonifacio Reduzido\bin\Release\Google.Apis.Core.pdb
+D:\Prog\T-Bonifacio\T-Bonifacio Reduzido\bin\Release\Google.Apis.Core.xml
+D:\Prog\T-Bonifacio\T-Bonifacio Reduzido\bin\Release\Google.Apis.Gmail.v1.pdb
+D:\Prog\T-Bonifacio\T-Bonifacio Reduzido\bin\Release\Google.Apis.Gmail.v1.xml
+D:\Prog\T-Bonifacio\T-Bonifacio Reduzido\bin\Release\Microsoft.Bcl.AsyncInterfaces.xml
+D:\Prog\T-Bonifacio\T-Bonifacio Reduzido\bin\Release\Microsoft.Extensions.DependencyInjection.xml
+D:\Prog\T-Bonifacio\T-Bonifacio Reduzido\bin\Release\Microsoft.Extensions.DependencyInjection.Abstractions.xml
+D:\Prog\T-Bonifacio\T-Bonifacio Reduzido\bin\Release\Microsoft.Extensions.Logging.xml
+D:\Prog\T-Bonifacio\T-Bonifacio Reduzido\bin\Release\Microsoft.Extensions.Logging.Abstractions.xml
+D:\Prog\T-Bonifacio\T-Bonifacio Reduzido\bin\Release\Microsoft.Extensions.Options.xml
+D:\Prog\T-Bonifacio\T-Bonifacio Reduzido\bin\Release\Microsoft.Extensions.Primitives.xml
+D:\Prog\T-Bonifacio\T-Bonifacio Reduzido\bin\Release\Newtonsoft.Json.xml
+D:\Prog\T-Bonifacio\T-Bonifacio Reduzido\bin\Release\PdfSharp.xml
+D:\Prog\T-Bonifacio\T-Bonifacio Reduzido\bin\Release\PdfSharp.Charting.xml
+D:\Prog\T-Bonifacio\T-Bonifacio Reduzido\bin\Release\SourceGrid.xml
+D:\Prog\T-Bonifacio\T-Bonifacio Reduzido\bin\Release\System.Buffers.xml
+D:\Prog\T-Bonifacio\T-Bonifacio Reduzido\bin\Release\System.CodeDom.xml
+D:\Prog\T-Bonifacio\T-Bonifacio Reduzido\bin\Release\System.Diagnostics.DiagnosticSource.xml
+D:\Prog\T-Bonifacio\T-Bonifacio Reduzido\bin\Release\System.Memory.xml
+D:\Prog\T-Bonifacio\T-Bonifacio Reduzido\bin\Release\System.Numerics.Vectors.xml
+D:\Prog\T-Bonifacio\T-Bonifacio Reduzido\bin\Release\System.Runtime.CompilerServices.Unsafe.xml
+D:\Prog\T-Bonifacio\T-Bonifacio Reduzido\bin\Release\System.Security.Cryptography.Pkcs.xml
+D:\Prog\T-Bonifacio\T-Bonifacio Reduzido\bin\Release\System.Threading.Tasks.Extensions.xml
+D:\Prog\T-Bonifacio\T-Bonifacio Reduzido\bin\Release\System.ValueTuple.xml
+D:\Prog\T-Bonifacio\T-Bonifacio Reduzido\bin\Release\ATCDll.pdb
+D:\Prog\T-Bonifacio\T-Bonifacio Reduzido\bin\Release\de\PdfSharp.resources.dll
+D:\Prog\T-Bonifacio\T-Bonifacio Reduzido\bin\Release\de\PdfSharp.Charting.resources.dll
+D:\Prog\T-Bonifacio\T-Bonifacio Reduzido\obj\Release\T-Bonifacio.csproj.AssemblyReference.cache
+D:\Prog\T-Bonifacio\T-Bonifacio Reduzido\obj\Release\TeleBonifacio.fCadClientes.resources
+D:\Prog\T-Bonifacio\T-Bonifacio Reduzido\obj\Release\TeleBonifacio.operDevedores.resources
+D:\Prog\T-Bonifacio\T-Bonifacio Reduzido\obj\Release\TeleBonifacio.fCadEntregadores.resources
+D:\Prog\T-Bonifacio\T-Bonifacio Reduzido\obj\Release\TeleBonifacio.fCadFormas.resources
+D:\Prog\T-Bonifacio\T-Bonifacio Reduzido\obj\Release\TeleBonifacio.CadFornec.resources
+D:\Prog\T-Bonifacio\T-Bonifacio Reduzido\obj\Release\TeleBonifacio.CadPercs.resources
+D:\Prog\T-Bonifacio\T-Bonifacio Reduzido\obj\Release\TeleBonifacio.fCadTiposFaltas.resources
+D:\Prog\T-Bonifacio\T-Bonifacio Reduzido\obj\Release\TeleBonifacio.CadVendedores2.resources
+D:\Prog\T-Bonifacio\T-Bonifacio Reduzido\obj\Release\TeleBonifacio.Dashboard.resources
+D:\Prog\T-Bonifacio\T-Bonifacio Reduzido\obj\Release\TeleBonifacio.Form1.resources
+D:\Prog\T-Bonifacio\T-Bonifacio Reduzido\obj\Release\TeleBonifacio.FormBase.resources
+D:\Prog\T-Bonifacio\T-Bonifacio Reduzido\obj\Release\TeleBonifacio.operAnota.resources
+D:\Prog\T-Bonifacio\T-Bonifacio Reduzido\obj\Release\TeleBonifacio.operAvanc.resources
+D:\Prog\T-Bonifacio\T-Bonifacio Reduzido\obj\Release\TeleBonifacio.operCaixa.resources
+D:\Prog\T-Bonifacio\T-Bonifacio Reduzido\obj\Release\TeleBonifacio.oprConfig.resources
+D:\Prog\T-Bonifacio\T-Bonifacio Reduzido\obj\Release\TeleBonifacio.Consultas.resources
+D:\Prog\T-Bonifacio\T-Bonifacio Reduzido\obj\Release\TeleBonifacio.operContratos.resources
+D:\Prog\T-Bonifacio\T-Bonifacio Reduzido\obj\Release\TeleBonifacio.operEdContratos.resources
+D:\Prog\T-Bonifacio\T-Bonifacio Reduzido\obj\Release\TeleBonifacio.OperFalta.resources
+D:\Prog\T-Bonifacio\T-Bonifacio Reduzido\obj\Release\TeleBonifacio.operGarantia.resources
+D:\Prog\T-Bonifacio\T-Bonifacio Reduzido\obj\Release\TeleBonifacio.operLancamento.resources
+D:\Prog\T-Bonifacio\T-Bonifacio Reduzido\obj\Release\TeleBonifacio.operLogin.resources
+D:\Prog\T-Bonifacio\T-Bonifacio Reduzido\obj\Release\TeleBonifacio.OperPDF.resources
+D:\Prog\T-Bonifacio\T-Bonifacio Reduzido\obj\Release\TeleBonifacio.operPecas.resources
+D:\Prog\T-Bonifacio\T-Bonifacio Reduzido\obj\Release\TeleBonifacio.OperRH.resources
+D:\Prog\T-Bonifacio\T-Bonifacio Reduzido\obj\Release\TeleBonifacio.operSQL.resources
+D:\Prog\T-Bonifacio\T-Bonifacio Reduzido\obj\Release\TeleBonifacio.opeTpContrato.resources
+D:\Prog\T-Bonifacio\T-Bonifacio Reduzido\obj\Release\TeleBonifacio.opRecibos.resources
+D:\Prog\T-Bonifacio\T-Bonifacio Reduzido\obj\Release\TeleBonifacio.pesCliente.resources
+D:\Prog\T-Bonifacio\T-Bonifacio Reduzido\obj\Release\TeleBonifacio.pesEmails.resources
+D:\Prog\T-Bonifacio\T-Bonifacio Reduzido\obj\Release\TeleBonifacio.CadVendedores.resources
+D:\Prog\T-Bonifacio\T-Bonifacio Reduzido\obj\Release\TeleBonifacio.Properties.Resources.resources
+D:\Prog\T-Bonifacio\T-Bonifacio Reduzido\obj\Release\TeleBonifacio.rel.Caixa.resources
+D:\Prog\T-Bonifacio\T-Bonifacio Reduzido\obj\Release\TeleBonifacio.rel.Extrato.resources
+D:\Prog\T-Bonifacio\T-Bonifacio Reduzido\obj\Release\TeleBonifacio.rel.RelEntegas.resources
+D:\Prog\T-Bonifacio\T-Bonifacio Reduzido\obj\Release\TeleBonifacio.rel.RH.resources
+D:\Prog\T-Bonifacio\T-Bonifacio Reduzido\obj\Release\T-Bonifacio.csproj.GenerateResource.cache
+D:\Prog\T-Bonifacio\T-Bonifacio Reduzido\obj\Release\T-Bonifacio.csproj.CoreCompileInputs.cache
+D:\Prog\T-Bonifacio\T-Bonifacio Reduzido\obj\Release\T-Bonifa.032312E5.Up2Date
+D:\Prog\T-Bonifacio\T-Bonifacio Reduzido\obj\Release\TeleBonifacio.exe
+D:\Prog\T-Bonifacio\T-Bonifacio Reduzido\obj\Release\TeleBonifacio.pdb
+D:\Prog\T-Bonifacio\T-Bonifacio\bin\Release\TeleBonifacio.exe.config
+D:\Prog\T-Bonifacio\T-Bonifacio\bin\Release\TeleBonifacio.exe
+D:\Prog\T-Bonifacio\T-Bonifacio\bin\Release\TeleBonifacio.pdb
+D:\Prog\T-Bonifacio\T-Bonifacio\bin\Release\AtcCtrl.dll
+D:\Prog\T-Bonifacio\T-Bonifacio\bin\Release\Google.Apis.Auth.dll
+D:\Prog\T-Bonifacio\T-Bonifacio\bin\Release\Google.Apis.Core.dll
+D:\Prog\T-Bonifacio\T-Bonifacio\bin\Release\Google.Apis.dll
+D:\Prog\T-Bonifacio\T-Bonifacio\bin\Release\Google.Apis.Gmail.v1.dll
+D:\Prog\T-Bonifacio\T-Bonifacio\bin\Release\Microsoft.Bcl.AsyncInterfaces.dll
+D:\Prog\T-Bonifacio\T-Bonifacio\bin\Release\Microsoft.Extensions.DependencyInjection.Abstractions.dll
+D:\Prog\T-Bonifacio\T-Bonifacio\bin\Release\Microsoft.Extensions.DependencyInjection.dll
+D:\Prog\T-Bonifacio\T-Bonifacio\bin\Release\Microsoft.Extensions.Logging.Abstractions.dll
+D:\Prog\T-Bonifacio\T-Bonifacio\bin\Release\Microsoft.Extensions.Logging.dll
+D:\Prog\T-Bonifacio\T-Bonifacio\bin\Release\Microsoft.Extensions.Options.dll
+D:\Prog\T-Bonifacio\T-Bonifacio\bin\Release\Microsoft.Extensions.Primitives.dll
+D:\Prog\T-Bonifacio\T-Bonifacio\bin\Release\Newtonsoft.Json.dll
+D:\Prog\T-Bonifacio\T-Bonifacio\bin\Release\PdfSharp.Charting.dll
+D:\Prog\T-Bonifacio\T-Bonifacio\bin\Release\PdfSharp.dll
+D:\Prog\T-Bonifacio\T-Bonifacio\bin\Release\SourceGrid.dll
+D:\Prog\T-Bonifacio\T-Bonifacio\bin\Release\System.Buffers.dll
+D:\Prog\T-Bonifacio\T-Bonifacio\bin\Release\System.CodeDom.dll
+D:\Prog\T-Bonifacio\T-Bonifacio\bin\Release\System.Diagnostics.DiagnosticSource.dll
+D:\Prog\T-Bonifacio\T-Bonifacio\bin\Release\System.Memory.dll
+D:\Prog\T-Bonifacio\T-Bonifacio\bin\Release\System.Numerics.Vectors.dll
+D:\Prog\T-Bonifacio\T-Bonifacio\bin\Release\System.Runtime.CompilerServices.Unsafe.dll
+D:\Prog\T-Bonifacio\T-Bonifacio\bin\Release\System.Security.Cryptography.Pkcs.dll
+D:\Prog\T-Bonifacio\T-Bonifacio\bin\Release\System.Threading.Tasks.Extensions.dll
+D:\Prog\T-Bonifacio\T-Bonifacio\bin\Release\System.ValueTuple.dll
+D:\Prog\T-Bonifacio\T-Bonifacio\bin\Release\ATCDll.dll
+D:\Prog\T-Bonifacio\T-Bonifacio\bin\Release\AtcCtrl.pdb
+D:\Prog\T-Bonifacio\T-Bonifacio\bin\Release\Google.Apis.pdb
+D:\Prog\T-Bonifacio\T-Bonifacio\bin\Release\Google.Apis.xml
+D:\Prog\T-Bonifacio\T-Bonifacio\bin\Release\Google.Apis.Auth.pdb
+D:\Prog\T-Bonifacio\T-Bonifacio\bin\Release\Google.Apis.Auth.xml
+D:\Prog\T-Bonifacio\T-Bonifacio\bin\Release\Google.Apis.Core.pdb
+D:\Prog\T-Bonifacio\T-Bonifacio\bin\Release\Google.Apis.Core.xml
+D:\Prog\T-Bonifacio\T-Bonifacio\bin\Release\Google.Apis.Gmail.v1.pdb
+D:\Prog\T-Bonifacio\T-Bonifacio\bin\Release\Google.Apis.Gmail.v1.xml
+D:\Prog\T-Bonifacio\T-Bonifacio\bin\Release\Microsoft.Bcl.AsyncInterfaces.xml
+D:\Prog\T-Bonifacio\T-Bonifacio\bin\Release\Microsoft.Extensions.DependencyInjection.xml
+D:\Prog\T-Bonifacio\T-Bonifacio\bin\Release\Microsoft.Extensions.DependencyInjection.Abstractions.xml
+D:\Prog\T-Bonifacio\T-Bonifacio\bin\Release\Microsoft.Extensions.Logging.xml
+D:\Prog\T-Bonifacio\T-Bonifacio\bin\Release\Microsoft.Extensions.Logging.Abstractions.xml
+D:\Prog\T-Bonifacio\T-Bonifacio\bin\Release\Microsoft.Extensions.Options.xml
+D:\Prog\T-Bonifacio\T-Bonifacio\bin\Release\Microsoft.Extensions.Primitives.xml
+D:\Prog\T-Bonifacio\T-Bonifacio\bin\Release\Newtonsoft.Json.xml
+D:\Prog\T-Bonifacio\T-Bonifacio\bin\Release\PdfSharp.xml
+D:\Prog\T-Bonifacio\T-Bonifacio\bin\Release\PdfSharp.Charting.xml
+D:\Prog\T-Bonifacio\T-Bonifacio\bin\Release\SourceGrid.xml
+D:\Prog\T-Bonifacio\T-Bonifacio\bin\Release\System.Buffers.xml
+D:\Prog\T-Bonifacio\T-Bonifacio\bin\Release\System.CodeDom.xml
+D:\Prog\T-Bonifacio\T-Bonifacio\bin\Release\System.Diagnostics.DiagnosticSource.xml
+D:\Prog\T-Bonifacio\T-Bonifacio\bin\Release\System.Memory.xml
+D:\Prog\T-Bonifacio\T-Bonifacio\bin\Release\System.Numerics.Vectors.xml
+D:\Prog\T-Bonifacio\T-Bonifacio\bin\Release\System.Runtime.CompilerServices.Unsafe.xml
+D:\Prog\T-Bonifacio\T-Bonifacio\bin\Release\System.Security.Cryptography.Pkcs.xml
+D:\Prog\T-Bonifacio\T-Bonifacio\bin\Release\System.Threading.Tasks.Extensions.xml
+D:\Prog\T-Bonifacio\T-Bonifacio\bin\Release\System.ValueTuple.xml
+D:\Prog\T-Bonifacio\T-Bonifacio\bin\Release\ATCDll.pdb
+D:\Prog\T-Bonifacio\T-Bonifacio\bin\Release\de\PdfSharp.resources.dll
+D:\Prog\T-Bonifacio\T-Bonifacio\bin\Release\de\PdfSharp.Charting.resources.dll
+D:\Prog\T-Bonifacio\T-Bonifacio\obj\Release\T-Bonifacio.csproj.AssemblyReference.cache
+D:\Prog\T-Bonifacio\T-Bonifacio\obj\Release\TeleBonifacio.exe.config
+D:\Prog\T-Bonifacio\T-Bonifacio\obj\Release\TeleBonifacio.fCadClientes.resources
+D:\Prog\T-Bonifacio\T-Bonifacio\obj\Release\TeleBonifacio.operDevedores.resources
+D:\Prog\T-Bonifacio\T-Bonifacio\obj\Release\TeleBonifacio.fCadEntregadores.resources
+D:\Prog\T-Bonifacio\T-Bonifacio\obj\Release\TeleBonifacio.fCadFormas.resources
+D:\Prog\T-Bonifacio\T-Bonifacio\obj\Release\TeleBonifacio.CadFornec.resources
+D:\Prog\T-Bonifacio\T-Bonifacio\obj\Release\TeleBonifacio.CadPercs.resources
+D:\Prog\T-Bonifacio\T-Bonifacio\obj\Release\TeleBonifacio.fCadTiposFaltas.resources
+D:\Prog\T-Bonifacio\T-Bonifacio\obj\Release\TeleBonifacio.CadVendedores2.resources
+D:\Prog\T-Bonifacio\T-Bonifacio\obj\Release\TeleBonifacio.Dashboard.resources
+D:\Prog\T-Bonifacio\T-Bonifacio\obj\Release\TeleBonifacio.Form1.resources
+D:\Prog\T-Bonifacio\T-Bonifacio\obj\Release\TeleBonifacio.FormBase.resources
+D:\Prog\T-Bonifacio\T-Bonifacio\obj\Release\TeleBonifacio.operAnota.resources
+D:\Prog\T-Bonifacio\T-Bonifacio\obj\Release\TeleBonifacio.operAvanc.resources
+D:\Prog\T-Bonifacio\T-Bonifacio\obj\Release\TeleBonifacio.operCaixa.resources
+D:\Prog\T-Bonifacio\T-Bonifacio\obj\Release\TeleBonifacio.oprConfig.resources
+D:\Prog\T-Bonifacio\T-Bonifacio\obj\Release\TeleBonifacio.Consultas.resources
+D:\Prog\T-Bonifacio\T-Bonifacio\obj\Release\TeleBonifacio.operContratos.resources
+D:\Prog\T-Bonifacio\T-Bonifacio\obj\Release\TeleBonifacio.operEdContratos.resources
+D:\Prog\T-Bonifacio\T-Bonifacio\obj\Release\TeleBonifacio.OperFalta.resources
+D:\Prog\T-Bonifacio\T-Bonifacio\obj\Release\TeleBonifacio.operGarantia.resources
+D:\Prog\T-Bonifacio\T-Bonifacio\obj\Release\TeleBonifacio.operLancamento.resources
+D:\Prog\T-Bonifacio\T-Bonifacio\obj\Release\TeleBonifacio.operLogin.resources
+D:\Prog\T-Bonifacio\T-Bonifacio\obj\Release\TeleBonifacio.OperPDF.resources
+D:\Prog\T-Bonifacio\T-Bonifacio\obj\Release\TeleBonifacio.operPecas.resources
+D:\Prog\T-Bonifacio\T-Bonifacio\obj\Release\TeleBonifacio.OperRH.resources
+D:\Prog\T-Bonifacio\T-Bonifacio\obj\Release\TeleBonifacio.operSQL.resources
+D:\Prog\T-Bonifacio\T-Bonifacio\obj\Release\TeleBonifacio.opeTpContrato.resources
+D:\Prog\T-Bonifacio\T-Bonifacio\obj\Release\TeleBonifacio.opRecibos.resources
+D:\Prog\T-Bonifacio\T-Bonifacio\obj\Release\TeleBonifacio.pesCliente.resources
+D:\Prog\T-Bonifacio\T-Bonifacio\obj\Release\TeleBonifacio.pesEmails.resources
+D:\Prog\T-Bonifacio\T-Bonifacio\obj\Release\TeleBonifacio.CadVendedores.resources
+D:\Prog\T-Bonifacio\T-Bonifacio\obj\Release\TeleBonifacio.Properties.Resources.resources
+D:\Prog\T-Bonifacio\T-Bonifacio\obj\Release\TeleBonifacio.rel.Caixa.resources
+D:\Prog\T-Bonifacio\T-Bonifacio\obj\Release\TeleBonifacio.rel.Extrato.resources
+D:\Prog\T-Bonifacio\T-Bonifacio\obj\Release\TeleBonifacio.rel.RelEntegas.resources
+D:\Prog\T-Bonifacio\T-Bonifacio\obj\Release\TeleBonifacio.rel.RH.resources
+D:\Prog\T-Bonifacio\T-Bonifacio\obj\Release\T-Bonifacio.csproj.GenerateResource.cache
+D:\Prog\T-Bonifacio\T-Bonifacio\obj\Release\T-Bonifacio.csproj.CoreCompileInputs.cache
+D:\Prog\T-Bonifacio\T-Bonifacio\obj\Release\T-Bonifa.032312E5.Up2Date
+D:\Prog\T-Bonifacio\T-Bonifacio\obj\Release\TeleBonifacio.exe
+D:\Prog\T-Bonifacio\T-Bonifacio\obj\Release\TeleBonifacio.pdb

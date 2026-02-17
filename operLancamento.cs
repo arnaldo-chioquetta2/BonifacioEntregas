@@ -5,6 +5,7 @@ using System.Windows.Forms;
 using TeleBonifacio.tb;
 using System.Globalization;
 
+// 4.0.9 Filtro de data inicial e final para as entregas   
 // 3.9.7 Forma de pagamento Boleto para as entregas
 // 3.9.0 Retornar para a Guilia depois da venda
 // 3.8.9 Seta a GIULIA como vendedar default nas entregas
@@ -34,15 +35,15 @@ namespace TeleBonifacio
             cmbMotoBoy.SelectedIndex = 0;
             cmbCliente.SelectedIndex = -1;
             rt.AdjustFormComponents(this);
-            SetaORicardo();
+            SetaOJose();
             SetaAGiulia();
         }
 
-        private void SetaORicardo()
+        private void SetaOJose()
         {
             for (int i = 0; i < cmbMotoBoy.Items.Count; i++)
             {
-                if (cmbMotoBoy.Items[i].ToString().ToUpper().Contains("RICARDO OLIVEIRA"))
+                if (cmbMotoBoy.Items[i].ToString().ToUpper().Contains("JOSE"))
                 {
                     cmbMotoBoy.SelectedIndex = i;
                     break;
@@ -93,7 +94,7 @@ namespace TeleBonifacio
 
         private void Limpar()
         {
-            SetaORicardo();
+            SetaOJose();
             SetaAGiulia();
             cmbCliente.SelectedIndex = 0;
             cmbFormaPagamento.SelectedIndex = -1;
@@ -103,43 +104,61 @@ namespace TeleBonifacio
             lbTotal.Text = "";
         }
 
+        // VERSAO 3.9.11
+        // Filtro por intervalo real de datas
+        // Data: 16/02/2026
+
         private void CarregaGrid()
         {
+            glo.Loga("VERSAO 3.9.11 - Filtro por intervalo de datas");
+            if (dtInicial.Value > dtpData.Value)
+            {
+                MessageBox.Show("Data inicial não pode ser maior que a final.");
+                return;
+            }
+
             entregasDAO = new EntregasDAO();
-            DateTime DT2 = dtpData.Value.AddDays(-1);
+
+            DateTime dataInicio = dtInicial.Value.Date;
+            DateTime dataFim = dtpData.Value.Date;
+
             string sObs = txObs.Text;
-            DataTable dados = entregasDAO.getDados(DT2, dtpData.Value, sObs);
+
+            int? idBoy = null;
+
+            if (cmbMotoBoy.SelectedValue != null)
+                idBoy = Convert.ToInt32(cmbMotoBoy.SelectedValue);
+
+            DataTable dados = entregasDAO.getDados(dataInicio, dataFim, sObs, idBoy);
+
             if (dados.Rows.Count > 0)
             {
                 decimal totalValor = 0;
                 decimal totalCompra = 0;
 
+                int contador = dados.Rows.Count;
+
                 foreach (DataRow row in dados.Rows)
                 {
                     if (decimal.TryParse(row["Valor"].ToString(), out decimal valor))
-                    {
                         totalValor += valor;
-                    }
 
                     if (decimal.TryParse(row["Compra"].ToString(), out decimal compra))
-                    {
                         totalCompra += compra;
-                    }
                 }
 
-                // Adiciona a linha de total ao DataTable
                 DataRow totalRow = dados.NewRow();
-                totalRow["MotoBoy"] = "Total"; // Você pode personalizar essa célula para indicar que é uma linha de total
-                totalRow["Valor"] = totalValor.ToString("C"); // Formata como moeda
-                totalRow["Compra"] = totalCompra.ToString("C"); // Formata como moeda
+                totalRow["MotoBoy"] = $"Total ({contador})";
+                totalRow["Valor"] = totalValor.ToString("C");
+                totalRow["Compra"] = totalCompra.ToString("C");
+
                 dados.Rows.Add(totalRow);
-
-
             }
 
-            DevAge.ComponentModel.BoundDataView boundDataView = new DevAge.ComponentModel.BoundDataView(dados.DefaultView);
-            dataGrid1.DataSource = boundDataView;
+            DevAge.ComponentModel.BoundDataView boundDataView =
+                new DevAge.ComponentModel.BoundDataView(dados.DefaultView);
 
+            dataGrid1.DataSource = boundDataView;
         }
 
         private void btnAdicionar_Click(object sender, EventArgs e)
@@ -360,6 +379,7 @@ namespace TeleBonifacio
             {
                 carregou = true;
                 dtpData.Value = DateTime.Now;
+                dtInicial.Value = DateTime.Now.AddDays(-1).Date; 
                 CarregaGrid();
                 ConfigurarGrid();
             }            
