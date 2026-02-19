@@ -1,0 +1,222 @@
+﻿using System;
+using System.Data;
+using System.Text;
+
+namespace TeleBonifacio.dao
+{
+    public class FaltasDAO
+    {
+        public void Adiciona(int idBalconista, string quantidade, string codigo, string Marca, string Descr, string Obs, int idForn, int idTipo, string UID)
+        {
+            string sql = $@"INSERT INTO Faltas (IDBalconista, Quant, Codigo, Marca, Data, Descricao, Obs, Tipo, idForn, UID, Prioridade) VALUES (
+                {idBalconista}, 
+                '{quantidade}', 
+                '{codigo}', 
+                '{Marca}', 
+                Now, 
+                '{Descr}', 
+                '{Obs}', 
+                '{idTipo}', 
+                {idForn}, 
+                '{UID}', 0)";
+            DB.ExecutarComandoSQL(sql); 
+        }
+
+        // v1.1 – 12/02/2026
+        // Inclusão de filtro por período (Data DE / ATÉ)
+        // Mantida estrutura original v1.0
+        // Log de versão incluído
+        //
+        // v1.0 – Método original sem filtro por período
+        public DataTable getDados(int tipo, int idForn, int Comprado, string codigo, string quantidade,
+            string marca, string Obs, int idVendedor, int EmFalta, string Descr, DateTime? dataDe, DateTime? dataAte)
+        {
+            const string VERSAO = "FaltasDAO.getDados v1.1";
+
+            try
+            {
+                glo.Loga($"{VERSAO} executando");
+
+                StringBuilder query = new StringBuilder();
+                query.Append(@"SELECT 0 as Cont, F.Compra, '' as Forn, F.ID, F.IDBalconista, 
+                    FORMAT(F.Data, 'dd/MM/yy') as Data, F.Codigo, F.Quant, F.Marca, F.Descricao, 
+                    V.Nome AS Balconista, F.UID, F.Tipo, F.Tipo as TipoOrig, 
+                    F.idForn, F.Valor, F.Obs, F.Prioridade  
+                    FROM Faltas F
+                    LEFT JOIN Vendedores V ON V.ID = F.IDBalconista ");
+
+                StringBuilder alteracoes = new StringBuilder();
+
+                // ===== FILTROS EXISTENTES (v1.0) =====
+                if (tipo > 0) alteracoes.Append($@" F.Tipo = '{tipo}' and ");
+                if (idForn > 0) alteracoes.Append($@" F.idForn = {idForn} and ");
+                if (Comprado > 0) alteracoes.Append(" F.Compra is not null and ");
+                if (codigo.Length > 0) alteracoes.Append($" F.Codigo LIKE '{codigo}%' and ");
+                if (quantidade.Length > 0) alteracoes.Append($" F.Quant Like '{quantidade}%' and ");
+                if (marca.Length > 0) alteracoes.Append($" F.Marca LIKE '{marca}%' and ");
+                if (Obs.Length > 0) alteracoes.Append($" F.Obs LIKE '{Obs}%' and ");
+                if (idVendedor > 0) alteracoes.Append($@" F.IDBalconista = {idVendedor} and ");
+                if (EmFalta > 0) alteracoes.Append($@" F.Tipo = '8' and ");
+                if (Descr.Length > 0) alteracoes.Append($" F.Descricao LIKE '{Descr}%' and ");
+
+                // ===== FILTRO DE PERÍODO (v1.2 – padrão Data Zero do sistema) =====
+                if (dataDe != DateTime.MinValue && dataAte != DateTime.MinValue)
+                {
+                    // Substitua as linhas:
+                    // string dtDe = dataDe.ToString("MM/dd/yyyy HH:mm:ss");
+                    // string dtAte = dataAte.ToString("MM/dd/yyyy HH:mm:ss");
+
+                    // Por:
+                    string dtDe = dataDe.Value.ToString("MM/dd/yyyy HH:mm:ss");
+                    string dtAte = dataAte.Value.ToString("MM/dd/yyyy HH:mm:ss");
+
+                    alteracoes.Append($" F.Data BETWEEN #{dtDe}# AND #{dtAte}# and ");
+                }
+
+                if (alteracoes.Length > 0)
+                {
+                    alteracoes.Length -= 4;
+                    query.Append($@" WHERE {alteracoes} ");
+                }
+
+                query.Append(" ORDER BY F.Prioridade DESC, F.Data DESC, V.Nome");
+
+                string sqlFinal = query.ToString();
+
+                glo.Loga($"DEBUG SQL ({VERSAO}) → {sqlFinal}");
+
+                // return DB.ExecutarConsulta(sqlFinal);
+                DataTable dt = DB.ExecutarConsulta(sqlFinal);
+                glo.Loga($"DEBUG {VERSAO} → Registros retornados: {dt?.Rows.Count ?? 0}");
+                return dt;
+            }
+            catch (Exception ex)
+            {
+                glo.Loga($"Erro em {VERSAO}: {ex.Message}");
+                throw;
+            }
+        }
+
+
+        public void Exclui(int id)
+        {
+            string sql = $@"DELETE FROM Faltas WHERE ID = {id}";
+            DB.ExecutarComandoSQL(sql);
+        }
+
+        public void Edita(int id, int idBalconista, string quantidade, string codigo)
+        {
+            string sql = $@"UPDATE Faltas SET 
+                IDBalconista = {idBalconista}, 
+                Quant = '{quantidade}', 
+                Codigo = '{codigo}'
+                WHERE ID = {id}";
+            DB.ExecutarComandoSQL(sql);
+        }
+
+        public void Atualiza(int iID, int iTpo, int idForn, string codigo, string quantidade, string marca, string Obs, string Descr, float Valor)
+        {
+            StringBuilder alteracoes = new StringBuilder();
+            if (iTpo > 0)
+            {
+                alteracoes.Append($"Tipo = {iTpo}, ");
+            }
+            if (idForn > 0)
+            {
+                alteracoes.Append($"idForn = {idForn}, ");
+            }
+            if (!string.IsNullOrEmpty(codigo))
+            {
+                alteracoes.Append($"Codigo = '{codigo}', ");
+            }
+            if (quantidade.Length > 0)
+            {
+                alteracoes.Append($"Quant = '{quantidade}', ");
+            }
+            if (!string.IsNullOrEmpty(marca))
+            {
+                alteracoes.Append($"Marca = '{marca}', ");
+            }
+            if (!string.IsNullOrEmpty(Obs))
+            {
+                alteracoes.Append($"Obs = '{Obs}', ");
+            }
+            if (!string.IsNullOrEmpty(Descr))
+            {
+                alteracoes.Append($"Descricao = '{Descr}', ");
+            }
+            if (Valor > 0)
+            {
+                alteracoes.Append($"Valor = {glo.sv(Valor)}, ");
+            }
+            alteracoes.Length -= 2;
+            string sValor = glo.sv(Valor);
+            string sql = $@"UPDATE Faltas SET {alteracoes} WHERE ID = {iID} ";
+            DB.ExecutarComandoSQL(sql);
+        }
+
+        public void Comprou(int iID, float Valor)
+        {
+            try
+            {
+                DataTable faltaData = DB.ExecutarConsulta($"SELECT * FROM Faltas WHERE ID = {iID}");
+                DataRow faltaRow = faltaData.Rows[0];
+                string UID = glo.GenerateUID();
+                string sValor = glo.sv(Valor);
+                int idForn = (faltaRow["idForn"].ToString().Length == 0) ? 0 : Convert.ToInt16(faltaRow["idForn"]);
+
+                string insertQuery = $@"INSERT INTO Produtos (Data, Quant, Codigo, Marca, UID, Tipo, Compra, Descricao, idForn, Obs, Valor) 
+                        VALUES (Now, '{faltaRow["Quant"]}', '{faltaRow["Codigo"]}', '{faltaRow["Marca"]}', '{UID}', '{faltaRow["Tipo"]}', Now(), '{faltaRow["Descricao"]}', {idForn}, '{faltaRow["Obs"]}', {sValor} ) ";
+                DB.ExecutarComandoSQL(insertQuery);
+
+                string updateFaltaQuery = $@"Delete From Faltas WHERE ID = {iID}";
+                DB.ExecutarComandoSQL(updateFaltaQuery);
+            }
+            catch (Exception ex)
+            {
+                glo.Loga($"Erro em Comprou: {ex.Message} | ID: {iID} | Valor: {Valor}");
+                throw;
+            }
+        }
+        //public void Comprou(int iID, float Valor)
+        //{
+        //    DataTable faltaData = DB.ExecutarConsulta($"SELECT * FROM Faltas WHERE ID = {iID}");
+        //    DataRow faltaRow = faltaData.Rows[0];
+        //    string UID = glo.GenerateUID();
+        //    string sValor = glo.sv(Valor);
+        //    int idForn = (faltaRow["idForn"].ToString().Length==0) ? 0 : Convert.ToInt16(faltaRow["idForn"]);
+        //    string insertQuery = $@"INSERT INTO Produtos (Data, Quant, Codigo, Marca, UID, Tipo, Compra, Descricao, idForn, Obs, Valor) 
+        //                    VALUES (Now, '{faltaRow["Quant"]}', '{faltaRow["Codigo"]}', '{faltaRow["Marca"]}', '{UID}', '{faltaRow["Tipo"]}', Now(), '{faltaRow["Descricao"]}', {idForn}, '{faltaRow["Obs"]}', {sValor} ) ";
+        //    DB.ExecutarComandoSQL(insertQuery);
+        //    string updateFaltaQuery = $@"Delete From Faltas WHERE ID = {iID}";
+        //    DB.ExecutarComandoSQL(updateFaltaQuery);
+        //}
+
+        public string VeSeJaTem(string codigo)
+        {
+            string query = $@"SELECT Count(*) FROM Faltas Where Codigo = '{codigo}' ";
+            int count = DB.ExecutarConsultaCount(query);
+            string ret = "";
+            if (count > 0)
+            {
+                ret= "Já existe um falta com este código.";
+            } else
+            {
+                string queryP = $@"SELECT FORMAT([Compra], 'dd/MM/yyyy') AS CompraFormatada FROM Produtos WHERE Codigo = '{codigo}' ";
+                DataTable dados = DB.ExecutarConsulta(queryP);
+                if (dados.Rows.Count > 0)
+                {
+                    DateTime? dataCompra = Convert.ToDateTime(dados.Rows[0]["CompraFormatada"]);
+                    ret = $"Este produto foi comprado em {dataCompra.Value.ToShortDateString()}";
+                }
+            }
+            return ret;
+        }
+
+        internal void Prio(int iID, string v)
+        {
+            string sql = $@"UPDATE Faltas SET Prioridade = Prioridade {v} 1 Where ID = {iID} ";
+            DB.ExecutarComandoSQL(sql);
+        }
+    }
+}
