@@ -130,7 +130,6 @@ namespace TeleBonifacio
 
         private void pictureBox14_Click(object sender, EventArgs e)
         {
-            // AbrirOuFocarFormulario<OperPagar>();
             AbrirOuFocarFormulario<OperPDF>();
         }
 
@@ -147,6 +146,11 @@ namespace TeleBonifacio
         private void pictureBox16_Click(object sender, EventArgs e)
         {
             AbrirOuFocarFormulario<operContratos>();
+        }
+
+        private void picFichas_Click(object sender, EventArgs e)
+        {
+            AbrirOuFocarFormulario<operPartilheira>();
         }
 
         #endregion
@@ -521,7 +525,6 @@ namespace TeleBonifacio
                 glo.Loga("Form1_Resize: Sender is not a Form.");
             }
         }
-
 
     }
 

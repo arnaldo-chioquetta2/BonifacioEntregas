@@ -346,6 +346,12 @@
     <Compile Include="operLogin.designer.cs">
       <DependentUpon>operLogin.cs</DependentUpon>
     </Compile>
+    <Compile Include="operPartilheira.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="operPartilheira.Designer.cs">
+      <DependentUpon>operPartilheira.cs</DependentUpon>
+    </Compile>
     <Compile Include="OperPDF.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -520,6 +526,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="operLogin.resx">
       <DependentUpon>operLogin.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="operPartilheira.resx">
+      <DependentUpon>operPartilheira.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="OperPDF.resx">
       <DependentUpon>OperPDF.cs</DependentUpon>
