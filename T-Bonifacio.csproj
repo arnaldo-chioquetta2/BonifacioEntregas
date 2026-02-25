@@ -188,6 +188,9 @@
     <Compile Include="CadClientes.designer.cs">
       <DependentUpon>CadClientes.cs</DependentUpon>
     </Compile>
+    <Compile Include="dao\CodigoPartilheiraDAO.cs" />
+    <Compile Include="gen\CodigoPartilheiraParser.cs" />
+    <Compile Include="tb\CodigoPartilheira.cs" />
     <Compile Include="gen\Cripto.cs" />
     <Compile Include="operDevedores.cs">
       <SubType>Form</SubType>
@@ -612,9 +615,7 @@
     <Content Include="dashboard.ico" />
     <None Include="Resources\%24this.Icon.ico" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="tb\NewFolder1\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <ProjectReference Include="..\AtcCtrl\AtcCtrl\AtcCtrl.csproj">
       <Project>{4fb78ef9-571f-6c62-b6fd-ea8dae537269}</Project>

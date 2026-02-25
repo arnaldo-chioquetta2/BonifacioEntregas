@@ -1,4 +1,6 @@
-﻿namespace TeleBonifacio
+﻿using System;
+
+namespace TeleBonifacio
 {
     partial class operPartilheira
     {
@@ -59,6 +61,7 @@
             this.txCodigo.Name = "txCodigo";
             this.txCodigo.Size = new System.Drawing.Size(172, 20);
             this.txCodigo.TabIndex = 7;
+            this.txCodigo.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txCodigo_KeyDown);
             // 
             // btAdicionar
             // 
@@ -68,6 +71,7 @@
             this.btAdicionar.TabIndex = 6;
             this.btAdicionar.Text = "Adicionar";
             this.btAdicionar.UseVisualStyleBackColor = true;
+            this.btAdicionar.Click += new System.EventHandler(this.btAdicionar_Click);
             // 
             // lblBuscar
             // 
@@ -103,8 +107,10 @@
             this.gridCodigos.Name = "gridCodigos";
             this.gridCodigos.RowHeadersVisible = false;
             this.gridCodigos.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.gridCodigos.Size = new System.Drawing.Size(651, 305);
+            this.gridCodigos.Size = new System.Drawing.Size(651, 280);
             this.gridCodigos.TabIndex = 3;
+            this.gridCodigos.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.gridCodigos_CellEndEdit);
+            this.gridCodigos.KeyDown += new System.Windows.Forms.KeyEventHandler(this.gridCodigos_KeyDown);
             // 
             // colCodigo
             // 
@@ -116,27 +122,29 @@
             // btExcluir
             // 
             this.btExcluir.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btExcluir.Location = new System.Drawing.Point(16, 381);
+            this.btExcluir.Location = new System.Drawing.Point(17, 365);
             this.btExcluir.Name = "btExcluir";
             this.btExcluir.Size = new System.Drawing.Size(77, 26);
             this.btExcluir.TabIndex = 2;
             this.btExcluir.Text = "Excluir";
             this.btExcluir.UseVisualStyleBackColor = true;
+            this.btExcluir.Click += new System.EventHandler(this.btExcluir_Click);
             // 
             // btLimpar
             // 
             this.btLimpar.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btLimpar.Location = new System.Drawing.Point(102, 381);
+            this.btLimpar.Location = new System.Drawing.Point(103, 365);
             this.btLimpar.Name = "btLimpar";
             this.btLimpar.Size = new System.Drawing.Size(86, 26);
             this.btLimpar.TabIndex = 1;
             this.btLimpar.Text = "Limpar Lista";
             this.btLimpar.UseVisualStyleBackColor = true;
+            this.btLimpar.Click += new System.EventHandler(this.btLimpar_Click);
             // 
             // btImprimir
             // 
             this.btImprimir.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btImprimir.Location = new System.Drawing.Point(590, 381);
+            this.btImprimir.Location = new System.Drawing.Point(591, 365);
             this.btImprimir.Name = "btImprimir";
             this.btImprimir.Size = new System.Drawing.Size(77, 26);
             this.btImprimir.TabIndex = 0;
@@ -148,10 +156,10 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(686, 417);
+            this.Controls.Add(this.gridCodigos);
             this.Controls.Add(this.btImprimir);
             this.Controls.Add(this.btLimpar);
             this.Controls.Add(this.btExcluir);
-            this.Controls.Add(this.gridCodigos);
             this.Controls.Add(this.txBuscar);
             this.Controls.Add(this.lblBuscar);
             this.Controls.Add(this.btAdicionar);
