@@ -11,9 +11,10 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyCulture("")]
 [assembly: ComVisible(false)]
 [assembly: Guid("308c57af-e663-456d-8a2c-188bbd61423d")]
-[assembly: AssemblyVersion("4.1.0.0")]
-[assembly: AssemblyFileVersion("4.1.0.0")]
+[assembly: AssemblyVersion("4.1.1.0")]
+[assembly: AssemblyFileVersion("4.1.1.0")]
 
+// 4.1.1 25/02/26 Tela de códigos de pratileira
 // 4.1.0 18/02/26 Correção da Aba Produtos e anotações
 // 4.0.9 16/02/26 Filtro de data inicial e final para as entregas   
 // 4.0.8 15/02/26 Total na pesquisa de entregas

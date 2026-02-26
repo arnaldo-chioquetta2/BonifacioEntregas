@@ -33,6 +33,7 @@ namespace TeleBonifacio
 
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(operPartilheira));
             this.lblCodigo = new System.Windows.Forms.Label();
             this.txCodigo = new System.Windows.Forms.TextBox();
             this.btAdicionar = new System.Windows.Forms.Button();
@@ -150,6 +151,7 @@ namespace TeleBonifacio
             this.btImprimir.TabIndex = 0;
             this.btImprimir.Text = "Imprimir";
             this.btImprimir.UseVisualStyleBackColor = true;
+            this.btImprimir.Click += new System.EventHandler(this.btImprimir_Click);
             // 
             // operPartilheira
             // 
@@ -165,6 +167,7 @@ namespace TeleBonifacio
             this.Controls.Add(this.btAdicionar);
             this.Controls.Add(this.txCodigo);
             this.Controls.Add(this.lblCodigo);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MinimizeBox = false;
             this.MinimumSize = new System.Drawing.Size(619, 456);
             this.Name = "operPartilheira";

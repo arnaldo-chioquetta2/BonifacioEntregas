@@ -1,9 +1,14 @@
 ﻿using System;
-using System.Linq;
-using TeleBonifacio.gen;
-using System.Windows.Forms;
 using System.Collections.Generic;
+using System.Drawing;
+using System.Drawing.Printing;
+using System.Linq;
+using System.Windows.Forms;
 using TeleBonifacio.dao;
+using TeleBonifacio.gen;
+using TeleBonifacio.tb;
+
+// 4.1.1 Tela de códigos de pratileira
 
 namespace TeleBonifacio
 {
@@ -11,9 +16,14 @@ namespace TeleBonifacio
     {
 
         private CodigoPartilheiraDAO dao;
-        private BindingSource bindingSource;
-        private bool _atualizandoGrid = false;
-        private bool _processandoEdicao = false;
+        private Timer _timerBusca;
+
+        private PrintDocument _printDocument;
+        private PrintPreviewDialog _printPreview;
+        private List<CodigoPartilheira> _listaParaImpressao;
+        private int _indiceImpressao;
+
+        #region Inicialização
 
         public operPartilheira()
         {
@@ -23,55 +33,258 @@ namespace TeleBonifacio
 
         private void operPartilheira_Load(object sender, EventArgs e)
         {
+            // ===============================
+            // CONFIGURAÇÃO DA TELA
+            // ===============================
+
+            this.StartPosition = FormStartPosition.CenterScreen;
+            this.Height = Screen.PrimaryScreen.WorkingArea.Height - 20;
+            this.Top = 0;
+            this.MinimumSize = new Size(1000, 700);
+            this.Padding = new Padding(10);
+
+            // ===============================
+            // DAO
+            // ===============================
 
             dao = new CodigoPartilheiraDAO();
+
+            // ===============================
+            // GRID
+            // ===============================
+
+            gridCodigos.AutoGenerateColumns = false;
+            colCodigo.DataPropertyName = "Codigo";
+            colCodigo.SortMode = DataGridViewColumnSortMode.NotSortable;
+
+            gridCodigos.AllowUserToAddRows = false;
+            gridCodigos.AllowUserToDeleteRows = false;
+            gridCodigos.AllowUserToResizeRows = false;
+
+            gridCodigos.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            gridCodigos.MultiSelect = false;
+            gridCodigos.RowHeadersVisible = false;
+
+            gridCodigos.Anchor = AnchorStyles.Top
+                               | AnchorStyles.Bottom
+                               | AnchorStyles.Left
+                               | AnchorStyles.Right;
+
+            // ===============================
+            // VISUAL GRANDE
+            // ===============================
+
+            AplicarModoVisualGrande();
+
+            // ===============================
+            // LAYOUT
+            // ===============================
+
+            AjustarLayoutVisual();
+
+            // ===============================
+            // IMPRESSÃO
+            // ===============================
+
+            _printDocument = new PrintDocument();
+            _printDocument.DefaultPageSettings.Landscape = true;
+            _printDocument.PrintPage += PrintDocument_PrintPage;
+
+            _printPreview = new PrintPreviewDialog();
+            _printPreview.Document = _printDocument;
+
+            // ===============================
+            // DADOS
+            // ===============================
+
             CarregarGrid();
+            this.Resize += (s, ev) => AjustarLayoutVisual();
 
-            // (deixe sem rt por enquanto)
-            //listaCodigos = new List<CodigoItem>();
-            //bindingSource = new BindingSource();
-
-            //gridCodigos.AutoGenerateColumns = false;
-            //gridCodigos.DataSource = bindingSource;
-
-            //// coluna do designer
-            //colCodigo.DataPropertyName = "Codigo";
-            //colCodigo.SortMode = DataGridViewColumnSortMode.NotSortable;
-
-            //AtualizarGrid();
             txCodigo.Focus();
         }
 
-        private void CarregarGrid()
+        private void AplicarModoVisualGrande()
         {
-            //var lista = dao.ListarTodos();
+            float tamanhoFonte = 16f;
 
-            //// Ordenação natural
-            //var ordenada = lista
-            //    .OrderBy(x => CodigoPartilheiraParser.Parse(x.Codigo).Prefixo)
-            //    .ThenBy(x => CodigoPartilheiraParser.Parse(x.Codigo).Numero)
-            //    .ThenBy(x => CodigoPartilheiraParser.Parse(x.Codigo).Sufixo)
-            //    .ThenBy(x => x.Codigo)
-            //    .ThenBy(x => x.Id)
-            //    .ToList();
+            // GRID
+            gridCodigos.DefaultCellStyle.Font = new Font("Segoe UI", tamanhoFonte);
+            gridCodigos.ColumnHeadersDefaultCellStyle.Font = new Font("Segoe UI", tamanhoFonte, FontStyle.Bold);
+            gridCodigos.RowTemplate.Height = 38;
+            gridCodigos.ColumnHeadersHeight = 45;
 
-            //string filtro = (txBuscar.Text ?? "").Trim().ToUpper();
+            // TextBox precisam de AutoSize false
+            txCodigo.AutoSize = false;
+            txBuscar.AutoSize = false;
 
-            //if (!string.IsNullOrEmpty(filtro))
-            //    ordenada = ordenada
-            //        .Where(x => x.Codigo.ToUpper().Contains(filtro))
-            //        .ToList();
+            txCodigo.Height = 36;
+            txBuscar.Height = 36;
 
-            //gridCodigos.AutoGenerateColumns = false;
-            //gridCodigos.DataSource = ordenada;
+            // Aplicar fonte geral
+            foreach (Control c in this.Controls)
+            {
+                if (c is Label || c is Button || c is TextBox)
+                {
+                    c.Font = new Font("Segoe UI", tamanhoFonte);
+                }
+            }
 
-            //gridCodigos.ClearSelection();
+            // Botões altura padronizada
+            btAdicionar.Height = 42;
+            btExcluir.Height = 42;
+            btLimpar.Height = 42;
+            btImprimir.Height = 42;
         }
-        
+
+        private void AjustarLayoutVisual()
+        {
+            int margem = 25;
+
+            // ===============================
+            // LINHA 1 - CÓDIGO
+            // ===============================
+
+            lblCodigo.Location = new Point(margem, 30);
+
+            txCodigo.Location = new Point(150, 25);
+            txCodigo.Width = 300;
+
+            btAdicionar.Location = new Point(470, 23);
+            btAdicionar.Width = 170;
+
+            // ===============================
+            // LINHA 2 - BUSCAR
+            // ===============================
+
+            lblBuscar.Location = new Point(margem, 90);
+
+            txBuscar.Location = new Point(150, 85);
+            txBuscar.Width = 490;
+
+            // ===============================
+            // GRID
+            // ===============================
+
+            int topoGrid = 150;
+            int rodapeAltura = 80;
+
+            gridCodigos.Location = new Point(margem, topoGrid);
+            gridCodigos.Size = new Size(
+                this.ClientSize.Width - (margem * 2),
+                this.ClientSize.Height - topoGrid - rodapeAltura
+            );
+
+            // ===============================
+            // BOTÕES INFERIORES
+            // ===============================
+
+            int yBotoes = this.ClientSize.Height - 60;
+
+            btExcluir.Width = 150;
+            btLimpar.Width = 180;
+            btImprimir.Width = 150;
+
+            btExcluir.Location = new Point(margem, yBotoes);
+            btExcluir.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+
+            btLimpar.Location = new Point(margem + 170, yBotoes);
+            btLimpar.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+
+            btImprimir.Location = new Point(this.ClientSize.Width - 175, yBotoes);
+            btImprimir.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+        }
+
+        #endregion
+
+        #region Impressão
+
+        private void PrintDocument_PrintPage(object sender, PrintPageEventArgs e)
+        {
+            Font fonteEtiqueta = new Font("Segoe UI", 28, FontStyle.Bold);
+
+            int margemEsquerda = e.MarginBounds.Left;
+            int margemTopo = e.MarginBounds.Top;
+
+            int larguraTotal = e.MarginBounds.Width;
+            int alturaTotal = e.MarginBounds.Height;
+
+            int colunas = 2;
+            int larguraColuna = larguraTotal / colunas;
+            int alturaLinha = 80; // altura grande para etiqueta
+
+            int y = margemTopo;
+
+            while (_indiceImpressao < _listaParaImpressao.Count)
+            {
+                for (int col = 0; col < colunas; col++)
+                {
+                    if (_indiceImpressao >= _listaParaImpressao.Count)
+                        break;
+
+                    string codigo = _listaParaImpressao[_indiceImpressao].Codigo;
+
+                    int posX = margemEsquerda + (col * larguraColuna);
+
+                    Rectangle area = new Rectangle(
+                        posX,
+                        y,
+                        larguraColuna,
+                        alturaLinha
+                    );
+
+                    StringFormat sf = new StringFormat();
+                    sf.Alignment = StringAlignment.Center;
+                    sf.LineAlignment = StringAlignment.Center;
+
+                    // borda para recorte
+                    e.Graphics.DrawRectangle(Pens.Black, area);
+
+                    e.Graphics.DrawString(codigo, fonteEtiqueta, Brushes.Black, area, sf);
+
+                    _indiceImpressao++;
+                }
+
+                y += alturaLinha;
+
+                if (y + alturaLinha > margemTopo + alturaTotal)
+                {
+                    e.HasMorePages = true;
+                    return;
+                }
+            }
+
+            e.HasMorePages = false;
+        }
+
+        private void btImprimir_Click(object sender, EventArgs e)
+        {
+            _listaParaImpressao = (gridCodigos.DataSource as List<CodigoPartilheira>)?.ToList();
+
+            if (_listaParaImpressao == null || _listaParaImpressao.Count == 0)
+            {
+                MessageBox.Show("Não há dados para imprimir.");
+                return;
+            }
+
+            _indiceImpressao = 0;
+
+            _printPreview.Width = 1000;
+            _printPreview.Height = 700;
+            _printPreview.ShowDialog();
+        }
+
+        #endregion
+
+        private void TimerBusca_Tick(object sender, EventArgs e)
+        {
+            _timerBusca.Stop();
+            CarregarGrid();
+        }
+
         #region Eventos
         private void btAdicionar_Click(object sender, EventArgs e)
         {
-            //AdicionarCodigo();
+            AdicionarCodigo();
         }
 
         private void txCodigo_KeyDown(object sender, KeyEventArgs e)
@@ -79,153 +292,140 @@ namespace TeleBonifacio
             if (e.KeyCode == Keys.Enter)
             {
                 e.SuppressKeyPress = true; // evita "beep"
-                //AdicionarCodigo();
+                AdicionarCodigo();
             }
+        }
+
+        private void AdicionarCodigo()
+        {
+            string codigo = (txCodigo.Text ?? "").Trim().ToUpper();
+
+            if (string.IsNullOrEmpty(codigo))
+                return;
+
+            // opcional: evitar inserir com espaços / caracteres estranhos
+            // codigo = codigo.Replace(" ", "");
+
+            dao.Inserir(codigo);
+
+            txCodigo.Clear();
+            txCodigo.Focus();
+
+            CarregarGrid();
         }
 
         private void txBuscar_TextChanged(object sender, EventArgs e)
         {
-            //AtualizarGrid();
+            _timerBusca.Stop();
+            _timerBusca.Start();
         }
 
         private void btExcluir_Click(object sender, EventArgs e)
         {
-            //if (listaCodigos == null || listaCodigos.Count == 0)
-            //    return;
+            if (gridCodigos.CurrentRow == null)
+                return;
 
-            //if (gridCodigos.CurrentRow == null)
-            //    return;
+            var item = gridCodigos.CurrentRow.DataBoundItem as CodigoPartilheira;
+            if (item == null)
+                return;
 
-            //var item = gridCodigos.CurrentRow.DataBoundItem as CodigoItem;
-            //if (item == null)
-            //    return;
+            var resp = MessageBox.Show(
+                $"Deseja excluir o código '{item.Codigo}'?",
+                "Confirmar exclusão",
+                MessageBoxButtons.YesNo,
+                MessageBoxIcon.Question);
 
-            //// Confirmação (opcional, mas recomendado)
-            //var resp = MessageBox.Show(
-            //    $"Deseja excluir o código '{item.Codigo}'?",
-            //    "Confirmar exclusão",
-            //    MessageBoxButtons.YesNo,
-            //    MessageBoxIcon.Question);
+            if (resp != DialogResult.Yes)
+                return;
 
-            //if (resp != DialogResult.Yes)
-            //    return;
+            dao.Excluir(item.Id);
 
-            //// Remove pelo Id (não erra com duplicados)
-            //listaCodigos.RemoveAll(x => x.Id == item.Id);
-
-            //AtualizarGrid();
-            //txCodigo.Focus();
+            CarregarGrid();
+            txCodigo.Focus();
         }
 
         private void btLimpar_Click(object sender, EventArgs e)
         {
-            //if (listaCodigos == null || listaCodigos.Count == 0)
-            //    return;
+            var resp = MessageBox.Show(
+                "Deseja limpar toda a lista?",
+                "Confirmar",
+                MessageBoxButtons.YesNo,
+                MessageBoxIcon.Question);
 
-            //var resp = MessageBox.Show(
-            //    "Deseja limpar toda a lista?",
-            //    "Confirmar",
-            //    MessageBoxButtons.YesNo,
-            //    MessageBoxIcon.Question);
+            if (resp != DialogResult.Yes)
+                return;
 
-            //if (resp != DialogResult.Yes)
-            //    return;
+            dao.LimparTodos();
 
-            //listaCodigos.Clear();
-            //AtualizarGrid();
+            CarregarGrid();
 
-            //txBuscar.Clear();   // opcional: limpa filtro junto
-            //txCodigo.Clear();   // opcional: limpa campo de entrada
-            //txCodigo.Focus();
+            txBuscar.Clear();
+            txCodigo.Clear();
+            txCodigo.Focus();
         }
 
         #endregion
 
         #region Grid
 
-        //private void AtualizarGrid()
-        //{
-        //    if (listaCodigos == null || bindingSource == null) return;
-        //    if (_atualizandoGrid) return;
+        private void CarregarGrid()
+        {
+            var lista = dao.ListarTodos();
 
-        //    _atualizandoGrid = true;
-        //    gridCodigos.SuspendLayout();
+            var estruturada = lista
+                .Select(x => new
+                {
+                    Original = x,
+                    Estrutura = CodigoPartilheiraParser.Parse(x.Codigo)
+                })
+                .ToList();
 
-        //    try
-        //    {
-        //        // Normaliza a lista principal (sem disparar refresh da grid)
-        //        foreach (var it in listaCodigos)
-        //            it.Codigo = (it.Codigo ?? "").Trim().ToUpper();
+            var ordenada = estruturada
+                .OrderBy(x => x.Estrutura.Prefixo)
+                .ThenBy(x => x.Estrutura.Numero)
+                .ThenBy(x => x.Estrutura.Sufixo)
+                .ThenBy(x => x.Original.Codigo)
+                .ThenBy(x => x.Original.Id)
+                .Select(x => x.Original)
+                .ToList();
 
-        //        // Monta lista de exibição (mesmas instâncias)
-        //        var listaExibicao = listaCodigos.ToList();
+            string filtro = (txBuscar.Text ?? "").Trim().ToUpper();
 
-        //        // Filtro simples
-        //        string filtro = (txBuscar.Text ?? "").Trim().ToUpper();
-        //        if (!string.IsNullOrEmpty(filtro))
-        //        {
-        //            listaExibicao = listaExibicao
-        //                .Where(x => !string.IsNullOrWhiteSpace(x.Codigo) && x.Codigo.Contains(filtro))
-        //                .ToList();
-        //        }
+            if (!string.IsNullOrEmpty(filtro))
+                ordenada = ordenada
+                    .Where(x => x.Codigo.ToUpper().Contains(filtro))
+                    .ToList();
 
-        //        // Atualiza binding
-        //        bindingSource.DataSource = listaExibicao;
-        //        bindingSource.ResetBindings(false);
-        //    }
-        //    finally
-        //    {
-        //        gridCodigos.ResumeLayout();
-        //        _atualizandoGrid = false;
-        //    }
-        //}
+            gridCodigos.AutoGenerateColumns = false;
+            gridCodigos.DataSource = ordenada;
+
+            gridCodigos.ClearSelection();
+        }
 
         private void gridCodigos_CellEndEdit(object sender, DataGridViewCellEventArgs e)
         {
-            //if (_atualizandoGrid || _processandoEdicao) return;
-            //if (e.RowIndex < 0 || e.ColumnIndex < 0) return;
+            if (e.RowIndex < 0)
+                return;
 
-            //try
-            //{
-            //    _processandoEdicao = true;
+            var item = gridCodigos.Rows[e.RowIndex].DataBoundItem as CodigoPartilheira;
+            if (item == null)
+                return;
 
-            //    var itemExibido = gridCodigos.Rows[e.RowIndex].DataBoundItem as CodigoItem;
-            //    if (itemExibido == null) return;
+            string novoCodigo = (item.Codigo ?? "").Trim().ToUpper();
 
-            //    string novoCodigo = (itemExibido.Codigo ?? "").Trim().ToUpper();
+            if (string.IsNullOrEmpty(novoCodigo))
+            {
+                CarregarGrid(); // restaura valor original
+                return;
+            }
 
-            //    // Se ficar vazio, restaura (ou você pode optar por remover)
-            //    if (string.IsNullOrEmpty(novoCodigo))
-            //    {
-            //        var original = listaCodigos.FirstOrDefault(x => x.Id == itemExibido.Id);
-            //        itemExibido.Codigo = original?.Codigo ?? "";
-            //        bindingSource.ResetBindings(false);
-            //        return;
-            //    }
+            dao.Atualizar(item.Id, novoCodigo);
 
-            //    // Atualiza o item na lista principal
-            //    var itemOriginal = listaCodigos.FirstOrDefault(x => x.Id == itemExibido.Id);
-            //    if (itemOriginal != null)
-            //        itemOriginal.Codigo = novoCodigo;
-
-            //    // Atualiza o exibido
-            //    itemExibido.Codigo = novoCodigo;
-
-            //    // Agendar refresh depois do fim do ciclo de edição (evita recursão)
-            //    this.BeginInvoke((Action)(() =>
-            //    {
-            //        AtualizarGrid();
-            //        // opcional: voltar foco para digitação contínua
-            //        txCodigo.Focus();
-            //    }));
-            //}
-            //finally
-            //{
-            //    {
-            //        _processandoEdicao = false;
-            //    }
-            //}
-
+            // Atualiza grid depois que termina ciclo interno do DataGridView
+            this.BeginInvoke((Action)(() =>
+            {
+                CarregarGrid();
+            }));
         }
 
         private void gridCodigos_KeyDown(object sender, KeyEventArgs e)
@@ -240,22 +440,31 @@ namespace TeleBonifacio
             if (e.KeyCode != Keys.Delete)
                 return;
 
-            if (gridCodigos.IsCurrentCellInEditMode)
+            if (gridCodigos.CurrentRow == null)
                 return;
 
-            // ... (resto do delete igual acima)
+            var item = gridCodigos.CurrentRow.DataBoundItem as CodigoPartilheira;
+            if (item == null)
+                return;
+
+            var resp = MessageBox.Show(
+                $"Excluir '{item.Codigo}'?",
+                "Confirmar",
+                MessageBoxButtons.YesNo,
+                MessageBoxIcon.Question);
+
+            if (resp != DialogResult.Yes)
+                return;
+
+            dao.Excluir(item.Id);
+
+            CarregarGrid();
         }
 
         #endregion
 
-
     }
 
-    //public class CodigoItem
-    //{
-    //    public Guid Id { get; set; } = Guid.NewGuid();
-    //    public string Codigo { get; set; }
-    //}
 }
 
 
