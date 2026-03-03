@@ -8,6 +8,7 @@ using TeleBonifacio.dao;
 using TeleBonifacio.gen;
 using TeleBonifacio.tb;
 
+// 4.1.2 Correção de bug na tela de códigos de prateleira
 // 4.1.1 Tela de códigos de pratileira
 
 namespace TeleBonifacio
@@ -16,12 +17,13 @@ namespace TeleBonifacio
     {
 
         private CodigoPartilheiraDAO dao;
-        private Timer _timerBusca;
+        // private Timer _timerBusca;
 
         private PrintDocument _printDocument;
         private PrintPreviewDialog _printPreview;
         private List<CodigoPartilheira> _listaParaImpressao;
         private int _indiceImpressao;
+        private bool _recarregando;
 
         #region Inicialização
 
@@ -275,11 +277,11 @@ namespace TeleBonifacio
 
         #endregion
 
-        private void TimerBusca_Tick(object sender, EventArgs e)
-        {
-            _timerBusca.Stop();
-            CarregarGrid();
-        }
+        //private void TimerBusca_Tick(object sender, EventArgs e)
+        //{
+        //    _timerBusca.Stop();
+        //    CarregarGrid();
+        //}
 
         #region Eventos
         private void btAdicionar_Click(object sender, EventArgs e)
@@ -314,11 +316,16 @@ namespace TeleBonifacio
             CarregarGrid();
         }
 
-        private void txBuscar_TextChanged(object sender, EventArgs e)
-        {
-            _timerBusca.Stop();
-            _timerBusca.Start();
-        }
+        //private void txBuscar_TextChanged(object sender, EventArgs e)
+        //{
+        //    //_timerBusca.Stop();
+        //    //_timerBusca.Start();
+        //    if (e.KeyCode == Keys.Enter)
+        //    {
+        //        e.SuppressKeyPress = true;
+        //        CarregarGrid();
+        //    }
+        //}
 
         private void btExcluir_Click(object sender, EventArgs e)
         {
@@ -370,6 +377,8 @@ namespace TeleBonifacio
 
         private void CarregarGrid()
         {
+            glo.Loga(">>> CarregarGrid INICIO");
+
             var lista = dao.ListarTodos();
 
             var estruturada = lista
@@ -392,18 +401,24 @@ namespace TeleBonifacio
             string filtro = (txBuscar.Text ?? "").Trim().ToUpper();
 
             if (!string.IsNullOrEmpty(filtro))
+            {
+                glo.Loga("Filtro aplicado: " + filtro);
                 ordenada = ordenada
                     .Where(x => x.Codigo.ToUpper().Contains(filtro))
                     .ToList();
+            }
 
-            gridCodigos.AutoGenerateColumns = false;
+            gridCodigos.DataSource = null;
             gridCodigos.DataSource = ordenada;
 
-            gridCodigos.ClearSelection();
+            glo.Loga("<<< CarregarGrid FIM");
         }
 
         private void gridCodigos_CellEndEdit(object sender, DataGridViewCellEventArgs e)
         {
+            if (_recarregando)
+                return;
+
             if (e.RowIndex < 0)
                 return;
 
@@ -415,19 +430,20 @@ namespace TeleBonifacio
 
             if (string.IsNullOrEmpty(novoCodigo))
             {
-                CarregarGrid(); // restaura valor original
+                BeginInvoke(new Action(() => CarregarGrid()));
                 return;
             }
 
             dao.Atualizar(item.Id, novoCodigo);
 
-            // Atualiza grid depois que termina ciclo interno do DataGridView
-            this.BeginInvoke((Action)(() =>
+            // Reorganizar depois que a grid terminar o ciclo
+            BeginInvoke(new Action(() =>
             {
+                _recarregando = true;
                 CarregarGrid();
+                _recarregando = false;
             }));
         }
-
         private void gridCodigos_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Enter)
@@ -462,6 +478,41 @@ namespace TeleBonifacio
         }
 
         #endregion
+
+        private void gridCodigos_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            glo.Loga($"CellClick Linha={e.RowIndex}");
+        }
+
+        private void gridCodigos_SelectionChanged(object sender, EventArgs e)
+        {
+            glo.Loga("SelectionChanged");
+        }
+
+        private void gridCodigos_CurrentCellChanged(object sender, EventArgs e)
+        {
+            glo.Loga("CurrentCellChanged");
+        }
+
+        private void gridCodigos_CellBeginEdit(object sender, DataGridViewCellCancelEventArgs e)
+        {
+            glo.Loga($"CellBeginEdit Linha={e.RowIndex}");
+        }
+
+        private void txBuscar_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                e.SuppressKeyPress = true;
+                CarregarGrid();
+            }
+        }
+
+        private void gridCodigos_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex >= 0)
+                gridCodigos.BeginEdit(true);
+        }
 
     }
 

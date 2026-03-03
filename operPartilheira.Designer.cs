@@ -89,9 +89,11 @@ namespace TeleBonifacio
             this.txBuscar.Name = "txBuscar";
             this.txBuscar.Size = new System.Drawing.Size(266, 20);
             this.txBuscar.TabIndex = 4;
+            this.txBuscar.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txBuscar_KeyDown);
             // 
             // gridCodigos
             // 
+            this.gridCodigos.AccessibleRole = System.Windows.Forms.AccessibleRole.None;
             this.gridCodigos.AllowUserToAddRows = false;
             this.gridCodigos.AllowUserToDeleteRows = false;
             this.gridCodigos.AllowUserToResizeRows = false;
@@ -102,7 +104,7 @@ namespace TeleBonifacio
             this.gridCodigos.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.gridCodigos.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.colCodigo});
-            this.gridCodigos.EditMode = System.Windows.Forms.DataGridViewEditMode.EditOnEnter;
+            this.gridCodigos.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically;
             this.gridCodigos.Location = new System.Drawing.Point(17, 70);
             this.gridCodigos.MultiSelect = false;
             this.gridCodigos.Name = "gridCodigos";
@@ -110,7 +112,12 @@ namespace TeleBonifacio
             this.gridCodigos.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.gridCodigos.Size = new System.Drawing.Size(651, 280);
             this.gridCodigos.TabIndex = 3;
+            this.gridCodigos.CellBeginEdit += new System.Windows.Forms.DataGridViewCellCancelEventHandler(this.gridCodigos_CellBeginEdit);
+            this.gridCodigos.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.gridCodigos_CellClick);
+            this.gridCodigos.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.gridCodigos_CellDoubleClick);
             this.gridCodigos.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.gridCodigos_CellEndEdit);
+            this.gridCodigos.CurrentCellChanged += new System.EventHandler(this.gridCodigos_CurrentCellChanged);
+            this.gridCodigos.SelectionChanged += new System.EventHandler(this.gridCodigos_SelectionChanged);
             this.gridCodigos.KeyDown += new System.Windows.Forms.KeyEventHandler(this.gridCodigos_KeyDown);
             // 
             // colCodigo
