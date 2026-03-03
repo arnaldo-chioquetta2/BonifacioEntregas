@@ -89,7 +89,7 @@ namespace TeleBonifacio
             // ===============================
 
             _printDocument = new PrintDocument();
-            _printDocument.DefaultPageSettings.Landscape = true;
+            // _printDocument.DefaultPageSettings.Landscape = true;
             _printDocument.PrintPage += PrintDocument_PrintPage;
 
             _printPreview = new PrintPreviewDialog();
@@ -102,7 +102,18 @@ namespace TeleBonifacio
             CarregarGrid();
             this.Resize += (s, ev) => AjustarLayoutVisual();
 
+            _printDocument.BeginPrint += PrintDocument_BeginPrint;
+
             txCodigo.Focus();
+        }
+
+        private void PrintDocument_BeginPrint(object sender, PrintEventArgs e)
+        {
+            glo.Loga("PrintDocument_BeginPrint V1 INICIO");
+
+            _indiceImpressao = 0;
+
+            glo.Loga("PrintDocument_BeginPrint V1 indice resetado");
         }
 
         private void AplicarModoVisualGrande()
@@ -202,86 +213,119 @@ namespace TeleBonifacio
 
         private void PrintDocument_PrintPage(object sender, PrintPageEventArgs e)
         {
-            Font fonteEtiqueta = new Font("Segoe UI", 28, FontStyle.Bold);
+            glo.Loga("PrintDocument_PrintPage V3 INICIO");
 
-            int margemEsquerda = e.MarginBounds.Left;
-            int margemTopo = e.MarginBounds.Top;
-
-            int larguraTotal = e.MarginBounds.Width;
-            int alturaTotal = e.MarginBounds.Height;
-
-            int colunas = 2;
-            int larguraColuna = larguraTotal / colunas;
-            int alturaLinha = 80; // altura grande para etiqueta
-
-            int y = margemTopo;
-
-            while (_indiceImpressao < _listaParaImpressao.Count)
+            try
             {
-                for (int col = 0; col < colunas; col++)
+                if (_listaParaImpressao == null || _listaParaImpressao.Count == 0)
                 {
-                    if (_indiceImpressao >= _listaParaImpressao.Count)
-                        break;
-
-                    string codigo = _listaParaImpressao[_indiceImpressao].Codigo;
-
-                    int posX = margemEsquerda + (col * larguraColuna);
-
-                    Rectangle area = new Rectangle(
-                        posX,
-                        y,
-                        larguraColuna,
-                        alturaLinha
-                    );
-
-                    StringFormat sf = new StringFormat();
-                    sf.Alignment = StringAlignment.Center;
-                    sf.LineAlignment = StringAlignment.Center;
-
-                    // borda para recorte
-                    e.Graphics.DrawRectangle(Pens.Black, area);
-
-                    e.Graphics.DrawString(codigo, fonteEtiqueta, Brushes.Black, area, sf);
-
-                    _indiceImpressao++;
-                }
-
-                y += alturaLinha;
-
-                if (y + alturaLinha > margemTopo + alturaTotal)
-                {
-                    e.HasMorePages = true;
+                    glo.Loga("PrintDocument_PrintPage V3 - lista vazia");
+                    e.HasMorePages = false;
                     return;
                 }
-            }
 
-            e.HasMorePages = false;
+                Font fonteEtiqueta = new Font("Segoe UI", 28, FontStyle.Bold);
+
+                Rectangle area = e.MarginBounds;
+
+                int colunas = 2;
+                int larguraColuna = area.Width / colunas;
+                int alturaLinha = 90;
+
+                int y = area.Top;
+
+                while (_indiceImpressao < _listaParaImpressao.Count)
+                {
+                    if (y + alturaLinha > area.Bottom)
+                    {
+                        glo.Loga("PrintDocument_PrintPage V3 - nova página indice=" + _indiceImpressao);
+                        e.HasMorePages = true;
+                        return;
+                    }
+
+                    for (int col = 0; col < colunas; col++)
+                    {
+                        if (_indiceImpressao >= _listaParaImpressao.Count)
+                            break;
+
+                        int x = area.Left + (col * larguraColuna);
+
+                        Rectangle etiqueta = new Rectangle(x, y, larguraColuna, alturaLinha);
+
+                        e.Graphics.DrawRectangle(Pens.Black, etiqueta);
+
+                        using (StringFormat sf = new StringFormat()
+                        {
+                            Alignment = StringAlignment.Center,
+                            LineAlignment = StringAlignment.Center
+                        })
+                        {
+                            e.Graphics.DrawString(
+                                _listaParaImpressao[_indiceImpressao].Codigo,
+                                fonteEtiqueta,
+                                Brushes.Black,
+                                etiqueta,
+                                sf);
+                        }
+
+                        _indiceImpressao++;
+                    }
+
+                    y += alturaLinha;
+                }
+
+                glo.Loga("PrintDocument_PrintPage V3 - fim impressão indice=" + _indiceImpressao);
+                e.HasMorePages = false;
+            }
+            catch (Exception ex)
+            {
+                glo.Loga("PrintDocument_PrintPage V3 ERRO: " + ex.Message);
+                throw;
+            }
+            finally
+            {
+                glo.Loga("PrintDocument_PrintPage V3 FIM");
+            }
         }
 
         private void btImprimir_Click(object sender, EventArgs e)
         {
-            _listaParaImpressao = (gridCodigos.DataSource as List<CodigoPartilheira>)?.ToList();
+            glo.Loga("btImprimir_Click V2 INICIO");
 
-            if (_listaParaImpressao == null || _listaParaImpressao.Count == 0)
+            try
             {
-                MessageBox.Show("Não há dados para imprimir.");
-                return;
+                var ds = gridCodigos.DataSource as IEnumerable<CodigoPartilheira>;
+                _listaParaImpressao = ds?.ToList();
+
+                if (_listaParaImpressao == null || _listaParaImpressao.Count == 0)
+                {
+                    MessageBox.Show("Não há dados para imprimir.");
+                    glo.Loga("btImprimir_Click V2 FIM - sem dados");
+                    return;
+                }
+
+                glo.Loga("btImprimir_Click V2 Itens para imprimir: " + _listaParaImpressao.Count);
+
+                // só garante o document (opcional)
+                _printPreview.Document = _printDocument;
+
+                _printPreview.Width = 1000;
+                _printPreview.Height = 700;
+
+                glo.Loga("btImprimir_Click V2 - abrindo preview");
+                _printPreview.ShowDialog();
+
+                glo.Loga("btImprimir_Click V2 FIM");
             }
-
-            _indiceImpressao = 0;
-
-            _printPreview.Width = 1000;
-            _printPreview.Height = 700;
-            _printPreview.ShowDialog();
+            catch (Exception ex)
+            {
+                glo.Loga("btImprimir_Click V2 ERRO: " + ex.Message);
+                throw;
+            }
         }
-
         #endregion
 
-        //private void TimerBusca_Tick(object sender, EventArgs e)
-        //{
-        //    _timerBusca.Stop();
-        //    CarregarGrid();
-        //}
+
 
         #region Eventos
         private void btAdicionar_Click(object sender, EventArgs e)
