@@ -8,6 +8,7 @@ using TeleBonifacio.dao;
 using TeleBonifacio.gen;
 using TeleBonifacio.tb;
 
+// 4.1.4 Tres colunas na impressão
 // 4.1.2 Correção de bug na tela de códigos de prateleira
 // 4.1.1 Tela de códigos de pratileira
 
@@ -224,11 +225,11 @@ namespace TeleBonifacio
                     return;
                 }
 
-                Font fonteEtiqueta = new Font("Segoe UI", 28, FontStyle.Bold);
+                Font fonteEtiqueta = new Font("Segoe UI", 22, FontStyle.Bold);
 
                 Rectangle area = e.MarginBounds;
 
-                int colunas = 2;
+                int colunas = 3;
                 int larguraColuna = area.Width / colunas;
                 int alturaLinha = 90;
 
@@ -324,7 +325,6 @@ namespace TeleBonifacio
             }
         }
         #endregion
-
 
 
         #region Eventos
