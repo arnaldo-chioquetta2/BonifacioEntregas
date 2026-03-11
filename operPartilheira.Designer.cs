@@ -44,6 +44,7 @@ namespace TeleBonifacio
             this.btExcluir = new System.Windows.Forms.Button();
             this.btLimpar = new System.Windows.Forms.Button();
             this.btImprimir = new System.Windows.Forms.Button();
+            this.btImprLista = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.gridCodigos)).BeginInit();
             this.SuspendLayout();
             // 
@@ -156,15 +157,27 @@ namespace TeleBonifacio
             this.btImprimir.Name = "btImprimir";
             this.btImprimir.Size = new System.Drawing.Size(77, 26);
             this.btImprimir.TabIndex = 0;
-            this.btImprimir.Text = "Imprimir";
+            this.btImprimir.Text = "Etiqueta";
             this.btImprimir.UseVisualStyleBackColor = true;
             this.btImprimir.Click += new System.EventHandler(this.btImprimir_Click);
+            // 
+            // btImprLista
+            // 
+            this.btImprLista.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btImprLista.Location = new System.Drawing.Point(508, 365);
+            this.btImprLista.Name = "btImprLista";
+            this.btImprLista.Size = new System.Drawing.Size(77, 26);
+            this.btImprLista.TabIndex = 9;
+            this.btImprLista.Text = "Lista";
+            this.btImprLista.UseVisualStyleBackColor = true;
+            this.btImprLista.Click += new System.EventHandler(this.btImprLista_Click);
             // 
             // operPartilheira
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(686, 417);
+            this.Controls.Add(this.btImprLista);
             this.Controls.Add(this.gridCodigos);
             this.Controls.Add(this.btImprimir);
             this.Controls.Add(this.btLimpar);
@@ -188,5 +201,7 @@ namespace TeleBonifacio
         }
 
         #endregion
+
+        private System.Windows.Forms.Button btImprLista;
     }
 }

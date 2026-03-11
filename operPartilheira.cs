@@ -8,6 +8,7 @@ using TeleBonifacio.dao;
 using TeleBonifacio.gen;
 using TeleBonifacio.tb;
 
+// 4.1.5 Impressão em lista na prateleira
 // 4.1.4 Tres colunas na impressão
 // 4.1.2 Correção de bug na tela de códigos de prateleira
 // 4.1.1 Tela de códigos de pratileira
@@ -17,14 +18,13 @@ namespace TeleBonifacio
     public partial class operPartilheira : Form
     {
 
+        private bool _recarregando;
+        private int _indiceImpressao;
         private CodigoPartilheiraDAO dao;
-        // private Timer _timerBusca;
-
         private PrintDocument _printDocument;
         private PrintPreviewDialog _printPreview;
-        private List<CodigoPartilheira> _listaParaImpressao;
-        private int _indiceImpressao;
-        private bool _recarregando;
+        private List<CodigoPartilheira> _listaParaImpressao;                
+        private TipoImpressao _modoImpressao = TipoImpressao.Etiquetas;
 
         #region Inicialização
 
@@ -197,6 +197,7 @@ namespace TeleBonifacio
             btExcluir.Width = 150;
             btLimpar.Width = 180;
             btImprimir.Width = 150;
+            btImprLista.Width = 150;
 
             btExcluir.Location = new Point(margem, yBotoes);
             btExcluir.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
@@ -204,8 +205,16 @@ namespace TeleBonifacio
             btLimpar.Location = new Point(margem + 170, yBotoes);
             btLimpar.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
 
+            btImprimir.Width = 150;
+            btImprLista.Width = 150;
+
             btImprimir.Location = new Point(this.ClientSize.Width - 175, yBotoes);
             btImprimir.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+
+            btImprLista.Location = new Point(this.ClientSize.Width - 350, yBotoes);
+            btImprLista.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+            btImprLista.Height = btImprimir.Height;
+
         }
 
         #endregion
@@ -214,13 +223,82 @@ namespace TeleBonifacio
 
         private void PrintDocument_PrintPage(object sender, PrintPageEventArgs e)
         {
-            glo.Loga("PrintDocument_PrintPage V3 INICIO");
+            glo.Loga("PrintDocument_PrintPage V4 INICIO");
+
+            if (_modoImpressao == TipoImpressao.Etiquetas)
+            {
+                ImprimirEtiquetas(e);
+            }
+            else
+            {
+                ImprimirLista(e);
+            }
+        }
+
+        private void ImprimirLista(PrintPageEventArgs e)
+        {
+            glo.Loga("ImprimirLista V2 INICIO");
+
+            Font fonte = new Font("Segoe UI", 16, FontStyle.Bold);
+
+            Rectangle area = e.MarginBounds;
+
+            int y = area.Top;
+
+            int alturaLinha = 40;
+
+            while (_indiceImpressao < _listaParaImpressao.Count)
+            {
+                string texto = _listaParaImpressao[_indiceImpressao].Codigo;
+
+                Rectangle linhaArea = new Rectangle(
+                    area.Left,
+                    y,
+                    area.Width,
+                    alturaLinha
+                );
+
+                e.Graphics.DrawString(
+                    texto,
+                    fonte,
+                    Brushes.Black,
+                    linhaArea
+                );
+
+                y += alturaLinha;
+
+                _indiceImpressao++;
+
+                if (y + alturaLinha > area.Bottom)
+                {
+                    glo.Loga("ImprimirLista V2 nova pagina indice=" + _indiceImpressao);
+                    e.HasMorePages = true;
+                    return;
+                }
+            }
+
+            e.HasMorePages = false;
+
+            glo.Loga("ImprimirLista V2 FIM");
+        }
+
+        private string ExtrairCodigo(string texto)
+        {
+            if (string.IsNullOrWhiteSpace(texto))
+                return "";
+            string[] partes = texto.Split(' ');
+            return partes[0];
+        }
+
+        private void ImprimirEtiquetas(PrintPageEventArgs e)
+        {
+            glo.Loga("ImprimirEtiquetas V4 INICIO");
 
             try
             {
                 if (_listaParaImpressao == null || _listaParaImpressao.Count == 0)
                 {
-                    glo.Loga("PrintDocument_PrintPage V3 - lista vazia");
+                    glo.Loga("ImprimirEtiquetas V4 - lista vazia");
                     e.HasMorePages = false;
                     return;
                 }
@@ -239,7 +317,7 @@ namespace TeleBonifacio
                 {
                     if (y + alturaLinha > area.Bottom)
                     {
-                        glo.Loga("PrintDocument_PrintPage V3 - nova página indice=" + _indiceImpressao);
+                        glo.Loga("ImprimirEtiquetas V4 - nova página indice=" + _indiceImpressao);
                         e.HasMorePages = true;
                         return;
                     }
@@ -251,7 +329,12 @@ namespace TeleBonifacio
 
                         int x = area.Left + (col * larguraColuna);
 
-                        Rectangle etiqueta = new Rectangle(x, y, larguraColuna, alturaLinha);
+                        Rectangle etiqueta = new Rectangle(
+                            x,
+                            y,
+                            larguraColuna,
+                            alturaLinha
+                        );
 
                         e.Graphics.DrawRectangle(Pens.Black, etiqueta);
 
@@ -261,8 +344,13 @@ namespace TeleBonifacio
                             LineAlignment = StringAlignment.Center
                         })
                         {
+                            string codigoCompleto = _listaParaImpressao[_indiceImpressao].Codigo;
+
+                            // extrai apenas o código antes do texto
+                            string codigo = ExtrairCodigo(codigoCompleto);
+
                             e.Graphics.DrawString(
-                                _listaParaImpressao[_indiceImpressao].Codigo,
+                                codigo,
                                 fonteEtiqueta,
                                 Brushes.Black,
                                 etiqueta,
@@ -275,55 +363,40 @@ namespace TeleBonifacio
                     y += alturaLinha;
                 }
 
-                glo.Loga("PrintDocument_PrintPage V3 - fim impressão indice=" + _indiceImpressao);
+                glo.Loga("ImprimirEtiquetas V4 - fim impressão indice=" + _indiceImpressao);
                 e.HasMorePages = false;
             }
             catch (Exception ex)
             {
-                glo.Loga("PrintDocument_PrintPage V3 ERRO: " + ex.Message);
+                glo.Loga("ImprimirEtiquetas V4 ERRO: " + ex.Message);
                 throw;
             }
             finally
             {
-                glo.Loga("PrintDocument_PrintPage V3 FIM");
+                glo.Loga("ImprimirEtiquetas V4 FIM");
             }
         }
 
-        private void btImprimir_Click(object sender, EventArgs e)
+        private void btImprLista_Click(object sender, EventArgs e)
         {
-            glo.Loga("btImprimir_Click V2 INICIO");
-
-            try
-            {
-                var ds = gridCodigos.DataSource as IEnumerable<CodigoPartilheira>;
-                _listaParaImpressao = ds?.ToList();
-
-                if (_listaParaImpressao == null || _listaParaImpressao.Count == 0)
-                {
-                    MessageBox.Show("Não há dados para imprimir.");
-                    glo.Loga("btImprimir_Click V2 FIM - sem dados");
-                    return;
-                }
-
-                glo.Loga("btImprimir_Click V2 Itens para imprimir: " + _listaParaImpressao.Count);
-
-                // só garante o document (opcional)
-                _printPreview.Document = _printDocument;
-
-                _printPreview.Width = 1000;
-                _printPreview.Height = 700;
-
-                glo.Loga("btImprimir_Click V2 - abrindo preview");
-                _printPreview.ShowDialog();
-
-                glo.Loga("btImprimir_Click V2 FIM");
-            }
-            catch (Exception ex)
-            {
-                glo.Loga("btImprimir_Click V2 ERRO: " + ex.Message);
-                throw;
-            }
+            glo.Loga("btImprLista_Click V1 INICIO");
+            _modoImpressao = TipoImpressao.Lista;
+            AbrirPreview();
         }
+
+        private void AbrirPreview()
+        {
+            glo.Loga("AbrirPreview V1 INICIO");
+            var ds = gridCodigos.DataSource as IEnumerable<CodigoPartilheira>;
+            _listaParaImpressao = ds?.ToList();
+            if (_listaParaImpressao == null || _listaParaImpressao.Count == 0)
+            {
+                MessageBox.Show("Não há dados para imprimir.");
+                return;
+            }
+            _printPreview.ShowDialog();
+        }
+
         #endregion
 
 
@@ -558,6 +631,19 @@ namespace TeleBonifacio
                 gridCodigos.BeginEdit(true);
         }
 
+        private void btImprimir_Click(object sender, EventArgs e)
+        {
+            glo.Loga("btImprimir_Click V4 INICIO");
+            _modoImpressao = TipoImpressao.Etiquetas;
+            AbrirPreview();
+        }
+
+    }
+
+    enum TipoImpressao
+    {
+        Etiquetas,
+        Lista
     }
 
 }
