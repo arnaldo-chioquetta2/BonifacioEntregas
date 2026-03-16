@@ -5,6 +5,7 @@ using System.Windows.Forms;
 using TeleBonifacio.tb;
 using System.Globalization;
 
+// 4.1.6 Informação do percentual de gasto com entregas
 // 4.0.9 Filtro de data inicial e final para as entregas   
 // 3.9.7 Forma de pagamento Boleto para as entregas
 // 3.9.0 Retornar para a Guilia depois da venda
@@ -104,13 +105,10 @@ namespace TeleBonifacio
             lbTotal.Text = "";
         }
 
-        // VERSAO 3.9.11
-        // Filtro por intervalo real de datas
-        // Data: 16/02/2026
-
         private void CarregaGrid()
         {
-            glo.Loga("VERSAO 3.9.11 - Filtro por intervalo de datas");
+            glo.Loga("VERSAO 3.9.15 - Texto Percentual das Vendas com valor");
+
             if (dtInicial.Value > dtpData.Value)
             {
                 MessageBox.Show("Data inicial não pode ser maior que a final.");
@@ -147,10 +145,25 @@ namespace TeleBonifacio
                         totalCompra += compra;
                 }
 
+                decimal pagamentoSemana = 750m;
+                decimal faltante = pagamentoSemana - totalValor;
+
+                if (faltante < 0)
+                    faltante = 0;
+
+                decimal percentual = 0;
+
+                if (totalCompra > 0)
+                    percentual = (faltante / totalCompra) * 100;
+
                 DataRow totalRow = dados.NewRow();
                 totalRow["MotoBoy"] = $"Total ({contador})";
                 totalRow["Valor"] = totalValor.ToString("C");
+                totalRow["Desconto"] = percentual.ToString("0.00") + " %";
                 totalRow["Compra"] = totalCompra.ToString("C");
+
+                // 🔴 Informação pedida pelo Denis
+                totalRow["Vendedor"] = $"Percentual das Vendas {percentual:0.00} %";
 
                 dados.Rows.Add(totalRow);
             }

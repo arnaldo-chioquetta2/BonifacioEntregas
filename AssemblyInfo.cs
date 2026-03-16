@@ -11,9 +11,10 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyCulture("")]
 [assembly: ComVisible(false)]
 [assembly: Guid("308c57af-e663-456d-8a2c-188bbd61423d")]
-[assembly: AssemblyVersion("4.1.5.0")]
-[assembly: AssemblyFileVersion("4.1.5.0")]
+[assembly: AssemblyVersion("4.1.6.0")]
+[assembly: AssemblyFileVersion("4.1.6.0")]
 
+// 4.1.6 15/03/26 Informação do percentual de gasto com entregas
 // 4.1.5 11/03/26 Impressão em lista na prateleira
 // 4.1.4 07/03/26 Tres colunas na impressão
 // 4.1.3 03/03/26 Ajuste na impressão da prateleira
