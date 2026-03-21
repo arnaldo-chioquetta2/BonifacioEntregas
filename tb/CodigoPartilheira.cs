@@ -2,7 +2,8 @@
 {
     public class CodigoPartilheira
     {
-        public int Id { get; set; }   // agora é int (AutoNumber)
+        public int Id { get; set; }   
         public string Codigo { get; set; }
+        public int Sequencia { get; set; }
     }
 }

@@ -1,13 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Drawing.Printing;
 using System.Linq;
-using System.Windows.Forms;
+using System.Drawing;
+using TeleBonifacio.tb;
 using TeleBonifacio.dao;
 using TeleBonifacio.gen;
-using TeleBonifacio.tb;
+using System.Windows.Forms;
+using System.Drawing.Printing;
+using System.Collections.Generic;
 
+// 4.1.7 Alteração do funcionamento dos códigos de prateleira
 // 4.1.5 Impressão em lista na prateleira
 // 4.1.4 Tres colunas na impressão
 // 4.1.2 Correção de bug na tela de códigos de prateleira
@@ -53,10 +54,26 @@ namespace TeleBonifacio
             dao = new CodigoPartilheiraDAO();
 
             // ===============================
-            // GRID
+            // GRID - CONFIGURAÇÃO E NOVA COLUNA
             // ===============================
 
             gridCodigos.AutoGenerateColumns = false;
+
+            // --- NOVA COLUNA DE SEQUÊNCIA (ENDEREÇO) ---
+            DataGridViewTextBoxColumn colSequencia = new DataGridViewTextBoxColumn();
+            colSequencia.Name = "colSequencia";
+            colSequencia.HeaderText = "Nº";
+            colSequencia.DataPropertyName = "Sequencia"; // Liga com a nova propriedade da classe
+            colSequencia.Width = 70;
+            colSequencia.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            colSequencia.ReadOnly = true;
+            colSequencia.SortMode = DataGridViewColumnSortMode.NotSortable;
+            colSequencia.DefaultCellStyle.ForeColor = Color.Blue; // Cor diferenciada para o Denis ver que é o endereço
+
+            // Insere como a primeira coluna
+            gridCodigos.Columns.Insert(0, colSequencia);
+            // -------------------------------------------
+
             colCodigo.DataPropertyName = "Codigo";
             colCodigo.SortMode = DataGridViewColumnSortMode.NotSortable;
 
@@ -69,9 +86,9 @@ namespace TeleBonifacio
             gridCodigos.RowHeadersVisible = false;
 
             gridCodigos.Anchor = AnchorStyles.Top
-                               | AnchorStyles.Bottom
-                               | AnchorStyles.Left
-                               | AnchorStyles.Right;
+                                | AnchorStyles.Bottom
+                                | AnchorStyles.Left
+                                | AnchorStyles.Right;
 
             // ===============================
             // VISUAL GRANDE
@@ -100,7 +117,10 @@ namespace TeleBonifacio
             // DADOS
             // ===============================
 
+            // O CarregarGrid() agora deve conter a lógica de looping 
+            // para preencher a propriedade .Sequencia (1, 2, 3...)
             CarregarGrid();
+
             this.Resize += (s, ev) => AjustarLayoutVisual();
 
             _printDocument.BeginPrint += PrintDocument_BeginPrint;
@@ -194,27 +214,39 @@ namespace TeleBonifacio
 
             int yBotoes = this.ClientSize.Height - 60;
 
+            // Padronização de Larguras
             btExcluir.Width = 150;
             btLimpar.Width = 180;
+            btReiniciar.Width = 150; // Definindo largura para o novo botão
             btImprimir.Width = 150;
             btImprLista.Width = 150;
 
+            // --- LADO ESQUERDO (Ações de Manutenção) ---
+
+            // Botão Excluir
             btExcluir.Location = new Point(margem, yBotoes);
             btExcluir.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
 
+            // Botão Limpar (fica a 170px do início)
             btLimpar.Location = new Point(margem + 170, yBotoes);
             btLimpar.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
 
-            btImprimir.Width = 150;
-            btImprLista.Width = 150;
+            // Botão Reiniciar (Fica ao lado do Limpar, com um pequeno recuo)
+            // Cálculo: margem(25) + 170 + largura do btLimpar(180) + gap(20) = 395 aprox.
+            btReiniciar.Location = new Point(margem + 370, yBotoes);
+            btReiniciar.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            btReiniciar.Height = btLimpar.Height; // Garante que a altura seja igual aos outros
 
+            // --- LADO DIREITO (Ações de Saída) ---
+
+            // Botão Imprimir (Extrema direita)
             btImprimir.Location = new Point(this.ClientSize.Width - 175, yBotoes);
             btImprimir.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
 
+            // Botão Imprimir Lista (Ao lado do Imprimir)
             btImprLista.Location = new Point(this.ClientSize.Width - 350, yBotoes);
             btImprLista.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             btImprLista.Height = btImprimir.Height;
-
         }
 
         #endregion
@@ -292,7 +324,7 @@ namespace TeleBonifacio
 
         private void ImprimirEtiquetas(PrintPageEventArgs e)
         {
-            glo.Loga("ImprimirEtiquetas V4 INICIO");
+            glo.Loga("ImprimirEtiquetas V4 INICIO (Com Sequência)");
 
             try
             {
@@ -303,6 +335,7 @@ namespace TeleBonifacio
                     return;
                 }
 
+                // Mantive a fonte Segoe UI Negrito 22 como estava
                 Font fonteEtiqueta = new Font("Segoe UI", 22, FontStyle.Bold);
 
                 Rectangle area = e.MarginBounds;
@@ -336,6 +369,7 @@ namespace TeleBonifacio
                             alturaLinha
                         );
 
+                        // Desenha a borda da etiqueta
                         e.Graphics.DrawRectangle(Pens.Black, etiqueta);
 
                         using (StringFormat sf = new StringFormat()
@@ -344,17 +378,24 @@ namespace TeleBonifacio
                             LineAlignment = StringAlignment.Center
                         })
                         {
-                            string codigoCompleto = _listaParaImpressao[_indiceImpressao].Codigo;
+                            // ============================================================
+                            // AJUSTE: Pegamos o item completo para usar a Sequência + Código
+                            // ============================================================
+                            var itemAtual = _listaParaImpressao[_indiceImpressao];
 
-                            // extrai apenas o código antes do texto
-                            string codigo = ExtrairCodigo(codigoCompleto);
+                            // Extraímos o código puro (limpando lixos se houver)
+                            string codigoPuro = ExtrairCodigo(itemAtual.Codigo);
+
+                            // Montamos a string final: "Nº - CÓDIGO"
+                            string textoExibicao = $"{itemAtual.Sequencia} - {codigoPuro}";
 
                             e.Graphics.DrawString(
-                                codigo,
+                                textoExibicao,
                                 fonteEtiqueta,
                                 Brushes.Black,
                                 etiqueta,
                                 sf);
+                            // ============================================================
                         }
 
                         _indiceImpressao++;
@@ -399,7 +440,6 @@ namespace TeleBonifacio
 
         #endregion
 
-
         #region Eventos
         private void btAdicionar_Click(object sender, EventArgs e)
         {
@@ -419,30 +459,47 @@ namespace TeleBonifacio
         {
             string codigo = (txCodigo.Text ?? "").Trim().ToUpper();
 
+            // 1. Validação de campo vazio
             if (string.IsNullOrEmpty(codigo))
                 return;
 
-            // opcional: evitar inserir com espaços / caracteres estranhos
-            // codigo = codigo.Replace(" ", "");
+            // ============================================================
+            // TRAVA DE SEGURANÇA: Evita que o Denis digite "1-BC5"
+            // ============================================================
+            // Se o código contiver um hífen, significa que ele tentou 
+            // colocar a numeração manualmente.
+            if (codigo.Contains("-"))
+            {
+                glo.Loga("AdicionarCodigo - Tentativa de inserir código com numeração manual: " + codigo);
 
+                MessageBox.Show(
+                    "Denis, não precisa mais colocar o número e o traço!\n\n" +
+                    "Digite apenas o código da peça (exemplo: BC5).\n" +
+                    "O sistema vai colocar o número da prateleira sozinho agora.",
+                    "Aviso do Sistema",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Information);
+
+                txCodigo.SelectAll();
+                txCodigo.Focus();
+                return; // Interrompe a inserção
+            }
+            // ============================================================
+
+            // 2. Inserção no Banco (via DAO)
+            // Agora temos a certeza que o código está limpo (Ex: "BC5")
             dao.Inserir(codigo);
 
+            glo.Loga("AdicionarCodigo - Inserido com sucesso: " + codigo);
+
+            // 3. Limpeza e Atualização
             txCodigo.Clear();
             txCodigo.Focus();
 
+            // O CarregarGrid vai reordenar tudo e atribuir o novo número 
+            // de sequência para este item automaticamente.
             CarregarGrid();
         }
-
-        //private void txBuscar_TextChanged(object sender, EventArgs e)
-        //{
-        //    //_timerBusca.Stop();
-        //    //_timerBusca.Start();
-        //    if (e.KeyCode == Keys.Enter)
-        //    {
-        //        e.SuppressKeyPress = true;
-        //        CarregarGrid();
-        //    }
-        //}
 
         private void btExcluir_Click(object sender, EventArgs e)
         {
@@ -498,13 +555,11 @@ namespace TeleBonifacio
 
             var lista = dao.ListarTodos();
 
-            var estruturada = lista
-                .Select(x => new
-                {
-                    Original = x,
-                    Estrutura = CodigoPartilheiraParser.Parse(x.Codigo)
-                })
-                .ToList();
+            // Sua lógica de parser e ordenação fantástica continua igual
+            var estruturada = lista.Select(x => new {
+                Original = x,
+                Estrutura = CodigoPartilheiraParser.Parse(x.Codigo)
+            }).ToList();
 
             var ordenada = estruturada
                 .OrderBy(x => x.Estrutura.Prefixo)
@@ -515,14 +570,14 @@ namespace TeleBonifacio
                 .Select(x => x.Original)
                 .ToList();
 
-            string filtro = (txBuscar.Text ?? "").Trim().ToUpper();
-
-            if (!string.IsNullOrEmpty(filtro))
+            // ==========================================
+            // NOVA LÓGICA: Atribuir a Sequência Dinâmica
+            // ==========================================
+            int contador = 1;
+            foreach (var item in ordenada)
             {
-                glo.Loga("Filtro aplicado: " + filtro);
-                ordenada = ordenada
-                    .Where(x => x.Codigo.ToUpper().Contains(filtro))
-                    .ToList();
+                item.Sequencia = contador;
+                contador++;
             }
 
             gridCodigos.DataSource = null;
@@ -636,6 +691,112 @@ namespace TeleBonifacio
             glo.Loga("btImprimir_Click V4 INICIO");
             _modoImpressao = TipoImpressao.Etiquetas;
             AbrirPreview();
+        }
+
+        private void btReiniciar_Click(object sender, EventArgs e)
+        {
+            // 1. CONFIRMAÇÃO
+            string mensagemAviso = "ATENÇÃO: Esta operação irá remover as numerações manuais de todos os códigos cadastrados (ex: transformará '1-BC5' em 'BC5').\n\n" +
+                                   "Deseja prosseguir com a limpeza agora?";
+
+            DialogResult resultado = MessageBox.Show(mensagemAviso, "Limpeza de Dados",
+                                                     MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+
+            if (resultado != DialogResult.Yes)
+            {
+                glo.Loga("btReiniciar_Click - Operação cancelada pelo usuário.");
+                return;
+            }
+
+            glo.Loga(">>> btReiniciar_Click - INICIO LIMPEZA INTELIGENTE");
+            this.Cursor = Cursors.WaitCursor;
+
+            try
+            {
+                // 2. CHAMA O PROCESSO DE LIMPEZA (Separado)
+                int corrigidos = ProcessarLimpezaEmMassa();
+
+                // 3. FINALIZAÇÃO E FEEDBACK VISUAL
+                glo.Loga($"<<< btReiniciar_Click - FIM LIMPEZA. Total corrigidos: {corrigidos}");
+                this.Cursor = Cursors.Default;
+                MessageBox.Show($"Sucesso! {corrigidos} códigos foram limpos de forma segura.", "Concluído", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                // Recarrega a grid para mostrar os dados novos
+                CarregarGrid();
+
+                // Esconde o botão após o sucesso
+                btReiniciar.Visible = false;
+                glo.Loga("btReiniciar_Click - Botão de reiniciar ocultado com sucesso.");
+            }
+            catch (Exception ex)
+            {
+                this.Cursor = Cursors.Default;
+                glo.Loga("ERRO CRÍTICO em btReiniciar_Click: " + ex.Message);
+                glo.Loga("Stack Trace: " + ex.StackTrace);
+                MessageBox.Show("Erro ao processar limpeza: " + ex.Message, "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private int ProcessarLimpezaEmMassa()
+        {
+            var listaSuja = dao.ListarTodos();
+            int corrigidos = 0;
+
+            glo.Loga($"ProcessarLimpezaEmMassa - Total de registros lidos para análise: {listaSuja.Count}");
+
+            foreach (var item in listaSuja)
+            {
+                if (item.Codigo.Contains("-"))
+                {
+                    // Chama a função que analisa apenas o texto
+                    string novoCodigo = AnalisarEExtrairCodigo(item.Codigo);
+
+                    if (novoCodigo != null) // Se retornou um código novo, faz o update!
+                    {
+                        glo.Loga($"ProcessarLimpezaEmMassa - ALTERANDO ID {item.Id}: '{item.Codigo}' -> '{novoCodigo}'");
+                        dao.Atualizar(item.Id, novoCodigo);
+                        corrigidos++;
+                    }
+                    else
+                    {
+                        glo.Loga($"ProcessarLimpezaEmMassa - IGNORANDO ID {item.Id} ('{item.Codigo}'): Não requer limpeza ou estrutura inválida.");
+                    }
+                }
+            }
+
+            return corrigidos;
+        }
+
+        private string AnalisarEExtrairCodigo(string codigoOriginal)
+        {
+            // Divide o código pelo traço para analisar a primeira parte
+            string[] partes = codigoOriginal.Split('-');
+            string prefixo = partes[0].Trim();
+
+            // Se não tem nada antes do traço (ex: "-BC5"), ignora
+            if (string.IsNullOrEmpty(prefixo))
+                return null;
+
+            // Verifica se o prefixo é EXATAMENTE UM NÚMERO (Ex: "1", "298"). 
+            foreach (char c in prefixo)
+            {
+                if (!char.IsDigit(c))
+                {
+                    // Se achou qualquer letra (Ex: "BC"), aborta a limpeza e retorna nulo
+                    return null;
+                }
+            }
+
+            // Se chegou até aqui, temos certeza que a primeira parte é só número.
+            // Vamos cortar do primeiro traço em diante.
+            int posicaoHifen = codigoOriginal.IndexOf('-');
+            string novoCodigo = codigoOriginal.Substring(posicaoHifen + 1).Trim();
+
+            // Proteção: Se o corte gerasse um código vazio, não faz nada
+            if (string.IsNullOrEmpty(novoCodigo))
+                return null;
+
+            return novoCodigo; // Retorna o código limpo (ex: "BC5")
         }
 
     }

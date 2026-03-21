@@ -45,6 +45,7 @@ namespace TeleBonifacio
             this.btLimpar = new System.Windows.Forms.Button();
             this.btImprimir = new System.Windows.Forms.Button();
             this.btImprLista = new System.Windows.Forms.Button();
+            this.btReiniciar = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.gridCodigos)).BeginInit();
             this.SuspendLayout();
             // 
@@ -172,11 +173,23 @@ namespace TeleBonifacio
             this.btImprLista.UseVisualStyleBackColor = true;
             this.btImprLista.Click += new System.EventHandler(this.btImprLista_Click);
             // 
+            // btReiniciar
+            // 
+            this.btReiniciar.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btReiniciar.Location = new System.Drawing.Point(195, 365);
+            this.btReiniciar.Name = "btReiniciar";
+            this.btReiniciar.Size = new System.Drawing.Size(77, 26);
+            this.btReiniciar.TabIndex = 10;
+            this.btReiniciar.Text = "Reiniciar";
+            this.btReiniciar.UseVisualStyleBackColor = true;
+            this.btReiniciar.Click += new System.EventHandler(this.btReiniciar_Click);
+            // 
             // operPartilheira
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(686, 417);
+            this.Controls.Add(this.btReiniciar);
             this.Controls.Add(this.btImprLista);
             this.Controls.Add(this.gridCodigos);
             this.Controls.Add(this.btImprimir);
@@ -203,5 +216,6 @@ namespace TeleBonifacio
         #endregion
 
         private System.Windows.Forms.Button btImprLista;
+        private System.Windows.Forms.Button btReiniciar;
     }
 }
