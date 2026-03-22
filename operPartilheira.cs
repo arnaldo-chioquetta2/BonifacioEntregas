@@ -8,6 +8,7 @@ using System.Windows.Forms;
 using System.Drawing.Printing;
 using System.Collections.Generic;
 
+// 4.1.8 Edição nos numeros dos códigos de prateleira
 // 4.1.7 Alteração do funcionamento dos códigos de prateleira
 // 4.1.5 Impressão em lista na prateleira
 // 4.1.4 Tres colunas na impressão
@@ -37,96 +38,124 @@ namespace TeleBonifacio
 
         private void operPartilheira_Load(object sender, EventArgs e)
         {
-            // ===============================
-            // CONFIGURAÇÃO DA TELA
-            // ===============================
+            ConfigurarFormulario();
 
+            dao = new CodigoPartilheiraDAO();
+
+            ConfigurarGrid();
+            ConfigurarImpressao();
+
+            // Visual e Layout
+            AplicarModoVisualGrande();
+            AjustarLayoutVisual();
+
+            // Carga inicial
+            CarregarGrid();
+            txCodigo.Focus();
+        }
+
+        private void ConfigurarFormulario()
+        {
             this.StartPosition = FormStartPosition.CenterScreen;
             this.Height = Screen.PrimaryScreen.WorkingArea.Height - 20;
             this.Top = 0;
             this.MinimumSize = new Size(1000, 700);
             this.Padding = new Padding(10);
 
-            // ===============================
-            // DAO
-            // ===============================
+            // Eventos do Form
+            this.Resize += (s, ev) => AjustarLayoutVisual();
+        }
 
-            dao = new CodigoPartilheiraDAO();
-
-            // ===============================
-            // GRID - CONFIGURAÇÃO E NOVA COLUNA
-            // ===============================
-
+        private void ConfigurarGrid()
+        {
             gridCodigos.AutoGenerateColumns = false;
 
-            // --- NOVA COLUNA DE SEQUÊNCIA (ENDEREÇO) ---
-            DataGridViewTextBoxColumn colSequencia = new DataGridViewTextBoxColumn();
-            colSequencia.Name = "colSequencia";
-            colSequencia.HeaderText = "Nº";
-            colSequencia.DataPropertyName = "Sequencia"; // Liga com a nova propriedade da classe
-            colSequencia.Width = 70;
-            colSequencia.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            colSequencia.ReadOnly = true;
-            colSequencia.SortMode = DataGridViewColumnSortMode.NotSortable;
-            colSequencia.DefaultCellStyle.ForeColor = Color.Blue; // Cor diferenciada para o Denis ver que é o endereço
+            // --- 1. COLUNA DE ID (OCULTA) ---
+            if (!gridCodigos.Columns.Contains("colId"))
+            {
+                DataGridViewTextBoxColumn colId = new DataGridViewTextBoxColumn();
+                colId.Name = "colId";
+                colId.DataPropertyName = "Id";
+                colId.Visible = false;
+                gridCodigos.Columns.Add(colId);
+            }
 
-            // Insere como a primeira coluna
-            gridCodigos.Columns.Insert(0, colSequencia);
-            // -------------------------------------------
+            // --- 2. COLUNA DE ENDEREÇO (EDITÁVEL) ---
+            if (!gridCodigos.Columns.Contains("colEndereco"))
+            {
+                DataGridViewTextBoxColumn colEndereco = new DataGridViewTextBoxColumn();
+                colEndereco.Name = "colEndereco";
+                colEndereco.HeaderText = "Nº";
+                colEndereco.DataPropertyName = "Endereco";
+                colEndereco.Width = 70;
+                colEndereco.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
+                colEndereco.ReadOnly = false; // Denis pode editar
+                colEndereco.SortMode = DataGridViewColumnSortMode.NotSortable;
+                colEndereco.DefaultCellStyle.ForeColor = Color.Blue;
+                colEndereco.DefaultCellStyle.Font = new Font(gridCodigos.Font, FontStyle.Bold);
+                gridCodigos.Columns.Insert(0, colEndereco);
+            }
 
+            // --- 3. COLUNA DE CÓDIGO (SOMENTE LEITURA) ---
             colCodigo.DataPropertyName = "Codigo";
             colCodigo.SortMode = DataGridViewColumnSortMode.NotSortable;
+            colCodigo.ReadOnly = true;
 
+            // --- CONFIGURAÇÕES GERAIS ---
             gridCodigos.AllowUserToAddRows = false;
             gridCodigos.AllowUserToDeleteRows = false;
             gridCodigos.AllowUserToResizeRows = false;
+            gridCodigos.EditMode = DataGridViewEditMode.EditOnKeystrokeOrF2;
+            gridCodigos.SelectionMode = DataGridViewSelectionMode.CellSelect;
+            gridCodigos.RowHeadersVisible = true;
+            gridCodigos.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
 
-            gridCodigos.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            gridCodigos.MultiSelect = false;
-            gridCodigos.RowHeadersVisible = false;
+            // Eventos da Grid
+            gridCodigos.CellValueChanged += gridCodigos_CellValueChanged;
+        }
 
-            gridCodigos.Anchor = AnchorStyles.Top
-                                | AnchorStyles.Bottom
-                                | AnchorStyles.Left
-                                | AnchorStyles.Right;
-
-            // ===============================
-            // VISUAL GRANDE
-            // ===============================
-
-            AplicarModoVisualGrande();
-
-            // ===============================
-            // LAYOUT
-            // ===============================
-
-            AjustarLayoutVisual();
-
-            // ===============================
-            // IMPRESSÃO
-            // ===============================
-
+        private void ConfigurarImpressao()
+        {
             _printDocument = new PrintDocument();
-            // _printDocument.DefaultPageSettings.Landscape = true;
             _printDocument.PrintPage += PrintDocument_PrintPage;
-
-            _printPreview = new PrintPreviewDialog();
-            _printPreview.Document = _printDocument;
-
-            // ===============================
-            // DADOS
-            // ===============================
-
-            // O CarregarGrid() agora deve conter a lógica de looping 
-            // para preencher a propriedade .Sequencia (1, 2, 3...)
-            CarregarGrid();
-
-            this.Resize += (s, ev) => AjustarLayoutVisual();
-
             _printDocument.BeginPrint += PrintDocument_BeginPrint;
 
-            txCodigo.Focus();
+            _printPreview = new PrintPreviewDialog
+            {
+                Document = _printDocument,
+                WindowState = FormWindowState.Maximized
+            };
         }
+        private void gridCodigos_CellValueChanged(object sender, DataGridViewCellEventArgs e)
+        {
+            // Ignora se for o cabeçalho ou se a grid estiver carregando
+            if (e.RowIndex < 0 || e.ColumnIndex < 0) return;
+
+            // Verifica se a coluna alterada foi a de Endereço (Nº)
+            if (gridCodigos.Columns[e.ColumnIndex].Name == "colEndereco")
+            {
+                try
+                {
+                    // Busca o ID que está na nossa coluna oculta "colId"
+                    int idItem = Convert.ToInt32(gridCodigos.Rows[e.RowIndex].Cells["colId"].Value);
+
+                    // Pega o novo valor digitado pelo Denis
+                    object valor = gridCodigos.Rows[e.RowIndex].Cells[e.ColumnIndex].Value;
+
+                    if (valor != null && int.TryParse(valor.ToString(), out int novoEndereco))
+                    {
+                        // Chama a DAO para salvar no Access
+                        dao.AtualizarEndereco(idItem, novoEndereco);
+                        glo.Loga($"Denis alterou ID {idItem} para o Endereço {novoEndereco}");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    glo.Loga("Erro ao salvar endereço manual: " + ex.Message);
+                }
+            }
+        }
+
 
         private void PrintDocument_BeginPrint(object sender, PrintEventArgs e)
         {
@@ -459,46 +488,53 @@ namespace TeleBonifacio
         {
             string codigo = (txCodigo.Text ?? "").Trim().ToUpper();
 
-            // 1. Validação de campo vazio
             if (string.IsNullOrEmpty(codigo))
                 return;
 
-            // ============================================================
-            // TRAVA DE SEGURANÇA: Evita que o Denis digite "1-BC5"
-            // ============================================================
-            // Se o código contiver um hífen, significa que ele tentou 
-            // colocar a numeração manualmente.
+            // 1. Trava de segurança (continua importante para manter o banco limpo)
             if (codigo.Contains("-"))
             {
-                glo.Loga("AdicionarCodigo - Tentativa de inserir código com numeração manual: " + codigo);
-
-                MessageBox.Show(
-                    "Denis, não precisa mais colocar o número e o traço!\n\n" +
-                    "Digite apenas o código da peça (exemplo: BC5).\n" +
-                    "O sistema vai colocar o número da prateleira sozinho agora.",
-                    "Aviso do Sistema",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Information);
-
-                txCodigo.SelectAll();
-                txCodigo.Focus();
-                return; // Interrompe a inserção
+                MessageBox.Show("Denis, digite apenas o código da peça.\nO número da prateleira será gerado no final da lista!",
+                                "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
             }
-            // ============================================================
 
-            // 2. Inserção no Banco (via DAO)
-            // Agora temos a certeza que o código está limpo (Ex: "BC5")
-            dao.Inserir(codigo);
+            try
+            {
+                // 2. Lógica para descobrir o próximo número de endereço
+                // Pegamos a lista atual para ver qual o maior número que já existe
+                var listaAtual = dao.ListarTodos();
+                int proximoEndereco = 1;
 
-            glo.Loga("AdicionarCodigo - Inserido com sucesso: " + codigo);
+                if (listaAtual.Count > 0)
+                {
+                    // Busca o maior valor da coluna Endereco e soma 1
+                    // Se não quiser usar LINQ, pode fazer um foreach simples
+                    foreach (var item in listaAtual)
+                    {
+                        if (item.Endereco >= proximoEndereco)
+                        {
+                            proximoEndereco = item.Endereco + 1;
+                        }
+                    }
+                }
 
-            // 3. Limpeza e Atualização
-            txCodigo.Clear();
-            txCodigo.Focus();
+                // 3. AGORA CHAMAMOS O INSERIR COM OS DOIS ARGUMENTOS
+                // O código da peça e o próximo número da sequência
+                dao.Inserir(codigo, proximoEndereco);
 
-            // O CarregarGrid vai reordenar tudo e atribuir o novo número 
-            // de sequência para este item automaticamente.
-            CarregarGrid();
+                glo.Loga($"AdicionarCodigo - Inserido: {codigo} no endereço {proximoEndereco}");
+
+                // 4. Limpeza e Atualização
+                txCodigo.Clear();
+                txCodigo.Focus();
+                CarregarGrid();
+            }
+            catch (Exception ex)
+            {
+                glo.Loga("Erro em AdicionarCodigo: " + ex.Message);
+                MessageBox.Show("Erro ao inserir: " + ex.Message);
+            }
         }
 
         private void btExcluir_Click(object sender, EventArgs e)

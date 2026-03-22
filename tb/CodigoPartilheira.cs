@@ -5,5 +5,7 @@
         public int Id { get; set; }   
         public string Codigo { get; set; }
         public int Sequencia { get; set; }
+
+        public int Endereco { get; set; }
     }
 }
