@@ -8,6 +8,7 @@ using System.Windows.Forms;
 using System.Drawing.Printing;
 using System.Collections.Generic;
 
+// 4.1.9 Retorno da edição dos códigos da prateleira
 // 4.1.8 Edição nos numeros dos códigos de prateleira
 // 4.1.7 Alteração do funcionamento dos códigos de prateleira
 // 4.1.5 Impressão em lista na prateleira
@@ -76,7 +77,7 @@ namespace TeleBonifacio
                 DataGridViewTextBoxColumn colId = new DataGridViewTextBoxColumn();
                 colId.Name = "colId";
                 colId.DataPropertyName = "Id";
-                colId.Visible = false;
+                colId.Visible = false; // Permanece oculta, apenas para controle do banco
                 gridCodigos.Columns.Add(colId);
             }
 
@@ -89,28 +90,38 @@ namespace TeleBonifacio
                 colEndereco.DataPropertyName = "Endereco";
                 colEndereco.Width = 70;
                 colEndereco.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
-                colEndereco.ReadOnly = false; // Denis pode editar
+
+                // Denis pode editar o número da prateleira aqui
+                colEndereco.ReadOnly = false;
+
                 colEndereco.SortMode = DataGridViewColumnSortMode.NotSortable;
                 colEndereco.DefaultCellStyle.ForeColor = Color.Blue;
                 colEndereco.DefaultCellStyle.Font = new Font(gridCodigos.Font, FontStyle.Bold);
                 gridCodigos.Columns.Insert(0, colEndereco);
             }
 
-            // --- 3. COLUNA DE CÓDIGO (SOMENTE LEITURA) ---
+            // --- 3. COLUNA DE CÓDIGO (AGORA EDITÁVEL!) ---
+            // Nota: 'colCodigo' deve ser o nome da coluna definida no Designer ou no código
             colCodigo.DataPropertyName = "Codigo";
             colCodigo.SortMode = DataGridViewColumnSortMode.NotSortable;
-            colCodigo.ReadOnly = true;
+
+            // MUDANÇA: Liberado para o Denis corrigir o nome da peça direto na grid
+            colCodigo.ReadOnly = false;
 
             // --- CONFIGURAÇÕES GERAIS ---
             gridCodigos.AllowUserToAddRows = false;
             gridCodigos.AllowUserToDeleteRows = false;
             gridCodigos.AllowUserToResizeRows = false;
+
+            // Com 'CellSelect', o Denis consegue clicar exatamente na palavra que quer mudar
             gridCodigos.EditMode = DataGridViewEditMode.EditOnKeystrokeOrF2;
             gridCodigos.SelectionMode = DataGridViewSelectionMode.CellSelect;
+
             gridCodigos.RowHeadersVisible = true;
             gridCodigos.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
 
-            // Eventos da Grid
+            // Eventos da Grid - Garante que as mudanças sejam salvas no banco
+            gridCodigos.CellValueChanged -= gridCodigos_CellValueChanged; // Previne duplicar o evento
             gridCodigos.CellValueChanged += gridCodigos_CellValueChanged;
         }
 
@@ -128,34 +139,36 @@ namespace TeleBonifacio
         }
         private void gridCodigos_CellValueChanged(object sender, DataGridViewCellEventArgs e)
         {
-            // Ignora se for o cabeçalho ou se a grid estiver carregando
             if (e.RowIndex < 0 || e.ColumnIndex < 0) return;
 
-            // Verifica se a coluna alterada foi a de Endereço (Nº)
-            if (gridCodigos.Columns[e.ColumnIndex].Name == "colEndereco")
+            try
             {
-                try
+                int idItem = Convert.ToInt32(gridCodigos.Rows[e.RowIndex].Cells["colId"].Value);
+                string novoValor = gridCodigos.Rows[e.RowIndex].Cells[e.ColumnIndex].Value?.ToString() ?? "";
+                string nomeColuna = gridCodigos.Columns[e.ColumnIndex].Name;
+
+                // CASO 1: Ele editou o Número (Endereço)
+                if (nomeColuna == "colEndereco")
                 {
-                    // Busca o ID que está na nossa coluna oculta "colId"
-                    int idItem = Convert.ToInt32(gridCodigos.Rows[e.RowIndex].Cells["colId"].Value);
-
-                    // Pega o novo valor digitado pelo Denis
-                    object valor = gridCodigos.Rows[e.RowIndex].Cells[e.ColumnIndex].Value;
-
-                    if (valor != null && int.TryParse(valor.ToString(), out int novoEndereco))
+                    if (int.TryParse(novoValor, out int enderecoNum))
                     {
-                        // Chama a DAO para salvar no Access
-                        dao.AtualizarEndereco(idItem, novoEndereco);
-                        glo.Loga($"Denis alterou ID {idItem} para o Endereço {novoEndereco}");
+                        dao.AtualizarEndereco(idItem, enderecoNum);
+                        glo.Loga($"Denis mudou Nº do ID {idItem} para {enderecoNum}");
                     }
                 }
-                catch (Exception ex)
+                // CASO 2: Ele editou o Texto do Código
+                else if (nomeColuna == "colCodigo") // Assumindo que o nome da coluna de código seja colCodigo
                 {
-                    glo.Loga("Erro ao salvar endereço manual: " + ex.Message);
+                    // Usamos o método Atualizar que já existe na sua DAO!
+                    dao.Atualizar(idItem, novoValor.ToUpper().Trim());
+                    // glo.Loga($"Denis mudou Código do ID {idItem} para {novoEndereco}");
                 }
             }
+            catch (Exception ex)
+            {
+                glo.Loga("Erro ao salvar edição direta na grid: " + ex.Message);
+            }
         }
-
 
         private void PrintDocument_BeginPrint(object sender, PrintEventArgs e)
         {
