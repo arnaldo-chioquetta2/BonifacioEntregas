@@ -14,15 +14,11 @@ namespace TeleBonifacio.dao
             
         }
 
-        // VERSAO 1.0
-        // Metodo original sem filtro por entregador
-
-        // VERSAO 1.1
-        // Adicionado filtro por idBoy (entregador selecionado)
-        // Data: 14/02/2026
+        // VERSAO 3.9.18
+        // getDados atualizado para buscar LiberadoPor e idLiberadoPor
         public DataTable getDados(DateTime? DT1, DateTime? DT2, string sObs, int? idBoy = null)
         {
-            glo.Loga("VERSAO 1.1 - getDados com filtro por idBoy");
+            glo.Loga("VERSAO 3.9.18 - EntregasDAO.getDados com LiberadoPor");
 
             StringBuilder query = new StringBuilder();
             int maxLength = 10;
@@ -44,16 +40,21 @@ namespace TeleBonifacio.dao
             TRUE, 'Desconhecido'
         ) AS Pagamento,
         c.Nome AS Cliente,
-        v.Nome AS Vendedor,  
+        v.Nome AS Vendedor,
+        vl.Nome AS LiberadoPor,
         e.Obs, 
         m.codi as idBoy,
         c.NrCli,
-        e.idForma, e.idVend, e.UID 
+        e.idForma,
+        e.idVend,
+        e.idLiberadoPor,
+        e.UID 
     FROM 
-        (((Entregas e
+        ((((Entregas e
         LEFT JOIN Clientes c ON c.NrCli = e.idCliente)
         LEFT JOIN Mecanicos m ON m.codi = e.idBoy)
-        LEFT JOIN Vendedores v ON v.ID = e.idVend)");
+        LEFT JOIN Vendedores v ON v.ID = e.idVend)
+        LEFT JOIN Vendedores vl ON vl.ID = e.idLiberadoPor)");
 
             DateTime dataInicio = DT1.Value.Date;
             DateTime dataFim = DT2.Value.Date;
@@ -65,19 +66,15 @@ namespace TeleBonifacio.dao
 
             if (!string.IsNullOrEmpty(sObs))
             {
-                query.AppendFormat(" AND e.Obs Like '%{0}%'", sObs.Replace("'", "''"));
+                query.AppendFormat(" AND e.Obs Like '%{0}%' ", sObs.Replace("'", "''"));
             }
 
-            // 🔴 NOVO FILTRO
             if (idBoy.HasValue && idBoy.Value > 0)
             {
                 query.AppendFormat(" AND e.idBoy = {0}", idBoy.Value);
             }
 
             query.Append(" Order By e.ID desc");
-
-            System.Diagnostics.Debug.WriteLine("SQL GERADO:");
-            System.Diagnostics.Debug.WriteLine(query.ToString());
 
             return DB.ExecutarConsulta(query.ToString());
         }
@@ -163,34 +160,48 @@ namespace TeleBonifacio.dao
             return dt;
         }
 
-        public void Adiciona(int idBoy, int idForma, float valor, int idcliente, float compra, string Obs, float desc, int idVend, string UID)
+        // VERSAO 3.9.17
+        // Edita atualizado para gravar idLiberadoPor
+        public void Edita(int iID, int idBoy, int idForma, float valor, int idCliente, float compra, string obs, float desc, int idVend, int idLiberadoPor)
         {
-            String sql = @"INSERT INTO Entregas (idCliente, idForma, idBoy, Valor, VlNota, Obs, Desconto, idVend, UID, Data) VALUES ("
+            glo.Loga("VERSAO 3.9.17 - EntregasDAO.Edita com idLiberadoPor");
+
+            String sql = @"UPDATE Entregas SET 
+        idCliente = " + idCliente.ToString() +
+                            ",idForma = " + idForma.ToString() +
+                            ",idBoy = " + idBoy.ToString() +
+                            ",Valor = " + glo.sv(valor) +
+                            ",VlNota = " + glo.sv(compra) +
+                            ",Obs = " + glo.fa(obs) +
+                            ",Desconto = " + glo.sv(desc) +
+                            ",idVend = " + idVend.ToString() +
+                            ",idLiberadoPor = " + idLiberadoPor.ToString() +
+                            " WHERE ID = " + iID.ToString();
+
+            DB.ExecutarComandoSQL(sql);
+        }
+
+        // VERSAO 3.9.17
+        // Adiciona atualizado para gravar idLiberadoPor
+        public void Adiciona(int idBoy, int idForma, float valor, int idcliente, float compra, string Obs, float desc, int idVend, string UID, int idLiberadoPor)
+        {
+            glo.Loga("VERSAO 3.9.17 - EntregasDAO.Adiciona com idLiberadoPor");
+
+            String sql = @"INSERT INTO Entregas 
+        (idCliente, idForma, idBoy, Valor, VlNota, Obs, Desconto, idVend, UID, idLiberadoPor, Data) 
+        VALUES ("
                 + idcliente.ToString() + ", "
                 + idForma.ToString() + ", "
-                + idBoy.ToString() + ", "                
+                + idBoy.ToString() + ", "
                 + glo.sv(valor) + ", "
                 + glo.sv(compra) + ", "
                 + glo.fa(Obs) + ", "
                 + glo.sv(desc) + ", "
                 + idVend.ToString() + ", "
-                + glo.fa(UID)
-                + ",Now)";
-            DB.ExecutarComandoSQL(sql);
-        }
+                + glo.fa(UID) + ", "
+                + idLiberadoPor.ToString()
+                + ", Now)";
 
-        public void Edita(int iID, int idBoy, int idForma, float valor, int idCliente, float compra, string obs, float desc, int idVend)
-        {
-            String sql = @"UPDATE Entregas SET 
-                idCliente = " + idCliente.ToString() + 
-                            ",idForma = " + idForma.ToString() + 
-                            ",idBoy = " + idBoy.ToString() + 
-                            ",Valor = " + glo.sv(valor) + 
-                            ",VlNota = " + glo.sv(compra) + 
-                            ",Obs = " + glo.fa(obs) + 
-                            ",Desconto = " + glo.sv(desc) +
-                            ",idVend = " + idVend.ToString() +
-                            " WHERE ID = " + iID.ToString();
             DB.ExecutarComandoSQL(sql);
         }
 

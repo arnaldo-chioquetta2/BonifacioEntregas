@@ -1,17 +1,9 @@
-﻿
-namespace TeleBonifacio
+﻿namespace TeleBonifacio
 {
     partial class operLancamento
     {
-        /// <summary>
-        /// Required designer variable.
-        /// </summary>
         private System.ComponentModel.IContainer components = null;
 
-        /// <summary>
-        /// Clean up any resources being used.
-        /// </summary>
-        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
         protected override void Dispose(bool disposing)
         {
             if (disposing && (components != null))
@@ -23,16 +15,15 @@ namespace TeleBonifacio
 
         #region Windows Form Designer generated code
 
-        /// <summary>
-        /// Required method for Designer support - do not modify
-        /// the contents of this method with the code editor.
-        /// </summary>
         private void InitializeComponent()
         {
             this.panel1 = new System.Windows.Forms.Panel();
+            this.dtInicial = new System.Windows.Forms.DateTimePicker();
             this.btRelat = new System.Windows.Forms.Button();
             this.cmbVendedor = new System.Windows.Forms.ComboBox();
             this.label7 = new System.Windows.Forms.Label();
+            this.cmbLiberadoPor = new System.Windows.Forms.ComboBox();
+            this.labelLiberadoPor = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
             this.txDesc = new System.Windows.Forms.TextBox();
             this.lbTotal = new System.Windows.Forms.Label();
@@ -54,7 +45,6 @@ namespace TeleBonifacio
             this.btnFiltrar = new System.Windows.Forms.Button();
             this.btnNovoCliente = new System.Windows.Forms.Button();
             this.dataGrid1 = new SourceGrid.DataGrid();
-            this.dtInicial = new System.Windows.Forms.DateTimePicker();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -64,6 +54,8 @@ namespace TeleBonifacio
             this.panel1.Controls.Add(this.btRelat);
             this.panel1.Controls.Add(this.cmbVendedor);
             this.panel1.Controls.Add(this.label7);
+            this.panel1.Controls.Add(this.cmbLiberadoPor);
+            this.panel1.Controls.Add(this.labelLiberadoPor);
             this.panel1.Controls.Add(this.label6);
             this.panel1.Controls.Add(this.txDesc);
             this.panel1.Controls.Add(this.lbTotal);
@@ -87,8 +79,18 @@ namespace TeleBonifacio
             this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(920, 129);
+            this.panel1.Size = new System.Drawing.Size(920, 144);
             this.panel1.TabIndex = 11;
+            // 
+            // dtInicial
+            // 
+            this.dtInicial.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
+            this.dtInicial.Format = System.Windows.Forms.DateTimePickerFormat.Short;
+            this.dtInicial.Location = new System.Drawing.Point(627, 111);
+            this.dtInicial.Name = "dtInicial";
+            this.dtInicial.Size = new System.Drawing.Size(90, 23);
+            this.dtInicial.TabIndex = 29;
+            this.dtInicial.Tag = "H";
             // 
             // btRelat
             // 
@@ -112,17 +114,36 @@ namespace TeleBonifacio
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label7.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F);
             this.label7.Location = new System.Drawing.Point(12, 66);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(67, 16);
             this.label7.TabIndex = 33;
             this.label7.Text = "Vendedor";
             // 
+            // cmbLiberadoPor
+            // 
+            this.cmbLiberadoPor.DisplayMember = "Nome";
+            this.cmbLiberadoPor.Location = new System.Drawing.Point(82, 91);
+            this.cmbLiberadoPor.Name = "cmbLiberadoPor";
+            this.cmbLiberadoPor.Size = new System.Drawing.Size(257, 21);
+            this.cmbLiberadoPor.TabIndex = 36;
+            this.cmbLiberadoPor.ValueMember = "Id";
+            // 
+            // labelLiberadoPor
+            // 
+            this.labelLiberadoPor.AutoSize = true;
+            this.labelLiberadoPor.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F);
+            this.labelLiberadoPor.Location = new System.Drawing.Point(1, 92);
+            this.labelLiberadoPor.Name = "labelLiberadoPor";
+            this.labelLiberadoPor.Size = new System.Drawing.Size(84, 16);
+            this.labelLiberadoPor.TabIndex = 37;
+            this.labelLiberadoPor.Text = "Liberado por";
+            // 
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F);
             this.label6.Location = new System.Drawing.Point(575, 70);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(65, 16);
@@ -142,7 +163,7 @@ namespace TeleBonifacio
             // 
             // lbTotal
             // 
-            this.lbTotal.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbTotal.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F);
             this.lbTotal.Location = new System.Drawing.Point(709, 68);
             this.lbTotal.Name = "lbTotal";
             this.lbTotal.Size = new System.Drawing.Size(83, 23);
@@ -153,7 +174,7 @@ namespace TeleBonifacio
             // 
             this.dtpData.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
             this.dtpData.Format = System.Windows.Forms.DateTimePickerFormat.Short;
-            this.dtpData.Location = new System.Drawing.Point(721, 99);
+            this.dtpData.Location = new System.Drawing.Point(723, 112);
             this.dtpData.Name = "dtpData";
             this.dtpData.Size = new System.Drawing.Size(90, 23);
             this.dtpData.TabIndex = 30;
@@ -161,16 +182,16 @@ namespace TeleBonifacio
             // 
             // txObs
             // 
-            this.txObs.Location = new System.Drawing.Point(222, 101);
+            this.txObs.Location = new System.Drawing.Point(447, 114);
             this.txObs.Name = "txObs";
-            this.txObs.Size = new System.Drawing.Size(397, 20);
+            this.txObs.Size = new System.Drawing.Size(174, 20);
             this.txObs.TabIndex = 28;
             // 
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label5.Location = new System.Drawing.Point(133, 102);
+            this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F);
+            this.label5.Location = new System.Drawing.Point(358, 115);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(82, 16);
             this.label5.TabIndex = 27;
@@ -190,7 +211,7 @@ namespace TeleBonifacio
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F);
             this.label4.Location = new System.Drawing.Point(585, 41);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(55, 16);
@@ -210,7 +231,7 @@ namespace TeleBonifacio
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F);
             this.label3.Location = new System.Drawing.Point(30, 40);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(48, 16);
@@ -220,7 +241,7 @@ namespace TeleBonifacio
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F);
             this.label2.Location = new System.Drawing.Point(601, 12);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(39, 16);
@@ -230,7 +251,7 @@ namespace TeleBonifacio
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F);
             this.label1.Location = new System.Drawing.Point(345, 14);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(138, 16);
@@ -240,7 +261,7 @@ namespace TeleBonifacio
             // lbMoto
             // 
             this.lbMoto.AutoSize = true;
-            this.lbMoto.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbMoto.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F);
             this.lbMoto.Location = new System.Drawing.Point(15, 16);
             this.lbMoto.Name = "lbMoto";
             this.lbMoto.Size = new System.Drawing.Size(60, 16);
@@ -287,7 +308,7 @@ namespace TeleBonifacio
             // btnLimpar
             // 
             this.btnLimpar.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnLimpar.Location = new System.Drawing.Point(817, 38);
+            this.btnLimpar.Location = new System.Drawing.Point(817, 44);
             this.btnLimpar.Name = "btnLimpar";
             this.btnLimpar.Size = new System.Drawing.Size(91, 23);
             this.btnLimpar.TabIndex = 16;
@@ -298,7 +319,7 @@ namespace TeleBonifacio
             // 
             this.btnAdicionar.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnAdicionar.Enabled = false;
-            this.btnAdicionar.Location = new System.Drawing.Point(817, 68);
+            this.btnAdicionar.Location = new System.Drawing.Point(817, 77);
             this.btnAdicionar.Name = "btnAdicionar";
             this.btnAdicionar.Size = new System.Drawing.Size(91, 23);
             this.btnAdicionar.TabIndex = 17;
@@ -308,7 +329,7 @@ namespace TeleBonifacio
             // btnFiltrar
             // 
             this.btnFiltrar.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnFiltrar.Location = new System.Drawing.Point(817, 97);
+            this.btnFiltrar.Location = new System.Drawing.Point(817, 110);
             this.btnFiltrar.Name = "btnFiltrar";
             this.btnFiltrar.Size = new System.Drawing.Size(91, 23);
             this.btnFiltrar.TabIndex = 18;
@@ -317,7 +338,7 @@ namespace TeleBonifacio
             // 
             // btnNovoCliente
             // 
-            this.btnNovoCliente.Location = new System.Drawing.Point(13, 101);
+            this.btnNovoCliente.Location = new System.Drawing.Point(12, 115);
             this.btnNovoCliente.Name = "btnNovoCliente";
             this.btnNovoCliente.Size = new System.Drawing.Size(96, 23);
             this.btnNovoCliente.TabIndex = 19;
@@ -330,24 +351,14 @@ namespace TeleBonifacio
             this.dataGrid1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataGrid1.EnableSort = false;
             this.dataGrid1.FixedRows = 1;
-            this.dataGrid1.Location = new System.Drawing.Point(0, 129);
+            this.dataGrid1.Location = new System.Drawing.Point(0, 144);
             this.dataGrid1.Name = "dataGrid1";
             this.dataGrid1.SelectionMode = SourceGrid.GridSelectionMode.Row;
-            this.dataGrid1.Size = new System.Drawing.Size(920, 432);
+            this.dataGrid1.Size = new System.Drawing.Size(920, 417);
             this.dataGrid1.TabIndex = 12;
             this.dataGrid1.TabStop = true;
             this.dataGrid1.ToolTipText = "";
             this.dataGrid1.Click += new System.EventHandler(this.dataGrid1_Click);
-            // 
-            // dtInicial
-            // 
-            this.dtInicial.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
-            this.dtInicial.Format = System.Windows.Forms.DateTimePickerFormat.Short;
-            this.dtInicial.Location = new System.Drawing.Point(625, 98);
-            this.dtInicial.Name = "dtInicial";
-            this.dtInicial.Size = new System.Drawing.Size(90, 23);
-            this.dtInicial.TabIndex = 29;
-            this.dtInicial.Tag = "H";
             // 
             // operLancamento
             // 
@@ -394,6 +405,8 @@ namespace TeleBonifacio
         private System.Windows.Forms.TextBox txDesc;
         private System.Windows.Forms.ComboBox cmbVendedor;
         private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.ComboBox cmbLiberadoPor;
+        private System.Windows.Forms.Label labelLiberadoPor;
         private System.Windows.Forms.Button btRelat;
         private System.Windows.Forms.DateTimePicker dtInicial;
     }

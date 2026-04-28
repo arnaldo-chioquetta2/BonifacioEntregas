@@ -6,6 +6,6 @@
         public string Codigo { get; set; }
         public int Sequencia { get; set; }
 
-        public int Endereco { get; set; }
+        public string Endereco { get; set; }
     }
 }

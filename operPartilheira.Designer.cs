@@ -119,6 +119,7 @@ namespace TeleBonifacio
             this.gridCodigos.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.gridCodigos_CellDoubleClick);
             this.gridCodigos.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.gridCodigos_CellEndEdit);
             this.gridCodigos.CurrentCellChanged += new System.EventHandler(this.gridCodigos_CurrentCellChanged);
+            this.gridCodigos.EditingControlShowing += new System.Windows.Forms.DataGridViewEditingControlShowingEventHandler(this.gridCodigos_EditingControlShowing);
             this.gridCodigos.SelectionChanged += new System.EventHandler(this.gridCodigos_SelectionChanged);
             this.gridCodigos.KeyDown += new System.Windows.Forms.KeyEventHandler(this.gridCodigos_KeyDown);
             // 
@@ -180,7 +181,7 @@ namespace TeleBonifacio
             this.btReiniciar.Name = "btReiniciar";
             this.btReiniciar.Size = new System.Drawing.Size(77, 26);
             this.btReiniciar.TabIndex = 10;
-            this.btReiniciar.Text = "Reiniciar";
+            this.btReiniciar.Text = "Limpar";
             this.btReiniciar.UseVisualStyleBackColor = true;
             this.btReiniciar.Click += new System.EventHandler(this.btReiniciar_Click);
             // 

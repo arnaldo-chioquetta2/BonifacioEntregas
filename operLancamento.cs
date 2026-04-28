@@ -5,6 +5,8 @@ using System.Windows.Forms;
 using TeleBonifacio.tb;
 using System.Globalization;
 
+// 4.2.2 Informação - Liberado por
+// 4.2.2 Botão limpar também limpa o campo de observações
 // 4.1.6 Informação do percentual de gasto com entregas
 // 4.0.9 Filtro de data inicial e final para as entregas   
 // 3.9.7 Forma de pagamento Boleto para as entregas
@@ -25,19 +27,31 @@ namespace TeleBonifacio
             InitializeComponent();
         }
 
+        // VERSAO 3.9.19
+        // Carrega cmbLiberadoPor com vendedores ativos
         private void operLancamento_Load(object sender, EventArgs e)
         {
+            glo.Loga("VERSAO 3.9.19 - Carregando combo LiberadoPor");
+
             EntregadorDAO Entregador = new EntregadorDAO();
             ClienteDAO Cliente = new ClienteDAO();
             VendedoresDAO Vendedor = new VendedoresDAO();
+
             glo.CarregarComboBox<Entregador>(cmbMotoBoy, Entregador);
             glo.CarregarComboBox<Cliente>(cmbCliente, Cliente);
-            glo.CarregarComboBox<Vendedor>(cmbVendedor, Vendedor,"", " Where Vendedores.Atende = 1 ", " desc ");
+            glo.CarregarComboBox<Vendedor>(cmbVendedor, Vendedor, "", " Where Vendedores.Atende = 1 ", " desc ");
+            glo.CarregarComboBox<Vendedor>(cmbLiberadoPor, Vendedor, "", " Where Vendedores.Atende = 1 ", " desc ");
+
             cmbMotoBoy.SelectedIndex = 0;
             cmbCliente.SelectedIndex = -1;
+            cmbLiberadoPor.SelectedIndex = -1;
+
             rt.AdjustFormComponents(this);
+
             SetaOJose();
             SetaAGiulia();
+
+            cmbLiberadoPor.SelectedValue = cmbVendedor.SelectedValue;
         }
 
         private void SetaOJose()
@@ -66,30 +80,39 @@ namespace TeleBonifacio
 
         #region MetodosPrincipais
 
+        // VERSAO 3.9.21
+        // Ajusta grid com coluna LiberadoPor
         private void ConfigurarGrid()
         {
-            dataGrid1.Columns[0].Width = 0;
-            dataGrid1.Columns[1].Width = 75;
-            dataGrid1.Columns[2].Width = 110;
+            glo.Loga("VERSAO 3.9.21 - ConfigurarGrid com LiberadoPor");
+
+            dataGrid1.Columns[0].Width = 0;     // Id
+            dataGrid1.Columns[1].Width = 75;    // Data
+            dataGrid1.Columns[2].Width = 110;   // MotoBoy
             dataGrid1.Columns[3].Width = 70;    // Valor
             dataGrid1.Columns[4].Width = 70;    // Desconto
-            dataGrid1.Columns[5].Width = 80; // 70;    // Compra
-            dataGrid1.Columns[6].Width = 60;    
+            dataGrid1.Columns[5].Width = 80;    // Compra
+            dataGrid1.Columns[6].Width = 60;    // Pagamento
             dataGrid1.Columns[7].Width = 170;   // Cliente
-            dataGrid1.Columns[8].Width = 170;   // Vendedor
-            dataGrid1.Columns[9].Width = 90;    // Obs
-            dataGrid1.Columns[10].Width = 0;
-            dataGrid1.Columns[11].Width = 0;
-            dataGrid1.Columns[12].Width = 0;
-            dataGrid1.Columns[13].Width = 0;
-            dataGrid1.Columns[14].Width = 0;
+            dataGrid1.Columns[8].Width = 120;   // Vendedor
+            dataGrid1.Columns[9].Width = 120;   // LiberadoPor
+            dataGrid1.Columns[10].Width = 90;   // Obs
+
+            dataGrid1.Columns[11].Width = 0;    // idBoy
+            dataGrid1.Columns[12].Width = 0;    // NrCli
+            dataGrid1.Columns[13].Width = 0;    // idForma
+            dataGrid1.Columns[14].Width = 0;    // idVend
+            dataGrid1.Columns[15].Width = 0;    // idLiberadoPor
+            dataGrid1.Columns[16].Width = 0;    // UID
+
             if (rt.IsLargeScreen())
             {
-                for (int i = 0; i < 9; i++)
+                for (int i = 0; i <= 10; i++)
                 {
                     dataGrid1.Columns[i].Width = (int)(dataGrid1.Columns[i].Width * rt.scaleFactor);
                 }
             }
+
             dataGrid1.Invalidate();
         }
 
@@ -103,6 +126,9 @@ namespace TeleBonifacio
             txCompra.Text = "";
             txDesc.Text = "";
             lbTotal.Text = "";
+
+            // Botão limpar também limpa o campo de observações
+            txObs.Text = "";
         }
 
         private void CarregaGrid()
@@ -180,34 +206,52 @@ namespace TeleBonifacio
             int idForma = Convert.ToInt32(cmbFormaPagamento.SelectedIndex);
             int idCliente = Convert.ToInt32(cmbCliente.SelectedValue);
             int idVend = Convert.ToInt32(cmbVendedor.SelectedValue);
+
+            // VERSAO 3.9.20
+            // Captura quem liberou a tele
+            int idLiberadoPor = 0;
+            if (cmbLiberadoPor.SelectedValue != null)
+            {
+                idLiberadoPor = Convert.ToInt32(cmbLiberadoPor.SelectedValue);
+            }
+
             float valor;
             if (!float.TryParse(txtValor.Text, out valor))
             {
                 valor = 0;
             }
+
             float compra;
             if (!float.TryParse(txCompra.Text, out compra))
             {
                 compra = 0;
             }
+
             string obs = txObs.Text;
+
             float desc;
             if (!float.TryParse(txDesc.Text, out desc))
             {
                 desc = 0;
             }
+
             if (btnAdicionar.Text == "Salvar")
             {
-                glo.Loga($@"EE,{this.iID}, {idBoy}, {idForma}, {valor}, {idCliente}, {compra}, {obs}, {desc}, {idVend}, {this.UID}");
-                entregasDAO.Edita(this.iID, idBoy, idForma, valor, idCliente, compra, obs, desc, idVend);
+                glo.Loga($@"EE,{this.iID}, {idBoy}, {idForma}, {valor}, {idCliente}, {compra}, {obs}, {desc}, {idVend}, {idLiberadoPor}, {this.UID}");
+
+                entregasDAO.Edita(this.iID, idBoy, idForma, valor, idCliente, compra, obs, desc, idVend, idLiberadoPor);
+
                 btnAdicionar.Text = "Adicionar";
             }
             else
             {
                 string UID = glo.GenerateUID();
-                glo.Loga($@"EA,{idForma},{compra},{idCliente}, {obs}, {desc}, {idVend}, {UID}");
-                entregasDAO.Adiciona(idBoy, idForma, valor, idCliente, compra, obs, desc, idVend, UID);
+
+                glo.Loga($@"EA,{idForma},{compra},{idCliente}, {obs}, {desc}, {idVend}, {idLiberadoPor}, {UID}");
+
+                entregasDAO.Adiciona(idBoy, idForma, valor, idCliente, compra, obs, desc, idVend, UID, idLiberadoPor);
             }
+
             CarregaGrid();
             Limpar();
         }
@@ -244,6 +288,19 @@ namespace TeleBonifacio
                     cmbMotoBoy.SelectedValue = glo.ConvOjbInt(((DataRowView)grid.SelectedDataRows[0]).Row["idBoy"]);
                     cmbCliente.SelectedValue = glo.ConvOjbInt(((DataRowView)grid.SelectedDataRows[0]).Row["NrCli"]);
                     cmbVendedor.SelectedValue = glo.ConvOjbInt(((DataRowView)grid.SelectedDataRows[0]).Row["idVend"]);
+
+                    // VERSAO 3.9.22
+                    // Carrega quem liberou a tele ao editar registro
+                    if (((DataRowView)grid.SelectedDataRows[0]).Row["idLiberadoPor"] != DBNull.Value)
+                    {
+                        cmbLiberadoPor.SelectedValue =
+                            glo.ConvOjbInt(((DataRowView)grid.SelectedDataRows[0]).Row["idLiberadoPor"]);
+                    }
+                    else
+                    {
+                        cmbLiberadoPor.SelectedIndex = -1;
+                    }
+
                     cmbFormaPagamento.SelectedIndex = glo.ConvOjbInt(((DataRowView)grid.SelectedDataRows[0]).Row["idForma"]);
                     this.UID = glo.ConvOjbStr(((DataRowView)grid.SelectedDataRows[0]).Row["UID"]);
                     btnAdicionar.Text = "Salvar";
@@ -397,6 +454,12 @@ namespace TeleBonifacio
                 ConfigurarGrid();
             }            
         }
+
+        private void SetaLiberadoPorPadrao()
+        {
+            cmbLiberadoPor.SelectedValue = cmbVendedor.SelectedValue;
+        }
+
     }
 }
 
