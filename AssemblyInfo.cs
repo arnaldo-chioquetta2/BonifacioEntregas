@@ -11,9 +11,10 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyCulture("")]
 [assembly: ComVisible(false)]
 [assembly: Guid("308c57af-e663-456d-8a2c-188bbd61423d")]
-[assembly: AssemblyVersion("4.2.2.0")]
-[assembly: AssemblyFileVersion("4.2.2.0")]
+[assembly: AssemblyVersion("4.2.3.0")]
+[assembly: AssemblyFileVersion("4.2.3.0")]
 
+// 4.2.3 08/07/26 Impressão de etiquetas
 // 4.2.2 28/04/26 Informação - Liberado por - Nas entregas
 // 4.2.2 28/04/26 Botão limpar também limpa o campo de observações - Nas entregas
 // 4.2.1 03/04/26 Impressão da anotação por completo

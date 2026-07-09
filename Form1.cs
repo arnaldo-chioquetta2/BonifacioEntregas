@@ -149,6 +149,11 @@ namespace TeleBonifacio
             AbrirOuFocarFormulario<operContratos>();
         }
 
+        private void pictureBox17_Click(object sender, EventArgs e)
+        {
+            AbrirOuFocarFormulario<operEtiquetas>();
+        }
+
         private void picFichas_Click(object sender, EventArgs e)
         {
             AbrirOuFocarFormulario<operPartilheira>();
@@ -530,3 +535,6 @@ namespace TeleBonifacio
     }
 
 }
+
+
+

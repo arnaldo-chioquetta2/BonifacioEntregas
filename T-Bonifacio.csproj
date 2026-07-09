@@ -237,8 +237,9 @@
     <Compile Include="dao\BaseDAO.cs" />
     <Compile Include="dao\CaixaDao.cs" />
     <Compile Include="dao\ClausulasDAO.cs" />
-    <Compile Include="dao\ClienteDAO.cs" />
-    <Compile Include="dao\ConfigDAO.cs" />
+    <Compile Include="dao\\ClienteDAO.cs" />
+    <Compile Include="dao\\EtiquetaRepository.cs" />
+    <Compile Include="dao\\ConfigDAO.cs" />
     <Compile Include="dao\ContasAPagarDao.cs" />
     <Compile Include="dao\ContratosDAO.cs" />
     <Compile Include="dao\DevedoresDao.cs" />
@@ -294,6 +295,12 @@
     </Compile>
     <Compile Include="operAvanc.designer.cs">
       <DependentUpon>operAvanc.cs</DependentUpon>
+    </Compile>
+    <Compile Include="operEtiquetas.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="operEtiquetas.Designer.cs">
+      <DependentUpon>operEtiquetas.cs</DependentUpon>
     </Compile>
     <Compile Include="operCaixa.cs">
       <SubType>Form</SubType>
@@ -448,8 +455,9 @@
     <Compile Include="tb\Document.cs" />
     <Compile Include="tb\Encomendas.cs" />
     <Compile Include="tb\Entregador.cs" />
-    <Compile Include="tb\Entregas.cs" />
-    <Compile Include="tb\Falta .cs" />
+    <Compile Include="tb\\Entregas.cs" />
+    <Compile Include="tb\\EtiquetaModel.cs" />
+    <Compile Include="tb\\Falta .cs" />
     <Compile Include="tb\Folder.cs" />
     <Compile Include="tb\Forma.cs" />
     <Compile Include="tb\Fornecedor.cs" />
@@ -502,6 +510,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="operAvanc.resx">
       <DependentUpon>operAvanc.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="operEtiquetas.resx">
+      <DependentUpon>operEtiquetas.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="operCaixa.resx">
       <DependentUpon>operCaixa.cs</DependentUpon>
@@ -624,3 +635,8 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
+
+
+
+
+
