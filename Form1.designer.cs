@@ -96,7 +96,7 @@ namespace TeleBonifacio
             // label1
             // 
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(164, 7);
+            this.label1.Location = new System.Drawing.Point(111, 10);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(100, 23);
             this.label1.TabIndex = 6;
@@ -106,7 +106,7 @@ namespace TeleBonifacio
             // label2
             // 
             this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(480, 7);
+            this.label2.Location = new System.Drawing.Point(427, 10);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(106, 20);
             this.label2.TabIndex = 7;
@@ -116,7 +116,7 @@ namespace TeleBonifacio
             // label3
             // 
             this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label3.Location = new System.Drawing.Point(592, 7);
+            this.label3.Location = new System.Drawing.Point(539, 10);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(106, 20);
             this.label3.TabIndex = 8;
@@ -126,7 +126,7 @@ namespace TeleBonifacio
             // label4
             // 
             this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label4.Location = new System.Drawing.Point(113, 135);
+            this.label4.Location = new System.Drawing.Point(10, 139);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(106, 20);
             this.label4.TabIndex = 9;
@@ -136,7 +136,7 @@ namespace TeleBonifacio
             // label5
             // 
             this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label5.Location = new System.Drawing.Point(216, 135);
+            this.label5.Location = new System.Drawing.Point(113, 139);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(106, 20);
             this.label5.TabIndex = 10;
@@ -146,7 +146,7 @@ namespace TeleBonifacio
             // label6
             // 
             this.label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label6.Location = new System.Drawing.Point(856, 129);
+            this.label6.Location = new System.Drawing.Point(860, 137);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(106, 20);
             this.label6.TabIndex = 11;
@@ -156,7 +156,7 @@ namespace TeleBonifacio
             // label7
             // 
             this.label7.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label7.Location = new System.Drawing.Point(9, 135);
+            this.label7.Location = new System.Drawing.Point(858, 13);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(106, 20);
             this.label7.TabIndex = 13;
@@ -166,7 +166,7 @@ namespace TeleBonifacio
             // label8
             // 
             this.label8.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label8.Location = new System.Drawing.Point(380, 10);
+            this.label8.Location = new System.Drawing.Point(327, 13);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(106, 20);
             this.label8.TabIndex = 15;
@@ -186,7 +186,7 @@ namespace TeleBonifacio
             // label9
             // 
             this.label9.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label9.Location = new System.Drawing.Point(693, 7);
+            this.label9.Location = new System.Drawing.Point(640, 10);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(106, 20);
             this.label9.TabIndex = 18;
@@ -196,7 +196,7 @@ namespace TeleBonifacio
             // label10
             // 
             this.label10.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label10.Location = new System.Drawing.Point(62, 6);
+            this.label10.Location = new System.Drawing.Point(9, 9);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(100, 23);
             this.label10.TabIndex = 20;
@@ -218,7 +218,7 @@ namespace TeleBonifacio
             // label11
             // 
             this.label11.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label11.Location = new System.Drawing.Point(807, 12);
+            this.label11.Location = new System.Drawing.Point(754, 15);
             this.label11.Name = "label11";
             this.label11.Size = new System.Drawing.Size(106, 20);
             this.label11.TabIndex = 23;
@@ -228,7 +228,7 @@ namespace TeleBonifacio
             // label12
             // 
             this.label12.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label12.Location = new System.Drawing.Point(273, 7);
+            this.label12.Location = new System.Drawing.Point(220, 10);
             this.label12.Name = "label12";
             this.label12.Size = new System.Drawing.Size(106, 20);
             this.label12.TabIndex = 25;
@@ -238,7 +238,7 @@ namespace TeleBonifacio
             // label13
             // 
             this.label13.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label13.Location = new System.Drawing.Point(427, 135);
+            this.label13.Location = new System.Drawing.Point(324, 139);
             this.label13.Name = "label13";
             this.label13.Size = new System.Drawing.Size(106, 20);
             this.label13.TabIndex = 27;
@@ -248,7 +248,7 @@ namespace TeleBonifacio
             // pictureBox13
             // 
             this.pictureBox13.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox13.Image")));
-            this.pictureBox13.Location = new System.Drawing.Point(432, 160);
+            this.pictureBox13.Location = new System.Drawing.Point(329, 164);
             this.pictureBox13.Name = "pictureBox13";
             this.pictureBox13.Size = new System.Drawing.Size(100, 94);
             this.pictureBox13.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -259,7 +259,7 @@ namespace TeleBonifacio
             // pictureBox12
             // 
             this.pictureBox12.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox12.Image")));
-            this.pictureBox12.Location = new System.Drawing.Point(277, 32);
+            this.pictureBox12.Location = new System.Drawing.Point(220, 33);
             this.pictureBox12.Name = "pictureBox12";
             this.pictureBox12.Size = new System.Drawing.Size(100, 94);
             this.pictureBox12.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -270,7 +270,7 @@ namespace TeleBonifacio
             // pictureBox11
             // 
             this.pictureBox11.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox11.Image")));
-            this.pictureBox11.Location = new System.Drawing.Point(810, 35);
+            this.pictureBox11.Location = new System.Drawing.Point(753, 36);
             this.pictureBox11.Name = "pictureBox11";
             this.pictureBox11.Size = new System.Drawing.Size(100, 94);
             this.pictureBox11.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -281,7 +281,7 @@ namespace TeleBonifacio
             // pictureBox10
             // 
             this.pictureBox10.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox10.Image")));
-            this.pictureBox10.Location = new System.Drawing.Point(65, 34);
+            this.pictureBox10.Location = new System.Drawing.Point(8, 35);
             this.pictureBox10.Name = "pictureBox10";
             this.pictureBox10.Size = new System.Drawing.Size(100, 94);
             this.pictureBox10.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -292,7 +292,7 @@ namespace TeleBonifacio
             // pictureBox9
             // 
             this.pictureBox9.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox9.Image")));
-            this.pictureBox9.Location = new System.Drawing.Point(699, 34);
+            this.pictureBox9.Location = new System.Drawing.Point(642, 35);
             this.pictureBox9.Name = "pictureBox9";
             this.pictureBox9.Size = new System.Drawing.Size(100, 94);
             this.pictureBox9.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -303,7 +303,7 @@ namespace TeleBonifacio
             // pictureBox8
             // 
             this.pictureBox8.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox8.Image")));
-            this.pictureBox8.Location = new System.Drawing.Point(383, 34);
+            this.pictureBox8.Location = new System.Drawing.Point(326, 35);
             this.pictureBox8.Name = "pictureBox8";
             this.pictureBox8.Size = new System.Drawing.Size(100, 94);
             this.pictureBox8.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -314,7 +314,7 @@ namespace TeleBonifacio
             // pictureBox7
             // 
             this.pictureBox7.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox7.Image")));
-            this.pictureBox7.Location = new System.Drawing.Point(12, 160);
+            this.pictureBox7.Location = new System.Drawing.Point(861, 38);
             this.pictureBox7.Name = "pictureBox7";
             this.pictureBox7.Size = new System.Drawing.Size(100, 94);
             this.pictureBox7.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -327,7 +327,7 @@ namespace TeleBonifacio
             // pictureBox6
             // 
             this.pictureBox6.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox6.Image")));
-            this.pictureBox6.Location = new System.Drawing.Point(856, 156);
+            this.pictureBox6.Location = new System.Drawing.Point(860, 164);
             this.pictureBox6.Name = "pictureBox6";
             this.pictureBox6.Size = new System.Drawing.Size(100, 94);
             this.pictureBox6.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -340,7 +340,7 @@ namespace TeleBonifacio
             // pictureBox5
             // 
             this.pictureBox5.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox5.Image")));
-            this.pictureBox5.Location = new System.Drawing.Point(222, 160);
+            this.pictureBox5.Location = new System.Drawing.Point(119, 164);
             this.pictureBox5.Name = "pictureBox5";
             this.pictureBox5.Size = new System.Drawing.Size(100, 94);
             this.pictureBox5.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -353,7 +353,7 @@ namespace TeleBonifacio
             // pictureBox4
             // 
             this.pictureBox4.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox4.Image")));
-            this.pictureBox4.Location = new System.Drawing.Point(116, 160);
+            this.pictureBox4.Location = new System.Drawing.Point(13, 164);
             this.pictureBox4.Name = "pictureBox4";
             this.pictureBox4.Size = new System.Drawing.Size(100, 94);
             this.pictureBox4.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -366,7 +366,7 @@ namespace TeleBonifacio
             // pictureBox3
             // 
             this.pictureBox3.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox3.Image")));
-            this.pictureBox3.Location = new System.Drawing.Point(593, 34);
+            this.pictureBox3.Location = new System.Drawing.Point(536, 35);
             this.pictureBox3.Name = "pictureBox3";
             this.pictureBox3.Size = new System.Drawing.Size(100, 94);
             this.pictureBox3.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -379,7 +379,7 @@ namespace TeleBonifacio
             // pictureBox2
             // 
             this.pictureBox2.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox2.Image")));
-            this.pictureBox2.Location = new System.Drawing.Point(487, 34);
+            this.pictureBox2.Location = new System.Drawing.Point(430, 35);
             this.pictureBox2.Name = "pictureBox2";
             this.pictureBox2.Size = new System.Drawing.Size(100, 94);
             this.pictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -392,7 +392,7 @@ namespace TeleBonifacio
             // pictureBox1
             // 
             this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
-            this.pictureBox1.Location = new System.Drawing.Point(171, 34);
+            this.pictureBox1.Location = new System.Drawing.Point(114, 35);
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.Size = new System.Drawing.Size(100, 94);
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -405,7 +405,7 @@ namespace TeleBonifacio
             // label14
             // 
             this.label14.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label14.Location = new System.Drawing.Point(749, 133);
+            this.label14.Location = new System.Drawing.Point(646, 137);
             this.label14.Name = "label14";
             this.label14.Size = new System.Drawing.Size(106, 20);
             this.label14.TabIndex = 29;
@@ -415,7 +415,7 @@ namespace TeleBonifacio
             // pictureBox14
             // 
             this.pictureBox14.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox14.Image")));
-            this.pictureBox14.Location = new System.Drawing.Point(752, 158);
+            this.pictureBox14.Location = new System.Drawing.Point(649, 162);
             this.pictureBox14.Name = "pictureBox14";
             this.pictureBox14.Size = new System.Drawing.Size(100, 94);
             this.pictureBox14.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -426,7 +426,7 @@ namespace TeleBonifacio
             // lbAnotacoes
             // 
             this.lbAnotacoes.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbAnotacoes.Location = new System.Drawing.Point(409, 59);
+            this.lbAnotacoes.Location = new System.Drawing.Point(306, 63);
             this.lbAnotacoes.Name = "lbAnotacoes";
             this.lbAnotacoes.Size = new System.Drawing.Size(100, 23);
             this.lbAnotacoes.TabIndex = 31;
@@ -437,7 +437,7 @@ namespace TeleBonifacio
             // picAnotacoes
             // 
             this.picAnotacoes.Image = ((System.Drawing.Image)(resources.GetObject("picAnotacoes.Image")));
-            this.picAnotacoes.Location = new System.Drawing.Point(356, 81);
+            this.picAnotacoes.Location = new System.Drawing.Point(253, 85);
             this.picAnotacoes.Name = "picAnotacoes";
             this.picAnotacoes.Size = new System.Drawing.Size(100, 94);
             this.picAnotacoes.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -449,7 +449,7 @@ namespace TeleBonifacio
             // pictureBox15
             // 
             this.pictureBox15.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox15.Image")));
-            this.pictureBox15.Location = new System.Drawing.Point(540, 158);
+            this.pictureBox15.Location = new System.Drawing.Point(437, 162);
             this.pictureBox15.Name = "pictureBox15";
             this.pictureBox15.Size = new System.Drawing.Size(100, 94);
             this.pictureBox15.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -460,7 +460,7 @@ namespace TeleBonifacio
             // label15
             // 
             this.label15.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label15.Location = new System.Drawing.Point(539, 133);
+            this.label15.Location = new System.Drawing.Point(436, 137);
             this.label15.Name = "label15";
             this.label15.Size = new System.Drawing.Size(106, 20);
             this.label15.TabIndex = 33;
@@ -470,7 +470,7 @@ namespace TeleBonifacio
             // label16
             // 
             this.label16.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label16.Location = new System.Drawing.Point(323, 135);
+            this.label16.Location = new System.Drawing.Point(220, 139);
             this.label16.Name = "label16";
             this.label16.Size = new System.Drawing.Size(106, 20);
             this.label16.TabIndex = 35;
@@ -480,7 +480,7 @@ namespace TeleBonifacio
             // pictureBox16
             // 
             this.pictureBox16.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox16.Image")));
-            this.pictureBox16.Location = new System.Drawing.Point(329, 160);
+            this.pictureBox16.Location = new System.Drawing.Point(226, 164);
             this.pictureBox16.Name = "pictureBox16";
             this.pictureBox16.Size = new System.Drawing.Size(100, 94);
             this.pictureBox16.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -491,7 +491,7 @@ namespace TeleBonifacio
             // pictureBox17
             // 
             this.pictureBox17.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox17.Image")));
-            this.pictureBox17.Location = new System.Drawing.Point(752, 158);
+            this.pictureBox17.Location = new System.Drawing.Point(756, 164);
             this.pictureBox17.Name = "pictureBox17";
             this.pictureBox17.Size = new System.Drawing.Size(100, 94);
             this.pictureBox17.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -502,7 +502,7 @@ namespace TeleBonifacio
             // picFichas
             // 
             this.picFichas.Image = ((System.Drawing.Image)(resources.GetObject("picFichas.Image")));
-            this.picFichas.Location = new System.Drawing.Point(646, 158);
+            this.picFichas.Location = new System.Drawing.Point(543, 162);
             this.picFichas.Name = "picFichas";
             this.picFichas.Size = new System.Drawing.Size(100, 94);
             this.picFichas.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -513,7 +513,7 @@ namespace TeleBonifacio
             // label17
             // 
             this.label17.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label17.Location = new System.Drawing.Point(643, 131);
+            this.label17.Location = new System.Drawing.Point(540, 135);
             this.label17.Name = "label17";
             this.label17.Size = new System.Drawing.Size(106, 20);
             this.label17.TabIndex = 37;
@@ -523,7 +523,7 @@ namespace TeleBonifacio
             // label18
             // 
             this.label18.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label18.Location = new System.Drawing.Point(749, 131);
+            this.label18.Location = new System.Drawing.Point(754, 137);
             this.label18.Name = "label18";
             this.label18.Size = new System.Drawing.Size(106, 20);
             this.label18.TabIndex = 39;
@@ -534,7 +534,7 @@ namespace TeleBonifacio
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(970, 266);
+            this.ClientSize = new System.Drawing.Size(972, 266);
             this.Controls.Add(this.label18);
             this.Controls.Add(this.pictureBox17);
             this.Controls.Add(this.label17);
@@ -652,6 +652,7 @@ namespace TeleBonifacio
         private System.Windows.Forms.Label label18;
     }
 }
+
 
 
 
