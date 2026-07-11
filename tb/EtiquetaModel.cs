@@ -32,11 +32,11 @@ namespace TeleBonifacio.tb
 
             return new Dictionary<string, EtiquetaFonteConfig>
             {
-                { "NomeEmpresa", NormalizarFonte(fontes, "NomeEmpresa", "Arial", 8f, true) },
-                { "Telefone", NormalizarFonte(fontes, "Telefone", "Arial", 7f, false) },
+                { "NomeEmpresa", NormalizarFonte(fontes, "NomeEmpresa", "Arial", 15f, true) },
+                { "Telefone", NormalizarFonte(fontes, "Telefone", "Arial", 15f, true) },
                 { "Codigo", NormalizarFonte(fontes, "Codigo", "Arial", 8f, true) },
                 { "Descricao", NormalizarFonte(fontes, "Descricao", "Arial", 7f, false) },
-                { "Preco", NormalizarFonte(fontes, "Preco", "Arial", 12f, true) },
+                { "Preco", NormalizarFonte(fontes, "Preco", "Arial", 15f, true) },
                 { "Observacao", NormalizarFonte(fontes, "Observacao", "Arial", 7f, false) },
                 { "TeleEntrega", NormalizarFonte(fontes, "TeleEntrega", "Arial", 7f, true) },
                 { "Local", NormalizarFonte(fontes, "Local", "Arial", 7f, true) }

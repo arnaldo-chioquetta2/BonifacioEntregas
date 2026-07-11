@@ -322,14 +322,17 @@ namespace TeleBonifacio
                     e.Graphics.DrawRectangle(pen, etiquetaRect);
                 }
 
-                RectangleF linhaNomeEmpresa = new RectangleF(etiquetaRect.X + 4, etiquetaRect.Y + 4, etiquetaRect.Width - 8, 14);
-                RectangleF linhaTelefone = new RectangleF(etiquetaRect.X + 4, etiquetaRect.Y + 18, etiquetaRect.Width - 8, 14);
-                RectangleF linhaCodigo = new RectangleF(etiquetaRect.X + 4, etiquetaRect.Y + 34, etiquetaRect.Width - 8, 14);
-                RectangleF linhaDescricao = new RectangleF(etiquetaRect.X + 4, etiquetaRect.Y + 52, etiquetaRect.Width - 8, 16);
-                RectangleF linhaPreco = new RectangleF(etiquetaRect.X + 4, etiquetaRect.Y + 70, etiquetaRect.Width - 8, 24);
-                RectangleF linhaObservacao = new RectangleF(etiquetaRect.X + 4, etiquetaRect.Y + 96, etiquetaRect.Width - 8, 14);
-                RectangleF linhaLocal = new RectangleF(etiquetaRect.X + 4, etiquetaRect.Bottom - 18, (etiquetaRect.Width / 2f) - 6, 14);
-                RectangleF linhaTeleEntrega = new RectangleF(etiquetaRect.X + (etiquetaRect.Width / 2f) + 2, etiquetaRect.Bottom - 18, (etiquetaRect.Width / 2f) - 6, 14);
+                float margemHorizontal = 4f;
+                float larguraTexto = etiquetaRect.Width - (margemHorizontal * 2);
+                float altura = etiquetaRect.Height;
+                RectangleF linhaNomeEmpresa = new RectangleF(etiquetaRect.X + margemHorizontal, etiquetaRect.Y + (altura * 0.03f), larguraTexto, altura * 0.12f);
+                RectangleF linhaDescricao = new RectangleF(etiquetaRect.X + margemHorizontal, etiquetaRect.Y + (altura * 0.17f), larguraTexto, altura * 0.16f);
+                RectangleF linhaPreco = new RectangleF(etiquetaRect.X + margemHorizontal, etiquetaRect.Y + (altura * 0.35f), larguraTexto, altura * 0.20f);
+                RectangleF linhaObservacao = new RectangleF(etiquetaRect.X + margemHorizontal, etiquetaRect.Y + (altura * 0.57f), larguraTexto, altura * 0.11f);
+                RectangleF linhaLocal = new RectangleF(etiquetaRect.X + margemHorizontal, etiquetaRect.Y + (altura * 0.69f), (etiquetaRect.Width / 2f) - 6, altura * 0.11f);
+                RectangleF linhaCodigo = new RectangleF(etiquetaRect.X + (etiquetaRect.Width / 2f) + 2, etiquetaRect.Y + (altura * 0.69f), (etiquetaRect.Width / 2f) - 6, altura * 0.11f);
+                RectangleF linhaTelefone = new RectangleF(etiquetaRect.X + margemHorizontal, etiquetaRect.Y + (altura * 0.81f), larguraTexto, altura * 0.09f);
+                RectangleF linhaTeleEntrega = new RectangleF(etiquetaRect.X + margemHorizontal, etiquetaRect.Y + (altura * 0.91f), larguraTexto, altura * 0.08f);
 
                 areasPreview["NomeEmpresa"] = linhaNomeEmpresa;
                 areasPreview["Telefone"] = linhaTelefone;
@@ -342,14 +345,15 @@ namespace TeleBonifacio
 
                 using (StringFormat center = new StringFormat { Alignment = StringAlignment.Center, LineAlignment = StringAlignment.Center })
                 using (StringFormat left = new StringFormat { Alignment = StringAlignment.Near, LineAlignment = StringAlignment.Center })
+                using (StringFormat right = new StringFormat { Alignment = StringAlignment.Far, LineAlignment = StringAlignment.Center })
                 {
                     DesenharLinhaPreview(e.Graphics, "NomeEmpresa", txtNomeEmpresa.Text.Trim(), linhaNomeEmpresa, center, Color.Black, true);
-                    DesenharLinhaPreview(e.Graphics, "Telefone", txtTelefone.Text.Trim(), linhaTelefone, center, Color.Black, false);
-                    DesenharLinhaPreview(e.Graphics, "Codigo", FormatarCodigoEtiqueta(txtCodigo.Text), linhaCodigo, center, Color.Black, true);
                     DesenharLinhaPreview(e.Graphics, "Descricao", txtDescricao.Text.Trim(), linhaDescricao, center, Color.Black, false);
                     DesenharLinhaPreview(e.Graphics, "Preco", FormatarPrecoEtiqueta(txtPreco.Text), linhaPreco, center, Color.Black, true);
                     DesenharLinhaPreview(e.Graphics, "Observacao", txtObservacao.Text.Trim(), linhaObservacao, center, Color.Black, false);
                     DesenharLinhaPreview(e.Graphics, "Local", FormatarLocalEtiqueta(txtLocal.Text), linhaLocal, left, Color.Black, true);
+                    DesenharLinhaPreview(e.Graphics, "Codigo", FormatarCodigoEtiqueta(txtCodigo.Text), linhaCodigo, right, Color.Black, true);
+                    DesenharLinhaPreview(e.Graphics, "Telefone", txtTelefone.Text.Trim(), linhaTelefone, center, Color.Black, false);
                     DesenharLinhaPreview(e.Graphics, "TeleEntrega", txtTeleEntrega.Text.Trim(), linhaTeleEntrega, center, Color.Black, true);
                 }
             }
@@ -1012,15 +1016,19 @@ namespace TeleBonifacio
                 string local = FormatarLocalEtiqueta(etiquetaImpressao?.Local);
 
                 using (StringFormat center = new StringFormat { Alignment = StringAlignment.Center, LineAlignment = StringAlignment.Center })
+                using (StringFormat right = new StringFormat { Alignment = StringAlignment.Far, LineAlignment = StringAlignment.Center })
                 {
-                    RectangleF nomeEmpresaRect = new RectangleF(area.X + 4, area.Y + 2, area.Width - 8, 12);
-                    RectangleF telefoneRect = new RectangleF(area.X + 4, area.Y + 14, area.Width - 8, 12);
-                    RectangleF codigoRect = new RectangleF(area.X + 4, area.Y + 28, area.Width - 8, 12);
-                    RectangleF descricaoRect = new RectangleF(area.X + 4, area.Y + 43, area.Width - 8, 14);
-                    RectangleF precoRect = new RectangleF(area.X + 4, area.Y + 58, area.Width - 8, 20);
-                    RectangleF observacaoRect = new RectangleF(area.X + 4, area.Y + 82, area.Width - 8, 12);
-                    RectangleF localRect = new RectangleF(area.X + 4, area.Bottom - 16, (area.Width / 2f) - 6, 12);
-                    RectangleF teleEntregaRect = new RectangleF(area.X + (area.Width / 2f) + 2, area.Bottom - 16, (area.Width / 2f) - 6, 12);
+                    float margemHorizontal = 4f;
+                    float larguraTexto = area.Width - (margemHorizontal * 2);
+                    float altura = area.Height;
+                    RectangleF nomeEmpresaRect = new RectangleF(area.X + margemHorizontal, area.Y + (altura * 0.03f), larguraTexto, altura * 0.12f);
+                    RectangleF descricaoRect = new RectangleF(area.X + margemHorizontal, area.Y + (altura * 0.17f), larguraTexto, altura * 0.16f);
+                    RectangleF precoRect = new RectangleF(area.X + margemHorizontal, area.Y + (altura * 0.35f), larguraTexto, altura * 0.20f);
+                    RectangleF observacaoRect = new RectangleF(area.X + margemHorizontal, area.Y + (altura * 0.57f), larguraTexto, altura * 0.11f);
+                    RectangleF localRect = new RectangleF(area.X + margemHorizontal, area.Y + (altura * 0.69f), (area.Width / 2f) - 6, altura * 0.11f);
+                    RectangleF codigoRect = new RectangleF(area.X + (area.Width / 2f) + 2, area.Y + (altura * 0.69f), (area.Width / 2f) - 6, altura * 0.11f);
+                    RectangleF telefoneRect = new RectangleF(area.X + margemHorizontal, area.Y + (altura * 0.81f), larguraTexto, altura * 0.09f);
+                    RectangleF teleEntregaRect = new RectangleF(area.X + margemHorizontal, area.Y + (altura * 0.91f), larguraTexto, altura * 0.08f);
 
                     using (Font fontNomeEmpresa = CriarFonteImpressao("NomeEmpresa", e.Graphics, nomeEmpresa, nomeEmpresaRect))
                     using (Font fontTelefone = CriarFonteImpressao("Telefone", e.Graphics, telefone, telefoneRect))
@@ -1033,11 +1041,11 @@ namespace TeleBonifacio
                     using (Brush brush = new SolidBrush(Color.Black))
                     {
                         e.Graphics.DrawString(nomeEmpresa, fontNomeEmpresa, brush, nomeEmpresaRect, center);
-                        e.Graphics.DrawString(telefone, fontTelefone, brush, telefoneRect, center);
-                        e.Graphics.DrawString(codigo, fontCodigo, brush, codigoRect, center);
                         e.Graphics.DrawString(descricao, fontDescricao, brush, descricaoRect, center);
                         e.Graphics.DrawString(preco, fontPreco, brush, precoRect, center);
                         e.Graphics.DrawString(observacao, fontObservacao, brush, observacaoRect, center);
+                        e.Graphics.DrawString(codigo, fontCodigo, brush, codigoRect, right);
+                        e.Graphics.DrawString(telefone, fontTelefone, brush, telefoneRect, center);
                         e.Graphics.DrawString(teleEntrega, fontTeleEntrega, brush, teleEntregaRect, center);
                         using (StringFormat left = new StringFormat { Alignment = StringAlignment.Near, LineAlignment = StringAlignment.Center })
                         {
