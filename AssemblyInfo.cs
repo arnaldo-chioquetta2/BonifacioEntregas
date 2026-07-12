@@ -11,9 +11,10 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyCulture("")]
 [assembly: ComVisible(false)]
 [assembly: Guid("308c57af-e663-456d-8a2c-188bbd61423d")]
-[assembly: AssemblyVersion("4.2.6.0")]
-[assembly: AssemblyFileVersion("4.2.6.0")]
+[assembly: AssemblyVersion("4.2.7.0")]
+[assembly: AssemblyFileVersion("4.2.7.0")]
 
+// 4.2.7 12/07/26 Correção na gravação das etiquetas
 // 4.2.6 11/07/26 Outros ajustes na Impressão de etiquetas
 // 4.2.5 11/07/26 Mais ajustes na Impressão de etiquetas
 // 4.2.4 10/07/26 Ajustes na Impressão de etiquetas

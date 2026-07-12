@@ -68,6 +68,8 @@ namespace TeleBonifacio.dao
                     etiqueta.Id = Guid.NewGuid().ToString();
                 }
 
+                etiqueta.Fontes = etiqueta.ObterFontesComPadrao();
+
                 if (existente == null)
                 {
                     DateTime agora = DateTime.Now;
@@ -77,10 +79,27 @@ namespace TeleBonifacio.dao
                 }
                 else
                 {
+                    existente.NomeEtiqueta = etiqueta.NomeEtiqueta;
                     existente.Codigo = etiqueta.Codigo;
                     existente.Descricao = etiqueta.Descricao;
                     existente.Preco = etiqueta.Preco;
                     existente.Observacao = etiqueta.Observacao;
+                    existente.NomeEmpresa = etiqueta.NomeEmpresa;
+                    existente.Telefone = etiqueta.Telefone;
+                    existente.TeleEntrega = etiqueta.TeleEntrega;
+                    existente.Local = etiqueta.Local;
+                    existente.Fontes = etiqueta.Fontes == null
+                        ? new Dictionary<string, EtiquetaFonteConfig>()
+                        : etiqueta.Fontes.ToDictionary(
+                            x => x.Key,
+                            x => x.Value == null
+                                ? null
+                                : new EtiquetaFonteConfig
+                                {
+                                    NomeFonte = x.Value.NomeFonte,
+                                    Tamanho = x.Value.Tamanho,
+                                    Negrito = x.Value.Negrito
+                                });
                     existente.AlteradoEm = DateTime.Now;
                 }
 
