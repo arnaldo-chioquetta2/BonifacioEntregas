@@ -325,14 +325,14 @@ namespace TeleBonifacio
                 float margemHorizontal = 4f;
                 float larguraTexto = etiquetaRect.Width - (margemHorizontal * 2);
                 float altura = etiquetaRect.Height;
-                RectangleF linhaNomeEmpresa = new RectangleF(etiquetaRect.X + margemHorizontal, etiquetaRect.Y + (altura * 0.03f), larguraTexto, altura * 0.12f);
-                RectangleF linhaDescricao = new RectangleF(etiquetaRect.X + margemHorizontal, etiquetaRect.Y + (altura * 0.17f), larguraTexto, altura * 0.16f);
-                RectangleF linhaPreco = new RectangleF(etiquetaRect.X + margemHorizontal, etiquetaRect.Y + (altura * 0.35f), larguraTexto, altura * 0.20f);
-                RectangleF linhaObservacao = new RectangleF(etiquetaRect.X + margemHorizontal, etiquetaRect.Y + (altura * 0.57f), larguraTexto, altura * 0.11f);
-                RectangleF linhaLocal = new RectangleF(etiquetaRect.X + margemHorizontal, etiquetaRect.Y + (altura * 0.69f), (etiquetaRect.Width / 2f) - 6, altura * 0.11f);
-                RectangleF linhaCodigo = new RectangleF(etiquetaRect.X + (etiquetaRect.Width / 2f) + 2, etiquetaRect.Y + (altura * 0.69f), (etiquetaRect.Width / 2f) - 6, altura * 0.11f);
-                RectangleF linhaTelefone = new RectangleF(etiquetaRect.X + margemHorizontal, etiquetaRect.Y + (altura * 0.81f), larguraTexto, altura * 0.09f);
-                RectangleF linhaTeleEntrega = new RectangleF(etiquetaRect.X + margemHorizontal, etiquetaRect.Y + (altura * 0.91f), larguraTexto, altura * 0.08f);
+                RectangleF linhaNomeEmpresa = new RectangleF(etiquetaRect.X + margemHorizontal, etiquetaRect.Y + (altura * 0.03f), larguraTexto, altura * 0.13f);
+                RectangleF linhaDescricao = new RectangleF(etiquetaRect.X + margemHorizontal, etiquetaRect.Y + (altura * 0.18f), larguraTexto, altura * 0.15f);
+                RectangleF linhaPreco = new RectangleF(etiquetaRect.X + margemHorizontal, etiquetaRect.Y + (altura * 0.35f), larguraTexto, altura * 0.18f);
+                RectangleF linhaObservacao = new RectangleF(etiquetaRect.X + margemHorizontal, etiquetaRect.Y + (altura * 0.55f), larguraTexto, altura * 0.10f);
+                RectangleF linhaLocal = new RectangleF(etiquetaRect.X + margemHorizontal, etiquetaRect.Y + (altura * 0.68f), (etiquetaRect.Width / 2f) - 6, altura * 0.12f);
+                RectangleF linhaCodigo = new RectangleF(etiquetaRect.X + (etiquetaRect.Width / 2f) + 2, etiquetaRect.Y + (altura * 0.68f), (etiquetaRect.Width / 2f) - 6, altura * 0.12f);
+                RectangleF linhaTelefone = new RectangleF(etiquetaRect.X + margemHorizontal, etiquetaRect.Y + (altura * 0.82f), larguraTexto, altura * 0.09f);
+                RectangleF linhaTeleEntrega = new RectangleF(etiquetaRect.X + margemHorizontal, etiquetaRect.Y + (altura * 0.92f), larguraTexto, altura * 0.07f);
 
                 areasPreview["NomeEmpresa"] = linhaNomeEmpresa;
                 areasPreview["Telefone"] = linhaTelefone;
@@ -408,12 +408,13 @@ namespace TeleBonifacio
             EtiquetaFonteConfig fonte;
             if (!fontesEdicao.TryGetValue(linha, out fonte) || fonte == null)
             {
-                return new EtiquetaFonteConfig
+                Dictionary<string, EtiquetaFonteConfig> padroes = new EtiquetaModel().ObterFontesComPadrao();
+                if (padroes.TryGetValue(linha, out fonte) && fonte != null)
                 {
-                    NomeFonte = "Arial",
-                    Tamanho = 8f,
-                    Negrito = false
-                };
+                    return fonte;
+                }
+
+                return new EtiquetaFonteConfig { NomeFonte = "Arial", Tamanho = 8f, Negrito = false };
             }
 
             return fonte;
@@ -1021,14 +1022,14 @@ namespace TeleBonifacio
                     float margemHorizontal = 4f;
                     float larguraTexto = area.Width - (margemHorizontal * 2);
                     float altura = area.Height;
-                    RectangleF nomeEmpresaRect = new RectangleF(area.X + margemHorizontal, area.Y + (altura * 0.03f), larguraTexto, altura * 0.12f);
-                    RectangleF descricaoRect = new RectangleF(area.X + margemHorizontal, area.Y + (altura * 0.17f), larguraTexto, altura * 0.16f);
-                    RectangleF precoRect = new RectangleF(area.X + margemHorizontal, area.Y + (altura * 0.35f), larguraTexto, altura * 0.20f);
-                    RectangleF observacaoRect = new RectangleF(area.X + margemHorizontal, area.Y + (altura * 0.57f), larguraTexto, altura * 0.11f);
-                    RectangleF localRect = new RectangleF(area.X + margemHorizontal, area.Y + (altura * 0.69f), (area.Width / 2f) - 6, altura * 0.11f);
-                    RectangleF codigoRect = new RectangleF(area.X + (area.Width / 2f) + 2, area.Y + (altura * 0.69f), (area.Width / 2f) - 6, altura * 0.11f);
-                    RectangleF telefoneRect = new RectangleF(area.X + margemHorizontal, area.Y + (altura * 0.81f), larguraTexto, altura * 0.09f);
-                    RectangleF teleEntregaRect = new RectangleF(area.X + margemHorizontal, area.Y + (altura * 0.91f), larguraTexto, altura * 0.08f);
+                    RectangleF nomeEmpresaRect = new RectangleF(area.X + margemHorizontal, area.Y + (altura * 0.03f), larguraTexto, altura * 0.13f);
+                    RectangleF descricaoRect = new RectangleF(area.X + margemHorizontal, area.Y + (altura * 0.18f), larguraTexto, altura * 0.15f);
+                    RectangleF precoRect = new RectangleF(area.X + margemHorizontal, area.Y + (altura * 0.35f), larguraTexto, altura * 0.18f);
+                    RectangleF observacaoRect = new RectangleF(area.X + margemHorizontal, area.Y + (altura * 0.55f), larguraTexto, altura * 0.10f);
+                    RectangleF localRect = new RectangleF(area.X + margemHorizontal, area.Y + (altura * 0.68f), (area.Width / 2f) - 6, altura * 0.12f);
+                    RectangleF codigoRect = new RectangleF(area.X + (area.Width / 2f) + 2, area.Y + (altura * 0.68f), (area.Width / 2f) - 6, altura * 0.12f);
+                    RectangleF telefoneRect = new RectangleF(area.X + margemHorizontal, area.Y + (altura * 0.82f), larguraTexto, altura * 0.09f);
+                    RectangleF teleEntregaRect = new RectangleF(area.X + margemHorizontal, area.Y + (altura * 0.92f), larguraTexto, altura * 0.07f);
 
                     using (Font fontNomeEmpresa = CriarFonteImpressao("NomeEmpresa", e.Graphics, nomeEmpresa, nomeEmpresaRect))
                     using (Font fontTelefone = CriarFonteImpressao("Telefone", e.Graphics, telefone, telefoneRect))
@@ -1123,7 +1124,7 @@ namespace TeleBonifacio
 
             if (etiquetaImpressao != null)
             {
-                Dictionary<string, EtiquetaFonteConfig> fontes = etiquetaImpressao.Fontes ?? etiquetaImpressao.ObterFontesComPadrao();
+                Dictionary<string, EtiquetaFonteConfig> fontes = etiquetaImpressao.ObterFontesComPadrao();
                 EtiquetaFonteConfig config;
                 if (fontes != null && fontes.TryGetValue(linha, out config) && config != null)
                 {
