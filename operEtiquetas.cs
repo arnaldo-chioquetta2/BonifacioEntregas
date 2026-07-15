@@ -329,10 +329,10 @@ namespace TeleBonifacio
                 RectangleF linhaDescricao = new RectangleF(etiquetaRect.X + margemHorizontal, etiquetaRect.Y + (altura * 0.18f), larguraTexto, altura * 0.15f);
                 RectangleF linhaPreco = new RectangleF(etiquetaRect.X + margemHorizontal, etiquetaRect.Y + (altura * 0.35f), larguraTexto, altura * 0.18f);
                 RectangleF linhaObservacao = new RectangleF(etiquetaRect.X + margemHorizontal, etiquetaRect.Y + (altura * 0.55f), larguraTexto, altura * 0.10f);
-                RectangleF linhaLocal = new RectangleF(etiquetaRect.X + margemHorizontal, etiquetaRect.Y + (altura * 0.68f), (etiquetaRect.Width / 2f) - 6, altura * 0.12f);
-                RectangleF linhaCodigo = new RectangleF(etiquetaRect.X + (etiquetaRect.Width / 2f) + 2, etiquetaRect.Y + (altura * 0.68f), (etiquetaRect.Width / 2f) - 6, altura * 0.12f);
-                RectangleF linhaTelefone = new RectangleF(etiquetaRect.X + margemHorizontal, etiquetaRect.Y + (altura * 0.82f), larguraTexto, altura * 0.09f);
-                RectangleF linhaTeleEntrega = new RectangleF(etiquetaRect.X + margemHorizontal, etiquetaRect.Y + (altura * 0.92f), larguraTexto, altura * 0.07f);
+                RectangleF linhaLocal = new RectangleF(etiquetaRect.X + margemHorizontal, etiquetaRect.Y + (altura * 0.61f), (etiquetaRect.Width / 2f) - 6, altura * 0.11f);
+                RectangleF linhaCodigo = new RectangleF(etiquetaRect.X + (etiquetaRect.Width / 2f) + 2, etiquetaRect.Y + (altura * 0.61f), (etiquetaRect.Width / 2f) - 6, altura * 0.11f);
+                RectangleF linhaTelefone = new RectangleF(etiquetaRect.X + margemHorizontal, etiquetaRect.Y + (altura * 0.74f), larguraTexto, altura * 0.12f);
+                RectangleF linhaTeleEntrega = new RectangleF(etiquetaRect.X + margemHorizontal, etiquetaRect.Y + (altura * 0.87f), larguraTexto, altura * 0.12f);
 
                 areasPreview["NomeEmpresa"] = linhaNomeEmpresa;
                 areasPreview["Telefone"] = linhaTelefone;
@@ -1026,10 +1026,10 @@ namespace TeleBonifacio
                     RectangleF descricaoRect = new RectangleF(area.X + margemHorizontal, area.Y + (altura * 0.18f), larguraTexto, altura * 0.15f);
                     RectangleF precoRect = new RectangleF(area.X + margemHorizontal, area.Y + (altura * 0.35f), larguraTexto, altura * 0.18f);
                     RectangleF observacaoRect = new RectangleF(area.X + margemHorizontal, area.Y + (altura * 0.55f), larguraTexto, altura * 0.10f);
-                    RectangleF localRect = new RectangleF(area.X + margemHorizontal, area.Y + (altura * 0.68f), (area.Width / 2f) - 6, altura * 0.12f);
-                    RectangleF codigoRect = new RectangleF(area.X + (area.Width / 2f) + 2, area.Y + (altura * 0.68f), (area.Width / 2f) - 6, altura * 0.12f);
-                    RectangleF telefoneRect = new RectangleF(area.X + margemHorizontal, area.Y + (altura * 0.82f), larguraTexto, altura * 0.09f);
-                    RectangleF teleEntregaRect = new RectangleF(area.X + margemHorizontal, area.Y + (altura * 0.92f), larguraTexto, altura * 0.07f);
+                    RectangleF localRect = new RectangleF(area.X + margemHorizontal, area.Y + (altura * 0.61f), (area.Width / 2f) - 6, altura * 0.11f);
+                    RectangleF codigoRect = new RectangleF(area.X + (area.Width / 2f) + 2, area.Y + (altura * 0.61f), (area.Width / 2f) - 6, altura * 0.11f);
+                    RectangleF telefoneRect = new RectangleF(area.X + margemHorizontal, area.Y + (altura * 0.74f), larguraTexto, altura * 0.12f);
+                    RectangleF teleEntregaRect = new RectangleF(area.X + margemHorizontal, area.Y + (altura * 0.87f), larguraTexto, altura * 0.12f);
 
                     using (Font fontNomeEmpresa = CriarFonteImpressao("NomeEmpresa", e.Graphics, nomeEmpresa, nomeEmpresaRect))
                     using (Font fontTelefone = CriarFonteImpressao("Telefone", e.Graphics, telefone, telefoneRect))
