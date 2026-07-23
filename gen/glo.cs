@@ -33,6 +33,7 @@ namespace TeleBonifacio
         public static bool ODBC = false;
 
         public static bool Adaptar = false;
+        public static bool LogRemoto { get; set; } = false;
 
         public static string CaminhoBase
         {

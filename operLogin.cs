@@ -19,6 +19,7 @@ namespace TeleBonifacio
             }
             INI cINI = new INI();
             glo.Adaptar = cINI.ReadString("Config", "Adaptar", "") == "1";
+            glo.LogRemoto = cINI.ReadString("Config", "LogRemoto", "") == "1";
             rt.AdjustFormComponents(this);
         }
 

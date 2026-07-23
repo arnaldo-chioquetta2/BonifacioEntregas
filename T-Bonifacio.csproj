@@ -287,6 +287,9 @@
     <Compile Include="gen\glo.cs" />
     <Compile Include="gen\INI.cs" />
     <Compile Include="gen\INI2.cs" />
+    <Compile Include="gen\LogRemotoEtiquetas.cs" />
+    <Compile Include="gen\EnvioLogRemotoEtiquetas.cs" />
+    <Compile Include="gen\MonitorSpoolerEtiquetas.cs" />
     <Compile Include="gen\odbc.cs" />
     <Compile Include="gen\rt.cs" />
     <Compile Include="gen\ValorPorExtenso.cs" />

@@ -4,6 +4,8 @@ using System.Drawing;
 using System.Drawing.Printing;
 using System.Globalization;
 using System.Linq;
+using System.Management;
+using System.Reflection;
 using System.Text;
 using System.Windows.Forms;
 using TeleBonifacio.dao;
@@ -23,6 +25,10 @@ namespace TeleBonifacio
         private readonly Dictionary<string, RectangleF> areasPreview = new Dictionary<string, RectangleF>();
         private EtiquetaModel etiquetaImpressao;
         private int copiasRestantes;
+        private int copiasTotais;
+        private string impressoraImpressao = "";
+        private string tentativaImpressaoAtual = "";
+        private bool erroPrintPageTratado;
         private static readonly Dictionary<string, string> mapaLinhaFormatacao = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
         {
             { "Nome da empresa", "NomeEmpresa" },
@@ -62,6 +68,7 @@ namespace TeleBonifacio
             try
             {
                 etiquetas = repository.Listar();
+                LogRemotoEtiquetas.Registrar("CarregarEtiquetas", "OK", "Etiquetas carregadas: " + etiquetas.Count);
                 ConfigurarGrid();
                 CarregarGrid(etiquetas);
                 CarregarImpressoras();
@@ -81,10 +88,13 @@ namespace TeleBonifacio
                 CarregarControlesFormatacao();
                 numQuantidade.Value = 1;
                 pnlPreview.Invalidate();
+                LogRemotoEtiquetas.Registrar("AberturaTela", "OK", "Tela de etiquetas aberta");
+                EnvioLogRemotoEtiquetas.DispararEnvioDeTodasPendenciasAssincrono();
             }
             catch (Exception ex)
             {
                 glo.Loga("Erro operEtiquetas_Load: " + ex.Message);
+                LogRemotoEtiquetas.RegistrarErro("AberturaTela", ex);
             }
         }
 
@@ -95,6 +105,10 @@ namespace TeleBonifacio
 
         private void btSalvar_Click(object sender, EventArgs e)
         {
+            string codigoLog = txtCodigo.Text.Trim();
+            string nomeEtiquetaLog = nomeEtiquetaSelecionada;
+            LogRemotoEtiquetas.Registrar("InicioSalvar", "INICIO", "Início do salvamento", codigo: codigoLog, nomeEtiqueta: nomeEtiquetaLog);
+
             try
             {
                 string codigo = txtCodigo.Text.Trim();
@@ -107,7 +121,10 @@ namespace TeleBonifacio
                 }
 
                 EtiquetaModel etiqueta = ObterEtiquetaDaTela();
+                codigoLog = etiqueta.Codigo;
+                nomeEtiquetaLog = etiqueta.NomeEtiqueta;
                 string idParaSelecionar = etiqueta.Id;
+                bool atualizacao = !string.IsNullOrWhiteSpace(etiqueta.Id);
 
                 if (string.IsNullOrWhiteSpace(etiqueta.Id))
                 {
@@ -130,6 +147,7 @@ namespace TeleBonifacio
 
                         etiqueta.Id = existente.Id;
                         idParaSelecionar = existente.Id;
+                        atualizacao = true;
                         if (string.IsNullOrWhiteSpace(etiqueta.NomeEtiqueta))
                         {
                             etiqueta.NomeEtiqueta = existente.NomeEtiqueta;
@@ -145,6 +163,7 @@ namespace TeleBonifacio
 
                 etiqueta.NomeEtiqueta = nomeEtiqueta;
                 nomeEtiquetaSelecionada = nomeEtiqueta;
+                nomeEtiquetaLog = nomeEtiqueta;
 
                 repository.Salvar(etiqueta);
                 etiquetas = repository.Listar();
@@ -154,11 +173,19 @@ namespace TeleBonifacio
                 SelecionarEtiquetaNoGrid(idParaSelecionar);
                 pnlPreview.Invalidate();
 
+                LogRemotoEtiquetas.Registrar(
+                    "SalvarEtiqueta",
+                    "OK",
+                    atualizacao ? "Etiqueta atualizada com sucesso" : "Etiqueta incluída com sucesso",
+                    codigo: etiqueta.Codigo,
+                    nomeEtiqueta: etiqueta.NomeEtiqueta);
+
                 MessageBox.Show("Etiqueta salva com sucesso.");
             }
             catch (Exception ex)
             {
                 glo.Loga("Erro ao salvar etiqueta: " + ex.Message);
+                LogRemotoEtiquetas.RegistrarErro("ErroSalvar", ex, codigo: codigoLog, nomeEtiqueta: nomeEtiquetaLog);
                 MessageBox.Show("Não foi possível salvar a etiqueta. Tente novamente.");
             }
         }
@@ -184,17 +211,33 @@ namespace TeleBonifacio
                     return;
                 }
 
+                EtiquetaModel etiquetaExclusao = etiquetas.FirstOrDefault(item => string.Equals(item.Id, etiquetaSelecionadaId, StringComparison.OrdinalIgnoreCase));
+                LogRemotoEtiquetas.Registrar(
+                    "InicioExcluir",
+                    "INICIO",
+                    "Início da exclusão",
+                    codigo: etiquetaExclusao != null ? etiquetaExclusao.Codigo : txtCodigo.Text.Trim(),
+                    nomeEtiqueta: etiquetaExclusao != null ? ObterNomeEtiquetaSugerido(etiquetaExclusao) : nomeEtiquetaSelecionada);
+
                 repository.Excluir(etiquetaSelecionadaId);
                 etiquetas = repository.Listar();
                 CarregarGrid(etiquetas);
                 LimparCampos();
                 pnlPreview.Invalidate();
 
+                LogRemotoEtiquetas.Registrar(
+                    "ExcluirEtiqueta",
+                    "OK",
+                    "Etiqueta excluída com sucesso",
+                    codigo: etiquetaExclusao != null ? etiquetaExclusao.Codigo : txtCodigo.Text.Trim(),
+                    nomeEtiqueta: etiquetaExclusao != null ? ObterNomeEtiquetaSugerido(etiquetaExclusao) : nomeEtiquetaSelecionada);
+
                 MessageBox.Show("Etiqueta excluída com sucesso.");
             }
             catch (Exception ex)
             {
                 glo.Loga("Erro ao excluir etiqueta: " + ex.Message);
+                LogRemotoEtiquetas.RegistrarErro("ErroExcluir", ex, codigo: txtCodigo.Text.Trim(), nomeEtiqueta: nomeEtiquetaSelecionada);
                 MessageBox.Show("Não foi possível excluir a etiqueta. Tente novamente.");
             }
         }
@@ -206,6 +249,7 @@ namespace TeleBonifacio
 
         private void btImprimir_Click(object sender, EventArgs e)
         {
+            string tentativaId = "";
             try
             {
                 EtiquetaModel etiqueta = ObterEtiquetaDaTela();
@@ -237,13 +281,570 @@ namespace TeleBonifacio
                     return;
                 }
 
-                ImprimirEtiqueta(etiqueta, cmbImpressora.SelectedItem.ToString(), quantidade);
+                string impressora = cmbImpressora.SelectedItem.ToString();
+                tentativaId = Guid.NewGuid().ToString("N");
+                LogRemotoEtiquetas.Registrar(
+                    "InicioImpressao",
+                    "INICIO",
+                    "Início da impressão",
+                    impressora,
+                    quantidade,
+                    etiqueta.Codigo,
+                    etiqueta.NomeEtiqueta,
+                    tentativaId);
+                RegistrarAmbienteImpressao(impressora, etiqueta, quantidade, tentativaId);
+                RegistrarDetalhesWmiImpressora(impressora, etiqueta, quantidade, tentativaId);
+                RegistrarEstadoServicoSpooler(impressora, etiqueta, quantidade, tentativaId);
+                RegistrarDriverEPortaImpressora(impressora, etiqueta, quantidade, tentativaId);
+                ImprimirEtiqueta(etiqueta, impressora, quantidade, tentativaId);
             }
             catch (Exception ex)
             {
                 glo.Loga("Erro ao imprimir etiqueta: " + ex.Message);
+                LogRemotoEtiquetas.RegistrarErro(
+                    "ErroImpressao",
+                    ex,
+                    cmbImpressora.SelectedItem != null ? cmbImpressora.SelectedItem.ToString() : "",
+                    (int)numQuantidade.Value,
+                    txtCodigo.Text.Trim(),
+                    nomeEtiquetaSelecionada,
+                    tentativaId);
                 MessageBox.Show("Não foi possível imprimir a etiqueta. Tente novamente.");
             }
+        }
+
+        private void RegistrarAmbienteImpressao(string impressora, EtiquetaModel etiqueta, int quantidade, string tentativaId)
+        {
+            try
+            {
+                List<string> impressorasInstaladas = new List<string>();
+                foreach (string item in PrinterSettings.InstalledPrinters)
+                {
+                    impressorasInstaladas.Add(item);
+                }
+
+                //string impressoraPadrao;
+                //using (PrinterSettings settings = new PrinterSettings())
+                //{
+                //    impressoraPadrao = settings.PrinterName;
+                //}
+                PrinterSettings settings = new PrinterSettings();
+                string impressoraPadrao = settings.PrinterName;
+
+                Assembly assembly = Assembly.GetEntryAssembly() ?? Assembly.GetExecutingAssembly();
+                string caminhoExecutavel = assembly.Location;
+                string versaoExecutavel = assembly.GetName().Version != null
+                    ? assembly.GetName().Version.ToString()
+                    : "";
+                string nomeLimpo = (impressora ?? "").Trim();
+                bool apareceNaListaIgnorandoCaixa = impressorasInstaladas.Any(item =>
+                    string.Equals(item, impressora, StringComparison.OrdinalIgnoreCase));
+                bool apareceNaListaExata = impressorasInstaladas.Any(item => item == impressora);
+                bool possuiEspacosNasExtremidades = !string.Equals(impressora, nomeLimpo, StringComparison.Ordinal);
+                bool pareceCompartilhamentoUnc = nomeLimpo.StartsWith("\\\\", StringComparison.Ordinal);
+                bool pareceCaminhoRede = pareceCompartilhamentoUnc ||
+                    nomeLimpo.IndexOf("\\\\", StringComparison.Ordinal) >= 0 ||
+                    nomeLimpo.IndexOf("//", StringComparison.Ordinal) >= 0;
+
+                string mensagem =
+                    "MachineName=" + Environment.MachineName +
+                    "; UserName=" + Environment.UserName +
+                    "; OSVersion=" + Environment.OSVersion +
+                    "; Is64BitOS=" + Environment.Is64BitOperatingSystem +
+                    "; Is64BitProcess=" + Environment.Is64BitProcess +
+                    "; EnvironmentVersion=" + Environment.Version +
+                    "; StartupPath=" + Application.StartupPath +
+                    "; ExecutablePath=" + caminhoExecutavel +
+                    "; ExecutableVersion=" + versaoExecutavel +
+                    "; UserInteractive=" + Environment.UserInteractive +
+                    "; ImpressoraEscolhida=" + impressora +
+                    "; ImpressoraPadrao=" + impressoraPadrao +
+                    "; QuantidadeImpressoras=" + impressorasInstaladas.Count +
+                    "; ImpressorasInstaladas=" + string.Join(" | ", impressorasInstaladas) +
+                    "; ApareceIgnorandoCaixa=" + apareceNaListaIgnorandoCaixa +
+                    "; ApareceExata=" + apareceNaListaExata +
+                    "; EspacosNasExtremidades=" + possuiEspacosNasExtremidades +
+                    "; ComprimentoNome=" + (impressora ?? "").Length +
+                    "; PareceUNC=" + pareceCompartilhamentoUnc +
+                    "; PareceCaminhoRede=" + pareceCaminhoRede +
+                    "; Codigo=" + (etiqueta != null ? etiqueta.Codigo : "") +
+                    "; Etiqueta=" + (etiqueta != null ? etiqueta.NomeEtiqueta : "") +
+                    "; Quantidade=" + quantidade;
+
+                LogRemotoEtiquetas.Registrar("AmbienteImpressao", "INFO", mensagem, impressora, quantidade, etiqueta != null ? etiqueta.Codigo : "", etiqueta != null ? etiqueta.NomeEtiqueta : "", tentativaId);
+            }
+            catch (Exception ex)
+            {
+                LogRemotoEtiquetas.Registrar("ErroAmbienteImpressao", "ERRO_LOCAL", ex.Message, impressora, quantidade, etiqueta != null ? etiqueta.Codigo : "", etiqueta != null ? etiqueta.NomeEtiqueta : "", tentativaId);
+            }
+        }
+
+        private void RegistrarDetalhesWmiImpressora(string impressora, EtiquetaModel etiqueta, int quantidade, string tentativaId)
+        {
+            if (!glo.LogRemoto)
+            {
+                return;
+            }
+
+            try
+            {
+                string nomeProcurado = impressora ?? "";
+                List<string> nomesWmi = new List<string>();
+                List<string> correspondenciasExatas = new List<string>();
+                List<string> correspondenciasIgnorandoCaixa = new List<string>();
+
+                using (ManagementObjectSearcher searcher = new ManagementObjectSearcher("SELECT * FROM Win32_Printer"))
+                using (ManagementObjectCollection resultados = searcher.Get())
+                {
+                    foreach (ManagementBaseObject objetoBase in resultados)
+                    {
+                        using (ManagementObject objeto = objetoBase as ManagementObject)
+                        {
+                            if (objeto == null)
+                            {
+                                continue;
+                            }
+
+                            string nomeWmi = ObterValorWmi(objeto, "Name");
+                            nomesWmi.Add(nomeWmi);
+
+                            if (string.Equals(nomeWmi, nomeProcurado, StringComparison.Ordinal))
+                            {
+                                correspondenciasExatas.Add(ObterDetalhesWmi(objeto));
+                            }
+
+                            if (string.Equals(nomeWmi, nomeProcurado, StringComparison.OrdinalIgnoreCase))
+                            {
+                                correspondenciasIgnorandoCaixa.Add(ObterDetalhesWmi(objeto));
+                            }
+                        }
+                    }
+                }
+
+                if (correspondenciasIgnorandoCaixa.Count == 0)
+                {
+                    LogRemotoEtiquetas.Registrar(
+                        "ImpressoraNaoEncontradaWmi",
+                        "INFO",
+                        "Nome procurado=" + nomeProcurado + "; QuantidadeWmi=" + nomesWmi.Count + "; NomesWmi=" + string.Join(" | ", nomesWmi),
+                        impressora,
+                        quantidade,
+                        etiqueta != null ? etiqueta.Codigo : "",
+                        etiqueta != null ? etiqueta.NomeEtiqueta : "",
+                        tentativaId);
+                    return;
+                }
+
+                string tipoCorrespondencia = correspondenciasExatas.Count > 0 ? "Exata" : "IgnorandoCaixa";
+                string mensagem = "Correspondencia=" + tipoCorrespondencia +
+                    "; QuantidadeCorrespondencias=" + correspondenciasIgnorandoCaixa.Count +
+                    "; Detalhes=" + string.Join(" || ", correspondenciasIgnorandoCaixa);
+                LogRemotoEtiquetas.Registrar(
+                    "DetalhesWmiImpressora",
+                    "INFO",
+                    mensagem,
+                    impressora,
+                    quantidade,
+                    etiqueta != null ? etiqueta.Codigo : "",
+                    etiqueta != null ? etiqueta.NomeEtiqueta : "",
+                    tentativaId);
+            }
+            catch (Exception ex)
+            {
+                LogRemotoEtiquetas.Registrar(
+                    "ErroDetalhesWmiImpressora",
+                    "ERRO_LOCAL",
+                    ex.Message,
+                    impressora,
+                    quantidade,
+                    etiqueta != null ? etiqueta.Codigo : "",
+                    etiqueta != null ? etiqueta.NomeEtiqueta : "",
+                    tentativaId);
+            }
+        }
+
+        private static string ObterValorWmi(ManagementBaseObject objeto, string propriedade)
+        {
+            try
+            {
+                object valor = objeto[propriedade];
+                return ConverterValorWmiParaTexto(valor);
+            }
+            catch
+            {
+                return "(nulo)";
+            }
+        }
+
+        private static string ConverterValorWmiParaTexto(object valor)
+        {
+            if (valor == null || Convert.IsDBNull(valor))
+            {
+                return "(nulo)";
+            }
+
+            Array array = valor as Array;
+            if (array != null)
+            {
+                List<string> itens = new List<string>();
+                foreach (object item in array)
+                {
+                    itens.Add(ConverterValorWmiParaTexto(item));
+                }
+
+                return string.Join(" | ", itens);
+            }
+
+            IFormattable formatavel = valor as IFormattable;
+            return formatavel != null
+                ? formatavel.ToString(null, CultureInfo.InvariantCulture)
+                : Convert.ToString(valor, CultureInfo.InvariantCulture);
+        }
+
+        private static string ObterDetalhesWmi(ManagementBaseObject objeto)
+        {
+            string[] propriedades =
+            {
+                "Name", "Caption", "DeviceID", "DriverName", "PortName", "ServerName", "ShareName",
+                "SystemName", "Location", "Comment", "Default", "Local", "Network", "Shared", "WorkOffline",
+                "Direct", "EnableBIDI", "Published", "PrinterStatus", "ExtendedPrinterStatus", "DetectedErrorState",
+                "ExtendedDetectedErrorState", "Status", "StatusInfo", "Availability", "JobCountSinceLastReset",
+                "HorizontalResolution", "VerticalResolution"
+            };
+
+            List<string> valores = new List<string>();
+            foreach (string propriedade in propriedades)
+            {
+                valores.Add(propriedade + "=" + ObterValorWmi(objeto, propriedade));
+            }
+
+            return string.Join("; ", valores);
+        }
+
+        private void RegistrarEstadoServicoSpooler(
+            string impressora,
+            EtiquetaModel etiqueta,
+            int quantidade,
+            string tentativaId)
+        {
+            if (!glo.LogRemoto)
+            {
+                return;
+            }
+
+            string codigo = etiqueta != null ? etiqueta.Codigo : "";
+            string nomeEtiqueta = etiqueta != null ? etiqueta.NomeEtiqueta : "";
+
+            try
+            {
+                bool encontrado = false;
+                using (ManagementObjectSearcher searcher = new ManagementObjectSearcher(
+                    "SELECT * FROM Win32_Service WHERE Name = 'Spooler'"))
+                using (ManagementObjectCollection resultados = searcher.Get())
+                {
+                    foreach (ManagementBaseObject objetoBase in resultados)
+                    {
+                        using (ManagementObject objeto = objetoBase as ManagementObject)
+                        {
+                            if (objeto == null)
+                            {
+                                continue;
+                            }
+
+                            encontrado = true;
+                            string state = ObterValorWmi(objeto, "State");
+                            string started = ObterValorWmi(objeto, "Started");
+                            bool alertaEstado = !string.Equals(state, "Running", StringComparison.OrdinalIgnoreCase) ||
+                                !string.Equals(started, "True", StringComparison.OrdinalIgnoreCase);
+                            string mensagem = ObterDetalhesServicoWmi(objeto) + "; AlertaEstado=" + alertaEstado;
+
+                            LogRemotoEtiquetas.Registrar(
+                                "EstadoServicoSpooler",
+                                "INFO",
+                                mensagem,
+                                impressora,
+                                quantidade,
+                                codigo,
+                                nomeEtiqueta,
+                                tentativaId);
+                        }
+                    }
+                }
+
+                if (!encontrado)
+                {
+                    LogRemotoEtiquetas.Registrar(
+                        "ServicoSpoolerNaoEncontrado",
+                        "INFO",
+                        "Serviço Windows Spooler não foi localizado pela consulta Win32_Service.",
+                        impressora,
+                        quantidade,
+                        codigo,
+                        nomeEtiqueta,
+                        tentativaId);
+                }
+            }
+            catch (Exception ex)
+            {
+                LogRemotoEtiquetas.Registrar(
+                    "ErroEstadoServicoSpooler",
+                    "ERRO_LOCAL",
+                    ex.Message,
+                    impressora,
+                    quantidade,
+                    codigo,
+                    nomeEtiqueta,
+                    tentativaId);
+            }
+        }
+
+        private static string ObterDetalhesServicoWmi(ManagementBaseObject objeto)
+        {
+            string[] propriedades =
+            {
+                "Name", "DisplayName", "State", "Status", "Started", "StartMode", "StartName",
+                "ProcessId", "ExitCode", "ServiceSpecificExitCode", "AcceptPause", "AcceptStop",
+                "DesktopInteract", "PathName", "Description"
+            };
+
+            List<string> valores = new List<string>();
+            foreach (string propriedade in propriedades)
+            {
+                valores.Add(propriedade + "=" + ObterValorWmi(objeto, propriedade));
+            }
+
+            return string.Join("; ", valores);
+        }
+
+        private void RegistrarDriverEPortaImpressora(
+            string impressora,
+            EtiquetaModel etiqueta,
+            int quantidade,
+            string tentativaId)
+        {
+            if (!glo.LogRemoto)
+            {
+                return;
+            }
+
+            string codigo = etiqueta != null ? etiqueta.Codigo : "";
+            string nomeEtiqueta = etiqueta != null ? etiqueta.NomeEtiqueta : "";
+
+            try
+            {
+                List<string> detalhesImpressora = new List<string>();
+                List<string> detalhesDrivers = new List<string>();
+                List<string> detalhesPortas = new List<string>();
+                List<string> nomesDrivers = new List<string>();
+                List<string> nomesPortas = new List<string>();
+                bool impressoraEncontrada = false;
+                bool driverEncontrado = false;
+                bool portaTcpIpEncontrada = false;
+                string driverName = "";
+                string portName = "";
+                string tipoPorta = "Desconhecida/Outra";
+                bool consultarPortaTcpIp = false;
+
+                using (ManagementObjectSearcher searcher = new ManagementObjectSearcher("SELECT * FROM Win32_Printer"))
+                using (ManagementObjectCollection resultados = searcher.Get())
+                {
+                    foreach (ManagementBaseObject objetoBase in resultados)
+                    {
+                        using (ManagementObject objeto = objetoBase as ManagementObject)
+                        {
+                            if (objeto == null || !string.Equals(ObterValorWmi(objeto, "Name"), impressora, StringComparison.OrdinalIgnoreCase))
+                            {
+                                continue;
+                            }
+
+                            impressoraEncontrada = true;
+                            string driverAtual = ObterValorWmi(objeto, "DriverName");
+                            string portaAtual = ObterValorWmi(objeto, "PortName");
+                            driverName = string.IsNullOrWhiteSpace(driverName) || driverName == "(nulo)" ? driverAtual : driverName;
+                            portName = string.IsNullOrWhiteSpace(portName) || portName == "(nulo)" ? portaAtual : portName;
+                            tipoPorta = ClassificarTipoPorta(portaAtual);
+                            consultarPortaTcpIp = consultarPortaTcpIp || EhPortaTcpIp(tipoPorta);
+                            detalhesImpressora.Add("DriverName=" + driverAtual + "; PortName=" + portaAtual + "; ServerName=" + ObterValorWmi(objeto, "ServerName") + "; Local=" + ObterValorWmi(objeto, "Local") + "; Network=" + ObterValorWmi(objeto, "Network") + "; Shared=" + ObterValorWmi(objeto, "Shared"));
+                        }
+                    }
+                }
+
+                using (ManagementObjectSearcher searcher = new ManagementObjectSearcher("SELECT * FROM Win32_PrinterDriver"))
+                using (ManagementObjectCollection resultados = searcher.Get())
+                {
+                    foreach (ManagementBaseObject objetoBase in resultados)
+                    {
+                        using (ManagementObject objeto = objetoBase as ManagementObject)
+                        {
+                            string nomeDriverWmi = objeto == null ? "" : ObterValorWmi(objeto, "Name");
+                            if (!string.IsNullOrWhiteSpace(nomeDriverWmi) && nomeDriverWmi != "(nulo)")
+                            {
+                                nomesDrivers.Add(nomeDriverWmi);
+                            }
+
+                            if (objeto != null && EhDriverCorrespondente(nomeDriverWmi, driverName))
+                            {
+                                driverEncontrado = true;
+                                detalhesDrivers.Add(ObterDetalhesDriverWmi(objeto));
+                            }
+                        }
+                    }
+                }
+
+                if (impressoraEncontrada && !string.IsNullOrWhiteSpace(driverName) && driverName != "(nulo)" && !driverEncontrado)
+                {
+                    LogRemotoEtiquetas.Registrar(
+                        "DriverImpressoraNaoEncontradoWmi",
+                        "INFO",
+                        "DriverName procurado=" + driverName + "; QuantidadeDriversWmi=" + nomesDrivers.Count + "; NomesDriversWmi=" + string.Join(" | ", nomesDrivers),
+                        impressora,
+                        quantidade,
+                        codigo,
+                        nomeEtiqueta,
+                        tentativaId);
+                }
+
+                if (impressoraEncontrada && EhPortaTcpIp(tipoPorta))
+                {
+                    using (ManagementObjectSearcher searcher = new ManagementObjectSearcher("SELECT * FROM Win32_TCPIPPrinterPort"))
+                    using (ManagementObjectCollection resultados = searcher.Get())
+                    {
+                        foreach (ManagementBaseObject objetoBase in resultados)
+                        {
+                            using (ManagementObject objeto = objetoBase as ManagementObject)
+                            {
+                                string nomePortaWmi = objeto == null ? "" : ObterValorWmi(objeto, "Name");
+                                if (!string.IsNullOrWhiteSpace(nomePortaWmi) && nomePortaWmi != "(nulo)")
+                                {
+                                    nomesPortas.Add(nomePortaWmi);
+                                }
+
+                                if (objeto != null && string.Equals(nomePortaWmi, portName, StringComparison.OrdinalIgnoreCase))
+                                {
+                                    portaTcpIpEncontrada = true;
+                                    detalhesPortas.Add(ObterDetalhesPortaTcpIpWmi(objeto));
+                                }
+                            }
+                        }
+                    }
+                }
+
+                string mensagem =
+                    "ImpressoraEncontrada=" + impressoraEncontrada +
+                    "; Impressora=" + impressora +
+                    "; DetalhesImpressora=" + string.Join(" || ", detalhesImpressora) +
+                    "; DriverName=" + driverName +
+                    "; DriverEncontrado=" + driverEncontrado +
+                    "; DriversCorrespondentes=" + detalhesDrivers.Count +
+                    "; DriverWmiDetalhes=" + string.Join(" || ", detalhesDrivers) +
+                    "; DriversWmiNomes=" + string.Join(" | ", nomesDrivers) +
+                    "; PortName=" + portName +
+                    "; TipoPortaProvavel=" + tipoPorta +
+                    "; PortaTcpIpConsultada=" + consultarPortaTcpIp +
+                    "; PortaTcpIpEncontrada=" + (consultarPortaTcpIp && portaTcpIpEncontrada) +
+                    "; PortasTcpIpNomes=" + string.Join(" | ", nomesPortas) +
+                    "; PortaTcpIpDetalhes=" + string.Join(" || ", detalhesPortas);
+
+                LogRemotoEtiquetas.Registrar(
+                    "DriverEPortaImpressora",
+                    "INFO",
+                    mensagem,
+                    impressora,
+                    quantidade,
+                    codigo,
+                    nomeEtiqueta,
+                    tentativaId);
+            }
+            catch (Exception ex)
+            {
+                LogRemotoEtiquetas.RegistrarErro(
+                    "ErroDriverEPortaImpressora",
+                    ex,
+                    impressora,
+                    quantidade,
+                    codigo,
+                    nomeEtiqueta,
+                    tentativaId);
+            }
+        }
+
+        private static bool EhDriverCorrespondente(string nomeDriverWmi, string driverName)
+        {
+            if (string.IsNullOrWhiteSpace(nomeDriverWmi) || nomeDriverWmi == "(nulo)" || string.IsNullOrWhiteSpace(driverName) || driverName == "(nulo)")
+            {
+                return false;
+            }
+
+            return string.Equals(nomeDriverWmi, driverName, StringComparison.Ordinal) ||
+                string.Equals(nomeDriverWmi, driverName, StringComparison.OrdinalIgnoreCase) ||
+                nomeDriverWmi.StartsWith(driverName + ",", StringComparison.OrdinalIgnoreCase);
+        }
+
+        private static string ClassificarTipoPorta(string portName)
+        {
+            string valor = (portName ?? "").Trim();
+            if (valor.StartsWith("USB", StringComparison.OrdinalIgnoreCase)) return "USB";
+            if (valor.StartsWith("LPT", StringComparison.OrdinalIgnoreCase)) return "Paralela";
+            if (valor.StartsWith("COM", StringComparison.OrdinalIgnoreCase)) return "Serial";
+            if (valor.StartsWith("IP_", StringComparison.OrdinalIgnoreCase) || ContemEnderecoIp(valor)) return "TCP/IP";
+            if (valor.StartsWith("\\\\", StringComparison.Ordinal)) return "Compartilhamento UNC";
+            return "Desconhecida/Outra";
+        }
+
+        private static bool EhPortaTcpIp(string tipoPorta)
+        {
+            return string.Equals(tipoPorta, "TCP/IP", StringComparison.OrdinalIgnoreCase);
+        }
+
+        private static bool ContemEnderecoIp(string valor)
+        {
+            char[] separadores = { ':', '[', ']', ';', ',', ' ', '\\', '/' };
+            foreach (string parte in (valor ?? "").Split(separadores, StringSplitOptions.RemoveEmptyEntries))
+            {
+                System.Net.IPAddress endereco;
+                if (System.Net.IPAddress.TryParse(parte, out endereco))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        private static string ObterDetalhesDriverWmi(ManagementBaseObject objeto)
+        {
+            string[] propriedades =
+            {
+                "Name", "DriverPath", "InfName", "ConfigFile", "DataFile", "HelpFile", "MonitorName",
+                "OEMUrl", "SupportedPlatform", "Version", "FilePath", "DefaultDataType", "DependentFiles"
+            };
+
+            List<string> valores = new List<string>();
+            foreach (string propriedade in propriedades)
+            {
+                valores.Add(propriedade + "=" + ObterValorWmi(objeto, propriedade));
+            }
+
+            return string.Join("; ", valores);
+        }
+
+        private static string ObterDetalhesPortaTcpIpWmi(ManagementBaseObject objeto)
+        {
+            string[] propriedades =
+            {
+                "Name", "HostAddress", "PortNumber", "Protocol", "Queue", "SNMPEnabled",
+                "SNMPDevIndex", "ByteCount", "DoubleSpool", "Enabled"
+            };
+
+            List<string> valores = new List<string>();
+            foreach (string propriedade in propriedades)
+            {
+                valores.Add(propriedade + "=" + ObterValorWmi(objeto, propriedade));
+            }
+
+            string comunidade = ObterValorWmi(objeto, "SNMPCommunity");
+            valores.Add("SNMPCommunityConfigurada=" + (!string.IsNullOrWhiteSpace(comunidade) && comunidade != "(nulo)"));
+            return string.Join("; ", valores);
         }
 
         private void txtBuscar_TextChanged(object sender, EventArgs e)
@@ -504,10 +1105,23 @@ namespace TeleBonifacio
                 {
                     cmbImpressora.SelectedIndex = 0;
                 }
+
+                LogRemotoEtiquetas.Registrar("CarregarImpressoras", "OK", "Impressoras instaladas: " + cmbImpressora.Items.Count);
+                for (int i = 0; i < cmbImpressora.Items.Count; i++)
+                {
+                    LogRemotoEtiquetas.Registrar("ImpressoraInstalada", "OK", "Impressora instalada: " + cmbImpressora.Items[i]);
+                }
+
+                LogRemotoEtiquetas.Registrar(
+                    "ImpressoraSelecionada",
+                    "OK",
+                    "Impressora selecionada: " + (cmbImpressora.SelectedItem ?? ""),
+                    impressora: cmbImpressora.SelectedItem != null ? cmbImpressora.SelectedItem.ToString() : "");
             }
             catch (Exception ex)
             {
                 glo.Loga("Erro CarregarImpressoras: " + ex.Message);
+                LogRemotoEtiquetas.RegistrarErro("CarregarImpressoras", ex);
             }
         }
 
@@ -974,24 +1588,232 @@ namespace TeleBonifacio
             }
         }
 
-        private void ImprimirEtiqueta(EtiquetaModel etiqueta, string impressora, int quantidade)
+        private void RegistrarConfiguracaoEssencialImpressao(
+            PrintDocument doc,
+            string impressora,
+            EtiquetaModel etiqueta,
+            int quantidade,
+            string tentativaId)
+        {
+            if (!glo.LogRemoto)
+            {
+                return;
+            }
+
+            string codigo = etiqueta != null ? etiqueta.Codigo : "";
+            string nomeEtiqueta = etiqueta != null ? etiqueta.NomeEtiqueta : "";
+
+            try
+            {
+                PrinterSettings settings = doc.PrinterSettings;
+                PageSettings pagina = doc.DefaultPageSettings;
+                PaperSize papel = pagina.PaperSize;
+                PrinterResolution resolucao = pagina.PrinterResolution;
+                RectangleF areaImprimivel = pagina.PrintableArea;
+                bool impressoraValida = settings.IsValid;
+                int quantidadePapeisSuportados = settings.PaperSizes.Count;
+                bool papelEncontradoPorNome = false;
+                bool papelEncontradoPorDimensao = false;
+                bool papelEncontradoPorDimensaoInvertida = false;
+
+                foreach (PaperSize papelSuportado in settings.PaperSizes)
+                {
+                    if (string.Equals(papelSuportado.PaperName, papel.PaperName, StringComparison.OrdinalIgnoreCase))
+                    {
+                        papelEncontradoPorNome = true;
+                    }
+
+                    if (papelSuportado.Width == papel.Width && papelSuportado.Height == papel.Height)
+                    {
+                        papelEncontradoPorDimensao = true;
+                    }
+
+                    if (papelSuportado.Width == papel.Height && papelSuportado.Height == papel.Width)
+                    {
+                        papelEncontradoPorDimensaoInvertida = true;
+                    }
+                }
+
+                bool alertaPapelNaoEncontrado = !papelEncontradoPorNome &&
+                    !papelEncontradoPorDimensao &&
+                    !papelEncontradoPorDimensaoInvertida;
+                bool alertaAreaImprimivelMenorQuePapel = areaImprimivel.Width < papel.Width ||
+                    areaImprimivel.Height < papel.Height;
+                string mensagem =
+                    "DocumentName=" + doc.DocumentName +
+                    "; PrinterName=" + settings.PrinterName +
+                    "; PrinterSettings.IsValid=" + impressoraValida +
+                    "; PaperName=" + papel.PaperName +
+                    "; PaperKind=" + papel.Kind +
+                    "; PaperRawKind=" + papel.RawKind +
+                    "; PaperWidth=" + papel.Width +
+                    "; PaperHeight=" + papel.Height +
+                    "; Landscape=" + pagina.Landscape +
+                    "; PrinterResolutionKind=" + (resolucao == null ? "(nulo)" : resolucao.Kind.ToString()) +
+                    "; PrinterResolutionX=" + (resolucao == null ? 0 : resolucao.X) +
+                    "; PrinterResolutionY=" + (resolucao == null ? 0 : resolucao.Y) +
+                    "; MarginsLeft=" + pagina.Margins.Left +
+                    "; MarginsRight=" + pagina.Margins.Right +
+                    "; MarginsTop=" + pagina.Margins.Top +
+                    "; MarginsBottom=" + pagina.Margins.Bottom +
+                    "; HardMarginX=" + pagina.HardMarginX +
+                    "; HardMarginY=" + pagina.HardMarginY +
+                    "; PrintableAreaWidth=" + areaImprimivel.Width +
+                    "; PrintableAreaHeight=" + areaImprimivel.Height +
+                    "; UnidadeMedida=CentesimosDePolegada" +
+                    "; QuantidadePapeisSuportados=" + quantidadePapeisSuportados +
+                    "; PapelEncontradoPorNome=" + papelEncontradoPorNome +
+                    "; PapelEncontradoPorDimensao=" + papelEncontradoPorDimensao +
+                    "; PapelEncontradoPorDimensaoInvertida=" + papelEncontradoPorDimensaoInvertida +
+                    "; AlertaImpressoraInvalida=" + !impressoraValida +
+                    "; AlertaPapelNaoEncontrado=" + alertaPapelNaoEncontrado +
+                    "; AlertaAreaImprimivelMenorQuePapel=" + alertaAreaImprimivelMenorQuePapel;
+
+                LogRemotoEtiquetas.Registrar(
+                    "ConfiguracaoEssencialImpressao",
+                    "INFO",
+                    mensagem,
+                    impressora,
+                    quantidade,
+                    codigo,
+                    nomeEtiqueta,
+                    tentativaId);
+            }
+            catch (Exception ex)
+            {
+                LogRemotoEtiquetas.RegistrarErro(
+                    "ErroConfiguracaoEssencialImpressao",
+                    ex,
+                    impressora,
+                    quantidade,
+                    codigo,
+                    nomeEtiqueta,
+                    tentativaId);
+            }
+        }
+
+        private void ImprimirEtiqueta(EtiquetaModel etiqueta, string impressora, int quantidade, string tentativaId)
         {
             try
             {
                 etiquetaImpressao = etiqueta;
                 copiasRestantes = quantidade;
+                copiasTotais = quantidade;
+                impressoraImpressao = impressora;
+                tentativaImpressaoAtual = tentativaId ?? "";
+                erroPrintPageTratado = false;
 
                 PrintDocument doc = new PrintDocument();
                 doc.PrinterSettings.PrinterName = impressora;
+                doc.DocumentName = "Etiqueta_" +
+                    (string.IsNullOrWhiteSpace(etiqueta != null ? etiqueta.Id : "") ? "SemId" : etiqueta.Id) +
+                    "_" + DateTime.Now.ToString("yyyyMMdd_HHmmss_fff");
                 doc.DefaultPageSettings.PaperSize = new PaperSize("Etiqueta 60x30mm", 236, 118);
                 doc.DefaultPageSettings.Margins = new Margins(2, 2, 2, 2);
                 doc.PrintPage += Doc_PrintPage;
+                LogRemotoEtiquetas.Registrar(
+                    "ConfigurarImpressao",
+                    "OK",
+                    "DocumentName=" + doc.DocumentName + "; PrinterName=" + doc.PrinterSettings.PrinterName + "; PaperSize=" + doc.DefaultPageSettings.PaperSize.PaperName + "; Largura=236; Altura=118; Margens=2,2,2,2; Quantidade=" + quantidade,
+                    impressora,
+                    quantidade,
+                    etiqueta != null ? etiqueta.Codigo : "",
+                    etiqueta != null ? etiqueta.NomeEtiqueta : "",
+                    tentativaId);
+                RegistrarConfiguracaoEssencialImpressao(doc, impressora, etiqueta, quantidade, tentativaId);
+
+                bool impressoraValida;
+                try
+                {
+                    impressoraValida = doc.PrinterSettings.IsValid;
+                }
+                catch (Exception ex)
+                {
+                    glo.Loga("Erro ao validar impressora: " + ex.Message);
+                    LogRemotoEtiquetas.RegistrarErroPendente(
+                        "ErroValidarImpressora",
+                        ex,
+                        impressora,
+                        quantidade,
+                        etiqueta != null ? etiqueta.Codigo : "",
+                        etiqueta != null ? etiqueta.NomeEtiqueta : "",
+                        tentativaId);
+                    EnvioLogRemotoEtiquetas.DispararEnvioAssincrono();
+                    MessageBox.Show(
+                        "Não foi possível validar a impressora selecionada. A impressão não foi enviada. Confira a instalação, o compartilhamento ou o nome da impressora.",
+                        "Impressão",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Warning);
+                    return;
+                }
+
+                if (!impressoraValida)
+                {
+                    LogRemotoEtiquetas.RegistrarPendente(
+                        "ImpressoraInvalida",
+                        "ERRO",
+                        "Nome configurado=" + impressora + "; PrinterSettings.IsValid=False; impressão não foi enviada ao Windows.",
+                        impressora,
+                        quantidade,
+                        etiqueta != null ? etiqueta.Codigo : "",
+                        etiqueta != null ? etiqueta.NomeEtiqueta : "",
+                        tentativaId);
+                    EnvioLogRemotoEtiquetas.DispararEnvioAssincrono();
+                    MessageBox.Show(
+                        "A impressora selecionada não está disponível ou não é válida no Windows. A impressão não foi enviada. Confira a instalação, o compartilhamento ou o nome da impressora.",
+                        "Impressão",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Warning);
+                    return;
+                }
+
+                LogRemotoEtiquetas.Registrar(
+                    "ValidarImpressora",
+                    "OK",
+                    "Impressora válida para o Windows. PrinterSettings.IsValid=True; Nome=" + impressora,
+                    impressora,
+                    quantidade,
+                    etiqueta != null ? etiqueta.Codigo : "",
+                    etiqueta != null ? etiqueta.NomeEtiqueta : "",
+                    tentativaId);
+
                 doc.Print();
+                LogRemotoEtiquetas.Registrar(
+                    "PrintRetornou",
+                    "OK",
+                    "PrintDocument.Print retornou sem exceção",
+                    impressora,
+                    quantidade,
+                    etiqueta != null ? etiqueta.Codigo : "",
+                    etiqueta != null ? etiqueta.NomeEtiqueta : "",
+                    tentativaId);
+                MonitorSpoolerEtiquetas.Iniciar(
+                    doc.DocumentName,
+                    impressora,
+                    etiqueta,
+                    quantidade,
+                    tentativaId);
             }
             catch (Exception ex)
             {
                 glo.Loga("Erro ao imprimir etiqueta: " + ex.Message);
+                if (!erroPrintPageTratado)
+                {
+                    LogRemotoEtiquetas.RegistrarErroPendente(
+                        "ErroImpressao",
+                        ex,
+                        impressora,
+                        quantidade,
+                        etiqueta != null ? etiqueta.Codigo : "",
+                        etiqueta != null ? etiqueta.NomeEtiqueta : "",
+                        tentativaId);
+                    EnvioLogRemotoEtiquetas.DispararEnvioAssincrono();
+                }
                 throw;
+            }
+            finally
+            {
+                tentativaImpressaoAtual = string.Empty;
             }
         }
 
@@ -999,6 +1821,15 @@ namespace TeleBonifacio
         {
             try
             {
+                LogRemotoEtiquetas.Registrar(
+                    "PrintPage",
+                    "INFO",
+                    "Cópia atual: " + (copiasTotais - copiasRestantes + 1) + "; Cópias restantes: " + copiasRestantes,
+                    impressoraImpressao,
+                    copiasRestantes,
+                    etiquetaImpressao != null ? etiquetaImpressao.Codigo : "",
+                    etiquetaImpressao != null ? etiquetaImpressao.NomeEtiqueta : "",
+                    tentativaImpressaoAtual);
                 Rectangle area = e.MarginBounds;
                 e.Graphics.Clear(Color.White);
 
@@ -1061,6 +1892,16 @@ namespace TeleBonifacio
             catch (Exception ex)
             {
                 glo.Loga("Erro ao imprimir etiqueta: " + ex.Message);
+                erroPrintPageTratado = true;
+                LogRemotoEtiquetas.RegistrarErroPendente(
+                    "ErroImpressao",
+                    ex,
+                    impressoraImpressao,
+                    copiasRestantes,
+                    etiquetaImpressao != null ? etiquetaImpressao.Codigo : "",
+                    etiquetaImpressao != null ? etiquetaImpressao.NomeEtiqueta : "",
+                    tentativaImpressaoAtual);
+                EnvioLogRemotoEtiquetas.DispararEnvioAssincrono();
                 e.HasMorePages = false;
                 throw;
             }

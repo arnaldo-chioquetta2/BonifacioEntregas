@@ -49,6 +49,113 @@ namespace TeleBonifacio
         {
         }
 
+        public static bool Append(
+            string caminhoLocal,
+            string pastaRemota,
+            string nomeArquivoRemoto,
+            out string mensagemErro)
+        {
+            mensagemErro = "";
+
+            try
+            {
+                if (string.IsNullOrWhiteSpace(caminhoLocal) || !File.Exists(caminhoLocal))
+                {
+                    mensagemErro = "Arquivo local não encontrado: " + caminhoLocal;
+                    return false;
+                }
+
+                FileInfo arquivo = new FileInfo(caminhoLocal);
+                if (arquivo.Length == 0)
+                {
+                    return true;
+                }
+
+                INI ini = new INI();
+                string host = ini.ReadString("FTP", "URL", "");
+                string usuario = gen.Cripto.Decrypt(ini.ReadString("FTP", "user", ""));
+                string senha = gen.Cripto.Decrypt(ini.ReadString("FTP", "pass", ""));
+                Uri uri = MontarUrlFtp(host, pastaRemota, nomeArquivoRemoto);
+
+                FtpWebRequest request = (FtpWebRequest)WebRequest.Create(uri);
+                request.Credentials = new NetworkCredential(usuario, senha);
+                request.Method = WebRequestMethods.Ftp.AppendFile;
+                request.UseBinary = true;
+                request.UsePassive = true;
+                request.KeepAlive = false;
+                request.Timeout = 15000;
+                request.ReadWriteTimeout = 15000;
+                request.ContentLength = arquivo.Length;
+
+                using (FileStream streamArquivo = new FileStream(caminhoLocal, FileMode.Open, FileAccess.Read, FileShare.Read))
+                using (Stream streamRequisicao = request.GetRequestStream())
+                {
+                    streamArquivo.CopyTo(streamRequisicao);
+                }
+
+                using (FtpWebResponse response = (FtpWebResponse)request.GetResponse())
+                {
+                    return true;
+                }
+            }
+            catch (WebException ex)
+            {
+                FtpWebResponse ftpResponse = ex.Response as FtpWebResponse;
+                if (ftpResponse != null)
+                {
+                    mensagemErro = "FTP " + ftpResponse.StatusCode + ": " + ftpResponse.StatusDescription;
+                    ftpResponse.Close();
+                }
+                else
+                {
+                    mensagemErro = "Erro FTP: " + ex.Message;
+                }
+
+                return false;
+            }
+            catch (IOException ex)
+            {
+                mensagemErro = "Erro de arquivo: " + ex.Message;
+                return false;
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                mensagemErro = "Acesso negado: " + ex.Message;
+                return false;
+            }
+            catch (Exception ex)
+            {
+                mensagemErro = "Erro ao anexar arquivo via FTP: " + ex.Message;
+                return false;
+            }
+        }
+
+        private static Uri MontarUrlFtp(string host, string pastaRemota, string nomeArquivoRemoto)
+        {
+            string hostNormalizado = (host ?? "").Trim().Replace('\\', '/').TrimEnd('/');
+            if (hostNormalizado.StartsWith("ftp://", StringComparison.OrdinalIgnoreCase))
+            {
+                hostNormalizado = hostNormalizado.Substring("ftp://".Length).Trim('/');
+            }
+
+            string pastaNormalizada = (pastaRemota ?? "").Replace('\\', '/').Trim('/');
+            string nomeNormalizado = (nomeArquivoRemoto ?? "").Replace('\\', '/').Trim('/');
+            if (string.IsNullOrWhiteSpace(hostNormalizado))
+            {
+                throw new InvalidOperationException("Host FTP não configurado.");
+            }
+
+            if (string.IsNullOrWhiteSpace(nomeNormalizado))
+            {
+                throw new ArgumentException("Nome do arquivo remoto não informado.", "nomeArquivoRemoto");
+            }
+
+            string caminho = string.IsNullOrWhiteSpace(pastaNormalizada)
+                ? Uri.EscapeDataString(nomeNormalizado)
+                : pastaNormalizada + "/" + Uri.EscapeDataString(nomeNormalizado);
+            return new Uri("ftp://" + hostNormalizado + "/" + caminho);
+        }
+
         public bool Upload(string _nomeArquivo, string Caminho, bool v)
         {
             this.Tot = 0;

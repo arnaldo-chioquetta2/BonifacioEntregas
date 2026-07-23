@@ -17,6 +17,7 @@ namespace TeleBonifacio
         public oprConfig()
         {
             InitializeComponent();
+            chkLogRemoto.CheckedChanged += chkLogRemoto_CheckedChanged;
             textBox1.Text = glo.CaminhoBase;
             cINI = new INI();
             txNome.Text = cINI.ReadString("Identidade", "Nome", "");
@@ -27,6 +28,8 @@ namespace TeleBonifacio
             txDocs.Text = cINI.ReadString("Config", "Docs", "");
             string NovaVersao = cINI.ReadString("Config", "NovaVersao", "");
             ckAdaptar.Checked = (cINI.ReadString("Config", "Adaptar", "") == "1");
+            chkLogRemoto.Checked = (cINI.ReadString("Config", "LogRemoto", "") == "1");
+            glo.LogRemoto = chkLogRemoto.Checked;
             if (NovaVersao.Length>0)
             {
                 int NovaVersaoInt = int.Parse(NovaVersao.Replace(".", ""));
@@ -56,6 +59,11 @@ namespace TeleBonifacio
             }
         }
 
+        private void chkLogRemoto_CheckedChanged(object sender, EventArgs e)
+        {
+            glo.LogRemoto = chkLogRemoto.Checked;
+        }
+
         private void button3_Click(object sender, EventArgs e)
         {            
             glo.CaminhoBase = textBox1.Text;
@@ -68,6 +76,8 @@ namespace TeleBonifacio
             glo.Adaptar = ckAdaptar.Checked;
             string sAdaptar = (glo.Adaptar) ? "1" : "0";
             cINI.WriteString("Config", "Adaptar", sAdaptar);
+            glo.LogRemoto = chkLogRemoto.Checked;
+            cINI.WriteString("Config", "LogRemoto", glo.LogRemoto ? "1" : "0");
             this.Close();
         }
 
