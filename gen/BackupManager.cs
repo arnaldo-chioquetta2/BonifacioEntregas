@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
@@ -11,6 +11,8 @@ namespace TeleBonifacio
         private INI _ini;
         private FTP _ftp;
         private bool usaProgress = false;
+        private string _etapaAtual = "Inicialização";
+        private string _caminhoArquivoZipAtual = "";
 
         public BackupManager()
         {
@@ -57,20 +59,64 @@ namespace TeleBonifacio
         //}
         public void RealizarBackup(bool usaProgress)
         {
-            this.usaProgress = usaProgress;
-            _ini = new INI();
-            _pastaOper = _ini.ReadString("Backup", "pastaOper", "");
-            ConfigurarFTP();
-            if (!Directory.Exists(_pastaOper))
+            try
             {
-                Directory.CreateDirectory(_pastaOper);
+                this.usaProgress = usaProgress;
+                _etapaAtual = "Inicialização";
+                _ini = new INI();
+
+                _etapaAtual = "Leitura da configuração do backup";
+                _pastaOper = _ini.ReadString("Backup", "pastaOper", "");
+                ConfigurarFTP();
+
+                _etapaAtual = "Criação da pasta temporária";
+                if (!Directory.Exists(_pastaOper))
+                {
+                    Directory.CreateDirectory(_pastaOper);
+                }
+
+                _etapaAtual = "Limpeza da pasta temporária";
+                LimparPastaDeBackup();
+
+                _etapaAtual = "Coleta e cópia dos arquivos";
+                List<string> arquivosParaZipar = CopiarArquivosParaPastaOper();
+
+                _etapaAtual = "Compactação do backup";
+                string caminhoArquivoZip = CompactarArquivos(arquivosParaZipar);
+                _caminhoArquivoZipAtual = caminhoArquivoZip;
+
+                _etapaAtual = "Envio do backup";
+                EnviarBackupParaServidor(caminhoArquivoZip);
             }
+            catch (Exception ex)
+            {
+                string mensagemLocal = "Erro no backup | Módulo=BACKUP | Etapa=" +
+                    _etapaAtual + " | PastaTemporaria=" + (_pastaOper ?? "(nulo)") +
+                    " | Zip=" + (_caminhoArquivoZipAtual ?? "(nulo)") + " | " +
+                    LogRemotoEtiquetas.FormatarExcecao(ex);
 
-            LimparPastaDeBackup();
-            List<string> arquivosParaZipar = CopiarArquivosParaPastaOper();
-            string caminhoArquivoZip = CompactarArquivos(arquivosParaZipar);
+                glo.Loga(mensagemLocal);
 
-            EnviarBackupParaServidor(caminhoArquivoZip);
+                try
+                {
+                    LogRemotoEtiquetas.RegistrarErroPendente(
+                        "BACKUP - " + _etapaAtual,
+                        ex);
+                    EnvioLogRemotoEtiquetas.DispararEnvioAssincrono();
+                }
+                catch (Exception exLogRemoto)
+                {
+                    try
+                    {
+                        glo.Loga("ERRO_ENVIO_LOG_REMOTO_BACKUP: " + exLogRemoto.Message);
+                    }
+                    catch
+                    {
+                    }
+                }
+
+                throw;
+            }
         }
 
 
@@ -89,7 +135,8 @@ namespace TeleBonifacio
             DateTime hoje = DateTime.Now;
             DateTime ultimas24Horas = hoje.AddHours(-24);
 
-            // 🔹 Passo 1: Adicionar arquivos definidos no INI
+            _etapaAtual = "Coleta dos arquivos definidos no INI";
+            // Passo 1: Adicionar arquivos definidos no INI
             int contador = 1;
             while (true)
             {
@@ -112,7 +159,8 @@ namespace TeleBonifacio
                 contador++;
             }
 
-            // 🔹 Passo 2: Adicionar arquivos .txt modificados hoje
+            _etapaAtual = "Coleta dos arquivos de entregas";
+            // Passo 2: Adicionar arquivos .txt modificados hoje
             string diretorioEntregas = @"C:\Entregas";
             if (Directory.Exists(diretorioEntregas))
             {
@@ -135,7 +183,8 @@ namespace TeleBonifacio
                 Console.WriteLine($"❌ ERRO: Diretório {diretorioEntregas} não encontrado.");
             }
 
-            // 🔹 Passo 3: Adicionar arquivos da subpasta "Logs" criados nas últimas 24 horas
+            _etapaAtual = "Coleta dos logs";
+            // Passo 3: Adicionar arquivos da subpasta "Logs" criados nas últimas 24 horas
             string diretorioLogs = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Logs");
             if (Directory.Exists(diretorioLogs))
             {
@@ -158,7 +207,8 @@ namespace TeleBonifacio
                 Console.WriteLine($"❌ ERRO: Diretório {diretorioLogs} não encontrado.");
             }
 
-            // 🔹 Passo 4: Adicionar o arquivo "Arquivo.xlsx"
+            _etapaAtual = "Cópia do arquivo Arquivo.xlsx";
+            // Passo 4: Adicionar o arquivo "Arquivo.xlsx"
             string caminhoArquivoXlsx = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Arquivo.xlsx");
             if (File.Exists(caminhoArquivoXlsx))
             {

@@ -1,4 +1,4 @@
-﻿namespace TeleBonifacio
+namespace TeleBonifacio
 {
     partial class operEtiquetas
     {
@@ -156,7 +156,7 @@
             this.lblObservacao.Name = "lblObservacao";
             this.lblObservacao.Size = new System.Drawing.Size(65, 13);
             this.lblObservacao.TabIndex = 11;
-            this.lblObservacao.Text = "Observação";
+            this.lblObservacao.Text = "Texto livre / Observação";
             // 
             // lblLocal
             // 
@@ -197,7 +197,7 @@
             // lblPreview
             // 
             this.lblPreview.AutoSize = true;
-            this.lblPreview.Location = new System.Drawing.Point(18, 274);
+            this.lblPreview.Location = new System.Drawing.Point(18, 310);
             this.lblPreview.Name = "lblPreview";
             this.lblPreview.Size = new System.Drawing.Size(84, 13);
             this.lblPreview.TabIndex = 2;
@@ -305,7 +305,12 @@
             // 
             this.txtObservacao.Location = new System.Drawing.Point(21, 190);
             this.txtObservacao.Name = "txtObservacao";
-            this.txtObservacao.Size = new System.Drawing.Size(390, 20);
+            this.txtObservacao.Multiline = true;
+            this.txtObservacao.AcceptsReturn = true;
+            this.txtObservacao.AcceptsTab = false;
+            this.txtObservacao.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.txtObservacao.WordWrap = true;
+            this.txtObservacao.Size = new System.Drawing.Size(390, 56);
             this.txtObservacao.TabIndex = 10;
             this.txtObservacao.TextChanged += new System.EventHandler(this.CamposPreview_TextChanged);
             // 
@@ -360,7 +365,7 @@
             this.gridEtiquetas.AllowUserToAddRows = false;
             this.gridEtiquetas.AllowUserToDeleteRows = false;
             this.gridEtiquetas.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-            this.gridEtiquetas.Location = new System.Drawing.Point(470, 294);
+            this.gridEtiquetas.Location = new System.Drawing.Point(470, 330);
             this.gridEtiquetas.MultiSelect = false;
             this.gridEtiquetas.Name = "gridEtiquetas";
             this.gridEtiquetas.ReadOnly = true;
@@ -373,7 +378,7 @@
             // 
             this.pnlPreview.BackColor = System.Drawing.Color.White;
             this.pnlPreview.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.pnlPreview.Location = new System.Drawing.Point(21, 294);
+            this.pnlPreview.Location = new System.Drawing.Point(21, 330);
             this.pnlPreview.Name = "pnlPreview";
             this.pnlPreview.Size = new System.Drawing.Size(430, 228);
             this.pnlPreview.TabIndex = 1;
@@ -382,7 +387,7 @@
             // 
             // btNovo
             // 
-            this.btNovo.Location = new System.Drawing.Point(21, 228);
+            this.btNovo.Location = new System.Drawing.Point(21, 260);
             this.btNovo.Name = "btNovo";
             this.btNovo.Size = new System.Drawing.Size(90, 28);
             this.btNovo.TabIndex = 7;
@@ -391,7 +396,7 @@
             // 
             // btSalvar
             // 
-            this.btSalvar.Location = new System.Drawing.Point(121, 228);
+            this.btSalvar.Location = new System.Drawing.Point(121, 260);
             this.btSalvar.Name = "btSalvar";
             this.btSalvar.Size = new System.Drawing.Size(90, 28);
             this.btSalvar.TabIndex = 6;
@@ -400,7 +405,7 @@
             // 
             // btExcluir
             // 
-            this.btExcluir.Location = new System.Drawing.Point(221, 228);
+            this.btExcluir.Location = new System.Drawing.Point(221, 260);
             this.btExcluir.Name = "btExcluir";
             this.btExcluir.Size = new System.Drawing.Size(90, 28);
             this.btExcluir.TabIndex = 5;
@@ -409,7 +414,7 @@
             // 
             // btLimpar
             // 
-            this.btLimpar.Location = new System.Drawing.Point(321, 228);
+            this.btLimpar.Location = new System.Drawing.Point(321, 260);
             this.btLimpar.Name = "btLimpar";
             this.btLimpar.Size = new System.Drawing.Size(90, 28);
             this.btLimpar.TabIndex = 4;
@@ -418,7 +423,7 @@
             // 
             // btImprimir
             // 
-            this.btImprimir.Location = new System.Drawing.Point(421, 228);
+            this.btImprimir.Location = new System.Drawing.Point(421, 260);
             this.btImprimir.Name = "btImprimir";
             this.btImprimir.Size = new System.Drawing.Size(90, 28);
             this.btImprimir.TabIndex = 3;
@@ -429,7 +434,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(969, 541);
+            this.ClientSize = new System.Drawing.Size(969, 577);
             this.Controls.Add(this.gridEtiquetas);
             this.Controls.Add(this.pnlPreview);
             this.Controls.Add(this.lblPreview);
@@ -469,7 +474,7 @@
             this.Controls.Add(this.txtNomeEmpresa);
             this.Controls.Add(this.lblNomeEmpresa);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.MinimumSize = new System.Drawing.Size(985, 580);
+            this.MinimumSize = new System.Drawing.Size(985, 616);
             this.Name = "operEtiquetas";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Etiquetas";

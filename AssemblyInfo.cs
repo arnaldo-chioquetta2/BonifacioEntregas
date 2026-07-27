@@ -11,9 +11,16 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyCulture("")]
 [assembly: ComVisible(false)]
 [assembly: Guid("308c57af-e663-456d-8a2c-188bbd61423d")]
-[assembly: AssemblyVersion("4.2.9.0")]
-[assembly: AssemblyFileVersion("4.2.9.0")]
+[assembly: AssemblyVersion("4.3.4.0")]
+[assembly: AssemblyFileVersion("4.3.4.0")]
 
+// 4.3.4 26/07/26 Modo de texto livre com persistência
+// 4.3.4 26/07/26 Log remoto para erros de backup
+// 4.3.3 25/07/26 Ajuste do ajuste no tamanho das letras das etiquetas2
+// 4.3.2 25/07/26 Ajuste no tamanho das letras das etiquetas2
+// 4.3.1 24/07/26 Ajuste no termo LOCAL da etiqueta
+// 4.3.0 23/07/26 Ajuste no tamanho das letras das etiquetas
+// 4.3.0 22/07/26 Log remoto
 // 4.2.9 14/07/26 Ajuste nas dimensões das letras das etiquetas
 // 4.2.8 13/07/26 Ajustes nas fontes das etiquetas
 // 4.2.7 12/07/26 Correção na gravação das etiquetas

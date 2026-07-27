@@ -80,6 +80,7 @@ namespace TeleBonifacio.dao
                 else
                 {
                     existente.NomeEtiqueta = etiqueta.NomeEtiqueta;
+                    existente.ModoTextoLivre = etiqueta.ModoTextoLivre;
                     existente.Codigo = etiqueta.Codigo;
                     existente.Descricao = etiqueta.Descricao;
                     existente.Preco = etiqueta.Preco;

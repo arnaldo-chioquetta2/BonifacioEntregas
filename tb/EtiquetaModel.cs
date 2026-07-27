@@ -13,6 +13,7 @@ namespace TeleBonifacio.tb
     public class EtiquetaModel
     {
         public string Id { get; set; }
+        public bool ModoTextoLivre { get; set; }
         public string NomeEtiqueta { get; set; }
         public string NomeEmpresa { get; set; }
         public string Telefone { get; set; }

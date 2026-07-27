@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Printing;
@@ -42,6 +42,7 @@ namespace TeleBonifacio
             { "Preço", "Preco" },
             { "Observacao", "Observacao" },
             { "Observação", "Observacao" },
+            { "Texto livre", "Observacao" },
             { "TeleEntrega", "TeleEntrega" },
             { "Tele-entrega", "TeleEntrega" },
             { "Local", "Local" },
@@ -56,7 +57,9 @@ namespace TeleBonifacio
             txtCodigo.TextChanged += CamposPreview_TextChanged;
             txtDescricao.TextChanged += CamposPreview_TextChanged;
             txtPreco.TextChanged += CamposPreview_TextChanged;
-            txtObservacao.TextChanged += CamposPreview_TextChanged;
+
+            txtObservacao.Enter += txtObservacao_Enter;
+            txtObservacao.Click += txtObservacao_Click;
             cmbLinhaFormatacao.SelectedIndexChanged += cmbLinhaFormatacao_SelectedIndexChanged;
             cmbFonte.SelectedIndexChanged += cmbFonte_SelectedIndexChanged;
             numTamanhoFonte.ValueChanged += numTamanhoFonte_ValueChanged;
@@ -79,6 +82,7 @@ namespace TeleBonifacio
                 cmbLinhaFormatacao.Items.Add("Descrição");
                 cmbLinhaFormatacao.Items.Add("Preço");
                 cmbLinhaFormatacao.Items.Add("Observação");
+                cmbLinhaFormatacao.Items.Add("Texto livre");
                 cmbLinhaFormatacao.Items.Add("Tele-entrega");
                 cmbLinhaFormatacao.Items.Add("Local");
                 cmbLinhaFormatacao.SelectedItem = "Código";
@@ -323,11 +327,6 @@ namespace TeleBonifacio
                     impressorasInstaladas.Add(item);
                 }
 
-                //string impressoraPadrao;
-                //using (PrinterSettings settings = new PrinterSettings())
-                //{
-                //    impressoraPadrao = settings.PrinterName;
-                //}
                 PrinterSettings settings = new PrinterSettings();
                 string impressoraPadrao = settings.PrinterName;
 
@@ -884,7 +883,9 @@ namespace TeleBonifacio
                 txtObservacao.Text = Convert.ToString(row.Cells["Observacao"].Value);
                 EtiquetaModel etiquetaSelecionada = etiquetas.FirstOrDefault(item => string.Equals(item.Id, etiquetaSelecionadaId, StringComparison.OrdinalIgnoreCase));
                 InicializarFontesEdicao(etiquetaSelecionada ?? new EtiquetaModel());
-                linhaSelecionada = "Codigo";
+                linhaSelecionada = etiquetaSelecionada != null && etiquetaSelecionada.ModoTextoLivre
+                    ? "Observacao"
+                    : "Codigo";
                 CarregarControlesFormatacao();
                 pnlPreview.Invalidate();
             }
@@ -892,6 +893,29 @@ namespace TeleBonifacio
             {
                 glo.Loga("Erro gridEtiquetas_CellClick: " + ex.Message);
             }
+        }
+
+        private RectangleF ObterAreaTextoLivre(RectangleF areaBase)
+        {
+            float margemHorizontal = areaBase.Width * 0.04f;
+            float margemVertical = areaBase.Height * 0.04f;
+            return new RectangleF(
+                areaBase.X + margemHorizontal,
+                areaBase.Y + margemVertical,
+                areaBase.Width - (margemHorizontal * 2),
+                areaBase.Height - (margemVertical * 2));
+        }
+
+        private bool EstaEmModoTextoLivre()
+        {
+            if (string.IsNullOrWhiteSpace(txtObservacao.Text) || cmbLinhaFormatacao.SelectedItem == null)
+            {
+                return false;
+            }
+
+            string itemSelecionado = cmbLinhaFormatacao.SelectedItem.ToString();
+            return string.Equals(itemSelecionado, "Texto livre", StringComparison.OrdinalIgnoreCase) ||
+                string.Equals(ObterChaveLinhaFormatacao(itemSelecionado), "Observacao", StringComparison.OrdinalIgnoreCase);
         }
 
         private void pnlPreview_Paint(object sender, PaintEventArgs e)
@@ -923,6 +947,24 @@ namespace TeleBonifacio
                     e.Graphics.DrawRectangle(pen, etiquetaRect);
                 }
 
+                if (EstaEmModoTextoLivre())
+                {
+                    RectangleF areaTextoLivre = ObterAreaTextoLivre(etiquetaRect);
+
+                    areasPreview["Observacao"] = areaTextoLivre;
+                    using (StringFormat textoLivreFormat = new StringFormat
+                    {
+                        Alignment = StringAlignment.Near,
+                        LineAlignment = StringAlignment.Near,
+                        Trimming = StringTrimming.None
+                    })
+                    {
+                        DesenharLinhaPreview(e.Graphics, "Observacao", txtObservacao.Text, areaTextoLivre, textoLivreFormat, Color.Black, false);
+                    }
+
+                    return;
+                }
+
                 float margemHorizontal = 4f;
                 float larguraTexto = etiquetaRect.Width - (margemHorizontal * 2);
                 float altura = etiquetaRect.Height;
@@ -930,8 +972,14 @@ namespace TeleBonifacio
                 RectangleF linhaDescricao = new RectangleF(etiquetaRect.X + margemHorizontal, etiquetaRect.Y + (altura * 0.18f), larguraTexto, altura * 0.15f);
                 RectangleF linhaPreco = new RectangleF(etiquetaRect.X + margemHorizontal, etiquetaRect.Y + (altura * 0.35f), larguraTexto, altura * 0.18f);
                 RectangleF linhaObservacao = new RectangleF(etiquetaRect.X + margemHorizontal, etiquetaRect.Y + (altura * 0.55f), larguraTexto, altura * 0.10f);
-                RectangleF linhaLocal = new RectangleF(etiquetaRect.X + margemHorizontal, etiquetaRect.Y + (altura * 0.61f), (etiquetaRect.Width / 2f) - 6, altura * 0.11f);
-                RectangleF linhaCodigo = new RectangleF(etiquetaRect.X + (etiquetaRect.Width / 2f) + 2, etiquetaRect.Y + (altura * 0.61f), (etiquetaRect.Width / 2f) - 6, altura * 0.11f);
+                float larguraLocal = larguraTexto * 0.45f;
+                float margemDireitaCodigo = Math.Max(1f, larguraTexto * 0.02f);
+                float espacoEntreLinhas = 2f;
+                float xLinha = etiquetaRect.X + margemHorizontal;
+                float xCodigo = xLinha + larguraLocal + espacoEntreLinhas;
+                float larguraCodigo = larguraTexto - larguraLocal - espacoEntreLinhas - margemDireitaCodigo;
+                RectangleF linhaLocal = new RectangleF(xLinha, etiquetaRect.Y + (altura * 0.59f), larguraLocal, altura * 0.14f);
+                RectangleF linhaCodigo = new RectangleF(xCodigo, etiquetaRect.Y + (altura * 0.59f), larguraCodigo, altura * 0.14f);
                 RectangleF linhaTelefone = new RectangleF(etiquetaRect.X + margemHorizontal, etiquetaRect.Y + (altura * 0.74f), larguraTexto, altura * 0.12f);
                 RectangleF linhaTeleEntrega = new RectangleF(etiquetaRect.X + margemHorizontal, etiquetaRect.Y + (altura * 0.87f), larguraTexto, altura * 0.12f);
 
@@ -945,13 +993,14 @@ namespace TeleBonifacio
                 areasPreview["TeleEntrega"] = linhaTeleEntrega;
 
                 using (StringFormat center = new StringFormat { Alignment = StringAlignment.Center, LineAlignment = StringAlignment.Center })
+                using (StringFormat observacaoFormat = new StringFormat { Alignment = StringAlignment.Near, LineAlignment = StringAlignment.Near, Trimming = StringTrimming.None })
                 using (StringFormat left = new StringFormat { Alignment = StringAlignment.Near, LineAlignment = StringAlignment.Center })
-                using (StringFormat right = new StringFormat { Alignment = StringAlignment.Far, LineAlignment = StringAlignment.Center })
+                using (StringFormat right = new StringFormat { Alignment = StringAlignment.Far, LineAlignment = StringAlignment.Center, Trimming = StringTrimming.None, FormatFlags = StringFormatFlags.NoWrap })
                 {
                     DesenharLinhaPreview(e.Graphics, "NomeEmpresa", txtNomeEmpresa.Text.Trim(), linhaNomeEmpresa, center, Color.Black, true);
                     DesenharLinhaPreview(e.Graphics, "Descricao", txtDescricao.Text.Trim(), linhaDescricao, center, Color.Black, false);
                     DesenharLinhaPreview(e.Graphics, "Preco", FormatarPrecoEtiqueta(txtPreco.Text), linhaPreco, center, Color.Black, true);
-                    DesenharLinhaPreview(e.Graphics, "Observacao", txtObservacao.Text.Trim(), linhaObservacao, center, Color.Black, false);
+                    DesenharLinhaPreview(e.Graphics, "Observacao", txtObservacao.Text, linhaObservacao, observacaoFormat, Color.Black, false);
                     DesenharLinhaPreview(e.Graphics, "Local", FormatarLocalEtiqueta(txtLocal.Text), linhaLocal, left, Color.Black, true);
                     DesenharLinhaPreview(e.Graphics, "Codigo", FormatarCodigoEtiqueta(txtCodigo.Text), linhaCodigo, right, Color.Black, true);
                     DesenharLinhaPreview(e.Graphics, "Telefone", txtTelefone.Text.Trim(), linhaTelefone, center, Color.Black, false);
@@ -980,7 +1029,8 @@ namespace TeleBonifacio
                 string.IsNullOrWhiteSpace(fonteConfig.NomeFonte) ? "Arial" : fonteConfig.NomeFonte,
                 fonteConfig.Tamanho > 0 ? fonteConfig.Tamanho : 8f,
                 estilo == FontStyle.Bold,
-                5f))
+                5f,
+                !EhLinhaComTamanhoPrioritario(linha) && !string.Equals(linha, "Observacao", StringComparison.OrdinalIgnoreCase)))
             {
                 if (string.Equals(linhaSelecionada, linha, StringComparison.OrdinalIgnoreCase))
                 {
@@ -1019,6 +1069,12 @@ namespace TeleBonifacio
             }
 
             return fonte;
+        }
+
+        private static bool EhLinhaComTamanhoPrioritario(string linha)
+        {
+            return string.Equals(linha, "Codigo", StringComparison.OrdinalIgnoreCase) ||
+                string.Equals(linha, "Local", StringComparison.OrdinalIgnoreCase);
         }
 
         private void ConfigurarGrid()
@@ -1130,6 +1186,7 @@ namespace TeleBonifacio
             return new EtiquetaModel
             {
                 Id = etiquetaSelecionadaId,
+                ModoTextoLivre = EstaEmModoTextoLivre(),
                 NomeEtiqueta = nomeEtiquetaSelecionada,
                 NomeEmpresa = txtNomeEmpresa.Text.Trim(),
                 Telefone = txtTelefone.Text.Trim(),
@@ -1138,7 +1195,7 @@ namespace TeleBonifacio
                 Codigo = NormalizarCodigoCampo(txtCodigo.Text),
                 Descricao = txtDescricao.Text.Trim(),
                 Preco = NormalizarPrecoCampo(txtPreco.Text),
-                Observacao = txtObservacao.Text.Trim(),
+                Observacao = txtObservacao.Text,
                 Fontes = CopiarFontesEdicao()
             };
         }
@@ -1191,7 +1248,7 @@ namespace TeleBonifacio
         private string FormatarLocalEtiqueta(string local)
         {
             string valor = NormalizarLocalCampo(local);
-            return string.IsNullOrWhiteSpace(valor) ? string.Empty : "LOCAL: " + valor;
+            return string.IsNullOrWhiteSpace(valor) ? string.Empty : "LC: " + valor;
         }
 
         private string SolicitarNomeEtiqueta(EtiquetaModel etiqueta)
@@ -1249,6 +1306,11 @@ namespace TeleBonifacio
                 return "Código";
             }
 
+            if (string.Equals(chave, "Observacao", StringComparison.OrdinalIgnoreCase))
+            {
+                return "Texto livre";
+            }
+
             foreach (KeyValuePair<string, string> item in mapaLinhaFormatacao)
             {
                 if (string.Equals(item.Value, chave, StringComparison.OrdinalIgnoreCase) &&
@@ -1259,6 +1321,16 @@ namespace TeleBonifacio
             }
 
             return chave;
+        }
+
+        private void txtObservacao_Enter(object sender, EventArgs e)
+        {
+            SelecionarLinhaFormatacao("Texto livre");
+        }
+
+        private void txtObservacao_Click(object sender, EventArgs e)
+        {
+            SelecionarLinhaFormatacao("Texto livre");
         }
 
         private void LimparCampos()
@@ -1848,7 +1920,8 @@ namespace TeleBonifacio
                 string local = FormatarLocalEtiqueta(etiquetaImpressao?.Local);
 
                 using (StringFormat center = new StringFormat { Alignment = StringAlignment.Center, LineAlignment = StringAlignment.Center })
-                using (StringFormat right = new StringFormat { Alignment = StringAlignment.Far, LineAlignment = StringAlignment.Center })
+                using (StringFormat observacaoFormat = new StringFormat { Alignment = StringAlignment.Center, LineAlignment = StringAlignment.Center, FormatFlags = StringFormatFlags.NoWrap })
+                using (StringFormat right = new StringFormat { Alignment = StringAlignment.Far, LineAlignment = StringAlignment.Center, Trimming = StringTrimming.None, FormatFlags = StringFormatFlags.NoWrap })
                 {
                     float margemHorizontal = 4f;
                     float larguraTexto = area.Width - (margemHorizontal * 2);
@@ -1857,11 +1930,34 @@ namespace TeleBonifacio
                     RectangleF descricaoRect = new RectangleF(area.X + margemHorizontal, area.Y + (altura * 0.18f), larguraTexto, altura * 0.15f);
                     RectangleF precoRect = new RectangleF(area.X + margemHorizontal, area.Y + (altura * 0.35f), larguraTexto, altura * 0.18f);
                     RectangleF observacaoRect = new RectangleF(area.X + margemHorizontal, area.Y + (altura * 0.55f), larguraTexto, altura * 0.10f);
-                    RectangleF localRect = new RectangleF(area.X + margemHorizontal, area.Y + (altura * 0.61f), (area.Width / 2f) - 6, altura * 0.11f);
-                    RectangleF codigoRect = new RectangleF(area.X + (area.Width / 2f) + 2, area.Y + (altura * 0.61f), (area.Width / 2f) - 6, altura * 0.11f);
+                    float larguraLocal = larguraTexto * 0.45f;
+                    float margemDireitaCodigo = Math.Max(1f, larguraTexto * 0.02f);
+                    float espacoEntreLinhas = 2f;
+                    float xLinha = area.X + margemHorizontal;
+                    float xCodigo = xLinha + larguraLocal + espacoEntreLinhas;
+                    float larguraCodigo = larguraTexto - larguraLocal - espacoEntreLinhas - margemDireitaCodigo;
+                    RectangleF localRect = new RectangleF(xLinha, area.Y + (altura * 0.59f), larguraLocal, altura * 0.14f);
+                    RectangleF codigoRect = new RectangleF(xCodigo, area.Y + (altura * 0.59f), larguraCodigo, altura * 0.14f);
                     RectangleF telefoneRect = new RectangleF(area.X + margemHorizontal, area.Y + (altura * 0.74f), larguraTexto, altura * 0.12f);
                     RectangleF teleEntregaRect = new RectangleF(area.X + margemHorizontal, area.Y + (altura * 0.87f), larguraTexto, altura * 0.12f);
 
+                    if (EstaEmModoTextoLivre())
+                    {
+                        RectangleF areaTextoLivre = ObterAreaTextoLivre(area);
+                        using (Font fontTextoLivre = CriarFonteImpressao("Observacao", e.Graphics, observacao, areaTextoLivre, false))
+                        using (StringFormat textoLivreFormat = new StringFormat
+                        {
+                            Alignment = StringAlignment.Near,
+                            LineAlignment = StringAlignment.Near,
+                            Trimming = StringTrimming.None
+                        })
+                        using (Brush brushTextoLivre = new SolidBrush(Color.Black))
+                        {
+                            e.Graphics.DrawString(observacao, fontTextoLivre, brushTextoLivre, areaTextoLivre, textoLivreFormat);
+                        }
+                    }
+                    else
+                    {
                     using (Font fontNomeEmpresa = CriarFonteImpressao("NomeEmpresa", e.Graphics, nomeEmpresa, nomeEmpresaRect))
                     using (Font fontTelefone = CriarFonteImpressao("Telefone", e.Graphics, telefone, telefoneRect))
                     using (Font fontCodigo = CriarFonteImpressao("Codigo", e.Graphics, codigo, codigoRect))
@@ -1875,7 +1971,7 @@ namespace TeleBonifacio
                         e.Graphics.DrawString(nomeEmpresa, fontNomeEmpresa, brush, nomeEmpresaRect, center);
                         e.Graphics.DrawString(descricao, fontDescricao, brush, descricaoRect, center);
                         e.Graphics.DrawString(preco, fontPreco, brush, precoRect, center);
-                        e.Graphics.DrawString(observacao, fontObservacao, brush, observacaoRect, center);
+                        e.Graphics.DrawString(observacao, fontObservacao, brush, observacaoRect, observacaoFormat);
                         e.Graphics.DrawString(codigo, fontCodigo, brush, codigoRect, right);
                         e.Graphics.DrawString(telefone, fontTelefone, brush, telefoneRect, center);
                         e.Graphics.DrawString(teleEntrega, fontTeleEntrega, brush, teleEntregaRect, center);
@@ -1883,6 +1979,7 @@ namespace TeleBonifacio
                         {
                             e.Graphics.DrawString(local, fontLocal, brush, localRect, left);
                         }
+                    }
                     }
                 }
 
@@ -1907,7 +2004,7 @@ namespace TeleBonifacio
             }
         }
 
-        private Font CriarFonteAjustada(Graphics graphics, string texto, RectangleF area, string nomeFonte, float tamanhoDesejado, bool negrito, float tamanhoMinimo)
+        private Font CriarFonteAjustada(Graphics graphics, string texto, RectangleF area, string nomeFonte, float tamanhoDesejado, bool negrito, float tamanhoMinimo, bool ajustarAutomaticamente = true)
         {
             float tamanhoAtual = tamanhoDesejado > 0 ? tamanhoDesejado : 8f;
             float tamanhoLimite = tamanhoMinimo > 0 ? tamanhoMinimo : 5f;
@@ -1934,6 +2031,11 @@ namespace TeleBonifacio
 
                 using (StringFormat format = new StringFormat(StringFormat.GenericTypographic))
                 {
+                    if (!ajustarAutomaticamente)
+                    {
+                        return fonte;
+                    }
+
                     format.FormatFlags |= StringFormatFlags.NoWrap;
                     SizeF medida = graphics.MeasureString(texto ?? string.Empty, fonte, new SizeF(area.Width, area.Height), format);
                     if (medida.Width <= area.Width && medida.Height <= area.Height)
@@ -1957,7 +2059,7 @@ namespace TeleBonifacio
             }
         }
 
-        private Font CriarFonteImpressao(string linha, Graphics graphics, string texto, RectangleF area)
+        private Font CriarFonteImpressao(string linha, Graphics graphics, string texto, RectangleF area, bool ajustarAutomaticamente = true)
         {
             string nomeFonte = "Arial";
             float tamanho = 8f;
@@ -1990,11 +2092,11 @@ namespace TeleBonifacio
                     nomeFonte = "Arial";
                 }
 
-                return CriarFonteAjustada(graphics, texto, area, nomeFonte, tamanho, negrito, 5f);
+                return CriarFonteAjustada(graphics, texto, area, nomeFonte, tamanho, negrito, 5f, ajustarAutomaticamente && !EhLinhaComTamanhoPrioritario(linha));
             }
             catch
             {
-                return CriarFonteAjustada(graphics, texto, area, "Arial", tamanho > 0 ? tamanho : 8f, negrito, 5f);
+                return CriarFonteAjustada(graphics, texto, area, "Arial", tamanho > 0 ? tamanho : 8f, negrito, 5f, ajustarAutomaticamente && !EhLinhaComTamanhoPrioritario(linha));
             }
         }
     }
