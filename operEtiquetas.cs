@@ -257,8 +257,10 @@ namespace TeleBonifacio
             try
             {
                 EtiquetaModel etiqueta = ObterEtiquetaDaTela();
+                bool modoTextoLivre = EstaEmModoTextoLivre();
 
-                if (string.IsNullOrWhiteSpace(etiqueta.Id) &&
+                if (!modoTextoLivre &&
+                    string.IsNullOrWhiteSpace(etiqueta.Id) &&
                     string.IsNullOrWhiteSpace(etiqueta.Codigo) &&
                     string.IsNullOrWhiteSpace(etiqueta.Descricao))
                 {
@@ -266,7 +268,9 @@ namespace TeleBonifacio
                     return;
                 }
 
-                if (string.IsNullOrWhiteSpace(etiqueta.Codigo) && string.IsNullOrWhiteSpace(etiqueta.Descricao))
+                if (!modoTextoLivre &&
+                    string.IsNullOrWhiteSpace(etiqueta.Codigo) &&
+                    string.IsNullOrWhiteSpace(etiqueta.Descricao))
                 {
                     MessageBox.Show("Informe ou selecione uma etiqueta para imprimir.");
                     return;
