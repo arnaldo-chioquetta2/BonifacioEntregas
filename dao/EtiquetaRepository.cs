@@ -25,8 +25,16 @@ namespace TeleBonifacio.dao
                     return new List<EtiquetaModel>();
                 }
 
-                var etiquetas = JsonConvert.DeserializeObject<List<EtiquetaModel>>(json);
-                return etiquetas ?? new List<EtiquetaModel>();
+                var etiquetas = JsonConvert.DeserializeObject<List<EtiquetaModel>>(json) ?? new List<EtiquetaModel>();
+                foreach (EtiquetaModel item in etiquetas)
+                {
+                    if (item != null)
+                    {
+                        item.SincronizarLinhasTextoLivre();
+                    }
+                }
+
+                return etiquetas;
             }
             catch (Exception ex)
             {
@@ -69,6 +77,8 @@ namespace TeleBonifacio.dao
                 }
 
                 etiqueta.Fontes = etiqueta.ObterFontesComPadrao();
+                etiqueta.SincronizarLinhasTextoLivre();
+                etiqueta.LinhasTextoLivre = EtiquetaModel.CopiarLinhasTextoLivre(etiqueta.LinhasTextoLivre);
 
                 if (existente == null)
                 {
@@ -89,6 +99,7 @@ namespace TeleBonifacio.dao
                     existente.Telefone = etiqueta.Telefone;
                     existente.TeleEntrega = etiqueta.TeleEntrega;
                     existente.Local = etiqueta.Local;
+                    existente.LinhasTextoLivre = EtiquetaModel.CopiarLinhasTextoLivre(etiqueta.LinhasTextoLivre);
                     existente.Fontes = etiqueta.Fontes == null
                         ? new Dictionary<string, EtiquetaFonteConfig>()
                         : etiqueta.Fontes.ToDictionary(

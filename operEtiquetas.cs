@@ -23,6 +23,9 @@ namespace TeleBonifacio
         private bool carregandoFormatacao;
         private Dictionary<string, EtiquetaFonteConfig> fontesEdicao;
         private readonly Dictionary<string, RectangleF> areasPreview = new Dictionary<string, RectangleF>();
+        private string linhaTextoLivreSelecionadaId = "";
+        private readonly Dictionary<string, RectangleF> areasLinhasTextoLivre = new Dictionary<string, RectangleF>();
+        private List<EtiquetaTextoLivreLinha> linhasTextoLivreEdicao = new List<EtiquetaTextoLivreLinha>();
         private EtiquetaModel etiquetaImpressao;
         private int copiasRestantes;
         private int copiasTotais;
@@ -857,6 +860,18 @@ namespace TeleBonifacio
 
         private void CamposPreview_TextChanged(object sender, EventArgs e)
         {
+            if (string.Equals(
+                ObterChaveLinhaFormatacao(cmbLinhaFormatacao.SelectedItem == null ? "" : cmbLinhaFormatacao.SelectedItem.ToString()),
+                "Observacao",
+                StringComparison.OrdinalIgnoreCase))
+            {
+                SincronizarLinhasTextoLivreDaTela();
+                if (EstaEmModoTextoLivre())
+                {
+                    CarregarFormatacaoLinhaTextoLivre();
+                }
+            }
+
             pnlPreview.Invalidate();
         }
 
@@ -887,10 +902,20 @@ namespace TeleBonifacio
                 txtObservacao.Text = Convert.ToString(row.Cells["Observacao"].Value);
                 EtiquetaModel etiquetaSelecionada = etiquetas.FirstOrDefault(item => string.Equals(item.Id, etiquetaSelecionadaId, StringComparison.OrdinalIgnoreCase));
                 InicializarFontesEdicao(etiquetaSelecionada ?? new EtiquetaModel());
-                linhaSelecionada = etiquetaSelecionada != null && etiquetaSelecionada.ModoTextoLivre
-                    ? "Observacao"
-                    : "Codigo";
-                CarregarControlesFormatacao();
+                linhasTextoLivreEdicao = EtiquetaModel.CopiarLinhasTextoLivre(
+                    etiquetaSelecionada != null ? etiquetaSelecionada.LinhasTextoLivre : null);
+                if (etiquetaSelecionada != null && etiquetaSelecionada.ModoTextoLivre)
+                {
+                    SincronizarLinhasTextoLivreDaTela();
+                    linhaSelecionada = "Observacao";
+                    CarregarFormatacaoLinhaTextoLivre();
+                }
+                else
+                {
+                    linhaTextoLivreSelecionadaId = "";
+                    linhaSelecionada = "Codigo";
+                    CarregarControlesFormatacao();
+                }
                 pnlPreview.Invalidate();
             }
             catch (Exception ex)
@@ -899,6 +924,120 @@ namespace TeleBonifacio
             }
         }
 
+        private string[] ObterLinhasTextoLivre(string texto)
+        {
+            return (texto ?? string.Empty).Split(
+                new[] { "\r\n", "\n", "\r" },
+                StringSplitOptions.None);
+        }
+        private void SincronizarLinhasTextoLivreDaTela()
+        {
+            if (linhasTextoLivreEdicao == null)
+            {
+                linhasTextoLivreEdicao = new List<EtiquetaTextoLivreLinha>();
+            }
+
+            List<EtiquetaTextoLivreLinha> antigas = linhasTextoLivreEdicao;
+            string[] textos = ObterLinhasTextoLivre(txtObservacao.Text);
+            EtiquetaFonteConfig fontePadrao = ObterFonteLinha("Observacao");
+            var novas = new List<EtiquetaTextoLivreLinha>();
+
+            for (int indice = 0; indice < textos.Length; indice++)
+            {
+                EtiquetaTextoLivreLinha antiga = indice < antigas.Count ? antigas[indice] : null;
+                novas.Add(new EtiquetaTextoLivreLinha
+                {
+                    Id = antiga != null && !string.IsNullOrWhiteSpace(antiga.Id)
+                        ? antiga.Id
+                        : Guid.NewGuid().ToString("N"),
+                    Texto = textos[indice],
+                    Fonte = CopiarFonteTextoLivre(
+                        antiga != null && antiga.Fonte != null
+                            ? antiga.Fonte
+                            : fontePadrao)
+                });
+            }
+
+            linhasTextoLivreEdicao = novas;
+            if (!string.IsNullOrWhiteSpace(linhaTextoLivreSelecionadaId) &&
+                !linhasTextoLivreEdicao.Any(item => item != null && item.Id == linhaTextoLivreSelecionadaId))
+            {
+                linhaTextoLivreSelecionadaId = "";
+            }
+
+            if (string.IsNullOrWhiteSpace(linhaTextoLivreSelecionadaId) && linhasTextoLivreEdicao.Count > 0)
+            {
+                EtiquetaTextoLivreLinha primeira = linhasTextoLivreEdicao.FirstOrDefault(item => item != null && !string.IsNullOrEmpty(item.Texto))
+                    ?? linhasTextoLivreEdicao.FirstOrDefault(item => item != null);
+                linhaTextoLivreSelecionadaId = primeira != null ? primeira.Id : "";
+            }
+        }
+
+        private EtiquetaFonteConfig CopiarFonteTextoLivre(EtiquetaFonteConfig fonte)
+        {
+            return fonte == null
+                ? new EtiquetaFonteConfig
+                {
+                    NomeFonte = "Arial",
+                    Tamanho = 7f,
+                    Negrito = false
+                }
+                : new EtiquetaFonteConfig
+                {
+                    NomeFonte = fonte.NomeFonte,
+                    Tamanho = fonte.Tamanho,
+                    Negrito = fonte.Negrito
+                };
+        }
+
+        private EtiquetaTextoLivreLinha ObterLinhaTextoLivreSelecionada()
+        {
+            if (string.IsNullOrWhiteSpace(linhaTextoLivreSelecionadaId) || linhasTextoLivreEdicao == null)
+            {
+                return null;
+            }
+
+            return linhasTextoLivreEdicao.FirstOrDefault(
+                item => item != null && item.Id == linhaTextoLivreSelecionadaId);
+        }
+
+        private void CarregarFormatacaoLinhaTextoLivre()
+        {
+            EtiquetaTextoLivreLinha linha = ObterLinhaTextoLivreSelecionada();
+            if (linha == null || linha.Fonte == null)
+            {
+                return;
+            }
+
+            try
+            {
+                carregandoFormatacao = true;
+                if (cmbLinhaFormatacao.Items.Contains("Texto livre"))
+                {
+                    cmbLinhaFormatacao.SelectedItem = "Texto livre";
+                }
+
+                string nomeFonte = string.IsNullOrWhiteSpace(linha.Fonte.NomeFonte) ? "Arial" : linha.Fonte.NomeFonte;
+                if (cmbFonte.Items.Contains(nomeFonte))
+                {
+                    cmbFonte.SelectedItem = nomeFonte;
+                }
+                else if (cmbFonte.Items.Count > 0)
+                {
+                    cmbFonte.SelectedIndex = 0;
+                }
+
+                decimal tamanho = (decimal)(linha.Fonte.Tamanho > 0f ? linha.Fonte.Tamanho : 7f);
+                numTamanhoFonte.Value = Math.Max(
+                    numTamanhoFonte.Minimum,
+                    Math.Min(numTamanhoFonte.Maximum, tamanho));
+                chkNegrito.Checked = linha.Fonte.Negrito;
+            }
+            finally
+            {
+                carregandoFormatacao = false;
+            }
+        }
         private RectangleF ObterAreaTextoLivre(RectangleF areaBase)
         {
             float margemHorizontal = areaBase.Width * 0.04f;
@@ -927,6 +1066,7 @@ namespace TeleBonifacio
             try
             {
                 areasPreview.Clear();
+                areasLinhasTextoLivre.Clear();
                 Rectangle area = pnlPreview.ClientRectangle;
                 e.Graphics.Clear(Color.White);
 
@@ -954,16 +1094,76 @@ namespace TeleBonifacio
                 if (EstaEmModoTextoLivre())
                 {
                     RectangleF areaTextoLivre = ObterAreaTextoLivre(etiquetaRect);
-
                     areasPreview["Observacao"] = areaTextoLivre;
+
+                    SincronizarLinhasTextoLivreDaTela();
+                    float yLinha = areaTextoLivre.Y;
+                    float espacamentoVertical = 2f;
+
                     using (StringFormat textoLivreFormat = new StringFormat
                     {
                         Alignment = StringAlignment.Near,
                         LineAlignment = StringAlignment.Near,
-                        Trimming = StringTrimming.None
+                        Trimming = StringTrimming.None,
+                        FormatFlags = StringFormatFlags.NoWrap
                     })
                     {
-                        DesenharLinhaPreview(e.Graphics, "Observacao", txtObservacao.Text, areaTextoLivre, textoLivreFormat, Color.Black, false);
+                        foreach (EtiquetaTextoLivreLinha linha in linhasTextoLivreEdicao)
+                        {
+                            if (linha == null || string.IsNullOrWhiteSpace(linha.Id))
+                            {
+                                continue;
+                            }
+
+                            EtiquetaFonteConfig configLinha = linha.Fonte ?? ObterFonteLinha("Observacao");
+                            using (Font fonteLinha = CriarFonteAjustadaLinhaLivre(
+                                e.Graphics,
+                                linha.Texto,
+                                areaTextoLivre.Width,
+                                configLinha))
+                            {
+                                float alturaLinha = Math.Max(
+                                    fonteLinha.GetHeight(e.Graphics),
+                                    fonteLinha.Size + espacamentoVertical);
+
+                                if (yLinha >= areaTextoLivre.Bottom)
+                                {
+                                    break;
+                                }
+
+                                RectangleF areaLinha = new RectangleF(
+                                    areaTextoLivre.X,
+                                    yLinha,
+                                    areaTextoLivre.Width,
+                                    Math.Min(alturaLinha, areaTextoLivre.Bottom - yLinha));
+                                areasLinhasTextoLivre[linha.Id] = areaLinha;
+
+                                if (linha.Id == linhaTextoLivreSelecionadaId)
+                                {
+                                    using (Brush brushSelecao = new SolidBrush(Color.FromArgb(35, Color.SteelBlue)))
+                                    using (Pen penSelecao = new Pen(Color.SteelBlue, 1)
+                                    {
+                                        DashStyle = System.Drawing.Drawing2D.DashStyle.Dash
+                                    })
+                                    {
+                                        e.Graphics.FillRectangle(brushSelecao, areaLinha);
+                                        e.Graphics.DrawRectangle(penSelecao, Rectangle.Round(areaLinha));
+                                    }
+                                }
+
+                                using (Brush brushTexto = new SolidBrush(Color.Black))
+                                {
+                                    e.Graphics.DrawString(
+                                        linha.Texto ?? string.Empty,
+                                        fonteLinha,
+                                        brushTexto,
+                                        areaLinha,
+                                        textoLivreFormat);
+                                }
+
+                                yLinha += alturaLinha;
+                            }
+                        }
                     }
 
                     return;
@@ -1017,6 +1217,58 @@ namespace TeleBonifacio
             }
         }
 
+        private Font CriarFonteAjustadaLinhaLivre(
+            Graphics graphics,
+            string texto,
+            float larguraDisponivel,
+            EtiquetaFonteConfig config)
+        {
+            string nomeFonte = config == null || string.IsNullOrWhiteSpace(config.NomeFonte)
+                ? "Arial"
+                : config.NomeFonte;
+            float tamanhoMaximo = config == null || config.Tamanho <= 0f
+                ? 8f
+                : config.Tamanho;
+            bool negrito = config != null && config.Negrito;
+            FontStyle estilo = negrito ? FontStyle.Bold : FontStyle.Regular;
+            float tamanho = Math.Max(5f, tamanhoMaximo);
+            string textoMedido = texto ?? string.Empty;
+
+            while (true)
+            {
+                Font fonte;
+                try
+                {
+                    fonte = new Font(nomeFonte, tamanho, estilo, GraphicsUnit.Point);
+                }
+                catch
+                {
+                    nomeFonte = "Arial";
+                    fonte = new Font(nomeFonte, tamanho, estilo, GraphicsUnit.Point);
+                }
+
+                SizeF medida;
+                using (StringFormat formatoMedicao = new StringFormat
+                {
+                    FormatFlags = StringFormatFlags.NoWrap
+                })
+                {
+                    medida = graphics.MeasureString(
+                        textoMedido,
+                        fonte,
+                        new SizeF(float.MaxValue, float.MaxValue),
+                        formatoMedicao);
+                }
+
+                if (medida.Width <= larguraDisponivel || tamanho <= 5f)
+                {
+                    return fonte;
+                }
+
+                fonte.Dispose();
+                tamanho = Math.Max(5f, tamanho - 0.5f);
+            }
+        }
         private void DesenharLinhaPreview(Graphics graphics, string linha, string texto, RectangleF areaLinha, StringFormat center, Color cor, bool negritoPadrao)
         {
             EtiquetaFonteConfig fonteConfig = ObterFonteLinha(linha);
@@ -1200,6 +1452,7 @@ namespace TeleBonifacio
                 Descricao = txtDescricao.Text.Trim(),
                 Preco = NormalizarPrecoCampo(txtPreco.Text),
                 Observacao = txtObservacao.Text,
+                LinhasTextoLivre = EtiquetaModel.CopiarLinhasTextoLivre(linhasTextoLivreEdicao),
                 Fontes = CopiarFontesEdicao()
             };
         }
@@ -1344,6 +1597,8 @@ namespace TeleBonifacio
                 etiquetaSelecionadaId = "";
                 nomeEtiquetaSelecionada = "";
                 InicializarFontesEdicao(new EtiquetaModel());
+                linhasTextoLivreEdicao = new List<EtiquetaTextoLivreLinha>();
+                linhaTextoLivreSelecionadaId = "";
                 linhaSelecionada = "Codigo";
                 txtNomeEmpresa.Clear();
                 txtTelefone.Clear();
@@ -1468,6 +1723,20 @@ namespace TeleBonifacio
                 InicializarFontesEdicao(new EtiquetaModel());
             }
 
+            if (EstaEmModoTextoLivre() && !string.IsNullOrWhiteSpace(linhaTextoLivreSelecionadaId))
+            {
+                EtiquetaTextoLivreLinha linhaLivre = ObterLinhaTextoLivreSelecionada();
+                if (linhaLivre != null)
+                {
+                    linhaLivre.Fonte = linhaLivre.Fonte ?? CopiarFonteTextoLivre(ObterFonteLinha("Observacao"));
+                    linhaLivre.Fonte.NomeFonte = cmbFonte.SelectedItem != null ? cmbFonte.SelectedItem.ToString() : "Arial";
+                    linhaLivre.Fonte.Tamanho = (float)numTamanhoFonte.Value;
+                    linhaLivre.Fonte.Negrito = chkNegrito.Checked;
+                    pnlPreview.Invalidate();
+                    return;
+                }
+            }
+
             string chave = string.IsNullOrWhiteSpace(linhaSelecionada) ? "Codigo" : linhaSelecionada;
             if (!fontesEdicao.ContainsKey(chave))
             {
@@ -1530,6 +1799,23 @@ namespace TeleBonifacio
         {
             try
             {
+                if (EstaEmModoTextoLivre())
+                {
+                    foreach (KeyValuePair<string, RectangleF> item in areasLinhasTextoLivre)
+                    {
+                        if (item.Value.Contains(new PointF(e.Location.X, e.Location.Y)))
+                        {
+                            linhaTextoLivreSelecionadaId = item.Key;
+                            linhaSelecionada = "Observacao";
+                            CarregarFormatacaoLinhaTextoLivre();
+                            pnlPreview.Invalidate();
+                            return;
+                        }
+                    }
+
+                    return;
+                }
+
                 foreach (KeyValuePair<string, RectangleF> item in areasPreview)
                 {
                     if (item.Value.Contains(new PointF(e.Location.X, e.Location.Y)))
@@ -1565,6 +1851,17 @@ namespace TeleBonifacio
             }
 
             linhaSelecionada = linha;
+            if (string.Equals(linha, "Observacao", StringComparison.OrdinalIgnoreCase) &&
+                !string.IsNullOrWhiteSpace(txtObservacao.Text))
+            {
+                SincronizarLinhasTextoLivreDaTela();
+                if (string.IsNullOrWhiteSpace(linhaTextoLivreSelecionadaId))
+                {
+                    EtiquetaTextoLivreLinha primeira = linhasTextoLivreEdicao.FirstOrDefault(item => item != null && !string.IsNullOrEmpty(item.Texto))
+                        ?? linhasTextoLivreEdicao.FirstOrDefault(item => item != null);
+                    linhaTextoLivreSelecionadaId = primeira != null ? primeira.Id : "";
+                }
+            }
 
             try
             {
@@ -1580,7 +1877,16 @@ namespace TeleBonifacio
                 carregandoFormatacao = false;
             }
 
-            CarregarControlesFormatacao();
+            if (string.Equals(linha, "Observacao", StringComparison.OrdinalIgnoreCase) &&
+                EstaEmModoTextoLivre())
+            {
+                CarregarFormatacaoLinhaTextoLivre();
+            }
+            else
+            {
+                CarregarControlesFormatacao();
+            }
+
             pnlPreview.Invalidate();
         }
 
@@ -1948,16 +2254,74 @@ namespace TeleBonifacio
                     if (EstaEmModoTextoLivre())
                     {
                         RectangleF areaTextoLivre = ObterAreaTextoLivre(area);
-                        using (Font fontTextoLivre = CriarFonteImpressao("Observacao", e.Graphics, observacao, areaTextoLivre, false))
+                        if (etiquetaImpressao == null)
+                        {
+                            etiquetaImpressao = new EtiquetaModel
+                            {
+                                Observacao = observacao,
+                                ModoTextoLivre = true
+                            };
+                        }
+
+                        etiquetaImpressao.SincronizarLinhasTextoLivre();
+                        float yLinha = areaTextoLivre.Y;
+                        float espacamentoVertical = 2f;
+
                         using (StringFormat textoLivreFormat = new StringFormat
                         {
                             Alignment = StringAlignment.Near,
                             LineAlignment = StringAlignment.Near,
-                            Trimming = StringTrimming.None
+                            Trimming = StringTrimming.None,
+                            FormatFlags = StringFormatFlags.NoWrap
                         })
-                        using (Brush brushTextoLivre = new SolidBrush(Color.Black))
                         {
-                            e.Graphics.DrawString(observacao, fontTextoLivre, brushTextoLivre, areaTextoLivre, textoLivreFormat);
+                            foreach (EtiquetaTextoLivreLinha linha in etiquetaImpressao.LinhasTextoLivre)
+                            {
+                                if (linha == null)
+                                {
+                                    continue;
+                                }
+
+                                EtiquetaFonteConfig configLinha = linha.Fonte;
+                                if (configLinha == null)
+                                {
+                                    configLinha = etiquetaImpressao.ObterFontesComPadrao()["Observacao"];
+                                }
+
+                                using (Font fonteLinha = CriarFonteAjustadaLinhaLivre(
+                                    e.Graphics,
+                                    linha.Texto,
+                                    areaTextoLivre.Width,
+                                    configLinha))
+                                {
+                                    float alturaLinha = Math.Max(
+                                        fonteLinha.GetHeight(e.Graphics),
+                                        fonteLinha.Size + espacamentoVertical);
+
+                                    if (yLinha >= areaTextoLivre.Bottom)
+                                    {
+                                        break;
+                                    }
+
+                                    RectangleF areaLinha = new RectangleF(
+                                        areaTextoLivre.X,
+                                        yLinha,
+                                        areaTextoLivre.Width,
+                                        Math.Min(alturaLinha, areaTextoLivre.Bottom - yLinha));
+
+                                    using (Brush brushTextoLivre = new SolidBrush(Color.Black))
+                                    {
+                                        e.Graphics.DrawString(
+                                            linha.Texto ?? string.Empty,
+                                            fonteLinha,
+                                            brushTextoLivre,
+                                            areaLinha,
+                                            textoLivreFormat);
+                                    }
+
+                                    yLinha += alturaLinha;
+                                }
+                            }
                         }
                     }
                     else

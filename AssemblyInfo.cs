@@ -11,9 +11,12 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyCulture("")]
 [assembly: ComVisible(false)]
 [assembly: Guid("308c57af-e663-456d-8a2c-188bbd61423d")]
-[assembly: AssemblyVersion("4.3.4.0")]
-[assembly: AssemblyFileVersion("4.3.4.0")]
+[assembly: AssemblyVersion("4.3.7.0")]
+[assembly: AssemblyFileVersion("4.3.7.0")]
 
+// 4.3.7 16/08/26 Novo ajuste nas expansões de letras das etiquetas
+// 4.3.6 16/08/26 Ajuste nas expansões de letras das etiquetas
+// 4.3.5 15/08/26 Ajuste na operação das etiquetas
 // 4.3.4 26/07/26 Modo de texto livre com persistência
 // 4.3.4 26/07/26 Log remoto para erros de backup
 // 4.3.3 25/07/26 Ajuste do ajuste no tamanho das letras das etiquetas2

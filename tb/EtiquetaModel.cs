@@ -10,6 +10,13 @@ namespace TeleBonifacio.tb
         public bool Negrito { get; set; }
     }
 
+    public class EtiquetaTextoLivreLinha
+    {
+        public string Id { get; set; }
+        public string Texto { get; set; }
+        public EtiquetaFonteConfig Fonte { get; set; }
+    }
+
     public class EtiquetaModel
     {
         public string Id { get; set; }
@@ -23,10 +30,72 @@ namespace TeleBonifacio.tb
         public string Descricao { get; set; }
         public string Preco { get; set; }
         public string Observacao { get; set; }
+        public List<EtiquetaTextoLivreLinha> LinhasTextoLivre { get; set; } = new List<EtiquetaTextoLivreLinha>();
         public Dictionary<string, EtiquetaFonteConfig> Fontes { get; set; }
         public DateTime CriadoEm { get; set; }
         public DateTime AlteradoEm { get; set; }
 
+        public void SincronizarLinhasTextoLivre()
+        {
+            if (!ModoTextoLivre || string.IsNullOrEmpty(Observacao) ||
+                (LinhasTextoLivre != null && LinhasTextoLivre.Count > 0))
+            {
+                return;
+            }
+
+            Dictionary<string, EtiquetaFonteConfig> fontesPadrao = ObterFontesComPadrao();
+            EtiquetaFonteConfig fonteObservacao = fontesPadrao["Observacao"];
+            string[] linhas = Observacao.Split(
+                new[] { "\r\n", "\n", "\r" },
+                StringSplitOptions.None);
+
+            LinhasTextoLivre = new List<EtiquetaTextoLivreLinha>();
+            foreach (string linha in linhas)
+            {
+                LinhasTextoLivre.Add(new EtiquetaTextoLivreLinha
+                {
+                    Id = Guid.NewGuid().ToString("N"),
+                    Texto = linha,
+                    Fonte = CopiarFonte(fonteObservacao)
+                });
+            }
+        }
+
+        public static List<EtiquetaTextoLivreLinha> CopiarLinhasTextoLivre(
+            List<EtiquetaTextoLivreLinha> linhas)
+        {
+            if (linhas == null)
+            {
+                return new List<EtiquetaTextoLivreLinha>();
+            }
+
+            var copia = new List<EtiquetaTextoLivreLinha>();
+            foreach (EtiquetaTextoLivreLinha linha in linhas)
+            {
+                copia.Add(linha == null
+                    ? null
+                    : new EtiquetaTextoLivreLinha
+                    {
+                        Id = linha.Id,
+                        Texto = linha.Texto,
+                        Fonte = CopiarFonte(linha.Fonte)
+                    });
+            }
+
+            return copia;
+        }
+
+        private static EtiquetaFonteConfig CopiarFonte(EtiquetaFonteConfig fonte)
+        {
+            return fonte == null
+                ? null
+                : new EtiquetaFonteConfig
+                {
+                    NomeFonte = fonte.NomeFonte,
+                    Tamanho = fonte.Tamanho,
+                    Negrito = fonte.Negrito
+                };
+        }
         public Dictionary<string, EtiquetaFonteConfig> ObterFontesComPadrao()
         {
             var fontes = Fontes ?? new Dictionary<string, EtiquetaFonteConfig>();
