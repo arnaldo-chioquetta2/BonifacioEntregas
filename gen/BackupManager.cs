@@ -101,7 +101,7 @@ namespace TeleBonifacio
                 {
                     LogRemotoEtiquetas.RegistrarErroPendente(
                         "BACKUP - " + _etapaAtual,
-                        ex);
+                        ex, modulo: "BACKUP");
                     EnvioLogRemotoEtiquetas.DispararEnvioAssincrono();
                 }
                 catch (Exception exLogRemoto)

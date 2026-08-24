@@ -241,5 +241,31 @@ namespace TeleBonifacio
             }
         }
 
+        private void btTesteOdbc_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                TeleBonifacio.gen.odbc.ExecutarConsulta("SELECT TOP 1 * FROM Clientes");
+
+                glo.Loga("Teste ODBC realizado com sucesso.");
+
+                MessageBox.Show(
+                    "Teste ODBC realizado com sucesso.",
+                    "Teste Odbc",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                glo.Loga("Falha no teste ODBC: " + ex.Message);
+
+                MessageBox.Show(
+                    "Falha no teste ODBC." + Environment.NewLine + Environment.NewLine +
+                    "Erro: " + ex.Message,
+                    "Teste Odbc",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+            }
+        }
     }
 }

@@ -11,9 +11,16 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyCulture("")]
 [assembly: ComVisible(false)]
 [assembly: Guid("308c57af-e663-456d-8a2c-188bbd61423d")]
-[assembly: AssemblyVersion("4.3.7.0")]
-[assembly: AssemblyFileVersion("4.3.7.0")]
+[assembly: AssemblyVersion("4.4.4.0")]
+[assembly: AssemblyFileVersion("4.4.4.0")]
 
+// 4.4.4 24/07/27 Login Compartilhado Balcão e Escritório
+// 4.4.3 22/07/27 Teste ODBC
+// 4.4.2 22/07/27 Passa pra odbc automaticamente se falhar acesso normal
+// 4.4.1 21/07/27 Correção da persistência do campo Atende Whats
+// 4.4.0 21/07/27 Log local obrigatório para erros de impressão
+// 4.3.9 20/07/27 Correção do filtro de funcionários no campo Liberado por
+// 4.3.8 19/07/26 Duplicar etiquetas preservando formatação individual
 // 4.3.7 16/08/26 Novo ajuste nas expansões de letras das etiquetas
 // 4.3.6 16/08/26 Ajuste nas expansões de letras das etiquetas
 // 4.3.5 15/08/26 Ajuste na operação das etiquetas

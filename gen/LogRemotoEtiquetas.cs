@@ -10,6 +10,8 @@ namespace TeleBonifacio
     public static class LogRemotoEtiquetas
     {
         internal static readonly object SincronizacaoArquivos = new object();
+        private static readonly object SincronizacaoLogLocal = new object();
+        private static readonly string PastaLogLocal = @"C:\Entregas\Log";
 
         private static string PastaLogs
         {
@@ -53,10 +55,12 @@ namespace TeleBonifacio
             int quantidade = 0,
             string codigo = "",
             string nomeEtiqueta = "",
-            string tentativaId = "")
+            string tentativaId = "",
+            string modulo = "IMPRESSAO_ETIQUETAS")
         {
             try
             {
+                RegistrarErroLocal(modulo, etapa, ex, CriarContexto(impressora, quantidade, codigo, nomeEtiqueta, tentativaId));
                 Registrar(etapa, "ERRO", FormatarExcecao(ex), impressora, quantidade, codigo, nomeEtiqueta, tentativaId);
             }
             catch
@@ -105,10 +109,12 @@ namespace TeleBonifacio
             int quantidade = 0,
             string codigo = "",
             string nomeEtiqueta = "",
-            string tentativaId = "")
+            string tentativaId = "",
+            string modulo = "IMPRESSAO_ETIQUETAS")
         {
             try
             {
+                RegistrarErroLocal(modulo, etapa, ex, CriarContexto(impressora, quantidade, codigo, nomeEtiqueta, tentativaId));
                 RegistrarPendente(etapa, "ERRO", FormatarExcecao(ex), impressora, quantidade, codigo, nomeEtiqueta, tentativaId);
             }
             catch
@@ -117,6 +123,63 @@ namespace TeleBonifacio
             }
         }
 
+        public static void RegistrarErroLocal(
+            string modulo,
+            string etapa,
+            Exception ex,
+            string contextoAdicional = null)
+        {
+            try
+            {
+                string caminho = Path.Combine(PastaLogLocal, "log_" + DateTime.Now.ToString("yyyy-MM-dd") + ".log");
+                StringBuilder registro = new StringBuilder();
+                registro.AppendLine(new string('=', 60));
+                registro.AppendLine("Data: " + DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss.fff"));
+                registro.AppendLine("Modulo: " + (modulo ?? "(nulo)"));
+                registro.AppendLine("Etapa: " + (etapa ?? "(nulo)"));
+                registro.AppendLine("Computador: " + Environment.MachineName);
+                registro.AppendLine("Usuario: " + Environment.UserName);
+                registro.AppendLine("Versao: " + Application.ProductVersion);
+                if (!string.IsNullOrWhiteSpace(contextoAdicional))
+                {
+                    registro.AppendLine("Contexto: " + contextoAdicional);
+                }
+                registro.AppendLine();
+                registro.AppendLine(ex == null ? "Exception: (nula)" : ex.ToString());
+                registro.AppendLine(new string('=', 60));
+
+                lock (SincronizacaoLogLocal)
+                {
+                    Directory.CreateDirectory(PastaLogLocal);
+                    File.AppendAllText(caminho, registro.ToString(), Encoding.UTF8);
+                }
+            }
+            catch (Exception erroLogLocal)
+            {
+                try
+                {
+                    glo.Loga("ERRO_LOG_LOCAL: " + erroLogLocal.Message);
+                }
+                catch
+                {
+                    // Nunca substituir a excecao original por falha do logger.
+                }
+            }
+        }
+
+        private static string CriarContexto(
+            string impressora,
+            int quantidade,
+            string codigo,
+            string nomeEtiqueta,
+            string tentativaId)
+        {
+            return "Impressora=" + (impressora ?? "") +
+                "; Quantidade=" + quantidade +
+                "; Codigo=" + (codigo ?? "") +
+                "; Etiqueta=" + (nomeEtiqueta ?? "") +
+                "; TentativaId=" + (tentativaId ?? "");
+        }
         public static int DiaDaSemanaParaNumero(DayOfWeek dia)
         {
             switch (dia)

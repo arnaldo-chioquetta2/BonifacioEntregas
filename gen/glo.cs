@@ -1,4 +1,4 @@
-﻿// #define ODBC
+// #define ODBC
 
 using System;
 using System.Collections.Generic;
@@ -24,10 +24,15 @@ namespace TeleBonifacio
         public static int IdAdicionado=0;
         //public static bool Inicializando = false;
 
-        public static int Nivel = 0;
-        // 0 Balconista, ve só as faltas  
-        // 1 Caixa
-        // 2 Adm
+        public const int NIVEL_BALCONISTA = 0;
+        public const int NIVEL_CAIXA = 1;
+        public const int NIVEL_ESCRITORIO = 2;
+        public const string LOGIN_BALCAO = "balcao";
+        public const string LOGIN_ESCRITORIO = "DENIS";
+        public static int Nivel = NIVEL_BALCONISTA;
+        // 0 = Balconista
+        // 2 = Escritório / acesso privilegiado
+        // 1 = Caixa / compatibilidade; não utilizar no login oficial
 
         public static int iUsuario = 0;
         public static bool ODBC = false;

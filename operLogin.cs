@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Data;
 using TeleBonifacio.gen;
 using System.Windows.Forms;
@@ -30,9 +30,13 @@ namespace TeleBonifacio
 
         private void Busca()
         {
+            // Cada tentativa começa sem privilégios residuais de uma sessão anterior.
+            glo.Nivel = glo.NIVEL_BALCONISTA;
+            glo.iUsuario = 0;
+
             string user = txYser.Text;
             string senha = Cripto.Encrypt(txSenha.Text);
-            string SQL = $"Select Nivel, Nro From Vendedores Where Usuario = '{user}' and Senha = '{senha}' ";
+            string SQL = $"Select Nro, Usuario From Vendedores Where Usuario = '{user}' and Senha = '{senha}' ";
             DataTable dados = DB.ExecutarConsulta(SQL);
             if (dados.Rows.Count == 0)
             {
@@ -41,8 +45,24 @@ namespace TeleBonifacio
             else
             {
                 DataRow Row = dados.Rows[0];
-                glo.Nivel = Convert.ToInt16(Row["Nivel"]);
                 glo.iUsuario = Convert.ToInt16(Row["Nro"]);
+                string usuarioAutenticado = Convert.ToString(Row["Usuario"]).Trim();
+
+                if (string.Equals(usuarioAutenticado, glo.LOGIN_BALCAO, StringComparison.OrdinalIgnoreCase))
+                {
+                    glo.Nivel = glo.NIVEL_BALCONISTA;
+                }
+                else if (string.Equals(usuarioAutenticado, glo.LOGIN_ESCRITORIO, StringComparison.OrdinalIgnoreCase))
+                {
+                    glo.Nivel = glo.NIVEL_ESCRITORIO;
+                }
+                else
+                {
+                    glo.Nivel = glo.NIVEL_BALCONISTA;
+                    glo.iUsuario = 0;
+                    MessageBox.Show("Usuário não autorizado para acesso ao sistema.", "Login inválido", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    return;
+                }
                 Form1 Form = new Form1();
                 Form.Show();
                 this.Visible = false;
@@ -56,22 +76,5 @@ namespace TeleBonifacio
             }
         }
 
-        private void label1_MouseClick(object sender, MouseEventArgs e)
-        {
-            if (e.Button == MouseButtons.Middle)
-            {
-
-                // glo.Nivel = 0;  // Balcão
-                // glo.Nivel = 1;  // Caixa
-                glo.Nivel = 2;  // Escritório
-
-                //glo.iUsuario = 4;
-                glo.iUsuario = 1;
-
-                Form1 Form = new Form1();
-                Form.Show();
-                this.Visible = false;
-            }
-        }
-    }    
+    }
 }

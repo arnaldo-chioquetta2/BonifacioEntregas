@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Drawing;
@@ -16,7 +16,7 @@ Logs
     CT  Alteração de data
 */
 
-// 3.9.8 Em modo escritório no caixa ver lançamentos de todos
+// 3.9.8 Em modo Escritório no caixa ver lançamentos de todos
 // 3.9.6 Adaptação do tamanho dos botões do caixa quando em tela grande
 // 3.9.5 Previsão para tipo errado nas formas entrou 2 e passa a interpretar como 0 tambem
 // 3.9.4 Tratamento de erros na mudança da data do caixa
@@ -40,24 +40,16 @@ namespace TeleBonifacio
 
         private void operCaixa_Load(object sender, EventArgs e)
         {
-            if (glo.Nivel == 1)
+            if (glo.Nivel == glo.NIVEL_ESCRITORIO)
             {
-                btnFiltrar.Visible = false;
-                button5.Visible = false;
-            }
-            else
-            {
-                if (glo.Nivel == 2)
+                INI2 cINI2 = new INI2();
+                string suser = cINI2.ReadString("Usuario", "User", "0");
+                if (suser == "1")
                 {
-                    INI2 cINI2 = new INI2();
-                    string suser = cINI2.ReadString("Usuario", "User", "0");
-                    if (suser == "1")
-                    {
-                        this.Especial = true;
-                        label1.Visible = true;
-                        label2.Visible = true;
-                        textBox1.Visible = true;
-                    }
+                    this.Especial = true;
+                    label1.Visible = true;
+                    label2.Visible = true;
+                    textBox1.Visible = true;
                 }
             }
             Caixa = new CaixaDao();
@@ -643,7 +635,7 @@ namespace TeleBonifacio
                 sCliente = cmbCliente.Text;
             }
             int nrVend = 0;
-            if (glo.Nivel < 2) {
+            if (glo.Nivel != glo.NIVEL_ESCRITORIO) {
                 //if (cmbVendedor.SelectedIndex > 0)
                 //{
                 //    sVendedor = cmbVendedor.Text;
@@ -689,7 +681,7 @@ namespace TeleBonifacio
         {
             if (e.KeyCode == Keys.Enter)
             {
-                if (glo.Nivel == 2)
+                if (glo.Nivel == glo.NIVEL_ESCRITORIO)
                 {
                     Registra(this.DefCred);
                 }                    
@@ -705,7 +697,7 @@ namespace TeleBonifacio
         {
             if (e.KeyCode == Keys.Enter)
             {
-                if (glo.Nivel == 2)
+                if (glo.Nivel == glo.NIVEL_ESCRITORIO)
                 {
                     Registra(this.DefDeb, false);
                 }                    
@@ -719,7 +711,7 @@ namespace TeleBonifacio
 
         private void txObs_KeyUp(object sender, KeyEventArgs e)
         {
-            if (glo.Nivel == 2)
+            if (glo.Nivel == glo.NIVEL_ESCRITORIO)
             {
                 if (e.KeyCode == Keys.Enter)
                 {

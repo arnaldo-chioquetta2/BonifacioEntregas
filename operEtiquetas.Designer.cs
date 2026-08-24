@@ -51,6 +51,7 @@ namespace TeleBonifacio
             this.pnlPreview = new System.Windows.Forms.Panel();
             this.btNovo = new System.Windows.Forms.Button();
             this.btSalvar = new System.Windows.Forms.Button();
+            this.btDuplicar = new System.Windows.Forms.Button();
             this.btExcluir = new System.Windows.Forms.Button();
             this.btLimpar = new System.Windows.Forms.Button();
             this.btImprimir = new System.Windows.Forms.Button();
@@ -403,30 +404,39 @@ namespace TeleBonifacio
             this.btSalvar.Text = "Salvar";
             this.btSalvar.Click += new System.EventHandler(this.btSalvar_Click);
             // 
+            // btDuplicar
+            //
+            this.btDuplicar.Location = new System.Drawing.Point(221, 260);
+            this.btDuplicar.Name = "btDuplicar";
+            this.btDuplicar.Size = new System.Drawing.Size(90, 28);
+            this.btDuplicar.TabIndex = 5;
+            this.btDuplicar.Text = "Duplicar";
+            this.btDuplicar.Click += new System.EventHandler(this.btDuplicar_Click);
+            //
             // btExcluir
             // 
-            this.btExcluir.Location = new System.Drawing.Point(221, 260);
+            this.btExcluir.Location = new System.Drawing.Point(321, 260);
             this.btExcluir.Name = "btExcluir";
             this.btExcluir.Size = new System.Drawing.Size(90, 28);
-            this.btExcluir.TabIndex = 5;
+            this.btExcluir.TabIndex = 4;
             this.btExcluir.Text = "Excluir";
             this.btExcluir.Click += new System.EventHandler(this.btExcluir_Click);
             // 
             // btLimpar
             // 
-            this.btLimpar.Location = new System.Drawing.Point(321, 260);
+            this.btLimpar.Location = new System.Drawing.Point(421, 260);
             this.btLimpar.Name = "btLimpar";
             this.btLimpar.Size = new System.Drawing.Size(90, 28);
-            this.btLimpar.TabIndex = 4;
+            this.btLimpar.TabIndex = 3;
             this.btLimpar.Text = "Limpar";
             this.btLimpar.Click += new System.EventHandler(this.btLimpar_Click);
             // 
             // btImprimir
             // 
-            this.btImprimir.Location = new System.Drawing.Point(421, 260);
+            this.btImprimir.Location = new System.Drawing.Point(521, 260);
             this.btImprimir.Name = "btImprimir";
             this.btImprimir.Size = new System.Drawing.Size(90, 28);
-            this.btImprimir.TabIndex = 3;
+            this.btImprimir.TabIndex = 2;
             this.btImprimir.Text = "Imprimir";
             this.btImprimir.Click += new System.EventHandler(this.btImprimir_Click);
             // 
@@ -442,6 +452,7 @@ namespace TeleBonifacio
             this.Controls.Add(this.btLimpar);
             this.Controls.Add(this.btExcluir);
             this.Controls.Add(this.btSalvar);
+            this.Controls.Add(this.btDuplicar);
             this.Controls.Add(this.btNovo);
             this.Controls.Add(this.txtBuscar);
             this.Controls.Add(this.lblBuscar);
@@ -522,6 +533,7 @@ namespace TeleBonifacio
         private System.Windows.Forms.Panel pnlPreview;
         private System.Windows.Forms.Button btNovo;
         private System.Windows.Forms.Button btSalvar;
+        private System.Windows.Forms.Button btDuplicar;
         private System.Windows.Forms.Button btExcluir;
         private System.Windows.Forms.Button btLimpar;
         private System.Windows.Forms.Button btImprimir;

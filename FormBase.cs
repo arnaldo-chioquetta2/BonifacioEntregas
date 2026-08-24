@@ -171,6 +171,28 @@ namespace TeleBonifacio
                 // 🔹 Força a atualização da cor do fundo do ComboBox
                 AtualizaAparenciaComboCor(cmb);
             }
+            else if (cmb.Name == "cnbNivel")
+            {
+                int nivel = glo.NIVEL_BALCONISTA;
+                if (int.TryParse(valor, out int nivelSalvo))
+                {
+                    if (nivelSalvo == glo.NIVEL_CAIXA)
+                        nivel = glo.NIVEL_CAIXA;
+                    else if (nivelSalvo == glo.NIVEL_ESCRITORIO)
+                        nivel = glo.NIVEL_ESCRITORIO;
+                }
+
+                for (int i = 0; i < cmb.Items.Count; i++)
+                {
+                    if (cmb.Items[i] is tb.ComboBoxItem item && item.Id == nivel)
+                    {
+                        cmb.SelectedIndex = i;
+                        return;
+                    }
+                }
+
+                cmb.SelectedIndex = 0;
+            }
             else
             {
                 // 🔹 Processamento padrão para outros ComboBoxes
@@ -229,7 +251,7 @@ namespace TeleBonifacio
             if (propertyInfo != null)
             {
                 string valor = propertyInfo.GetValue(reg, null)?.ToString() ?? string.Empty;
-                check.Checked = (valor == "True" || valor == "1");
+                check.Checked = (valor == "True" || valor == "1" || valor == "-1");
                //  check.Checked = (valor == "True");
             }
         }
@@ -346,6 +368,14 @@ namespace TeleBonifacio
                 // 🔹 Salva a cor como string (nome da cor)
                 propertyInfo.SetValue(reg, selectedColor.Name, null);
             }
+            else if (cmb.Name == "cnbNivel")
+            {
+                int nivel = cmb.SelectedItem is tb.ComboBoxItem item
+                    ? item.Id
+                    : glo.NIVEL_BALCONISTA;
+
+                propertyInfo.SetValue(reg, nivel, null);
+            }
             else
             {
                 // 🔹 Para outros ComboBoxes, armazena o índice da seleção
@@ -397,16 +427,24 @@ namespace TeleBonifacio
 
         private void MapearCheckParaModelo(CheckBox check, BaseDAO reg)
         {
-            string propertyName = check.Name.Substring(3); 
+            string propertyName = check.Name.Substring(3);
             PropertyInfo propertyInfo = reg.GetType().GetProperty(propertyName);
             if (propertyInfo == null)
             {
-                propertyInfo.SetValue(reg, null, null);
+                return;
+            }
+
+            if (propertyInfo.PropertyType == typeof(bool))
+            {
+                propertyInfo.SetValue(reg, check.Checked, null);
+            }
+            else if (propertyInfo.PropertyType == typeof(int))
+            {
+                propertyInfo.SetValue(reg, check.Checked ? 1 : 0, null);
             }
             else
             {
-                int Vlr = check.Checked ? 1 : 0;
-                propertyInfo.SetValue(reg, Vlr, null);
+                propertyInfo.SetValue(reg, Convert.ChangeType(check.Checked, propertyInfo.PropertyType), null);
             }
         }
 

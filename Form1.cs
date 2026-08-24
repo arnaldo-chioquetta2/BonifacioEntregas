@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
@@ -428,7 +428,8 @@ namespace TeleBonifacio
             {
                 switch (glo.Nivel)
                 {
-                    case 0: // Balconista, ve só as faltas    
+                    case glo.NIVEL_BALCONISTA:
+                    default: // niveis desconhecidos usam o comportamento restrito
                         label1.Visible = false;
                         label2.Visible = false;
                         label3.Visible = false;
@@ -487,50 +488,8 @@ namespace TeleBonifacio
                         this.Width = 520;
                         this.Height = 200;
                         break;
-                    case 1: // Caixa
-                        label1.Visible = false;
-                        label2.Visible = false;
-                        label3.Visible = false;
-                        label4.Visible = false;
-                        label5.Visible = false;
-                        label6.Visible = false;
-                        label7.Visible = false;
-                        label8.Visible = false;
-                        lbMens.Visible = false;
-                        label9.Visible = false;
-                        label12.Visible = false;
-                        label13.Visible = false;
-                        label14.Visible = false;
-                        pictureBox1.Visible = false;
-                        pictureBox2.Visible = false;
-                        pictureBox3.Visible = false;
-                        pictureBox4.Visible = false;
-                        pictureBox5.Visible = false;
-                        pictureBox6.Visible = false;
-                        pictureBox7.Visible = false;
-                        pictureBox8.Visible = false;
-                        pictureBox9.Visible = false;
-                        pictureBox12.Visible = false;
-                        pictureBox13.Visible = false;
-                        pictureBox14.Visible = false;
-                        label10.Visible = true;
-                        pictureBox10.Visible = true;
-                        label11.Visible = true;
-                        pictureBox11.Visible = true;                        
-                        this.Height = 200;
-                        this.Width = 350;
-                        label10.Top = label11.Top = 10;
-                        int posL2 = 10;
-                        pictureBox10.Left = label10.Left = posL2;
-                        pictureBox11.Left = label11.Left = posL2 + pictureBox10.Width;
-                        lbAnotacoes.Left = picAnotacoes.Left = pictureBox11.Left + 110;
-                        lbAnotacoes.Top = label1.Top;
-                        lbAnotacoes.Visible = true;
-                        picAnotacoes.Top = pictureBox10.Top = pictureBox11.Top = pictureBox1.Top;
-                        picAnotacoes.Visible = true;
-                        break;
-                    case 2:
-                        // Escritório Vê tudo
+                    case glo.NIVEL_ESCRITORIO:
+                        // Escritório / acesso privilegiado vê tudo
                         break;
                 }
             }            

@@ -197,6 +197,64 @@ namespace TeleBonifacio
             }
         }
 
+        private void btDuplicar_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (string.IsNullOrWhiteSpace(etiquetaSelecionadaId))
+                {
+                    MessageBox.Show("Selecione uma etiqueta para duplicar.");
+                    return;
+                }
+
+                EtiquetaModel atual = ObterEtiquetaDaTela();
+                atual.Id = etiquetaSelecionadaId;
+
+                EtiquetaModel copia = DuplicarEtiqueta(atual);
+
+                string novoNome = SolicitarNomeEtiqueta(
+                    copia,
+                    "Informe o nome da nova etiqueta:",
+                    "Duplicar etiqueta");
+                if (novoNome == null)
+                {
+                    return;
+                }
+
+                copia.NomeEtiqueta = novoNome;
+                copia.Id = string.Empty;
+                copia.CriadoEm = DateTime.Now;
+                copia.AlteradoEm = DateTime.Now;
+
+                repository.Salvar(copia);
+
+                etiquetas = repository.Listar();
+                CarregarGrid(etiquetas);
+
+                EtiquetaModel nova = etiquetas.FirstOrDefault(item =>
+                    !string.IsNullOrWhiteSpace(copia.Id) &&
+                    string.Equals(item.Id, copia.Id, StringComparison.OrdinalIgnoreCase));
+                if (nova == null)
+                {
+                    nova = etiquetas.FirstOrDefault(item =>
+                        string.Equals(item.NomeEtiqueta, novoNome, StringComparison.OrdinalIgnoreCase));
+                }
+
+                if (nova != null)
+                {
+                    SelecionarEtiquetaNoGrid(nova.Id);
+                    CarregarEtiquetaNaTela(nova);
+                }
+
+                MessageBox.Show("Etiqueta duplicada com sucesso.");
+            }
+            catch (Exception ex)
+            {
+                glo.Loga("Erro ao duplicar etiqueta: " + ex.Message);
+                MessageBox.Show("Não foi possível duplicar a etiqueta. Tente novamente.");
+            }
+        }
+
         private void btExcluir_Click(object sender, EventArgs e)
         {
             try
@@ -875,6 +933,37 @@ namespace TeleBonifacio
             pnlPreview.Invalidate();
         }
 
+        private void CarregarEtiquetaNaTela(EtiquetaModel etiqueta)
+        {
+            EtiquetaModel modelo = etiqueta ?? new EtiquetaModel();
+            etiquetaSelecionadaId = modelo.Id;
+            nomeEtiquetaSelecionada = ObterNomeEtiquetaSugerido(modelo);
+            txtNomeEmpresa.Text = modelo.NomeEmpresa;
+            txtTelefone.Text = modelo.Telefone;
+            txtTeleEntrega.Text = modelo.TeleEntrega;
+            txtLocal.Text = NormalizarLocalCampo(modelo.Local);
+            txtCodigo.Text = NormalizarCodigoCampo(modelo.Codigo);
+            txtDescricao.Text = modelo.Descricao;
+            txtPreco.Text = NormalizarPrecoCampo(modelo.Preco);
+            txtObservacao.Text = modelo.Observacao;
+            InicializarFontesEdicao(modelo);
+            linhasTextoLivreEdicao = EtiquetaModel.CopiarLinhasTextoLivre(modelo.LinhasTextoLivre);
+            if (modelo.ModoTextoLivre)
+            {
+                SincronizarLinhasTextoLivreDaTela();
+                linhaSelecionada = "Observacao";
+                CarregarFormatacaoLinhaTextoLivre();
+            }
+            else
+            {
+                linhaTextoLivreSelecionadaId = "";
+                linhaSelecionada = "Codigo";
+                CarregarControlesFormatacao();
+            }
+
+            pnlPreview.Invalidate();
+        }
+
         private void gridEtiquetas_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             try
@@ -890,7 +979,15 @@ namespace TeleBonifacio
                     return;
                 }
 
-                etiquetaSelecionadaId = Convert.ToString(row.Cells["Id"].Value);
+                string idLinha = Convert.ToString(row.Cells["Id"].Value);
+                EtiquetaModel etiquetaSelecionada = etiquetas.FirstOrDefault(item => string.Equals(item.Id, idLinha, StringComparison.OrdinalIgnoreCase));
+                if (etiquetaSelecionada != null)
+                {
+                    CarregarEtiquetaNaTela(etiquetaSelecionada);
+                    return;
+                }
+
+                etiquetaSelecionadaId = idLinha;
                 nomeEtiquetaSelecionada = Convert.ToString(row.Cells["Nome"].Value);
                 txtNomeEmpresa.Text = Convert.ToString(row.Cells["NomeEmpresa"].Value);
                 txtTelefone.Text = Convert.ToString(row.Cells["Telefone"].Value);
@@ -900,22 +997,11 @@ namespace TeleBonifacio
                 txtDescricao.Text = Convert.ToString(row.Cells["Descricao"].Value);
                 txtPreco.Text = NormalizarPrecoCampo(Convert.ToString(row.Cells["Preco"].Value));
                 txtObservacao.Text = Convert.ToString(row.Cells["Observacao"].Value);
-                EtiquetaModel etiquetaSelecionada = etiquetas.FirstOrDefault(item => string.Equals(item.Id, etiquetaSelecionadaId, StringComparison.OrdinalIgnoreCase));
-                InicializarFontesEdicao(etiquetaSelecionada ?? new EtiquetaModel());
-                linhasTextoLivreEdicao = EtiquetaModel.CopiarLinhasTextoLivre(
-                    etiquetaSelecionada != null ? etiquetaSelecionada.LinhasTextoLivre : null);
-                if (etiquetaSelecionada != null && etiquetaSelecionada.ModoTextoLivre)
-                {
-                    SincronizarLinhasTextoLivreDaTela();
-                    linhaSelecionada = "Observacao";
-                    CarregarFormatacaoLinhaTextoLivre();
-                }
-                else
-                {
-                    linhaTextoLivreSelecionadaId = "";
-                    linhaSelecionada = "Codigo";
-                    CarregarControlesFormatacao();
-                }
+                InicializarFontesEdicao(new EtiquetaModel());
+                linhasTextoLivreEdicao = new List<EtiquetaTextoLivreLinha>();
+                linhaTextoLivreSelecionadaId = "";
+                linhaSelecionada = "Codigo";
+                CarregarControlesFormatacao();
                 pnlPreview.Invalidate();
             }
             catch (Exception ex)
@@ -1457,6 +1543,73 @@ namespace TeleBonifacio
             };
         }
 
+        private EtiquetaModel DuplicarEtiqueta(EtiquetaModel origem)
+        {
+            if (origem == null)
+            {
+                return new EtiquetaModel();
+            }
+
+            Dictionary<string, EtiquetaFonteConfig> fontesCopia = null;
+            if (origem.Fontes != null)
+            {
+                fontesCopia = new Dictionary<string, EtiquetaFonteConfig>();
+                foreach (KeyValuePair<string, EtiquetaFonteConfig> item in origem.Fontes)
+                {
+                    fontesCopia[item.Key] = item.Value == null
+                        ? null
+                        : new EtiquetaFonteConfig
+                        {
+                            NomeFonte = item.Value.NomeFonte,
+                            Tamanho = item.Value.Tamanho,
+                            Negrito = item.Value.Negrito
+                        };
+                }
+            }
+
+            List<EtiquetaTextoLivreLinha> linhasCopia = new List<EtiquetaTextoLivreLinha>();
+            if (origem.LinhasTextoLivre != null)
+            {
+                foreach (EtiquetaTextoLivreLinha linha in origem.LinhasTextoLivre)
+                {
+                    linhasCopia.Add(linha == null
+                        ? null
+                        : new EtiquetaTextoLivreLinha
+                        {
+                            Id = Guid.NewGuid().ToString("N"),
+                            Texto = linha.Texto,
+                            Fonte = linha.Fonte == null
+                                ? null
+                                : new EtiquetaFonteConfig
+                                {
+                                    NomeFonte = linha.Fonte.NomeFonte,
+                                    Tamanho = linha.Fonte.Tamanho,
+                                    Negrito = linha.Fonte.Negrito
+                                }
+                        });
+                }
+            }
+
+            return new EtiquetaModel
+            {
+                Id = string.Empty,
+                CriadoEm = DateTime.Now,
+                AlteradoEm = DateTime.Now,
+                ModoTextoLivre = origem.ModoTextoLivre,
+                NomeEtiqueta = origem.NomeEtiqueta,
+                NomeEmpresa = origem.NomeEmpresa,
+                Telefone = origem.Telefone,
+                TeleEntrega = origem.TeleEntrega,
+                Local = origem.Local,
+                Codigo = origem.Codigo,
+                Descricao = origem.Descricao,
+                Preco = origem.Preco,
+                Observacao = origem.Observacao,
+                Fontes = fontesCopia,
+                LinhasTextoLivre = linhasCopia
+            };
+        }
+
         private string NormalizarCodigoCampo(string codigo)
         {
             string valor = (codigo ?? string.Empty).Trim();
@@ -1510,8 +1663,15 @@ namespace TeleBonifacio
 
         private string SolicitarNomeEtiqueta(EtiquetaModel etiqueta)
         {
+            return SolicitarNomeEtiqueta(etiqueta, "Informe um nome para esta etiqueta:", "Nome da etiqueta");
+        }
+
+        private string SolicitarNomeEtiqueta(EtiquetaModel etiqueta, string mensagem, string titulo)
+        {
             using (FormNomeEtiqueta form = new FormNomeEtiqueta())
             {
+                form.Mensagem = mensagem;
+                form.Titulo = titulo;
                 form.NomeEtiqueta = ObterNomeEtiquetaSugerido(etiqueta);
                 return form.ShowDialog(this) == DialogResult.OK ? form.NomeEtiqueta : null;
             }

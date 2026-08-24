@@ -17,6 +17,18 @@ namespace TeleBonifacio
             set { txtNome.Text = value ?? string.Empty; }
         }
 
+        public string Titulo
+        {
+            get { return Text; }
+            set { Text = value ?? "Nome da etiqueta"; }
+        }
+
+        public string Mensagem
+        {
+            get { return lbMensagem.Text; }
+            set { lbMensagem.Text = value ?? "Informe um nome para esta etiqueta:"; }
+        }
+
         public FormNomeEtiqueta()
         {
             lbMensagem = new Label();

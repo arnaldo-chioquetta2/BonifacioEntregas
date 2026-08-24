@@ -207,7 +207,7 @@ namespace TeleBonifacio
             this.cnbNivel.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cnbNivel.FormattingEnabled = true;
             this.cnbNivel.Items.AddRange(new object[] {
-            "Balconísta",
+            "Balconista",
             "Caixa",
             "Escritório"});
             this.cnbNivel.Location = new System.Drawing.Point(8, 166);

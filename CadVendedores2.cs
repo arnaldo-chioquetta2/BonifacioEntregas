@@ -21,17 +21,16 @@ namespace TeleBonifacio
         public CadVendedores2()
         {
             InitializeComponent();
+            cnbNivel.Items.Clear();
+            cnbNivel.Items.Add(new tb.ComboBoxItem(glo.NIVEL_BALCONISTA, "Balconista"));
+            cnbNivel.Items.Add(new tb.ComboBoxItem(glo.NIVEL_CAIXA, "Caixa"));
+            cnbNivel.Items.Add(new tb.ComboBoxItem(glo.NIVEL_ESCRITORIO, "Escritório"));
             base.DAO = new dao.VendedoresDAO();
             base.reg = getUlt();
             ID = base.reg.Id;
             Nome = base.reg.Nome;
             base.Mostra();
             base.LerTagsDosCamposDeTexto();
-            List<string> lista = new List<string>();
-            lista.Add("Balconísta");
-            lista.Add("Caixa");
-            lista.Add("Escritório");
-            base.setListCombo(lista);
             rt.AdjustFormComponents(this);
             cINI = new INI();
             VerificaHorarios(base.reg);
@@ -74,7 +73,7 @@ namespace TeleBonifacio
                             ret.Id = (int)reader["ID"];
                             ret.Nome = reader["Nome"].ToString();
                             ret.Loja = reader["Loja"].ToString();
-                            ret.Atende = reader["Atende"] != DBNull.Value && (int)reader["Atende"] == 1;
+                            ret.Atende = reader["Atende"] != DBNull.Value && Convert.ToInt32(reader["Atende"]) != 0;
                             ret.Nro = reader["Nro"].ToString();
                             ret.Usuario = reader["Usuario"].ToString();
                             ret.Senha = reader["Senha"].ToString();

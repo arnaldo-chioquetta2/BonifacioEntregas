@@ -53,6 +53,7 @@ namespace TeleBonifacio
             this.button5 = new System.Windows.Forms.Button();
             this.btFormas = new System.Windows.Forms.Button();
             this.btBackup = new System.Windows.Forms.Button();
+            this.btTesteOdbc = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // lblNome
@@ -268,6 +269,16 @@ namespace TeleBonifacio
             this.btBackup.Text = "Backup";
             this.btBackup.UseVisualStyleBackColor = true;
             this.btBackup.Click += new System.EventHandler(this.btBackup_Click);
+            //
+            // btTesteOdbc
+            //
+            this.btTesteOdbc.Location = new System.Drawing.Point(12, 190);
+            this.btTesteOdbc.Name = "btTesteOdbc";
+            this.btTesteOdbc.Size = new System.Drawing.Size(83, 23);
+            this.btTesteOdbc.TabIndex = 25;
+            this.btTesteOdbc.Text = "Teste Odbc";
+            this.btTesteOdbc.UseVisualStyleBackColor = true;
+            this.btTesteOdbc.Click += new System.EventHandler(this.btTesteOdbc_Click);
             // 
             // oprConfig
             // 
@@ -277,6 +288,7 @@ namespace TeleBonifacio
             this.Controls.Add(this.btBackup);
             this.Controls.Add(this.btFormas);
             this.Controls.Add(this.button5);
+            this.Controls.Add(this.btTesteOdbc);
             this.Controls.Add(this.ckAdaptar);
             this.Controls.Add(this.chkLogRemoto);
             this.Controls.Add(this.button4);
@@ -332,5 +344,6 @@ namespace TeleBonifacio
         private System.Windows.Forms.Button button5;
         private System.Windows.Forms.Button btFormas;
         private System.Windows.Forms.Button btBackup;
+        private System.Windows.Forms.Button btTesteOdbc;
     }
 }

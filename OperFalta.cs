@@ -126,7 +126,7 @@ namespace TeleBonifacio
         private void VerificarNivel()
         {
             glo.Loga("glo.Nivel = " + glo.Nivel.ToString());
-            if (glo.Nivel == 2)
+            if (glo.Nivel == glo.NIVEL_ESCRITORIO)
             {
                 lbVlor.Visible = true;
                 txValor.Visible = true;
@@ -602,7 +602,7 @@ namespace TeleBonifacio
                 dataGrid1.Columns["TipoOrig"].Visible = false;
                 dataGrid1.Columns["idForn"].Visible = false;
                 dataGrid1.Columns["Prioridade"].Visible = false;
-                dataGrid1.Columns["Valor"].Visible = (glo.Nivel == 2);
+                dataGrid1.Columns["Valor"].Visible = (glo.Nivel == glo.NIVEL_ESCRITORIO);
 
                 // 3. Define o "peso" de preenchimento (FillWeight) para cada coluna VISÍVEL.
                 // A proporção entre os números é o que importa.
@@ -1521,7 +1521,7 @@ namespace TeleBonifacio
             dataGrid2.Columns[2].Visible = false;   // ID
             dataGrid2.Columns[3].Width = 80; // 100;       // Data
             dataGrid2.Columns[4].Width = 80;        // Código
-            if (glo.Nivel == 2)
+            if (glo.Nivel == glo.NIVEL_ESCRITORIO)
             {
                 dataGrid2.Columns[5].Visible = true;
                 dataGrid2.Columns[5].Width = 80;
@@ -1645,7 +1645,7 @@ namespace TeleBonifacio
                         btComprei.Text = "Em Falta";
                         ckEmFalta.Visible = false;
                         timer1.Enabled = false;
-                        if (glo.Nivel == 2)
+                        if (glo.Nivel == glo.NIVEL_ESCRITORIO)
                         {
                             lbVlor.Visible = true;
                             txValor.Visible = true;
