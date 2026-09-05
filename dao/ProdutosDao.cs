@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Data;
 using System.Text;
 
@@ -6,18 +6,20 @@ namespace TeleBonifacio.dao
 {
     public class ProdutosDao
     {
-        public void Adiciona(int idBalconista, float quantidade, string codigo, string Marca, string Descr, string Obs, int idForn, int idTipo, string UID)
+        public void Adiciona(int idBalconista, float quantidade, string codigo, string Marca, string Descr, string Obs, int idForn, int idTipo, string UID, string categoria)
         {
-            string sql = $@"INSERT INTO Produtos (Quant, Codigo, Marca, Data, Descricao, Obs, Tipo, idForn, UID) VALUES (
-                {quantidade}, 
-                '{codigo}', 
-                '{Marca}', 
-                Now, 
-                '{Descr}', 
-                '{Obs}', 
-                '{idTipo}', 
-                {idForn}, 
-                '{UID}')";
+            string categoriaSql = (categoria ?? "").Replace("'", "''");
+            string sql = $@"INSERT INTO Produtos (Quant, Codigo, Marca, Data, Descricao, Obs, Tipo, idForn, UID, Categoria) VALUES (
+                {quantidade},
+                '{codigo}',
+                '{Marca}',
+                Now,
+                '{Descr}',
+                '{Obs}',
+                '{idTipo}',
+                {idForn},
+                '{UID}',
+                '{categoriaSql}')";
             DB.ExecutarComandoSQL(sql);
         }
 
@@ -38,7 +40,8 @@ namespace TeleBonifacio.dao
             string Descr,
             DateTime? dataDe,
             DateTime? dataAte,
-            bool usarPeriodo)
+            bool usarPeriodo,
+            string categoria)
         {
             const string VERSAO = "ProdutosDAO.getDados v1.1";
 
@@ -47,11 +50,11 @@ namespace TeleBonifacio.dao
                 glo.Loga($"{VERSAO} executando");
 
                 StringBuilder query = new StringBuilder();
-                query.Append(@"SELECT F.Compra, '' as Forn, F.ID, 
-                       FORMAT(F.Data, 'dd/MM/yy') as Data, 
-                       F.Codigo, F.Valor, F.Quant, F.Marca, 
-                       F.Descricao, F.UID, F.Tipo, 
-                       F.Tipo as TipoOrig, F.idForn, F.Obs 
+                query.Append(@"SELECT F.Compra, '' as Forn, F.ID,
+                       FORMAT(F.Data, 'dd/MM/yy') as Data,
+                       F.Codigo, F.Valor, F.Quant, F.Marca,
+                       F.Descricao, F.UID, F.Tipo,
+                       F.Tipo as TipoOrig, F.idForn, F.Obs, F.Categoria
                        FROM Produtos F ");
 
                 StringBuilder alteracoes = new StringBuilder();
@@ -77,6 +80,9 @@ namespace TeleBonifacio.dao
 
                 if (!string.IsNullOrWhiteSpace(Descr))
                     alteracoes.Append($" F.Descricao LIKE '{Descr}%' and ");
+
+                if (!string.IsNullOrWhiteSpace(categoria))
+                    alteracoes.Append($" F.Categoria = '{categoria.Replace("'", "''")}' and ");
 
                 // ===== NOVO FILTRO – v1.1 =====
                 if (usarPeriodo && dataDe.HasValue && dataAte.HasValue)
@@ -113,15 +119,15 @@ namespace TeleBonifacio.dao
 
         public void Edita(int id, int idBalconista, string quantidade, string codigo)
         {
-            string sql = $@"UPDATE Produtos SET 
-                IDBalconista = {idBalconista}, 
-                Quant = '{quantidade}', 
+            string sql = $@"UPDATE Produtos SET
+                IDBalconista = {idBalconista},
+                Quant = '{quantidade}',
                 Codigo = '{codigo}'
                 WHERE ID = {id}";
             DB.ExecutarComandoSQL(sql);
         }
 
-        public void Atualiza(int iID, int iTpo, int idForn, string codigo, string quantidade, string marca, string Obs, string descr, float Valor)
+        public void Atualiza(int iID, int iTpo, int idForn, string codigo, string quantidade, string marca, string Obs, string descr, float Valor, string categoria)
         {
             StringBuilder alteracoes = new StringBuilder();
             if (iTpo > 0)
@@ -147,10 +153,14 @@ namespace TeleBonifacio.dao
             if (!string.IsNullOrEmpty(Obs))
             {
                 alteracoes.Append($"Obs = '{Obs}', ");
-            }            
+            }
             if (!string.IsNullOrEmpty(descr))
             {
                 alteracoes.Append($"Descricao = '{descr}', ");
+            }
+            if (!string.IsNullOrWhiteSpace(categoria))
+            {
+                alteracoes.Append($"Categoria = '{categoria.Replace("'", "''")}', ");
             }
             string sValor = glo.sv(Valor);
             string sql = $@"UPDATE Produtos SET {alteracoes} Valor = {sValor} WHERE ID = {iID}";
@@ -180,13 +190,17 @@ namespace TeleBonifacio.dao
             DataTable encomendaData = DB.ExecutarConsulta($"SELECT * FROM Produtos WHERE ID = {gID} ");
             DataRow Row = encomendaData.Rows[0];
             string sValor = Row["Valor"].ToString();
+            object categoriaValor = Row["Categoria"];
+string categoriaSql = categoriaValor == DBNull.Value || categoriaValor == null
+    ? "NULL"
+    : "'" + Convert.ToString(categoriaValor).Replace("'", "''") + "'";
             float fValor = glo.LeValor(sValor);
             sValor = glo.sv(fValor);
-            string insertQuery = $@"INSERT INTO Faltas (Data, Quant, Codigo, Marca, UID, Tipo, Descricao, idForn, Obs, Valor) 
-                        VALUES (Now, {Row["Quant"]}, '{Row["Codigo"]}', '{Row["Marca"]}', '{Row["UID"]}', '{Row["Tipo"]}', '{Row["Descricao"]}', {Row["idForn"]}, '{Row["Obs"]}', {sValor} )";
+            string insertQuery = $@"INSERT INTO Faltas (Data, Quant, Codigo, Marca, UID, Tipo, Descricao, idForn, Obs, Valor, Categoria)
+                        VALUES (Now, {Row["Quant"]}, '{Row["Codigo"]}', '{Row["Marca"]}', '{Row["UID"]}', '{Row["Tipo"]}', '{Row["Descricao"]}', {Row["idForn"]}, '{Row["Obs"]}', {sValor}, {categoriaSql} )";
             DB.ExecutarComandoSQL(insertQuery);
             string sql = $@"DELETE FROM Produtos WHERE ID = {gID} ";
             DB.ExecutarComandoSQL(sql);
-        }        
+        }
     }
 }

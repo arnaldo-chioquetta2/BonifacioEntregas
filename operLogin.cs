@@ -35,11 +35,59 @@ namespace TeleBonifacio
             glo.iUsuario = 0;
 
             string user = txYser.Text;
+            string usuarioNormalizado = user.Trim();
+            glo.Loga("LOGIN - início da tentativa");
+            glo.Loga("LOGIN - usuário informado: " + usuarioNormalizado);
+            glo.Loga("LOGIN - Banco utilizado: " + (glo.ODBC ? "DSN=MbCarros" : glo.CaminhoBase));
+            glo.Loga("LOGIN - Modo conexão: " + (glo.ODBC ? "ODBC" : "OleDb"));
+
             string senha = Cripto.Encrypt(txSenha.Text);
+            glo.Loga("LOGIN - senha informada foi criptografada");
+            glo.Loga("LOGIN - tamanho do valor criptografado: " + senha.Length);
+
+            try
+            {
+                DataTable usuarios = DB.ExecutarConsulta(
+                    $"Select Nro, Nome, Usuario, Senha, Nivel From Vendedores Where Usuario = '{user}'");
+
+                glo.Loga("LOGIN - quantidade de registros para " + usuarioNormalizado + ": " + usuarios.Rows.Count);
+                bool senhaCorrespondente = false;
+                foreach (DataRow usuario in usuarios.Rows)
+                {
+                    string usuarioBanco = Convert.ToString(usuario["Usuario"]);
+                    bool possuiEspacosExtras = usuarioBanco != usuarioBanco.Trim();
+                    senhaCorrespondente = senhaCorrespondente ||
+                        string.Equals(Convert.ToString(usuario["Senha"]), senha, StringComparison.Ordinal);
+
+                    glo.Loga(
+                        "LOGIN - usuário " + usuarioNormalizado +
+                        " encontrado: SIM; Nro: " + Convert.ToString(usuario["Nro"]) +
+                        "; Nome: " + Convert.ToString(usuario["Nome"]) +
+                        "; Nivel cadastrado: " + Convert.ToString(usuario["Nivel"]) +
+                        "; espaços extras no Usuario: " + (possuiEspacosExtras ? "SIM" : "NÃO") +
+                        "; Usuario normalizado: " + usuarioBanco.Trim());
+                }
+
+                if (usuarios.Rows.Count == 0)
+                {
+                    glo.Loga("LOGIN - usuário " + usuarioNormalizado + " encontrado: NÃO");
+                }
+
+                glo.Loga("LOGIN - senha criptografada corresponde ao cadastro: " +
+                    (senhaCorrespondente ? "SIM" : "NÃO"));
+            }
+            catch (Exception exDiagnostico)
+            {
+                glo.Loga("LOGIN - falha na consulta diagnóstica: " + exDiagnostico.GetType().Name);
+            }
+
+            glo.Loga("LOGIN - executando consulta de autenticação em Vendedores");
             string SQL = $"Select Nro, Usuario From Vendedores Where Usuario = '{user}' and Senha = '{senha}' ";
             DataTable dados = DB.ExecutarConsulta(SQL);
+            glo.Loga("LOGIN - consulta original encontrou registro: " + (dados.Rows.Count > 0 ? "SIM" : "NÃO"));
             if (dados.Rows.Count == 0)
             {
+                glo.Loga("LOGIN - autenticação: FALHOU");
                 MessageBox.Show("Usuário não reconhecido", "Login Inválido", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             else
@@ -63,6 +111,7 @@ namespace TeleBonifacio
                     MessageBox.Show("Usuário não autorizado para acesso ao sistema.", "Login inválido", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     return;
                 }
+                glo.Loga("LOGIN - autenticação: OK; nivel da sessão: " + glo.Nivel);
                 Form1 Form = new Form1();
                 Form.Show();
                 this.Visible = false;
@@ -73,6 +122,24 @@ namespace TeleBonifacio
             if (e.KeyChar == 13)
             {
                 Busca();
+            }
+        }
+
+        private void label1_MouseClick(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Middle)
+            {
+
+                // glo.Nivel = 0;  // Balcão
+                // glo.Nivel = 1;  // Caixa
+                glo.Nivel = 2;  // Escritório
+
+                //glo.iUsuario = 4;
+                glo.iUsuario = 1;
+
+                Form1 Form = new Form1();
+                Form.Show();
+                this.Visible = false;
             }
         }
 

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 using System.Data;
 using System.Linq;
@@ -28,6 +28,7 @@ namespace TeleBonifacio
         private FaltasDAO faltasDAO;
         private TpoFaltaDAO TpoFalta;
         private FornecedorDao Forn;
+        private CategoriaDao categoriaDao;
         private EncomendasDao EncoDao;
         private ProdutosDao cDaoP;
         private GarantiasDao cDaoG;
@@ -46,6 +47,7 @@ namespace TeleBonifacio
         private string Bakcodigo = "";
         private string Bakquantidade = "";
         private string Bakmarca = "";
+        private string BakCategoria = "";
         private string BakObs = "";
         private string BakDescr = "";
         private DateTime BakDataDe;
@@ -105,6 +107,7 @@ namespace TeleBonifacio
             faltasDAO = new FaltasDAO();
             TpoFalta = new TpoFaltaDAO();
             Forn = new FornecedorDao();
+            categoriaDao = new CategoriaDao();
             MostraTipos();
         }
         private void ConfigurarUI()
@@ -331,6 +334,13 @@ namespace TeleBonifacio
         {
             if (btnAdicionar.Text != "Limpar")
             {
+                if (tbFaltas.SelectedIndex == 0 && string.IsNullOrWhiteSpace(ObterCategoriaSelecionada()))
+                {
+                    MessageBox.Show("Informe a categoria do produto.", "Categoria obrigatória", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    cmbCategoria.Focus();
+                    return;
+                }
+
                 string codigo = txtCodigo.Text;
                 string ret = "";
                 if (codigo.Length > 0)
@@ -348,6 +358,7 @@ namespace TeleBonifacio
                     string Marca = txMarca.Text;
                     string Descr = txDescr.Text;
                     string Obs = txObs.Text;
+                    string categoria = ObterCategoriaSelecionada();
                     string UID = glo.GenerateUID();
                     int idForn = 0;
                     if (!Restrito)
@@ -373,8 +384,8 @@ namespace TeleBonifacio
                             }
                         }
                     }
-                    glo.Loga($@"FA,{idBalconista}, {quantidade}, {codigo}, {Marca}, {Descr}, {Obs} , {idForn}, {idTipo}, {UID}");
-                    faltasDAO.Adiciona(idBalconista, quantidade, codigo, Marca, Descr, Obs, idForn, idTipo, UID);
+                    glo.Loga($@"FA,{idBalconista}, {quantidade}, {codigo}, {Marca}, {Descr}, {Obs} , {idForn}, {idTipo}, {UID}, {categoria}");
+                    faltasDAO.Adiciona(idBalconista, quantidade, codigo, Marca, Descr, Obs, idForn, idTipo, UID, categoria);
                     cmbVendedor.FlatStyle = FlatStyle.System;
                 }
             }
@@ -404,6 +415,7 @@ namespace TeleBonifacio
             BakObs = "";
             Normaliza(txtCodigo, 1);
             Normaliza(txMarca, 1);
+            NormalizaCategoria(true);
             Normaliza(txDescr, 1);
             Normaliza(txObs, 1);
             Normaliza(txQuantidade, 1);
@@ -415,6 +427,7 @@ namespace TeleBonifacio
         {
             Normaliza(txtCodigo, 0);
             Normaliza(txMarca, 0);
+            NormalizaCategoria(false);
             Normaliza(txDescr, 0);
             Normaliza(txObs, 0);
             Normaliza(txQuantidade, 0);
@@ -494,6 +507,40 @@ namespace TeleBonifacio
             VeSeHab(txMarca);
         }
 
+        private void cmbCategoria_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (carregando || cmbCategoria.SelectedItem == null)
+                return;
+
+            string texto = cmbCategoria.SelectedItem.ToString();
+            if (texto == "ADICIONE")
+            {
+                btAdicTpo.Text = "Adicionar";
+                btAdicTpo.Enabled = true;
+                txNvCategoria.Visible = true;
+                cmbCategoria.Visible = false;
+                btComprei.Text = "Cancelar";
+                btComprei.Enabled = true;
+                txNvCategoria.Focus();
+            }
+            else
+            {
+                btAdicTpo.Enabled = true;
+                cmbCategoria.FlatStyle = FlatStyle.Flat;
+                cmbCategoria.Tag = "M";
+                button2.Enabled = true;
+                btLmpFiltro.Enabled = true;
+            }
+        }
+
+        private void cmbCategoriaFiltro_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (!carregando)
+            {
+                button2.Enabled = btLmpFiltro.Enabled = true;
+            }
+        }
+
         private void txObs_KeyUp(object sender, KeyEventArgs e)
         {
             VeSeHab(txObs);
@@ -514,6 +561,7 @@ namespace TeleBonifacio
             cmbVendedor.Enabled = !v;
             txQuantidade.ReadOnly = v;
             txMarca.ReadOnly = v;
+            cmbCategoria.Enabled = !v;
             txtCodigo.ReadOnly = v;
         }
 
@@ -619,6 +667,7 @@ namespace TeleBonifacio
                 dataGrid1.Columns["Balconista"].FillWeight = 80;
                 dataGrid1.Columns["Tipo"].FillWeight = 110;
                 dataGrid1.Columns["Obs"].FillWeight = 170;       // A segunda mais larga
+                dataGrid1.Columns["Categoria"].FillWeight = 100;
 
                 // 4. Configurações específicas de alinhamento e visibilidade condicional
                 dataGrid1.Columns["Quant"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
@@ -665,7 +714,7 @@ namespace TeleBonifacio
                              $"Forn={BakidForn}, " +
                              $"UsarPeriodo={BakUsarPeriodo}, " +
                              $"DataDe={BakDataDe:dd/MM/yyyy HH:mm:ss}, " +
-                             $"DataAte={BakDataAte:dd/MM/yyyy HH:mm:ss}");
+                             $"DataAte={BakDataAte:dd/MM/yyyy HH:mm:ss}, Categoria={BakCategoria}");
 
 
                     FaltasDAO faltasDAO = new FaltasDAO();
@@ -683,7 +732,8 @@ namespace TeleBonifacio
                         bakEmFalta,
                         BakDescr,
                         BakDataDe,
-                        BakDataAte);
+                        BakDataAte,
+                        BakCategoria);
 
                     // Mantido comportamento original
                     tipos = TpoFalta.getTipos();
@@ -727,6 +777,9 @@ namespace TeleBonifacio
                 txtCodigo.Text = FiltraOZero(selectedRow.Cells["Codigo"].Value);
                 txMarca.Text = FiltraOZero(selectedRow.Cells["Marca"].Value);
                 txObs.Text = FiltraOZero(selectedRow.Cells["Obs"].Value);
+                SelecionarCategoria(cmbCategoria, selectedRow.Cells["Categoria"].Value == DBNull.Value
+                    ? ""
+                    : Convert.ToString(selectedRow.Cells["Categoria"].Value));
                 txDescr.Text = Convert.ToString(selectedRow.Cells["Descricao"].Value);
                 txValor.Text = glo.fmtVlr(Convert.ToString(selectedRow.Cells["Valor"].Value));
                 cmbVendedor.SelectedValue = Convert.ToInt32(selectedRow.Cells["IDBalconista"].Value);
@@ -753,6 +806,7 @@ namespace TeleBonifacio
                 btComprei.Enabled = true;
                 txQuantidade.ReadOnly = false;
                 txMarca.ReadOnly = false;
+                cmbCategoria.Enabled = true;
                 if (dataGrid1.SelectedRows.Count == 1)
                 {
                     txtCodigo.ReadOnly = false;
@@ -763,6 +817,7 @@ namespace TeleBonifacio
                 }
                 txQuantidade.BackColor = originalBackgroundColor;
                 txMarca.BackColor = originalBackgroundColor;
+                cmbCategoria.BackColor = originalBackgroundColor;
                 txtCodigo.BackColor = originalBackgroundColor;
                 txDescr.BackColor = originalBackgroundColor;
                 txObs.BackColor = originalBackgroundColor;
@@ -936,6 +991,77 @@ namespace TeleBonifacio
 
         #region Tipos
 
+        private string ObterCategoriaSelecionada()
+        {
+            tb.ComboBoxItem item = cmbCategoria.SelectedItem as tb.ComboBoxItem;
+            if (item == null || item.Id == 0 || item.Nome == "ESCOLHA" || item.Nome == "ADICIONE")
+                return "";
+            return item.Nome.Trim();
+        }
+
+        private string ObterCategoriaFiltro()
+        {
+            tb.ComboBoxItem item = cmbCategoriaFiltro.SelectedItem as tb.ComboBoxItem;
+            if (item == null || item.Id == 0 || item.Nome == "ESCOLHA")
+                return "";
+            return item.Nome.Trim();
+        }
+
+        private void SelecionarCategoria(ComboBox comboBox, string categoria)
+        {
+            if (string.IsNullOrWhiteSpace(categoria))
+            {
+                comboBox.SelectedIndex = 0;
+                return;
+            }
+            for (int i = 0; i < comboBox.Items.Count; i++)
+            {
+                tb.ComboBoxItem item = comboBox.Items[i] as tb.ComboBoxItem;
+                if (item != null && string.Equals(item.Nome, categoria.Trim(), StringComparison.OrdinalIgnoreCase))
+                {
+                    comboBox.SelectedIndex = i;
+                    return;
+                }
+            }
+            comboBox.SelectedIndex = 0;
+        }
+
+        private void NormalizaCategoria(bool limpar)
+        {
+            if (limpar)
+                cmbCategoria.SelectedIndex = 0;
+            cmbCategoria.Enabled = true;
+            cmbCategoria.BackColor = originalBackgroundColor;
+            cmbCategoria.Tag = "";
+        }
+
+        private void CarregarCategorias(ComboBox comboBox, bool permitirAdicionar)
+        {
+            List<tb.ComboBoxItem> categorias = new List<tb.ComboBoxItem>();
+            categorias.Add(new tb.ComboBoxItem(0, "ESCOLHA"));
+            DataTable dados = categoriaDao.GetDadosOrdenados();
+            if (dados != null)
+            {
+                foreach (DataRow row in dados.Rows)
+                {
+                    if (row["Nome"] != DBNull.Value)
+                        categorias.Add(new tb.ComboBoxItem(Convert.ToInt32(row["Id"]), Convert.ToString(row["Nome"])));
+                }
+            }
+            if (permitirAdicionar)
+                categorias.Add(new tb.ComboBoxItem(0, "ADICIONE"));
+            comboBox.DataSource = categorias;
+            comboBox.DisplayMember = "Nome";
+            comboBox.ValueMember = "Id";
+            comboBox.SelectedIndex = 0;
+        }
+
+        private void MostraCategorias()
+        {
+            CarregarCategorias(cmbCategoria, true);
+            CarregarCategorias(cmbCategoriaFiltro, false);
+        }
+
         private void MostraTipos()
         {
             if (glo.ODBC)
@@ -948,13 +1074,14 @@ namespace TeleBonifacio
                 glo.CarregarComboBoxComCores<tb.TpoFalta>(cmbTipos, TpoFalta, "ESCOLHA", "", "", "ADICIONE", "EDIÇÃO", tipoFaltaCores: tipoFaltaCores);
                 glo.CarregarComboBox<tb.Fornecedor>(cmbForn, Forn, "ESCOLHA", ItemFinal: "ADICIONE", ItemFinal2: "EDIÇÃO", filtro: "EhForn = 1 ");
             }
+            MostraCategorias();
         }
 
         private void btAdicTpo_Click(object sender, EventArgs e)
         {
             if (btAdicTpo.Text == "Adicionar")
             {
-                if ((txNvTipo.Text.Length == 0) && (txNvForn.Text.Length == 0))
+                if ((txNvTipo.Text.Length == 0) && (txNvForn.Text.Length == 0) && (txNvCategoria.Text.Length == 0))
                 {
                     MessageBox.Show("Só é possível adicionar se dizer qual ele é",
                                                   "Faltou dizer",
@@ -963,15 +1090,22 @@ namespace TeleBonifacio
                 }
                 else
                 {
-                    if (txNvTipo.Visible)
+                    if (txNvCategoria.Visible)
+                    {
+                        string novaCategoria = txNvCategoria.Text.Trim();
+                        categoriaDao.Adiciona(novaCategoria);
+                        RetCmboTpo(novaCategoria);
+                    }
+                    else if (txNvTipo.Visible)
                     {
                         TpoFalta.Adiciona(txNvTipo.Text, null);
+                        RetCmboTpo();
                     }
                     else
                     {
                         Forn.Adiciona(txNvForn.Text);
+                        RetCmboTpo();
                     }
-                    RetCmboTpo();
                 }
             }
             else
@@ -1063,6 +1197,13 @@ namespace TeleBonifacio
         {
             HashSet<string> selectedCodes = new HashSet<string>();
             int scrollPosition = grid.FirstDisplayedScrollingRowIndex;
+            string categoria = ObterCategoriaSelecionada();
+            if ((tbFaltas.SelectedIndex == 0 || tbFaltas.SelectedIndex == 1) && string.IsNullOrWhiteSpace(categoria))
+            {
+                MessageBox.Show("Informe a categoria do produto.", "Categoria obrigatória", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                cmbCategoria.Focus();
+                return;
+            }
             if (grid.SelectedRows.Count > 1)
             {
                 codigo = "";
@@ -1073,14 +1214,14 @@ namespace TeleBonifacio
                 selectedCodes.Add(sID);
                 int gID = Convert.ToInt32(row.Cells["ID"].Value);
                 string UID = Convert.ToString(row.Cells["UID"].Value);
-                glo.Loga($@"FA,{gID}, {idTipo}, {idForn}, {codigo}, {quantidade}, {marca}, {obs}, {descr}, {Vlr}, {UID}");
+                glo.Loga($@"FU,{nrGrid}, {gID}, {idTipo}, {idForn}, {codigo}, {quantidade}, {marca}, {obs}, {descr}, {Vlr}, {UID}, {categoria}");
                 switch (tbFaltas.SelectedIndex)
                 {
                     case 0:
-                        faltasDAO.Atualiza(gID, idTipo, idForn, codigo, quantidade, marca, obs, descr, Vlr);
+                        faltasDAO.Atualiza(gID, idTipo, idForn, codigo, quantidade, marca, obs, descr, Vlr, categoria);
                         break;
                     case 1:
-                        cDaoP.Atualiza(gID, idTipo, idForn, codigo, quantidade, marca, obs, descr, Vlr);
+                        cDaoP.Atualiza(gID, idTipo, idForn, codigo, quantidade, marca, obs, descr, Vlr, categoria);
                         break;
                     case 2:
                         EncoDao.Atualiza(gID, this.idCliente, idForn, codigo, quantidade, marca, obs, descr);
@@ -1132,6 +1273,7 @@ namespace TeleBonifacio
             btComprei.Enabled = false;
             Normaliza(txtCodigo, 0);
             Normaliza(txMarca, 0);
+            NormalizaCategoria(false);
             Normaliza(txDescr, 0);
             Normaliza(txObs, 0);
             Normaliza(txQuantidade, 0);
@@ -1232,6 +1374,13 @@ namespace TeleBonifacio
             if (btComprei.Text == "Comprei")
             {
                 //  COMPROU A MERCADORIA QUE ESTAVA EM FALTA
+                if (dataGrid1.SelectedRows.Count == 0 || dataGrid1.SelectedRows.Cast<DataGridViewRow>().Any(row => !CategoriaInformada(row)))
+                {
+                    MessageBox.Show("Informe a categoria antes de marcar o item como comprado.", "Categoria obrigatória", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    cmbCategoria.Focus();
+                    return;
+                }
+
                 int scrollPosition = dataGrid1.FirstDisplayedScrollingRowIndex;
                 if (dataGrid1.SelectedRows.Count == 1)
                 {
@@ -1293,6 +1442,12 @@ namespace TeleBonifacio
                     Limpar();
                 }
             }
+        }
+
+        private bool CategoriaInformada(DataGridViewRow row)
+        {
+            object valor = row.Cells["Categoria"].Value;
+            return valor != null && valor != DBNull.Value && !string.IsNullOrWhiteSpace(Convert.ToString(valor));
         }
 
         private void AcionaComprou(int gID, float Valor)
@@ -1447,6 +1602,7 @@ namespace TeleBonifacio
                 {
                     Bakmarca = txMarca.Text;
                 }
+                BakCategoria = ObterCategoriaFiltro();
                 BakObs = "";
                 if (txObs.Tag == "M")
                 {
@@ -1484,13 +1640,17 @@ namespace TeleBonifacio
         {
             button2.Tag = "";
             btLmpFiltro.Enabled = false;
+            string categoriaEdicao = ObterCategoriaSelecionada();
             Limpar();
+            SelecionarCategoria(cmbCategoria, categoriaEdicao);
+            cmbCategoriaFiltro.SelectedIndex = 0;
             BakidTipo = 0;
             BakidForn = 0;
             bakComprado = 0;
             Bakcodigo = "";
             Bakquantidade = "";
             Bakmarca = "";
+            BakCategoria = "";
             BakObs = "";
             switch (tbFaltas.SelectedIndex)
             {
@@ -1541,6 +1701,9 @@ namespace TeleBonifacio
             dataGrid2.Columns[11].Visible = false;  // Tipo valor original
             dataGrid2.Columns[12].Visible = false;  // idForn
             dataGrid2.Columns[13].Width = 290;      // Obs
+            dataGrid2.Columns["Categoria"].HeaderText = "Categoria";
+            dataGrid2.Columns["Categoria"].Width = 100;
+            dataGrid2.Columns["Categoria"].DisplayIndex = 8;
             if (rt.IsLargeScreen())
             {
                 for (int i = 0; i < 13; i++)
@@ -1581,7 +1744,8 @@ namespace TeleBonifacio
                     BakDescr,
                     BakDataDe,
                     BakDataAte,
-                    BakUsarPeriodo);
+                    BakUsarPeriodo,
+                    BakCategoria);
 
                 List<tb.TpoFalta> tipos = TpoFalta.getTipos();
                 List<tb.Fornecedor> Fornecs = Forn.getForns();
@@ -1795,6 +1959,9 @@ namespace TeleBonifacio
                 txQuantidade.Text = FiltraOZero(selectedRow.Cells["Quant"].Value);
                 txtCodigo.Text = FiltraOZero(selectedRow.Cells["Codigo"].Value);
                 txMarca.Text = FiltraOZero(selectedRow.Cells["Marca"].Value);
+                SelecionarCategoria(cmbCategoria, selectedRow.Cells["Categoria"].Value == DBNull.Value
+                    ? ""
+                    : Convert.ToString(selectedRow.Cells["Categoria"].Value));
                 txObs.Text = FiltraOZero(selectedRow.Cells["Obs"].Value);
                 txDescr.Text = Convert.ToString(selectedRow.Cells["Descricao"].Value);
                 txValor.Text = glo.fmtVlr(Convert.ToString(selectedRow.Cells["Valor"].Value));
@@ -1819,6 +1986,7 @@ namespace TeleBonifacio
                 btComprei.Enabled = true;
                 txQuantidade.ReadOnly = false;
                 txMarca.ReadOnly = false;
+                cmbCategoria.Enabled = true;
                 if (dataGrid2.SelectedRows.Count == 1)
                 {
                     txtCodigo.ReadOnly = false;
@@ -1829,6 +1997,7 @@ namespace TeleBonifacio
                 }
                 txQuantidade.BackColor = originalBackgroundColor;
                 txMarca.BackColor = originalBackgroundColor;
+                cmbCategoria.BackColor = originalBackgroundColor;
                 txtCodigo.BackColor = originalBackgroundColor;
                 txDescr.BackColor = originalBackgroundColor;
                 txObs.BackColor = originalBackgroundColor;
@@ -2295,13 +2464,19 @@ namespace TeleBonifacio
             int c = 0;
             foreach (string linha in linhas)
             {
-                if (linha.Contains("FA,"))
+                int separador = linha.IndexOf(": ", StringComparison.Ordinal);
+                string registro = separador >= 0 ? linha.Substring(separador + 2) : linha;
+                if (registro.StartsWith("FA,", StringComparison.Ordinal))
                 {
-                    ProcessarAdicao(linha);
+                    ProcessarAdicao(registro);
                 }
-                else if (linha.Contains("FD,"))
+                else if (registro.StartsWith("FU,", StringComparison.Ordinal))
                 {
-                    ProcessarExclusao(linha);
+                    ProcessarAtualizacao(registro);
+                }
+                else if (registro.StartsWith("FD,", StringComparison.Ordinal))
+                {
+                    ProcessarExclusao(registro);
                 }
                 c++;
             }
@@ -2311,6 +2486,18 @@ namespace TeleBonifacio
         private void ProcessarAdicao(string linha)
         {
             string[] partes = linha.Split(',');
+            if (partes.Length < 11)
+            {
+                glo.Loga("Importação de Falta ignorada: registro antigo sem Categoria.");
+                return;
+            }
+            int idFornRegistro;
+            int idTipoRegistro;
+            if (!int.TryParse(partes[7].Trim(), out idFornRegistro) || !int.TryParse(partes[8].Trim(), out idTipoRegistro))
+            {
+                glo.Loga("Importação de Falta ignorada: registro FA ambíguo ou formato de atualização legado.");
+                return;
+            }
             int idBalconista = Convert.ToInt32(partes[1].Trim());
             string quantidade = string.IsNullOrWhiteSpace(partes[2]) ? "0" : partes[2].Trim();
             string codigo = string.IsNullOrWhiteSpace(partes[3]) ? "N/A" : partes[3].Trim();
@@ -2320,10 +2507,69 @@ namespace TeleBonifacio
             int idForn = string.IsNullOrWhiteSpace(partes[7]) ? 0 : Convert.ToInt32(partes[7].Trim());
             int idTipo = string.IsNullOrWhiteSpace(partes[8]) ? 0 : Convert.ToInt32(partes[8].Trim());
             string UID = string.IsNullOrWhiteSpace(partes[9]) ? "N/A" : partes[9].Trim().Replace("'", "''"); //
-            glo.Loga($@"FA,{idBalconista}, {quantidade}, {codigo}, {marca}, {descricao}, {obs} , {idForn}, {idTipo}, {UID}");
-            faltasDAO.Adiciona(idBalconista, quantidade, codigo, marca, descricao, obs, idForn, idTipo, UID);
+            string categoria = partes[10].Trim();
+            if (string.IsNullOrWhiteSpace(categoria) || categoria.Length > 20)
+            {
+                glo.Loga("Importação de Falta ignorada: Categoria vazia ou maior que 20 caracteres.");
+                return;
+            }
+            glo.Loga($@"FA,{idBalconista}, {quantidade}, {codigo}, {marca}, {descricao}, {obs} , {idForn}, {idTipo}, {UID}, {categoria}");
+            faltasDAO.Adiciona(idBalconista, quantidade, codigo, marca, descricao, obs, idForn, idTipo, UID, categoria);
         }
 
+        private void ProcessarAtualizacao(string linha)
+        {
+            string[] partes = linha.Split(',');
+            if (partes.Length < 13)
+            {
+                glo.Loga("Atualização ignorada: registro FU incompleto.");
+                return;
+            }
+
+            int nrGrid;
+            int gID;
+            int idTipo;
+            int idForn;
+            if (!int.TryParse(partes[1].Trim(), out nrGrid) ||
+                !int.TryParse(partes[2].Trim(), out gID) ||
+                !int.TryParse(partes[3].Trim(), out idTipo) ||
+                !int.TryParse(partes[4].Trim(), out idForn))
+            {
+                glo.Loga("Atualização ignorada: identificador inválido no registro FU.");
+                return;
+            }
+
+            string codigo = partes[5].Trim();
+            string quantidade = partes[6].Trim();
+            string marca = partes[7].Trim();
+            string obs = partes[8].Trim();
+            string descr = partes[9].Trim();
+            float valor = glo.LeValor(partes[10].Trim());
+            string categoria = partes[12].Trim();
+
+            if ((nrGrid == 0 || nrGrid == 1) &&
+                (string.IsNullOrWhiteSpace(categoria) || categoria.Length > 20))
+            {
+                glo.Loga("Atualização ignorada: Categoria vazia ou maior que 20 caracteres.");
+                return;
+            }
+
+            switch (nrGrid)
+            {
+                case 0:
+                    faltasDAO.Atualiza(gID, idTipo, idForn, codigo, quantidade, marca, obs, descr, valor, categoria);
+                    break;
+                case 1:
+                    cDaoP.Atualiza(gID, idTipo, idForn, codigo, quantidade, marca, obs, descr, valor, categoria);
+                    break;
+                case 2:
+                    EncoDao.Atualiza(gID, this.idCliente, idForn, codigo, quantidade, marca, obs, descr);
+                    break;
+                default:
+                    glo.Loga("Atualização ignorada: grid FU desconhecida.");
+                    break;
+            }
+        }
         private void ProcessarExclusao(string linha)
         {
             string[] partes = linha.Split(',');
@@ -2338,6 +2584,12 @@ namespace TeleBonifacio
             cINI.WriteBool("Opcoes", "AdaptAtivo", rtfWord.AltImprHab);
         }
 
+        private void txNvCategoria_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter && !string.IsNullOrWhiteSpace(txNvCategoria.Text))
+                btAdicTpo_Click(sender, EventArgs.Empty);
+        }
+
         private void txNvTipo_KeyUp(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Enter)
@@ -2350,17 +2602,22 @@ namespace TeleBonifacio
             }
         }
 
-        private void RetCmboTpo()
+        private void RetCmboTpo(string categoriaSelecionar = null)
         {
             txNvTipo.Text = "";
             txNvForn.Text = "";
+            txNvCategoria.Text = "";
             txNvTipo.Visible = false;
             txNvForn.Visible = false;
+            txNvCategoria.Visible = false;
             cmbTipos.Visible = true;
             cmbForn.Visible = true;
+            cmbCategoria.Visible = true;
             cmbTipos.DataSource = null;
             cmbForn.DataSource = null;
             MostraTipos();
+            if (!string.IsNullOrWhiteSpace(categoriaSelecionar))
+                SelecionarCategoria(cmbCategoria, categoriaSelecionar);
             btAdicTpo.Text = "Atualizar";
             btAdicTpo.Enabled = false;
             btComprei.Text = "Comprei";

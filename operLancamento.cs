@@ -1,12 +1,15 @@
-﻿using TeleBonifacio.dao;
+using TeleBonifacio.dao;
 using System;
 using System.Data;
+using System.Drawing;
 using System.Windows.Forms;
 using TeleBonifacio.tb;
 using System.Globalization;
 
 // 4.2.2 Informação - Liberado por
 // 4.2.2 Botão limpar também limpa o campo de observações
+// 4.2.3 Preserva posição, scroll e seleção da grid após edição de entrega
+// 4.2.4 Corrige preservação dos filtros após salvar edição
 // 4.1.6 Informação do percentual de gasto com entregas
 // 4.0.9 Filtro de data inicial e final para as entregas   
 // 3.9.7 Forma de pagamento Boleto para as entregas
@@ -21,6 +24,24 @@ namespace TeleBonifacio
         private int iID = 0;
         private string UID = "";
         private bool carregou = false;
+        private bool filtrosInicializados = false;
+        private DateTime filtroDataInicial;
+        private DateTime filtroDataFinal;
+        private int? filtroIdMotoBoy;
+        private string filtroObsAtual = "";
+
+
+        private sealed class EstadoGridEdicao
+        {
+            public int IdRegistro { get; set; }
+            public Point Scroll { get; set; }
+            public SourceGrid.Position PosicaoAtiva { get; set; }
+
+
+
+
+        }
+
 
         public operLancamento()
         {
@@ -135,7 +156,10 @@ namespace TeleBonifacio
         {
             glo.Loga("VERSAO 3.9.15 - Texto Percentual das Vendas com valor");
 
-            if (dtInicial.Value > dtpData.Value)
+            if (!filtrosInicializados)
+                AtualizarFiltrosDaTela();
+
+            if (filtroDataInicial > filtroDataFinal)
             {
                 MessageBox.Show("Data inicial não pode ser maior que a final.");
                 return;
@@ -143,15 +167,12 @@ namespace TeleBonifacio
 
             entregasDAO = new EntregasDAO();
 
-            DateTime dataInicio = dtInicial.Value.Date;
-            DateTime dataFim = dtpData.Value.Date;
+            DateTime dataInicio = filtroDataInicial;
+            DateTime dataFim = filtroDataFinal;
 
-            string sObs = txObs.Text;
+            string sObs = filtroObsAtual;
+            int? idBoy = filtroIdMotoBoy;
 
-            int? idBoy = null;
-
-            if (cmbMotoBoy.SelectedValue != null)
-                idBoy = Convert.ToInt32(cmbMotoBoy.SelectedValue);
 
             DataTable dados = entregasDAO.getDados(dataInicio, dataFim, sObs, idBoy);
 
@@ -200,8 +221,104 @@ namespace TeleBonifacio
             dataGrid1.DataSource = boundDataView;
         }
 
+        private EstadoGridEdicao CapturarEstadoGridEdicao(int idRegistro)
+        {
+            EstadoGridEdicao estado = new EstadoGridEdicao
+            {
+                IdRegistro = idRegistro,
+                Scroll = dataGrid1.CustomScrollPosition,
+                PosicaoAtiva = dataGrid1.Selection.ActivePosition,
+            };
+
+            return estado;
+        }
+
+        private void RestaurarEstadoGridEdicao(EstadoGridEdicao estado)
+        {
+            if (estado == null)
+                return;
+
+            dataGrid1.CustomScrollPosition = estado.Scroll;
+
+            DataRowView linhaEncontrada = null;
+            int indiceLinha = -1;
+            for (int i = 0; i < dataGrid1.Rows.Count; i++)
+            {
+                DataRowView linha = dataGrid1.Rows.IndexToDataSourceRow(i) as DataRowView;
+                if (linha == null || linha.Row["Id"] == DBNull.Value)
+                    continue;
+
+                if (glo.ConvOjbInt(linha.Row["Id"]) == estado.IdRegistro)
+                {
+                    linhaEncontrada = linha;
+                    indiceLinha = i;
+                    break;
+                }
+            }
+
+            if (linhaEncontrada == null)
+            {
+                glo.Loga($"VERSAO 3.9.23 - Registro ID {estado.IdRegistro} não está mais no filtro");
+                return;
+            }
+
+            dataGrid1.SelectedDataRows = new object[] { linhaEncontrada };
+
+            int coluna = estado.PosicaoAtiva == SourceGrid.Position.Empty
+                ? 0
+                : estado.PosicaoAtiva.Column;
+            if (dataGrid1.Columns.Count > 0)
+                coluna = Math.Max(0, Math.Min(coluna, dataGrid1.Columns.Count - 1));
+
+            SourceGrid.Position posicaoRestaurada = new SourceGrid.Position(indiceLinha, coluna);
+            dataGrid1.Selection.Focus(posicaoRestaurada, false);
+
+            int? primeiraLinhaVisivel = dataGrid1.Rows.FirstVisibleScrollableRow;
+            int? ultimaLinhaVisivel = dataGrid1.Rows.LastVisibleScrollableRow;
+            if (!primeiraLinhaVisivel.HasValue || !ultimaLinhaVisivel.HasValue ||
+                indiceLinha < primeiraLinhaVisivel.Value || indiceLinha > ultimaLinhaVisivel.Value)
+            {
+                dataGrid1.ShowCell(posicaoRestaurada, false);
+            }
+
+            glo.Loga($"VERSAO 3.9.23 - Restaurando registro ID {estado.IdRegistro}");
+        }
+
+        private void AtualizarFiltrosDaTela()
+        {
+            filtroDataInicial = dtInicial.Value.Date;
+            filtroDataFinal = dtpData.Value.Date;
+            filtroObsAtual = txObs.Text;
+            filtroIdMotoBoy = null;
+
+            if (cmbMotoBoy.SelectedValue != null && cmbMotoBoy.SelectedValue != DBNull.Value)
+                filtroIdMotoBoy = Convert.ToInt32(cmbMotoBoy.SelectedValue);
+
+            filtrosInicializados = true;
+            glo.Loga("VERSAO 4.2.4 - Atualizando estado dos filtros da grid");
+        }
+
+        private void RestaurarFiltrosDaTela()
+        {
+            if (!filtrosInicializados)
+                return;
+
+            dtInicial.Value = filtroDataInicial;
+            dtpData.Value = filtroDataFinal;
+            if (filtroIdMotoBoy.HasValue)
+                cmbMotoBoy.SelectedValue = filtroIdMotoBoy.Value;
+            else
+                cmbMotoBoy.SelectedIndex = -1;
+            txObs.Text = filtroObsAtual;
+        }
+
         private void btnAdicionar_Click(object sender, EventArgs e)
         {
+            bool editando = btnAdicionar.Text == "Salvar";
+            EstadoGridEdicao estadoGrid = editando
+                ? CapturarEstadoGridEdicao(this.iID)
+                : null;
+
             int idBoy = Convert.ToInt32(cmbMotoBoy.SelectedValue);
             int idForma = Convert.ToInt32(cmbFormaPagamento.SelectedIndex);
             int idCliente = Convert.ToInt32(cmbCliente.SelectedValue);
@@ -254,6 +371,14 @@ namespace TeleBonifacio
 
             CarregaGrid();
             Limpar();
+
+            if (editando)
+            {
+                glo.Loga("VERSAO 4.2.4 - Preservando filtros originais após edição");
+                RestaurarFiltrosDaTela();
+
+                RestaurarEstadoGridEdicao(estadoGrid);
+            }
         }
 
         private void MostraTotal()
@@ -407,6 +532,7 @@ namespace TeleBonifacio
 
         private void btnFiltrar_Click(object sender, EventArgs e)
         {
+            AtualizarFiltrosDaTela();
             CarregaGrid();
         }
 
@@ -450,6 +576,7 @@ namespace TeleBonifacio
                 carregou = true;
                 dtpData.Value = DateTime.Now;
                 dtInicial.Value = DateTime.Now.AddDays(-1).Date; 
+                AtualizarFiltrosDaTela();
                 CarregaGrid();
                 ConfigurarGrid();
             }            

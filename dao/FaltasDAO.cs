@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Data;
 using System.Text;
 
@@ -6,20 +6,21 @@ namespace TeleBonifacio.dao
 {
     public class FaltasDAO
     {
-        public void Adiciona(int idBalconista, string quantidade, string codigo, string Marca, string Descr, string Obs, int idForn, int idTipo, string UID)
+        public void Adiciona(int idBalconista, string quantidade, string codigo, string Marca, string Descr, string Obs, int idForn, int idTipo, string UID, string categoria)
         {
-            string sql = $@"INSERT INTO Faltas (IDBalconista, Quant, Codigo, Marca, Data, Descricao, Obs, Tipo, idForn, UID, Prioridade) VALUES (
-                {idBalconista}, 
-                '{quantidade}', 
-                '{codigo}', 
-                '{Marca}', 
-                Now, 
-                '{Descr}', 
-                '{Obs}', 
-                '{idTipo}', 
-                {idForn}, 
-                '{UID}', 0)";
-            DB.ExecutarComandoSQL(sql); 
+            string categoriaSql = (categoria ?? "").Replace("'", "''");
+            string sql = $@"INSERT INTO Faltas (IDBalconista, Quant, Codigo, Marca, Data, Descricao, Obs, Tipo, idForn, UID, Categoria, Prioridade) VALUES (
+                {idBalconista},
+                '{quantidade}',
+                '{codigo}',
+                '{Marca}',
+                Now,
+                '{Descr}',
+                '{Obs}',
+                '{idTipo}',
+                {idForn},
+                '{UID}', '{categoriaSql}', 0)";
+            DB.ExecutarComandoSQL(sql);
         }
 
         // v1.1 – 12/02/2026
@@ -29,7 +30,7 @@ namespace TeleBonifacio.dao
         //
         // v1.0 – Método original sem filtro por período
         public DataTable getDados(int tipo, int idForn, int Comprado, string codigo, string quantidade,
-            string marca, string Obs, int idVendedor, int EmFalta, string Descr, DateTime? dataDe, DateTime? dataAte)
+            string marca, string Obs, int idVendedor, int EmFalta, string Descr, DateTime? dataDe, DateTime? dataAte, string categoria)
         {
             const string VERSAO = "FaltasDAO.getDados v1.1";
 
@@ -38,10 +39,10 @@ namespace TeleBonifacio.dao
                 glo.Loga($"{VERSAO} executando");
 
                 StringBuilder query = new StringBuilder();
-                query.Append(@"SELECT 0 as Cont, F.Compra, '' as Forn, F.ID, F.IDBalconista, 
-                    FORMAT(F.Data, 'dd/MM/yy') as Data, F.Codigo, F.Quant, F.Marca, F.Descricao, 
-                    V.Nome AS Balconista, F.UID, F.Tipo, F.Tipo as TipoOrig, 
-                    F.idForn, F.Valor, F.Obs, F.Prioridade  
+                query.Append(@"SELECT 0 as Cont, F.Compra, '' as Forn, F.ID, F.IDBalconista,
+                    FORMAT(F.Data, 'dd/MM/yy') as Data, F.Codigo, F.Quant, F.Marca, F.Descricao,
+                    V.Nome AS Balconista, F.UID, F.Tipo, F.Tipo as TipoOrig,
+                    F.idForn, F.Valor, F.Obs, F.Prioridade, F.Categoria
                     FROM Faltas F
                     LEFT JOIN Vendedores V ON V.ID = F.IDBalconista ");
 
@@ -72,6 +73,9 @@ namespace TeleBonifacio.dao
 
                     alteracoes.Append($" F.Data BETWEEN #{dtDe}# AND #{dtAte}# and ");
                 }
+
+                if (!string.IsNullOrWhiteSpace(categoria))
+                    alteracoes.Append($" F.Categoria = '{categoria.Replace("'", "''")}' and ");
 
                 if (alteracoes.Length > 0)
                 {
@@ -106,15 +110,15 @@ namespace TeleBonifacio.dao
 
         public void Edita(int id, int idBalconista, string quantidade, string codigo)
         {
-            string sql = $@"UPDATE Faltas SET 
-                IDBalconista = {idBalconista}, 
-                Quant = '{quantidade}', 
+            string sql = $@"UPDATE Faltas SET
+                IDBalconista = {idBalconista},
+                Quant = '{quantidade}',
                 Codigo = '{codigo}'
                 WHERE ID = {id}";
             DB.ExecutarComandoSQL(sql);
         }
 
-        public void Atualiza(int iID, int iTpo, int idForn, string codigo, string quantidade, string marca, string Obs, string Descr, float Valor)
+        public void Atualiza(int iID, int iTpo, int idForn, string codigo, string quantidade, string marca, string Obs, string Descr, float Valor, string categoria)
         {
             StringBuilder alteracoes = new StringBuilder();
             if (iTpo > 0)
@@ -149,6 +153,11 @@ namespace TeleBonifacio.dao
             {
                 alteracoes.Append($"Valor = {glo.sv(Valor)}, ");
             }
+            if (!string.IsNullOrWhiteSpace(categoria))
+            {
+                string categoriaSql = categoria.Replace("'", "''");
+                alteracoes.Append($"Categoria = '{categoriaSql}', ");
+            }
             alteracoes.Length -= 2;
             string sValor = glo.sv(Valor);
             string sql = $@"UPDATE Faltas SET {alteracoes} WHERE ID = {iID} ";
@@ -164,9 +173,18 @@ namespace TeleBonifacio.dao
                 string UID = glo.GenerateUID();
                 string sValor = glo.sv(Valor);
                 int idForn = (faltaRow["idForn"].ToString().Length == 0) ? 0 : Convert.ToInt16(faltaRow["idForn"]);
+                string categoriaOriginal = faltaRow["Categoria"] == DBNull.Value
+                    ? ""
+                    : Convert.ToString(faltaRow["Categoria"]).Trim();
+                if (string.IsNullOrWhiteSpace(categoriaOriginal))
+                {
+                    throw new InvalidOperationException(
+                        "A Falta precisa ter Categoria antes de ser marcada como comprada.");
+                }
+                string categoria = categoriaOriginal.Replace("'", "''");
 
-                string insertQuery = $@"INSERT INTO Produtos (Data, Quant, Codigo, Marca, UID, Tipo, Compra, Descricao, idForn, Obs, Valor) 
-                        VALUES (Now, '{faltaRow["Quant"]}', '{faltaRow["Codigo"]}', '{faltaRow["Marca"]}', '{UID}', '{faltaRow["Tipo"]}', Now(), '{faltaRow["Descricao"]}', {idForn}, '{faltaRow["Obs"]}', {sValor} ) ";
+                string insertQuery = $@"INSERT INTO Produtos (Data, Quant, Codigo, Marca, UID, Tipo, Compra, Descricao, idForn, Obs, Valor, Categoria)
+                        VALUES (Now, '{faltaRow["Quant"]}', '{faltaRow["Codigo"]}', '{faltaRow["Marca"]}', '{UID}', '{faltaRow["Tipo"]}', Now(), '{faltaRow["Descricao"]}', {idForn}, '{faltaRow["Obs"]}', {sValor}, '{categoria}' ) ";
                 DB.ExecutarComandoSQL(insertQuery);
 
                 string updateFaltaQuery = $@"Delete From Faltas WHERE ID = {iID}";
@@ -185,7 +203,7 @@ namespace TeleBonifacio.dao
         //    string UID = glo.GenerateUID();
         //    string sValor = glo.sv(Valor);
         //    int idForn = (faltaRow["idForn"].ToString().Length==0) ? 0 : Convert.ToInt16(faltaRow["idForn"]);
-        //    string insertQuery = $@"INSERT INTO Produtos (Data, Quant, Codigo, Marca, UID, Tipo, Compra, Descricao, idForn, Obs, Valor) 
+        //    string insertQuery = $@"INSERT INTO Produtos (Data, Quant, Codigo, Marca, UID, Tipo, Compra, Descricao, idForn, Obs, Valor)
         //                    VALUES (Now, '{faltaRow["Quant"]}', '{faltaRow["Codigo"]}', '{faltaRow["Marca"]}', '{UID}', '{faltaRow["Tipo"]}', Now(), '{faltaRow["Descricao"]}', {idForn}, '{faltaRow["Obs"]}', {sValor} ) ";
         //    DB.ExecutarComandoSQL(insertQuery);
         //    string updateFaltaQuery = $@"Delete From Faltas WHERE ID = {iID}";
