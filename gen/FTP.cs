@@ -30,9 +30,12 @@ namespace TeleBonifacio
             {
                 _tamanhoConteudo = value;
                 Tot += value;
-                if (this.TemProgress)
+                if (this.TemProgress && this.ProgressBar1 != null)
                 {
-                    this.ProgressBar1.Value = Tot;
+                    int valorProgresso = Math.Max(
+                        this.ProgressBar1.Minimum,
+                        Math.Min(this.ProgressBar1.Maximum, Tot));
+                    this.ProgressBar1.Value = valorProgresso;
                 }
                 
             }
@@ -47,6 +50,48 @@ namespace TeleBonifacio
 
         public FTP()
         {
+        }
+
+        private void RegistrarDiagnosticoUpload(string etapa, string status, string mensagem)
+        {
+            glo.Loga(
+                "FTP Upload | Etapa=" + etapa +
+                " | Status=" + status +
+                " | " + (mensagem ?? ""));
+        }
+
+        private void RegistrarExcecaoUpload(string etapa, Exception ex)
+        {
+            string mensagem = ex == null ? "(excecao nula)" : ex.Message;
+            string tipo = ex == null || ex.GetType() == null ? "(nulo)" : ex.GetType().FullName;
+            string detalhes = "Tipo=" + tipo + "; Mensagem=" + mensagem;
+
+            WebException webException = ex as WebException;
+            if (webException != null)
+            {
+                detalhes += "; WebStatus=" + webException.Status;
+                FtpWebResponse ftpResponse = webException.Response as FtpWebResponse;
+                if (ftpResponse != null)
+                {
+                    try
+                    {
+                        detalhes += "; FtpStatusCode=" + ftpResponse.StatusCode +
+                            "; FtpStatusDescription=" + ftpResponse.StatusDescription;
+                    }
+                    finally
+                    {
+                        ftpResponse.Close();
+                    }
+                }
+            }
+
+            if (ex != null && ex.InnerException != null)
+            {
+                detalhes += "; InnerException=" + ex.InnerException.GetType().FullName +
+                    ": " + ex.InnerException.Message;
+            }
+
+            RegistrarDiagnosticoUpload(etapa, "ERRO", detalhes);
         }
 
         public static bool Append(
@@ -158,66 +203,155 @@ namespace TeleBonifacio
 
         public bool Upload(string _nomeArquivo, string Caminho, bool v)
         {
-            this.Tot = 0;
-            string Cam = Caminho.Replace(@"\", @"/");
-            FileInfo _arquivoInfo = new FileInfo(_nomeArquivo);
-            string Suri = "ftp://" + this.ftpIPServidor + @"/" + Cam + @"/" + _arquivoInfo.Name;
-            FtpWebRequest requisicaoFTP;
-            requisicaoFTP = (FtpWebRequest)FtpWebRequest.Create(new Uri(Suri));
-            requisicaoFTP.Credentials = new NetworkCredential(this.ftpUsuarioID, this.ftpSenha);
-            requisicaoFTP.KeepAlive = false;
-            requisicaoFTP.Method = WebRequestMethods.Ftp.UploadFile;
-            requisicaoFTP.UseBinary = true;
-            requisicaoFTP.ContentLength = _arquivoInfo.Length;
-            this.TemProgress = v;
-            if (this.TemProgress)
+            try
             {
-                this.ProgressBar1.Visible = true;
-                this.ProgressBar1.Maximum = (int)_arquivoInfo.Length;
-                this.ProgressBar1.Enabled = true;
-            }
-            FileStream fs = _arquivoInfo.OpenRead();
-            bool sair = false;
-            bool bReturn = false;
-            while (sair==false) {
-                string ret = this.UploadEmSi(requisicaoFTP, fs);
-                if (ret=="")
+                this.Tot = 0;
+                string arquivoLocal = _nomeArquivo ?? "";
+                string diretorioRemoto = Caminho == null ? "(null)" : Caminho;
+                bool arquivoExiste = !string.IsNullOrWhiteSpace(_nomeArquivo) && File.Exists(_nomeArquivo);
+                long tamanhoArquivo = arquivoExiste ? new FileInfo(_nomeArquivo).Length : 0;
+                RegistrarDiagnosticoUpload(
+                    "Inicio",
+                    "INICIO",
+                    "Arquivo=" + arquivoLocal +
+                    "; Existe=" + arquivoExiste +
+                    "; Tamanho=" + tamanhoArquivo +
+                    "; Servidor=" + (this.ftpIPServidor ?? "") +
+                    "; DiretorioRemoto=" + diretorioRemoto +
+                    "; UsuarioConfigurado=" + !string.IsNullOrWhiteSpace(this.ftpUsuarioID) +
+                    "; SenhaConfigurada=" + !string.IsNullOrWhiteSpace(this.ftpSenha) +
+                    "; UsaProgress=" + v +
+                    "; ProgressBarConfigurada=" + (this.ProgressBar1 != null));
+
+                if (string.IsNullOrWhiteSpace(_nomeArquivo))
                 {
-                    bReturn = true;
-                    sair = true;
-                } else
+                    throw new ArgumentException("Arquivo local não informado.", "_nomeArquivo");
+                }
+
+                if (!File.Exists(_nomeArquivo))
                 {
-                    if (ret.IndexOf("553") > 0)
+                    throw new FileNotFoundException("Arquivo local não existe: " + _nomeArquivo, _nomeArquivo);
+                }
+
+                if (string.IsNullOrWhiteSpace(this.ftpIPServidor))
+                {
+                    throw new InvalidOperationException("Servidor FTP não configurado.");
+                }
+
+                if (Caminho == null)
+                {
+                    throw new ArgumentNullException("Caminho", "Diretório remoto FTP não informado.");
+                }
+
+                string Cam = Caminho.Replace(@"\", @"/");
+                FileInfo _arquivoInfo = new FileInfo(_nomeArquivo);
+                string Suri = "ftp://" + this.ftpIPServidor + @"/" + Cam + @"/" + _arquivoInfo.Name;
+                RegistrarDiagnosticoUpload(
+                    "ConfigurarRequisicao",
+                    "INFO",
+                    "Url=" + Suri +
+                    "; Arquivo=" + _arquivoInfo.FullName +
+                    "; Tamanho=" + _arquivoInfo.Length +
+                    "; UsuarioConfigurado=" + !string.IsNullOrWhiteSpace(this.ftpUsuarioID) +
+                    "; SenhaConfigurada=" + !string.IsNullOrWhiteSpace(this.ftpSenha) +
+                    "; UsaProgress=" + v +
+                    "; ProgressBarConfigurada=" + (this.ProgressBar1 != null));
+
+                this.TemProgress = v && this.ProgressBar1 != null;
+                if (this.TemProgress)
+                {
+                    this.ProgressBar1.Visible = true;
+                    this.ProgressBar1.Maximum = (int)_arquivoInfo.Length;
+                    this.ProgressBar1.Enabled = true;
+                }
+                bool sair = false;
+                bool bReturn = false;
+                int tentativa = 0;
+                while (sair==false) {
+                    tentativa++;
+                    RegistrarDiagnosticoUpload("Upload", "TENTATIVA", "Numero=" + tentativa + "; Arquivo=" + _arquivoInfo.FullName);
+
+                    FtpWebRequest requisicaoFTP = (FtpWebRequest)FtpWebRequest.Create(new Uri(Suri));
+                    requisicaoFTP.Credentials = new NetworkCredential(this.ftpUsuarioID, this.ftpSenha);
+                    requisicaoFTP.KeepAlive = false;
+                    requisicaoFTP.Method = WebRequestMethods.Ftp.UploadFile;
+                    requisicaoFTP.UseBinary = true;
+                    requisicaoFTP.ContentLength = _arquivoInfo.Length;
+
+                    string ret;
+                    using (FileStream fs = _arquivoInfo.OpenRead())
                     {
-                        string sUrlD = "ftp://" + this.ftpIPServidor + Cam;
-                        FtpWebRequest requestCD = (FtpWebRequest)FtpWebRequest.Create(new Uri(sUrlD));
-                        requestCD.Credentials = new NetworkCredential(this.ftpUsuarioID, this.ftpSenha);
-                        requestCD.KeepAlive = false;
-                        requestCD.Method = WebRequestMethods.Ftp.MakeDirectory;
-                        requestCD.Credentials = new NetworkCredential("user", "pass");
-                        try
+                        ret = this.UploadEmSi(requisicaoFTP, fs);
+                    }
+                    if (ret=="")
+                    {
+                        bReturn = true;
+                        sair = true;
+                        RegistrarDiagnosticoUpload("Upload", "SUCESSO", "Arquivo=" + _arquivoInfo.FullName + "; Tamanho=" + _arquivoInfo.Length);
+                    } else
+                    {
+                        if (ret == null)
                         {
-                            using (var resp = (FtpWebResponse)requestCD.GetResponse())
+                            RegistrarDiagnosticoUpload(
+                                "UploadEmSi",
+                                "RETORNO_NULO",
+                                "O upload não retornou confirmação de sucesso nem mensagem de erro.");
+                        }
+                        else
+                        {
+                            RegistrarDiagnosticoUpload("UploadEmSi", "ERRO", "Retorno=" + ret);
+                        }
+                        RegistrarDiagnosticoUpload("Upload", "FALHA", "Arquivo=" + _arquivoInfo.FullName + "; Retorno=" + ret);
+                        if (tentativa == 1 && ret != null && ret.IndexOf("553") >= 0)
+                        {
+                            string sUrlD = "ftp://" + this.ftpIPServidor + Cam;
+                            RegistrarDiagnosticoUpload("CriacaoDiretorio", "INICIO", "DiretorioRemoto=" + Cam + "; Url=" + sUrlD + "; Motivo=553");
+                            FtpWebRequest requestCD = (FtpWebRequest)FtpWebRequest.Create(new Uri(sUrlD));
+                            requestCD.Credentials = new NetworkCredential(this.ftpUsuarioID, this.ftpSenha);
+                            requestCD.KeepAlive = false;
+                            requestCD.Method = WebRequestMethods.Ftp.MakeDirectory;
+                            try
                             {
-                                Console.WriteLine(resp.StatusCode);
+                                using (var resp = (FtpWebResponse)requestCD.GetResponse())
+                                {
+                                    Console.WriteLine(resp.StatusCode);
+                                    RegistrarDiagnosticoUpload("CriacaoDiretorio", "SUCESSO", "DiretorioRemoto=" + Cam + "; Status=" + resp.StatusCode);
+                                }
+                                RegistrarDiagnosticoUpload("Upload", "RETRY", "Nova tentativa após criação do diretório; Arquivo=" + _arquivoInfo.FullName);
+                            }
+                            catch (WebException ex)
+                            {
+                                RegistrarExcecaoUpload("CriacaoDiretorio", ex);
+                                bReturn = false;
+                                sair = true;
+                            }
+                            catch (Exception ex)
+                            {
+                                RegistrarExcecaoUpload("CriacaoDiretorio", ex);
+                                bReturn = false;
+                                sair = true;
                             }
                         }
-                        catch (Exception ex)
+                        else
                         {
-                            MessageBox.Show("Não foi possivel enviar arquivo", "É necessário criar o diretório");
                             bReturn = false;
                             sair = true;
                         }
                     }
-                    else
-                    {
-                        MessageBox.Show(ret, "Erro não tratado");
-                        bReturn = false;
-                        sair = true;
-                    }
-                } 
+                }
+                RegistrarDiagnosticoUpload("Fim", bReturn ? "SUCESSO" : "FALHA", "Arquivo=" + _arquivoInfo.FullName + "; ResultadoUpload=" + bReturn);
+                return bReturn;
             }
-            return bReturn;
+            catch (WebException ex)
+            {
+                RegistrarExcecaoUpload("Upload", ex);
+                throw;
+            }
+            catch (Exception ex)
+            {
+                RegistrarExcecaoUpload("Upload", ex);
+                throw;
+            }
         }
 
         private string UploadEmSi(FtpWebRequest requisicaoFTP, FileStream fs)
@@ -225,29 +359,27 @@ namespace TeleBonifacio
             try
             {
                 // Stream  para o qual o arquivo a ser enviado será escrito
-                Stream strm = requisicaoFTP.GetRequestStream();
-
-                int buffLength = 2048;
-                byte[] buff = new byte[buffLength];
-
-                // Lê a partir do arquivo stream, 2k por vez
-                this.tamanhoConteudo = fs.Read(buff, 0, buffLength);
-
-                // ate o conteudo do stream terminar
-                while (this.tamanhoConteudo != 0)
+                using (Stream strm = requisicaoFTP.GetRequestStream())
                 {
-                    // Escreve o conteudo a partir do arquivo para o stream FTP 
-                    strm.Write(buff, 0, this.tamanhoConteudo);
-                    this.tamanhoConteudo = fs.Read(buff, 0, buffLength);
-                }
+                    int buffLength = 2048;
+                    byte[] buff = new byte[buffLength];
 
-                // Fecha o stream a requisição
-                strm.Close();
-                fs.Close();
+                    // Lê a partir do arquivo stream, 2k por vez
+                    this.tamanhoConteudo = fs.Read(buff, 0, buffLength);
+
+                    // ate o conteudo do stream terminar
+                    while (this.tamanhoConteudo != 0)
+                    {
+                        // Escreve o conteudo a partir do arquivo para o stream FTP
+                        strm.Write(buff, 0, this.tamanhoConteudo);
+                        this.tamanhoConteudo = fs.Read(buff, 0, buffLength);
+                    }
+                }
                 return "";
             }
             catch (Exception ex)
             {
+                RegistrarExcecaoUpload("UploadEmSi", ex);
                 return ex.Message;
             }
         }

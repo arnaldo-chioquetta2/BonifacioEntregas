@@ -314,9 +314,33 @@ namespace TeleBonifacio
 
         private void btImprimir_Click(object sender, EventArgs e)
         {
-            string tentativaId = "";
+            string tentativaId = Guid.NewGuid().ToString("N");
             try
             {
+                bool modoTextoLivreInicial = EstaEmModoTextoLivre();
+                string impressoraInicial = cmbImpressora.SelectedItem != null ? cmbImpressora.SelectedItem.ToString() : "";
+                int quantidadeInicial = (int)numQuantidade.Value;
+                string codigoInicial = txtCodigo.Text.Trim();
+                string nomeEtiquetaInicial = nomeEtiquetaSelecionada ?? "";
+                string mensagemClique =
+                    "ETIQUETAS IMPRESSAO | TentativaId=" + tentativaId +
+                    " | Etapa=CliqueImprimir | Status=INICIO" +
+                    " | Impressora=" + impressoraInicial +
+                    " | Quantidade=" + quantidadeInicial +
+                    " | Codigo=" + codigoInicial +
+                    " | Etiqueta=" + nomeEtiquetaInicial +
+                    " | ModoTextoLivre=" + modoTextoLivreInicial;
+                glo.Loga(mensagemClique);
+                LogRemotoEtiquetas.Registrar(
+                    "CliqueImprimir",
+                    "INICIO",
+                    "Clique no botão Imprimir; ModoTextoLivre=" + modoTextoLivreInicial,
+                    impressoraInicial,
+                    quantidadeInicial,
+                    codigoInicial,
+                    nomeEtiquetaInicial,
+                    tentativaId);
+
                 EtiquetaModel etiqueta = ObterEtiquetaDaTela();
                 bool modoTextoLivre = EstaEmModoTextoLivre();
 
@@ -325,6 +349,23 @@ namespace TeleBonifacio
                     string.IsNullOrWhiteSpace(etiqueta.Codigo) &&
                     string.IsNullOrWhiteSpace(etiqueta.Descricao))
                 {
+                    glo.Loga(
+                        "ETIQUETAS IMPRESSAO | TentativaId=" + tentativaId +
+                        " | Etapa=ValidacaoEtiqueta | Status=FALHA" +
+                        " | Impressora=" + impressoraInicial +
+                        " | Quantidade=" + quantidadeInicial +
+                        " | Codigo=" + etiqueta.Codigo +
+                        " | Etiqueta=" + etiqueta.NomeEtiqueta +
+                        " | ModoTextoLivre=" + modoTextoLivre);
+                    LogRemotoEtiquetas.Registrar(
+                        "ValidacaoEtiqueta",
+                        "FALHA",
+                        "Etiqueta não informada ou não selecionada; ModoTextoLivre=" + modoTextoLivre,
+                        impressoraInicial,
+                        quantidadeInicial,
+                        etiqueta.Codigo,
+                        etiqueta.NomeEtiqueta,
+                        tentativaId);
                     MessageBox.Show("Informe ou selecione uma etiqueta para imprimir.");
                     return;
                 }
@@ -333,6 +374,23 @@ namespace TeleBonifacio
                     string.IsNullOrWhiteSpace(etiqueta.Codigo) &&
                     string.IsNullOrWhiteSpace(etiqueta.Descricao))
                 {
+                    glo.Loga(
+                        "ETIQUETAS IMPRESSAO | TentativaId=" + tentativaId +
+                        " | Etapa=ValidacaoCampos | Status=FALHA" +
+                        " | Impressora=" + impressoraInicial +
+                        " | Quantidade=" + quantidadeInicial +
+                        " | Codigo=" + etiqueta.Codigo +
+                        " | Etiqueta=" + etiqueta.NomeEtiqueta +
+                        " | ModoTextoLivre=" + modoTextoLivre);
+                    LogRemotoEtiquetas.Registrar(
+                        "ValidacaoCampos",
+                        "FALHA",
+                        "Código e descrição não informados; ModoTextoLivre=" + modoTextoLivre,
+                        impressoraInicial,
+                        quantidadeInicial,
+                        etiqueta.Codigo,
+                        etiqueta.NomeEtiqueta,
+                        tentativaId);
                     MessageBox.Show("Informe ou selecione uma etiqueta para imprimir.");
                     return;
                 }
@@ -340,18 +398,51 @@ namespace TeleBonifacio
                 int quantidade = (int)numQuantidade.Value;
                 if (quantidade <= 0)
                 {
+                    glo.Loga(
+                        "ETIQUETAS IMPRESSAO | TentativaId=" + tentativaId +
+                        " | Etapa=ValidacaoQuantidade | Status=FALHA" +
+                        " | Impressora=" + impressoraInicial +
+                        " | Quantidade=" + quantidade +
+                        " | Codigo=" + etiqueta.Codigo +
+                        " | Etiqueta=" + etiqueta.NomeEtiqueta +
+                        " | ModoTextoLivre=" + modoTextoLivre);
+                    LogRemotoEtiquetas.Registrar(
+                        "ValidacaoQuantidade",
+                        "FALHA",
+                        "Quantidade menor ou igual a zero; ModoTextoLivre=" + modoTextoLivre,
+                        impressoraInicial,
+                        quantidade,
+                        etiqueta.Codigo,
+                        etiqueta.NomeEtiqueta,
+                        tentativaId);
                     MessageBox.Show("A quantidade deve ser maior que zero.");
                     return;
                 }
 
                 if (cmbImpressora.SelectedItem == null)
                 {
+                    glo.Loga(
+                        "ETIQUETAS IMPRESSAO | TentativaId=" + tentativaId +
+                        " | Etapa=ValidacaoImpressoraSelecionada | Status=FALHA" +
+                        " | Impressora=" + impressoraInicial +
+                        " | Quantidade=" + quantidade +
+                        " | Codigo=" + etiqueta.Codigo +
+                        " | Etiqueta=" + etiqueta.NomeEtiqueta +
+                        " | ModoTextoLivre=" + modoTextoLivre);
+                    LogRemotoEtiquetas.Registrar(
+                        "ValidacaoImpressoraSelecionada",
+                        "FALHA",
+                        "Nenhuma impressora selecionada; ModoTextoLivre=" + modoTextoLivre,
+                        impressoraInicial,
+                        quantidade,
+                        etiqueta.Codigo,
+                        etiqueta.NomeEtiqueta,
+                        tentativaId);
                     MessageBox.Show("Selecione uma impressora.");
                     return;
                 }
 
                 string impressora = cmbImpressora.SelectedItem.ToString();
-                tentativaId = Guid.NewGuid().ToString("N");
                 LogRemotoEtiquetas.Registrar(
                     "InicioImpressao",
                     "INICIO",
@@ -2238,6 +2329,11 @@ namespace TeleBonifacio
         {
             try
             {
+                glo.Loga(
+                    "ETIQUETAS IMPRESSAO | TentativaId=" + tentativaId +
+                    " | Etapa=ImprimirEtiqueta | Status=INICIO" +
+                    " | Impressora=" + impressora +
+                    " | Quantidade=" + quantidade);
                 etiquetaImpressao = etiqueta;
                 copiasRestantes = quantidade;
                 copiasTotais = quantidade;
@@ -2247,6 +2343,10 @@ namespace TeleBonifacio
 
                 PrintDocument doc = new PrintDocument();
                 doc.PrinterSettings.PrinterName = impressora;
+                glo.Loga(
+                    "ETIQUETAS IMPRESSAO | TentativaId=" + tentativaId +
+                    " | Etapa=ConfigurarPrinterName | Status=OK" +
+                    " | PrinterName=" + doc.PrinterSettings.PrinterName);
                 doc.DocumentName = "Etiqueta_" +
                     (string.IsNullOrWhiteSpace(etiqueta != null ? etiqueta.Id : "") ? "SemId" : etiqueta.Id) +
                     "_" + DateTime.Now.ToString("yyyyMMdd_HHmmss_fff");
@@ -2267,10 +2367,24 @@ namespace TeleBonifacio
                 bool impressoraValida;
                 try
                 {
+                    glo.Loga(
+                        "ETIQUETAS IMPRESSAO | TentativaId=" + tentativaId +
+                        " | Etapa=ValidarImpressora | Status=INICIO" +
+                        " | Impressora=" + impressora);
                     impressoraValida = doc.PrinterSettings.IsValid;
+                    glo.Loga(
+                        "ETIQUETAS IMPRESSAO | TentativaId=" + tentativaId +
+                        " | Etapa=ValidarImpressora | Status=OK" +
+                        " | IsValid=" + impressoraValida.ToString().ToLowerInvariant() +
+                        " | Impressora=" + impressora);
                 }
                 catch (Exception ex)
                 {
+                    glo.Loga(
+                        "ETIQUETAS IMPRESSAO | TentativaId=" + tentativaId +
+                        " | Etapa=ValidarImpressora | Status=ERRO" +
+                        " | Tipo=" + ex.GetType().FullName +
+                        " | Mensagem=" + ex.Message);
                     glo.Loga("Erro ao validar impressora: " + ex.Message);
                     LogRemotoEtiquetas.RegistrarErroPendente(
                         "ErroValidarImpressora",
@@ -2291,6 +2405,10 @@ namespace TeleBonifacio
 
                 if (!impressoraValida)
                 {
+                    glo.Loga(
+                        "ETIQUETAS IMPRESSAO | TentativaId=" + tentativaId +
+                        " | Etapa=ValidarImpressora | Status=FALHA" +
+                        " | Impressora=" + impressora);
                     LogRemotoEtiquetas.RegistrarPendente(
                         "ImpressoraInvalida",
                         "ERRO",
@@ -2319,7 +2437,17 @@ namespace TeleBonifacio
                     etiqueta != null ? etiqueta.NomeEtiqueta : "",
                     tentativaId);
 
+                glo.Loga(
+                    "ETIQUETAS IMPRESSAO | TentativaId=" + tentativaId +
+                    " | Etapa=Print | Status=INICIO" +
+                    " | Impressora=" + impressora +
+                    " | Quantidade=" + quantidade);
                 doc.Print();
+                glo.Loga(
+                    "ETIQUETAS IMPRESSAO | TentativaId=" + tentativaId +
+                    " | Etapa=Print | Status=RETORNOU" +
+                    " | Impressora=" + impressora +
+                    " | Quantidade=" + quantidade);
                 LogRemotoEtiquetas.Registrar(
                     "PrintRetornou",
                     "OK",
@@ -2338,6 +2466,11 @@ namespace TeleBonifacio
             }
             catch (Exception ex)
             {
+                glo.Loga(
+                    "ETIQUETAS IMPRESSAO | TentativaId=" + tentativaId +
+                    " | Etapa=ImprimirEtiqueta | Status=ERRO" +
+                    " | Tipo=" + ex.GetType().FullName +
+                    " | Mensagem=" + ex.Message);
                 glo.Loga("Erro ao imprimir etiqueta: " + ex.Message);
                 if (!erroPrintPageTratado)
                 {

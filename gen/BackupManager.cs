@@ -57,7 +57,7 @@ namespace TeleBonifacio
         //        glo.Loga("Erro durante o backup: " + ex.Message);
         //    }
         //}
-        public void RealizarBackup(bool usaProgress)
+        public bool RealizarBackup(bool usaProgress)
         {
             try
             {
@@ -86,7 +86,7 @@ namespace TeleBonifacio
                 _caminhoArquivoZipAtual = caminhoArquivoZip;
 
                 _etapaAtual = "Envio do backup";
-                EnviarBackupParaServidor(caminhoArquivoZip);
+                return EnviarBackupParaServidor(caminhoArquivoZip);
             }
             catch (Exception ex)
             {
@@ -295,10 +295,16 @@ namespace TeleBonifacio
             return caminhoArquivoZip;
         }
 
-        private void EnviarBackupParaServidor(string caminhoArquivoZip)
+        private bool EnviarBackupParaServidor(string caminhoArquivoZip)
         {
             string PastaBaseFTP = _ini.ReadString("Backup", "PastaBaseFTP", "");
-            _ftp.Upload(caminhoArquivoZip, PastaBaseFTP, this.usaProgress);
+            bool resultadoUpload = _ftp.Upload(caminhoArquivoZip, PastaBaseFTP, this.usaProgress);
+            glo.Loga(
+                "FTP Upload | Etapa=BackupManager | Status=" + (resultadoUpload ? "SUCESSO" : "FALHA") +
+                " | ResultadoUpload=" + resultadoUpload +
+                " | Arquivo=" + caminhoArquivoZip +
+                " | DiretorioRemoto=" + PastaBaseFTP);
+            return resultadoUpload;
         }
     }
 }

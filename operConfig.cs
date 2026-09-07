@@ -202,10 +202,18 @@ namespace TeleBonifacio
                 glo.Loga("Acionamento do Backup");
                 DesabilitarControles(this);
                 BackupManager backupManager = new BackupManager();
-                backupManager.RealizarBackup(false);
+                bool backupRealizado = backupManager.RealizarBackup(false);
                 button2.Text = "Fechar";
-                glo.Loga("Backup realizado com sucesso!");
-                MessageBox.Show("Backup realizado com sucesso!");
+                if (backupRealizado)
+                {
+                    glo.Loga("Backup realizado com sucesso!");
+                    MessageBox.Show("Backup realizado com sucesso!");
+                }
+                else
+                {
+                    glo.Loga("Backup local realizado, mas o envio FTP falhou.");
+                    MessageBox.Show("Backup local realizado, mas o envio FTP falhou.");
+                }
             }
             catch (Exception ex)
             {

@@ -334,13 +334,6 @@ namespace TeleBonifacio
         {
             if (btnAdicionar.Text != "Limpar")
             {
-                if (tbFaltas.SelectedIndex == 0 && string.IsNullOrWhiteSpace(ObterCategoriaSelecionada()))
-                {
-                    MessageBox.Show("Informe a categoria do produto.", "Categoria obrigatória", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    cmbCategoria.Focus();
-                    return;
-                }
-
                 string codigo = txtCodigo.Text;
                 string ret = "";
                 if (codigo.Length > 0)
@@ -1198,12 +1191,6 @@ namespace TeleBonifacio
             HashSet<string> selectedCodes = new HashSet<string>();
             int scrollPosition = grid.FirstDisplayedScrollingRowIndex;
             string categoria = ObterCategoriaSelecionada();
-            if ((tbFaltas.SelectedIndex == 0 || tbFaltas.SelectedIndex == 1) && string.IsNullOrWhiteSpace(categoria))
-            {
-                MessageBox.Show("Informe a categoria do produto.", "Categoria obrigatória", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                cmbCategoria.Focus();
-                return;
-            }
             if (grid.SelectedRows.Count > 1)
             {
                 codigo = "";
@@ -1374,13 +1361,6 @@ namespace TeleBonifacio
             if (btComprei.Text == "Comprei")
             {
                 //  COMPROU A MERCADORIA QUE ESTAVA EM FALTA
-                if (dataGrid1.SelectedRows.Count == 0 || dataGrid1.SelectedRows.Cast<DataGridViewRow>().Any(row => !CategoriaInformada(row)))
-                {
-                    MessageBox.Show("Informe a categoria antes de marcar o item como comprado.", "Categoria obrigatória", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    cmbCategoria.Focus();
-                    return;
-                }
-
                 int scrollPosition = dataGrid1.FirstDisplayedScrollingRowIndex;
                 if (dataGrid1.SelectedRows.Count == 1)
                 {
@@ -1442,12 +1422,6 @@ namespace TeleBonifacio
                     Limpar();
                 }
             }
-        }
-
-        private bool CategoriaInformada(DataGridViewRow row)
-        {
-            object valor = row.Cells["Categoria"].Value;
-            return valor != null && valor != DBNull.Value && !string.IsNullOrWhiteSpace(Convert.ToString(valor));
         }
 
         private void AcionaComprou(int gID, float Valor)
@@ -2486,9 +2460,9 @@ namespace TeleBonifacio
         private void ProcessarAdicao(string linha)
         {
             string[] partes = linha.Split(',');
-            if (partes.Length < 11)
+            if (partes.Length < 10)
             {
-                glo.Loga("Importação de Falta ignorada: registro antigo sem Categoria.");
+                glo.Loga("Importação de Falta ignorada: registro FA incompleto.");
                 return;
             }
             int idFornRegistro;
@@ -2507,10 +2481,10 @@ namespace TeleBonifacio
             int idForn = string.IsNullOrWhiteSpace(partes[7]) ? 0 : Convert.ToInt32(partes[7].Trim());
             int idTipo = string.IsNullOrWhiteSpace(partes[8]) ? 0 : Convert.ToInt32(partes[8].Trim());
             string UID = string.IsNullOrWhiteSpace(partes[9]) ? "N/A" : partes[9].Trim().Replace("'", "''"); //
-            string categoria = partes[10].Trim();
-            if (string.IsNullOrWhiteSpace(categoria) || categoria.Length > 20)
+            string categoria = partes.Length > 10 ? partes[10].Trim() : "";
+            if (categoria.Length > 20)
             {
-                glo.Loga("Importação de Falta ignorada: Categoria vazia ou maior que 20 caracteres.");
+                glo.Loga("Importação de Falta ignorada: Categoria maior que 20 caracteres.");
                 return;
             }
             glo.Loga($@"FA,{idBalconista}, {quantidade}, {codigo}, {marca}, {descricao}, {obs} , {idForn}, {idTipo}, {UID}, {categoria}");
@@ -2520,7 +2494,7 @@ namespace TeleBonifacio
         private void ProcessarAtualizacao(string linha)
         {
             string[] partes = linha.Split(',');
-            if (partes.Length < 13)
+            if (partes.Length < 12)
             {
                 glo.Loga("Atualização ignorada: registro FU incompleto.");
                 return;
@@ -2545,12 +2519,12 @@ namespace TeleBonifacio
             string obs = partes[8].Trim();
             string descr = partes[9].Trim();
             float valor = glo.LeValor(partes[10].Trim());
-            string categoria = partes[12].Trim();
+            string categoria = partes.Length > 12 ? partes[12].Trim() : "";
 
             if ((nrGrid == 0 || nrGrid == 1) &&
-                (string.IsNullOrWhiteSpace(categoria) || categoria.Length > 20))
+                categoria.Length > 20)
             {
-                glo.Loga("Atualização ignorada: Categoria vazia ou maior que 20 caracteres.");
+                glo.Loga("Atualização ignorada: Categoria maior que 20 caracteres.");
                 return;
             }
 

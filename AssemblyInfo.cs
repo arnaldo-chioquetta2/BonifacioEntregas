@@ -11,9 +11,12 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyCulture("")]
 [assembly: ComVisible(false)]
 [assembly: Guid("308c57af-e663-456d-8a2c-188bbd61423d")]
-[assembly: AssemblyVersion("4.4.7.0")]
-[assembly: AssemblyFileVersion("4.4.7.0")]
+[assembly: AssemblyVersion("4.4.9.0")]
+[assembly: AssemblyFileVersion("4.4.9.0")]
 
+// 4.4.9 07/09/26 Correção do envio FTP e tratamento de falhas no backup automático
+// 4.4.9 07/09/26 Melhorado diagnóstico de falhas na impressão de etiquetas.
+// 4.4.8 05/09/26 Restaurada função de adição de faltas
 // 4.4.7 04/09/26 Adicionada categoria aos produtos e filtrar por categoria
 // 4.4.6 29/08/26 Preservação do estado da grid na edição
 // 4.4.5 24/08/26 Ajuste no login compartilhado

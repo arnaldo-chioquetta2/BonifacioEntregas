@@ -16,7 +16,12 @@ namespace TeleBonifacio
         {
             try
             {
-                if (!glo.LogRemoto || string.IsNullOrWhiteSpace(nomeDocumento))
+                glo.Loga(
+                    "ETIQUETAS IMPRESSAO | TentativaId=" + (tentativaId ?? "") +
+                    " | Etapa=MonitorSpooler | Status=INICIO" +
+                    " | Impressora=" + (impressora ?? "") +
+                    " | Document=" + (nomeDocumento ?? ""));
+                if (string.IsNullOrWhiteSpace(nomeDocumento))
                 {
                     return;
                 }
@@ -45,11 +50,6 @@ namespace TeleBonifacio
 
                 while ((DateTime.Now - inicio).TotalSeconds <= TimeoutSegundos)
                 {
-                    if (!glo.LogRemoto)
-                    {
-                        return;
-                    }
-
                     List<TrabalhoSpooler> trabalhos = ConsultarTrabalhos(impressora, nomeDocumento);
                     if (trabalhos.Count > 0)
                     {
@@ -67,6 +67,10 @@ namespace TeleBonifacio
                                 string etapa = estadoErro ? "SpoolerErro" : "SpoolerEncontrado";
                                 string resultado = estadoErro ? "ERRO" : "OK";
                                 string mensagem = CriarMensagemTrabalho(nomeDocumento, impressora, trabalho, inicio);
+                                glo.Loga(
+                                    "ETIQUETAS IMPRESSAO | TentativaId=" + tentativaId +
+                                    " | Etapa=MonitorSpooler | Status=" + (estadoErro ? "ERRO" : "ENCONTRADO") +
+                                    " | " + mensagem);
                                 if (estadoErro)
                                 {
                                     LogRemotoEtiquetas.RegistrarPendente(etapa, resultado, mensagem, impressora, quantidade, codigo, nomeEtiqueta, tentativaId);
@@ -81,10 +85,17 @@ namespace TeleBonifacio
                     }
                     else if (encontrado && !houveErro)
                     {
+                        string mensagemProcessado =
+                            "Trabalho nao esta mais presente na fila; processado pelo spooler. " +
+                            CriarMensagemTrabalho(nomeDocumento, impressora, ultimoTrabalho, inicio);
+                        glo.Loga(
+                            "ETIQUETAS IMPRESSAO | TentativaId=" + tentativaId +
+                            " | Etapa=MonitorSpooler | Status=PROCESSADO" +
+                            " | " + mensagemProcessado);
                         LogRemotoEtiquetas.RegistrarPendente(
                             "SpoolerProcessado",
                             "OK",
-                            "Trabalho nao esta mais presente na fila; processado pelo spooler. " + CriarMensagemTrabalho(nomeDocumento, impressora, ultimoTrabalho, inicio),
+                            mensagemProcessado,
                             impressora,
                             quantidade,
                             codigo,
@@ -101,6 +112,11 @@ namespace TeleBonifacio
                 string mensagemTimeout = encontrado
                     ? "Trabalho permaneceu na fila ate o timeout. " + CriarMensagemTrabalho(nomeDocumento, impressora, ultimoTrabalho, inicio)
                     : "Trabalho nao encontrado na fila dentro do tempo limite. DocumentName=" + nomeDocumento + "; Impressora=" + impressora + "; TempoDecorridoMs=" + ObterTempoDecorridoMs(inicio);
+                glo.Loga(
+                    "ETIQUETAS IMPRESSAO | TentativaId=" + tentativaId +
+                    " | Etapa=MonitorSpooler | Status=" + (encontrado ? "TIMEOUT" : "NAO_ENCONTRADO") +
+                    " | Impressora=" + impressora +
+                    " | " + mensagemTimeout);
                 LogRemotoEtiquetas.RegistrarPendente(
                     etapaTimeout,
                     "NAO_CONFIRMADO",
@@ -114,6 +130,12 @@ namespace TeleBonifacio
             }
             catch (Exception ex)
             {
+                glo.Loga(
+                    "ETIQUETAS IMPRESSAO | TentativaId=" + tentativaId +
+                    " | Etapa=MonitorSpooler | Status=ERRO" +
+                    " | Tipo=" + ex.GetType().FullName +
+                    " | Mensagem=" + ex.Message +
+                    " | Impressora=" + impressora);
                 LogRemotoEtiquetas.RegistrarErroPendente("ErroMonitorSpooler", ex, impressora, quantidade, codigo, nomeEtiqueta, tentativaId);
                 EnvioLogRemotoEtiquetas.DispararEnvioAssincrono();
             }

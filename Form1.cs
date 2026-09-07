@@ -361,9 +361,14 @@ namespace TeleBonifacio
 
         private void timer1_Tick(object sender, EventArgs e)
         {
-            if (!this.DentroDoTimer)
+            if (this.DentroDoTimer)
             {
-                this.DentroDoTimer = true;
+                return;
+            }
+
+            this.DentroDoTimer = true;
+            try
+            {
                 lbMens.Text = "Fazendo Backup OnLine";
                 string Caption = this.Text;
                 this.Text = "Fazendo Backup OnLine";
@@ -377,11 +382,31 @@ namespace TeleBonifacio
 
                 if (Fazer)
                 {
-                    BackupManager backupManager = new BackupManager();
-                    backupManager.RealizarBackup(true);
+                    try
+                    {
+                        BackupManager backupManager = new BackupManager();
+                        bool backupRealizado = backupManager.RealizarBackup(true);
+                        if (backupRealizado)
+                        {
+                            glo.Loga("BACKUP AUTOMATICO | Status=SUCESSO");
+                        }
+                        else
+                        {
+                            glo.Loga("BACKUP AUTOMATICO | Status=FALHA | ResultadoUpload=False | ZIP gerado, mas envio FTP falhou.");
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        glo.Loga(
+                            "BACKUP AUTOMATICO | Status=ERRO | Tipo=" + ex.GetType().FullName +
+                            " | Mensagem=" + ex.Message);
+                    }
                 }
                 this.Text = Caption;
                 this.Height = 171;
+            }
+            finally
+            {
                 this.DentroDoTimer = false;
             }
         }

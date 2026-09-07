@@ -176,11 +176,6 @@ namespace TeleBonifacio.dao
                 string categoriaOriginal = faltaRow["Categoria"] == DBNull.Value
                     ? ""
                     : Convert.ToString(faltaRow["Categoria"]).Trim();
-                if (string.IsNullOrWhiteSpace(categoriaOriginal))
-                {
-                    throw new InvalidOperationException(
-                        "A Falta precisa ter Categoria antes de ser marcada como comprada.");
-                }
                 string categoria = categoriaOriginal.Replace("'", "''");
 
                 string insertQuery = $@"INSERT INTO Produtos (Data, Quant, Codigo, Marca, UID, Tipo, Compra, Descricao, idForn, Obs, Valor, Categoria)
